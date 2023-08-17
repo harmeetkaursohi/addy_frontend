@@ -14,6 +14,7 @@ import CreatePost from '../features/planner/views/createPost'
 import Review from '../features/review/views/review'
 import Gallery from '../features/gallary/views/gallery'
 import AiImageModal from '../features/modals/views/ai_image_modal/ai_image_modal'
+import CommentPage from '../features/commentPage/views/commentPage'
 // import 'cdbreact/dist/css/styles.css';
 // import 'cdbreact/dist/css/coreui.min.css'
 function App() {
@@ -33,6 +34,7 @@ function App() {
     <Route path="/review"  element={<Review/>}/>
     <Route path="/gallery"  element={<Gallery/>}/>
     <Route path="/image"  element={<AiImageModal/>}/>
+    <Route path="/commentpage"  element={<CommentPage/>}/>
 
     </Routes>
     </BrowserRouter>

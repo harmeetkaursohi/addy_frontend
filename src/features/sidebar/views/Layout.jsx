@@ -132,28 +132,28 @@ const SideBar = () => {
                         <li>
                             <div className='sidebar_item_outer'>
                                 <img src={info_icon} />
-                                <NavLink activeClassName="active" to="/planner">Insights</NavLink>
+                                <NavLink activeClassName="active" to="/">Insights</NavLink>
 
                             </div>
                         </li>
                         <li>
                             <div className='sidebar_item_outer'>
                                 <img src={faq_icon} />
-                                <NavLink activeClassName="active" to="/planner">FAQ’s</NavLink>
+                                <NavLink activeClassName="active" to="/">FAQ’s</NavLink>
 
                             </div>
                         </li>
                         <li>
                             <div className='sidebar_item_outer'>
                                 <img src={privacy_icon} />
-                                <NavLink activeClassName="active" to="/planner">Privacy Policy</NavLink>
+                                <NavLink activeClassName="active" to="/">Privacy Policy</NavLink>
 
                             </div>
                         </li>
                         <li>
                             <div className='sidebar_item_outer'>
                                 <img src={call_icon} />
-                                <NavLink activeClassName="active" to="/planner">Contact Us</NavLink>
+                                <NavLink activeClassName="active" to="/">Contact Us</NavLink>
 
                             </div>
                         </li>

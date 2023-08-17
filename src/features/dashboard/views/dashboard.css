@@ -22,8 +22,18 @@ gap: 15px;
 .cmn_background{
     border-radius: 22px;
     background: #FFF;
-    min-height: 620px;
+    min-height: 775px;
     box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68)
+}
+.upcoming_post_outer {
+    margin-top: 30px;
+}
+
+element.style {
+    display: flex;
+}
+.delete_btn_outer {
+    display: flex;
 }
 .followers_wrapper h5{
 color: #232934;
@@ -173,9 +183,11 @@ color: #2E3646;
 padding: 8px 46px;
 font-weight: 600;
 border: none;
+width: 100%;
 }
 .change_post_btn{
     padding: 8px 46px;
+    width: 100%;
 }
 .page_title_container {
     display: flex;

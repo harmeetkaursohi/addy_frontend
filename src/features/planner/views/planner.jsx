@@ -2,10 +2,17 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import './planner.css'
 import SideBar from '../../sidebar/views/Layout'
+import instagram_img from'../../../images/instagram.png'
 const Planner = () => {
     const events = [
-        { title: 'Meeting', start: new Date() }
+        { title: 'Instagram post', start: new Date() , imageUrl: instagram_img},
     ]
+    const eventContent = ({ event }) => (
+      <div className="custom_event">
+        <img src={event.extendedProps.imageUrl} alt={event.title} />
+        <h3>{event.title}</h3>
+      </div>
+    );
     const customHeaders = (
         <div className="custom-header">
           <h3 className="fc-h3">Custom Header Text</h3>
@@ -53,6 +60,7 @@ const Planner = () => {
                                 initialView='dayGridMonth'
                                 weekends={true}
                                 events={events}
+                                eventContent={eventContent}
                                 headerToolbar={{
                                     left: ' today prev,next ',
                                     center: 'title',
