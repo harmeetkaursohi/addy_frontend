@@ -1,0 +1,147 @@
+.planner_header_outer{
+    display: flex;
+    justify-content: space-between;
+}
+.create_post_btn{
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+.planner_outer {
+    padding-top: 24px;
+}
+.planner_header h6{
+color:  #5F6D7E;
+font-size: 16px;
+font-weight: 400;
+line-height: 24px; 
+letter-spacing: -0.016px;
+}
+.planner_header h2{
+color:  #2E3646;
+font-family: 'Nunito';
+font-size: 28px;
+font-style: normal;
+font-weight: 700;
+line-height: 38px; /* 135.714% */
+letter-spacing: -0.28px;
+}
+/* calnder  */
+button.fc-today-button.fc-button.fc-button-primary {
+color: #000;
+font-family: 'Nunito';
+font-size: 14px;
+font-style: normal;
+font-weight: 700;
+line-height: 20px; 
+letter-spacing: -0.014px;
+border-radius: 6px;
+border: 1px solid #C3C3C3;
+background-color: white;
+padding: 9px 25px;
+}
+.fc .fc-button-primary {
+    color: #5F6D7E;
+    background-color:transparent;
+    border: none;
+}
+.fc-header-toolbar.fc-toolbar {
+    padding: 18px 0px;
+    border-radius: 10px;
+    background: #F4F7FC;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
+    justify-content: start;
+}
+.fc .fc-toolbar-title  {
+    color: #000;
+    font-family: Nunito;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 38px; 
+    letter-spacing: -0.16px;
+}
+.fc .fc-button-primary:hover {
+    background-color: unset;
+    border-color: unset;
+    color: unset;
+}
+.cmn_event_box{
+width: 24px;
+height: 24px;
+border-radius: 4px;
+}
+.Todayevent_outer{
+background: #00A3FF;
+}
+.Upcomingevent_outer{
+background: #F07C33;
+}
+.Pastevent_outer{
+ background:#DDD;;
+}
+.events_wrapper {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+}
+.event_group{
+display: flex;
+gap: 11px;
+}
+.event_group h5{
+color: #000;
+font-weight: 700;
+
+}
+.fc-direction-ltr {
+margin-top: 26px;
+}
+button.fc-customHeader-button.fc-button.fc-button-primary {
+color: #000;
+font-family: 'Nunito';
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: 24px; 
+letter-spacing: -0.016px;
+}
+button.fc-customText-button.fc-button.fc-button-primary {
+color: #97A1AD;
+font-family: 'Nunito';
+font-size: 16px;
+font-style: normal;
+font-weight: 700;
+line-height: 24px; 
+letter-spacing: -0.016px;
+}
+@media screen and (max-width:991px){
+.planner_header_outer{
+    display: block;
+}
+.create_post_btn{
+    margin-top:12px
+}
+.event_group h5 {
+font-size: 13px;
+}
+}
+@media screen and (max-width:767px){
+    .planner_header h6 {
+        font-size: 14px;
+    }
+    .events_wrapper {
+        display: block;
+        
+    }
+    .event_group {
+        margin-top: 13px;
+    }
+    .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
+        display: block;
+    }
+    .fc .fc-toolbar-title {
+        font-size: 14px;
+        padding-left: 30px;
+    }
+}
