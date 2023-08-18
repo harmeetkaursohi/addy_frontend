@@ -10,13 +10,13 @@
 }
 @media screen and (max-width:991px){
     svg.recharts-surface {
-        width: 71%;
+         width: 69%;
         height: 100%;
     }
 }
 @media screen and (max-width:767px){
     svg.recharts-surface {
-        width: 34%;
+        width: 31%;
         height: 100%;
     }
     /* .recharts-wrapper.line_chart {

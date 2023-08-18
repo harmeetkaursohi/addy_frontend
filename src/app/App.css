@@ -48,9 +48,12 @@ font-weight: 500;
 line-height: 18px;
 letter-spacing: -0.013px;
 }
-img.cmn_width{
+img .cmn_width{
 width: 24px;
 height: 24px;
+}
+a {
+  text-decoration: none !important;
 }
 .cmn_white_text{
 color:  #FFF;
@@ -88,3 +91,19 @@ letter-spacing: -0.014px;
     line-height: 24px; 
     letter-spacing: -0.016px;
     }
+    .box_shadow{
+border-radius: 6px;
+background: #FFF;
+box-shadow: 0px 0px 8px 0px rgba(16, 24, 40, 0.05);
+    }
+    textarea:focus-visible{
+      outline: unset;
+      border: 1px solid #00A3FF;
+    }
+    select:focus-visible {
+      outline: unset;
+      border: 1px solid #00A3FF;
+  }
+  :focus-visible {
+    outline: unset
+}

@@ -216,6 +216,7 @@ width: 441px;
     min-width: 100px;
     
 }
+
 @media screen and (max-width:1024px){
     .get_messages_outer{
         display: block;

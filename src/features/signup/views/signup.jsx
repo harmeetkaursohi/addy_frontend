@@ -1,5 +1,6 @@
 import men_img from "../../../images/men.png"
 import google_img from '../../../images/Google_img.svg'
+import { Link } from "react-router-dom"
 const SignUp=()=>{
     return(
         <>
@@ -54,16 +55,10 @@ const SignUp=()=>{
                                         <label>Confirm Password</label>
                                         <input className="form-control mt-1"type='password' placeholder='Confirm Password'/>
                                     </div>
-                                     <button className=' login_btn'>Login</button>
-                                     <h2 className='cmn_heading'>OR</h2>
-                                     <button className='login_btn login_google_btn'>
-                                        <div className="google_img_outer"> 
-                                            <img src={google_img}/>
-                                            <h2 className="ps-2">Login with Google </h2></div>
-                                     </button>
+                                     <button className=' login_btn'>Sign Up</button>
                                     </div>
                                 </form>
-                                <h3 className='cmn_heading'>Don’t have an account? <span className='sign_up'>Signup</span></h3>
+                                <h3 className='cmn_heading'>Already have an account?  <Link to="/login"><span className='sign_up'>Login</span></Link></h3>
                              </div>
                         </div>
 

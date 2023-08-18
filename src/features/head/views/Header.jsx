@@ -25,7 +25,7 @@ const Header=()=>{
                         <button className="Create_Ad_btn crate_btn">
                             Create Ad
                             </button>
-                            <button className=" crate_btn cmn_btn_color ms-3">
+                            <button className="createPost_btn crate_btn cmn_btn_color ms-3">
                             Create Post
                             </button>
                         </div>

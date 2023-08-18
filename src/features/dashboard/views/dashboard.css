@@ -22,7 +22,7 @@ gap: 15px;
 .cmn_background{
     border-radius: 22px;
     background: #FFF;
-    min-height: 775px;
+    min-height: 801px;
     box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68)
 }
 .upcoming_post_outer {
@@ -178,6 +178,30 @@ letter-spacing: -0.2px;
     background-repeat: no-repeat;
     
 }
+.account_info {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+}
+.page_title_header{
+    padding: 16px 20px;
+}
+.account_reached {
+    background: #05A2FB;
+}
+.cmn_chart_btn{
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+}
+.account_group{
+    display: flex;
+    gap: 10px;
+}
+.total_follower{
+background: #F07C33;
+}
+
 .delete_post_btn {
 color: #2E3646;
 padding: 8px 46px;
@@ -192,7 +216,7 @@ width: 100%;
 .page_title_container {
     display: flex;
     justify-content: space-between;
-    padding: 16px 20px;
+   
 }
  .dropdown_days {
 font-size: 10px;
@@ -223,6 +247,26 @@ select.page_title_options {
     .social_media_outer{
         display: block;
     }
+    .disconnect_btn{
+        margin-top: 10px;
+    }
+    .connect_btn {
+        margin-top: 10px;
+    }
+    .followers_wrapper h2{
+        font-size: 20px;
+    }
+    .delete_post_btn,.change_post_btn {
+        padding: 8px 14px;
+ }
+}
+ @media screen and (max-width:991px) {
+    .social_media_outer{
+        display: flex;
+    }
+    .cmn_background{
+        min-height: 100%;
+    }
  }
 @media screen and (max-width:767px){
     /* upcoming post  */
@@ -248,5 +292,13 @@ select.page_title_options {
     .connect_btn,.disconnect_btn {
         margin-top: 15px;
     }
+    /*  */
+    .page_title_container{
+        display: block;
+    }
+    .account_info{
+        display: block;
+    }
     
+
 }

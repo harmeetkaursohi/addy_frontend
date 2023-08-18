@@ -11,15 +11,7 @@ import addy_logo from '../../../images/addylogo.png'
 import comment_img from '../../../images/comment_image.svg'
 import { NavLink, useLocation } from "react-router-dom"
 import "./Layout.css"
-import {
-    CDBSidebar,
-    CDBSidebarHeader,
-    CDBSidebarMenuItem,
-    CDBSidebarContent,
-    CDBSidebarMenu,
-    // CDBSidebarSubMenu,
-    CDBSidebarFooter,
-} from 'cdbreact';
+
 
 const SideBar = () => {
     const [sidebar, setSidebar] = useState(true)

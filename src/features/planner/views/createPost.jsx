@@ -10,7 +10,7 @@ import ellipse_img from '../../../images/ellipse.svg'
 import upload_video_img from '../../../images/video_img.svg'
 import upload_img from '../../../images/post_image.svg'
 const CreatePost = () => {
-   
+
     return (
         <>
             <div className="Container">
@@ -99,17 +99,16 @@ const CreatePost = () => {
                                         <div className='schedule_date_outer'>
                                             <div className='date_time_outer'>
                                                 <h6 className='create_post_text'>Set date</h6>
-                                                <select  className='mt-3'>
+                                                <input type='date' placeholder='set date' className='form-control mt-2'/>
+                                                {/* <select  className='mt-3' >
                                                     <option>set date</option>
-                                                </select>
+                                                </select> */}
 
                                             </div>
                                             <div className='date_time_outer'>
                                                 <h6 className='create_post_text'>Set Time</h6>
-                                                {/* <i class="fa-regular fa-clock"></i> */}
-                                                <select className='mt-3'>
-                                                    <option> <i class="fa-regular fa-clock"></i>set date</option>
-                                                </select>
+                                               <input type='time' className='mt-2 form-control'/>
+                                                
 
                                             </div>
                                         </div>

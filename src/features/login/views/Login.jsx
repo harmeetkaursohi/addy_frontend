@@ -1,7 +1,7 @@
 import addyads_img from '../../../images/addylogo.png'
 import girl_img from '../../../images/girl.png'
 import google_img from '../../../images/Google_img.svg'
-
+import {Link} from "react-router-dom"
 import './Login.css'
 const Login=()=>{
     return(
@@ -60,7 +60,7 @@ const Login=()=>{
                                      </button>
                                     </div>
                                 </form>
-                                <h3 className='cmn_heading'>Don’t have an account? <span className='sign_up'>Signup</span></h3>
+                                <h3 className='cmn_heading'>Don’t have an account? <Link to="/"><span className='sign_up'>Signup</span></Link></h3>
                              </div>
                         </div>
 

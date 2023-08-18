@@ -83,7 +83,7 @@ const Dashboard = () => {
                                     <h3 className="cmn_white_text instagram_overview_heading">Instagram Overview</h3>
                                         </div>
                                         <div className="days_outer">
-                                        <select className=" dropdown_days">
+                                        <select className=" dropdown_days box_shadow">
                                             <option>Last 7 days</option>
                                             <option>Last 7 days</option>
                                             <option>Last 7 days</option>
@@ -92,6 +92,19 @@ const Dashboard = () => {
 
                                         </div>
                                         <Chart/>
+                                        <div className="account_info mt-2">
+                                            <div className="account_group">
+                                            <div className="account_reached cmn_chart_btn">
+                                            </div>
+                                                <h4 className="cmn_headings">Accounts Reached</h4>
+                                            </div>
+                                            <div className="account_group">
+                                            <div className="total_follower cmn_chart_btn">
+                                            </div>
+                                            <h4 className="cmn_headings">Total Followers</h4>
+
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
