@@ -3,9 +3,10 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import './planner.css'
 import SideBar from '../../sidebar/views/Layout'
 import instagram_img from '../../../images/instagram.png'
+import linkedin from '../../../images/linkedin.svg'
 const Planner = () => {
   const events = [
-    { title: 'Instagram post', start: new Date(), imageUrl: instagram_img }
+    { title: 'Instagram post', start: new Date(), imageUrl: instagram_img },{title:"Twitter",start: '2023-08-18',imageUrl: linkedin}
   ]
   // render event content
   const eventContent = ({ event }) => (
@@ -70,7 +71,7 @@ const Planner = () => {
             {/* select option */}
             <div className='calender_outer_wrapper'>
               <div className="custom-header">
-                <select className="filter_select_btn filter_options">
+                <select className=" filter_options cmn_text_style box_shadow">
                   <option>Filter</option>
                   <option>Option 1</option>
                   <option>Option 2</option>

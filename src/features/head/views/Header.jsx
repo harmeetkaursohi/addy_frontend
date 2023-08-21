@@ -5,6 +5,7 @@ const Header=()=>{
         <>
         <header>
             <div className="header_outer">
+                <form>
                 <div className="row">
                     <div className="col-lg-5 col-md-12 col-sm-12">
                      <div className="header_outer_container">
@@ -17,7 +18,7 @@ const Header=()=>{
                     <div className="col-lg-4 col-md-12 col-sm-12" >
                     <div className="search_outer">
                         <img src={search_icon} className="search_icon"/>
-                        <input type="text" className="form-control search_input" placeholder="Search_icon" />
+                        <input type="text" className="form-control search_input" placeholder="Search" />
                      </div>
                     </div>
                     <div className="col-lg-3 col-md-12 col-sm-12">
@@ -25,12 +26,14 @@ const Header=()=>{
                         <button className="Create_Ad_btn crate_btn">
                             Create Ad
                             </button>
-                            <button className="createPost_btn crate_btn cmn_btn_color ms-3">
+                            <button className="createPost_btn crate_btn cmn_btn_color ">
                             Create Post
                             </button>
                         </div>
                     </div>
                 </div>
+
+                </form>
             </div>
         </header>
         </>

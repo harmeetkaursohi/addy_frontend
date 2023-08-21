@@ -20,7 +20,7 @@ const Review=()=>{
                         <h2 className="cmn_text_heading">Like/Comments</h2>
                         <h6 className="cmn_small_heading">Here you find all the upcoming Posts you scheduled.</h6>
                         </div>
-                        <select className="filter_select_btn">
+                        <select className="filter_select_btn cmn_text_style">
                             <option>Filter</option>
                             <option>1</option>
                         </select>

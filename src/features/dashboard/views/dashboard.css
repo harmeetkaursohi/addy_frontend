@@ -14,15 +14,20 @@ button#dropdown-basic
     padding: 14px;
 }
 .followers_outer{
-box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.10);
-padding: 16px 20px;
+padding: 21px 20px;
 display: flex;
 gap: 15px;
+}
+.followers_wrapper{
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow:  0px 4px 5px rgba(0, 0, 0, 0.10);
+    flex-grow: 1;
 }
 .cmn_background{
     border-radius: 22px;
     background: #FFF;
-    min-height: 801px;
+    min-height: 100%;
     box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68)
 }
 .upcoming_post_outer {
@@ -35,6 +40,7 @@ element.style {
 .delete_btn_outer {
     display: flex;
 }
+
 .followers_wrapper h5{
 color: #232934;
 font-size: 16px;
@@ -59,15 +65,17 @@ border-radius: 5px;
 background: #00A3FF;
 border: none;
 color: #F2F6FC;
-padding: 0px 10px;
+padding: 2px 8px;
 display: flex;
 align-items: center;
-gap: 8px;
+gap: 5px;
+font-size: 13px;
 }
 .monthly_growth{
     display: flex;
-    gap: 10px;
+    gap: 7px;
     margin-top: 12px;
+    align-items: center;
 }
 .social_media_account {
     display: flex;
@@ -92,9 +100,11 @@ text-decoration-line: underline;
 border-radius: 10px;
 border: none;
 color: #F8F9FB;
+min-width: 98px;
+height: 39px;
 }
 .dropdown_btn{
-padding: 32px 24px 0px;  
+padding: 20px 24px 0px;  
 }
 .cmn_connect_btn{
  font-family: Nunito;
@@ -117,6 +127,7 @@ padding: 7px 14px
 .social_media_content{
     display: flex;
     gap: 12px;
+    align-items: center;
 }
 .social_media_content h5{
 color: #5F6D7E;
@@ -130,6 +141,8 @@ border-radius: 5px;
 border: 1px solid  #D1D9E2;
 background: #E6E9EC;
 color: #393939;
+min-width: 111px;
+height: 39px;
 }
 /* upcoming_post */
 .post_content h4{
@@ -176,6 +189,9 @@ letter-spacing: -0.2px;
     border-top-left-radius: 19px;
     border-top-right-radius: 19px; 
     background-repeat: no-repeat;
+    margin-top: 12px;
+    width: 100%;
+    background-size: cover;
     
 }
 .account_info {
@@ -184,7 +200,15 @@ letter-spacing: -0.2px;
     gap: 28px;
 }
 .page_title_header{
-    padding: 16px 20px;
+    /* padding: 10px 20px; */
+    margin:  20px;
+    border-radius: 22px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow:  0px 3px 9px 0px rgba(0, 0, 0, 0.10);
+}
+.account_info {
+    padding-bottom: 20px;
 }
 .account_reached {
     background: #05A2FB;
@@ -215,7 +239,11 @@ width: 100%;
 }
 .page_title_container {
     display: flex;
+    padding: 16px 20px;
     justify-content: space-between;
+    border-bottom: 1px solid #D1D9E2;
+    background-color: #F8F9FB;
+    align-items: center;
    
 }
  .dropdown_days {
@@ -240,19 +268,36 @@ select.page_title_options {
 .instagram_overview_heading{
     color: #5F6D7E;
 }
- @media screen and (max-width:1024px){
-    .followers_outer{
-        display: block;
-    }
+@media screen and (max-width:1280px){
     .social_media_outer{
         display: block;
     }
-    .disconnect_btn{
-        margin-top: 10px;
+    .createPost_btn {
+        margin-left: 9px;
     }
     .connect_btn {
         margin-top: 10px;
     }
+    .disconnect_btn{
+        margin-top: 10px;
+    }
+}
+ @media screen and (max-width:1024px){
+    .followers_outer{
+        display: block;
+    }
+    .followers_wrapper {
+        margin-top: 15px;
+    }
+    /* .social_media_outer{
+        display: block;
+    } */
+    /* .disconnect_btn{
+        margin-top: 10px;
+    }
+    .connect_btn {
+        margin-top: 10px;
+    } */
     .followers_wrapper h2{
         font-size: 20px;
     }
@@ -267,6 +312,9 @@ select.page_title_options {
     .cmn_background{
         min-height: 100%;
     }
+    .social_media_wrapper{
+        margin-top: 10px;
+    }
  }
 @media screen and (max-width:767px){
     /* upcoming post  */
@@ -274,6 +322,10 @@ select.page_title_options {
         padding: 8px 42px;
         margin-left: 0px !important;
         margin-top: 13px;
+    }
+    button#dropdown-basic {
+        font-size: 14px;
+        padding: 6px 13px;
     }
     .delete_btn_outer {
         display: flex;
@@ -298,6 +350,7 @@ select.page_title_options {
     }
     .account_info{
         display: block;
+        padding: 16px 20px;
     }
     
 

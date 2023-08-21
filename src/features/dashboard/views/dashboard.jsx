@@ -25,7 +25,7 @@ const Dashboard = () => {
                                 <div className="post_activity_outer cmn_background">
                                     <Dropdown className="dropdown_btn">
                                         <Dropdown.Toggle variant="success" id="dropdown-basic" className="instagram_dropdown">
-                                            Instagram
+                                            <img src={instagram_img} className="me-3"/>Instagram
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
                                             <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
@@ -34,7 +34,7 @@ const Dashboard = () => {
                                         </Dropdown.Menu>
                                     </Dropdown>
                                     <div className="followers_outer ">
-                                    <div className="followers_wrapper">
+                                    <div className="followers_wrapper ">
                                     <h5>Followers</h5>
                                     <div className="followers_inner_content">
                                     <h2>15,452</h2>
@@ -47,7 +47,7 @@ const Dashboard = () => {
                                     </div>
                                     </div>
                                     <div className="followers_wrapper">
-                                    <h5>Followers</h5>
+                                    <h5>Accounts Reached </h5>
                                     <div className="followers_inner_content">
                                     <h2>15,452</h2>
                                     <div className="monthly_growth">
@@ -59,7 +59,7 @@ const Dashboard = () => {
                                     </div>
                                     </div>
                                     <div className="followers_wrapper">
-                                    <h5>Followers</h5>
+                                    <h5>Post Activity</h5>
                                     <div className="followers_inner_content">
                                     <h2>15,452</h2>
                                     <div className="monthly_growth">
@@ -116,7 +116,7 @@ const Dashboard = () => {
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
-                                            <img clasName="cmn_width" src={fb_img}/>
+                                            <img className="cmn_width" src={fb_img}/>
                                          <div>
                                            <h5 className="">Facebook account</h5>
                                             <h6 className="cmn_headings">www.facebook.com</h6>
@@ -126,7 +126,7 @@ const Dashboard = () => {
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
-                                            <img  clasName="cmn_width"src={twitter_img}/>
+                                            <img  className="cmn_width"src={twitter_img}/>
                                            <div>
                                            <h5 className="">Twitter account</h5>
                                             <h6 className="cmn_headings">www.twitter.com</h6>
@@ -136,7 +136,7 @@ const Dashboard = () => {
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
-                                            <img  clasName="cmn_width"src={instagram_img}/>
+                                            <img  className="cmn_width"src={instagram_img}/>
                                            <div>
                                            <h5 className=""> Instagram account</h5>
                                             <h6 className="cmn_headings">www.facebook.com</h6>
@@ -146,7 +146,7 @@ const Dashboard = () => {
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
-                                            <img  clasName="cmn_width"src={linkedin_img}/>
+                                            <img  className="cmn_width"src={linkedin_img}/>
                                            <div>
                                            <h5 className="">Linkedin account</h5>
                                             <h6 className="cmn_headings">www.facebook.com</h6>
@@ -156,7 +156,7 @@ const Dashboard = () => {
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
-                                            <img  clasName="cmn_width"src={tiktok_img}/>
+                                            <img  className="cmn_width"src={tiktok_img}/>
                                            <div>
                                            <h5 className="">Tiktok account</h5>
                                             <h6 className="cmn_headings">www.facebook.com</h6>
@@ -170,6 +170,7 @@ const Dashboard = () => {
                         {/* upcoming post */}
                         <div className="upcoming_post_outer">
                         <h2>Upcoming Posts</h2>
+                        <form>
                         <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12">
                             <div className="upcoming_post_container">
@@ -218,6 +219,8 @@ const Dashboard = () => {
                          </div>
                         </div>
                         </div>
+
+                        </form>
                         </div>
                     </div>
 

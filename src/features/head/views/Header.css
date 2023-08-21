@@ -16,6 +16,9 @@ border-radius: 6px;
 .header_outer_container {
     display: flex;
 }
+.search_outer input{
+    text-indent: 13px;
+ }
 .header_container h2{
 color:  #2E3646;
 font-size: 28px;
@@ -46,9 +49,12 @@ letter-spacing: -0.016px;
 .header_outer {
     padding: 32px 0px;
 }
+.createPost_btn{
+    margin-left: 16px;
+}
  @media screen and (max-width:1024px){
-    .createPost_btn{
-        margin-left: 0px !important;
+    button.createPost_btn{
+        margin-left: 0px ;
         margin-top: 10px;
     }
     .header_container h2 {
@@ -63,9 +69,9 @@ letter-spacing: -0.016px;
     .create_Ad_outer {
         margin-top: 21px;
     }
-    .createPost_btn{
-        margin-top: 0px;
-        margin-left: 10px !important;
+    button.createPost_btn{
+        
+        margin-left: 10px 
     }
     .search_outer {
         margin-top: 21px;
@@ -91,5 +97,9 @@ letter-spacing: -0.016px;
 }
 .search_outer {
     margin-top: 20px;
+}
+button.createPost_btn{
+    margin-left: 10px ;
+    margin-top: 0px;
 }
 }

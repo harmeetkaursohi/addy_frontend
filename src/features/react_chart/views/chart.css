@@ -1,16 +1,17 @@
 .recharts-wrapper.line_chart {
     width: 100%;
     min-height: 332px;
+    margin-top: 14px;
 }
 @media screen and (max-width:1024px){
     svg.recharts-surface {
-        width: 71%;
+        width: 67%;
         height: 100%;
     }
 }
 @media screen and (max-width:991px){
     svg.recharts-surface {
-         width: 69%;
+         width: 64%;
         height: 100%;
     }
 }

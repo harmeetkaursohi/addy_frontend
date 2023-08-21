@@ -18,6 +18,13 @@
     position: absolute;
     top: 22px;
     right: 1px;
+    position: absolute;
+    top: 22px;
+    right: 1px;
+    border: unset;
+    padding: 13px 0px 13px 13px;
+    min-width: 152px;
+
 }
 
 .calender_outer_wrapper {
@@ -196,15 +203,21 @@ button.fc-customText-button.fc-button.fc-button-primary {
 }
 
 .custom_event {
-    background-color: white;
+    background-color: #F8EDFF;
     width: 100%;
     height: 36px;
     border-radius: 7px;
     padding: 6px 10px;
     display: flex;
+    align-items: center;
+    gap: 10px;
 
 }
-
+.fc-h-event {
+    background-color: unset;
+    border: unset
+   
+}
 .custom_event img {
     height: 14px;
     width: 14px;
@@ -212,13 +225,16 @@ button.fc-customText-button.fc-button.fc-button-primary {
 
 .custom_event h3 {
     color: #000;
-    font-family: Nunito;
+    overflow: hidden;
+    font-family: "Nunito";
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
 }
-
+button.fc--button.fc-button.fc-button-primary {
+    display: none;
+}
 @media screen and (max-width:991px) {
     .planner_header_outer {
         display: block;
@@ -246,22 +262,22 @@ button.fc-customText-button.fc-button.fc-button-primary {
         display: block;
 
     }
-
+    .custom-header {
+        margin-top: 13px;
+    }
     .event_group {
         border-right: unset;
     }
 
-    .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
-        display: block;
-    }
 
     .fc .fc-toolbar-title {
-        font-size: 14px;
+        font-size: 11px;
 
     }
 
     .filter_options {
         position: unset;
+        font-size: 14px;
     }
 
 }

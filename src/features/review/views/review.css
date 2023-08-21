@@ -5,7 +5,9 @@
 }
 .filter_select_btn{
     min-width: 126px;
-    height: 37px;
+    font-size: 16px;
+    height: 44px;
+    padding: 8px;
     border-radius: 6px;
 border: 1px solid #C3C3C3;
 box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
