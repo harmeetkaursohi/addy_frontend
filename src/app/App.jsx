@@ -15,6 +15,7 @@ import Review from '../features/review/views/review'
 import Gallery from '../features/gallary/views/gallery'
 import AiImageModal from '../features/modals/views/ai_image_modal/ai_image_modal'
 import CommentPage from '../features/commentPage/views/commentPage'
+import AddressForm from '../features/signup/views/addressForm'
 // import 'cdbreact/dist/css/styles.css';
 // import 'cdbreact/dist/css/coreui.min.css'
 function App() {
@@ -35,7 +36,7 @@ function App() {
     <Route path="/gallery"  element={<Gallery/>}/>
     <Route path="/image"  element={<AiImageModal/>}/>
     <Route path="/commentpage"  element={<CommentPage/>}/>
-
+    <Route path="/addressform"  element={<AddressForm/>}/>
     </Routes>
     </BrowserRouter>
       {/* <div>

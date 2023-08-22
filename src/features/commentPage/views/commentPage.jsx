@@ -57,7 +57,7 @@ const CommentPage = () => {
 
                                         </div>
                                     </div>
-                                    <h5 className='reply_heading cmn_headings'>View replies</h5>
+                                    <h5 className='reply_heading cmn_headings'>Hide replies</h5>
                                     {/* repley section */}
                                     <div className='user_profile_info user_reply_outer '>
                                         <img src={user_profile_img} className='user_img' />

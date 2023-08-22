@@ -1,6 +1,6 @@
 import men_img from "../../../images/men.png"
 import { Link } from "react-router-dom"
-const SignUp=()=>{
+const AddressForm=()=>{
     return(
         <>
          <section className='Container'>
@@ -24,37 +24,33 @@ const SignUp=()=>{
                         <div className='addy_container'>
                         <div className="addy_outer">
                             <div className="addy_img">
-                                <h2 className='cmn_fontFamily'>Create New Account</h2>
-                                <p className="pt-2">Lorem Ipsum is simply dummy text of the printing and type setting industry.</p>
+                                <h2 className='cmn_fontFamily'>Just One Step Away.</h2>
+                                <p className="pt-2">Enter Your Address</p>
                             </div>
                              <div className='login_form'>
                                 <form>
-                                    <div className='form-group'>
-                                        <label> User Name</label>
-                                        <input className="form-control mt-1"type='text' placeholder='Username'/>
-                                    </div>
-                                    <div className='form-group'>
-                                        <label>Email</label>
-                                        <input className="form-control mt-1"type='email' placeholder='Email'/>
-                                    </div>
-                                    <div className='rememberPass_outer mt-2'>
-                                    <div className='form-group'>
-                                        <label>Industry</label>
-                                        <input className="form-control mt-1"type='text' placeholder='Industry'/>
-                                    </div>
                                     <div className='form-group'>
                                         <label>Country</label>
                                         <input className="form-control mt-1"type='text' placeholder='Country'/>
                                     </div>
                                     <div className='form-group'>
-                                        <label>Password</label>
-                                        <input className="form-control mt-1"type='password' placeholder='Password'/>
+                                        <label>State</label>
+                                        <input className="form-control mt-1"type='text' placeholder='State'/>
+                                    </div>
+                                    <div className='rememberPass_outer mt-2'>
+                                    <div className='form-group'>
+                                        <label>City</label>
+                                        <input className="form-control mt-1"type='text' placeholder='City'/>
                                     </div>
                                     <div className='form-group'>
-                                        <label>Confirm Password</label>
-                                        <input className="form-control mt-1"type='password' placeholder='Confirm Password'/>
+                                        <label>House No</label>
+                                        <input className="form-control mt-1"type='text' placeholder='House/Flate No'/>
                                     </div>
-                                     <button className=' login_btn'>Next</button>
+                                    <div className='form-group'>
+                                        <label>Pin Code</label>
+                                        <input className="form-control mt-1"type='number' placeholder='Pin Code'/>
+                                    </div>
+                                     <button className=' login_btn'>Sign Up</button>
                                     </div>
                                 </form>
                                 <h3 className='cmn_heading'>Already have an account?  <Link to="/login"><span className='sign_up'>Login</span></Link></h3>
@@ -69,4 +65,4 @@ const SignUp=()=>{
         </>
     )
 }
-export default SignUp
+export default  AddressForm

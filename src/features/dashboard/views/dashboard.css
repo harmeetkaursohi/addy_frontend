@@ -11,8 +11,15 @@ button#dropdown-basic
     font-weight: 700;
     line-height: 20px;
     letter-spacing: -0.02px;
-    padding: 14px;
+    padding: 10px 10px 10px 0px;
+    width: 191px;
 }
+button#dropdown-basic::after{
+    content: url("../../../images/down_arrow.svg");
+    position: absolute;
+    height: 50px;
+    border: unset;
+} 
 .followers_outer{
 padding: 21px 20px;
 display: flex;
@@ -194,6 +201,9 @@ letter-spacing: -0.2px;
     background-size: cover;
     
 }
+
+
+
 .account_info {
     display: flex;
     justify-content: center;
@@ -263,6 +273,7 @@ select.page_title_options {
     padding: 6px 2px 6px 0px;
     border: none;
     font-size: 16px;
+    background-color: transparent;
     
 }
 .instagram_overview_heading{

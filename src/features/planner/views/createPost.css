@@ -14,7 +14,77 @@ text-align: center;
 .create_post_content {
     padding: 30px 70px;
 }
+button#instagram {
+    width: 100%;
+    text-align: left;
+    border-radius: 8px;
+    border: 0.8px solid #C3C3C3;
+    background: #FFF;
+    color:  #5F6D7E;
+    font-family: "Nunito";
+}
 
+button#instagram::after{
+    position: absolute;
+    top: 19px;
+    left: auto;
+    right: 15px;
+}
+/* ======= */
+.date_input::-webkit-calendar-picker-indicator {
+    background:url('../../../images/calendar_today.svg') no-repeat;
+    /* position: absolute; */
+    /* right: 0; 
+    left: 10px; */
+ }
+/* input[type="time"]::-webkit-date-and-time-value {
+    -webkit-appearance: none;
+    display: none;
+
+  } */
+  
+ input.date_input{
+    color: #BDC0CC;
+ }
+ .time_input::-webkit-calendar-picker-indicator {
+    background:url('../../../images/time.svg') no-repeat;
+ }
+
+ input.time_input{
+    color: #BDC0CC;
+ }
+ /* input[type=date]::-webkit-datetime-edit-text {
+    -webkit-appearance: none;
+    display: none;
+}
+input[type=date]::-webkit-datetime-edit-month-field{
+    -webkit-appearance: none;
+    display: none;
+}
+input[type=date]::-webkit-datetime-edit-day-field {
+    -webkit-appearance: none;
+    display: none;
+}
+input[type=date]::-webkit-datetime-edit-year-field {
+    -webkit-appearance: none;
+    display: none;
+} */
+/* input.date_input::after{
+content: url("../../../images/down_arrow.svg");
+} */
+
+/* input.date_input::before{
+    content: "Set date";
+    position: absolute;
+    left: 30px;
+} */
+/* input.time_input::before{
+    content: "Set time";
+    position: absolute;
+} */
+.date_time_outer {
+    width: 100%;
+}
 .create_post_wrapper {
     width: 100%;
     overflow: hidden;
@@ -153,7 +223,7 @@ min-width: 100px;
 }
 .schedule_date_outer{
     display: flex;
-    justify-content: space-between;
+    gap: 36px;
     margin-top: 30px;
 }
 .date_time_outer select{

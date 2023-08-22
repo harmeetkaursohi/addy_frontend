@@ -12,6 +12,11 @@
     align-items: center;
     height: 100vh;
 }
+.post_image{
+    width: 100%;
+    height: 550px;
+    object-fit: cover;
+}
 .comment_header {
     display: flex;
     justify-content: space-between;

@@ -9,8 +9,9 @@ import ribbon_img from '../../../images/Ribbon.png'
 import ellipse_img from '../../../images/ellipse.svg'
 import upload_video_img from '../../../images/video_img.svg'
 import upload_img from '../../../images/post_image.svg'
+import Dropdown from 'react-bootstrap/Dropdown';
+import instagram_img from "../../../images/instagram.png"
 const CreatePost = () => {
-
     return (
         <>
             <div className="Container">
@@ -22,10 +23,20 @@ const CreatePost = () => {
                                 <form>
                                     <div className="createPost_outer">
                                         <label className='create_post_label'>Please Select Media Platform</label>
-                                        <select>
+                                        {/* <select>
                                             <option>Team Musafiir</option>
                                             <option>Team Musafiir</option>
-                                        </select>
+                                        </select> */}
+                                        <Dropdown className="insta_dropdown_btn mt-2">
+                                        <Dropdown.Toggle  id="instagram" className="instagram_dropdown">
+                                            <img src={instagram_img} className="me-3"/>Instagram
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu className='w-100'>
+                                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
                                     </div>
                                     {/* add media */}
                                     <div className="media_outer">
@@ -99,15 +110,13 @@ const CreatePost = () => {
                                         <div className='schedule_date_outer'>
                                             <div className='date_time_outer'>
                                                 <h6 className='create_post_text'>Set date</h6>
-                                                <input type='date' placeholder='set date' className='form-control mt-2'/>
-                                                {/* <select  className='mt-3' >
-                                                    <option>set date</option>
-                                                </select> */}
-
+                                               
+                                                <input type='date' placeholder='set date' className='form-control mt-2 date_input'/>
+                                                
                                             </div>
                                             <div className='date_time_outer'>
                                                 <h6 className='create_post_text'>Set Time</h6>
-                                               <input type='time' className='mt-2 form-control'/>
+                                               <input type='time' placeholder="set time "className='mt-2 form-control time_input'/>
                                                 
 
                                             </div>
