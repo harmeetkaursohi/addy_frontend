@@ -3,9 +3,35 @@ import girl_img from '../../../images/girl.png'
 import google_img from '../../../images/Google_img.svg'
 import {Link} from "react-router-dom"
 import './Login.css'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import counter from "../../../app/slices/authSlice"
 const Login=()=>{
+const[name,setName]=useState("")
+const[validName,setValidName]=useState(false)
+const[validPassword,setValidPassword]=useState(false)
+const[password,setPassword]=useState("")
+const[check,setCheck]=useState("")
+const loginForm=(e)=>{
+e.preventDefault()
+if(name===""){
+    setValidName(true)
+}else{
+    if(password===""){
+        setValidPassword(true)
+    }else{
+        setName("")
+        setPassword("")
+        setValidPassword(false)
+        setValidName(false)
+    }
+}
+}
+console.log(validName,"ch")
+
     return(
         <>
+         
          <section className='Container'>
             <div className="login_wrapper">
                 <div className="row">
@@ -34,26 +60,29 @@ const Login=()=>{
                                 <p>Lorem Ipsum is simply dummy text of the printing and type setting industry.</p>
                             </div>
                              <div className='login_form'>
-                                <form>
+                                <form onSubmit={loginForm}>
                                     <div className='form-group'>
                                         <label>E-mail or Username</label>
-                                        <input className="form-control mt-1"type='email' placeholder='Email'/>
+                                        <input className="form-control mt-1"type='email' placeholder='Email' value={name} onChange={(e)=>setName(e.target.value)} onFocus={()=>{setValidName(false)}}/>
+                                        {validName?<p style={{color:"red"}}>Please enter your email</p>:""}
                                     </div>
                                     <div className='form-group'>
                                         <label>Password</label>
-                                        <input className="form-control mt-1"type='password' placeholder='Password'/>
+                                        <input className="form-control mt-1"type='password' placeholder='Password' value={password} onChange={(e)=>{setPassword(e.target.value)}} onFocus={()=>{setValidPassword(false)}}/>
+                                        {validPassword?<p style={{color:"red"}}>Please enter password</p>:""}
+
                                     </div>
                                     <div className='rememberPass_outer mt-2'>
                                      <div className='check_box_outer'>
                                         <div>
-                                        <input type='checkbox'/>
+                                        <input type='checkbox' onChange={(e)=>{setCheck(e.target.checked)}}/>
                                         <label className='ms-2'>Remember Password</label>
                                         </div>
                                      <label className='forgetPass_heading'>Forgot Password?</label>
                                      </div>
                                      <button className=' login_btn'>Login</button>
                                      <h2 className='cmn_heading'>OR</h2>
-                                     <button className='login_btn login_google_btn'>
+                                     <button className='login_btn login_google_btn' >
                                         <div className="google_img_outer"> 
                                             <img src={google_img}/>
                                             <h2 className="ps-2">Login with Google </h2></div>

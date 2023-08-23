@@ -15,7 +15,15 @@ const Planner = () => {
       <h3>{event.title}</h3>
     </div>
   );
-  
+  // customise week name 
+  const customDayHeaderContent = (args) => {
+    // You can customize the day names here
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    console.log(args,"args")
+    return days[args.date.getDay()];
+  };
+ 
+
   // events date
   // const [date,setDate]=useState("")
   // const [data,setdata]=useState([])
@@ -83,7 +91,7 @@ const Planner = () => {
                 weekends={true}
                 events={events}
                 eventContent={eventContent}
-                // customHeader={customHeader}
+                dayHeaderContent={customDayHeaderContent}
                 headerToolbar={{
                   left: '  prev',
                   center: 'title',
