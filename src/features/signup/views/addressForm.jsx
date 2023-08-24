@@ -3,6 +3,7 @@ import men_img from "../../../images/men.png"
 import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { counter } from "../../../app/slices/authSlice"
+import jsondata  from "../../../locales/data/initialdata.json"
 const AddressForm=()=>{
 const [addressData,setAddressData]=useState({country:"",state:"",city:"",houseNo:"",pinCode:"",})
 const [error,setError]=useState({country:"",state:"",city:"",houseNo:"",pinCode:"",})
@@ -75,45 +76,45 @@ console.log(addressData,"======sdssff")
                         <div className='addy_container'>
                         <div className="addy_outer">
                             <div className="addy_img">
-                                <h2 className='cmn_fontFamily'>Just One Step Away.</h2>
-                                <p className="pt-2">Enter Your Address</p>
+                                <h2 className='cmn_fontFamily'>{jsondata.oneStepAway}</h2>
+                                <p className="pt-2">{jsondata.address}</p>
                             </div>
                              <div className='login_form'>
                                 <form onSubmit={addressForm}>
                                     <div className='form-group'>
-                                        <label>Country</label>
-                                        <input onChange={formInput} name="country" className="form-control mt-1"type='text' placeholder='Country'/>
+                                        <label>{jsondata.country}</label>
+                                        <input onChange={formInput} name="country" className="form-control mt-1"type='text' placeholder={jsondata.country}/>
                                         {error?<p style={{color:"red"}}>{error.country}</p>:""}
                                     </div>
                                     <div className='form-group'>
-                                        <label>State</label>
-                                        <input onChange={formInput} name="state" className="form-control mt-1"type='text' placeholder='State'/>
+                                        <label>{jsondata.state}</label>
+                                        <input onChange={formInput} name="state" className="form-control mt-1"type='text' placeholder={jsondata.state}/>
                                         {error?<p style={{color:"red"}}>{error.state}</p>:""}
 
                                     </div>
                                     <div className='rememberPass_outer mt-2'>
                                     <div className='form-group'>
-                                        <label>City</label>
-                                        <input onChange={formInput} name="city" className="form-control mt-1"type='text' placeholder='City'/>
+                                        <label>{jsondata.city}</label>
+                                        <input onChange={formInput} name="city" className="form-control mt-1"type='text' placeholder={jsondata.city}/>
                                         {error?<p style={{color:"red"}}>{error.city}</p>:""}
 
                                     </div>
                                     <div className='form-group'>
-                                        <label>House No</label>
+                                        <label>{jsondata.houseNo}</label>
                                         <input onChange={formInput} name="houseNo" className="form-control mt-1"type='number' placeholder='House/Flate No'/>
                                         {error?<p style={{color:"red"}}>{error.houseNo}</p>:""}
 
                                     </div>
                                     <div className='form-group'>
-                                        <label>Pin Code</label>
-                                        <input onChange={formInput} name="pinCode" className="form-control mt-1"type='number' placeholder='Pin Code'/>
+                                        <label>{jsondata.pinCode}</label>
+                                        <input onChange={formInput} name="pinCode" className="form-control mt-1"type='number' placeholder={jsondata.pinCode}/>
                                         {error?<p style={{color:"red"}}>{error.pinCode}</p>:""}
 
                                     </div>
-                                     <button className=' login_btn'>Sign Up</button>
+                                     <button className=' login_btn'>{jsondata.signUp}</button>
                                     </div>
                                 </form>
-                                <h3 className='cmn_heading'>Already have an account? <Link to="/login"><span className='sign_up'>Login</span></Link></h3>
+                                <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to="/login"><span className='sign_up'>{jsondata.login}</span></Link></h3>
                              </div>
                         </div>
 

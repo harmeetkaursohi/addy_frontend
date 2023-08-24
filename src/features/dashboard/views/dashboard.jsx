@@ -11,7 +11,7 @@ import linkedin_img from '../../../images/linkedin.svg'
 import right_arrow_icon from '../../../images/right_arrow_icon.svg'
 import Chart from "../../react_chart/views/chart";
 import UpcomingPost from "../../upcomingPost/views/upcomingPost";
-
+import jsondata from '../../../locales/data/initialdata.json'
 const Dashboard = () => {
     return (
         <>
@@ -35,38 +35,38 @@ const Dashboard = () => {
                                     </Dropdown>
                                     <div className="followers_outer ">
                                     <div className="followers_wrapper ">
-                                    <h5>Followers</h5>
+                                    <h5>{jsondata.followers}</h5>
                                     <div className="followers_inner_content">
                                     <h2>15,452</h2>
                                     <div className="monthly_growth">
                                     <button className="cmn_followers_btn">
                                         <img src={polygon_img} className="polygon_img"/>
                                         1255</button>
-                                    <h6 className="cmn_headings">monthly growth</h6>
+                                    <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
                                     </div>
                                     </div>
                                     </div>
                                     <div className="followers_wrapper">
-                                    <h5>Accounts Reached </h5>
+                                    <h5>{jsondata.accountsReach} </h5>
                                     <div className="followers_inner_content">
                                     <h2>15,452</h2>
                                     <div className="monthly_growth">
                                     <button className="cmn_followers_btn">
                                         <img src={polygon_img} className="polygon_img"/>
                                         1255</button>
-                                    <h6 className="cmn_headings">monthly growth</h6>
+                                    <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
                                     </div>
                                     </div>
                                     </div>
                                     <div className="followers_wrapper">
-                                    <h5>Post Activity</h5>
+                                    <h5>{jsondata.postActivity}</h5>
                                     <div className="followers_inner_content">
                                     <h2>15,452</h2>
                                     <div className="monthly_growth">
                                     <button className="cmn_followers_btn">
                                         <img src={polygon_img} className="polygon_img"/>
                                         1255</button>
-                                    <h6 className="cmn_headings">monthly growth</h6>
+                                    <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
                                     </div>
                                     </div>
                                     </div>
@@ -111,8 +111,8 @@ const Dashboard = () => {
                             <div className="col-lg-4 col-md-12 col-sm-12">
                                 <div className="cmn_background social_media_wrapper">
                                     <div className="social_media_account">
-                                        <h3>Social accounts</h3>
-                                        <h6>See More <img src={right_arrow_icon} height="11px" width="11px"/></h6>
+                                        <h3>{jsondata.socialAccount}</h3>
+                                        <h6>{jsondata.seemore}<img src={right_arrow_icon} height="11px" width="11px"/></h6>
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">

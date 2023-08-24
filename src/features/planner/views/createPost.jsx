@@ -11,18 +11,20 @@ import upload_video_img from '../../../images/video_img.svg'
 import upload_img from '../../../images/post_image.svg'
 import Dropdown from 'react-bootstrap/Dropdown';
 import instagram_img from "../../../images/instagram.png"
+import jsondata from '../../../locales/data/initialdata.json'
 const CreatePost = () => {
     return (
         <>
+        
             <div className="Container">
                 <div className="create_post_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12">
                             <div className="create_post_content">
-                                <h2 className='creare_post_heading'>Create Post</h2>
+                                <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
                                 <form>
                                     <div className="createPost_outer">
-                                        <label className='create_post_label'>Please Select Media Platform</label>
+                                        <label className='create_post_label'>{jsondata.mediaPlatform}</label>
                                         {/* <select>
                                             <option>Team Musafiir</option>
                                             <option>Team Musafiir</option>
@@ -40,8 +42,8 @@ const CreatePost = () => {
                                     </div>
                                     {/* add media */}
                                     <div className="media_outer">
-                                        <h5 className='post_heading create_post_text'>Media</h5>
-                                        <h6 className='create_post_text'>Share photos or a video. Instagram post can’t exceed 10 photos.</h6>
+                                        <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
+                                        <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
                                         <div className="file_outer">
                                             <div className='cmn_blue_border add_media_outer'>
                                                 <input type="file" id='image' className='file'/>
@@ -52,11 +54,11 @@ const CreatePost = () => {
                                                 <label htmlFor='video' className='cmn_headings'> <img src={upload_video_img}/>Add Video</label>
                                             </div>
                                         </div>
-                                        <h2 className='cmn_heading'>OR</h2>
+                                        <h2 className='cmn_heading'>{jsondata.OR}</h2>
                                         <div className="ai_outer_btn">
                                             <button className="ai_btn cmn_white_text mt-2">
                                                 <img src={ai_icon} className='ai_icon me-2' />
-                                                Generate Image with AI </button>
+                                                {jsondata.generateAi} </button>
                                         </div>
                                     </div>
                                     {/* post caption */}
@@ -66,11 +68,11 @@ const CreatePost = () => {
 
                                             <button className="ai_btn cmn_white_text">
                                                 <img src={ai_icon} className='ai_icon me-2' />
-                                                Generate Image with AI </button>
+                                                {jsondata.generateCaptionAi} </button>
 
                                         </div>
                                         <div className='textarea_outer'>
-                                            <h6 className='create_post_text'>Add Text</h6>
+                                            <h6 className='create_post_text'>{jsondata.addText}</h6>
                                             <textarea className='textarea mt-2' rows={3}></textarea>
                                         </div>
                                         <div className='caption_header hashtag_outer'>
@@ -78,11 +80,11 @@ const CreatePost = () => {
 
                                             <button className="ai_btn cmn_white_text">
                                                 <img src={ai_icon} className='ai_icon me-2' />
-                                                Generate Image with AI </button>
+                                                {jsondata.generateHashtagAi} </button>
 
                                         </div>
                                         <div className='textarea_outer'>
-                                            <h6 className='create_post_text'>Add Text</h6>
+                                            <h6 className='create_post_text'>{jsondata.addText}</h6>
                                             <textarea className='textarea mt-2' rows={3}></textarea>
                                         </div>
                                         <div className='textarea get_messages_outer'>
@@ -93,7 +95,7 @@ const CreatePost = () => {
                                                 <h6 className='create_post_text try_it_heading'>Try it out</h6>
                                             </div>
                                             
-                                                <button className='cmn_btn_color add_btn'>Add button</button>
+                                                <button className='cmn_btn_color add_btn'>{jsondata.addbutton}</button>
                                             
                                         </div>
 
@@ -101,21 +103,21 @@ const CreatePost = () => {
                                     {/* schedule */}
                                     <div className='schedule_outer media_outer'>
                                         <div className='schedule_btn_outer'>
-                                            <h5 className='create_post_text post_heading'>Set a Schedule</h5>
+                                            <h5 className='create_post_text post_heading'>{jsondata.setSchedule}</h5>
                                             <div className='schedule_btn_wrapper'>
-                                                <button className='cmn_bg_btn schedule_btn '>Schedule</button>
-                                                <button className='save_btn cmn_bg_btn'>Save as Draft</button>
+                                                <button className='cmn_bg_btn schedule_btn '>{jsondata.schedule}</button>
+                                                <button className='save_btn cmn_bg_btn'>{jsondata.saveasdraft}</button>
                                             </div>
                                         </div>
                                         <div className='schedule_date_outer'>
                                             <div className='date_time_outer'>
-                                                <h6 className='create_post_text'>Set date</h6>
+                                                <h6 className='create_post_text'>{jsondata.setdate}</h6>
                                                
                                                 <input type='date' placeholder='set date' className='form-control mt-2 date_input'/>
                                                 
                                             </div>
                                             <div className='date_time_outer'>
-                                                <h6 className='create_post_text'>Set Time</h6>
+                                                <h6 className='create_post_text'>{jsondata.settime}</h6>
                                                <input type='time' placeholder="set time "className='mt-2 form-control time_input'/>
                                                 
 
@@ -129,8 +131,8 @@ const CreatePost = () => {
                                             <label className="form-check-label create_post_label boost_post_text" for="flexSwitchCheckChecked">Boost Post</label>
                                         </div>
                                         <div className='cancel_publish_btn_outer'>
-                                            <button className='cancel_btn cmn_bg_btn'>Cancel</button>
-                                            <button className='publish_btn cmn_bg_btn'>Publish Now</button>
+                                            <button className='cancel_btn cmn_bg_btn'>{jsondata.cancel}</button>
+                                            <button className='publish_btn cmn_bg_btn'>{jsondata.publishnow}</button>
                                         </div>
                                     </div>
                                 </form>

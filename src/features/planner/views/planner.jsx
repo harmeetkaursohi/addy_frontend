@@ -4,6 +4,7 @@ import './planner.css'
 import SideBar from '../../sidebar/views/Layout'
 import instagram_img from '../../../images/instagram.png'
 import linkedin from '../../../images/linkedin.svg'
+import jsondata from '../../../locales/data/initialdata.json'
 const Planner = () => {
   const events = [
     { title: 'Instagram post', start: new Date(), imageUrl: instagram_img },{title:"Twitter",start: '2023-08-18',imageUrl: linkedin}
@@ -46,11 +47,11 @@ const Planner = () => {
           <div className='planner_outer'>
             <div className='planner_header_outer'>
               <div className='planner_header'>
-                <h2>Planner</h2>
+                <h2>{jsondata.sidebarContent.planner}</h2>
                 <h6>Here you find all the upcoming Posts you scheduled.</h6>
               </div>
               <div>
-                <button className='cmn_btn_color create_post_btn cmn_white_text'>Create Post</button>
+                <button className='cmn_btn_color create_post_btn cmn_white_text'>{jsondata.createpost}</button>
 
               </div>
             </div>

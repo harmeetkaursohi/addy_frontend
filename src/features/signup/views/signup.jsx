@@ -1,6 +1,7 @@
 import { useState } from "react"
 import men_img from "../../../images/men.png"
 import { Link } from "react-router-dom"
+import jsondata from "../../../locales/data/initialdata.json"
 const SignUp = () => {
     const [formData, setFormData] = useState({ username: "", email: "", industry: "", country: "", password: "", confirmPass: "" })
     const [error, setError] = useState({ username: "", validuser: "", email: "", industry: "", country: "", password: "", confirmPass: "", matchPassword: "" })
@@ -114,7 +115,7 @@ const userData = (e) => {
                                     <div className='login_form'>
                                         <form onSubmit={userData}>
                                             <div className='form-group'>
-                                                <label> User Name</label>
+                                                <label>{jsondata.username}</label>
                                                 <input value={formData.username} onChange={inputHandler} name="username" className="form-control mt-1" type='text' placeholder='Username' />
                                                 <p>{error ? <p style={{ color: "red" }}>{error.username}</p> : ""}</p> 
                                                  <p>{error ? <p style={{ color: "red" }}>{error.validuser}</p> : ""}</p> 
@@ -122,37 +123,37 @@ const userData = (e) => {
 
                                             </div>
                                             <div className='form-group'>
-                                                <label>Email</label>
+                                                <label>{jsondata.email}</label>
                                                 <input value={formData.email} onChange={inputHandler} name="email" className="form-control mt-1" type='email' placeholder='Email' />
                                                  <p>{error ? <p style={{ color: "red" }}>{error.email}</p> : ""}</p> 
                                             </div>
                                             <div className='rememberPass_outer mt-2'>
                                                 <div className='form-group'>
-                                                    <label>Industry</label>
+                                                    <label>{jsondata.industry}</label>
                                                     <input value={formData.industry} onChange={inputHandler} name="industry" className="form-control mt-1" type='text' placeholder='Industry' />
                                                      <p>{error ? <p style={{ color: "red" }}>{error.industry}</p> : ""}</p>
                                                 </div>
                                                 <div className='form-group'>
-                                                    <label>Country</label>
+                                                    <label>{jsondata.country}</label>
                                                     <input value={formData.country} onChange={inputHandler} name="country" className="form-control mt-1" type='text' placeholder='Country' />
                                                      <p>{error ? <p style={{ color: "red" }}>{error.country}</p> : ""}</p> 
                                                 </div>
                                                 <div className='form-group'>
-                                                    <label>Password</label>
+                                                    <label>{jsondata.password}</label>
                                                     <input value={formData.password} onChange={inputHandler} name="password" className="form-control mt-1" type='password' placeholder='Password' />
                                                      <p>{error ? <p style={{ color: "red" }}>{error.password}</p> : ""}</p> 
 
                                                 </div>
                                                 <div className='form-group'>
-                                                    <label>Confirm Password</label>
+                                                    <label>{jsondata.confirmPass}</label>
                                                     <input value={formData.confirmPass} onChange={inputHandler} name="confirmPass" className="form-control mt-1" type='password' placeholder='Confirm Password' />
                                                     <p>{error ? <p style={{ color: "red" }}>{error.confirmPass}</p> : ""}</p>
                                                      <p>{error ? <p style={{ color: "red" }}>{error.matchPassword}</p> : ""}</p> 
                                                 </div>
-                                                <button className=' login_btn'>Next</button>
+                                                <button className=' login_btn'>{jsondata.next}</button>
                                             </div>
                                         </form>
-                                        <h3 className='cmn_heading'>Already have an account?  <Link to="/login"><span className='sign_up'>Login</span></Link></h3>
+                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount}  <Link to="/login"><span className='sign_up'>{formdata.userdata.login}</span></Link></h3>
                                     </div>
                                 </div>
 

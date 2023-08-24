@@ -2,6 +2,7 @@ import addyads_img from '../../../images/addylogo.png'
 import girl_img from '../../../images/girl.png'
 import google_img from '../../../images/Google_img.svg'
 import {Link} from "react-router-dom"
+import jsondata from '../../../locales/data/initialdata.json'
 import './Login.css'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,6 +13,7 @@ const[validName,setValidName]=useState(false)
 const[validPassword,setValidPassword]=useState(false)
 const[password,setPassword]=useState("")
 const[check,setCheck]=useState("")
+console.log(formdata,"=======")
 const loginForm=(e)=>{
 e.preventDefault()
 if(name===""){
@@ -56,18 +58,18 @@ console.log(validName,"ch")
                             <div className="addy_img">
                                 <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                 </div>
-                                <h2 className='cmn_fontFamily'>Welcome Back</h2>
+                                <h2 className='cmn_fontFamily'>{jsondata.welcomeBack}</h2>
                                 <p>Lorem Ipsum is simply dummy text of the printing and type setting industry.</p>
                             </div>
                              <div className='login_form'>
                                 <form onSubmit={loginForm}>
                                     <div className='form-group'>
-                                        <label>E-mail or Username</label>
+                                        <label>{jsondata.email} or {jsondata.username}</label>
                                         <input className="form-control mt-1"type='email' placeholder='Email' value={name} onChange={(e)=>setName(e.target.value)} onFocus={()=>{setValidName(false)}}/>
                                         {validName?<p style={{color:"red"}}>Please enter your email</p>:""}
                                     </div>
                                     <div className='form-group'>
-                                        <label>Password</label>
+                                        <label>{jsondata.password}</label>
                                         <input className="form-control mt-1"type='password' placeholder='Password' value={password} onChange={(e)=>{setPassword(e.target.value)}} onFocus={()=>{setValidPassword(false)}}/>
                                         {validPassword?<p style={{color:"red"}}>Please enter password</p>:""}
 
@@ -76,11 +78,11 @@ console.log(validName,"ch")
                                      <div className='check_box_outer'>
                                         <div>
                                         <input type='checkbox' onChange={(e)=>{setCheck(e.target.checked)}}/>
-                                        <label className='ms-2'>Remember Password</label>
+                                        <label className='ms-2'>{jsondata.rememberPassword}</label>
                                         </div>
-                                     <label className='forgetPass_heading'>Forgot Password?</label>
+                                     <label className='forgetPass_heading'>{jsondata.forgotpassword}?</label>
                                      </div>
-                                     <button className=' login_btn'>Login</button>
+                                     <button className=' login_btn'>{jsondata.login}</button>
                                      <h2 className='cmn_heading'>OR</h2>
                                      <button className='login_btn login_google_btn' >
                                         <div className="google_img_outer"> 
@@ -89,7 +91,7 @@ console.log(validName,"ch")
                                      </button>
                                     </div>
                                 </form>
-                                <h3 className='cmn_heading'>Don’t have an account? <Link to="/"><span className='sign_up'>Signup</span></Link></h3>
+                                <h3 className='cmn_heading'>{jsondata.account}<Link to="/"><span className='sign_up'>{formdata.userdata.signup}</span></Link></h3>
                              </div>
                         </div>
 
