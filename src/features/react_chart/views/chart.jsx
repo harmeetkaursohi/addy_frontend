@@ -1,4 +1,4 @@
-import { AreaChart, LineChart,Area,Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { AreaChart, LineChart,Area,Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,ResponsiveContainer } from 'recharts';
 import './chart.css'
 const Chart=()=>{
     const data = [
@@ -14,8 +14,8 @@ const Chart=()=>{
       
     return(
         <>
-        <div  >
-
+        <div className='rechart_container' >
+        <ResponsiveContainer width="100%" aspect={1} >
     <AreaChart  data={data} className='line_chart' height={400} width={500} >
     <XAxis dataKey="name" tick={{ fill: '#5F6D7E', fontSize: 13 }}/>
     <YAxis  dataKey="amt" tick={{ fill: '#5F6D7E', fontSize: 13 }}/>
@@ -25,6 +25,7 @@ const Chart=()=>{
     <Area type="monotone" dataKey="value" stackId="1" stroke="#05A2FB" fill="#98d2f3"/>
     <Area type="monotone" dataKey="value1" stackId="2" stroke="#F07C33" fill='transparent'/>
   </AreaChart>
+  </ResponsiveContainer>
         </div>
         </>
     )

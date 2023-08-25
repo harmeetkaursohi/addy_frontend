@@ -72,7 +72,7 @@ const Planner = () => {
             <div className='calender_outer_wrapper'>
               <div className="custom-header">
                 <select className=" filter_options cmn_text_style box_shadow">
-                  <option>Filter</option>
+                  <option >Filter</option>
                   <option>Option 1</option>
                   <option>Option 2</option>
                 </select>
