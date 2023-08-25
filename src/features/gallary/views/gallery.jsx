@@ -5,6 +5,7 @@ import child_girl from '../../../images/child_girl.png'
 import nature from '../../../images/nature.png'
 import beautiful_nature from '../../../images/beautiful_nature.png'
 import ai_bg from '../../../images/ai_bg.png'
+import  jsondata  from "../../../locales/data/initialdata.json"
 const Gallery=()=>{
     return(
         <>
@@ -15,7 +16,7 @@ const Gallery=()=>{
             <div className="gallery_wrapper">
                 <div className="gallery_header">
                 <h2 className="cmn_text_heading">
-                Gallery
+                {jsondata.sidebarContent.gallery}
                 </h2>
                 <h6 className="cmn_small_heading">Here you find all the upcoming Posts you scheduled.</h6>
                 </div>

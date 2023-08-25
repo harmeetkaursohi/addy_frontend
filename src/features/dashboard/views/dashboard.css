@@ -11,8 +11,15 @@ button#dropdown-basic
     font-weight: 700;
     line-height: 20px;
     letter-spacing: -0.02px;
-    padding: 14px;
+    padding: 10px 10px 10px 0px;
+    width: 191px;
 }
+button#dropdown-basic::after{
+    content: url("../../../images/down_arrow.svg");
+    position: absolute;
+    height: 50px;
+    border: unset;
+} 
 .followers_outer{
 padding: 21px 20px;
 display: flex;
@@ -144,56 +151,6 @@ color: #393939;
 min-width: 111px;
 height: 39px;
 }
-/* upcoming_post */
-.post_content h4{
-color: #585858;
-font-family: Nunito;
-font-size: 16px;
-font-style: normal;
-font-weight: 600;
-line-height: 24px; /* 150% */
-letter-spacing: 0.024px;
-padding-top: 12px;
-}
-.upcoming_post_outer h2{
-color: #000;
-font-size: 20px;
-font-weight: 700;
-line-height: 38px; 
-letter-spacing: -0.2px;
-}
-.Tomorrow_btn{
-    border: none;
-    border-radius: 5px;
-    display: flex;
-    gap: 5px;
-    align-items: center;
-}
-.user_outer{
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-.post_outer{
-    display: flex;
-    justify-content: space-between;
-    padding: 16px 20px;
-    
-}
-.post_content {
-    padding: 16px 20px;
-}
-.upcoming_post_container{
-    background-image: url("../../../images//post_bg.png");
-    height: 196px;
-    border-top-left-radius: 19px;
-    border-top-right-radius: 19px; 
-    background-repeat: no-repeat;
-    margin-top: 12px;
-    width: 100%;
-    background-size: cover;
-    
-}
 .account_info {
     display: flex;
     justify-content: center;
@@ -263,6 +220,7 @@ select.page_title_options {
     padding: 6px 2px 6px 0px;
     border: none;
     font-size: 16px;
+    background-color: transparent;
     
 }
 .instagram_overview_heading{
@@ -301,9 +259,7 @@ select.page_title_options {
     .followers_wrapper h2{
         font-size: 20px;
     }
-    .delete_post_btn,.change_post_btn {
-        padding: 8px 14px;
- }
+    
 }
  @media screen and (max-width:991px) {
     .social_media_outer{
@@ -317,21 +273,6 @@ select.page_title_options {
     }
  }
 @media screen and (max-width:767px){
-    /* upcoming post  */
-    .change_post_btn {
-        padding: 8px 42px;
-        margin-left: 0px !important;
-        margin-top: 13px;
-    }
-    button#dropdown-basic {
-        font-size: 14px;
-        padding: 6px 13px;
-    }
-    .delete_btn_outer {
-        display: flex;
-        flex-wrap: wrap;
-    }
-    /*  */
     .monthly_growth{
         display: block;
     }

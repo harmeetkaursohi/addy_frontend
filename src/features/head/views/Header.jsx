@@ -1,4 +1,5 @@
 import search_icon from "../../../images/search_icon.svg"
+import  jsondata  from "../../../locales/data/initialdata.json"
 import './Header.css'
 const Header=()=>{
     return(
@@ -10,7 +11,7 @@ const Header=()=>{
                     <div className="col-lg-5 col-md-12 col-sm-12">
                      <div className="header_outer_container">
                      <div className="header_container">
-                     <h2 className="">Hey there, Pritpal Singh!</h2>
+                     <h2 className="">{jsondata.heythere} Pritpal Singh!</h2>
                      <h6>Welcome back to your all in Dashboard and more text here!</h6>
                      </div>
                      </div>
@@ -24,10 +25,10 @@ const Header=()=>{
                     <div className="col-lg-3 col-md-12 col-sm-12">
                         <div className="create_Ad_outer">
                         <button className="Create_Ad_btn crate_btn">
-                            Create Ad
+                           {jsondata.createad}
                             </button>
                             <button className="createPost_btn crate_btn cmn_btn_color ">
-                            Create Post
+                            {jsondata.createpost}
                             </button>
                         </div>
                     </div>

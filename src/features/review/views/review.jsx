@@ -7,6 +7,7 @@ import nature from '../../../images/nature.png'
 import beautiful_nature from '../../../images/beautiful_nature.png'
 import ai_bg from '../../../images/ai_bg.png'
 import tiktok_img from '../../../images/tiktok.svg'
+import jsondata from "../../../locales/data/initialdata.json"
 const Review=()=>{
     return(
         <>
@@ -17,7 +18,7 @@ const Review=()=>{
                 <div className="review_wrapper">
                     <div className="review_header">
                         <div className="review_heading">
-                        <h2 className="cmn_text_heading">Like/Comments</h2>
+                        <h2 className="cmn_text_heading">{jsondata.likecomment}</h2>
                         <h6 className="cmn_small_heading">Here you find all the upcoming Posts you scheduled.</h6>
                         </div>
                         <select className="filter_select_btn cmn_text_style">
@@ -29,11 +30,11 @@ const Review=()=>{
                         <table >
                        <thead>
                         <tr>
-                        <th>Post</th>
-                       <th>Soial Media</th>
-                       <th>Likes</th>
-                       <th>Comments</th>
-                       <th>Share</th>
+                        <th>{jsondata.post}</th>
+                       <th>{jsondata.socialmedia}</th>
+                       <th>{jsondata.likes}</th>
+                       <th>{jsondata.comments}</th>
+                       <th>{jsondata.share}</th>
                        <th></th>
                         </tr>
                        </thead>
@@ -47,7 +48,7 @@ const Review=()=>{
                         <td>100 Comments</td>
                         <td>100 Share</td>
                         <td>
-                            <button className="view_post_btn cmn_bg_btn">View Post</button>
+                            <button className="view_post_btn cmn_bg_btn">{jsondata.viewpost}</button>
                         </td>
                         </tr>
                         <tr>
@@ -59,7 +60,7 @@ const Review=()=>{
                         <td>100 Comments</td>
                         <td>100 Share</td>
                         <td>
-                            <button className="view_post_btn cmn_bg_btn">View Post</button>
+                            <button className="view_post_btn cmn_bg_btn">{jsondata.viewpost}</button>
                         </td>
                         </tr>
                         <tr>
@@ -71,7 +72,7 @@ const Review=()=>{
                         <td>100 Comments</td>
                         <td>100 Share</td>
                         <td>
-                            <button className="view_post_btn cmn_bg_btn">View Post</button>
+                            <button className="view_post_btn cmn_bg_btn">{jsondata.viewpost}</button>
                         </td>
                         </tr>
                         <tr>
@@ -83,7 +84,7 @@ const Review=()=>{
                         <td>100 Comments</td>
                         <td>100 Share</td>
                         <td>
-                            <button className="view_post_btn cmn_bg_btn">View Post</button>
+                            <button className="view_post_btn cmn_bg_btn">{jsondata.viewpost}</button>
                         </td>
                         </tr>
                         <tr>
@@ -95,7 +96,7 @@ const Review=()=>{
                         <td>100 Comments</td>
                         <td>100 Share</td>
                         <td>
-                            <button className="view_post_btn cmn_bg_btn">View Post</button>
+                            <button className="view_post_btn cmn_bg_btn">{jsondata.viewpost}</button>
                         </td>
                         </tr>
                        </tbody>
