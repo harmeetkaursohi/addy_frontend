@@ -13,7 +13,7 @@ const[validName,setValidName]=useState(false)
 const[validPassword,setValidPassword]=useState(false)
 const[password,setPassword]=useState("")
 const[check,setCheck]=useState("")
-console.log(formdata,"=======")
+
 const loginForm=(e)=>{
 e.preventDefault()
 if(name===""){
@@ -91,7 +91,7 @@ console.log(validName,"ch")
                                      </button>
                                     </div>
                                 </form>
-                                <h3 className='cmn_heading'>{jsondata.account}<Link to="/"><span className='sign_up'>{formdata.userdata.signup}</span></Link></h3>
+                                <h3 className='cmn_heading'>{jsondata.account}<Link to="/"><span className='sign_up'>{jsondata.signup}</span></Link></h3>
                              </div>
                         </div>
 

@@ -12,15 +12,9 @@ const Chart=()=>{
       ];
     return(
         <>
-<<<<<<< HEAD
-        <div className='rechart_container' >
-        <ResponsiveContainer width="100%" aspect={1} >
-    <AreaChart  data={data} className='line_chart' height={400} width={500} >
-=======
         <div className='rechart_container'  >
       <ResponsiveContainer  height={300}  >
     <AreaChart  data={data} className='line_chart'   >
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
     <XAxis dataKey="name" tick={{ fill: '#5F6D7E', fontSize: 13 }}/>
     <YAxis  tickFormatter={(amt) => `${amt}%`} dataKey="amt"  tick={{ fill: '#5F6D7E', fontSize: 13 }}/>
     <CartesianGrid stroke="#eee" strokeDasharray="2 2"/>

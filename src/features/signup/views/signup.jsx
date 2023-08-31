@@ -153,7 +153,7 @@ const userData = (e) => {
                                                 <button className=' login_btn'>{jsondata.next}</button>
                                             </div>
                                         </form>
-                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount}  <Link to="/login"><span className='sign_up'>{formdata.userdata.login}</span></Link></h3>
+                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount}  <Link to="/login"><span className='sign_up'>{jsondata.login}</span></Link></h3>
                                     </div>
                                 </div>
 

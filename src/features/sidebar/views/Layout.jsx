@@ -9,11 +9,7 @@ import profile_img from '../../../images/profile_img.png'
 import addy_logo from '../../../images/addylogo.png'
 import { NavLink, useLocation } from "react-router-dom"
 import "./Layout.css"
-<<<<<<< HEAD
-
-=======
 import jsondata from "../../../locales/data/initialdata.json"
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
 const SideBar = () => {
     const [sidebar, setSidebar] = useState(true)
     const show_sidebar = () => {
@@ -68,11 +64,7 @@ const SideBar = () => {
                                             <path id="Vector_2" d="M11.875 14.75H7.125" stroke="#97A1AD" stroke-width="2" stroke-linecap="round" />
                                         </g>
                                     </svg>}
-<<<<<<< HEAD
-                                    Home</NavLink>
-=======
                                     {jsondata.sidebarContent.home}</NavLink>
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
                             </div>
                         </li>
                         <li>
@@ -110,11 +102,7 @@ const SideBar = () => {
                                                 <path id="Vector_10" d="M6.33333 10.7917C6.33333 11.2289 5.97889 11.5833 5.54167 11.5833C5.10444 11.5833 4.75 11.2289 4.75 10.7917C4.75 10.3544 5.10444 10 5.54167 10C5.97889 10 6.33333 10.3544 6.33333 10.7917Z" fill="#97A1AD" />
                                             </g>
                                         </svg>}
-<<<<<<< HEAD
-                                    Planner</NavLink>
-=======
                                         {jsondata.sidebarContent.planner}</NavLink>
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
                             </div>
                         </li>
                         <li>
@@ -154,11 +142,7 @@ const SideBar = () => {
                                             </clipPath>
                                         </defs>
                                     </svg>}
-<<<<<<< HEAD
-                                    Comments/Reviews</NavLink>
-=======
                                     {jsondata.sidebarContent.comment}</NavLink>
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
 
                             </div>
                         </li>
@@ -182,11 +166,7 @@ const SideBar = () => {
                                         </svg>
                                     }
 
-<<<<<<< HEAD
-                                    Gallery</NavLink>
-=======
                                     {jsondata.sidebarContent.gallery}</NavLink>
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
 
                             </div>
                         </li>
@@ -219,11 +199,7 @@ const SideBar = () => {
                                             </clipPath>
                                         </defs>
                                     </svg>}
-<<<<<<< HEAD
-                                    Insights</NavLink>
-=======
                                     {jsondata.sidebarContent.insight}</NavLink>
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
 
                             </div>
                         </li>
@@ -253,11 +229,7 @@ const SideBar = () => {
                                         </defs>
                                     </svg>}
 
-<<<<<<< HEAD
-                                    FAQ’s</NavLink>
-=======
                                     {jsondata.sidebarContent.faq}</NavLink>
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
 
                             </div>
                         </li>
@@ -278,11 +250,7 @@ const SideBar = () => {
                                             <path id="Vector_2" d="M2.625 11.1135V13.2746C2.625 15.2348 2.625 16.2149 3.00647 16.9635C3.34204 17.6221 3.87747 18.1576 4.53604 18.4931C5.28473 18.8746 6.26482 18.8746 8.225 18.8746H12.775C14.7352 18.8746 15.7153 18.8746 16.464 18.4931C17.1225 18.1576 17.6579 17.6221 17.9935 16.9635C18.375 16.2149 18.375 15.2348 18.375 13.2746V11.1135C18.375 10.1083 18.375 9.60574 18.2454 9.14294C18.1307 8.73298 17.9421 8.34739 17.6889 8.0051C17.4031 7.6187 17.0065 7.31016 16.213 6.69308L13.9381 4.92363C12.7084 3.96725 12.0936 3.48905 11.4147 3.30524C10.8157 3.14304 10.1843 3.14304 9.58528 3.30524C8.90636 3.48905 8.29157 3.96725 7.06193 4.92363L4.78693 6.69308C3.99353 7.31016 3.59684 7.6187 3.31104 8.0051C3.05789 8.34739 2.8693 8.73298 2.75454 9.14294C2.625 9.60574 2.625 10.1083 2.625 11.1135Z" stroke="#97A1AD" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
                                         </g>
                                     </svg>}
-<<<<<<< HEAD
-                                    Privacy Policy</NavLink>
-=======
                                     {jsondata.sidebarContent.privacyPolicy}</NavLink>
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
                             </div>
                         </li>
                         <li>
@@ -300,11 +268,7 @@ const SideBar = () => {
                                             <path id="Vector" d="M8.5851 9.79193C9.4435 11.3014 10.6986 12.5565 12.2081 13.4149L13.0189 12.2798C13.2885 11.9025 13.7973 11.7859 14.2043 12.0082C15.4939 12.7126 16.919 13.1407 18.4057 13.2584C18.8824 13.2962 19.25 13.694 19.25 14.1722V18.2631C19.25 18.7331 18.8945 19.1269 18.427 19.1749C17.9413 19.2249 17.4512 19.25 16.9583 19.25C9.11129 19.25 2.75 12.8887 2.75 5.04167C2.75 4.54875 2.77514 4.05873 2.82507 3.57295C2.87311 3.10544 3.26695 2.75 3.73693 2.75H7.8278C8.30601 2.75 8.70387 3.11762 8.74161 3.59433C8.85928 5.08097 9.28739 6.50617 9.99185 7.79574C10.2141 8.2027 10.0975 8.71158 9.72024 8.98111L8.5851 9.79193ZM6.2739 9.18977L8.01552 7.94575C7.52168 6.87971 7.18326 5.74918 7.01 4.58333H4.59165C4.58611 4.73579 4.58333 4.88858 4.58333 5.04167C4.58333 11.8762 10.1239 17.4167 16.9583 17.4167C17.1114 17.4167 17.2642 17.4139 17.4167 17.4083V14.99C16.2509 14.8167 15.1203 14.4783 14.0542 13.9845L12.8102 15.7262C12.307 15.5306 11.821 15.3005 11.3551 15.0389L11.3019 15.0086C9.50556 13.9871 8.0129 12.4944 6.99142 10.6981L6.96111 10.6449C6.69945 10.179 6.46941 9.69302 6.2739 9.18977Z" fill="#97A1AD" />
                                         </g>
                                     </svg>}
-<<<<<<< HEAD
-                                    Contact Us</NavLink>
-=======
                                     {jsondata.sidebarContent.contact}</NavLink>
->>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c
 
                             </div>
                         </li>
