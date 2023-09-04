@@ -9,6 +9,9 @@
     "privacyPolicy": "Privacy Policy",
     "contact": "Contact Us"
   },
+  "createPassword":{
+    "createPassword":"Create Password"
+  },
   "post": "Post",
   "socialmedia": "Social Media",
   "likes": "Likes",
@@ -48,8 +51,12 @@
   "alreadyAccount": "Already have an account?",
   "oneStepAway": "Just One Step Away.",
   "state": "State",
-  "city": "City",
+  "county": "County",
+  "contactNo":"Contact No",
   "houseNo": "House No.",
+  "addressLine1":"Address Line1 ",
+  "addressLine2":"Address Line2 ",
+  "city":"City",
   "pinCode": "Pin Code",
   "address": "Enter Your Address",
   "signUp": "Sign up",

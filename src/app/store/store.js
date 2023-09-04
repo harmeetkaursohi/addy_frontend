@@ -5,7 +5,7 @@ import logger from 'redux-logger';
 
 
 const rootReducers = combineReducers({
-    users: userSlice,
+    user: userSlice,
 })
 
 const store = configureStore({

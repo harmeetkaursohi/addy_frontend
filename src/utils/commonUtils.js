@@ -14,17 +14,25 @@ export const validationSchemas = {
 
     register: yup.object().shape({
         username: yup.string().required('Username is required'),
-        //     .test('is-unique', 'Username is already exists', async (value) => {
-        //
-        // }),
         email: yup.string().required('Email is required').email('Invalid email format'),
-        industry: yup.string().required('Industry is required'),
-        country: yup.string().required('Country is required'),
+        // industry: yup.string().required('Industry is required'),
+        contactNo: yup.string().required('Contact No is required'),
+    }),
+
+    createPassword: yup.object().shape({
         password: yup.string()
-            .min(5, 'Password must be at least 5 characters')
+            .min(8, 'Password must be at least 8 characters')
             .required('Password is required'),
-            // .matches(passwordPattern, 'Password must meet the specified criteria'),
+        // .matches(passwordPattern, 'Password must meet the specified criteria'),
         confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
             .required('Confirm Password is required'),
+
+    }),
+
+    address:yup.object().shape({
+        country: yup.string().required('Country is required'),
+        addressLine1: yup.string().required('AddressLine is required'),
+        county: yup.string().required('County is required'),
+        state: yup.string().required('State is required'),
     }),
 };

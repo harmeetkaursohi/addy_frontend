@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loginUser, signUpUser } from "../../actions/userActions/userActions.js";
+import { loginUser, resetPassword, signUpUser } from "../../actions/userActions/userActions.js";
 
 const userSlice = createSlice({
     name: 'user',
@@ -35,12 +35,23 @@ const userSlice = createSlice({
 
         // register-user
         [signUpUser.pending]: (state) => {
-            state.signUpReducer = { loading: true }
+            state.signUpReducer = { loading: true };
         },
-        [signUpUser.fulfilled]: (state, action) => {
-            state.signUpReducer = { loading: false, data: action.payload.data }
+        [signUpUser.fulfilled]: (state) => {
+            state.signUpReducer = { loading: false}
         },
         [signUpUser.rejected]: (state) => {
+            state.signUpReducer = { loading: false }
+        },
+
+        // create password
+        [resetPassword.pending]: (state) => {
+            state.signUpReducer = { loading: true };
+        },
+        [resetPassword.fulfilled]: (state, action) => {
+            state.signUpReducer = { loading: false, data: action.payload}
+        },
+        [resetPassword.rejected]: (state) => {
             state.signUpReducer = { loading: false }
         },
     }
