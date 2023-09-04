@@ -1,0 +1,66 @@
+.generate_btn{
+    position: absolute;
+    left: auto;
+    right: 8px;
+    top: 11px;
+    border-radius: 5px;
+background: #97A1AD;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    border: none;
+    padding: 11px 15px
+
+}
+
+.generate_image_wrapper_box {
+    padding: 30px;
+}
+.modal-header{
+    border-bottom: unset;
+}
+.ai_images_outer {
+    margin-top: 41px;
+    gap: 14px;
+    display: flex;
+}
+.ai_genarted_img{
+    height: 126px;
+    width: 126px;;
+}
+.generate_image_outer{
+    position: relative;
+}
+.generate_image_outer input{
+    padding: 20px 17px;
+}
+.generate_image_outer input::placeholder{
+color: #5F6D7E;
+font-family: "Nunito";
+font-size: 12px;
+font-style: italic;
+font-weight: 500;
+line-height: normal;
+}
+
+
+@media screen and (max-width:767px){
+    .generate_image_wrapper_box {
+        padding: 9px;
+    }
+    .ai_images_outer{
+        display: block;
+        margin-top: 20px;
+    }
+    .ai_images_outer img{
+        margin: 10px;
+    }
+    button.generate_btn {
+        margin-top: 20px;
+        position: unset;
+        padding: 7px 20px;
+    }
+    .generate_image_outer input {
+        padding: 11px 7px;
+    }
+}

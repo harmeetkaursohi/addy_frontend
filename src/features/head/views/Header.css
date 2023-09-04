@@ -1,0 +1,105 @@
+.Create_Ad_btn{
+    color: #393939 !important; 
+    background-color: #E6E9EC;
+}
+.crate_btn{
+    padding: 8px 16px;
+color:  #F8F9FB;
+font-family: Nunito;
+font-size: 14px;
+font-style: normal;
+font-weight: 700;
+line-height: 20px;
+border: none;
+border-radius: 6px;
+}
+.header_outer_container {
+    display: flex;
+}
+.search_outer input{
+    text-indent: 13px;
+ }
+.header_container h2{
+color:  #2E3646;
+font-size: 28px;
+font-weight: 700;
+line-height: 38px; 
+letter-spacing: -0.28px;
+}
+.header_container h6{
+color: #5F6D7E;
+font-family: Nunito;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 24px; /* 150% */
+letter-spacing: -0.016px;
+}
+.search_outer{
+    position: relative;
+}
+.search_icon{
+    position: absolute;
+    top: 11px;
+    left: 11px;
+}
+.search_input::placeholder{
+    padding-left: 20px;
+}
+.header_outer {
+    padding: 32px 0px;
+}
+.createPost_btn{
+    margin-left: 16px;
+}
+ @media screen and (max-width:1024px){
+    button.createPost_btn{
+        margin-left: 0px ;
+        margin-top: 10px;
+    }
+    .header_container h2 {
+        font-size: 24px;
+    }
+    
+    .header_container h6 {
+        font-size: 15px;
+    }
+ }
+@media screen and (max-width:991px){
+    .create_Ad_outer {
+        margin-top: 21px;
+    }
+    button.createPost_btn{
+        
+        margin-left: 10px 
+    }
+    .search_outer {
+        margin-top: 21px;
+    }
+    
+    .header_container h6 {
+        margin-top: 10px;
+    }
+}
+@media screen and (max-width:767px) {
+   .create_Ad_outer{
+    display: flex;
+    margin-top: 20px;
+   }
+   button.crate_btn {
+    padding: 11px 13px;
+}
+.header_container h2 {
+    font-size: 18px;
+}
+.header_container h6 {
+    font-size: 14px;
+}
+.search_outer {
+    margin-top: 20px;
+}
+button.createPost_btn{
+    margin-left: 10px ;
+    margin-top: 0px;
+}
+}

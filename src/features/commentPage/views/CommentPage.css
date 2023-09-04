@@ -1,0 +1,142 @@
+.comment_outer {
+    width: 100%;
+    overflow: hidden;
+}
+.post_image_outer {
+    background: #1E1E1E;
+    height: 100%;
+}
+.post_Image_wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.post_image{
+    width: 100%;
+    height: 550px;
+    object-fit: cover;
+}
+.comment_header {
+    display: flex;
+    justify-content: space-between;
+    padding: 26px 32px;
+}
+.back_heading_outer{
+    display: flex;
+    gap: 20px;
+
+}
+.back_heading{
+    font-size: 32px;
+}
+.user_img{
+    height: 40px;
+    width: 40px;
+}
+.user_name_heading {
+    color: #000;
+}
+.discover_hedaing{
+color: #000;
+font-size: 18px;
+font-weight: 600;
+line-height: normal;
+}
+.hashtag_text h3{
+ color: #00A3FF;
+font-size: 18px;
+font-weight: 600;
+line-height: normal;
+}
+.all_likes_outer {
+    display: flex;
+    gap: 10px;
+}
+.reply_heading{
+    margin-top: 10px;
+    padding-left: 133px;
+}
+.reply_heading::before{
+content: "";
+height: 1px;
+width: 56px;
+background: #aba6a6;
+color: red;
+position: absolute;
+right: 316px;
+margin-top: 10px;
+}
+.user_reply_outer{
+    margin-left: 67px;
+}
+.post_total_comment_outer {
+    background: #F4F7FC;
+   
+}
+.likes_comment_wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.share_outer{
+    display: flex;
+    gap: 20px;
+}
+.hr{
+    background: #DDE3EA;
+}
+.post_comment_wrapper{
+    background-color: white;
+    gap: 12px;
+
+    align-items: center;
+    display: flex;
+
+}
+.thumbs_up_outer{
+    background: #0e88df;
+    width: 26px;
+    height: 26px;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.post_btn{
+    color: #00A3FF;
+    font-weight: 600;
+line-height: normal;
+border: none;
+background-color: white;
+}
+.post_comment_wrapper input{
+    border: unset;
+}
+.cmn_padding{
+    padding: 12px 31px;
+}
+.user_comment_outer {
+    padding-top: 23px;
+}
+@media screen and (max-width:991px){
+    .post_image{
+        width: 100%;
+    }
+    .reply_heading::before {
+        right: 256px;
+    }
+}
+@media screen and (max-width:767px){
+    .reply_heading::before {
+        right: 201px;
+    }
+    .user_comment_outer {
+        margin-top: 20px;
+    }
+    .likes_comment_wrapper{
+        font-size: 14px;
+    }
+    .discover_hedaing {
+        font-size: 14px;
+    }
+    
+}

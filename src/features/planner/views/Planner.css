@@ -1,0 +1,283 @@
+.planner_header_outer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.create_post_btn {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+}
+
+.planner_outer {
+    padding: 24px;
+    background: #FDFAFF;
+}
+
+.filter_options {
+    position: absolute;
+    top: 22px;
+    right: 1px;
+    position: absolute;
+    top: 22px;
+    right: 1px;
+    border: unset;
+    padding: 13px 0px 13px 13px;
+    min-width: 152px;
+
+}
+
+.calender_outer_wrapper {
+    position: relative;
+}
+
+.fc-button-primary:not(:disabled):active {
+    background-color: unset;
+    border-color: unset;
+    color: unset;
+}
+
+.fc .fc-button:focus {
+    box-shadow: unset;
+    outline: unset;
+}
+
+.planner_header h6 {
+    color: #5F6D7E;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.016px;
+}
+
+.planner_header h2 {
+    color: #2E3646;
+    font-family: 'Nunito';
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 38px;
+    /* 135.714% */
+    letter-spacing: -0.28px;
+}
+
+/* calender  */
+/* button.fc-today-button.fc-button.fc-button-primary {
+color: #000;
+font-family: 'Nunito';
+font-size: 14px;
+font-style: normal;
+font-weight: 700;
+line-height: 20px; 
+letter-spacing: -0.014px;
+border-radius: 6px;
+border: 1px solid #C3C3C3;
+background-color: white;
+padding: 9px 25px;
+} */
+.fc .fc-button-primary:not(:disabled).fc-button-active:focus,
+.fc .fc-button-primary:not(:disabled):active:focus {
+    box-shadow: unset
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background-color: transparent;
+    border-color: transparent;
+    color: #5F6D7E;
+}
+
+.fc .fc-button-primary {
+    color: #5F6D7E;
+    background-color: transparent;
+    border: none;
+}
+
+.fc-header-toolbar.fc-toolbar {
+    padding: 18px 0px;
+    justify-content: start;
+}
+
+.fc .fc-toolbar-title {
+    color: #000;
+    font-family: Nunito;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: -0.16px;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: unset;
+    border-color: unset;
+    color: unset;
+}
+
+.cmn_event_box {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+.Todayevent_outer {
+    background: #00A3FF;
+}
+
+.Upcomingevent_outer {
+    background: #F07C33;
+}
+
+.Pastevent_outer {
+    background: #DDD;
+    ;
+}
+
+.events_wrapper {
+    border-radius: 15px;
+    background: #FFF;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
+    padding: 24px;
+    margin-top: 22px;
+
+}
+
+.highlight-cell {
+    background-color: red;
+}
+
+.event_group {
+    border-right: 1px solid #EBDAF5;
+}
+
+.fc-daygrid-day-top a {
+    color: #000;
+    text-decoration: none;
+    font-family: "Nunito";
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: -0.22px;
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border: 1px solid #E3E3E3;
+}
+
+.fc-scrollgrid-sync-inner a {
+    color: #232934;
+    font-family: "Nunito";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: -0.16px;
+    text-decoration: none;
+}
+
+button.fc-customHeader-button.fc-button.fc-button-primary {
+    color: #000;
+    font-family: 'Nunito';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: -0.016px;
+}
+
+button.fc-customText-button.fc-button.fc-button-primary {
+    color: #97A1AD;
+    font-family: 'Nunito';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: -0.016px;
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+    /* border: 1px solid #E3E3E3; */
+    background: #AAE0FF;
+}
+
+.custom_event {
+    background-color: #F8EDFF;
+    width: 100%;
+    height: 36px;
+    border-radius: 7px;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+}
+.fc-h-event {
+    background-color: unset;
+    border: unset
+   
+}
+.custom_event img {
+    height: 14px;
+    width: 14px;
+}
+
+.custom_event h3 {
+    color: #000;
+    overflow: hidden;
+    font-family: "Nunito";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+button.fc--button.fc-button.fc-button-primary {
+    display: none;
+}
+@media screen and (max-width:991px) {
+    .planner_header_outer {
+        display: block;
+    }
+
+    .create_post_btn {
+        margin-top: 12px
+    }
+
+    .event_group h5 {
+        font-size: 13px;
+    }
+
+    .event_group {
+        border-right: unset;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .planner_header h6 {
+        font-size: 14px;
+    }
+
+    .events_wrapper {
+        display: block;
+
+    }
+    .custom-header {
+        margin-top: 13px;
+    }
+    .event_group {
+        border-right: unset;
+    }
+
+
+    .fc .fc-toolbar-title {
+        font-size: 11px;
+
+    }
+
+    .filter_options {
+        position: unset;
+        font-size: 14px;
+    }
+
+}

@@ -1,0 +1,355 @@
+.media_outer{
+border-radius: 3px;
+background: #F4F7FC;
+box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
+padding: 17px 24px;
+}
+.creare_post_heading {
+color: #000;
+font-size: 32px;
+font-weight: 700;
+line-height: normal;
+text-align: center;
+}
+.create_post_content {
+    padding: 30px 70px;
+}
+button#instagram {
+    width: 100%;
+    text-align: left;
+    border-radius: 8px;
+    border: 0.8px solid #C3C3C3;
+    background: #FFF;
+    color:  #5F6D7E;
+    font-family: "Nunito";
+}
+
+button#instagram::after{
+    position: absolute;
+    top: 19px;
+    left: auto;
+    right: 15px;
+}
+/* ======= */
+.date_input::-webkit-calendar-picker-indicator {
+    background:url('../../../images/calendar_today.svg') no-repeat;
+    /* position: absolute; */
+    /* right: 0; 
+    left: 10px; */
+ }
+/* input[type="time"]::-webkit-date-and-time-value {
+    -webkit-appearance: none;
+    display: none;
+
+  } */
+  
+ input.date_input{
+    color: #BDC0CC;
+ }
+ .time_input::-webkit-calendar-picker-indicator {
+    background:url('../../../images/time.svg') no-repeat;
+ }
+
+ input.time_input{
+    color: #BDC0CC;
+ }
+ /* input[type=date]::-webkit-datetime-edit-text {
+    -webkit-appearance: none;
+    display: none;
+}
+input[type=date]::-webkit-datetime-edit-month-field{
+    -webkit-appearance: none;
+    display: none;
+}
+input[type=date]::-webkit-datetime-edit-day-field {
+    -webkit-appearance: none;
+    display: none;
+}
+input[type=date]::-webkit-datetime-edit-year-field {
+    -webkit-appearance: none;
+    display: none;
+} */
+/* input.date_input::after{
+content: url("../../../images/down_arrow.svg");
+} */
+
+/* input.date_input::before{
+    content: "Set date";
+    position: absolute;
+    left: 30px;
+} */
+/* input.time_input::before{
+    content: "Set time";
+    position: absolute;
+} */
+.date_time_outer {
+    width: 100%;
+}
+.create_post_wrapper {
+    width: 100%;
+    overflow: hidden;
+}
+.create_post_label{
+    color: #000;
+font-family: "Nunito";
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+button.ai_btn {
+    border-radius: 6px;
+    background: #00A3FF;
+    border: none;
+    padding: 7px 14px;
+    font-size: 10px;
+    line-height: normal;
+}
+.ai_outer_btn{
+    text-align: center;
+}
+.create_post_text{
+color: #525254;
+font-size: 12px;
+font-weight: 400;
+line-height: normal;
+}
+.get_measage_heading{
+color: #000;
+
+}
+.try_it_heading{
+color: #00A3FF;
+font-size: 11px;
+}
+.hashtag_outer{
+    margin-top: 29px;
+}
+.send_measage_heading{
+color: #525254;
+font-size: 11px;
+}
+.post_heading{
+color: #000;
+font-weight: 600;
+}
+.caption_header {
+    display: flex;
+    justify-content: space-between;
+}
+.textarea{
+width: 100%;
+border-radius: 8px;
+border: 0.8px solid #C3C3C3;
+background: #FFF;
+}
+.media_outer {
+    margin-top: 30px;
+}
+.add_btn{
+border: none;
+border-radius: 6px;
+color: #FFF;
+font-family: Nunito;
+font-size: 12px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+padding: 10px 15px;
+width: 112px;
+height: 36px;
+}
+.get_messages_outer {
+    display: flex;
+    padding: 17px 18px;
+    margin-top: 19px;
+    align-items: center;
+    justify-content: space-between;
+}
+.save_btn{
+border-radius: 6px;
+border: 1px solid #00A3FF;
+background: #FFF;
+color: #000;
+
+}
+.createPost_outer select{
+    width: 100%;
+    border-radius: 8px;
+    border: 0.8px solid #C3C3C3;
+    background: #FFF;
+    padding: 15px 16px;
+    margin-top: 14px;
+}
+
+.schedule_btn_outer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.schedule_btn_wrapper{
+    display: flex;
+    gap: 10px;
+    margin-top: 17px;
+}
+.publish_post_outer{
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+.file_outer {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 21px;
+}
+.add_media_outer{
+    padding: 9px 25px;
+}
+.add_media_outer label{
+    display: flex;
+    gap: 10px;
+}
+
+.file_outer input{
+    display: none;
+}
+.cancel_btn{
+background: #E7E7E7;
+color: #8C8989;
+margin-right: 10px;
+min-width: 100px;
+}
+.schedule_date_outer{
+    display: flex;
+    gap: 36px;
+    margin-top: 30px;
+}
+.date_time_outer select{
+    height: 34px;
+    min-width: 230px;
+    border: none;
+}
+.publish_btn{
+    min-width: 100px;
+}
+.boost_post_text{
+    color: #000;
+}
+.form-check-input:checked {
+    background-color: #1C2B33;
+    border-color: #1C2B33;
+}
+.preview_wrapper{
+    border-radius: 3px;
+    background: #FFF;
+    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.05);
+
+}
+.status{
+color: #ADACAC;
+font-size: 10px;
+}
+.post_img{
+width: 441px;
+
+}
+.user_profile_info {
+    display: flex;
+    gap: 10px;
+    padding: 19px 12px;
+}
+.like_comment_outer {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 23px;
+}
+.like_img {
+    margin-right: 40px;
+}
+.post_preview_outer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:#1E1E1E;
+    height: 100%;
+}
+.feed_preview{
+    font-size: 22px;
+    line-height: normal;
+    background-color:#1E1E1E ;
+    padding-bottom: 19px;
+}
+.schedule_btn{
+    border: none;
+    min-width: 100px;
+    
+}
+
+@media screen and (max-width:1024px){
+    .get_messages_outer{
+        display: block;
+    }
+    .add_btn{
+        margin-top: 10px;
+    }
+    .schedule_date_outer{
+        display: block;
+    }
+    .publish_post_outer{
+        display: block;
+    }
+    .cancel_publish_btn_outer{
+        margin-top: 13px;
+    }
+    .date_time_outer select{
+        width: 100%;
+    }
+    .date_time_outer {
+        margin-top: 20px;
+    }
+}
+@media screen and (max-width:991px){
+    .feed_preview{
+        text-align: center;
+        padding-top: 10px;
+    }
+}
+@media screen and (max-width:767px){
+    .post_preview_outer{
+        display: block;
+    }
+    
+    .create_post_content {
+        padding: 30px 19px;
+    }
+    .caption_header{
+        display: block;
+    }
+    .ai_btn{
+        margin-top: 10px;
+    }
+    .textarea_outer {
+        margin-top: 13px;
+    }
+
+    .get_messages_outer{
+        display: block;
+    }
+    .add_btn{
+        margin-top: 10px;
+    }
+    .schedule_btn_outer{
+        display: block;
+    }
+    .file_outer{
+        display: block;
+    }
+    .add_media_outer {
+        margin-top: 20px;
+    }
+}
+
+
+

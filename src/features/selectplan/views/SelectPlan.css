@@ -1,0 +1,158 @@
+.selectplan_heading{
+    width: 35%;
+    margin: auto;
+}
+.back_outer {
+    display: flex;
+    align-items: center;
+}
+.back_outer img{
+ width: 12.964px;
+height: 22px;
+}
+.back_outer h2{
+color: #2E3646;
+font-size: 32px;
+font-weight: 500;
+line-height: 40px;
+letter-spacing: -0.64px;
+}
+.selectplan_container{
+    padding: 20px 60px 70px;
+    height:100%
+
+}
+.Personal_wrapper h3{
+color: #4D4D4D;
+text-align: center;
+font-size: 30px;
+font-weight: 600;
+line-height: normal;
+text-align: center;
+}
+.euro_img_outer{
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    border-bottom: 1px solid #D4D4D4;;
+    padding-bottom: 20px;
+}
+.euro_img_outer h5{
+color: #4D4D4D;
+font-size: 16px;
+font-weight: 400;
+line-height: normal;
+}
+.euro_img_outer span{
+    color: #4D4D4D;
+}
+.euro_img{
+    height: 11px;
+    width: 8px;
+}
+.list_items {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.plan_list_items{
+    list-style: none;
+    margin: 27px 0px;
+    padding-left: 0px;
+    min-height: 136px;
+}
+.plan_button_outer{
+    text-align: center;
+}
+.cmn_plan_btn{
+width: 164px;
+padding: 10.5px;
+justify-content: center;
+align-items: center;
+gap: 7px;
+border: none;
+color: #FFF;
+text-align: center;
+font-family: Nunito;
+font-size: 13px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+.personal_plan{
+ border-radius: 20px;
+background: #F0F0F0;
+padding: 30px;
+margin-top: 34px;
+}
+.list_items h2{
+    color: #AEAEAE;
+    text-align: center;
+    font-family: Nunito;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.list_items span{
+    color: #4D4D4D;
+}
+.pro_plan{
+    border-radius: 20px;
+background: #1E1E1E;
+padding: 30px;
+min-height: 395px;
+}
+.plan_list_items li {
+    margin-top: 14px;
+}
+.free_trial_btn{
+ color: #FFF;
+font-family: Nunito;
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: 24px; 
+letter-spacing: 0.03px;
+border: none;
+padding: 16px 124px;
+}
+.trial_btn{
+    text-align: center;
+    margin-top: 60px;
+}
+@media screen and (max-width:1024px){
+    .selectplan_heading {
+        width: 59%;
+    }
+}
+@media screen and (max-width:991px){
+    .selectplan_heading.mt-5 {
+        width: 75%;
+    }
+}
+@media screen and (max-width:767px){
+    .selectplan_container {
+        padding: 20px 20px 40px;
+    }
+    
+    .selectplan_heading.mt-5 {
+        width: 100%;
+    }
+    .back_outer img {
+        width: 7.964px;
+    }
+    button.cmn_btn_color.free_trial_btn {
+        padding: 8px 26px;
+        font-size: 15px;
+    }
+    .back_outer h2{
+        font-size: 20px;
+    }
+    .pro_plan{
+        margin-top: 20px;
+    }
+    .personal_plan{
+        margin-top: 20px;
+    }
+}

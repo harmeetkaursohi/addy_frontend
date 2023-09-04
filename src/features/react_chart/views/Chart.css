@@ -1,0 +1,20 @@
+/* .recharts-wrapper.line_chart {
+    width: 100%;
+    min-height: 332px;
+    margin-top: 14px;
+} */
+.rechart_container {
+    padding: 16px 20px;
+    width: "100%";
+    padding: "30px";
+    max-width: "1440px";
+    margin: "20px auto";
+}
+<<<<<<< HEAD
+=======
+ @media screen and (max-width:767px){
+    .rechart_container{
+        padding: 16px 8px;
+    }
+ }
+>>>>>>> 73173a6cfdd5f96488d3621f275a95e84c48c49c

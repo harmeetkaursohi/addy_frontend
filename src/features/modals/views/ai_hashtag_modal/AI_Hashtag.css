@@ -1,0 +1,39 @@
+
+.hashtag_btn {
+border-radius: 20px;
+height: 38px;
+padding: 10px 22px 9px 22px;
+font-family: Nunito;
+font-size: 14px;
+font-style: italic;
+font-weight: 500;
+line-height: normal;
+border: none;
+margin: 10px;
+}
+.selected_hashtag_btn{
+color: #FFF;
+background: #00A3FF;
+
+}
+.unselected_hashtag{
+background: #F4F7FC;
+color: black;
+}
+.selected_hashtag_outer{
+border-radius: 8px;
+border: 1px solid #C3C3C3;
+}
+.regenerate_btn_outer{
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+ @media screen and (max-width:767px){
+    .regenerate_btn_outer button {
+        margin: 8px;
+    }
+    .regenerate_btn_outer{
+        display: block;
+    }
+ }

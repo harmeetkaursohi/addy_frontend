@@ -1,0 +1,25 @@
+.form_group {
+    display: flex;
+    gap: 20px;
+}
+
+.payment_outer {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 8px;
+    border: 1px solid #C3C3C3;
+    padding: 7px 10px;
+}
+.payment_outer input[type=radio]{
+    height: 16px;
+    width: 15px;
+}
+.paypal_img{
+    width: 22.502px;
+    height: 27.702px;
+}
+@media screen and (max-width:767px){
+    .form_group{
+        display: block;
+    }
+}

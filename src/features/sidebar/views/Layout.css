@@ -1,0 +1,165 @@
+.sidebar_wrapper {
+width: 280px;
+background: #FFF;
+box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68);
+z-index:2;
+position: fixed;
+overflow: scroll;
+height: 100%;
+}
+.svg_color{
+stroke: black;   
+}
+::-webkit-scrollbar {
+    width: 5px; 
+}
+::-webkit-scrollbar-thumb {
+    background-color: #e0dbdb;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: #f1ecec;  
+  }
+/* .sc-JrDLc.gaTCvF.pro-sidebar {
+
+border-radius: 22px;
+background: #FFF;
+
+box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68);
+} */
+i.bar_icon{
+    display: flex;
+    justify-content: flex-end;
+}
+.addy_logo{
+    width: 178px;
+height: 68px;
+margin-top: 24px;
+}
+.sidebar_item_outer a{
+color: #97A1AD;
+font-family: Nunito;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 37px; /* 231.25% */
+letter-spacing: -0.016px;
+text-decoration: none;
+gap: 20px;
+display: flex;
+align-items: center;
+
+}
+.sidebar_container_items{
+    border-radius:15px;
+    background: #F4F4F4;
+    padding: 11px 18px !important;
+}
+h4.icon {
+    font-size: 18px;
+    color: #97A1AD;
+}
+h4.active_icon{
+    color: #000;
+    font-size: 18px;
+}
+a.active {
+    color: #000;
+}
+.profile_img{
+    height: 80px;
+    width: 80px;
+}
+.sidebar_item_outer{
+    display: flex;
+    gap: 10px;
+    padding: 11px 28px;
+    flex-grow: 1;
+    margin-right: 10px;
+    align-items: center;
+}
+.sidebar_item {
+    margin-top: 37px;
+}
+.user_profile_outer h3{
+color: #000;
+font-size: 15px;
+font-weight: 500;
+line-height: 22px;
+letter-spacing: -0.015px;
+}
+.bar{
+background: #F07C33;
+width: 3px;
+height: 68px;
+
+}
+.sidebar_item li{
+    display: flex;
+    gap: 7px;
+}
+.user_profile_outer h4{
+color: #5F6D7E;
+font-size: 14px;
+font-weight: 500;
+line-height: 20px; 
+letter-spacing: -0.014px;
+    }
+.user_profile_wrapper {
+ display: flex;
+ justify-content: space-evenly;
+ padding-top: 24px;
+}
+.user_profile_outer {
+    border-bottom: 1px solid #D1D9E2;
+    padding-bottom: 24px;
+}
+.sidebar_container{
+    height: 100vh;
+    position: absolute;
+}
+i.bar_icon{
+    display: none;
+}
+@media screen and (max-width:767px){
+    .sidebar_content{
+        width: 59px;
+    }
+    .sidebar_content img{
+        padding: 13px;
+    }
+    .cmn_container {
+        padding-left: 62px;
+    }
+    .sidebars_items{
+        width: 30px;
+    }
+    .user_Profile_outer{
+        display: none;
+    }
+    .sidebar_content h2{
+        display: none;
+    }
+    i.bar_icon{
+        display: flex;
+        padding: 20px;
+    }
+    div.followers_outer {
+        display: block;
+    }
+    
+    div.social_media_outer {
+        display: block;
+    }
+    .delete_post_btn{
+        padding: 8px 38px
+    }
+    .sidebar_item_outer {
+     padding: 11px 12px 11px 17px !important;
+        
+}
+.sidebar_item li {
+    width: 275px;
+    gap:3px
+}
+}

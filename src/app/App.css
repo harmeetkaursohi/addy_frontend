@@ -1,0 +1,124 @@
+h2,p,h3,h4,h5,h6,label,ul{
+  font-family:  'Nunito', sans-serif;
+  font-style: normal;
+}
+h2,h3,h4,h5,h6{
+  margin-bottom: 0px !important ;
+}
+.cmn_btn_color{
+  border-radius: 10px;
+background: #F07C33;
+}
+.cmn_white_bg{
+border: 1px solid  #D1D9E2;
+background:  #E6E9EC;
+border-radius: 5px;
+}
+ul{
+  list-style: none;
+  padding-left: 0px !important;
+}
+.cmn_container{
+  padding-left: 280px;
+  width: 100%;
+  overflow: hidden;
+}
+.cmn_wrapper_outer{
+  padding: 0px 20px 30px;
+}
+  .form-control {
+    border: 1px solid #5F6D7E;
+}
+.cmn_blue_bg{
+border-radius: 5px;
+background: #00A3FF;
+border: none;
+}
+.cmn_blue_border{
+border-radius: 6px;
+border: 1px solid #00A3FF;
+background: #FFF;
+}
+.cmn_headings{
+color: #5F6D7E;
+font-family: 'Nunito';
+font-size: 13px;
+font-style: normal;
+font-weight: 500;
+line-height: 18px;
+letter-spacing: -0.013px;
+}
+img.cmn_width {
+  height: 20px;
+  width: 20px;
+}
+a {
+  text-decoration: none !important;
+}
+.cmn_white_text{
+color:  #FFF;
+font-family: 'Nunito';
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 20px; 
+letter-spacing: -0.014px;
+}
+
+.cmn_bg_btn{
+  color: #FFF;
+  font-family:"Nunito";
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  padding: 10px 15px;
+  border: none;
+  background-color: #F07C33;
+  border-radius: 6px;
+  }
+  .cmn_text_heading{
+      color:  #2E3646;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 38px; 
+      letter-spacing: -0.28px;
+   
+  }
+  .cmn_small_heading{
+    color:  #5F6D7E;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px; 
+    letter-spacing: -0.016px;
+    }
+    .box_shadow{
+border-radius: 6px;
+background: #FFF;
+box-shadow: 0px 0px 8px 0px rgba(16, 24, 40, 0.05);
+    }
+    textarea:focus-visible{
+      outline: unset;
+      border: 1px solid #00A3FF;
+    }
+    select:focus-visible {
+      outline: unset;
+      border: 1px solid #00A3FF;
+  }
+  :focus-visible {
+    outline: unset
+} 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.cmn_text_style{
+color: #000;
+font-family: "Nunito";
+font-size: 20px;
+font-style: normal;
+font-weight: 600;
+line-height: 38px; 
+letter-spacing: -0.2px;
+}
