@@ -1,18 +1,16 @@
-import { useEffect, useState } from "react"
 import men_img from "../../../../images/men.png"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import jsondata from "../../../../locales/data/initialdata.json"
-
 import { useFormik } from "formik"
 import { validationSchemas } from "../../../../utils/commonUtils"
 import { useDispatch, useSelector } from "react-redux"
 import { signUpUser } from "../../../../app/actions/userActions/userActions"
-import Loader from "../../../loader/Loader"
+import Button from "../../../common/components/Button"
 const AddressInfo = ({ formData, setFormData, setShowTab }) => {
     const dispatch = useDispatch()
-
+    const navigate=useNavigate()
     const signUpReducer = useSelector(state => state?.user?.signUpReducer);
-
+  
     const formik = useFormik({
         initialValues: {
             addressLine1: "",
@@ -36,24 +34,14 @@ const AddressInfo = ({ formData, setFormData, setShowTab }) => {
                 pinCode: values.pinCode
             }
 
-            dispatch(signUpUser({ ...formData, address: addressObj}))
+            dispatch(signUpUser({ ...formData, address: addressObj,navigate}))
 
         },
     });
 
-    useEffect(()=>{
-
-        console.log("signUpReducer",signUpReducer);
-            if(signUpReducer?.data && !signUpReducer?.loading){
-                console.log("signUpRweqweeweweducer",signUpReducer);
-
-                setShowTab(1);
-            }
-    },[signUpReducer]);
-
-
     return (
         <>
+        
             <section className='Container'>
                 <div className="login_wrapper">
                     <div className="row">
@@ -81,7 +69,7 @@ const AddressInfo = ({ formData, setFormData, setShowTab }) => {
                                     <div className='login_form'>
                                         <form onSubmit={formik.handleSubmit}>
                                             <div className='form-group'>
-                                                <label>{jsondata.addressLine1}</label>
+                                                <label>{jsondata.addressLine1} <span>*</span> </label>
                                                 <input onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.addressLine1} name="addressLine1" className="form-control mt-1" type='text' placeholder={jsondata.addressLine1} />
@@ -99,15 +87,7 @@ const AddressInfo = ({ formData, setFormData, setShowTab }) => {
 
                                             </div>
                                             <div className='form-group'>
-                                                <label>{jsondata.city}</label>
-                                                <input onChange={formik.handleChange}
-                                                    onBlur={formik.handleBlur}
-                                                    value={formik.values.city} name="city" className="form-control mt-1" type='text' placeholder={jsondata.city} />
-
-
-                                            </div>
-                                            <div className='form-group'>
-                                                <label>{jsondata.country}</label>
+                                                <label>{jsondata.country}<span>*</span> </label>
                                                 <input onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.country} name="country" className="form-control mt-1" type='text' placeholder={jsondata.country} />
@@ -117,7 +97,7 @@ const AddressInfo = ({ formData, setFormData, setShowTab }) => {
 
                                             </div>
                                             <div className='form-group'>
-                                                <label>{jsondata.state}</label>
+                                                <label>{jsondata.state}<span>*</span> </label>
                                                 <input onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.state} name="state" className="form-control mt-1" type='text' placeholder={jsondata.state} />
@@ -125,9 +105,17 @@ const AddressInfo = ({ formData, setFormData, setShowTab }) => {
                                                     <p style={{ color: "red" }}>{formik.errors.state}</p>
                                                 ) : null}
                                             </div>
+                                            <div className='form-group'>
+                                                <label>{jsondata.city}</label>
+                                                <input onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                    value={formik.values.city} name="city" className="form-control mt-1" type='text' placeholder={jsondata.city} />
+
+
+                                            </div>
                                             <div className='rememberPass_outer mt-2'>
                                                 <div className='form-group'>
-                                                    <label>{jsondata.county}</label>
+                                                    <label>{jsondata.county}<span>*</span> </label>
                                                     <input onChange={formik.handleChange}
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.county} name="county" className="form-control mt-1" type='text' placeholder={jsondata.county} />
@@ -144,10 +132,10 @@ const AddressInfo = ({ formData, setFormData, setShowTab }) => {
 
 
                                                 </div>
-                               
-                                            <button className=' login_btn' disabled={signUpReducer?.loading}>{signUpReducer?.loading ? 
+                                              <Button text={jsondata.signUp} loading={signUpReducer?.loading}/>
+                                                {/* <button className=' login_btn' disabled={signUpReducer?.loading}>{signUpReducer?.loading ? 
                                                     <Loader /> : jsondata.signUp} 
-                                            </button>
+                                            </button> */}
                                                 
                         
                                             </div>

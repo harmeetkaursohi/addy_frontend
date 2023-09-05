@@ -1,33 +1,34 @@
 import addyads_img from '../../../images/addylogo.png'
 import girl_img from '../../../images/girl.png'
 import google_img from '../../../images/Google_img.svg'
-import {Link} from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import jsondata from '../../../locales/data/initialdata.json'
 import './Login.css'
-import {useFormik} from 'formik';
-import {useDispatch} from "react-redux";
-import {loginUser} from "../../../app/actions/userActions/userActions.js";
-import {validationSchemas} from "../../../utils/commonUtils.js";
+import { useFormik } from 'formik';
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../../app/actions/userActions/userActions.js";
+import { validationSchemas } from "../../../utils/commonUtils.js";
+
 
 const Login = () => {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues: {
             username: '',
             password: '',
+            timeZoneId: Intl.DateTimeFormat().resolvedOptions().timeZone,
             rememberPassword: false
         },
         validationSchema: validationSchemas.login,
         onSubmit: (values) => {
-            dispatch(loginUser(values));
+            dispatch(loginUser({ values, navigate }));
         },
     });
-
     return (
         <>
-
             <section className='Container'>
                 <div className="login_wrapper">
                     <div className="row">
@@ -36,7 +37,7 @@ const Login = () => {
                                 <div className='login_outer'>
 
                                     <div className='reach_user_outer'>
-                                        <img src={girl_img} className='girl_img_width'/>
+                                        <img src={girl_img} className='girl_img_width' />
                                         <h2 className='mt-5'>Reach your users with new tools. Reach your users with new
                                             tools. Reach your users with new tools.</h2>
                                         <p>Efficiently unleash cross-media information without cross-media value.
@@ -53,7 +54,7 @@ const Login = () => {
                             <div className='addy_container'>
                                 <div className="addy_outer">
                                     <div className="addy_img">
-                                        <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
+                                        <div className='logo_outer'><img src={addyads_img} height="90px" width="238px" />
                                         </div>
                                         <h2 className='cmn_fontFamily'>{jsondata.welcomeBack}</h2>
                                         <p>Lorem Ipsum is simply dummy text of the printing and type setting
@@ -75,7 +76,7 @@ const Login = () => {
                                                 />
 
                                                 {formik.touched.username && formik.errors.username ? (
-                                                    <p style={{color: "red"}}>{formik.errors.username}</p>
+                                                    <p style={{ color: "red" }}>{formik.errors.username}</p>
                                                 ) : null}
 
                                             </div>
@@ -92,7 +93,7 @@ const Login = () => {
                                                     value={formik.values.password}
                                                 />
                                                 {formik.touched.password && formik.errors.password ? (
-                                                    <p style={{color: "red"}}>{formik.errors.password}</p>
+                                                    <p style={{ color: "red" }}>{formik.errors.password}</p>
                                                 ) : null}
 
                                             </div>
@@ -113,16 +114,18 @@ const Login = () => {
 
                                                         <label className='ms-2'>{jsondata.rememberPassword}</label>
                                                     </div>
+                                                    <Link to="/forgetpass">
+                                                        <label
+                                                            className='forgetPass_heading'>{jsondata.forgotpassword}?</label>
+                                                    </Link>
 
-                                                    <label
-                                                        className='forgetPass_heading'>{jsondata.forgotpassword}?</label>
                                                 </div>
 
                                                 <button className=' login_btn'>{jsondata.login}</button>
                                                 <h2 className='cmn_heading'>OR</h2>
                                                 <button className='login_btn login_google_btn'>
                                                     <div className="google_img_outer">
-                                                        <img src={google_img}/>
+                                                        <img src={google_img} />
                                                         <h2 className="ps-2">Login with Google </h2></div>
                                                 </button>
                                             </div>

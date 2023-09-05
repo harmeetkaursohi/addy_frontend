@@ -1,23 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loginUser, resetPassword, signUpUser } from "../../actions/userActions/userActions.js";
+import { loginUser, createPassword, signUpUser, forgetPassword } from "../../actions/userActions/userActions.js";
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
         loginUserReducer: { loading: false },
         signUpReducer: { loading: false },
+        createPasswordReducer:{loading:false},
+        forgetPasswordReducer:{loading:false},
         token: localStorage.getItem('token') || null,
     },
-    reducers: {
-        setUser: (state, action) => {
-            state.token = action.payload;
-            localStorage.setItem('token', action.payload);
-        },
-        clearUser: (state) => {
-            state.token = null;
-            localStorage.removeItem('token');
-        },
-    },
+   
     extraReducers: {
 
         //login-user
@@ -45,17 +38,27 @@ const userSlice = createSlice({
         },
 
         // create password
-        [resetPassword.pending]: (state) => {
-            state.signUpReducer = { loading: true };
+        [createPassword.pending]: (state) => {
+            state.createPasswordReducer = { loading: true };
         },
-        [resetPassword.fulfilled]: (state, action) => {
-            state.signUpReducer = { loading: false, data: action.payload}
+        [createPassword.fulfilled]: (state) => {
+            state.createPasswordReducer = { loading: false}
         },
-        [resetPassword.rejected]: (state) => {
-            state.signUpReducer = { loading: false }
+        [createPassword.rejected]: (state) => {
+            state.createPasswordReducer = { loading: false }
+        },
+        // forget password
+        [forgetPassword.pending]: (state) => {
+            state.forgetPasswordReducer = { loading: true };
+        },
+        [forgetPassword.fulfilled]: (state) => {
+            state.forgetPasswordReducer = { loading: false}
+        },
+        [forgetPassword.rejected]: (state) => {
+            state.forgetPasswordReducer = { loading: false }
         },
     }
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { } = userSlice.actions;
 export default userSlice.reducer;

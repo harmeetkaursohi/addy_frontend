@@ -5,6 +5,9 @@ h2,p,h3,h4,h5,h6,label,ul{
 h2,h3,h4,h5,h6{
   margin-bottom: 0px !important ;
 }
+p{
+  margin: 0px;
+}
 .cmn_btn_color{
   border-radius: 10px;
 background: #F07C33;

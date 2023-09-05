@@ -5,6 +5,7 @@ import {validationSchemas} from "../../../../utils/commonUtils.js";
 import {useFormik} from "formik";
 import { useSelector } from "react-redux";
 import Loader from "../../../loader/Loader";
+import Button from "../../../common/components/Button";
 
 
 const UserInfo = ({formData,setFormData, setShowTab}) => {
@@ -23,7 +24,7 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
             setShowTab(2);
         },
     });
-
+     const blockInvalidChar = e => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault();
 
     return (
         <>
@@ -129,6 +130,7 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
                                                         placeholder='Contact No'
                                                         onChange={formik.handleChange}
                                                         onBlur={formik.handleBlur}
+                                                        onKeyDown={blockInvalidChar}
                                                         value={formik.values.contactNo}
                                                     />
 
@@ -141,8 +143,8 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
                                                
 
                                                 
-
-                                                <button className=' login_btn'>{jsondata.next}</button>
+                                              <Button text={jsondata.next}/>
+                                                {/* <button className=' login_btn'>{jsondata.next}</button> */}
                                             </div>
                                         </form>
                                         <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to="/login"><span

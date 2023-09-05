@@ -1,10 +1,7 @@
 import * as yup from "yup";
-
-
 const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
 
 export const validationSchemas = {
-
     login: yup.object().shape({
         username: yup.string().required('Username is required').email('Invalid email format'),
         password: yup.string()
@@ -15,8 +12,8 @@ export const validationSchemas = {
     register: yup.object().shape({
         username: yup.string().required('Username is required'),
         email: yup.string().required('Email is required').email('Invalid email format'),
-        // industry: yup.string().required('Industry is required'),
-        contactNo: yup.string().required('Contact No is required'),
+        contactNo: yup.number().required('Contact No is required')
+        // .max(10, "Contact No is not valid")
     }),
 
     createPassword: yup.object().shape({
@@ -34,5 +31,9 @@ export const validationSchemas = {
         addressLine1: yup.string().required('AddressLine is required'),
         county: yup.string().required('County is required'),
         state: yup.string().required('State is required'),
+    }),
+
+    forgetPassword:yup.object().shape({
+        email: yup.string().required('Email is required').email('Invalid email format'),
     }),
 };

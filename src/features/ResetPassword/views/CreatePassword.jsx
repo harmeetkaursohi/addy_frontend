@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import "./ResetPassword.css"
+import "./CreatePassword.css"
 import jsondata from "../../../locales/data/initialdata.json"
 import { useFormik } from 'formik';
 import { validationSchemas } from '../../../utils/commonUtils';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { resetPassword } from '../../../app/actions/userActions/userActions';
+import { createPassword } from '../../../app/actions/userActions/userActions';
 
 const CreatePassword = () => {
     const location = useLocation();
@@ -17,19 +17,17 @@ const CreatePassword = () => {
     const formik = useFormik({
         initialValues: {
             password: "",
-            userId: userId,
-            token: token
+            customerId: userId,
+            customerToken: token
         },
         validationSchema: validationSchemas.createPassword,
         onSubmit: (values) => {
-
-
-            dispatch(resetPassword({
+           const obj = {
                 newPassword: values.password, 
-                userId: values.userId,
-                userToken: values.token,
-                navigate: navigate
-            }))
+                customerId: values.customerId,
+                customerToken: values.customerToken,
+            }
+            dispatch(createPassword({values:obj,navigate: navigate}))
            
            
         },
@@ -46,7 +44,7 @@ const CreatePassword = () => {
                             <input
                                 className="form-control mt-1"
                                 type='password'
-                                placeholder=''
+                                placeholder='Password'
                                 name="password"
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
@@ -63,7 +61,7 @@ const CreatePassword = () => {
                             <input
                                 className="form-control mt-1"
                                 type='password'
-                                placeholder='Password'
+                                placeholder='Confirm Password'
                                 name="confirmPassword"
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}

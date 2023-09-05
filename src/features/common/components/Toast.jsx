@@ -2,19 +2,32 @@ import { toast } from 'react-toastify';
 
 
 export function showErrorToast(content) {
-   toast.error(content);
+   toast.isActive("toast") ? toast.update("toast", {
+      type: toast.TYPE.ERROR,
+      render: content
+   }) : toast.error(content, { toastId: "toast" })
 }
 
 
 export function showSuccessToast(content) {
-   toast.success(content);
+
+   toast.isActive("toast") ? toast.update("toast", {
+      type: toast.TYPE.SUCCESS,
+      render: content
+   }) : toast.success(content, { toastId: "toast" })
 }
 
 
 export function showWarningToast(content) {
-   toast.warning(content);
+   toast.isActive("toast") ? toast.update("toast", {
+      type: toast.TYPE.WARNING,
+      render: content
+   }) : toast.warning(content, { toastId: "toast" })
 }
 
 export function showInfoToast(content) {
-   toast.info(content);
+   toast.isActive("toast") ? toast.update("toast", {
+      type: toast.TYPE.INFO,
+      render: content
+   }) : toast.info(content, { toastId: "toast" })
 }

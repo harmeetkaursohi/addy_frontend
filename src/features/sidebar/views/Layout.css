@@ -36,7 +36,7 @@ i.bar_icon{
 height: 68px;
 margin-top: 24px;
 }
-.sidebar_item_outer a{
+.sidebar_item_outer a {
 color: #97A1AD;
 font-family: Nunito;
 font-size: 16px;
@@ -48,12 +48,16 @@ text-decoration: none;
 gap: 20px;
 display: flex;
 align-items: center;
-
+}
+.sidebar_item li{
+    background-color: white;
+    margin-top: 8px;
+    margin-right: 16px;
 }
 .sidebar_container_items{
     border-radius:15px;
     background: #F4F4F4;
-    padding: 11px 18px !important;
+    /* padding: 11px 18px !important; */
 }
 h4.icon {
     font-size: 18px;
@@ -70,13 +74,27 @@ a.active {
     height: 80px;
     width: 80px;
 }
-.sidebar_item_outer{
+.sidebar_item_outers{
     display: flex;
     gap: 10px;
     padding: 11px 28px;
     flex-grow: 1;
     margin-right: 10px;
     align-items: center;
+    color: #97A1AD;
+    
+}
+.sidebar_item_outers h6{
+color: #97A1AD;
+font-family: Nunito;
+font-size: 16px;
+font-style: normal;
+font-weight: 600;
+line-height: 37px; /* 231.25% */
+letter-spacing: -0.016px;
+text-decoration: none;
+gap: 20px;
+
 }
 .sidebar_item {
     margin-top: 37px;
@@ -89,15 +107,32 @@ line-height: 22px;
 letter-spacing: -0.015px;
 }
 .bar{
-background: #F07C33;
+/* background: #F07C33;
 width: 3px;
-height: 68px;
+height: 68px; */
+border-left: 3px solid #f07c33;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
 
 }
-.sidebar_item li{
+.sidebar_inner_content{
+    width: 100%;
+    background: #F4F4F4;
+    margin-left: 6px;
+    border-radius: 12px;
+    padding: 16px 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: black;
+}
+.sidebar_inner_content h6{
+    font-weight: 600;
+}
+/* .sidebar_item li{
     display: flex;
     gap: 7px;
-}
+} */
 .user_profile_outer h4{
 color: #5F6D7E;
 font-size: 14px;
@@ -122,6 +157,9 @@ i.bar_icon{
     display: none;
 }
 @media screen and (max-width:767px){
+    .sidebar_item_outers{
+        padding: 11px 19px;
+    }
     .sidebar_content{
         width: 59px;
     }
@@ -154,12 +192,19 @@ i.bar_icon{
     .delete_post_btn{
         padding: 8px 38px
     }
-    .sidebar_item_outer {
-     padding: 11px 12px 11px 17px !important;
+    .sidebar_content {
+        width: 51px;
+    }
+    .sidebar_item li{
+        margin-top: 15px;
+    }
+        .sidebar_item_outer {
+            padding: 0px ;
+        }
         
 }
 .sidebar_item li {
     width: 275px;
     gap:3px
-}
+
 }

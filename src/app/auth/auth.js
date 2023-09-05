@@ -1,9 +1,16 @@
-import { useSelector } from "react-redux";
+import {useSelector} from "react-redux";
 import CryptoJS from 'crypto-js';
+import jwt_decode from "jwt-decode";
 
 export const getToken = () => {
     const token = useSelector((state) => state.user.token);
-    const decryptedBytes = CryptoJS.DES.decrypt(token, import.meta.env.VITE_APP_SECRET_KEY);
-    const decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
-    return decryptedToken;
+    return token;
 };
+
+export const decryptedToken = (token) => {
+    return CryptoJS.AES.decrypt(token, import.meta.env.VITE_APP_SECRET_KEY).toString(CryptoJS.enc.Utf8);
+}
+
+export const decodeJwtToken = (token) => {
+    return jwt_decode(  );
+}                                                                                  

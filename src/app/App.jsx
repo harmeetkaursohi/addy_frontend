@@ -1,7 +1,7 @@
 import './App.css'
 import Login from '../features/login/views/Login'
-import {BrowserRouter, Routes, Route} from "react-router-dom"
-import Signup from '../features/signup/views/SignUp'
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+
 import SelectPlan from '../features/selectplan/views/SelectPlan.jsx'
 import BillingForm from '../features/billingInfo/views/BillingForm.jsx'
 import SideBar from '../features/sidebar/views/Layout'
@@ -13,37 +13,49 @@ import Gallery from '../features/gallary/views/Gallery.jsx'
 import AI_ImageModal from '../features/modals/views/ai_image_modal/AI_ImageModal.jsx'
 import CommentPage from '../features/commentPage/views/CommentPage.jsx'
 import AddressForm from '../features/signup/views/tabs/AddressInfo.jsx'
-import {ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ResetPassword from '../features/ResetPassword/views/ResetPassword'
-import Loader from '../features/loader/Loader'
+import CreatePassword from '../features/ResetPassword/views/CreatePassword'
+
+import ForgetPassword from '../features/forgetPassword/ForgetPassword'
+import Signup from '../features/signup/views/Signup'
+import NotFound from '../features/common/components/NotFound'
+import React from 'react'
+import { Outlet, Navigate } from 'react-router-dom';
+import { getToken } from "../app/auth/auth.js";
 
 const App = () => {
+
+    const PrivateRoute = () => {
+        const token = getToken();
+        return token ? <Outlet /> : <Navigate to="/login" />;
+    }
 
     return (
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path="/" element={<Signup/>}/>
-                    <Route path="/plan" element={<SelectPlan/>}/>
-                    <Route path="/payment" element={<BillingForm/>}/>
-                    <Route path="/sidebar" element={<SideBar/>}/>
-                    <Route path="/dashboard" element={<Dashboard/>}/>
-                    <Route path="/planner" element={<Planner/>}/>
-                    <Route path="/post" element={<CreatePost/>}/>
-                    <Route path="/review" element={<Review/>}/>
-                    <Route path="/gallery" element={<Gallery/>}/>
-                    <Route path="/image" element={<AI_ImageModal/>}/>
-                    <Route path="/comment" element={<CommentPage/>}/>
-                    <Route path="/address" element={<AddressForm/>}/>
-                    <Route path="/reset-password" element={<ResetPassword/>}/>
-                    
-                    <Route path="/loader" element={<Loader/>}/>
-
+                    <Route element={<PrivateRoute />}>
+                        <Route path="/plan" element={<SelectPlan />} />
+                        <Route path="/payment" element={<BillingForm />} />
+                        <Route path="/sidebar" element={<SideBar />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/planner" element={<Planner />} />
+                        <Route path="/post" element={<CreatePost />} />
+                        <Route path="/review" element={<Review />} />
+                        <Route path="/gallery" element={<Gallery />} />
+                        <Route path="/image" element={<AI_ImageModal />} />
+                        <Route path="/comment" element={<CommentPage />} />
+                        <Route path="/address" element={<AddressForm />} />
+                    </Route>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/" element={<Signup />} />
+                    <Route path="/reset-password" element={<CreatePassword />} />
+                    <Route path="/forgetpass" element={<ForgetPassword />} />
+                    <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
-            <ToastContainer/>
+            <ToastContainer />
         </>
     )
 }
