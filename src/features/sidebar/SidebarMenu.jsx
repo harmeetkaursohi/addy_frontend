@@ -1,9 +1,12 @@
 import { BsTelephone } from "react-icons/bs";
-import { MdOutlinePrivacyTip } from "react-icons/md";
-import { BiErrorCircle } from "react-icons/bi";
+import { BsHouseLock } from "react-icons/bs";
+import { BsExclamationSquare } from "react-icons/bs";
 import { FaRegCommentDots } from "react-icons/fa";
 import { BiCalendar } from "react-icons/bi";
 import { TbSmartHome } from "react-icons/tb";
+import { AiOutlinePicture } from "react-icons/ai";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
+
 
 export const sidebarMenuItems = [
     {
@@ -25,26 +28,31 @@ export const sidebarMenuItems = [
     {
         "name": "Gallery",
         "path": "/gallery",
-        "icon": <BiErrorCircle />
+        "icon": <AiOutlinePicture />
     },
     {
         "name": "Insights",
         "path": "/insights",
-        "icon":<MdOutlinePrivacyTip />
+        "icon":<BsExclamationSquare />
     },
     {
         "name": "FAQ's",
         "path": "/faq",
-        "icon": <BiErrorCircle />
+        "icon": <AiOutlineQuestionCircle />
     },
     {
         "name": "Privacy Policy",
         "path": "/privacy",
-        "icon": <MdOutlinePrivacyTip />
+        "icon": <BsHouseLock />
     },
     {
         "name": "Contact Us",
         "path": "/contact",
         "icon": <BsTelephone />
-    }
+    },
+    
+      
+   
+    
 ];
+

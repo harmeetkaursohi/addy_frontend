@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useLocation, useNavigate } from "react-router-dom"
 import profile_img from '../../../images/profile_img.png'
 import addy_logo from '../../../images/addylogo.png'
+import { BiLogOut } from "react-icons/bi";
 import './Layout.css'
 import { sidebarMenuItems } from '../sidebarMenu'
 const Layout = () => {
@@ -14,8 +15,10 @@ const Layout = () => {
     const {pathname} = location;
     //Javascript split method to get the name of the path in array
     const splitLocation = pathname.split("/");
-
-    console.log(splitLocation);
+    const LogOut=()=>{
+       const removeItem= localStorage.removeItem("token")
+       navigate("/login")
+    }
 
     return (
         <>
@@ -35,26 +38,27 @@ const Layout = () => {
                         </div>
                     </div>
                     <ul className='sidebar_item'>
-                    
-
                             {
-                                sidebarMenuItems?.map((item) => (
-                                    <li className={item.path == '/' + splitLocation[1] ? "sidebar_container_items sidebar_item_outer bar text-center" : 'sidebar_item_outer'} onClick={() => {
+                                sidebarMenuItems?.map((item,index) => (
+                                    <li  key={index} className={item.path == '/' + splitLocation[1] ? "sidebar_container_items sidebar_item_outer bar text-center" : 'sidebar_item_outer'} onClick={() => {
                                         navigate(item.path)
                                     }}>
-                                       
-
-
-                                            <div key={item.name} className={item.path == '/' + splitLocation[1] ?'sidebar_inner_content':"sidebar_item_outers"}>
+                                            <div  className={item.path == '/' + splitLocation[1] ?'sidebar_inner_content':"sidebar_item_outers"}>
                                                 {item.icon}
-                                                <h6 className=''>{item.name}</h6>
+                                                <h6 className=''>{ item.name} </h6>
                                             </div>
-
-                                     
                                     </li>
 
                                 ))
                             }
+                            <li className='sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer'
+                                        
+                                    >
+                                            <div  className=' sidebar_item_outers'>
+                                            <BiLogOut/>
+                                             <h6 className='' onClick={LogOut}>Logout </h6>
+                                            </div>
+                                    </li>
                     </ul>
                 </div>
 

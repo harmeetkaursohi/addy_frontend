@@ -23,6 +23,7 @@ import NotFound from '../features/common/components/NotFound'
 import React from 'react'
 import { Outlet, Navigate } from 'react-router-dom';
 import { getToken } from "../app/auth/auth.js";
+import FacebookModal from '../features/modals/views/facebookModal/facebookModal'
 
 const App = () => {
 
@@ -53,6 +54,7 @@ const App = () => {
                     <Route path="/reset-password" element={<CreatePassword />} />
                     <Route path="/forgetpass" element={<ForgetPassword />} />
                     <Route path="*" element={<NotFound />} />
+                    <Route path="/fb" element={<FacebookModal />} />
                 </Routes>
             </BrowserRouter>
             <ToastContainer />

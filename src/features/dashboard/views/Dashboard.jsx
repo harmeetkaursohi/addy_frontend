@@ -12,8 +12,13 @@ import right_arrow_icon from '../../../images/right_arrow_icon.svg'
 import Chart from "../../react_chart/views/Chart.jsx";
 import UpcomingPost from "../../upcomingPost/views/UpcomingPost.jsx";
 import jsondata from '../../../locales/data/initialdata.json'
+import { useLocation } from "react-router-dom";
 
 const Dashboard = () => {
+const pathName=useLocation()
+const queryparam= new URLSearchParams(pathName.search)
+const status=queryparam.get("status")
+console.log(status,"accesstoken")
     return (
         <>
             <SideBar/>
@@ -115,6 +120,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <div className="col-lg-4 col-md-12 col-sm-12">
+                                {/* socail media */}
                                 <div className="cmn_background social_media_wrapper">
                                     <div className="social_media_account">
                                         <h3>{jsondata.socialAccount}</h3>
@@ -129,7 +135,8 @@ const Dashboard = () => {
                                                 <h6 className="cmn_headings">www.facebook.com</h6>
                                             </div>
                                         </div>
-                                        <button className="cmn_btn_color cmn_connect_btn connect_btn ">Connect</button>
+                                        <a  href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=http://127.0.0.1:5173/dashboard&customerId=64f80ff7bb722f1224aca1d6`} className="cmn_btn_color cmn_connect_btn connect_btn ">Connect</a>
+                                        
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">

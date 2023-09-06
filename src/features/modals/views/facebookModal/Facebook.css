@@ -1,0 +1,65 @@
+.modal_inner_content {
+    display: flex;
+    justify-content: space-between;
+    gap:20px;
+    padding-top: 21px;
+    border-bottom: 1px solid  #CBCBCB;
+}
+.modal_inner_content:first-child{
+    padding-top: 4px;
+}
+.modal_inner_content:last-child{
+    border-bottom: unset;
+}
+.facebook_content_outer{
+    padding: 0px 30px;
+}
+.user_contents {
+color: #000;
+font-family: Nunito;
+font-size: 14px;
+font-style: normal;
+font-weight: 300;
+line-height: 20px; /* 142.857% */
+letter-spacing: -0.014px;
+}
+.users_profile img {
+width: 50px;
+height: 50px;
+}
+.modal-content{
+    border-radius: 30px !important;
+}
+.facebook_title{
+    text-align: center;
+    width: 400px;
+}
+.upgrade_paln_btn{
+    padding: 8px 12px;
+}
+.modal-header{
+    margin: 17px !important;
+    padding-bottom: 16px !important;
+  align-items: baseline !important;
+}
+.users_name h2{
+    font-size: 14px;
+}
+.facebook_title h2{
+    font-size: 14px;
+}
+.connect_btn_outer button{
+    min-width: 80px;
+    height: 31px;
+    padding: 3px 10px;
+}
+@media screen and (max-width:767px) {
+    .facebook_title {
+        width: 100%;
+    }
+    
+    .modal_inner_content {
+        flex-wrap: wrap;
+        padding-bottom: 11px;
+    }
+}
