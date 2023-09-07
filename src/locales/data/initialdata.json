@@ -23,6 +23,8 @@
   "likecomment": "Like/Comments",
   "addbutton": "Add button",
   "cancel": "Cancel",
+  "loginwithfb":"Login with Facebook",
+  "loginwithgoogle":"Login with Google",
   "publishnow": "Publish Now",
   "schedule": "Schedule",
   "generateAi": "Generate Image with AI",

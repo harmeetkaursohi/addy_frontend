@@ -15,10 +15,11 @@ import jsondata from '../../../locales/data/initialdata.json'
 import { useLocation } from "react-router-dom";
 
 const Dashboard = () => {
-const pathName=useLocation()
-const queryparam= new URLSearchParams(pathName.search)
-const status=queryparam.get("status")
-console.log(status,"accesstoken")
+
+
+    console.log("inside dashboard----->");
+
+
     return (
         <>
             <SideBar/>
@@ -135,7 +136,8 @@ console.log(status,"accesstoken")
                                                 <h6 className="cmn_headings">www.facebook.com</h6>
                                             </div>
                                         </div>
-                                        <a  href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=http://127.0.0.1:5173/dashboard&customerId=64f80ff7bb722f1224aca1d6`} className="cmn_btn_color cmn_connect_btn connect_btn ">Connect</a>
+                                        <button><a className="cmn_btn_color cmn_connect_btn connect_btn" href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=http://127.0.0.1:5173/dashboard&customerId=64f80ff7bb722f1224aca1d6`} >Connect</a></button>
+                                        
                                         
                                     </div>
                                     <div className="social_media_outer">

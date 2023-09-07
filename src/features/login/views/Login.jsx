@@ -1,6 +1,7 @@
 import addyads_img from '../../../images/addylogo.png'
 import girl_img from '../../../images/girl.png'
 import google_img from '../../../images/Google_img.svg'
+import fbImg from "../../../images/fb.svg"
 import { Link, useNavigate } from "react-router-dom"
 import jsondata from '../../../locales/data/initialdata.json'
 import './Login.css'
@@ -126,8 +127,16 @@ const Login = () => {
                                                 <button className='login_btn login_google_btn'>
                                                     <div className="google_img_outer">
                                                         <img src={google_img} />
-                                                        <h2 className="ps-2">Login with Google </h2></div>
+                                                        <h2 className="ps-2">{jsondata.loginwithgoogle} </h2></div>
                                                 </button>
+                                                {/*login with  facebook =======*/}
+                                                    
+                                                <a  className='' href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=http://127.0.0.1:5173/auth-redirect`}>
+                                                    <div className="google_img_outer login_btn login_google_btn">
+                                                        <img src={fbImg} />
+                                                        <h2 className="ps-2">{jsondata.loginwithfb} </h2></div>
+                                                </a>
+                                                
                                             </div>
                                         </form>
                                         <h3 className='cmn_heading'>{jsondata.account}<Link to="/"><span
