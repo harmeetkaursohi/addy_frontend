@@ -12,13 +12,92 @@ import right_arrow_icon from '../../../images/right_arrow_icon.svg'
 import Chart from "../../react_chart/views/Chart.jsx";
 import UpcomingPost from "../../upcomingPost/views/UpcomingPost.jsx";
 import jsondata from '../../../locales/data/initialdata.json'
-import { useLocation } from "react-router-dom";
+import {useEffect, useState} from "react";
+import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
+import {useDispatch, useSelector} from "react-redux";
+import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
+import {
+    facebookPageConnect,
+    getAllFacebookPages,
+    getFacebookConnectedPages
+} from "../../../app/actions/facebookActions/facebookActions.js";
+import {useNavigate} from "react-router-dom";
 
 const Dashboard = () => {
+    const [showFacebookModal, setShowFacebookModal] = useState(false)
+    const [facebookData, setFacebookData] = useState(null)
+    const [userInfo, setUserInfo] = useState(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+    const token = getToken();
+    const [facebookPages,setFacebookPages] = useState([]);
+    const [facebookConnectedPageList,setFacebookConnectedPageList] = useState([]);
+
+    const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
+    const facebookConnectedPages = useSelector(state => state.facebook.getFacebookConnectedPagesReducer.facebookConnectedPages);
+
+    console.log("@@@ facebookConnectedPages ::: ",facebookConnectedPages)
+
+    useEffect(() => {
+        if (facebookPageList && facebookConnectedPages) {
+           setFacebookConnectedPageList(facebookConnectedPages);
+            setFacebookPages(facebookPageList);
+        }
+    }, [facebookPageList,facebookConnectedPages])
+
+    useEffect(() => {
+        if (token) {
+            const decodeJwt = decodeJwtToken(token);
+            console.log("@@@ decodeJwt ::: ", decodeJwt)
+            setUserInfo(decodeJwt);
+        }
+    }, [])
+
+    useEffect(() => {
+        if (userInfo) {
+            dispatch(getAllFacebookPages({customerId: userInfo?.customerId, token: token, navigate: navigate}))
+        }
+    }, [userInfo])
 
 
-    console.log("inside dashboard----->");
+    const facebook = () => {
+        setShowFacebookModal(true)
+    }
 
+    useEffect(() => {
+
+        if (facebookData) {
+            handleFacebookConnect()
+        }
+
+    }, [facebookData]);
+
+    useEffect(() => {
+        if (!facebookPageList?.loading) {
+            dispatch(getFacebookConnectedPages({customerId: userInfo?.customerId, token: token}))
+        }
+    }, [facebookPageList]);
+
+
+    const handleFacebookConnect = () => {
+
+        if (facebookData) {
+            const requestBody = {
+                customerId: userInfo?.customerId,
+                pageAccessTokenDTO: {
+                    pageId: facebookData.id,
+                    name: facebookData.name,
+                    imageUrl: facebookData.imageUrl,
+                    about: facebookData.about,
+                    access_token: facebookData.access_token
+                },
+                token: token
+            }
+
+            dispatch(facebookPageConnect(requestBody));
+            dispatch(getFacebookConnectedPages({customerId: userInfo?.customerId, token: token}))
+        }
+    }
 
     return (
         <>
@@ -136,9 +215,11 @@ const Dashboard = () => {
                                                 <h6 className="cmn_headings">www.facebook.com</h6>
                                             </div>
                                         </div>
-                                        <button><a className="cmn_btn_color cmn_connect_btn connect_btn" href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=http://127.0.0.1:5173/dashboard&customerId=64f80ff7bb722f1224aca1d6`} >Connect</a></button>
-                                        
-                                        
+                                        <button className="cmn_btn_color cmn_connect_btn connect_btn" onClick={() => {
+                                            facebook()
+                                        }}>Connect
+                                        </button>
+
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
@@ -192,7 +273,9 @@ const Dashboard = () => {
                 </div>
 
             </div>
-
+            {showFacebookModal &&
+                <FacebookModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal}
+                               facebookPageList={facebookPages} setFacebookData={setFacebookData} facebookConnectedPages={facebookConnectedPageList}/>}
 
         </>
     )

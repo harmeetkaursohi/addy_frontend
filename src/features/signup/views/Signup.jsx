@@ -23,7 +23,6 @@ const Signup = () => {
       pinCode: ""
     }
   });
-console.log(formData,"formdata")
 
 
   return (

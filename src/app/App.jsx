@@ -23,7 +23,7 @@ import NotFound from '../features/common/components/NotFound'
 import React from 'react'
 import { Outlet, Navigate } from 'react-router-dom';
 import { getToken } from "../app/auth/auth.js";
-import FacebookModal from '../features/modals/views/facebookModal/facebookModal'
+import FacebookModal from '../features/modals/views/facebookModal/FacebookModal'
 import Oauth2RedirectComponent from '../features/authentication/Oauth2RedirectComponent'
 
 const App = () => {

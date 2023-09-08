@@ -6,15 +6,15 @@ import { showErrorToast, showSuccessToast } from "../../../features/common/compo
 
 export const loginUser = createAsyncThunk('user/loginUser', async (data, thunkAPI) => {
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/auth/login`, data.values).then(res => {
-        console.log("res",res);
         const encryptedToken = CryptoJS.AES.encrypt(res.data.token, import.meta.env.VITE_APP_SECRET_KEY).toString();
         res.data.token = encryptedToken;
         showSuccessToast('User logged in successfully');
         data.navigate("/dashboard")
         return res.data;
     }).catch(error => {
-        console.log(error.response.data.message);
+        localStorage.removeItem("token")
         showErrorToast(error.response.data.message);
+        data.navigate("/login")
         return thunkAPI.rejectWithValue(error.response);
     });
 });

@@ -12,5 +12,15 @@ export const decryptedToken = (token) => {
 }
 
 export const decodeJwtToken = (token) => {
-    return jwt_decode(  );
-}                                                                                  
+    return jwt_decode(token);
+}
+
+export const setAuthenticationHeader = (token) => {
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    };
+
+    return config;
+}

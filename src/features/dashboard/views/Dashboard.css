@@ -40,7 +40,11 @@ gap: 15px;
 .upcoming_post_outer {
     margin-top: 30px;
 }
+.users_name p{
+    font-size: 13px;
+    line-height: 21px;
 
+}
 element.style {
     display: flex;
 }

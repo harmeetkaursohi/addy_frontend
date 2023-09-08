@@ -32,7 +32,7 @@
 // export default Oauth2RedirectComponent;
 
 import { useEffect } from 'react';
-import {useLocation, Navigate} from 'react-router-dom';
+import { useLocation, Navigate } from 'react-router-dom';
 import { getToken } from '../../app/auth/auth';
 
 const Oauth2RedirectComponent = () => {
@@ -51,15 +51,18 @@ const Oauth2RedirectComponent = () => {
     useEffect(() => {
         if (token) {
             localStorage.setItem("token", token);
+            window.location.href="/dashboard";
+        }else{
+            window.location.href="/login";  
         }
     }, []);
 
 
     return (
         <>
-            {getToken() ? <Navigate to="/dashboard" state={{from: location.pathname}}/> :
-                <Navigate to="/login" state={{from: location.pathname, error: error}}/>
-            }
+            {/* {getToken() ? <Navigate to="/dashboard" state={{ from: location.pathname }} /> :
+                <Navigate to="/login" state={{ from: location.pathname, error: error }} />
+            } */}
         </>
     );
 };
