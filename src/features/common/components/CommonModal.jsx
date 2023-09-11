@@ -1,19 +1,18 @@
 import React, {useState} from 'react'
 import Modal from 'react-bootstrap/Modal';
 import "./CommonModal.css"
+import {useSelector} from "react-redux";
 
 const CommonModal = ({
                          showFacebookModal,
                          setShowFacebookModal,
                          facebookPageList,
                          setFacebookData,
-                         facebookConnectedPages
+                         facebookConnectedPages,
+                         setHandleClick
                      }) => {
 
     const handleClose = () => setShowFacebookModal(false);
-
-    console.log("facebookPageList--->",facebookPageList);
-    console.log("facebookConnectedPages--->",facebookConnectedPages)
 
 
     return (
@@ -49,6 +48,7 @@ const CommonModal = ({
                                                     className='cmn_btn_color cmn_connect_btn connect_btn connect_btn '
                                                     onClick={(e) => {
                                                         setFacebookData(data);
+                                                        setHandleClick(true);
                                                     }}>
                                                     {facebookConnectedPages?.find(c => c.pageId === data?.id) ? "Disconnect" : "Connect"}
                                                 </button>

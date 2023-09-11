@@ -16,42 +16,51 @@ import {useEffect, useState} from "react";
 import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
 import {useDispatch, useSelector} from "react-redux";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
+
 import {
     facebookPageConnect,
     getAllFacebookPages,
     getFacebookConnectedPages
 } from "../../../app/actions/facebookActions/facebookActions.js";
 import {useNavigate} from "react-router-dom";
+import {resetFacebookReducer} from "../../../app/slices/facebookSlice/facebookSlice.js";
+import {LoginSocialFacebook, LoginSocialInstagram} from "reactjs-social-login";
+import {FacebookLoginButton, InstagramLoginButton} from "react-social-login-buttons";
+import {computeAndSocialAccountJSONForFacebook} from "../../../utils/commonUtils.js";
+import {
+    getAllConnectedSocialAccountAction,
+    socialAccountConnectActions
+} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 
 const Dashboard = () => {
+
     const [showFacebookModal, setShowFacebookModal] = useState(false)
     const [facebookData, setFacebookData] = useState(null)
     const [userInfo, setUserInfo] = useState(null);
+    const [handleClick, setHandleClick] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate()
     const token = getToken();
-    const [facebookPages,setFacebookPages] = useState([]);
-    const [facebookConnectedPageList,setFacebookConnectedPageList] = useState([]);
+
 
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
     const facebookConnectedPages = useSelector(state => state.facebook.getFacebookConnectedPagesReducer.facebookConnectedPages);
 
-    console.log("@@@ facebookConnectedPages ::: ",facebookConnectedPages)
+    const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
+    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
 
-    useEffect(() => {
-        if (facebookPageList && facebookConnectedPages) {
-           setFacebookConnectedPageList(facebookConnectedPages);
-            setFacebookPages(facebookPageList);
-        }
-    }, [facebookPageList,facebookConnectedPages])
+
+    console.log("@@@ getAllConnectedSocialAccountData ::: ", getAllConnectedSocialAccountData)
 
     useEffect(() => {
         if (token) {
             const decodeJwt = decodeJwtToken(token);
             console.log("@@@ decodeJwt ::: ", decodeJwt)
             setUserInfo(decodeJwt);
+            dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId , token:token}))
         }
-    }, [])
+    }, [token])
+
 
     useEffect(() => {
         if (userInfo) {
@@ -64,40 +73,60 @@ const Dashboard = () => {
         setShowFacebookModal(true)
     }
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     if (handleClick && userInfo?.customerId) {
+    //         handleFacebookConnect()
+    //         setHandleClick(false);
+    //         dispatch(getFacebookConnectedPages({customerId: userInfo?.customerId, token: token}))
+    //     }
+    //
+    // }, [handleClick]);
 
-        if (facebookData) {
-            handleFacebookConnect()
-        }
-
-    }, [facebookData]);
-
-    useEffect(() => {
-        if (!facebookPageList?.loading) {
-            dispatch(getFacebookConnectedPages({customerId: userInfo?.customerId, token: token}))
-        }
-    }, [facebookPageList]);
+    // useEffect(() => {
+    //     if (!facebookPageList?.loading && userInfo?.customerId) {
+    //         dispatch(getFacebookConnectedPages({customerId: userInfo?.customerId, token: token}))
+    //     }
+    // }, [facebookPageList]);
 
 
-    const handleFacebookConnect = () => {
+    // const handleFacebookConnect = () => {
+    //
+    //     if (facebookData) {
+    //         const requestBody = {
+    //             customerId: userInfo?.customerId,
+    //             pageAccessTokenDTO: {
+    //                 pageId: facebookData.id,
+    //                 name: facebookData.name,
+    //                 imageUrl: facebookData.imageUrl,
+    //                 about: facebookData.about,
+    //                 access_token: facebookData.access_token
+    //             },
+    //             token: token
+    //         }
+    //         dispatch(facebookPageConnect(requestBody));
+    //     }
+    //     dispatch(resetFacebookReducer())
+    // }
 
-        if (facebookData) {
-            const requestBody = {
-                customerId: userInfo?.customerId,
-                pageAccessTokenDTO: {
-                    pageId: facebookData.id,
-                    name: facebookData.name,
-                    imageUrl: facebookData.imageUrl,
-                    about: facebookData.about,
-                    access_token: facebookData.access_token
-                },
-                token: token
-            }
 
-            dispatch(facebookPageConnect(requestBody));
-            dispatch(getFacebookConnectedPages({customerId: userInfo?.customerId, token: token}))
-        }
+    const connectSocialMediaAccountToCustomer = (object) => {
+
+        object.then((res)=>{
+            dispatch(socialAccountConnectActions(res)).then(() => {
+                console.log("then res====>",res)
+                dispatch(getAllConnectedSocialAccountAction(res))
+            })
+        }).catch((error)=>{
+            console.log("--->error",error)
+        })
+
     }
+
+
+    console.log("socialAccountConnectData",socialAccountConnectData.data)
+
+
+
 
     return (
         <>
@@ -207,6 +236,30 @@ const Dashboard = () => {
                                         <h6>{jsondata.seemore}<img src={right_arrow_icon} height="11px" width="11px"/>
                                         </h6>
                                     </div>
+                                    <Dropdown className={'cmn_drop_down'}>
+                                        <Dropdown.Toggle id="dropdown-facebook">
+                                            <div className="social_media_outer">
+                                                <div className="social_media_content">
+                                                    <img className="cmn_width" src={fb_img} />
+                                                    <div>
+                                                        <h5 className="">Facebook account</h5>
+                                                        <h6 className="cmn_headings">https://www.facebook.com</h6>
+                                                    </div>
+                                                    <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path id="Icon" d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1" stroke="#5F6D7E" stroke-width="1.67" stroke-linecap="round"/>
+                                                    </svg>
+
+                                                </div>
+
+                                            </div>
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu className="menu_items ">
+
+                                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                            <Dropdown.Item href="" className="connect_more_btn ">Connect More</Dropdown.Item>
+
+                                        </Dropdown.Menu>
+                                    </Dropdown>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
                                             <img className="cmn_width" src={fb_img}/>
@@ -215,12 +268,36 @@ const Dashboard = () => {
                                                 <h6 className="cmn_headings">www.facebook.com</h6>
                                             </div>
                                         </div>
-                                        <button className="cmn_btn_color cmn_connect_btn connect_btn" onClick={() => {
-                                            facebook()
-                                        }}>Connect
-                                        </button>
+
+                                        {!getAllConnectedSocialAccountData?.loading &&  getAllConnectedSocialAccountData?.data?.filter(c=>c.provider==='FACEBOOK').length===0 &&
+                                            <LoginSocialFacebook
+                                            isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
+                                            appId="688937182693504"
+                                            onResolve={(response) => {
+                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
+                                            }}
+                                            onReject={(error) => {
+                                            }}
+                                        >
+
+                                            <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
+                                                                 icon={() => null} preventActiveStyles={true} style={{
+                                                borderRadius: '10px',
+                                                background: "#F07C33",
+                                                boxShadow: "unset",
+                                                fontSize: "12px",
+                                                color: "#fff",
+                                                border: '1px solid #F07C33'
+                                            }}/>
+                                        </LoginSocialFacebook>}
+
+
+
+
 
                                     </div>
+
+                                    {/* */}
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
                                             <img className="cmn_width" src={twitter_img}/>
@@ -240,8 +317,32 @@ const Dashboard = () => {
                                                 <h6 className="cmn_headings">www.facebook.com</h6>
                                             </div>
                                         </div>
-                                        <button className="cmn_btn_color cmn_connect_btn disconnect_btn ">Disconnect
-                                        </button>
+
+                                        <LoginSocialInstagram
+                                            client_id="258452007021390"
+                                            client_secret="952c05ad1f2a53f09eb37fd62ba1547d"
+                                            scope="user_profile"
+                                            redirect_uri="https://baee-45-127-193-129.ngrok-free.app/dashboard"
+                                            onResolve={(response) => {
+                                                console.log("------>response", response);
+                                            }}
+                                            onReject={(error) => {
+                                                console.log("------>error", error);
+                                                console.log(error);
+                                            }}
+                                        >
+                                            <InstagramLoginButton text={"Connect"} className={"facebook_connect"}
+                                                                  icon={() => null} preventActiveStyles={true} style={{
+                                                borderRadius: '10px',
+                                                background: "#F07C33",
+                                                boxShadow: "unset",
+                                                fontSize: "12px",
+                                                color: "#fff",
+                                                border: '1px solid #F07C33'
+                                            }}/>
+                                        </LoginSocialInstagram>
+
+
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
@@ -275,7 +376,8 @@ const Dashboard = () => {
             </div>
             {showFacebookModal &&
                 <FacebookModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal}
-                               facebookPageList={facebookPages} setFacebookData={setFacebookData} facebookConnectedPages={facebookConnectedPageList}/>}
+                               facebookPageList={facebookPageList} setFacebookData={setFacebookData}
+                               facebookConnectedPages={facebookConnectedPages} setHandleClick={setHandleClick}/>}
 
         </>
     )

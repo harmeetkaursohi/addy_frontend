@@ -139,6 +139,19 @@ padding: 7px 14px
     display: flex;
     gap: 12px;
     align-items: center;
+    width: 100%;
+}
+.social_media_content svg {
+    margin-left: auto;
+}
+.cmn_drop_down.dropdown svg {
+    transform: rotate(-90deg);
+}
+
+.cmn_drop_down.show.dropdown svg{
+
+    transform: rotate(-0deg);
+
 }
 .social_media_content h5{
 color: #5F6D7E;
@@ -167,6 +180,21 @@ height: 39px;
     overflow: hidden;
     background-color: white;
     box-shadow:  0px 3px 9px 0px rgba(0, 0, 0, 0.10);
+}
+button.facebook_connect>div>div {
+    display: none !important;
+}
+
+button.facebook_connect> div>div:last-child {
+    display: block !important;
+    text-align: center !important;
+    font-weight: 500;
+}
+
+button.facebook_connect {
+    min-width: 98px;
+    text-align: center;
+    height: 39px !important;
 }
 .account_info {
     padding-bottom: 20px;
@@ -229,6 +257,22 @@ select.page_title_options {
 }
 .instagram_overview_heading{
     color: #5F6D7E;
+}
+/*drop down side*/
+.cmn_drop_down.dropdown button {
+    background: transparent;
+    border: transparent;
+    width: 100%;
+    padding: 0px;
+}
+
+
+.cmn_drop_down.show.dropdown .menu_items.dropdown-menu {
+    position: relative !important;
+    inset: unset !important;
+    transform: unset !important;
+    border: transparent;
+    padding: 0;
 }
 @media screen and (max-width:1280px){
     .social_media_outer{

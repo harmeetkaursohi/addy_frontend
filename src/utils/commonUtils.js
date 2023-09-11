@@ -1,4 +1,9 @@
 import * as yup from "yup";
+import {SocialAccountProvider} from "./contantData.js";
+import {exchangeForLongLivedToken} from "../services/facebookService";
+import axios from "axios";
+import {decodeJwtToken} from "../app/auth/auth.js";
+
 const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
 
 export const validationSchemas = {
@@ -26,14 +31,48 @@ export const validationSchemas = {
 
     }),
 
-    address:yup.object().shape({
+    address: yup.object().shape({
         country: yup.string().required('Country is required'),
         addressLine1: yup.string().required('AddressLine is required'),
         county: yup.string().required('County is required'),
         state: yup.string().required('State is required'),
     }),
 
-    forgetPassword:yup.object().shape({
+    forgetPassword: yup.object().shape({
         email: yup.string().required('Email is required').email('Invalid email format'),
     }),
 };
+
+
+export const computeAndSocialAccountJSONForFacebook = async (jsonObj) => {
+
+    const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.accessToken);
+    const token = localStorage.getItem("token");
+    const decodeJwt = decodeJwtToken(token);
+
+    return {
+        customerId: decodeJwt.customerId,
+        token: token,
+        socialAccountData: {
+            name: jsonObj?.data?.name || null,
+            email: jsonObj?.data?.email || null,
+            imageUrl: jsonObj?.data?.picture?.data?.url || null,
+            provider: getKeyFromValueOfObject(SocialAccountProvider, jsonObj?.provider) || null,
+            providerId: jsonObj?.data?.userID || null,
+            accessToken: longLivedToken || null,
+            pageAccessToken: []
+        }
+    }
+
+}
+
+
+export const getKeyFromValueOfObject = (object, value) => {
+
+    for (const key in object) {
+        if (object.hasOwnProperty(key) && object[key] === value) {
+            return key;
+        }
+    }
+
+}

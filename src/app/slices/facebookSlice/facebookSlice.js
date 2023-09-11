@@ -12,6 +12,11 @@ const facebookSlice = createSlice({
         facebookPageConnectReducer: {loading: false},
         getFacebookConnectedPagesReducer: {loading: false},
     },
+    reducers: {
+        resetFacebookReducer: (state) => {
+            state.getFacebookConnectedPagesReducer = {loading: false, facebookConnectedPages: []};
+        }
+    },
 
     extraReducers: {
 
@@ -42,14 +47,18 @@ const facebookSlice = createSlice({
             state.getFacebookConnectedPagesReducer = {loading: true}
         },
         [getFacebookConnectedPages.fulfilled]: (state, action) => {
-            state.getFacebookConnectedPagesReducer = {loading: false, facebookConnectedPages: action.payload==="" ? [] :action.payload }
+            state.getFacebookConnectedPagesReducer = {
+                loading: false,
+                facebookConnectedPages: action.payload === "" ? [] : action.payload
+            }
         },
         [getFacebookConnectedPages.rejected]: (state) => {
             state.getFacebookConnectedPagesReducer = {loading: false}
         },
 
+
     }
 });
 
-export const {} = facebookSlice.actions;
+export const {resetFacebookReducer} = facebookSlice.actions;
 export default facebookSlice.reducer;
