@@ -1,16 +1,13 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {
-    getAllConnectedSocialAccountAction,
-    socialAccountConnectActions
-} from "../../actions/socialAccountActions/socialAccountActions.js";
-import {getAllFacebookPages} from "../../actions/facebookActions/facebookActions.js";
+import {disconnectSocialAccountAction, getAllConnectedSocialAccountAction, socialAccountConnectActions} from "../../actions/socialAccountActions/socialAccountActions.js";
 
 
 const socialAccountSlice = createSlice({
     name: 'socialAccount',
     initialState: {
         connectSocialAccountReducer: {loading: false},
-        getAllConnectedSocialAccountReducer: {loading: false}
+        getAllConnectedSocialAccountReducer: {loading: false},
+        disconnectSocialAccountReducer: {loading: false}
     },
     reducers: {
         resetSocialAccountReducer: (state) => {
@@ -36,13 +33,22 @@ const socialAccountSlice = createSlice({
             state.getAllConnectedSocialAccountReducer = {loading: true}
         },
         [getAllConnectedSocialAccountAction.fulfilled]: (state, action) => {
-            console.log("action.payload----->",action.payload);
             state.getAllConnectedSocialAccountReducer = {loading: false, data: action.payload}
         },
         [getAllConnectedSocialAccountAction.rejected]: (state) => {
             state.getAllConnectedSocialAccountReducer = {loading: false}
         },
 
+        // social account disconnect
+        [disconnectSocialAccountAction.pending]: (state) => {
+            state.disconnectSocialAccountReducer = {loading: true}
+        },
+        [disconnectSocialAccountAction.fulfilled]: (state) => {
+            state.disconnectSocialAccountReducer = {loading: false}
+        },
+        [disconnectSocialAccountAction.rejected]: (state) => {
+            state.disconnectSocialAccountReducer = {loading: false}
+        },
 
 
     }

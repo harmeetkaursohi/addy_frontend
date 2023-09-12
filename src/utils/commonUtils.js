@@ -1,8 +1,9 @@
 import * as yup from "yup";
 import {SocialAccountProvider} from "./contantData.js";
-import {exchangeForLongLivedToken} from "../services/facebookService";
+import {exchangeForLongLivedToken} from "../services/facebookService.js";
 import axios from "axios";
 import {decodeJwtToken} from "../app/auth/auth.js";
+import {loginUser} from "../app/actions/userActions/userActions.js";
 
 const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
 
@@ -75,4 +76,11 @@ export const getKeyFromValueOfObject = (object, value) => {
         }
     }
 
+}
+
+export const cleanAndValidateRequestURL = (baseUrl, path, fields, token) => {
+    const url = new URL(`${baseUrl}${path}`);
+    url.searchParams.set('fields', fields);
+    url.searchParams.set('access_token', token);
+    return url.toString();
 }

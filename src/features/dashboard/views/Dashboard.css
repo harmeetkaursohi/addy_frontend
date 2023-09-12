@@ -1,3 +1,87 @@
+.social_media_wrapper .dropdown-toggle::after{
+    display: none;
+}
+.menu_items .dropdown-item:focus, .dropdown-item:hover {
+    color:unset !important;
+    background-color: unset !important;
+}
+.user_Details img {
+    border-radius: 5px;
+}
+
+.connectDisconnect_btn_outer {
+    display: flex;
+    gap: 23px;
+}
+.menu_items a.dropdown-item {
+    padding: 0px;
+    margin-top: 14px;
+}
+button#dropdown-facebook.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active  {
+    background: white !important;
+    border-color: unset !important;
+    color: unset !important;
+} 
+.cmn_drop_down.dropdown {
+    border-bottom: 1px solid #C6D2E0;
+    padding-bottom: 18px;
+}
+button.ConnectBtn {
+    background: #F07C33 !important;
+    color: white;
+    width: 144px;
+    height: 39px;
+    border-radius: 5px;
+border: 1px solid var(--neutral-700, #D1D9E2);
+}
+.dropdown-item:active {
+    background: transparent;
+}
+.user_profileInfo_wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+}
+.user_Details h4{
+    color: #5F6D7E;
+    font-size: 12px;
+}
+.user_Details {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.connect_text_connect{
+    color:  #038000;
+    line-height: 20px;
+    letter-spacing: -0.01px;
+    font-size: 10px;;
+}
+
+.connect_text_not_connect{
+    color: rgb(255, 58, 58);
+    line-height: 20px;
+    letter-spacing: -0.01px;
+    font-size: 10px;;
+}
+
+.not_connect_text{
+    color: #F69999;
+    line-height: 20px;
+    letter-spacing: -0.01px;
+    font-size: 10px;
+}
+button.DisConnectBtn{
+    border-radius: 5px;
+    border: 1px solid #D1D9E2;
+    background: #E6E9EC !important;
+    color: #393939;
+    min-width: 111px;
+    height: 39px;
+}
+
+
 button#dropdown-basic 
 {
     border-radius: 10px;
@@ -145,12 +229,12 @@ padding: 7px 14px
     margin-left: auto;
 }
 .cmn_drop_down.dropdown svg {
-    transform: rotate(-90deg);
+    transform: rotate(-0deg);
 }
 
 .cmn_drop_down.show.dropdown svg{
 
-    transform: rotate(-0deg);
+    transform: rotate(180deg);
 
 }
 .social_media_content h5{
@@ -341,6 +425,19 @@ select.page_title_options {
         display: block;
         padding: 16px 20px;
     }
-    
+    .user_profileInfo_wrapper {
+        display: block;
+    }
+    .connectDisconnect_btn_outer {
+        flex-wrap: wrap;
+    }
+    button.DisConnectBtn {
+        width: 115px !important;
+        height: 35px !important;
+    }   
+    button.ConnectBtn {
+        width: 115px !important;
+        height: 35px !important;
+    }  
 
 }

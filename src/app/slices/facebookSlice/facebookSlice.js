@@ -47,10 +47,7 @@ const facebookSlice = createSlice({
             state.getFacebookConnectedPagesReducer = {loading: true}
         },
         [getFacebookConnectedPages.fulfilled]: (state, action) => {
-            state.getFacebookConnectedPagesReducer = {
-                loading: false,
-                facebookConnectedPages: action.payload === "" ? [] : action.payload
-            }
+            state.getFacebookConnectedPagesReducer = {loading: false, facebookConnectedPages: action.payload === "" ? [] : action.payload}
         },
         [getFacebookConnectedPages.rejected]: (state) => {
             state.getFacebookConnectedPagesReducer = {loading: false}

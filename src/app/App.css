@@ -125,3 +125,37 @@ font-weight: 600;
 line-height: 38px; 
 letter-spacing: -0.2px;
 }
+.skeleton {
+  position: relative;
+  width: max-content;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: #d8dbde !important;
+  color: transparent !important;
+  border-color: #ccced1 !important;
+  user-select: none;
+  cursor: default;
+}
+
+.skeleton::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg, rgba(252, 236, 236, 0) 0, rgb(117 113 113 / 20%) 20%, rgba(255, 255, 255, 0.5) 60%, rgba(0, 0, 0, 0));
+
+  animation: shimmer 2s infinite;
+  content: '';
+}
+
+.skeleton img {
+  opacity: 0;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

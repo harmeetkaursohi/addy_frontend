@@ -7,11 +7,11 @@ export async function exchangeForLongLivedToken(shortLivedToken) {
         grant_type: 'fb_exchange_token',
         client_id: '688937182693504',
         fb_exchange_token: shortLivedToken,
-        client_secret:'f758b83170899e5e9c9c1baa5342c877'
+        client_secret: 'f758b83170899e5e9c9c1baa5342c877'
     };
 
     try {
-        const response = await axios.get(url, { params });
+        const response = await axios.get(url, {params});
 
         if (response.status === 200 && response.data && response.data.access_token) {
             return response.data.access_token;
@@ -23,3 +23,4 @@ export async function exchangeForLongLivedToken(shortLivedToken) {
         throw error;
     }
 }
+
