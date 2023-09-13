@@ -14,12 +14,14 @@ import instagram_img from "../../../images/instagram.png"
 import jsondata from '../../../locales/data/initialdata.json'
 import {useState} from "react";
 import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
+import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
+import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
 
 const CreatePost = () => {
 
-    const [aiGenerateImageModel, setAIGenerateImageModel] = useState(false);
-    // const [aiGenerateHastModel, setAIGenerateImageModel] = useState(false);
-
+    const [aiGenerateImageModal, setAIGenerateImageModal] = useState(false);
+    const [aiGenerateCaptionModal, setAIGenerateCaptionModal] = useState(false);
+    const [aiGenerateHashTagModal, setAIGenerateHashTagModal] = useState(false);
 
 
     return (
@@ -63,7 +65,8 @@ const CreatePost = () => {
                                         <h2 className='cmn_heading'>{jsondata.OR}</h2>
                                         <div className="ai_outer_btn">
                                             <button className="ai_btn cmn_white_text mt-2" onClick={(e) => {
-                                                setAIGenerateImageModel(true);
+                                                e.preventDefault();
+                                                setAIGenerateImageModal(true);
                                             }}><img src={ai_icon} className='ai_icon me-2'/>{jsondata.generateAi}
                                             </button>
                                         </div>
@@ -73,9 +76,13 @@ const CreatePost = () => {
                                         <div className='caption_header'>
                                             <h5 className='post_heading create_post_text'>Add Post Caption</h5>
 
-                                            <button className="ai_btn cmn_white_text">
-                                                <img src={ai_icon} className='ai_icon me-2'/>
-                                                {jsondata.generateCaptionAi} </button>
+                                            <button className="ai_btn cmn_white_text" onClick={(e) => {
+                                                e.preventDefault();
+                                                setAIGenerateCaptionModal(true);
+                                            }}>
+                                                <img src={ai_icon}
+                                                     className='ai_icon me-2'/>{jsondata.generateCaptionAi}
+                                            </button>
 
                                         </div>
                                         <div className='textarea_outer'>
@@ -85,7 +92,10 @@ const CreatePost = () => {
                                         <div className='caption_header hashtag_outer'>
                                             <h5 className='post_heading create_post_text'>Add Hashtag</h5>
 
-                                            <button className="ai_btn cmn_white_text">
+                                            <button className="ai_btn cmn_white_text" onClick={(e) => {
+                                                e.preventDefault();
+                                                setAIGenerateHashTagModal(true);
+                                            }}>
                                                 <img src={ai_icon} className='ai_icon me-2'/>
                                                 {jsondata.generateHashtagAi} </button>
 
@@ -185,8 +195,18 @@ const CreatePost = () => {
             </div>
 
             {
-                aiGenerateImageModel && <AI_ImageModal aiGenerateImageModel={aiGenerateImageModel}
-                                                       setAIGenerateImageModel={setAIGenerateImageModel}/>
+                aiGenerateImageModal && <AI_ImageModal aiGenerateImageModal={aiGenerateImageModal}
+                                                       setAIGenerateImageModal={setAIGenerateImageModal}/>
+            }
+
+            {
+                aiGenerateCaptionModal && <AiCaptionModal aiGenerateCaptionModal={aiGenerateCaptionModal}
+                                                          setAIGenerateCaptionModal={setAIGenerateCaptionModal}/>
+            }
+
+            {
+                aiGenerateHashTagModal && <AI_Hashtag aiGenerateHashTagModal={aiGenerateHashTagModal}
+                                                      setAIGenerateHashTagModal={setAIGenerateHashTagModal}/>
             }
         </>
     )

@@ -37,10 +37,10 @@ export const generateAIImageService = async (imageRequestBody) => {
         n: imageRequestBody.noOfImg,
         size: imageRequestBody.imageSize
     }
-    return await axios.post(`${import.meta.env.VITE_APP_AI_GENERATE_IMAGE_URL}`, requestBody, setAuthenticationHeader(`Bearer ${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
+    return await axios.post(`${import.meta.env.VITE_APP_AI_GENERATE_IMAGE_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
 }
 
 
 export const generateAICaptionAndHashTagService = async (requestBody) => {
-    return await axios.post(`${import.meta.env.VITE_APP_AI_GENERATE_CAPTION_URL}`, requestBody, setAuthenticationHeader(`Bearer ${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
+    return await axios.post(`${import.meta.env.VITE_APP_AI_GENERATE_CAPTION_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
 }
