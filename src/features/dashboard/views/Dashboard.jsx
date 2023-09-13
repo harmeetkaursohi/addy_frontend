@@ -370,7 +370,8 @@ const Dashboard = () => {
                                                 boxShadow: "unset",
                                                 fontSize: "12px",
                                                 color: "#fff",
-                                                border: '1px solid #F07C33'
+                                                border: '1px solid #F07C33',
+                                                margin:"0px"
                                             }}/>
                                         </LoginSocialInstagram>
 
