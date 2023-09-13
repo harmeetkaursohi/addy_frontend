@@ -1,7 +1,6 @@
 import './App.css'
 import Login from '../features/login/views/Login'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-
 import SelectPlan from '../features/selectplan/views/SelectPlan.jsx'
 import BillingForm from '../features/billingInfo/views/BillingForm.jsx'
 import SideBar from '../features/sidebar/views/Layout'
@@ -16,7 +15,6 @@ import AddressForm from '../features/signup/views/tabs/AddressInfo.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreatePassword from '../features/resetPassword/views/CreatePassword'
-
 import ForgetPassword from '../features/forgetPassword/ForgetPassword'
 import Signup from '../features/signup/views/Signup'
 import NotFound from '../features/common/components/NotFound'

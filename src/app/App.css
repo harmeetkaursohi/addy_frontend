@@ -127,7 +127,8 @@ letter-spacing: -0.2px;
 }
 .skeleton {
   position: relative;
-  width: max-content;
+  /*width: max-content;*/
+  width:100%;
   overflow: hidden;
   border-radius: 4px;
   background-color: #d8dbde !important;
@@ -135,6 +136,7 @@ letter-spacing: -0.2px;
   border-color: #ccced1 !important;
   user-select: none;
   cursor: default;
+  margin-top: 10px;
 }
 
 .skeleton::after {

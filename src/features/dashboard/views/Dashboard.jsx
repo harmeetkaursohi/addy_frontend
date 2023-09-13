@@ -18,11 +18,10 @@ import {useEffect, useState} from "react";
 import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
 import {useDispatch, useSelector} from "react-redux";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
-
 import {
     facebookPageConnect,
     getAllFacebookPages,
-    getFacebookConnectedPages,
+    getFacebookConnectedPages
 } from "../../../app/actions/facebookActions/facebookActions.js";
 import {useNavigate} from "react-router-dom";
 import {LoginSocialFacebook, LoginSocialInstagram} from "reactjs-social-login";
@@ -33,6 +32,7 @@ import {
     getAllConnectedSocialAccountAction,
     socialAccountConnectActions
 } from "../../../app/actions/socialAccountActions/socialAccountActions.js";
+import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 
 const Dashboard = () => {
 
@@ -46,6 +46,7 @@ const Dashboard = () => {
 
 
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
+    const facebookPageLoading = useSelector(state => state.facebook.getFacebookPageReducer.loading);
     const facebookConnectedPages = useSelector(state => state.facebook.getFacebookConnectedPagesReducer.facebookConnectedPages);
 
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
@@ -57,7 +58,7 @@ const Dashboard = () => {
             setUserInfo(decodeJwt);
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
         }
-    }, [token])
+    }, [])
 
 
     useEffect(() => {
@@ -66,7 +67,10 @@ const Dashboard = () => {
             dispatch(getAllFacebookPages({
                 providerId: faceBookSocialAccount?.providerId,
                 accessToken: faceBookSocialAccount?.accessToken
-            }));
+            })).then((res)=>{
+                const decodeJwt = decodeJwtToken(token);
+                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+            })
         }
 
     }, [getAllConnectedSocialAccountData]);
@@ -99,10 +103,6 @@ const Dashboard = () => {
             console.log("--->error", error)
         })
     }
-
-
-    console.log("facebookPageList", facebookPageList)
-    console.log("facebookConnectedPages", facebookConnectedPages);
 
     return (
         <>
@@ -230,8 +230,9 @@ const Dashboard = () => {
 
                                             <LoginSocialFacebook
                                                 isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
-                                                appId="688937182693504"
+                                                appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                                 onResolve={(response) => {
+                                                    console.log("fb response", response)
                                                     connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
                                                 }}
                                                 onReject={(error) => {
@@ -280,27 +281,30 @@ const Dashboard = () => {
 
                                                 <Dropdown.Menu className="menu_items ">
 
-                                                    {!(getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0) &&
-                                                        facebookPageList?.slice(0, 3).map((data, index) => {
-                                                            return (
-                                                                <>
-                                                                    <Dropdown.Item href="#/action-2" key={index}>
-                                                                        <div className="user_profileInfo_wrapper">
-                                                                            <div className="user_Details">
-                                                                                <img src={data.picture.data.url}
-                                                                                     height="30px"
-                                                                                     width="30px"/>
-                                                                                <h4 className="cmn_text_style">{data.name}</h4>
+                                                    {
+                                                        facebookPageLoading === true ?
+                                                            <SkeletonEffect count={3}/> :
+
+                                                            !(getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0) &&
+                                                            facebookPageList?.slice(0, 3).map((data, index) => {
+                                                                return (
+                                                                    <>
+                                                                        <Dropdown.Item href="#/action-2" key={index}>
+                                                                            <div className="user_profileInfo_wrapper">
+                                                                                <div className="user_Details">
+                                                                                    <img src={data.picture.data.url}
+                                                                                         height="30px"
+                                                                                         width="30px"/>
+                                                                                    <h4 className="cmn_text_style">{data.name}</h4>
+                                                                                </div>
+                                                                                <h4 className={facebookConnectedPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "connect_text cmn_text_style" : "connect_text_not_connect cmn_text_style"}>{facebookConnectedPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "Connected" : "Not Connected"}</h4>
                                                                             </div>
-                                                                            <h4 className={facebookConnectedPages?.findIndex(c=>c?.pageId===data?.id)> -1 ? "connect_text_connect cmn_text_style" : "connect_text_not_connect cmn_text_style"} >{facebookConnectedPages?.findIndex(c=>c?.pageId===data?.id) >-1 ? "Connected" : "Not Connected"}</h4>
-                                                                        </div>
-                                                                    </Dropdown.Item>
-                                                                </>
-                                                            )
-                                                        })
+                                                                        </Dropdown.Item>
+                                                                    </>
+                                                                )
+                                                            })
 
                                                     }
-
                                                     <Dropdown.Item>
                                                         <div className="connectDisconnect_btn_outer">
                                                             <button className="DisConnectBtn  cmn_connect_btn"
@@ -456,9 +460,7 @@ const Dashboard = () => {
             {showFacebookModal &&
                 <FacebookModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal}
                                facebookPageList={facebookPageList} setFacebookData={setFacebookData}
-                               facebookConnectedPages={facebookConnectedPages}
-                               facebookPageConnect={facebookPageConnect} getFacebookConnectedPages={getFacebookConnectedPages}/>}
-
+                               facebookConnectedPages={facebookConnectedPages}/>}
         </>
     )
 }

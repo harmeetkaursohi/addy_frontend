@@ -1,13 +1,15 @@
 import axios from 'axios';
 
 export async function exchangeForLongLivedToken(shortLivedToken) {
-    const url = 'https://graph.facebook.com/v17.0/oauth/access_token';
+    const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/oauth/access_token`;
+    const client_Id = import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID;
+    const client_secret = import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET;
 
     const params = {
         grant_type: 'fb_exchange_token',
-        client_id: '688937182693504',
+        client_id: client_Id,
         fb_exchange_token: shortLivedToken,
-        client_secret: 'f758b83170899e5e9c9c1baa5342c877'
+        client_secret: client_secret
     };
 
     try {

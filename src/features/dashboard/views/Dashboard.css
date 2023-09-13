@@ -12,6 +12,7 @@
 .connectDisconnect_btn_outer {
     display: flex;
     gap: 23px;
+    padding-bottom: 23px;
 }
 .menu_items a.dropdown-item {
     padding: 0px;
@@ -24,7 +25,6 @@ button#dropdown-facebook.btn-check:checked+.btn, .btn.active, .btn.show, .btn:fi
 } 
 .cmn_drop_down.dropdown {
     border-bottom: 1px solid #C6D2E0;
-    padding-bottom: 18px;
 }
 button.ConnectBtn {
     background: #F07C33 !important;
@@ -52,12 +52,13 @@ border: 1px solid var(--neutral-700, #D1D9E2);
     gap: 8px;
     align-items: center;
 }
-.connect_text_connect{
+.connect_text{
     color:  #038000;
     line-height: 20px;
     letter-spacing: -0.01px;
     font-size: 10px;;
 }
+
 
 .connect_text_not_connect{
     color: rgb(255, 58, 58);

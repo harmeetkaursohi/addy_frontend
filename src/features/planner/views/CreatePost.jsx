@@ -12,10 +12,16 @@ import upload_img from '../../../images/post_image.svg'
 import Dropdown from 'react-bootstrap/Dropdown';
 import instagram_img from "../../../images/instagram.png"
 import jsondata from '../../../locales/data/initialdata.json'
+import {useState} from "react";
+import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
+
 const CreatePost = () => {
+
+    const [aiGenerateImageModel, setAIGenerateImageModel] = useState(false);
+
+
     return (
         <>
-        
             <div className="Container">
                 <div className="create_post_wrapper">
                     <div className="row">
@@ -25,20 +31,16 @@ const CreatePost = () => {
                                 <form>
                                     <div className="createPost_outer">
                                         <label className='create_post_label'>{jsondata.mediaPlatform}</label>
-                                        {/* <select>
-                                            <option>Team Musafiir</option>
-                                            <option>Team Musafiir</option>
-                                        </select> */}
                                         <Dropdown className="insta_dropdown_btn mt-2">
-                                        <Dropdown.Toggle  id="instagram" className="instagram_dropdown">
-                                            <img src={instagram_img} className="me-3"/>Instagram
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu className='w-100'>
-                                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                                            <Dropdown.Toggle id="instagram" className="instagram_dropdown">
+                                                <img src={instagram_img} className="me-3"/>Instagram
+                                            </Dropdown.Toggle>
+                                            <Dropdown.Menu className='w-100'>
+                                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
                                     </div>
                                     {/* add media */}
                                     <div className="media_outer">
@@ -47,17 +49,19 @@ const CreatePost = () => {
                                         <div className="file_outer">
                                             <div className='cmn_blue_border add_media_outer'>
                                                 <input type="file" id='image' className='file'/>
-                                                <label htmlFor='image' className='cmn_headings'> <img src={upload_img}/>Add Photo</label>
+                                                <label htmlFor='image' className='cmn_headings'> <img src={upload_img}/>Add
+                                                    Photo</label>
                                             </div>
-                                            <div className='cmn_blue_border add_media_outer' >
+                                            <div className='cmn_blue_border add_media_outer'>
                                                 <input type="file" id='video'/>
-                                                <label htmlFor='video' className='cmn_headings'> <img src={upload_video_img}/>Add Video</label>
+                                                <label htmlFor='video' className='cmn_headings'> <img
+                                                    src={upload_video_img}/>Add Video</label>
                                             </div>
                                         </div>
                                         <h2 className='cmn_heading'>{jsondata.OR}</h2>
                                         <div className="ai_outer_btn">
                                             <button className="ai_btn cmn_white_text mt-2">
-                                                <img src={ai_icon} className='ai_icon me-2' />
+                                                <img src={ai_icon} className='ai_icon me-2'/>
                                                 {jsondata.generateAi} </button>
                                         </div>
                                     </div>
@@ -67,7 +71,7 @@ const CreatePost = () => {
                                             <h5 className='post_heading create_post_text'>Add Post Caption</h5>
 
                                             <button className="ai_btn cmn_white_text">
-                                                <img src={ai_icon} className='ai_icon me-2' />
+                                                <img src={ai_icon} className='ai_icon me-2'/>
                                                 {jsondata.generateCaptionAi} </button>
 
                                         </div>
@@ -79,7 +83,7 @@ const CreatePost = () => {
                                             <h5 className='post_heading create_post_text'>Add Hashtag</h5>
 
                                             <button className="ai_btn cmn_white_text">
-                                                <img src={ai_icon} className='ai_icon me-2' />
+                                                <img src={ai_icon} className='ai_icon me-2'/>
                                                 {jsondata.generateHashtagAi} </button>
 
                                         </div>
@@ -89,14 +93,16 @@ const CreatePost = () => {
                                         </div>
                                         <div className='textarea get_messages_outer'>
                                             <div className='get_messages'>
-                                                <input type='checkbox' />
-                                                <label className='create_post_text get_measage_heading ps-2'>Get more messages</label>
-                                                <h6 className='create_post_text send_measage_heading'>Businesses like your get more messages when they add a “send message” button.</h6>
+                                                <input type='checkbox'/>
+                                                <label className='create_post_text get_measage_heading ps-2'>Get more
+                                                    messages</label>
+                                                <h6 className='create_post_text send_measage_heading'>Businesses like
+                                                    your get more messages when they add a “send message” button.</h6>
                                                 <h6 className='create_post_text try_it_heading'>Try it out</h6>
                                             </div>
-                                            
-                                                <button className='cmn_btn_color add_btn'>{jsondata.addbutton}</button>
-                                            
+
+                                            <button className='cmn_btn_color add_btn'>{jsondata.addbutton}</button>
+
                                         </div>
 
                                     </div>
@@ -105,21 +111,24 @@ const CreatePost = () => {
                                         <div className='schedule_btn_outer'>
                                             <h5 className='create_post_text post_heading'>{jsondata.setSchedule}</h5>
                                             <div className='schedule_btn_wrapper'>
-                                                <button className='cmn_bg_btn schedule_btn '>{jsondata.schedule}</button>
+                                                <button
+                                                    className='cmn_bg_btn schedule_btn '>{jsondata.schedule}</button>
                                                 <button className='save_btn cmn_bg_btn'>{jsondata.saveasdraft}</button>
                                             </div>
                                         </div>
                                         <div className='schedule_date_outer'>
                                             <div className='date_time_outer'>
                                                 <h6 className='create_post_text'>{jsondata.setdate}</h6>
-                                               
-                                                <input type='date' placeholder='set date' className='form-control mt-2 date_input'/>
-                                                
+
+                                                <input type='date' placeholder='set date'
+                                                       className='form-control mt-2 date_input'/>
+
                                             </div>
                                             <div className='date_time_outer'>
                                                 <h6 className='create_post_text'>{jsondata.settime}</h6>
-                                               <input type='time' placeholder="set time "className='mt-2 form-control time_input'/>
-                                                
+                                                <input type='time' placeholder="set time "
+                                                       className='mt-2 form-control time_input'/>
+
 
                                             </div>
                                         </div>
@@ -127,8 +136,10 @@ const CreatePost = () => {
                                     {/* boost post */}
                                     <div className='publish_post_outer media_outer'>
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"  />
-                                            <label className="form-check-label create_post_label boost_post_text" for="flexSwitchCheckChecked">Boost Post</label>
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="flexSwitchCheckChecked"/>
+                                            <label className="form-check-label create_post_label boost_post_text"
+                                                   for="flexSwitchCheckChecked">Boost Post</label>
                                         </div>
                                         <div className='cancel_publish_btn_outer'>
                                             <button className='cancel_btn cmn_bg_btn'>{jsondata.cancel}</button>
@@ -142,31 +153,37 @@ const CreatePost = () => {
                             <div className='post_preview_outer'>
                                 <div className='preview_wrapper'>
                                     <h2 className='cmn_white_text feed_preview'>Instagram feed Preview</h2>
-                                <div className='user_profile_info'>
-                                <img src={user_propfile}   height="36px" width="36px" />
-                                    <div>
-                                    <h3 className='create_post_text user_name boost_post_text'>Team Musafirrr</h3>
-                                    <h6 className='status create_post_text'>just now <img src={ellipse_img}/></h6>
+                                    <div className='user_profile_info'>
+                                        <img src={user_propfile} height="36px" width="36px"/>
+                                        <div>
+                                            <h3 className='create_post_text user_name boost_post_text'>Team
+                                                Musafirrr</h3>
+                                            <h6 className='status create_post_text'>just now <img src={ellipse_img}/>
+                                            </h6>
+                                        </div>
+
                                     </div>
-                                    
-                                </div>
-                                <img src={bg_img} className='post_img'/>
-                                <div className='like_comment_outer'>
-                                <div>
-                                <img src={like_img} className='like_img'/>
-                                <img src={comment_img} className='like_img'/>
-                                <img src={send_img} className='like_img'/>
-                                </div>
-                                <img src={ribbon_img}/>
-                                </div>
+                                    <img src={bg_img} className='post_img'/>
+                                    <div className='like_comment_outer'>
+                                        <div>
+                                            <img src={like_img} className='like_img'/>
+                                            <img src={comment_img} className='like_img'/>
+                                            <img src={send_img} className='like_img'/>
+                                        </div>
+                                        <img src={ribbon_img}/>
+                                    </div>
                                 </div>
                             </div>
 
-                           
+
                         </div>
                     </div>
                 </div>
             </div>
+
+            {
+                aiGenerateImageModel && <AI_ImageModal aiGenerateImageModel={aiGenerateImageModel} setAIGenerateImageModel={setAIGenerateImageModel}/>
+            }
         </>
     )
 }
