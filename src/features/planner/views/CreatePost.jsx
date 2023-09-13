@@ -18,6 +18,8 @@ import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
 const CreatePost = () => {
 
     const [aiGenerateImageModel, setAIGenerateImageModel] = useState(false);
+    // const [aiGenerateHastModel, setAIGenerateImageModel] = useState(false);
+
 
 
     return (
@@ -60,9 +62,10 @@ const CreatePost = () => {
                                         </div>
                                         <h2 className='cmn_heading'>{jsondata.OR}</h2>
                                         <div className="ai_outer_btn">
-                                            <button className="ai_btn cmn_white_text mt-2">
-                                                <img src={ai_icon} className='ai_icon me-2'/>
-                                                {jsondata.generateAi} </button>
+                                            <button className="ai_btn cmn_white_text mt-2" onClick={(e) => {
+                                                setAIGenerateImageModel(true);
+                                            }}><img src={ai_icon} className='ai_icon me-2'/>{jsondata.generateAi}
+                                            </button>
                                         </div>
                                     </div>
                                     {/* post caption */}
@@ -182,7 +185,8 @@ const CreatePost = () => {
             </div>
 
             {
-                aiGenerateImageModel && <AI_ImageModal aiGenerateImageModel={aiGenerateImageModel} setAIGenerateImageModel={setAIGenerateImageModel}/>
+                aiGenerateImageModel && <AI_ImageModal aiGenerateImageModel={aiGenerateImageModel}
+                                                       setAIGenerateImageModel={setAIGenerateImageModel}/>
             }
         </>
     )

@@ -6,17 +6,17 @@ import './AI_Image.css'
 
 const AI_ImageModal = ({aiGenerateImageModel, setAIGenerateImageModel}) => {
 
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    // const [show, setShow] = useState(false);
+    const handleClose = () => setAIGenerateImageModel(false);
+    // const handleShow = () => setShow(true);
 
     return (
         <>
             <div className='generate_ai_img_container'>
 
-                <Button variant="primary" onClick={handleShow}>
-                    Launch demo modal
-                </Button>
+                {/*<Button variant="primary" onClick={handleShow}>*/}
+                {/*    Launch demo modal*/}
+                {/*</Button>*/}
 
                 <Modal show={aiGenerateImageModel} onHide={handleClose}>
                     <Modal.Header closeButton>
