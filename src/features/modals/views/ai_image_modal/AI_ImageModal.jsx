@@ -22,8 +22,6 @@ const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal}) => {
         dispatch(generateAIImageAction(imageRequestBody))
     }
 
-    console.log("generateAIImageData", generateAIImageData)
-
 
     return (
         <>
