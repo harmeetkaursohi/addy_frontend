@@ -3,7 +3,6 @@ import {SocialAccountProvider} from "./contantData.js";
 import {exchangeForLongLivedToken} from "../services/facebookService.js";
 import axios from "axios";
 import {decodeJwtToken} from "../app/auth/auth.js";
-import {loginUser} from "../app/actions/userActions/userActions.js";
 
 const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
 
@@ -84,3 +83,26 @@ export const cleanAndValidateRequestURL = (baseUrl, path, fields, token) => {
     url.searchParams.set('access_token', token);
     return url.toString();
 }
+
+export const PLATFORM_TYPE = Object.freeze({
+    FACEBOOK: "facebook",
+    INSTAGRAM: "instagram",
+    TWITTER: "twitter",
+    LINKEDIN: "linkedin"
+});
+
+export const getValueByEnumObject = (object) => {
+    const values = [];
+    for (let key in object) {
+        if (!isNaN(Number(key))) {
+            continue;
+        }
+        values.push(object[key]);
+    }
+    return values;
+}
+
+
+
+
+

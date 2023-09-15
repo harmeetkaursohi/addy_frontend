@@ -1,5 +1,11 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {disconnectSocialAccountAction, getAllConnectedSocialAccountAction, socialAccountConnectActions} from "../../actions/socialAccountActions/socialAccountActions.js";
+import {
+    disconnectSocialAccountAction,
+    findSocialAccountByProviderAndCustomerIdAction,
+    getAllConnectedSocialAccountAction,
+    socialAccountConnectActions,
+    getAllByCustomerIdAction
+} from "../../actions/socialAccountActions/socialAccountActions.js";
 
 
 const socialAccountSlice = createSlice({
@@ -7,7 +13,9 @@ const socialAccountSlice = createSlice({
     initialState: {
         connectSocialAccountReducer: {loading: false},
         getAllConnectedSocialAccountReducer: {loading: false},
-        disconnectSocialAccountReducer: {loading: false}
+        disconnectSocialAccountReducer: {loading: false},
+        findSocialAccountByProviderAndCustomerIdReducer: {loading: false},
+        getAllByCustomerIdReducer: {loading: false},
     },
     reducers: {
         resetSocialAccountReducer: (state) => {
@@ -50,6 +58,27 @@ const socialAccountSlice = createSlice({
             state.disconnectSocialAccountReducer = {loading: false}
         },
 
+        // get social account by customer id and provider
+        [findSocialAccountByProviderAndCustomerIdAction.pending]: (state) => {
+            state.findSocialAccountByProviderAndCustomerIdReducer = {loading: true}
+        },
+        [findSocialAccountByProviderAndCustomerIdAction.fulfilled]: (state, action) => {
+            state.findSocialAccountByProviderAndCustomerIdReducer = {loading: false, data: action.payload}
+        },
+        [findSocialAccountByProviderAndCustomerIdAction.rejected]: (state) => {
+            state.findSocialAccountByProviderAndCustomerIdReducer = {loading: false}
+        },
+
+        // get social account by customer id and provider
+        [getAllByCustomerIdAction.pending]: (state) => {
+            state.getAllByCustomerIdReducer = {loading: true}
+        },
+        [getAllByCustomerIdAction.fulfilled]: (state, action) => {
+            state.getAllByCustomerIdReducer = {loading: false, data: action.payload}
+        },
+        [getAllByCustomerIdAction.rejected]: (state) => {
+            state.getAllByCustomerIdReducer = {loading: false}
+        },
 
     }
 

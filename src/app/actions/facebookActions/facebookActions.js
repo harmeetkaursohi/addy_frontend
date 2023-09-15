@@ -3,6 +3,7 @@ import {showErrorToast} from "../../../features/common/components/Toast";
 import axios from "axios";
 import {setAuthenticationHeader} from "../../auth/auth.js";
 import {cleanAndValidateRequestURL} from "../../../utils/commonUtils.js";
+import {exchangeForLongLivedToken} from "../../../services/facebookService.js";
 
 export const getAllFacebookPages = createAsyncThunk('facebook/getAllFacebookPages', async (data, thunkAPI) => {
         try {
@@ -12,6 +13,9 @@ export const getAllFacebookPages = createAsyncThunk('facebook/getAllFacebookPage
             const pageInfoList = [];
             for (let obj of response.data.data) {
                 const pageInfoResponse = await getPageFullInfoByPageAccessToken(obj.access_token);
+                console.log("@@@ pageInfoResponse  ::: ", pageInfoResponse?.data?.access_token)
+                const longLivedToken = await exchangeForLongLivedToken(pageInfoResponse?.data?.access_token);
+                pageInfoResponse.data.access_token = longLivedToken;
                 pageInfoList.push(pageInfoResponse.data);
             }
             return pageInfoList;
@@ -49,8 +53,6 @@ export const getFacebookConnectedPages = createAsyncThunk('facebook/getFacebookC
 });
 
 export const getFacebookUserInfo = createAsyncThunk('facebook/getFacebookUserInfo', async (data, thunkAPI) => {
-
-
     return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/me`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {

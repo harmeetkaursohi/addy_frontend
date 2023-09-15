@@ -131,7 +131,7 @@ const Login = () => {
                                                 </button>
                                                 {/*login with  facebook =======*/}
                                                     
-                                                <a  className='' href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=https://9d12-103-239-235-57.ngrok-free.app/auth-redirect`}>
+                                                <a  className='' href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=https://f6dd-45-127-194-130.ngrok-free.app/auth-redirect`}>
                                                     <div className="google_img_outer login_btn login_google_btn">
                                                         <img src={fbImg} />
                                                         <h2 className="ps-2">{jsondata.loginwithfb} </h2></div>

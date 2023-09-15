@@ -3,6 +3,16 @@ import axios from "axios";
 import {setAuthenticationHeader} from "../../auth/auth.js";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 
+export const createFacebookPostAction = createAsyncThunk('post/createFacebookPostAction', async (data, thunkAPI) => {
+    console.log("createFacebookPostAction", data)
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/facebook/post/${data.customerId}`, data.postRequestDto, setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});
+
 export const generateAIImageAction = createAsyncThunk('post/generateAIImageAction', async (data, thunkAPI) => {
     return generateAIImageService(data).then(res => {
         return res.data;
@@ -29,7 +39,6 @@ export const generateAIHashTagAction = createAsyncThunk('post/generateAIHashTagA
         return thunkAPI.rejectWithValue(error.response);
     })
 });
-
 
 export const generateAIImageService = async (imageRequestBody) => {
     const requestBody = {

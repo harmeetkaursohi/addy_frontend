@@ -19,7 +19,6 @@ import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
 import {useDispatch, useSelector} from "react-redux";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {
-    facebookPageConnect,
     getAllFacebookPages,
     getFacebookConnectedPages
 } from "../../../app/actions/facebookActions/facebookActions.js";
