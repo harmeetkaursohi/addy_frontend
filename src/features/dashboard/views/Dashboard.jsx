@@ -353,7 +353,7 @@ const Dashboard = () => {
                                             client_id="258452007021390"
                                             client_secret="952c05ad1f2a53f09eb37fd62ba1547d"
                                             scope="user_profile,user_media"
-                                            redirect_uri="https://9d12-103-239-235-57.ngrok-free.app/dashboard"
+                                            redirect_uri="https://0be0-2402-3a80-1a65-bdbb-718a-ffb1-45f1-8620.ngrok-free.app/dashboard"
                                             onResolve={(response) => {
                                                 console.log("------>response", response);
                                             }}
