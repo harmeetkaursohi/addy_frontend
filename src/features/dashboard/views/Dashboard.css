@@ -1,10 +1,12 @@
-.social_media_wrapper .dropdown-toggle::after{
+.social_media_wrapper .dropdown-toggle::after {
     display: none;
 }
+
 .menu_items .dropdown-item:focus, .dropdown-item:hover {
-    color:unset !important;
+    color: unset !important;
     background-color: unset !important;
 }
+
 .user_Details img {
     border-radius: 5px;
 }
@@ -12,68 +14,79 @@
 .connectDisconnect_btn_outer {
     display: flex;
     gap: 23px;
-    padding-bottom: 23px;
 }
+
 .menu_items a.dropdown-item {
     padding: 0px;
     margin-top: 14px;
+    cursor: auto
 }
-button#dropdown-facebook.btn-check:checked+.btn, .btn.active, .btn.show, .btn:first-child:active  {
+
+button#dropdown-facebook.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active {
     background: white !important;
     border-color: unset !important;
     color: unset !important;
-} 
+}
+
 .cmn_drop_down.dropdown {
     border-bottom: 1px solid #C6D2E0;
+    padding-bottom: 12px;
 }
+
 button.ConnectBtn {
     background: #F07C33 !important;
     color: white;
     width: 144px;
     height: 39px;
     border-radius: 5px;
-border: 1px solid var(--neutral-700, #D1D9E2);
+    border: 1px solid var(--neutral-700, #D1D9E2);
 }
+
 .dropdown-item:active {
     background: transparent;
 }
+
 .user_profileInfo_wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 14px;
 }
-.user_Details h4{
+
+.user_Details h4 {
     color: #5F6D7E;
     font-size: 12px;
 }
+
 .user_Details {
     display: flex;
     gap: 8px;
     align-items: center;
 }
-.connect_text{
-    color:  #038000;
+
+.connect_text {
+    color: #038000;
     line-height: 20px;
     letter-spacing: -0.01px;
     font-size: 10px;;
 }
 
 
-.connect_text_not_connect{
+.connect_text_not_connect {
     color: rgb(255, 58, 58);
     line-height: 20px;
     letter-spacing: -0.01px;
     font-size: 10px;;
 }
 
-.not_connect_text{
+.not_connect_text {
     color: #F69999;
     line-height: 20px;
     letter-spacing: -0.01px;
     font-size: 10px;
 }
-button.DisConnectBtn{
+
+button.DisConnectBtn {
     border-radius: 5px;
     border: 1px solid #D1D9E2;
     background: #E6E9EC !important;
@@ -83,8 +96,7 @@ button.DisConnectBtn{
 }
 
 
-button#dropdown-basic 
-{
+button#dropdown-basic {
     border-radius: 10px;
     border: 1px solid #F3F7FD;
     background: #F4F4F4;
@@ -99,178 +111,202 @@ button#dropdown-basic
     padding: 10px 10px 10px 0px;
     width: 191px;
 }
-button#dropdown-basic::after{
+
+button#dropdown-basic::after {
     content: url("../../../images/down_arrow.svg");
     position: absolute;
     height: 50px;
     border: unset;
-} 
-.followers_outer{
-padding: 21px 20px;
-display: flex;
-gap: 15px;
 }
-.followers_wrapper{
+
+.followers_outer {
+    padding: 21px 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.followers_wrapper {
     border-radius: 10px;
     overflow: hidden;
-    box-shadow:  0px 4px 5px rgba(0, 0, 0, 0.10);
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.10);
     flex-grow: 1;
 }
-.cmn_background{
+
+.cmn_background {
     border-radius: 22px;
     background: #FFF;
     min-height: 100%;
     box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68)
 }
+
 .upcoming_post_outer {
     margin-top: 30px;
 }
-.users_name p{
-    font-size: 13px;
-    line-height: 21px;
 
-}
+
+
 element.style {
     display: flex;
 }
+
 .delete_btn_outer {
     display: flex;
 }
 
-.followers_wrapper h5{
-color: #232934;
-font-size: 16px;
-font-weight: 700;
-line-height: 24px; 
-letter-spacing: 0.024px;
-background: #F4F4F4;
-padding: 16px 20px;
-} 
-.followers_inner_content{
+.followers_wrapper h5 {
+    color: #232934;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.024px;
+    background: #F4F4F4;
     padding: 16px 20px;
 }
-.followers_wrapper h2{
-color: var(--gray-500, #2E3646);
-font-size: 28px;
-font-weight: 700;
-line-height: 38px;
-letter-spacing: -0.28px;
+
+.followers_inner_content {
+    padding: 16px 20px;
 }
-.cmn_followers_btn{
-border-radius: 5px;
-background: #00A3FF;
-border: none;
-color: #F2F6FC;
-padding: 2px 8px;
-display: flex;
-align-items: center;
-gap: 5px;
-font-size: 13px;
+
+.followers_wrapper h2 {
+    color: var(--gray-500, #2E3646);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: -0.28px;
 }
-.monthly_growth{
+
+.cmn_followers_btn {
+    border-radius: 5px;
+    background: #00A3FF;
+    border: none;
+    color: #F2F6FC;
+    padding: 2px 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+}
+
+.monthly_growth {
     display: flex;
     gap: 7px;
     margin-top: 12px;
     align-items: center;
 }
+
 .social_media_account {
     display: flex;
     justify-content: space-between;
 }
-.social_media_account h3{
-color: #232934;
-font-size: 16px;
-font-weight: 700;
-line-height: 24px; 
-letter-spacing: 0.024px;
+
+.social_media_account h3 {
+    color: #232934;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 0.024px;
 }
-.social_media_account h6{
-color: #F07C33;
-font-size: 10px;
-font-weight: 600;
-line-height: 24px;
-letter-spacing: 0.015px;
-text-decoration-line: underline;
+
+.social_media_account h6 {
+    color: #F07C33;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0.015px;
+    text-decoration-line: underline;
 }
-.connect_btn{
-border-radius: 10px;
-border: none;
-color: #F8F9FB;
-min-width: 98px;
-height: 39px;
+
+.connect_btn {
+    border-radius: 5px;
+    border: none;
+    color: #F8F9FB;
+    min-width: 111px;
+    height: 39px;
 }
-.dropdown_btn{
-padding: 20px 24px 0px;  
+
+.dropdown_btn {
+    padding: 20px 24px 0px;
 }
-.cmn_connect_btn{
- font-family: Nunito;
-font-size: 14px;
-font-style: normal;
-font-weight: 600;
-line-height: 20px; 
-letter-spacing: -0.014px;
-padding: 7px 14px
+
+.cmn_connect_btn {
+    font-family: Nunito;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: -0.014px;
+    padding: 7px 14px
 }
-.social_media_wrapper{
+
+.social_media_wrapper {
     padding: 16px 20px;
 }
-.social_media_outer{
+
+.social_media_outer {
     display: flex;
     gap: 12px;
-    padding: 16px 0px;
+    padding: 16px 0px 0px;
     justify-content: space-between;
 }
-.social_media_content{
+
+.social_media_content {
     display: flex;
     gap: 12px;
     align-items: center;
     width: 100%;
 }
+
 .social_media_content svg {
     margin-left: auto;
 }
+
 .cmn_drop_down.dropdown svg {
     transform: rotate(-0deg);
 }
 
-.cmn_drop_down.show.dropdown svg{
+.cmn_drop_down.show.dropdown svg {
 
     transform: rotate(180deg);
 
 }
-.social_media_content h5{
-color: #5F6D7E;
-font-size: 15px;
-font-weight: 600;
-line-height: 22px;
-letter-spacing: -0.015px;
+
+.social_media_content h5 {
+    color: #5F6D7E;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 22px;
+    letter-spacing: -0.015px;
 }
-.disconnect_btn{
-border-radius: 5px;
-border: 1px solid  #D1D9E2;
-background: #E6E9EC;
-color: #393939;
-min-width: 111px;
-height: 39px;
+
+.disconnect_btn {
+    border-radius: 5px;
+    border: 1px solid #D1D9E2;
+    background: #E6E9EC;
+    color: #393939;
+    min-width: 111px;
+    height: 39px;
 }
+
 .account_info {
     display: flex;
     justify-content: center;
     gap: 28px;
 }
-.page_title_header{
+
+.page_title_header {
     /* padding: 10px 20px; */
-    margin:  20px;
+    margin: 20px;
     border-radius: 22px;
     overflow: hidden;
     background-color: white;
-    box-shadow:  0px 3px 9px 0px rgba(0, 0, 0, 0.10);
+    box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.10);
 }
-button.facebook_connect>div>div {
+
+button.facebook_connect > div > div {
     display: none !important;
 }
 
-button.facebook_connect> div>div:last-child {
+button.facebook_connect > div > div:last-child {
     display: block !important;
     text-align: center !important;
     font-weight: 500;
@@ -281,36 +317,43 @@ button.facebook_connect {
     text-align: center;
     height: 39px !important;
 }
+
 .account_info {
     padding-bottom: 20px;
 }
+
 .account_reached {
     background: #05A2FB;
 }
-.cmn_chart_btn{
+
+.cmn_chart_btn {
     width: 14px;
     height: 14px;
     border-radius: 4px;
 }
-.account_group{
+
+.account_group {
     display: flex;
     gap: 10px;
 }
-.total_follower{
-background: #F07C33;
+
+.total_follower {
+    background: #F07C33;
 }
 
 .delete_post_btn {
-color: #2E3646;
-padding: 8px 46px;
-font-weight: 600;
-border: none;
-width: 100%;
+    color: #2E3646;
+    padding: 8px 46px;
+    font-weight: 600;
+    border: none;
+    width: 100%;
 }
-.change_post_btn{
+
+.change_post_btn {
     padding: 8px 46px;
     width: 100%;
 }
+
 .page_title_container {
     display: flex;
     padding: 16px 20px;
@@ -318,19 +361,20 @@ width: 100%;
     border-bottom: 1px solid #D1D9E2;
     background-color: #F8F9FB;
     align-items: center;
-   
+
 }
- .dropdown_days {
-font-size: 10px;
-background: white;
-border: none;
-color: #5F6D7E;
-font-family: Nunito;
-font-style: normal;
-font-weight: 600;
-line-height: 24px; 
-letter-spacing: 0.015px;
-padding: 10px 9px 10px 20px;
+
+.dropdown_days {
+    font-size: 10px;
+    background: white;
+    border: none;
+    color: #5F6D7E;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0.015px;
+    padding: 10px 9px 10px 20px;
 }
 
 select.page_title_options {
@@ -338,11 +382,13 @@ select.page_title_options {
     border: none;
     font-size: 16px;
     background-color: transparent;
-    
+
 }
-.instagram_overview_heading{
+
+.instagram_overview_heading {
     color: #5F6D7E;
 }
+
 /*drop down side*/
 .cmn_drop_down.dropdown button {
     background: transparent;
@@ -359,27 +405,34 @@ select.page_title_options {
     border: transparent;
     padding: 0;
 }
-@media screen and (max-width:1280px){
-    .social_media_outer{
+
+@media screen and (max-width: 1280px) {
+    .social_media_outer {
         display: block;
     }
+
     .createPost_btn {
         margin-left: 9px;
     }
+
     .connect_btn {
         margin-top: 10px;
     }
-    .disconnect_btn{
+
+    .disconnect_btn {
         margin-top: 10px;
     }
 }
- @media screen and (max-width:1024px){
-    .followers_outer{
+
+@media screen and (max-width: 1024px) {
+    .followers_outer {
         display: block;
     }
+
     .followers_wrapper {
         margin-top: 15px;
     }
+
     /* .social_media_outer{
         display: block;
     } */
@@ -389,57 +442,70 @@ select.page_title_options {
     .connect_btn {
         margin-top: 10px;
     } */
-    .followers_wrapper h2{
+    .followers_wrapper h2 {
         font-size: 20px;
     }
-    
+
 }
- @media screen and (max-width:991px) {
-    .social_media_outer{
+
+@media screen and (max-width: 991px) {
+    .social_media_outer {
         display: flex;
     }
-    .cmn_background{
+
+    .cmn_background {
         min-height: 100%;
     }
-    .social_media_wrapper{
+
+    .social_media_wrapper {
         margin-top: 10px;
     }
- }
-@media screen and (max-width:767px){
-    .monthly_growth{
+}
+
+@media screen and (max-width: 767px) {
+    .monthly_growth {
         display: block;
     }
-    .monthly_growth h6{
+
+    .monthly_growth h6 {
         padding-top: 10px;
     }
+
     .social_media_wrapper {
         margin-top: 20px;
     }
-    .connect_btn,.disconnect_btn {
+
+    .connect_btn, .disconnect_btn {
         margin-top: 15px;
     }
+
     /*  */
-    .page_title_container{
+    .page_title_container {
         display: block;
     }
-    .account_info{
+
+    .account_info {
         display: block;
         padding: 16px 20px;
     }
+
     .user_profileInfo_wrapper {
         display: block;
     }
+
     .connectDisconnect_btn_outer {
         flex-wrap: wrap;
     }
+
     button.DisConnectBtn {
         width: 115px !important;
         height: 35px !important;
-    }   
+    }
+
     button.ConnectBtn {
         width: 115px !important;
         height: 35px !important;
-    }  
+    }
 
 }
 

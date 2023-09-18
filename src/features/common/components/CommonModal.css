@@ -1,63 +1,98 @@
 .modal_inner_content {
     display: flex;
     justify-content: space-between;
-    gap:20px;
-    padding-top: 21px;
-    border-bottom: 1px solid  #CBCBCB;
+    gap: 20px;
+    padding: 20px 0px;
+    border-bottom: 1px solid #CBCBCB;
+    align-items: center;
 }
-.modal_inner_content:first-child{
+.Connectmodal_btn{
+    background-color: #C0C0C0;
+}
+.modal_inner_content:first-child {
     padding-top: 4px;
 }
-.modal_inner_content:last-child{
+
+.modal_inner_content:last-child {
     border-bottom: unset;
 }
-.facebook_content_outer{
+
+.facebook_content_outer {
     padding: 0px 30px;
 }
+
 .user_contents {
-color: #000;
-font-family: Nunito;
-font-size: 14px;
-font-style: normal;
-font-weight: 300;
-line-height: 20px; /* 142.857% */
-letter-spacing: -0.014px;
+    color: #000;
+    font-family: Nunito;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: -0.014px;
+    margin-bottom: 0px;
 }
+
 .users_profile img {
-width: 50px;
-height: 50px;
+    width: 100px;
+    height: 100px;
 }
-.modal-content{
-    border-radius: 30px !important;
+
+div.modal-content {
+    border-radius: 30px;
 }
-.facebook_title{
+
+.facebook_title {
     text-align: center;
-    width: 400px;
 }
-.upgrade_paln_btn{
+
+.upgrade_paln_btn {
     padding: 8px 12px;
+    margin-top: 19px;
 }
-.modal-header{
+
+.modal-header {
     margin: 17px !important;
     padding-bottom: 16px !important;
-  align-items: baseline !important;
+    align-items: baseline !important;
 }
-.users_name h2{
+div.commonmodal_header{
+    width: 100%;
+}
+.users_name h2 {
+    font-size: 22px;
+    line-height: initial;
+}
+.users_name p {
     font-size: 14px;
+    line-height: 21px;
+    font-weight: 300;
+    margin-top: 5px;
+
 }
-.facebook_title h2{
-    font-size: 14px;
+.user_info_container{
+    display: flex;
+   align-items: center;
+    gap: 20px;
 }
-.connect_btn_outer button{
-    min-width: 80px;
-    height: 31px;
-    padding: 3px 10px;
+.facebook_title h2 {
+    font-size: 22px;
 }
-@media screen and (max-width:767px) {
+.users_profile img {
+    border-radius: 24px;
+    height: 100px;
+    width: 100px;
+}
+.connect_btn_outer button {
+    min-width: 92px;
+    height: 35px;
+    padding: 8px 12px;
+}
+
+@media screen and (max-width: 767px) {
     .facebook_title {
         width: 100%;
     }
-    
+
     .modal_inner_content {
         flex-wrap: wrap;
         padding-bottom: 11px;
