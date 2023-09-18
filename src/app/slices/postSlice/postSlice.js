@@ -2,7 +2,8 @@ import {createSlice} from '@reduxjs/toolkit'
 import {
     generateAIImageAction,
     generateAIHashTagAction,
-    generateAICaptionAction
+    generateAICaptionAction,
+    createFacebookPostAction
 } from "../../actions/postActions/postActions.js";
 
 
@@ -12,6 +13,7 @@ const postSlice = createSlice({
         generateAIImageReducer: {loading: false},
         generateAIHashTagReducer: {loading: false},
         generateAICaptionReducer: {loading: false},
+        createFacebookPostActionReducer: {loading: false}
     },
     extraReducers: {
 
@@ -46,6 +48,16 @@ const postSlice = createSlice({
         },
         [generateAICaptionAction.rejected]: (state) => {
             state.generateAICaptionReducer = {loading: false}
+        },
+
+        [createFacebookPostAction.pending]: (state) => {
+            state.createFacebookPostActionReducer = {loading: true}
+        },
+        [createFacebookPostAction.fulfilled]: (state) => {
+            state.createFacebookPostActionReducer = {loading: false}
+        },
+        [createFacebookPostAction.rejected]: (state) => {
+            state.createFacebookPostActionReducer = {loading: false}
         },
 
 

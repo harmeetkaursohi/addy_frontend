@@ -30,3 +30,22 @@ export const getAllConnectedSocialAccountAction = createAsyncThunk('socialAccoun
         return thunkAPI.rejectWithValue(error.response);
     });
 });
+
+
+export const findSocialAccountByProviderAndCustomerIdAction = createAsyncThunk('socialAccount/findSocialAccountByProviderAndCustomerIdAction', async (data, thunkAPI) => {
+    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/findSocialAccountByProviderAndCustomerId/${data.customerId}?provider=${data.provider}`, setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});
+
+export const getAllByCustomerIdAction = createAsyncThunk('socialAccount/getAllByCustomerIdAction', async (data, thunkAPI) => {
+    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/${data.customerId}`, setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});

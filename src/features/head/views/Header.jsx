@@ -1,6 +1,7 @@
 import search_icon from "../../../images/search_icon.svg"
 import  jsondata  from "../../../locales/data/initialdata.json"
 import './Header.css'
+import {Link} from "react-router-dom";
 const Header=()=>{
     return(
         <>
@@ -27,9 +28,9 @@ const Header=()=>{
                         <button className="Create_Ad_btn crate_btn">
                            {jsondata.createad}
                             </button>
-                            <button className="createPost_btn crate_btn cmn_btn_color ">
-                            {jsondata.createpost}
-                            </button>
+                            <Link to="/post" className="createPost_btn crate_btn cmn_btn_color">
+                                {jsondata.createpost}
+                            </Link>
                         </div>
                     </div>
                 </div>

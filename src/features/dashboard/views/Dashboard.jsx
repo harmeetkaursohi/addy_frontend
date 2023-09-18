@@ -19,7 +19,6 @@ import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
 import {useDispatch, useSelector} from "react-redux";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {
-    facebookPageConnect,
     getAllFacebookPages,
     getFacebookConnectedPages
 } from "../../../app/actions/facebookActions/facebookActions.js";
@@ -354,7 +353,7 @@ const Dashboard = () => {
                                             client_id="258452007021390"
                                             client_secret="952c05ad1f2a53f09eb37fd62ba1547d"
                                             scope="user_profile,user_media"
-                                            redirect_uri="https://baee-45-127-193-129.ngrok-free.app/dashboard"
+                                            redirect_uri="https://0be0-2402-3a80-1a65-bdbb-718a-ffb1-45f1-8620.ngrok-free.app/dashboard"
                                             onResolve={(response) => {
                                                 console.log("------>response", response);
                                             }}
