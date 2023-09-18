@@ -1,28 +1,26 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Modal from 'react-bootstrap/Modal';
 import "./CommonModal.css"
 import {useDispatch} from "react-redux";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {facebookPageConnect, getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions.js";
+import ConfirmModal from "./ConfirmModal.jsx";
 
 const CommonModal = ({
                          showFacebookModal,
                          setShowFacebookModal,
                          facebookPageList,
-                         setFacebookData,
                          facebookConnectedPages
                      }) => {
-
-    console.log("facebookPageList", facebookPageList)
-    console.log("facebookConnectedPages", facebookConnectedPages)
 
     const handleClose = () => setShowFacebookModal(false);
     const dispatch = useDispatch();
     const token = getToken();
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [facebookData, setFacebookData] = useState(null);
+    const [connectPage, setConnectPage] = useState(false);
 
-    const facebookPageConnectAction = (e,facebookData) => {
-        e.preventDefault();
-        console.log("@@@ facebookPageConnectAction ",facebookData)
+    const facebookPageConnectAction = () => {
         const decodeJwt = decodeJwtToken(token);
         if (facebookData) {
             const requestBody = {
@@ -49,9 +47,9 @@ const CommonModal = ({
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal show={showFacebookModal} onHide={handleClose}>
+                <Modal  size="lg" show={showFacebookModal} onHide={handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>
+                        <Modal.Title className="commonmodal_header">
                             <div className='facebook_title'>
                                 <h2 className='cmn_text_style'>Please choose your page to connect with Addy</h2>
                                 <p className='user_contents'>You have Personal Plan, you can add only one page.</p>
@@ -65,18 +63,25 @@ const CommonModal = ({
                                 {facebookPageList?.map((data, index) => {
                                     return (
                                         <div key={index} className="modal_inner_content">
-                                            <div className='users_profile'>
-                                                <img src={data.picture.data.url}/>
+                                            <div className="user_info_container">
+                                                <div className='users_profile'>
+                                                    <img src={data.picture.data.url}/>
+                                                </div>
+                                                <div className='users_name'>
+                                                    <h2 className='cmn_text_style'>{data.name}</h2>
+                                                    {data.about && <p className="cmn_text_style mb-0">{data.about}</p>}
+                                                </div>
                                             </div>
-                                            <div className='users_name'>
-                                                <h2 className='cmn_text_style'>{data.name}</h2>
-                                                <p className="cmn_text_style">{data.about}</p>
-                                            </div>
+
                                             <div className='connect_btn_outer'>
                                                 <button
-                                                    style={{background: facebookConnectedPages?.find(c => c.pageId === data?.id) ? "red" : ""}}
-                                                    className='cmn_btn_color cmn_connect_btn connect_btn connect_btn '
-                                                    onClick={(e) => facebookPageConnectAction(e,data)}
+                                                    style={{background: facebookConnectedPages?.find(c => c.pageId === data?.id) ? "#E24A4A" : ""}}
+                                                    className='Connectmodal_btn cmn_connect_btn connect_btn connect_btn '
+                                                    onClick={(e) => {
+                                                        setConnectPage(!connectPage);
+                                                        setFacebookData(data);
+                                                        setShowConfirmModal(true);
+                                                    }}
 
                                                 >
                                                     {facebookConnectedPages?.find(c => c.pageId === data?.id) ? "Disconnect" : "Connect"}
@@ -93,6 +98,16 @@ const CommonModal = ({
                 </Modal>
 
             </section>
+
+            {showConfirmModal &&
+                <ConfirmModal
+                    confirmModalAction={facebookPageConnectAction}
+                    setShowConfirmModal={setShowConfirmModal}
+                    showConfirmModal={showConfirmModal}
+                    icon={facebookConnectedPages?.find(c => c.pageId === facebookData?.id) ? "warning" : "success"}
+                    title={"Are you sure ?"}
+                    confirmMessage={facebookConnectedPages?.find(c => c.pageId === facebookData?.id) ? "You want to dis-connect from facebook page ?" : "You want to connect from facebook page ?"}
+                />}
         </>
     );
 }

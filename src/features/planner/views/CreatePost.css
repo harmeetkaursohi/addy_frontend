@@ -375,12 +375,30 @@ createPost_outer select {
     min-width: 100px;
 
 }
+.add_btn{
+    font-size: 9px;
+}
 
 @media screen and (max-width: 1024px) {
     .get_messages_outer {
         display: block;
     }
-
+    .post_img
+    {
+        width:100%
+    }
+    .add_media_outer {
+        padding: 9px 21px;
+    }
+    .feed_preview{
+        text-align: center;
+    }
+    .create_post_content{
+        padding:30px 10px
+    }
+    .schedule_btn_outer{
+        display: block;
+    }
     .add_btn {
         margin-top: 10px;
     }
@@ -404,6 +422,7 @@ createPost_outer select {
     .date_time_outer {
         margin-top: 20px;
     }
+
 }
 
 @media screen and (max-width: 991px) {
@@ -453,6 +472,21 @@ createPost_outer select {
     .add_media_outer {
         margin-top: 20px;
     }
+    .cmn_bg_btn{
+        padding: 10px;
+    }
+
+.like_comment_outer img{
+    height: 20px;
+    width: 20px;
+}
+.publish_btn{
+    margin-top: 10px;
+}
+ .like_img {
+     margin-right: 23px;
+
+ }
 }
 
 /**/

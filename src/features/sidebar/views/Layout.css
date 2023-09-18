@@ -4,8 +4,11 @@
     box-shadow: 2px 0px 50px 0px rgba(226, 232, 240, 0.68);
     z-index: 2;
     position: fixed;
-    /*overflow: scroll;*/
+    overflow-y: scroll;
     height: 100%;
+    overflow-x: hidden;
+
+
 }
 
 .svg_color {
@@ -187,8 +190,8 @@ i.bar_icon {
 }
 
 @media screen and (max-width: 767px) {
-    .sidebar_item_outers {
-        padding: 11px 19px;
+    div.sidebar_item_outers {
+        padding: 11px 16px;
     }
 
     .sidebar_content {
