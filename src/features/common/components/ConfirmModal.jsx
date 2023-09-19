@@ -1,5 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import './ConfirmModal.css'
+import {stopPropagationEvent} from "../../../utils/commonUtils.js";
 
 
 const ConfirmModal = ({
@@ -48,12 +49,16 @@ const ConfirmModal = ({
                             <div className="confirm_btn ">
 
                                 <button className="cmn_btn_color cmn_connect_btn disconnect_btn"
-                                        onClick={handleClose}>Cancel
+                                        onClick={(e) => {
+                                            stopPropagationEvent(e)
+                                            handleClose()
+                                        }}>Cancel
                                 </button>
 
                                 <button type="button" className="cmn_btn_color cmn_connect_btn connect_btn yes_btn"
                                         onClick={(e) => {
                                             e.preventDefault();
+                                            stopPropagationEvent(e)
                                             handleConfirmModel(e);
                                         }}>Yes
                                 </button>

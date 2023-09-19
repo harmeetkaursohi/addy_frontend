@@ -264,7 +264,7 @@ const Dashboard = () => {
                                                         <div className="social_media_content">
                                                             <img className="cmn_width" src={fb_img}/>
                                                             <div className="text-start">
-                                                                <h5 className="">Pritam Ray</h5>
+                                                                <h5 className="">{getAllConnectedSocialAccountData?.data && Array.isArray(getAllConnectedSocialAccountData?.data) && getAllConnectedSocialAccountData.data.find(c=>c.provider==='FACEBOOK')?.name}</h5>
                                                                 <h4 className="connect_text cmn_text_style">Connected</h4>
                                                             </div>
                                                             <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
@@ -310,14 +310,18 @@ const Dashboard = () => {
                                                         <div className="connectDisconnect_btn_outer">
                                                             <button className="DisConnectBtn  cmn_connect_btn"
                                                                     disabled={getAllConnectedSocialAccountData?.loading}
-                                                                    onClick={() => {
+                                                                    onClick={(e) => {
+                                                                        stopPropagationEvent(e);
                                                                         confirmModalHandler()
                                                                     }}
                                                             >
                                                                 Disconnect
                                                             </button>
                                                             <button className="ConnectBtn cmn_connect_btn"
-                                                                    onClick={() => facebook()}>Connect More
+                                                                    onClick={(e) => {
+                                                                        stopPropagationEvent(e)
+                                                                        facebook()
+                                                                    }}>Connect More
                                                             </button>
                                                         </div>
                                                     </Dropdown.Item>
@@ -437,7 +441,10 @@ const Dashboard = () => {
                                                         className="DisConnectBtn  cmn_connect_btn">Disconnect
                                                     </button>
                                                     <button className="ConnectBtn cmn_connect_btn"
-                                                            onClick={() => facebook()}>Connect More
+                                                            onClick={(e) => {
+                                                                stopPropagationEvent(e);
+                                                                facebook()
+                                                            }}>Connect More
                                                     </button>
                                                 </div>
                                             </Dropdown.Item>
