@@ -20,7 +20,7 @@ import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {getAllFacebookPages, getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions.js";
 import {LoginSocialFacebook, LoginSocialInstagram} from "reactjs-social-login";
 import {FacebookLoginButton, InstagramLoginButton} from "react-social-login-buttons";
-import {computeAndSocialAccountJSONForFacebook} from "../../../utils/commonUtils.js";
+import {computeAndSocialAccountJSONForFacebook, stopPropagationEvent} from "../../../utils/commonUtils.js";
 import {
     disconnectSocialAccountAction,
     getAllConnectedSocialAccountAction,
@@ -50,7 +50,6 @@ const Dashboard = () => {
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
         }
     }, [])
-
 
     useEffect(() => {
         if ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
@@ -99,12 +98,13 @@ const Dashboard = () => {
         setShowConfirmModal(true)
     }
 
-
     return (
         <>
             <SideBar/>
             <div className="cmn_container">
-                <div className="cmn_wrapper_outer">
+                <div className="cmn_wrapper_outer" onClick={(e) => {
+                    stopPropagationEvent(e)
+                }}>
                     <Header/>
                     <div className="dashboard_outer">
                         <div className="row">
@@ -112,7 +112,7 @@ const Dashboard = () => {
                                 <div className="post_activity_outer cmn_background">
                                     <Dropdown className="dropdown_btn">
                                         <Dropdown.Toggle variant="success" id="dropdown-basic"
-                                                         className="instagram_dropdown">
+                                                         className="social_dropdowns">
                                             <img src={instagram_img} className="me-3"/>Instagram
                                         </Dropdown.Toggle>
                                         <Dropdown.Menu>
@@ -227,7 +227,7 @@ const Dashboard = () => {
                                             <LoginSocialFacebook
                                                 isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
                                                 appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
-                                                redirect_uri="https://d4b1-2402-3a80-1a65-bdbb-718a-ffb1-45f1-8620.ngrok-free.app/dashboard"
+                                                redirect_uri="https://b514-103-36-77-84.ngrok-free.app/dashboard"
                                                 onResolve={(response) => {
                                                     console.log("fb response", response)
                                                     connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))

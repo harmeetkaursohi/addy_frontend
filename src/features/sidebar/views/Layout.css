@@ -173,6 +173,7 @@ a.active {
     display: flex;
     justify-content: space-evenly;
     padding-top: 24px;
+    align-items: center;
 }
 
 .user_profile_outer {
@@ -188,7 +189,15 @@ a.active {
 i.bar_icon {
     display: none;
 }
-
+.profile_container{
+    word-wrap:break-word ;
+    max-width:150px
+}
+.user_profile_wrapper  img{
+    height: 64px;
+    width: 64px;
+border-radius: 20px;
+}
 @media screen and (max-width: 767px) {
     div.sidebar_item_outers {
         padding: 11px 16px;
