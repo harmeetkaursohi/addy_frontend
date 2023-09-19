@@ -1,23 +1,50 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useLocation, useNavigate} from "react-router-dom"
 import profile_img from '../../../images/profile_img.png'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
 import './Layout.css'
 import {sidebarMenuItems} from '../sidebarMenu'
+import axios from "axios";
+import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth.js";
+import {showErrorToast} from "../../common/components/Toast.jsx";
 
 const Layout = () => {
-    const [sidebar, setSidebar] = useState(true)
+
+    const [sidebar, setSidebar] = useState(true);
+    const [userData, setUserData] = useState(null);
+
+    const token = getToken();
+
+    useEffect(() => {
+        if (token) {
+            const decodeJwt = decodeJwtToken(token);
+            axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${decodeJwt.customerId}`, setAuthenticationHeader(token)).then(res => {
+                setUserData({
+                    username: res.data.username,
+                    profilePic: res.data.profilePic,
+                    email: res.data.email,
+                })
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+        }
+    }, []);
+
+
     const show_sidebar = () => {
         setSidebar(!sidebar)
     }
+
     const navigate = useNavigate();
     const location = useLocation();
     const {pathname} = location;
     //Javascript split method to get the name of the path in array
     const splitLocation = pathname.split("/");
     const LogOut = () => {
-        const removeItem = localStorage.removeItem("token")
+        localStorage.removeItem("token")
         navigate("/login")
     }
 
@@ -31,10 +58,12 @@ const Layout = () => {
                             <img src={addy_logo} className='addy_logo'/>
                         </div>
                         <div className='user_profile_wrapper'>
-                            <img src={profile_img} className='profile_img'/>
+                            <img
+                                src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : profile_img}
+                                style={{height: "70px", width: "50px"}} className='profile_img'/>
                             <div>
-                                <h3 className='mt-3'>Pritpal Singh</h3>
-                                <h4>pritpal@gmail.com</h4>
+                                <h3 className='profile_container'>{userData?.username || "username"}</h3>
+                                <h4 className="profile_container">{userData?.email || "abc@demo.com"}</h4>
                             </div>
                         </div>
                     </div>
@@ -42,12 +71,12 @@ const Layout = () => {
                         {
                             sidebarMenuItems?.map((item, index) => (
                                 <li key={index}
-                                    className={item.path == '/' + splitLocation[1] ? "sidebar_container_items sidebar_item_outer bar text-center" : 'sidebar_item_outer'}
+                                    className={item.path === '/' + splitLocation[1] ? "sidebar_container_items sidebar_item_outer bar text-center" : 'sidebar_item_outer'}
                                     onClick={() => {
                                         navigate(item.path)
                                     }}>
                                     <div
-                                        className={item.path == '/' + splitLocation[1] ? 'sidebar_inner_content' : "sidebar_item_outers"}>
+                                        className={item.path === '/' + splitLocation[1] ? 'sidebar_inner_content' : "sidebar_item_outers"}>
                                         {item.icon}
                                         <h6 className=''>{item.name} </h6>
                                     </div>

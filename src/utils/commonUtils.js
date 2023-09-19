@@ -102,7 +102,9 @@ export const getValueByEnumObject = (object) => {
     return values;
 }
 
-
+export const stopPropagationEvent=(event)=>{
+    event.stopPropagation()
+}
 
 
 
