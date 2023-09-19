@@ -1,10 +1,11 @@
 import CommonModal from "../../../common/components/CommonModal.jsx";
+import {SocialAccountProvider} from "../../../../utils/contantData.js";
 
 const FacebookModal = ({showFacebookModal, setShowFacebookModal,facebookPageList,setFacebookData,facebookConnectedPages}) => {
 
     return (
         <>
-            <CommonModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal} facebookPageList={facebookPageList} setFacebookData={setFacebookData}  facebookConnectedPages={facebookConnectedPages}/>
+            <CommonModal showModal={showFacebookModal} setShowModal={setShowFacebookModal} allPagesList={facebookPageList} setFacebookData={setFacebookData}  connectedPagesList={facebookConnectedPages} socialMediaType={SocialAccountProvider.FACEBOOK} />
         </>
     )
 }

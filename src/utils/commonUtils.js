@@ -3,6 +3,8 @@ import {SocialAccountProvider} from "./contantData.js";
 import {exchangeForLongLivedToken} from "../services/facebookService.js";
 import axios from "axios";
 import {decodeJwtToken} from "../app/auth/auth.js";
+import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/facebookActions/facebookActions.js";
+import {useDispatch} from "react-redux";
 
 const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
 
@@ -105,6 +107,33 @@ export const getValueByEnumObject = (object) => {
 export const stopPropagationEvent=(event)=>{
     event.stopPropagation()
 }
+
+
+export const facebookPageConnectAction = (dispatch,token, facebookData) => {
+    console.log("---->",token)
+    const decodeJwt = decodeJwtToken(token);
+    if (facebookData) {
+        const requestBody = {
+            customerId: decodeJwt?.customerId,
+            pageAccessTokenDTO: {
+                pageId: facebookData?.id,
+                name: facebookData?.name,
+                imageUrl: facebookData.picture?.data?.url,
+                about: facebookData?.about,
+                access_token: facebookData?.access_token
+            },
+            token: token
+        }
+        dispatch(facebookPageConnect(requestBody)).then((response) => {
+            console.log(response)
+            dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+        }).catch((error) => {
+            console.log("--->error", error)
+        })
+    }
+}
+
+
 
 
 
