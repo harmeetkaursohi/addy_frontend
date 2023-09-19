@@ -104,10 +104,6 @@ export const getValueByEnumObject = (object) => {
     return values;
 }
 
-export const stopPropagationEvent=(event)=>{
-    event.stopPropagation()
-}
-
 
 export const facebookPageConnectAction = (dispatch,token, facebookData) => {
     console.log("---->",token)

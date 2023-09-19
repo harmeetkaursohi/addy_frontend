@@ -22,6 +22,12 @@
     cursor: auto
 }
 
+.menu_items li {
+    padding: 0px;
+    margin-top: 14px;
+    cursor: auto
+}
+
 button#dropdown-facebook.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active {
     background: white !important;
     border-color: unset !important;

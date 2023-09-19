@@ -20,7 +20,7 @@ import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {getAllFacebookPages, getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions.js";
 import {LoginSocialFacebook, LoginSocialInstagram} from "reactjs-social-login";
 import {FacebookLoginButton, InstagramLoginButton} from "react-social-login-buttons";
-import {computeAndSocialAccountJSONForFacebook, stopPropagationEvent} from "../../../utils/commonUtils.js";
+import {computeAndSocialAccountJSONForFacebook} from "../../../utils/commonUtils.js";
 import {
     disconnectSocialAccountAction,
     getAllConnectedSocialAccountAction,
@@ -33,6 +33,7 @@ const Dashboard = () => {
 
     const [showFacebookModal, setShowFacebookModal] = useState(false)
     const [showConfirmModal, setShowConfirmModal] = useState(false)
+    const [facebookDropDown, setFacebookDropDown] = useState(false)
     const dispatch = useDispatch();
     const token = getToken();
 
@@ -102,9 +103,7 @@ const Dashboard = () => {
         <>
             <SideBar/>
             <div className="cmn_container">
-                <div className="cmn_wrapper_outer" onClick={(e) => {
-                    stopPropagationEvent(e)
-                }}>
+                <div className="cmn_wrapper_outer" >
                     <Header/>
                     <div className="dashboard_outer">
                         <div className="row">
@@ -255,80 +254,72 @@ const Dashboard = () => {
 
                                         :
 
-                                        <div>
-                                            <Dropdown className={'cmn_drop_down'}>
-
-                                                <Dropdown.Toggle id="dropdown-facebook">
-
-                                                    <div className="social_media_outer">
-                                                        <div className="social_media_content">
-                                                            <img className="cmn_width" src={fb_img}/>
-                                                            <div className="text-start">
-                                                                <h5 className="">{getAllConnectedSocialAccountData?.data && Array.isArray(getAllConnectedSocialAccountData?.data) && getAllConnectedSocialAccountData.data.find(c=>c.provider==='FACEBOOK')?.name}</h5>
-                                                                <h4 className="connect_text cmn_text_style">Connected</h4>
-                                                            </div>
-                                                            <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <path id="Icon"
-                                                                      d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                                                      d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                                                      stroke="#5F6D7E" strokeWidth="1.67"
-                                                                      strokeLinecap="round"/>
-                                                            </svg>
+                                        <div className=" cmn_drop_down dropdown">
+                                            <div className="dropdown_header">
+                                                <div className="social_media_outer">
+                                                    <div className="social_media_content">
+                                                        <img className="cmn_width" src={fb_img}/>
+                                                        <div className="text-start">
+                                                            <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c=>c.provider==='FACEBOOK')?.name || "facebook"}</h5>
+                                                            <h4 className="connect_text cmn_text_style">Connected</h4>
                                                         </div>
+                                                        <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg" onClick={()=>setFacebookDropDown(!facebookDropDown)}>
+                                                            <path id="Icon"
+                                                                  d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                                  d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                                  stroke="#5F6D7E" strokeWidth="1.67"
+                                                                  strokeLinecap="round"/>
+                                                        </svg>
                                                     </div>
+                                                </div>
 
-                                                </Dropdown.Toggle>
+                                                {
+                                                    facebookDropDown===true  &&
 
-                                                <Dropdown.Menu className="menu_items ">
+                                                    <ul className="menu_items">
+                                                        {
+                                                            facebookPageLoading === true ?
+                                                                <SkeletonEffect count={3}/> :
 
-                                                    {
-                                                        facebookPageLoading === true ?
-                                                            <SkeletonEffect count={3}/> :
-
-                                                            !(getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0) &&
-                                                            facebookPageList?.slice(0, 3).map((data, index) => {
-                                                                return (
-                                                                    <>
-                                                                        <Dropdown.Item href="#/action-2" key={index}>
-                                                                            <div className="user_profileInfo_wrapper">
-                                                                                <div className="user_Details">
-                                                                                    <img src={data.picture.data.url}
-                                                                                         height="30px"
-                                                                                         width="30px"/>
-                                                                                    <h4 className="cmn_text_style">{data.name}</h4>
+                                                                !(getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0) &&
+                                                                facebookPageList?.slice(0, 3).map((data, index) => {
+                                                                    return (
+                                                                        <>
+                                                                            <li href="#/action-2" key={index}>
+                                                                                <div className="user_profileInfo_wrapper">
+                                                                                    <div className="user_Details">
+                                                                                        <img src={data.picture.data.url}
+                                                                                             height="30px"
+                                                                                             width="30px"/>
+                                                                                        <h4 className="cmn_text_style">{data.name}</h4>
+                                                                                    </div>
+                                                                                    <h4 className={facebookConnectedPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "connect_text cmn_text_style" : "connect_text_not_connect cmn_text_style"}>{facebookConnectedPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "Connected" : "Not Connected"}</h4>
                                                                                 </div>
-                                                                                <h4 className={facebookConnectedPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "connect_text cmn_text_style" : "connect_text_not_connect cmn_text_style"}>{facebookConnectedPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "Connected" : "Not Connected"}</h4>
-                                                                            </div>
-                                                                        </Dropdown.Item>
-                                                                    </>
-                                                                )
-                                                            })
+                                                                            </li>
+                                                                        </>
+                                                                    )
+                                                                })
 
-                                                    }
-                                                    <Dropdown.Item>
-                                                        <div className="connectDisconnect_btn_outer">
-                                                            <button className="DisConnectBtn  cmn_connect_btn"
-                                                                    disabled={getAllConnectedSocialAccountData?.loading}
-                                                                    onClick={(e) => {
-                                                                        stopPropagationEvent(e);
-                                                                        confirmModalHandler()
-                                                                    }}
-                                                            >
-                                                                Disconnect
-                                                            </button>
-                                                            <button className="ConnectBtn cmn_connect_btn"
-                                                                    onClick={(e) => {
-                                                                        stopPropagationEvent(e)
-                                                                        facebook()
-                                                                    }}>Connect More
-                                                            </button>
-                                                        </div>
-                                                    </Dropdown.Item>
+                                                        }
+                                                        <li>
+                                                            <div className="connectDisconnect_btn_outer">
+                                                                <button className="DisConnectBtn  cmn_connect_btn"
+                                                                        disabled={getAllConnectedSocialAccountData?.loading}
+                                                                        onClick={() => {
+                                                                            confirmModalHandler()
+                                                                        }}
+                                                                >
+                                                                    Disconnect
+                                                                </button>
+                                                                <button className="ConnectBtn cmn_connect_btn"
+                                                                        onClick={() => facebook()}>Connect More
+                                                                </button>
+                                                            </div>
+                                                        </li>
+                                                    </ul>}
 
-                                                </Dropdown.Menu>
-
-                                            </Dropdown>
+                                            </div>
                                         </div>
                                     }
 
@@ -442,7 +433,6 @@ const Dashboard = () => {
                                                     </button>
                                                     <button className="ConnectBtn cmn_connect_btn"
                                                             onClick={(e) => {
-                                                                stopPropagationEvent(e);
                                                                 facebook()
                                                             }}>Connect More
                                                     </button>
