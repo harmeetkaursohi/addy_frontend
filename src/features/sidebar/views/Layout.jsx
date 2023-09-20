@@ -60,7 +60,7 @@ const Layout = () => {
                         <div className='user_profile_wrapper'>
                             <img
                                 src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : profile_img}
-                                style={{height: "70px", width: "50px"}} className='profile_img'/>
+                                 className='profile_img'/>
                             <div>
                                 <h3 className='profile_container'>{userData?.username || "username"}</h3>
                                 <h4 className="profile_container">{userData?.email || "abc@demo.com"}</h4>

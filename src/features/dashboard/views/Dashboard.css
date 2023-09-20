@@ -36,7 +36,7 @@ button#dropdown-facebook.btn-check:checked + .btn, .btn.active, .btn.show, .btn:
 
 .cmn_drop_down.dropdown {
     border-bottom: 1px solid #C6D2E0;
-    padding-bottom: 12px;
+    /*padding-bottom: 12px;*/
 }
 
 button.ConnectBtn {
@@ -251,10 +251,14 @@ element.style {
 .social_media_outer {
     display: flex;
     gap: 12px;
-    padding: 16px 0px 0px;
     justify-content: space-between;
+    padding: 16px 0px;
+    margin-top: 12px;
+    border-bottom: 1px solid #C6D2E0;
 }
-
+.social_media_outer:first-child{
+    border-bottom: unset;
+}
 .social_media_content {
     display: flex;
     gap: 12px;
@@ -515,9 +519,9 @@ select.page_title_options {
 
 }
 
-.sidebar_item_outers {
-    padding: 0px 24px !important;
-}
+/*.sidebar_item_outers {*/
+/*    padding: 0px 24px !important;*/
+/*}*/
 
 .sidebar_item {
     margin-top: 24px !important;
@@ -527,11 +531,4 @@ select.page_title_options {
     width: 160px;
     height: 100%;
     margin-top: 15px;
-}
-
-.connect_text {
-    color: #038000;
-    line-height: 18px;
-    letter-spacing: -0.01px;
-    font-size: 13px;
 }

@@ -1,12 +1,23 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
-import {setAuthenticationHeader} from "../../auth/auth.js";
-import {showErrorToast} from "../../../features/common/components/Toast.jsx";
+import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
+import {showErrorToast, showSuccessToast} from "../../../features/common/components/Toast.jsx";
 
 export const createFacebookPostAction = createAsyncThunk('post/createFacebookPostAction', async (data, thunkAPI) => {
     console.log("createFacebookPostAction", data)
-    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/facebook/post/${data.customerId}`, data.postRequestDto, setAuthenticationHeader(data.token)).then(res => {
+
+    const formData = new FormData();
+    formData.append('caption', data.postRequestDto.caption);
+    formData.append('hashTag', data.postRequestDto.hashTag);
+    formData.append('boostPost', data.postRequestDto.boostPost);
+    formData.append('scheduleDate', data.postRequestDto.scheduleDate);
+    formData.append('attachments[0].mediaType', data.postRequestDto.attachments[0].mediaType);
+    formData.append('attachments[0].file', data.postRequestDto.attachments[0].file);
+    formData.append('attachments[0].pageId', data.postRequestDto.attachments[0].pageId);
+
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.customerId}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
         return res.data;
+        showSuccessToast("Post Uploaded Success")
     }).catch(error => {
         showErrorToast(error.response.data.message);
         return thunkAPI.rejectWithValue(error.response);

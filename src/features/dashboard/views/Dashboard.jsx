@@ -226,7 +226,7 @@ const Dashboard = () => {
                                             <LoginSocialFacebook
                                                 isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
                                                 appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
-                                                redirect_uri="https://b514-103-36-77-84.ngrok-free.app/dashboard"
+                                                redirect_uri="https://0902-103-36-77-84.ngrok-free.app/dashboard"
                                                 onResolve={(response) => {
                                                     console.log("fb response", response)
                                                     connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
@@ -353,7 +353,7 @@ const Dashboard = () => {
                                             client_id="258452007021390"
                                             client_secret="952c05ad1f2a53f09eb37fd62ba1547d"
                                             scope="user_profile,user_media"
-                                            redirect_uri="https://d4b1-2402-3a80-1a65-bdbb-718a-ffb1-45f1-8620.ngrok-free.app/dashboard"
+                                            redirect_uri="https://0902-103-36-77-84.ngrok-free.app/dashboard"
                                             onResolve={(response) => {
                                                 console.log("------>response", response);
                                             }}
@@ -381,66 +381,7 @@ const Dashboard = () => {
 
 
                                     </div>
-                                    <Dropdown className={'cmn_drop_down'}>
-                                        <Dropdown.Toggle id="dropdown-facebook">
-                                            <div className="social_media_outer">
-                                                <div className="social_media_content">
-                                                    <img className="cmn_width" src={fb_img}/>
-                                                    <div className="text-start">
-                                                        <h5 className="">Facebook account</h5>
-                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
-                                                    </div>
-                                                    <svg width="14" height="8" viewBox="0 0 14 8"
-                                                         fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path id="Icon"
-                                                              d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                                              stroke="#5F6D7E" strokeWidth="1.67"
-                                                              strokeLinecap="round"/>
-                                                    </svg>
-                                                </div>
-
-                                            </div>
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu className="menu_items ">
-                                            <Dropdown.Item href="#/action-2">
-                                                <div className="user_profileInfo_wrapper">
-                                                    <div className="user_Details">
-                                                        <img src={biker_img} height="30px"
-                                                             width="30px"/>
-                                                        <h4 className="cmn_text_style">Team
-                                                            Musafir</h4>
-                                                    </div>
-                                                    <h4 className="connect_text cmn_text_style">Connected</h4>
-                                                </div>
-                                            </Dropdown.Item>
-                                            <Dropdown.Item href="">
-                                                <div className="user_profileInfo_wrapper">
-                                                    <div className="user_Details">
-                                                        <img src={biker_img} height="30px"
-                                                             width="30px"/>
-                                                        <h4 className="cmn_text_style">Team
-                                                            Musafir</h4>
-                                                    </div>
-                                                    <h4 className="not_connect_text cmn_text_style"> Not
-                                                        Connected</h4>
-                                                </div>
-                                            </Dropdown.Item>
-                                            <Dropdown.Item>
-                                                <div className="connectDisconnect_btn_outer">
-                                                    <button
-                                                        className="DisConnectBtn  cmn_connect_btn">Disconnect
-                                                    </button>
-                                                    <button className="ConnectBtn cmn_connect_btn"
-                                                            onClick={(e) => {
-                                                                facebook()
-                                                            }}>Connect More
-                                                    </button>
-                                                </div>
-                                            </Dropdown.Item>
-
-                                        </Dropdown.Menu>
-                                    </Dropdown>
+                                    <div className="cmn_drop_down">
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
                                             <img className="cmn_width" src={linkedin_img}/>
@@ -452,6 +393,7 @@ const Dashboard = () => {
                                         <button
                                             className="cmn_btn_color cmn_connect_btn connect_btn ">Connect
                                         </button>
+                                    </div>
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">

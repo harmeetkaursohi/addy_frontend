@@ -24,3 +24,15 @@ export const setAuthenticationHeader = (token) => {
 
     return config;
 }
+
+export const setAuthenticationHeaderWithMultipart = (token) => {
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+        }
+    };
+
+    return config;
+}
+
