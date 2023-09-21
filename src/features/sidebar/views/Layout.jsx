@@ -4,10 +4,10 @@ import profile_img from '../../../images/profile_img.png'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
 import './Layout.css'
-import {SidebarMenuItems} from '../sidebarMenu'
 import axios from "axios";
 import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth.js";
 import {showErrorToast} from "../../common/components/Toast.jsx";
+import {SidebarMenuItems} from "../SidebarMenu.jsx";
 
 const Layout = () => {
 
