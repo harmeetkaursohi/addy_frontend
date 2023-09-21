@@ -4,20 +4,24 @@ import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../
 import {showErrorToast, showSuccessToast} from "../../../features/common/components/Toast.jsx";
 
 export const createFacebookPostAction = createAsyncThunk('post/createFacebookPostAction', async (data, thunkAPI) => {
-    console.log("createFacebookPostAction", data)
-
     const formData = new FormData();
+
+    // Create a FormData object to hold the data.
     formData.append('caption', data.postRequestDto.caption);
     formData.append('hashTag', data.postRequestDto.hashTag);
     formData.append('boostPost', data.postRequestDto.boostPost);
     formData.append('scheduleDate', data.postRequestDto.scheduleDate);
-    formData.append('attachments[0].mediaType', data.postRequestDto.attachments[0].mediaType);
-    formData.append('attachments[0].file', data.postRequestDto.attachments[0].file);
-    formData.append('attachments[0].pageId', data.postRequestDto.attachments[0].pageId);
+
+    // Loop through the attachments array and append each attachment's data.
+    data.postRequestDto.attachments.forEach((attachment, index) => {
+        formData.append(`attachments[${index}].mediaType`, attachment.mediaType);
+        formData.append(`attachments[${index}].file`, attachment.file);
+        formData.append(`attachments[${index}].pageId`, attachment.pageId);
+    });
 
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.customerId}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
-        return res.data;
         showSuccessToast("Post Uploaded Success")
+        return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
         return thunkAPI.rejectWithValue(error.response);

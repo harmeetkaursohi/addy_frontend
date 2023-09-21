@@ -16,7 +16,7 @@ export const loginUser = createAsyncThunk('user/loginUser', async (data, thunkAP
 
 export const signUpUser = createAsyncThunk('user/signUpUser', async (data, thunkAPI) => {
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/auth/register`, data).then(res => {
-        showSuccessToast('Create password email send successfully on registered email');
+        showSuccessToast('Create password email sent successfully!');
         data.navigate("/login")
         return res.data;
     }).catch(error => {

@@ -3,8 +3,6 @@ import {Link} from "react-router-dom"
 import jsondata from "../../../../locales/data/initialdata.json";
 import {validationSchemas} from "../../../../utils/commonUtils.js";
 import {useFormik} from "formik";
-import { useSelector } from "react-redux";
-import Loader from "../../../loader/Loader";
 import Button from "../../../common/components/Button";
 
 
@@ -57,8 +55,8 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
                                 <div className="addy_outer">
                                     <div className="addy_img">
                                         <h2 className='cmn_fontFamily'>Create New Account</h2>
-                                        <p className="pt-2">Lorem Ipsum is simply dummy text of the printing and type
-                                            setting industry.</p>
+                                        {/*<p className="pt-2">Lorem Ipsum is simply dummy text of the printing and type*/}
+                                        {/*    setting industry.</p>*/}
                                     </div>
                                     <div className='login_form'>
 

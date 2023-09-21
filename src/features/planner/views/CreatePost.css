@@ -318,6 +318,8 @@ button.ai_btn {
     border-radius: 8px;
     border: 0.8px solid #C3C3C3;
     background: #FFF;
+    padding: 10px;
+    font-size: 13px;
 }
 
 .media_outer {
@@ -462,6 +464,7 @@ createPost_outer select {
     display: flex;
     justify-content: space-between;
     padding: 14px 23px;
+    margin-top: 17px;
 }
 
 .like_img {
@@ -692,12 +695,27 @@ input {
     width: 16px;
 }
 
+
 /*.checkbox-button__control {*/
 /*    transform: scale(0.75);*/
 /*}*/
 
 button.instagram_dropdown.dropdown-toggle.show::after {
     transform: rotate(-180deg);
+}
+.disable_color{
+    background-color: gray;
+    border: 1px solid gray;
+    border-radius: 6px;
+
+}
+.disable_color label{
+    color: white;
+}
+button.disabledButton {
+    background-color: gray ; /* Change the background color to gray or any color you prefer */
+    color: white; /* Change the text color to white or any color you prefer */
+    cursor: not-allowed; /* Change the cursor to indicate that the button is disabled */
 }
 
 

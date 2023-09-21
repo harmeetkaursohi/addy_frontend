@@ -4,8 +4,8 @@ const Button = ({ text, loading }) => {
 
     return (
         <>
-            <button className='login_btn' disabled={loading}>{loading ?
-                <><Loader /> <span>{text}</span></>  : text}
+            <button className='login_btn d-flex align-items-center justify-content-center' disabled={loading}>{loading ?
+                <><Loader /> <span className="ms-2">{text}</span></>  : text}
             </button>
 
         </>
@@ -14,3 +14,5 @@ const Button = ({ text, loading }) => {
 }
 
 export default Button
+
+

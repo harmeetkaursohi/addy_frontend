@@ -106,55 +106,67 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                 ) : null}
 
                                             </div>
-                                            <div className='form-group'>
-                                                <label>{jsondata.state}<span>*</span> </label>
-                                                <input onChange={formik.handleChange}
-                                                       onBlur={formik.handleBlur}
-                                                       value={formik.values.state} name="state"
-                                                       className="form-control mt-1" type='text'
-                                                       placeholder={jsondata.state}/>
-                                                {formik.touched.state && formik.errors.state ? (
-                                                    <p style={{color: "red"}}>{formik.errors.state}</p>
-                                                ) : null}
-                                            </div>
-                                            <div className='form-group'>
-                                                <label>{jsondata.city}</label>
-                                                <input onChange={formik.handleChange}
-                                                       onBlur={formik.handleBlur}
-                                                       value={formik.values.city} name="city"
-                                                       className="form-control mt-1" type='text'
-                                                       placeholder={jsondata.city}/>
+                                            <div className="row">
+                                                <div className='col-lg-6'>
+                                                    <div className='form-group'>
+                                                        <label>{jsondata.state}<span>*</span> </label>
+                                                        <input onChange={formik.handleChange}
+                                                               onBlur={formik.handleBlur}
+                                                               value={formik.values.state} name="state"
+                                                               className="form-control mt-1" type='text'
+                                                               placeholder={jsondata.state}/>
+                                                        {formik.touched.state && formik.errors.state ? (
+                                                            <p style={{color: "red"}}>{formik.errors.state}</p>
+                                                        ) : null}
+                                                    </div>
+                                                </div>
+                                                <div className='col-lg-6'>
+                                                    <div className='form-group'>
+                                                        <label>{jsondata.city}</label>
+                                                        <input onChange={formik.handleChange}
+                                                               onBlur={formik.handleBlur}
+                                                               value={formik.values.city} name="city"
+                                                               className="form-control mt-1" type='text'
+                                                               placeholder={jsondata.city}/>
 
 
-                                            </div>
-                                            <div className='rememberPass_outer mt-2'>
-                                                <div className='form-group'>
-                                                    <label>{jsondata.county}<span>*</span> </label>
-                                                    <input onChange={formik.handleChange}
-                                                           onBlur={formik.handleBlur}
-                                                           value={formik.values.county} name="county"
-                                                           className="form-control mt-1" type='text'
-                                                           placeholder={jsondata.county}/>
-                                                    {formik.touched.county && formik.errors.county ? (
-                                                        <p style={{color: "red"}}>{formik.errors.county}</p>
-                                                    ) : null}
+                                                    </div>
                                                 </div>
 
-                                                <div className='form-group'>
-                                                    <label>{jsondata.pinCode}</label>
-                                                    <input onChange={formik.handleChange}
-                                                           onBlur={formik.handleBlur}
-                                                           value={formik.values.pinCode} name="pinCode"
-                                                           className="form-control mt-1" type='number'
-                                                           placeholder={jsondata.pinCode}/>
 
+                                                <div className='col-lg-6'>
+                                                    <div className='rememberPass_outer mt-2'>
+                                                        <div className='form-group'>
+                                                            <label>{jsondata.county}<span>*</span> </label>
+                                                            <input onChange={formik.handleChange}
+                                                                   onBlur={formik.handleBlur}
+                                                                   value={formik.values.county} name="county"
+                                                                   className="form-control mt-1" type='text'
+                                                                   placeholder={jsondata.county}/>
+                                                            {formik.touched.county && formik.errors.county ? (
+                                                                <p style={{color: "red"}}>{formik.errors.county}</p>
+                                                            ) : null}
+                                                        </div>
+                                                    </div>
 
                                                 </div>
-                                                <Button text={jsondata.signUp} loading={signUpReducer?.loading}/>
-                                                {/* <button className=' login_btn' disabled={signUpReducer?.loading}>{signUpReducer?.loading ? 
-                                                    <Loader /> : jsondata.signUp} 
-                                            </button> */}
+                                                <div className='col-lg-6'>
+                                                    <div className='form-group'>
+                                                        <label>{jsondata.pinCode}</label>
+                                                        <input onChange={formik.handleChange}
+                                                               onBlur={formik.handleBlur}
+                                                               value={formik.values.pinCode} name="pinCode"
+                                                               className="form-control mt-1" type='number'
+                                                               placeholder={jsondata.pinCode}/>
 
+
+                                                    </div>
+                                                </div>
+
+
+                                               <div>
+                                                   <Button text={jsondata.signUp} loading={signUpReducer?.loading}/>
+                                               </div>
 
                                             </div>
                                         </form>

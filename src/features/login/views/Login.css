@@ -15,12 +15,12 @@
     align-items: center;
 }
 .addy_outer{
-    padding: 80px 95px;
+    padding: 0px 95px;
     width: 100%;
     
 }
 .google_img_outer h2{
-    font-size: 20px;
+    font-size: 16px;
 }
 .Container{
     width: 100%;
@@ -33,10 +33,14 @@
 .addy_img h2{
 color: #2E3646;
 text-align: center;
-font-size: 40px;
+font-size: 32px;
 font-weight: 700;
 line-height: 40px;
 letter-spacing: -0.8px;
+}
+.logo_outer img {
+    width: 160px;
+    height: unset;
 }
 .form-control:focus {
     background-color: var(--bs-body-bg);
@@ -52,6 +56,7 @@ font-size: 15px;
 font-weight: 500;
 line-height: 24px; 
 letter-spacing: -0.016px;
+    margin-bottom: 0px;
 }
 .reach_user_outer h2{
   color: #FFF;
@@ -116,8 +121,8 @@ border: none;
 width: 100%;
 padding: 16px 0px;
 border-radius: 10px;
-margin-top: 40px;
-height: 54px;
+margin-top: 25px;
+height: 48px;
 
 }
 .login_google_btn{
@@ -157,7 +162,7 @@ margin-top: 27px;
 
 }
 .addy_container{
-    height: 100%;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -165,6 +170,11 @@ margin-top: 27px;
 .form-group input {
     border: 1px solid #C3C3C3;
 }
+/*21 sep*/
+.login_form h3 {
+    margin-top: 15px;
+}
+/*21 sep*/
 @media screen and (max-width:767px){
     .addy_img h2 {
         font-size: 25px;

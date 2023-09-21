@@ -226,7 +226,7 @@ const Dashboard = () => {
                                             <LoginSocialFacebook
                                                 isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
                                                 appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
-                                                redirect_uri="https://0902-103-36-77-84.ngrok-free.app/dashboard"
+                                                redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                                 onResolve={(response) => {
                                                     console.log("fb response", response)
                                                     connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
@@ -350,10 +350,10 @@ const Dashboard = () => {
                                         </div>
 
                                         <LoginSocialInstagram
-                                            client_id="258452007021390"
-                                            client_secret="952c05ad1f2a53f09eb37fd62ba1547d"
-                                            scope="user_profile,user_media"
-                                            redirect_uri="https://0902-103-36-77-84.ngrok-free.app/dashboard"
+                                            client_id={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_ID}`}
+                                            client_secret={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_SECRET}`}
+                                            scope={`${import.meta.env.VITE_APP_INSTAGRAM_SCOPE}`}
+                                            redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                             onResolve={(response) => {
                                                 console.log("------>response", response);
                                             }}

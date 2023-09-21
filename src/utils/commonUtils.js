@@ -1,10 +1,8 @@
 import * as yup from "yup";
 import {SocialAccountProvider} from "./contantData.js";
 import {exchangeForLongLivedToken} from "../services/facebookService.js";
-import axios from "axios";
 import {decodeJwtToken} from "../app/auth/auth.js";
 import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/facebookActions/facebookActions.js";
-import {useDispatch} from "react-redux";
 
 const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
 
@@ -20,7 +18,6 @@ export const validationSchemas = {
         username: yup.string().required('Username is required'),
         email: yup.string().required('Email is required').email('Invalid email format'),
         contactNo: yup.number().required('Contact No is required')
-        // .max(10, "Contact No is not valid")
     }),
 
     createPassword: yup.object().shape({
@@ -84,24 +81,6 @@ export const cleanAndValidateRequestURL = (baseUrl, path, fields, token) => {
     url.searchParams.set('fields', fields);
     url.searchParams.set('access_token', token);
     return url.toString();
-}
-
-export const PLATFORM_TYPE = Object.freeze({
-    FACEBOOK: "facebook",
-    INSTAGRAM: "instagram",
-    TWITTER: "twitter",
-    LINKEDIN: "linkedin"
-});
-
-export const getValueByEnumObject = (object) => {
-    const values = [];
-    for (let key in object) {
-        if (!isNaN(Number(key))) {
-            continue;
-        }
-        values.push(object[key]);
-    }
-    return values;
 }
 
 

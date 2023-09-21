@@ -10,10 +10,11 @@
     "contact": "Contact Us"
   },
   "createPassword":{
-    "createPassword":"Reset Password"
+    "createPassword":"Create Password"
   },
   "forgetPassword":{
     "forgetPassword":"Forget Password"
+
   },
   "post": "Post",
   "socialmedia": "Social Media",
@@ -48,6 +49,7 @@
   "email": "E-mail",
   "rememberPassword": "Remember Password",
   "account": "Don’t have an account ?",
+  "backToLogin": "Back to login",
   "or": "or",
   "industry": "Industry",
   "country": "Country",
@@ -71,6 +73,7 @@
   "cardnumber": "Card Number",
   "expireDate": "Expire Date",
   "cvv": "CVV",
+
   "payNow": "Pay Now",
   "paypal": "Paypal",
   "credit": "Credit/Debit Card",

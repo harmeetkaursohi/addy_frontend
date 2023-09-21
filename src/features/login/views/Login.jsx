@@ -28,6 +28,7 @@ const Login = () => {
             dispatch(loginUser({values, navigate}));
         },
     });
+
     return (
         <>
             <section className='Container'>
@@ -55,11 +56,10 @@ const Login = () => {
                             <div className='addy_container'>
                                 <div className="addy_outer">
                                     <div className="addy_img">
-                                        <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
+                                        <div className='logo_outer'>
+                                            <img src={addyads_img} height="90px" width="238px"/>
                                         </div>
                                         <h2 className='cmn_fontFamily'>{jsondata.welcomeBack}</h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and type setting
-                                            industry.</p>
                                     </div>
                                     <div className='login_form'>
                                         <form onSubmit={formik.handleSubmit}>
@@ -115,7 +115,7 @@ const Login = () => {
 
                                                         <label className='ms-2'>{jsondata.rememberPassword}</label>
                                                     </div>
-                                                    <Link to="/forgetpass">
+                                                    <Link to="/forget-password">
                                                         <label
                                                             className='forgetPass_heading'>{jsondata.forgotpassword}?</label>
                                                     </Link>
@@ -127,7 +127,7 @@ const Login = () => {
 
                                                 {/*======= login with  google =======*/}
                                                 <a className=''
-                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/google?redirect_uri=https://0902-103-36-77-84.ngrok-free.app/auth-redirect`}>
+                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/google?redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
                                                     <div className="google_img_outer login_btn login_google_btn">
                                                         <img src={google_img}/>
                                                         <h2 className="ps-2">{jsondata.loginwithgoogle} </h2></div>
@@ -136,7 +136,7 @@ const Login = () => {
                                                 {/*======= login with  facebook =======*/}
 
                                                 <a className=''
-                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=https://0902-103-36-77-84.ngrok-free.app/auth-redirect`}>
+                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
                                                     <div className="google_img_outer login_btn login_google_btn">
                                                         <img src={fbImg}/>
                                                         <h2 className="ps-2">{jsondata.loginwithfb} </h2></div>
@@ -144,8 +144,12 @@ const Login = () => {
 
                                             </div>
                                         </form>
-                                        <h3 className='cmn_heading'>{jsondata.account}<Link to="/"><span
-                                            className='sign_up'>{jsondata.signup}</span></Link></h3>
+
+                                        <h3 className='cmn_heading'>{jsondata.account}
+                                            <Link className="ms-2" to="/">
+                                            <span className='sign_up'>{jsondata.signup}</span>
+                                            </Link>
+                                        </h3>
                                     </div>
                                 </div>
 

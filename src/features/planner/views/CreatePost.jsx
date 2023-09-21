@@ -1,13 +1,6 @@
 import './CreatePost.css'
 import ai_icon from '../../../images/ai_icon.svg'
-import bg_img from '../../../images/bg_img.png'
-import user_propfile from '../../../images/profile_img.png'
-import send_img from '../../../images/send.png'
-import like_img from '../../../images/Like.png'
-import comment_img from '../../../images/comment_img.png'
 import instagram_img from '../../../images/instagram.png'
-import ribbon_img from '../../../images/Ribbon.png'
-import ellipse_img from '../../../images/ellipse.svg'
 import upload_video_img from '../../../images/video_img.svg'
 import upload_img from '../../../images/post_image.svg'
 import jsondata from '../../../locales/data/initialdata.json'
@@ -15,7 +8,7 @@ import {useEffect, useState} from "react";
 import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
 import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
+import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth.js";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import {Dropdown} from 'react-bootstrap'
@@ -23,13 +16,12 @@ import facebook_img from '../../../images/fb.svg'
 import linkedin_img from '../../../images/linkedin.svg'
 import twitter_img from '../../../images/twitter.svg'
 import SideBar from "../../sidebar/views/Layout.jsx";
-import {GoComment} from "react-icons/go"
-import {FiThumbsUp} from "react-icons/fi"
-import {PiShareFat} from "react-icons/pi"
 import {BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
+import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
+import axios from "axios";
+import {showErrorToast} from "../../common/components/Toast.jsx";
 import {createFacebookPostAction} from "../../../app/actions/postActions/postActions.js";
-
 
 const CreatePost = () => {
 
@@ -37,14 +29,11 @@ const CreatePost = () => {
     const [aiGenerateCaptionModal, setAIGenerateCaptionModal] = useState(false);
     const [aiGenerateHashTagModal, setAIGenerateHashTagModal] = useState(false);
 
-    const [selectedPlatform, setSelectedPlatform] = useState('');
     const [hashTag, setHashTag] = useState("");
     const [caption, setCaption] = useState("");
     const [scheduleDate, setScheduleDate] = useState("");
     const [scheduleTime, setScheduleTime] = useState("");
     const [boostPost, setBoostPost] = useState(false);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [selectedFileUrl, setSelectedFileUrl] = useState("");
     const dispatch = useDispatch();
 
     const token = getToken();
@@ -53,9 +42,31 @@ const CreatePost = () => {
     const [selectedOptionLabels, setSelectedOptionLabels] = useState([]);
     const [selectAllCheckBox, setSelectAllCheckBox] = useState(false);
     const [socialAccountData, setSocialAccountData] = useState([]);
+    const [userData, setUserData] = useState(null);
+    const [files, setFiles] = useState([]);
+    const [selectedFileType, setSelectedFileType] = useState("");
+    const [disableFileButton, setDisableFileButton] = useState(false);
+    const [disableVideoButton, setDisableVideoButton] = useState(false);
 
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
 
+
+    useEffect(() => {
+        if (token) {
+            const decodeJwt = decodeJwtToken(token);
+            axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${decodeJwt.customerId}`, setAuthenticationHeader(token)).then(res => {
+                setUserData({
+                    username: res.data.username,
+                    profilePic: res.data.profilePic,
+                    email: res.data.email,
+                })
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+        }
+    }, []);
 
     useEffect(() => {
         if (socialAccounts) {
@@ -76,8 +87,6 @@ const CreatePost = () => {
 
     const toggleOption = (option, e) => {
         const optionIndex = selectedOptions.indexOf(option.id);
-
-        console.log(optionIndex);
 
         if (optionIndex !== -1) {
             setSelectedOptions(selectedOptions.filter((id) => id !== option.id));
@@ -134,8 +143,6 @@ const CreatePost = () => {
 
         const optionIndex = selectedOptions.indexOf(option.id);
 
-        console.log(optionIndex);
-
         if (optionIndex !== -1) {
 
             setSelectedOptions(selectedOptions.filter((id) => id !== option.id));
@@ -165,14 +172,13 @@ const CreatePost = () => {
         const combinedDateTimeString = `${scheduleDate}T${scheduleTime}:00`;
         const scheduleDateTime = new Date(combinedDateTimeString);
 
-
         const requestBody = {
             token: token,
             customerId: userInfo?.customerId,
             postRequestDto: {
                 attachments: [{
-                    mediaType: "IMAGE",
-                    file: selectedFile,
+                    mediaType: selectedFileType,
+                    file: files[0],
                     pageId: "115612628302302"
                 }],
                 hashTag: hashTag,
@@ -180,11 +186,24 @@ const CreatePost = () => {
                 scheduleDate: scheduleDateTime,
                 boostPost: boostPost,
             }
-
         }
 
-        dispatch(createFacebookPostAction(requestBody));
+        console.log("requestBody", requestBody)
 
+        dispatch(createFacebookPostAction(requestBody));
+        handleReset();
+
+    }
+
+    const handleReset = () => {
+        setScheduleTime("");
+        setScheduleDate("");
+        setBoostPost(false);
+        setCaption("");
+        setHashTag("");
+        setSelectedOptionLabels([]);
+        setSelectedOptions([]);
+        setFiles([]);
     }
 
     const handleSelectAllChange = (e) => {
@@ -230,6 +249,12 @@ const CreatePost = () => {
         }
 
     };
+
+    const handleSelectedFile = (e) => {
+        e.preventDefault();
+        const uploadedFiles = Array.from(e.target.files);
+        setFiles([...files, ...uploadedFiles]);
+    }
 
 
     return (
@@ -362,8 +387,7 @@ const CreatePost = () => {
                                                                                         key={index}>
                                                                                         <div
                                                                                             className="checkbox-button_outer">
-                                                                                            <img
-                                                                                                src={page?.imageUrl}/>
+                                                                                            <img src={page?.imageUrl}/>
                                                                                             <h2 className="cmn_text_style">{page?.name}</h2>
                                                                                         </div>
                                                                                         <input
@@ -375,8 +399,7 @@ const CreatePost = () => {
                                                                                                 id: page.id,
                                                                                                 label: page.name,
                                                                                                 imageUrl: page?.imageUrl
-                                                                                            }, e)
-                                                                                            }
+                                                                                            }, e)}
                                                                                         />
                                                                                     </div>
                                                                                 ))
@@ -404,41 +427,59 @@ const CreatePost = () => {
                                         <div className="media_outer">
                                             <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                             <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+
                                             <div className="file_outer">
                                                 <div
-                                                    className='cmn_blue_border add_media_outer'>
+                                                    className={disableFileButton ? "disable_color add_media_outer" : "cmn_blue_border add_media_outer"}>
                                                     <input type="file" id='image'
                                                            className='file'
+                                                           multiple
                                                            name={'file'}
+                                                           disabled={disableFileButton}
                                                            onChange={(e) => {
-                                                               e.preventDefault();
-                                                               setSelectedFileUrl(URL.createObjectURL(e.target.files[0]));
-                                                               setSelectedFile(e.target.files[0]);
+                                                               setSelectedFileType("IMAGE")
+                                                               setDisableVideoButton(true);
+                                                               handleSelectedFile(e);
                                                            }}
                                                     />
-                                                    <label htmlFor='image'
-                                                           className='cmn_headings'> <img
-                                                        src={upload_img}/>{selectedFile?.name ? selectedFile.name : "Add Photo"}
+                                                    <label htmlFor='image' className='cmn_headings'>
+                                                        <i className="fa fa-image"
+                                                           style={{marginTop: "2px"}}/>{"Add Photo"}
                                                     </label>
                                                 </div>
 
                                                 <div
-                                                    className='cmn_blue_border add_media_outer'>
-                                                    <input type="file" id='video'/>
-                                                    <label htmlFor='video'
-                                                           className='cmn_headings'> <img
-                                                        src={upload_video_img}/>Add
-                                                        Video</label>
+                                                    className={`${disableVideoButton ? "disable_color add_media_outer" : 'cmn_blue_border add_media_outer'}`}>
+                                                    <input
+                                                        type="file"
+                                                        id='video'
+                                                        disabled={disableVideoButton}
+                                                        onChange={(e) => {
+                                                            setSelectedFileType("VIDEO");
+                                                            setDisableFileButton(true);
+                                                            handleSelectedFile(e);
+                                                        }}/>
+                                                    <label htmlFor='video' className='cmn_headings'>
+                                                        <i className="fa fa-video-camera" style={{marginTop: "2px"}}/>Add
+                                                        Video
+                                                    </label>
                                                 </div>
+
                                             </div>
+
                                             <h2 className='cmn_heading'>{jsondata.OR}</h2>
                                             <div className="ai_outer_btn">
-                                                <button className="ai_btn cmn_white_text mt-2"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            setAIGenerateImageModal(true);
-                                                        }}><img src={ai_icon}
-                                                                className='ai_icon me-2'/>{jsondata.generateAi}
+                                                <button
+                                                    className={`${disableFileButton ? 'disabledButton ai_btn' : 'ai_btn cmn_white_text mt-2'}`}
+                                                    disabled={disableFileButton}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setDisableVideoButton(true);
+                                                        setAIGenerateImageModal(true);
+                                                    }}>
+                                                    {/*//  <img src={ai_icon} className='ai_icon me-2'/>*/}
+                                                    <i className="fa-solid fa-robot ai_icon me-2"
+                                                       style={{fontSize: "15px"}}/> {jsondata.generateAi}
                                                 </button>
                                             </div>
                                         </div>
@@ -491,25 +532,6 @@ const CreatePost = () => {
                                                               e.preventDefault();
                                                               setHashTag(e.target.value);
                                                           }}></textarea>
-                                            </div>
-                                            <div className='textarea get_messages_outer'>
-                                                <div className='get_messages'>
-                                                    <input type='checkbox'/>
-                                                    <label
-                                                        className='create_post_text get_measage_heading ps-2'>Get
-                                                        more
-                                                        messages</label>
-                                                    <h6 className='create_post_text send_measage_heading'>Businesses
-                                                        like
-                                                        your get more messages when they add a
-                                                        “send message” button.</h6>
-                                                    <h6 className='create_post_text try_it_heading'>Try
-                                                        it out</h6>
-                                                </div>
-
-                                                <button
-                                                    className='cmn_btn_color add_btn'>{jsondata.addbutton}</button>
-
                                             </div>
 
                                         </div>
@@ -587,71 +609,16 @@ const CreatePost = () => {
                                 </div>
                             </div>
                             <div className="col-lg-6 col-md-12 col-sm-12">
+
                                 <div className='post_preview_outer'>
-                                    <div className='preview_wrapper'>
-                                        <h2 className='cmn_white_text feed_preview'>Instagram
-                                            feed Preview</h2>
-                                        <div className='user_profile_info'>
-                                            <img src={user_propfile} height="36px"
-                                                 width="36px"/>
-                                            <div>
-                                                <h3 className='create_post_text user_name boost_post_text'>Team
-                                                    Musafirrr</h3>
-                                                <h6 className='status create_post_text'>just
-                                                    now <img src={ellipse_img}/>
-                                                </h6>
-                                            </div>
 
-                                        </div>
-                                        <img src={bg_img} className='post_img'/>
-                                        <div className='like_comment_outer'>
-                                            <div>
-                                                <img src={like_img}
-                                                     className='like_img'/>
-                                                <img src={comment_img}
-                                                     className='like_img'/>
-                                                <img src={send_img}
-                                                     className='like_img'/>
-                                            </div>
-                                            <img src={ribbon_img}
-                                                 className="ribbon_img"/>
-                                        </div>
-                                    </div>
-                                    {/*   facebook post preview */}
-                                    <div className='preview_wrapper'>
-                                        <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>Facebook
-                                            feed Preview</h2>
-                                        <div className='user_profile_info'>
-                                            <img src={user_propfile} height="36px"
-                                                 width="36px"/>
-                                            <div>
-                                                <h3 className='create_post_text user_name boost_post_text'>Team
-                                                    Musafirrr</h3>
-                                                <h6 className='status create_post_text'>just
-                                                    now <img src={ellipse_img}/>
-                                                </h6>
-                                            </div>
+                                    <CommonFeedPreview previewTitle={`Facebook feed Preview`}
+                                                       pageName={`Team Musafirrr`}
+                                                       userData={userData}
+                                                       files={files}
+                                                       selectedFileType={selectedFileType}
 
-                                        </div>
-                                        <img src={selectedFileUrl} className='post_img'/>
-                                        <div className='like_comment_outer'>
-                                            <div className="fb_likes">
-                                                <FiThumbsUp/>
-                                                <h3 className="cmn_text_style">Likes</h3>
-                                            </div>
-                                            <div className="fb_likes">
-                                                <GoComment/>
-                                                <h3 className="cmn_text_style">Comment</h3>
-                                            </div>
-                                            <div className="fb_likes">
-                                                <PiShareFat/>
-                                                <h3 className="cmn_text_style">Share</h3>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-
+                                    />
                                 </div>
 
 
