@@ -10,7 +10,11 @@ export default defineConfig({
     ],
     server: {
         watch: {
-            usePolling: true
+            usePolling: false
         }
+    },
+    build: {
+        watch: false
     }
 })
+
