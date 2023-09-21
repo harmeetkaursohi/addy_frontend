@@ -9,7 +9,6 @@ import twitter_img from '../../../images/twitter.svg'
 import instagram_img from '../../../images/instagram.png'
 import linkedin_img from '../../../images/linkedin.svg'
 import right_arrow_icon from '../../../images/right_arrow_icon.svg'
-import biker_img from '../../../images/biker.png'
 import Chart from "../../react_chart/views/Chart.jsx";
 import UpcomingPost from "../../upcomingPost/views/UpcomingPost.jsx";
 import jsondata from '../../../locales/data/initialdata.json'

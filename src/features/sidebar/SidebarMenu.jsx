@@ -8,7 +8,7 @@ import { AiOutlinePicture } from "react-icons/ai";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 
-export const sidebarMenuItems = [
+export const SidebarMenuItems = [
     {
         "name": "Home",
         "path": "/dashboard",
