@@ -9,14 +9,13 @@ import twitter_img from '../../../images/twitter.svg'
 import instagram_img from '../../../images/instagram.png'
 import linkedin_img from '../../../images/linkedin.svg'
 import right_arrow_icon from '../../../images/right_arrow_icon.svg'
-import biker_img from '../../../images/biker.png'
 import Chart from "../../react_chart/views/Chart.jsx";
 import UpcomingPost from "../../upcomingPost/views/UpcomingPost.jsx";
 import jsondata from '../../../locales/data/initialdata.json'
 import {useEffect, useState} from "react";
 import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
 import {useDispatch, useSelector} from "react-redux";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
+import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth.js";
 import {getAllFacebookPages, getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions.js";
 import {LoginSocialFacebook, LoginSocialInstagram} from "reactjs-social-login";
 import {FacebookLoginButton, InstagramLoginButton} from "react-social-login-buttons";
@@ -28,15 +27,17 @@ import {
 } from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import ConfirmModal from "../../common/components/ConfirmModal.jsx";
+import axios from "axios";
+import {showErrorToast} from "../../common/components/Toast.jsx";
 
 const Dashboard = () => {
 
     const [showFacebookModal, setShowFacebookModal] = useState(false)
     const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [facebookDropDown, setFacebookDropDown] = useState(false)
+    const [userData, setUserData] = useState(null);
     const dispatch = useDispatch();
     const token = getToken();
-
 
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
     const facebookPageLoading = useSelector(state => state.facebook.getFacebookPageReducer.loading);
@@ -51,6 +52,24 @@ const Dashboard = () => {
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
         }
     }, [])
+
+
+    useEffect(() => {
+        if (token) {
+            const decodeJwt = decodeJwtToken(token);
+            axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${decodeJwt.customerId}`, setAuthenticationHeader(token)).then(res => {
+                setUserData({
+                    username: res.data.username,
+                    profilePic: res.data.profilePic,
+                    email: res.data.email,
+                })
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+        }
+    }, []);
 
     useEffect(() => {
         if ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
@@ -103,8 +122,8 @@ const Dashboard = () => {
         <>
             <SideBar/>
             <div className="cmn_container">
-                <div className="cmn_wrapper_outer" >
-                    <Header/>
+                <div className="cmn_wrapper_outer">
+                    <Header userData={userData}/>
                     <div className="dashboard_outer">
                         <div className="row">
                             <div className="col-lg-8 col-md-12 col-sm-12">
@@ -260,11 +279,12 @@ const Dashboard = () => {
                                                     <div className="social_media_content">
                                                         <img className="cmn_width" src={fb_img}/>
                                                         <div className="text-start">
-                                                            <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c=>c.provider==='FACEBOOK')?.name || "facebook"}</h5>
+                                                            <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
                                                             <h4 className="connect_text cmn_text_style">Connected</h4>
                                                         </div>
                                                         <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg" onClick={()=>setFacebookDropDown(!facebookDropDown)}>
+                                                             xmlns="http://www.w3.org/2000/svg"
+                                                             onClick={() => setFacebookDropDown(!facebookDropDown)}>
                                                             <path id="Icon"
                                                                   d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
                                                                   d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
@@ -275,7 +295,7 @@ const Dashboard = () => {
                                                 </div>
 
                                                 {
-                                                    facebookDropDown===true  &&
+                                                    facebookDropDown === true &&
 
                                                     <ul className="menu_items">
                                                         {
@@ -287,7 +307,8 @@ const Dashboard = () => {
                                                                     return (
                                                                         <>
                                                                             <li href="#/action-2" key={index}>
-                                                                                <div className="user_profileInfo_wrapper">
+                                                                                <div
+                                                                                    className="user_profileInfo_wrapper">
                                                                                     <div className="user_Details">
                                                                                         <img src={data.picture.data.url}
                                                                                              height="30px"
@@ -382,18 +403,18 @@ const Dashboard = () => {
 
                                     </div>
                                     <div className="cmn_drop_down">
-                                    <div className="social_media_outer">
-                                        <div className="social_media_content">
-                                            <img className="cmn_width" src={linkedin_img}/>
-                                            <div>
-                                                <h5 className="">Linkedin account</h5>
-                                                <h6 className="cmn_headings">www.facebook.com</h6>
+                                        <div className="social_media_outer">
+                                            <div className="social_media_content">
+                                                <img className="cmn_width" src={linkedin_img}/>
+                                                <div>
+                                                    <h5 className="">Linkedin account</h5>
+                                                    <h6 className="cmn_headings">www.facebook.com</h6>
+                                                </div>
                                             </div>
+                                            <button
+                                                className="cmn_btn_color cmn_connect_btn connect_btn ">Connect
+                                            </button>
                                         </div>
-                                        <button
-                                            className="cmn_btn_color cmn_connect_btn connect_btn ">Connect
-                                        </button>
-                                    </div>
                                     </div>
                                     <div className="social_media_outer">
                                         <div className="social_media_content">

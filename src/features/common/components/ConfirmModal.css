@@ -23,3 +23,18 @@
     height: 40px;
     width:110px
 }
+img.post_img {
+    height: 350px;
+    object-fit: cover;
+    object-position: top;
+}
+ul.slick-dots{
+    bottom: 18px;
+}
+ul.slick-dots li.slick-active button:before{
+    color: #ff5c00;
+}
+ul.slick-dots li button:before{
+    opacity: 1;
+    color: #fff;
+}

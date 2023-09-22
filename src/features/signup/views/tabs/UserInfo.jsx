@@ -1,4 +1,5 @@
 import men_img from "../../../../images/men.png"
+import addyads_img from "../../../../images/addylogo.png";
 import {Link} from "react-router-dom"
 import jsondata from "../../../../locales/data/initialdata.json";
 import {validationSchemas} from "../../../../utils/commonUtils.js";
@@ -22,13 +23,11 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
             setShowTab(2);
         },
     });
+
      const blockInvalidChar = e => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault();
 
     return (
         <>
-    
-                               
-            
             <section className='Container'>
               
                 <div className="login_wrapper">
@@ -54,6 +53,8 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
                             <div className='addy_container'>
                                 <div className="addy_outer">
                                     <div className="addy_img">
+                                    <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
+                                    </div>
                                         <h2 className='cmn_fontFamily'>Create New Account</h2>
                                         {/*<p className="pt-2">Lorem Ipsum is simply dummy text of the printing and type*/}
                                         {/*    setting industry.</p>*/}
@@ -76,7 +77,7 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
                                                 />
 
                                                 {formik.touched.username && formik.errors.username ? (
-                                                    <p style={{color: "red"}}>{formik.errors.username}</p>
+                                                    <p className="error_message">{formik.errors.username}</p>
                                                 ) : null}
 
                                             </div>
@@ -94,7 +95,7 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
                                                 />
 
                                                 {formik.touched.email && formik.errors.email ? (
-                                                    <p style={{color: "red"}}>{formik.errors.email}</p>
+                                                    <p className="error_message">{formik.errors.email}</p>
                                                 ) : null}
 
                                             </div>
@@ -114,7 +115,7 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
                                                     />
 
                                                     {formik.touched.industry && formik.errors.industry ? (
-                                                        <p style={{color: "red"}}>{formik.errors.industry}</p>
+                                                        <p className="error_message">{formik.errors.industry}</p>
                                                     ) : null}
 
                                                 </div>
@@ -133,16 +134,12 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
                                                     />
 
                                                     {formik.touched.contactNo && formik.errors.contactNo ? (
-                                                        <p style={{color: "red"}}>{formik.errors.contactNo}</p>
+                                                        <p className="error_message">{formik.errors.contactNo}</p>
                                                     ) : null}
 
                                                 </div>
 
-                                               
-
-                                                
-                                              <Button text={jsondata.next}/>
-                                                {/* <button className=' login_btn'>{jsondata.next}</button> */}
+                                              <Button type={"Submit"} text={jsondata.next}/>
                                             </div>
                                         </form>
                                         <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to="/login"><span

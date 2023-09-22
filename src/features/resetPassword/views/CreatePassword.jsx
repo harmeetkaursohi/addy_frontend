@@ -1,42 +1,49 @@
-import React from 'react'
+import React, {useState} from 'react'
 import "./CreatePassword.css"
 import jsondata from "../../../locales/data/initialdata.json"
-import { useFormik } from 'formik';
-import { validationSchemas } from '../../../utils/commonUtils';
-import {Link, useLocation, useNavigate} from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import {useFormik} from 'formik';
+import {validationSchemas} from '../../../utils/commonUtils';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
 import girl_img from "../../../images/girl.png";
 import addyads_img from "../../../images/addylogo.png";
 import {createPassword} from "../../../app/actions/userActions/userActions.js";
 
 const CreatePassword = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     const location = useLocation();
     const queryParamVale = new URLSearchParams(location.search);
-    const navigate=useNavigate()
+    const navigate = useNavigate()
+
     const userId = queryParamVale.get("id")
     const token = queryParamVale.get("token")
     const dispatch = useDispatch()
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    }
+
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    }
+
+
     const formik = useFormik({
         initialValues: {
-            password: "",
-            customerId: userId,
-            customerToken: token
-        },
-        validationSchema: validationSchemas.createPassword,
-        onSubmit: (values) => {
-           const obj = {
-                newPassword: values.password, 
-                customerId: values.customerId,
-                customerToken: values.customerToken,
+            password: "", customerId: userId, customerToken: token
+        }, validationSchema: validationSchemas.createPassword, onSubmit: (values) => {
+            const obj = {
+                newPassword: values.password, customerId: values.customerId, customerToken: values.customerToken,
             }
-            dispatch(createPassword({values:obj,navigate: navigate}))
-           
-           
+            dispatch(createPassword({values: obj, navigate: navigate}))
+
+
         },
     });
 
-    return (
-        <section className='Container'>
+    return (<section className='Container'>
             <div className="login_wrapper">
                 <div className="row">
                     <div className="col-lg-6 col-md-12 col-sm-12 ">
@@ -70,43 +77,65 @@ const CreatePassword = () => {
                                     <form onSubmit={formik.handleSubmit}>
 
 
-                                                         <div className='form-group '>
-                                                        <label>{jsondata.password}</label>
-                                                           <input
-                                                                className="form-control mt-1"
-                                                                type='password'
-                                                                placeholder='Password'
-                                                                name="password"
-                                                                onChange={formik.handleChange}
-                                                                onBlur={formik.handleBlur}
-                                                                value={formik.values.password}
-                                                            />
-                                                            {formik.touched.password && formik.errors.password ? (
-                                                                <p style={{ color: "red" }}>{formik.errors.password}</p>
-                                                            ) : null}
+                                        <div className='form-group '>
+                                            <label>{jsondata.password}</label>
+                                            <input
+                                                className="form-control mt-1"
+                                                type={showPassword ? 'text' : 'password'}
+                                                placeholder='Password'
+                                                name="password"
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                value={formik.values.password}
+                                            />
+                                            <span className="password-toggle" onClick={togglePasswordVisibility}>
+                                            {showPassword ? (
+                                                <h2 className="openEye">
+                                                    <i className="fa-solid fa-eye"></i>
+                                                </h2>
+                                            ) : (
+                                                <h2 className="closeEyeIcon">
+                                                    <i className="fa fa-eye-slash" aria-hidden="true"/>
+                                                </h2>
+                                            )}
+                                            </span>
 
-                                                        </div>
-                                                        <div className='form-group '>
+                                            {formik.touched.password && formik.errors.password ? (
+                                                <p className="error_message">{formik.errors.password}</p>) : null}
 
-                                                            <label>{jsondata.confirmPass}</label>
-                                                            <input
-                                                                className="form-control mt-1"
-                                                                type='password'
-                                                                placeholder='Confirm Password'
-                                                                name="confirmPassword"
-                                                                onChange={formik.handleChange}
-                                                                onBlur={formik.handleBlur}
-                                                                value={formik.values.confirmPassword}
-                                                            />
-                                                            {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                                                                <p style={{ color: "red" }}>{formik.errors.confirmPassword}</p>
-                                                            ) : null}
+                                        </div>
+                                        <div className='form-group '>
 
-                                                        </div>
+                                            <label>{jsondata.confirmPass}</label>
+                                            <input
+                                                className="form-control mt-1"
+                                                type={showConfirmPassword ? 'text' : 'password'}
+                                                placeholder='Confirm Password'
+                                                name="confirmPassword"
+                                                onChange={formik.handleChange}
+                                                onBlur={formik.handleBlur}
+                                                value={formik.values.confirmPassword}
+                                            />
 
-                                                        <button className=' login_btn'>{jsondata.createPassword.createPassword}</button>
+                                            <span className="password-toggle" onClick={toggleConfirmPasswordVisibility}>
+                                            {showConfirmPassword ? (
+                                                <h2 className="openEye">
+                                                    <i className="fa-solid fa-eye "></i>
+                                                </h2>) : (
+                                                <h2 className="openEye">
+                                                    <i className="fa fa-eye-slash" aria-hidden="true"/>
+                                                </h2>
+                                            )}
+                                            </span>
 
-                                            </form>
+                                            {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+                                                <p className="error_message">{formik.errors.confirmPassword}</p>) : null}
+
+                                        </div>
+
+                                        <button className=' login_btn'>{jsondata.createPassword.createPassword}</button>
+
+                                    </form>
                                 </div>
                             </div>
 
@@ -115,51 +144,6 @@ const CreatePassword = () => {
                 </div>
             </div>
         </section>
-        // <section className='Container'>
-        //     <form onSubmit={formik.handleSubmit}>
-        //         <div className='resetOuter'>
-        //             <div className='reset_password_content'>
-        //                 <h2>{jsondata.createPassword.createPassword}</h2>
-        //                 <div className='form-group '>
-        //                     <label>{jsondata.password}</label>
-        //                     <input
-        //                         className="form-control mt-1"
-        //                         type='password'
-        //                         placeholder='Password'
-        //                         name="password"
-        //                         onChange={formik.handleChange}
-        //                         onBlur={formik.handleBlur}
-        //                         value={formik.values.password}
-        //                     />
-        //                     {formik.touched.password && formik.errors.password ? (
-        //                         <p style={{ color: "red" }}>{formik.errors.password}</p>
-        //                     ) : null}
-        //
-        //                 </div>
-        //                 <div className='form-group '>
-        //
-        //                     <label>{jsondata.confirmPass}</label>
-        //                     <input
-        //                         className="form-control mt-1"
-        //                         type='password'
-        //                         placeholder='Confirm Password'
-        //                         name="confirmPassword"
-        //                         onChange={formik.handleChange}
-        //                         onBlur={formik.handleBlur}
-        //                         value={formik.values.confirmPassword}
-        //                     />
-        //                     {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-        //                         <p style={{ color: "red" }}>{formik.errors.confirmPassword}</p>
-        //                     ) : null}
-        //
-        //                 </div>
-        //
-        //                 <button className=' login_btn'>{jsondata.createPassword.createPassword}</button>
-        //             </div>
-        //
-        //         </div>
-        //     </form>
-        // </section>
     )
 }
 

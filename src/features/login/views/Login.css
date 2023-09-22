@@ -19,6 +19,12 @@
     width: 100%;
     
 }
+.error_message {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
 .google_img_outer h2{
     font-size: 16px;
 }
@@ -146,8 +152,15 @@ line-height: 20px;
     line-height: 22px; 
     letter-spacing: -0.015px;
 }
+.girl_img_width {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 10px;
+}
 .form-group {
-    margin-top: 23px;
+    margin-top: 10px;
 }
 .cmn_heading{
 color:  #5F6D7E;
@@ -166,6 +179,7 @@ margin-top: 27px;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
 }
 .form-group input {
     border: 1px solid #C3C3C3;
@@ -174,7 +188,18 @@ margin-top: 27px;
 .login_form h3 {
     margin-top: 15px;
 }
+.reach_user_outer p {
+    margin: 0px;
+    margin-top: 10px;
+}
 /*21 sep*/
+@media(max-width:1440px){
+    .girl_img_width {
+      
+        /* height: 250px; */
+      
+    }
+}
 @media screen and (max-width:767px){
     .addy_img h2 {
         font-size: 25px;

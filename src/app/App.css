@@ -64,7 +64,7 @@ font-family: 'Nunito';
 font-size: 14px;
 font-style: normal;
 font-weight: 500;
-line-height: 20px; 
+line-height: 20px;
 letter-spacing: -0.014px;
 }
 
@@ -84,15 +84,15 @@ letter-spacing: -0.014px;
       color:  #2E3646;
       font-size: 28px;
       font-weight: 700;
-      line-height: 38px; 
+      line-height: 38px;
       letter-spacing: -0.28px;
-   
+
   }
   .cmn_small_heading{
     color:  #5F6D7E;
     font-size: 16px;
     font-weight: 400;
-    line-height: 24px; 
+    line-height: 24px;
     letter-spacing: -0.016px;
     }
     .box_shadow{
@@ -110,7 +110,7 @@ box-shadow: 0px 0px 8px 0px rgba(16, 24, 40, 0.05);
   }
   :focus-visible {
     outline: unset
-} 
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -123,7 +123,7 @@ font-family: "Nunito";
 font-size: 20px;
 font-style: normal;
 font-weight: 600;
-line-height: 38px; 
+line-height: 38px;
 letter-spacing: -0.2px;
 }
 .skeleton {
@@ -156,7 +156,23 @@ letter-spacing: -0.2px;
 .skeleton img {
   opacity: 0;
 }
-
+h2.closeEyeIcon {
+  position: absolute;
+  font-size: 15px;
+  left: auto;
+  right: 12px;
+  top: 39px;
+}
+h2.openEye {
+  font-size: 15px;
+  left: auto;
+  position: absolute;
+  right: 10px;
+  top: 38px;
+}
+.form-group{
+  position: relative;
+}
 @keyframes shimmer {
   100% {
     transform: translateX(100%);

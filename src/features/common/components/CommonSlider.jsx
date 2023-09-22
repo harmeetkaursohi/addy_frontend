@@ -3,9 +3,10 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import React from "react";
 
-const CommonSlider = ({files, selectedFileType}) => {
+const CommonSlider = ({files, selectedFileType,caption}) => {
 
     const settings = {
+        arrows:false,
         dots: true,
         infinite: true,
         speed: 500,
@@ -23,7 +24,8 @@ const CommonSlider = ({files, selectedFileType}) => {
 
                     files?.map((file, index) => (
                         <div key={index}>
-                            <img src={URL.createObjectURL(file)} alt={`Image ${index}`} className='post_img'/>
+                            <p className="caption_text">{caption}</p>
+                            <img  src={URL.createObjectURL(file)} alt={`Image ${index}`} className='post_img'/>
                         </div>
                     ))
                 }

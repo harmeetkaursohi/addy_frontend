@@ -279,7 +279,7 @@ button.ai_btn {
 
 .create_post_text {
     color: #525254;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
     line-height: normal;
 }
@@ -457,14 +457,21 @@ createPost_outer select {
 .user_profile_info {
     display: flex;
     gap: 10px;
-    padding: 19px 12px;
+    padding: 19px 12px 8px 12px;
 }
-
+.user_profile_info img{
+    border-radius: 20px;
+}
+.caption_text{
+    padding: 0px 14px;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
 .like_comment_outer {
     display: flex;
     justify-content: space-between;
     padding: 14px 23px;
-    margin-top: 17px;
+    /*margin-top: 17px;*/
 }
 
 .like_img {

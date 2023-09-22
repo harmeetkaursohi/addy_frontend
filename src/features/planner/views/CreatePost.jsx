@@ -477,7 +477,6 @@ const CreatePost = () => {
                                                         setDisableVideoButton(true);
                                                         setAIGenerateImageModal(true);
                                                     }}>
-                                                    {/*//  <img src={ai_icon} className='ai_icon me-2'/>*/}
                                                     <i className="fa-solid fa-robot ai_icon me-2"
                                                        style={{fontSize: "15px"}}/> {jsondata.generateAi}
                                                 </button>
@@ -617,6 +616,7 @@ const CreatePost = () => {
                                                        userData={userData}
                                                        files={files}
                                                        selectedFileType={selectedFileType}
+                                                       caption={caption}
 
                                     />
                                 </div>

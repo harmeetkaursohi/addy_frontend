@@ -70,7 +70,7 @@ function ForgetPassword() {
                                                     value={formik.values.email}
                                                 />
                                                 {formik.touched.email && formik.errors.email ? (
-                                                    <p style={{color: "red"}}>{formik.errors.email}</p>
+                                                    <p className="error_message">{formik.errors.email}</p>
                                                 ) : null}
 
                                                 <button type="submit"

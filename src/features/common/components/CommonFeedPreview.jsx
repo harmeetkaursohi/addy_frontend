@@ -7,12 +7,13 @@ import React from "react";
 import CommonSlider from "./CommonSlider.jsx";
 
 
-const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType}) => {
+const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType,caption}) => {
 
     return (
         <>
+            <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>{previewTitle}</h2>
+
             <div className='preview_wrapper'>
-                <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>{previewTitle}</h2>
                 <div className='user_profile_info'>
                     <img src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : user_propfile}
                          height="36px"
@@ -25,7 +26,7 @@ const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFil
                     </div>
                 </div>
 
-                <CommonSlider files={files} selectedFileType={selectedFileType}/>
+                <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption}/>
 
                 <div className='like_comment_outer'>
                     <div className="fb_likes">

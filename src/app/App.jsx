@@ -25,11 +25,6 @@ import FacebookModal from '../features/modals/views/facebookModal/FacebookModal'
 import Oauth2RedirectComponent from '../features/authentication/Oauth2RedirectComponent'
 
 const App = () => {
-
-
-
-
-
     const PrivateRoute = () => {
         const token = getToken();
         return token ? <Outlet /> : <Navigate to="/login" />;
@@ -59,9 +54,6 @@ const App = () => {
                     <Route path="/fb" element={<FacebookModal />} />
                     <Route path="/auth-redirect" element={<Oauth2RedirectComponent />} />
                     <Route path="*" element={<NotFound />} />
-
-
-                    
                 </Routes>
             </BrowserRouter>
             <ToastContainer />

@@ -20,14 +20,14 @@ const Login = () => {
         initialValues: {
             username: '',
             password: '',
-            timeZoneId: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            rememberPassword: false
+            timeZoneId: Intl.DateTimeFormat().resolvedOptions().timeZone
         },
         validationSchema: validationSchemas.login,
         onSubmit: (values) => {
             dispatch(loginUser({values, navigate}));
         },
     });
+
 
     return (
         <>
@@ -77,7 +77,7 @@ const Login = () => {
                                                 />
 
                                                 {formik.touched.username && formik.errors.username ? (
-                                                    <p style={{color: "red"}}>{formik.errors.username}</p>
+                                                    <p className="error_message">{formik.errors.username}</p>
                                                 ) : null}
 
                                             </div>
@@ -94,7 +94,7 @@ const Login = () => {
                                                     value={formik.values.password}
                                                 />
                                                 {formik.touched.password && formik.errors.password ? (
-                                                    <p style={{color: "red"}}>{formik.errors.password}</p>
+                                                    <p className="error_message">{formik.errors.password}</p>
                                                 ) : null}
 
                                             </div>
@@ -102,19 +102,7 @@ const Login = () => {
                                             <div className='rememberPass_outer mt-2'>
 
                                                 <div className='check_box_outer'>
-                                                    <div>
-
-                                                        <input
-                                                            type='checkbox'
-                                                            id="rememberPassword"
-                                                            name="rememberPassword"
-                                                            value={formik.values.rememberPassword}
-                                                            checked={formik.values.rememberPassword}
-                                                            onChange={formik.handleChange}
-                                                        />
-
-                                                        <label className='ms-2'>{jsondata.rememberPassword}</label>
-                                                    </div>
+                                                    <div></div>
                                                     <Link to="/forget-password">
                                                         <label
                                                             className='forgetPass_heading'>{jsondata.forgotpassword}?</label>
@@ -122,7 +110,7 @@ const Login = () => {
 
                                                 </div>
 
-                                                <button className=' login_btn'>{jsondata.login}</button>
+                                                <button type={"submit"} className='login_btn'>{jsondata.login}</button>
                                                 <h2 className='cmn_heading'>OR</h2>
 
                                                 {/*======= login with  google =======*/}
@@ -147,7 +135,7 @@ const Login = () => {
 
                                         <h3 className='cmn_heading'>{jsondata.account}
                                             <Link className="ms-2" to="/">
-                                            <span className='sign_up'>{jsondata.signup}</span>
+                                                <span className='sign_up'>{jsondata.signup}</span>
                                             </Link>
                                         </h3>
                                     </div>
