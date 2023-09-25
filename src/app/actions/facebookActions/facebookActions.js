@@ -13,7 +13,6 @@ export const getAllFacebookPages = createAsyncThunk('facebook/getAllFacebookPage
             const pageInfoList = [];
             for (let obj of response.data.data) {
                 const pageInfoResponse = await getPageFullInfoByPageAccessToken(obj.access_token);
-                console.log("@@@ pageInfoResponse  ::: ", pageInfoResponse?.data?.access_token)
                 const longLivedToken = await exchangeForLongLivedToken(pageInfoResponse?.data?.access_token);
                 pageInfoResponse.data.access_token = longLivedToken;
                 pageInfoList.push(pageInfoResponse.data);
