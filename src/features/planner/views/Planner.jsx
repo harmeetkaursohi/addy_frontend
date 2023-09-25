@@ -26,7 +26,6 @@ const Planner = () => {
     const customDayHeaderContent = (args) => {
         // You can customize the day names here
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        console.log(args, "args")
         return days[args.date.getDay()];
     };
 
