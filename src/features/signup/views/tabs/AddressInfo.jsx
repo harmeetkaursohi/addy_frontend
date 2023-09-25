@@ -7,17 +7,22 @@ import {validationSchemas} from "../../../../utils/commonUtils"
 import {useDispatch, useSelector} from "react-redux"
 import {signUpUser} from "../../../../app/actions/userActions/userActions"
 import Button from "../../../common/components/Button"
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Country, State, City} from 'country-state-city';
 
 const AddressInfo = ({formData, setFormData, setShowTab}) => {
-    console.log("Country.getAllCountries()", Country.getAllCountries());
-    console.log("State.getAllStates()", State.getAllStates());
-    console.log("City.getAllCities()", City.getAllCities());
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const signUpReducer = useSelector(state => state?.user?.signUpReducer);
+    const [countries, setCountries] = useState([]);
+    const [states, setStates] = useState([]);
+    const [cities, setCities] = useState([]);
+
+    useEffect(() => {
+        setCountries(Country.getAllCountries());
+    }, []);
+
 
     const formik = useFormik({
         initialValues: {
@@ -32,6 +37,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
         },
         validationSchema: validationSchemas.address,
         onSubmit: (values) => {
+
             let addressObj = {
                 addressLine1: values.addressLine1,
                 addressLine2: values.addressLine2,
@@ -48,7 +54,25 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
     });
 
     const handlePreviousTab = () => {
+        setFormData(formData);
         setShowTab((prev) => prev - 1);
+    }
+
+    // Custom onChange handler for the country select element
+    const handleCountryChange = (event) => {
+        const selectedCountry = event.target.value;
+        formik.setFieldValue('country', selectedCountry);
+        const country = Country.getAllCountries().find(state => state.name === selectedCountry);
+        setStates(State.getStatesOfCountry(country.isoCode));
+    };
+
+    // Custom onChange handler for the state select element
+    const handleStateChange = (event) => {
+        const selectedState = event.target.value;
+        formik.setFieldValue('state', selectedState);
+        const state = State.getAllStates().find(state => state.name === selectedState);
+        const cities = City.getCitiesOfState(state.countryCode, state.isoCode);
+        setCities(cities);
     }
 
     return (
@@ -78,7 +102,6 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                             <div className='addy_container'>
                                 <div className="addy_outer">
                                     <div className="addy_img">
-
                                         <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                         </div>
                                         <h2 className='cmn_fontFamily'>{jsondata.oneStepAway}</h2>
@@ -110,62 +133,108 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                        placeholder={jsondata.addressLine2}/>
                                             </div>
 
+                                            {/**Start Country Fields */}
                                             <div className='form-group'>
-                                                <label>{jsondata.country}<span>*</span> </label>
-                                                <input onChange={formik.handleChange}
-                                                       onBlur={formik.handleBlur}
-                                                       value={formik.values.country} name="country"
-                                                       className="form-control mt-1" type='text'
-                                                       placeholder={jsondata.country}/>
+                                                <label htmlFor="country">Country<span>*</span> </label>
+                                                <select
+                                                    id="country"
+                                                    name="country"
+                                                    onChange={handleCountryChange} // Use the custom onChange handler
+                                                    onBlur={formik.handleBlur}
+                                                    value={formik.values.country}
+                                                    className="form-control mt-1"
+                                                >
+                                                    <option value="">Select Country</option>
+                                                    {countries?.map((country) => (
+                                                        <option key={country.name} value={country.name}>
+                                                            {country.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
                                                 {formik.touched.country && formik.errors.country ? (
                                                     <p className="error_message">{formik.errors.country}</p>
                                                 ) : null}
-
                                             </div>
+
+                                            {/** End Country Fields */}
+
 
                                             <div className="row">
 
+                                                {/** Start States Fields */}
+
                                                 <div className='col-lg-6'>
                                                     <div className='form-group'>
-                                                        <label>{jsondata.state}<span>*</span> </label>
-                                                        <input onChange={formik.handleChange}
-                                                               onBlur={formik.handleBlur}
-                                                               value={formik.values.state} name="state"
-                                                               className="form-control mt-1" type='text'
-                                                               placeholder={jsondata.state}/>
+                                                        <label htmlFor="state">State<span>*</span> </label>
+                                                        <select
+                                                            id="state"
+                                                            name="state"
+                                                            onChange={handleStateChange}
+                                                            onBlur={formik.handleBlur}
+                                                            value={formik.values.state}
+                                                            className="form-control mt-1"
+                                                        >
+                                                            <option value="">Select State</option>
+                                                            {states?.map((state) => (
+                                                                <option key={state.name} value={state.name}>
+                                                                    {state.name}
+                                                                </option>
+                                                            ))}
+                                                        </select>
                                                         {formik.touched.state && formik.errors.state ? (
                                                             <p className="error_message">{formik.errors.state}</p>
                                                         ) : null}
                                                     </div>
                                                 </div>
 
+                                                {/** End States Fields */}
+
+                                                {/** Start City Fields */}
                                                 <div className='col-lg-6'>
                                                     <div className='form-group'>
-                                                        <label>{jsondata.city}</label>
-                                                        <input onChange={formik.handleChange}
-                                                               onBlur={formik.handleBlur}
-                                                               value={formik.values.city} name="city"
-                                                               className="form-control mt-1" type='text'
-                                                               placeholder={jsondata.city}/>
+                                                        <label htmlFor="city">City</label>
+                                                        <select
+                                                            id="city"
+                                                            name="city"
+                                                            onChange={formik.handleChange}
+                                                            onBlur={formik.handleBlur}
+                                                            value={formik.values.city}
+                                                            className="form-control mt-1"
+                                                        >
+                                                            <option value="">Select City</option>
+                                                            {cities?.map((city, index) => (
+                                                                <option key={index} value={city.isoCode}>
+                                                                    {city.name}
+                                                                </option>
+                                                            ))}
+                                                        </select>
                                                     </div>
                                                 </div>
+                                                {/** End City Fields */}
 
 
                                                 <div className='col-lg-6'>
-                                                    <div className='rememberPass_outer mt-2'>
-                                                        <div className='form-group'>
-                                                            <label>{jsondata.county}<span>*</span> </label>
-                                                            <input onChange={formik.handleChange}
-                                                                   onBlur={formik.handleBlur}
-                                                                   value={formik.values.county} name="county"
-                                                                   className="form-control mt-1" type='text'
-                                                                   placeholder={jsondata.county}/>
-                                                            {formik.touched.county && formik.errors.county ? (
-                                                                <p className="error_message">{formik.errors.county}</p>
-                                                            ) : null}
-                                                        </div>
+                                                    <div className='form-group'>
+                                                        <label htmlFor="city">County<span>*</span></label>
+                                                        <select
+                                                            id="county"
+                                                            name="county"
+                                                            onChange={formik.handleChange}
+                                                            onBlur={formik.handleBlur}
+                                                            value={formik.values.county}
+                                                            className="form-control mt-1"
+                                                        >
+                                                            <option value="">Select County</option>
+                                                            {cities?.map((city, index) => (
+                                                                <option key={index} value={city.isoCode}>
+                                                                    {city.name}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                        {formik.touched.county && formik.errors.county ? (
+                                                            <p className="error_message">{formik.errors.county}</p>
+                                                        ) : null}
                                                     </div>
-
                                                 </div>
 
                                                 <div className='col-lg-6'>
@@ -180,8 +249,11 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                 </div>
 
 
-                                                <div>
-                                                    {/* <Button text={"Previous"} loading={false} type="" handleOnClickFunction={handlePreviousTab}/> */}
+                                                <div className='col-lg-6'>
+                                                    <Button text={"Previous"} loading={false} type=""
+                                                            handleOnClickFunction={handlePreviousTab}/>
+                                                </div>
+                                                <div className='col-lg-6'>
                                                     <Button type={"Submit"} text={jsondata.signUp}
                                                             loading={signUpReducer?.loading}/>
                                                 </div>
