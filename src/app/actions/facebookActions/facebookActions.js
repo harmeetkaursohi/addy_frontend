@@ -51,15 +51,6 @@ export const getFacebookConnectedPages = createAsyncThunk('facebook/getFacebookC
     });
 });
 
-export const getFacebookUserInfo = createAsyncThunk('facebook/getFacebookUserInfo', async (data, thunkAPI) => {
-    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/me`, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
-
 
 
 
