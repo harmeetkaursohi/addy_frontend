@@ -53,8 +53,11 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
         },
     });
 
-    const handlePreviousTab = () => {
-        setFormData(formData);
+    const handlePreviousTab = (e) => {
+        e.preventDefault();
+        setFormData((prevState) => {
+            return {...prevState, formData}
+        });
         setShowTab((prev) => prev - 1);
     }
 
@@ -251,7 +254,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                                                 <div className='col-lg-6'>
                                                     <Button text={"Previous"} loading={false} type=""
-                                                            handleOnClickFunction={handlePreviousTab}/>
+                                                            handleOnClickFunction={(e) => handlePreviousTab(e)}/>
                                                 </div>
                                                 <div className='col-lg-6'>
                                                     <Button type={"Submit"} text={jsondata.signUp}

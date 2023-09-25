@@ -5,11 +5,10 @@ import jsondata from "../../../../locales/data/initialdata.json";
 import {validationSchemas} from "../../../../utils/commonUtils.js";
 import {useFormik} from "formik";
 import Button from "../../../common/components/Button";
-import React from 'react'
+import React, {useEffect} from 'react'
 
 
-
-const UserInfo = ({formData,setFormData, setShowTab}) => {
+const UserInfo = ({formData, setFormData, setShowTab}) => {
 
     const formik = useFormik({
         initialValues: {
@@ -17,21 +16,39 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
             email: "",
             industry: "",
             contactNo: "",
-          
+            fullName: ""
         },
         validationSchema: validationSchemas.register,
         onSubmit: (values) => {
-            setFormData({...formData, username : values.username , email : values.email,industry : values.industry , contactNo : values.contactNo });
+            setFormData({
+                ...formData,
+                fullName: values.fullName,
+                username: values.username,
+                email: values.email,
+                industry: values.industry,
+                contactNo: values.contactNo
+            });
             setShowTab(2);
         },
     });
 
-     const blockInvalidChar = e => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault();
+    useEffect(() => {
+        if (formData) {
+            formik.setFieldValue("username", formData.username);
+            formik.setFieldValue("email", formData.email);
+            formik.setFieldValue("industry", formData.industry);
+            formik.setFieldValue("contactNo", formData.contactNo);
+            formik.setFieldValue("fullName", formData.fullName);
+        }
+    }, [formData]);
+
+
+    const blockInvalidChar = e => ['e', 'E', '+', '-'].includes(e.key) && e.preventDefault();
 
     return (
         <>
             <section className='Container'>
-              
+
                 <div className="login_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12 ">
@@ -55,15 +72,33 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
                             <div className='addy_container'>
                                 <div className="addy_outer">
                                     <div className="addy_img">
-                                    <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
-                                    </div>
+                                        <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
+                                        </div>
                                         <h2 className='cmn_fontFamily'>Create New Account</h2>
-                                        {/*<p className="pt-2">Lorem Ipsum is simply dummy text of the printing and type*/}
-                                        {/*    setting industry.</p>*/}
                                     </div>
                                     <div className='login_form'>
 
                                         <form onSubmit={formik.handleSubmit}>
+
+                                            <div className='form-group'>
+                                                <label>Full Name</label>
+
+                                                <input
+                                                    name="fullName"
+                                                    className="form-control mt-1"
+                                                    type='text'
+                                                    placeholder='Full Name'
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                    value={formik.values.fullName}
+                                                />
+
+                                                {formik.touched.fullName && formik.errors.fullName ? (
+                                                    <p className="error_message">{formik.errors.fullName}</p>
+                                                ) : null}
+
+                                            </div>
+
 
                                             <div className='form-group'>
                                                 <label>{jsondata.username}</label>
@@ -141,7 +176,7 @@ const UserInfo = ({formData,setFormData, setShowTab}) => {
 
                                                 </div>
 
-                                              <Button type={"Submit"} text={jsondata.next}/>
+                                                <Button type={"Submit"} text={jsondata.next}/>
                                             </div>
                                         </form>
                                         <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to="/login"><span
