@@ -15,6 +15,7 @@ export const validationSchemas = {
     }),
 
     register: yup.object().shape({
+        fullName: yup.string().required('Full Name is required'),
         username: yup.string().required('Username is required'),
         email: yup.string().required('Email is required').email('Invalid email format'),
         contactNo: yup.number().required('Contact No is required')

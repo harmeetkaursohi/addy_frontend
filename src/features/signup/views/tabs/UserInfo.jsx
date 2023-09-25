@@ -81,7 +81,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                         <form onSubmit={formik.handleSubmit}>
 
                                             <div className='form-group'>
-                                                <label>Full Name</label>
+                                                <label>Full Name <span>*</span> </label>
 
                                                 <input
                                                     name="fullName"
@@ -101,7 +101,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
 
 
                                             <div className='form-group'>
-                                                <label>{jsondata.username}</label>
+                                                <label>{jsondata.username} <span>*</span></label>
 
                                                 <input
                                                     name="username"
@@ -120,7 +120,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                             </div>
 
                                             <div className='form-group'>
-                                                <label>{jsondata.email}</label>
+                                                <label>{jsondata.email} <span>*</span></label>
                                                 <input
                                                     name="email"
                                                     className="form-control mt-1"
@@ -150,11 +150,6 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.industry}
                                                     />
-
-                                                    {formik.touched.industry && formik.errors.industry ? (
-                                                        <p className="error_message">{formik.errors.industry}</p>
-                                                    ) : null}
-
                                                 </div>
 
                                                 <div className='form-group'>
@@ -169,11 +164,6 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                         onKeyDown={blockInvalidChar}
                                                         value={formik.values.contactNo}
                                                     />
-
-                                                    {formik.touched.contactNo && formik.errors.contactNo ? (
-                                                        <p className="error_message">{formik.errors.contactNo}</p>
-                                                    ) : null}
-
                                                 </div>
 
                                                 <Button type={"Submit"} text={jsondata.next}/>
