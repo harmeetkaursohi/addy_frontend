@@ -6,6 +6,7 @@ const Signup = () => {
 
     const [showTab, setShowTab] = useState(1);
     const [formData, setFormData] = useState({
+        fullName: "",
         username: "",
         email: "",
         contactNo: "",
@@ -22,7 +23,6 @@ const Signup = () => {
             pinCode: ""
         }
     });
-
 
     return (
         <>
