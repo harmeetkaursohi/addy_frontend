@@ -287,7 +287,6 @@ const Dashboard = () => {
                                                              onClick={() => setFacebookDropDown(!facebookDropDown)}>
                                                             <path id="Icon"
                                                                   d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                                                  d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
                                                                   stroke="#5F6D7E" strokeWidth="1.67"
                                                                   strokeLinecap="round"/>
                                                         </svg>

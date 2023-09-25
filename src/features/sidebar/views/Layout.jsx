@@ -4,10 +4,10 @@ import profile_img from '../../../images/profile_img.png'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
 import './Layout.css'
-import {sidebarMenuItems} from '../sidebarMenu'
 import axios from "axios";
 import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth.js";
 import {showErrorToast} from "../../common/components/Toast.jsx";
+import {SidebarMenuItems} from "../SidebarMenu.jsx";
 
 const Layout = () => {
 
@@ -69,7 +69,7 @@ const Layout = () => {
                     </div>
                     <ul className='sidebar_item'>
                         {
-                            sidebarMenuItems?.map((item, index) => (
+                            SidebarMenuItems &&  SidebarMenuItems?.map((item, index) => (
                                 <li key={index}
                                     className={item.path === '/' + splitLocation[1] ? "sidebar_container_items sidebar_item_outer bar text-center" : 'sidebar_item_outer'}
                                     onClick={() => {

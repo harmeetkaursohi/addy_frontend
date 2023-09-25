@@ -1,5 +1,5 @@
-import "./loader.css"
-import laoderImg from "../../images/loading-gif.gif"
+import "./Loader.css"
+
 const Loader = () => {
 
     return (

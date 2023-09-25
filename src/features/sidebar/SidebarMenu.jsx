@@ -1,3 +1,4 @@
+import React from 'react';
 import { BsTelephone } from "react-icons/bs";
 import { BsHouseLock } from "react-icons/bs";
 import { BsExclamationSquare } from "react-icons/bs";
@@ -8,7 +9,7 @@ import { AiOutlinePicture } from "react-icons/ai";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 
-export const sidebarMenuItems = [
+export const SidebarMenuItems = [
     {
         "name": "Home",
         "path": "/dashboard",

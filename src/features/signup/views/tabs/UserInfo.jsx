@@ -5,6 +5,8 @@ import jsondata from "../../../../locales/data/initialdata.json";
 import {validationSchemas} from "../../../../utils/commonUtils.js";
 import {useFormik} from "formik";
 import Button from "../../../common/components/Button";
+import React from 'react'
+
 
 
 const UserInfo = ({formData,setFormData, setShowTab}) => {
