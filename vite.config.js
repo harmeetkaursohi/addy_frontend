@@ -7,6 +7,10 @@ dotenv.config({
     path: `.env.${process.env.NODE_ENV || 'development'}`,
 });
 
+const PORT = process.env.PORT;
+const VITE_HMR_HOST = process.env.VITE_HMR_HOST;
+const VITE_HMR_PORT = process.env.VITE_HMR_PORT;
+const VITE_HMR_PROTOCOL = process.env.VITE_HMR_PROTOCOL;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,11 +18,11 @@ export default defineConfig({
         react(),
     ],
     server: {
-        port: Number(process.env.PORT || 5143),
+        port: Number(PORT || 5143),
         hmr: {
-            host: "localhost",
-            port: Number(process.env.PORT || 5143),
-            protocol: "wss",
+            host: VITE_HMR_HOST,
+            port: Number(VITE_HMR_PORT),
+            protocol: VITE_HMR_PROTOCOL,
         },
         watch: {
             usePolling: true
