@@ -1,49 +1,24 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {useLocation, useNavigate} from "react-router-dom"
 import profile_img from '../../../images/profile_img.png'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
 import './Layout.css'
-import axios from "axios";
-import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth.js";
-import {showErrorToast} from "../../common/components/Toast.jsx";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
 
-const Layout = () => {
+const Layout = ({userData}) => {
 
     const [sidebar, setSidebar] = useState(true);
-    const [userData, setUserData] = useState(null);
-
-    const token = getToken();
-
-    useEffect(() => {
-        if (token) {
-            const decodeJwt = decodeJwtToken(token);
-            axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${decodeJwt.customerId}`, setAuthenticationHeader(token)).then(res => {
-                setUserData({
-                    username: res.data.username,
-                    fullName: res.data.fullName,
-                    profilePic: res.data.profilePic,
-                    email: res.data.email,
-                })
-                return res.data;
-            }).catch(error => {
-                showErrorToast(error.response.data.message);
-                return thunkAPI.rejectWithValue(error.response);
-            });
-        }
-    }, []);
-
-
-    const show_sidebar = () => {
-        setSidebar(!sidebar)
-    }
-
     const navigate = useNavigate();
     const location = useLocation();
     const {pathname} = location;
     //Javascript split method to get the name of the path in array
     const splitLocation = pathname.split("/");
+
+    const show_sidebar = () => {
+        setSidebar(!sidebar)
+    }
+
     const LogOut = () => {
         localStorage.removeItem("token")
         navigate("/login")

@@ -29,9 +29,13 @@ const Header = (props) => {
                                     <button className="Create_Ad_btn crate_btn">
                                         {jsondata.createad}
                                     </button>
-                                    <Link to="/post" className="createPost_btn crate_btn cmn_btn_color">
-                                        {jsondata.createpost}
-                                    </Link>
+
+                                    {
+                                        props?.socialAccount?.status === "connected" &&
+                                        <Link to="/post" className="createPost_btn crate_btn cmn_btn_color">
+                                            {jsondata.createpost}
+                                        </Link>
+                                    }
                                 </div>
                             </div>
                         </div>

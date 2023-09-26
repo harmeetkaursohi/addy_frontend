@@ -8,7 +8,6 @@ import tiktok_img from '../../../images/tiktok.svg'
 import twitter_img from '../../../images/twitter.svg'
 import instagram_img from '../../../images/instagram.png'
 import linkedin_img from '../../../images/linkedin.svg'
-import right_arrow_icon from '../../../images/right_arrow_icon.svg'
 import Chart from "../../react_chart/views/Chart.jsx";
 import UpcomingPost from "../../upcomingPost/views/UpcomingPost.jsx";
 import jsondata from '../../../locales/data/initialdata.json'
@@ -38,6 +37,7 @@ const Dashboard = () => {
     const [userData, setUserData] = useState(null);
     const dispatch = useDispatch();
     const token = getToken();
+    const [socialAccount, setSocialAccount] = useState(null);
 
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
     const facebookPageLoading = useSelector(state => state.facebook.getFacebookPageReducer.loading);
@@ -121,10 +121,10 @@ const Dashboard = () => {
 
     return (
         <>
-            <SideBar/>
+            <SideBar userData={userData}/>
             <div className="cmn_container">
                 <div className="cmn_wrapper_outer">
-                    <Header userData={userData}/>
+                    <Header userData={userData} socialAccount={socialAccount}/>
                     <div className="dashboard_outer">
                         <div className="row">
                             <div className="col-lg-8 col-md-12 col-sm-12">
@@ -226,8 +226,6 @@ const Dashboard = () => {
 
                                     <div className="social_media_account">
                                         <h3>{jsondata.socialAccount}</h3>
-                                        <h6>{jsondata.seemore}<img src={right_arrow_icon} height="11px" width="11px"/>
-                                        </h6>
                                     </div>
 
                                     {/*facebook connect starts */}
@@ -248,7 +246,8 @@ const Dashboard = () => {
                                                 appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                                 redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                                 onResolve={(response) => {
-                                                    console.log("fb response", response)
+                                                    console.log("fb response", response.status)
+                                                    setSocialAccount(response);
                                                     connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
                                                 }}
                                                 onReject={(error) => {
