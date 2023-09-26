@@ -5,10 +5,10 @@ import jsondata from "../../../../locales/data/initialdata.json"
 import {useFormik} from "formik"
 import {validationSchemas} from "../../../../utils/commonUtils"
 import {useDispatch, useSelector} from "react-redux"
-import {signUpUser} from "../../../../app/actions/userActions/userActions"
 import Button from "../../../common/components/Button"
 import React, {useEffect, useState} from "react";
 import {Country, State, City} from 'country-state-city';
+import {signUpUser} from "../../../../app/actions/userActions/userActions";
 
 const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
@@ -48,10 +48,25 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                 pinCode: values.pinCode
             }
 
-            dispatch(signUpUser({...formData, address: addressObj, navigate}))
-
+            dispatch(signUpUser({...formData, address: addressObj, navigate})).then((response) => {
+                formik.resetForm();
+                setFormData(resetUserInfo)
+            }).catch((error) => {
+                formik.resetForm();
+                setFormData(resetUserInfo)
+            })
         },
     });
+
+    const resetUserInfo = {
+        fullName: "",
+        username: "",
+        email: "",
+        contactNo: "",
+        industry: "",
+        isAccountNonLocked: false,
+        isEnabled: false
+    }
 
     const handlePreviousTab = (e) => {
         e.preventDefault();

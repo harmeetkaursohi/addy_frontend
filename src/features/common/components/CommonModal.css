@@ -6,9 +6,11 @@
     border-bottom: 1px solid #CBCBCB;
     align-items: center;
 }
-.Connectmodal_btn{
-    background-color: #C0C0C0;
+
+.Connectmodal_btn {
+    background-color: #F07C33;
 }
+
 .modal_inner_content:first-child {
     padding-top: 4px;
 }
@@ -55,13 +57,16 @@ div.modal-content {
     padding-bottom: 16px !important;
     align-items: baseline !important;
 }
-div.commonmodal_header{
+
+div.commonmodal_header {
     width: 100%;
 }
+
 .users_name h2 {
     font-size: 22px;
     line-height: initial;
 }
+
 .users_name p {
     font-size: 14px;
     line-height: 21px;
@@ -69,23 +74,101 @@ div.commonmodal_header{
     margin-top: 5px;
 
 }
-.user_info_container{
+
+.user_info_container {
     display: flex;
-   align-items: center;
+    align-items: center;
     gap: 20px;
 }
+
 .facebook_title h2 {
     font-size: 22px;
 }
+
 .users_profile img {
     border-radius: 24px;
     height: 100px;
     width: 100px;
 }
+
 .connect_btn_outer button {
     min-width: 92px;
     height: 35px;
     padding: 8px 12px;
+}
+
+.default-button {
+    background-color: orange;
+    color: white;
+}
+
+.connected-button {
+    background-color: #e24a4a;
+    color: white;
+}
+
+.disabled-button {
+    background-color: gray;
+    color: white;
+}
+
+/*26 sep*/
+.modal_inner_content.disconnect_wrapper .users_profile,
+.modal_inner_content.disconnect_wrapper
+h2.cmn_text_style,
+.modal_inner_content.disconnect_wrapper
+button, .modal_inner_content.disconnect_wrapper
+.users_name p {
+    position: relative;
+    opacity: 0.41;
+}
+
+/*media QUERY*/
+@media (max-width: 1699px) {
+    .users_profile img {
+        height: 70px;
+        width: 70px;
+    }
+
+    .users_name h2 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 1440px) {
+    .users_profile img {
+        height: 60px;
+        width: 60px;
+        border-radius: 10px;
+    }
+
+    .users_name h2 {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 991px) {
+    .users_profile img {
+        height: 50px;
+        width: 50px;
+    }
+
+    .users_name h2 {
+        font-size: 16px;
+        line-height: initial;
+    }
+}
+
+@media (max-width: 567px) {
+    .modal_inner_content {
+        display: flex;
+        justify-content: space-between;
+        gap: 0px;
+    }
+
+    .facebook_content_outer {
+        padding: 0px;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -95,6 +178,11 @@ div.commonmodal_header{
 
     .modal_inner_content {
         flex-wrap: wrap;
-        padding-bottom: 11px;
+        padding-bottom: 15px;
+    }
+
+    .user_info_container {
+        flex-grow: 1;
+        width: 100%;
     }
 }

@@ -8,7 +8,7 @@ const ConfirmModal = ({
                           confirmModalAction = null,
                           icon = "",
                           title = "",
-                          confirmMessage = "",
+                          confirmMessage = ""
                       }) => {
 
     const handleClose = () => setShowConfirmModal(false);

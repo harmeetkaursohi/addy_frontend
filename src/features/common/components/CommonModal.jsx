@@ -72,21 +72,20 @@ const CommonModal = ({
                             <div className=''>
                                 {allPagesList?.map((data, index) => {
                                     return (
-                                        <div key={index} className="modal_inner_content">
+                                        <div key={index} className={`modal_inner_content ${(currentConnectedPages?.includes(data?.id) ? '' : (currentConnectedPages.length > 0 ? 'disconnect_wrapper' : ''))}`}>
                                             <div className="user_info_container">
                                                 <div className='users_profile'>
                                                     <img src={data.picture.data.url}/>
                                                 </div>
                                                 <div className='users_name'>
-                                                    <h2 className='cmn_text_style'>{data.name}</h2>
+                                                    <h2 className={`cmn_text_style ${currentConnectedPages?.includes(data?.id) ? 'text-success' : ''}`}>{data.name}</h2>
                                                     {data.about && <p className="cmn_text_style mb-0">{data.about}</p>}
                                                 </div>
                                             </div>
 
                                             <div className='connect_btn_outer'>
                                                 <button
-                                                    style={{background: currentConnectedPages?.includes(data?.id) ? "#E24A4A" : ""}}
-                                                    className='Connectmodal_btn cmn_connect_btn connect_btn connect_btn '
+                                                    className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : (currentConnectedPages.length > 0 ? 'disabled-button' : 'default-button')}`}
                                                     onClick={(e) => {
                                                         setMediaPageData(data);
                                                         setShowConfirmModal(true);

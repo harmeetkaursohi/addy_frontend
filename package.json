@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
     "start:local": "NODE_ENV=local vite",
     "start:dev": "NODE_ENV=dev vite",
     "start:prod": "NODE_ENV=prod vite",
@@ -41,6 +43,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.4.2",
     "slick-carousel": "^1.8.1",
+    "sweetalert2": "^11.7.31",
     "yup": "^1.2.0"
   },
   "devDependencies": {

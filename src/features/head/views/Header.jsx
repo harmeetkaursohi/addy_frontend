@@ -2,8 +2,13 @@ import search_icon from "../../../images/search_icon.svg"
 import jsondata from "../../../locales/data/initialdata.json"
 import './Header.css'
 import {Link} from "react-router-dom";
+import {useEffect, useState} from "react";
 
-const Header = (props) => {
+const Header = ({userData, getAllConnectedSocialAccountData}) => {
+
+    console.log("@@@ getAllConnectedSocialAccountData getAllConnectedSocialAccountData", getAllConnectedSocialAccountData)
+    console.log("@@@ Length ", getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length)
+
     return (
         <>
             <header>
@@ -13,7 +18,7 @@ const Header = (props) => {
                             <div className="col-lg-5 col-md-12 col-sm-12">
                                 <div className="header_outer_container">
                                     <div className="header_container">
-                                        <h2 className="">{`${jsondata.heythere} ${props?.userData?.fullName}!`}</h2>
+                                        <h2 className="">{`${jsondata.heythere} ${userData?.fullName}!`}</h2>
                                         <h6>Welcome back to your all in Dashboard and more text here!</h6>
                                     </div>
                                 </div>
@@ -31,11 +36,12 @@ const Header = (props) => {
                                     </button>
 
                                     {
-                                        props?.socialAccount?.status === "connected" &&
+                                        (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) &&
                                         <Link to="/post" className="createPost_btn crate_btn cmn_btn_color">
                                             {jsondata.createpost}
                                         </Link>
                                     }
+
                                 </div>
                             </div>
                         </div>

@@ -255,6 +255,7 @@ element.style {
     padding: 16px 0px;
     margin-top: 12px;
     border-bottom: 1px solid #C6D2E0;
+    cursor:pointer;
 }
 .social_media_outer:first-child{
     border-bottom: unset;

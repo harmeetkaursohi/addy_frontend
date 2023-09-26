@@ -37,7 +37,6 @@ const Dashboard = () => {
     const [userData, setUserData] = useState(null);
     const dispatch = useDispatch();
     const token = getToken();
-    const [socialAccount, setSocialAccount] = useState(null);
 
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
     const facebookPageLoading = useSelector(state => state.facebook.getFacebookPageReducer.loading);
@@ -119,12 +118,14 @@ const Dashboard = () => {
         setShowConfirmModal(true)
     }
 
+    console.log("socialAccount", socialAccountConnectData);
+
     return (
         <>
             <SideBar userData={userData}/>
             <div className="cmn_container">
                 <div className="cmn_wrapper_outer">
-                    <Header userData={userData} socialAccount={socialAccount}/>
+                    <Header userData={userData} getAllConnectedSocialAccountData={getAllConnectedSocialAccountData}/>
                     <div className="dashboard_outer">
                         <div className="row">
                             <div className="col-lg-8 col-md-12 col-sm-12">
@@ -246,13 +247,11 @@ const Dashboard = () => {
                                                 appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                                 redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                                 onResolve={(response) => {
-                                                    console.log("fb response", response.status)
-                                                    setSocialAccount(response);
+                                                    console.log("fb response", response)
                                                     connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
                                                 }}
                                                 onReject={(error) => {
-                                                }}
-                                            >
+                                                }}>
 
                                                 <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
                                                                      icon={() => null} preventActiveStyles={true}
@@ -276,7 +275,8 @@ const Dashboard = () => {
                                         <div className=" cmn_drop_down dropdown">
                                             <div className="dropdown_header">
                                                 <div className="social_media_outer">
-                                                    <div className="social_media_content">
+                                                    <div className="social_media_content"
+                                                         onClick={() => setFacebookDropDown(!facebookDropDown)}>
                                                         <img className="cmn_width" src={fb_img}/>
                                                         <div className="text-start">
                                                             <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
@@ -450,6 +450,7 @@ const Dashboard = () => {
                     icon={"warning"}
                     title={"Are you sure ?"}
                     confirmMessage={"You want to disconnect from facebook account ?"}
+
                 />}
         </>
     )
