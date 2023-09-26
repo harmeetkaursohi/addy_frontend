@@ -22,6 +22,7 @@ const Layout = () => {
             axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${decodeJwt.customerId}`, setAuthenticationHeader(token)).then(res => {
                 setUserData({
                     username: res.data.username,
+                    fullName: res.data.fullName,
                     profilePic: res.data.profilePic,
                     email: res.data.email,
                 })
@@ -60,16 +61,16 @@ const Layout = () => {
                         <div className='user_profile_wrapper'>
                             <img
                                 src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : profile_img}
-                                 className='profile_img'/>
+                                className='profile_img'/>
                             <div>
-                                <h3 className='profile_container'>{userData?.username || "username"}</h3>
+                                <h3 className='profile_container'>{userData?.fullName || "name"}</h3>
                                 <h4 className="profile_container">{userData?.email || "abc@demo.com"}</h4>
                             </div>
                         </div>
                     </div>
                     <ul className='sidebar_item'>
                         {
-                            SidebarMenuItems &&  SidebarMenuItems?.map((item, index) => (
+                            SidebarMenuItems && SidebarMenuItems?.map((item, index) => (
                                 <li key={index}
                                     className={item.path === '/' + splitLocation[1] ? "sidebar_container_items sidebar_item_outer bar text-center" : 'sidebar_item_outer'}
                                     onClick={() => {

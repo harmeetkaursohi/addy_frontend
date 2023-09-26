@@ -13,7 +13,7 @@ const Header = (props) => {
                             <div className="col-lg-5 col-md-12 col-sm-12">
                                 <div className="header_outer_container">
                                     <div className="header_container">
-                                        <h2 className="">{`${jsondata.heythere} ${props?.userData?.username}!`}</h2>
+                                        <h2 className="">{`${jsondata.heythere} ${props?.userData?.fullName}!`}</h2>
                                         <h6>Welcome back to your all in Dashboard and more text here!</h6>
                                     </div>
                                 </div>

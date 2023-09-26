@@ -60,6 +60,7 @@ const Dashboard = () => {
             axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${decodeJwt.customerId}`, setAuthenticationHeader(token)).then(res => {
                 setUserData({
                     username: res.data.username,
+                    fullName: res.data.fullName,
                     profilePic: res.data.profilePic,
                     email: res.data.email,
                 })

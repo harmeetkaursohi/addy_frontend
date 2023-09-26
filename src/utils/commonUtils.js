@@ -25,7 +25,6 @@ export const validationSchemas = {
         password: yup.string()
             .min(8, 'Password must be at least 8 characters')
             .required('Password is required'),
-        // .matches(passwordPattern, 'Password must meet the specified criteria'),
         confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
             .required('Confirm Password is required'),
 
@@ -86,7 +85,6 @@ export const cleanAndValidateRequestURL = (baseUrl, path, fields, token) => {
 
 
 export const facebookPageConnectAction = (dispatch,token, facebookData) => {
-    console.log("---->",token)
     const decodeJwt = decodeJwtToken(token);
     if (facebookData) {
         const requestBody = {
@@ -101,7 +99,6 @@ export const facebookPageConnectAction = (dispatch,token, facebookData) => {
             token: token
         }
         dispatch(facebookPageConnect(requestBody)).then((response) => {
-            console.log(response)
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
         }).catch((error) => {
             console.log("--->error", error)

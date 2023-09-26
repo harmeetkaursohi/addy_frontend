@@ -1,5 +1,12 @@
 import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react-swc'
+import dotenv from 'dotenv';
+
+// Load environment variables from the appropriate .env.local file
+dotenv.config({
+    path: `.env.${process.env.NODE_ENV || 'development'}`,
+});
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,10 +14,10 @@ export default defineConfig({
         react(),
     ],
     server: {
-        port: 5173,
+        port: Number(process.env.PORT || 5143),
         hmr: {
             host: "localhost",
-            port: 5173,
+            port: Number(process.env.PORT || 5143),
             protocol: "wss",
         },
         watch: {
