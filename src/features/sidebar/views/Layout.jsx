@@ -1,23 +1,42 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useLocation, useNavigate} from "react-router-dom"
 import profile_img from '../../../images/profile_img.png'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
 import './Layout.css'
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
+import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth";
+import axios from "axios";
+import {showErrorToast} from "../../common/components/Toast";
+import {getUserInfo} from "../../../app/actions/userActions/userActions";
+import {useDispatch, useSelector} from "react-redux";
 
-const Layout = ({userData}) => {
+const Layout = () => {
 
     const [sidebar, setSidebar] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
     const {pathname} = location;
-    //Javascript split method to get the name of the path in array
     const splitLocation = pathname.split("/");
+    const token = getToken();
+    const dispatch = useDispatch();
+    const userData = useSelector(state => state.user.userInfoReducer.data);
 
     const show_sidebar = () => {
         setSidebar(!sidebar)
     }
+
+    useEffect(() => {
+        if (token && !userData) {
+            const decodeJwt = decodeJwtToken(token);
+            const requestBody = {
+                customerId: decodeJwt.customerId,
+                token: token
+            }
+            dispatch(getUserInfo(requestBody))
+        }
+    }, [token, dispatch, userData])
+
 
     const LogOut = () => {
         localStorage.removeItem("token")
@@ -25,6 +44,7 @@ const Layout = ({userData}) => {
     }
 
     return (
+
         <>
             <section className='sidebar_container'>
                 <div className={sidebar ? "sidebar_content sidebar_wrapper" : "sidebar_wrapper"}>

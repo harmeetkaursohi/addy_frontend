@@ -1,5 +1,5 @@
 import {useFormik} from 'formik';
-import React from 'react'
+import React, {useEffect} from 'react'
 import {validationSchemas} from "../../utils/commonUtils"
 import jsondata from "../../locales/data/initialdata.json"
 import {useDispatch, useSelector} from "react-redux"
@@ -8,10 +8,16 @@ import {Link, useNavigate} from 'react-router-dom';
 import girl_img from "../../images/girl.png";
 import addyads_img from "../../images/addylogo.png";
 
+
 function ForgetPassword() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        document.title = "Forget Password"
+    }, []);
+
 
     const formik = useFormik({
         initialValues: {

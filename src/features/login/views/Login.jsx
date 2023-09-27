@@ -9,12 +9,17 @@ import {useFormik} from 'formik';
 import {useDispatch} from "react-redux";
 import {loginUser} from "../../../app/actions/userActions/userActions.js";
 import {validationSchemas} from "../../../utils/commonUtils.js";
+import {useEffect} from "react";
 
 
 const Login = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        document.title = 'Login';
+    }, []);
 
     const formik = useFormik({
         initialValues: {

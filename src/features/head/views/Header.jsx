@@ -4,10 +4,7 @@ import './Header.css'
 import {Link} from "react-router-dom";
 import {useEffect, useState} from "react";
 
-const Header = ({userData, getAllConnectedSocialAccountData}) => {
-
-    console.log("@@@ getAllConnectedSocialAccountData getAllConnectedSocialAccountData", getAllConnectedSocialAccountData)
-    console.log("@@@ Length ", getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length)
+const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList}) => {
 
     return (
         <>
@@ -36,7 +33,7 @@ const Header = ({userData, getAllConnectedSocialAccountData}) => {
                                     </button>
 
                                     {
-                                        (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) &&
+                                        (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && facebookPageList?.length > 0 &&
                                         <Link to="/post" className="createPost_btn crate_btn cmn_btn_color">
                                             {jsondata.createpost}
                                         </Link>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import "./CreatePassword.css"
 import jsondata from "../../../locales/data/initialdata.json"
 import {useFormik} from 'formik';
@@ -20,6 +20,10 @@ const CreatePassword = () => {
     const userId = queryParamVale.get("id")
     const token = queryParamVale.get("token")
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        document.title = "Create Password"
+    }, []);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);

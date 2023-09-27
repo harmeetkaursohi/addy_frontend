@@ -9,6 +9,7 @@ import Button from "../../../common/components/Button"
 import React, {useEffect, useState} from "react";
 import {Country, State, City} from 'country-state-city';
 import {signUpUser} from "../../../../app/actions/userActions/userActions";
+import {showErrorToast} from "../../../common/components/Toast";
 
 const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
@@ -52,6 +53,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                 formik.resetForm();
                 setFormData(resetUserInfo)
             }).catch((error) => {
+                showErrorToast(error.response.data.message);
                 formik.resetForm();
                 setFormData(resetUserInfo)
             })
@@ -68,6 +70,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
         isEnabled: false
     }
 
+    // handle previous tab
     const handlePreviousTab = (e) => {
         e.preventDefault();
         setFormData((prevState) => {

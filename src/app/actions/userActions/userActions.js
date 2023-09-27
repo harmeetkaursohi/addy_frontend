@@ -2,6 +2,7 @@ import axios from "axios";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {showErrorToast, showSuccessToast} from "../../../features/common/components/Toast";
 import Swal from "sweetalert2";
+import {setAuthenticationHeader} from "../../auth/auth";
 
 
 export const loginUser = createAsyncThunk('user/loginUser', async (data, thunkAPI) => {
@@ -19,7 +20,7 @@ export const signUpUser = createAsyncThunk('user/signUpUser', async (data, thunk
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/auth/register`, data).then(res => {
         Swal.fire({
             icon: 'success',
-            title: 'Success!',
+            title: 'Registration Successful',
             html: `
                  <p>Your registration is complete, and we've sent a confirmation email to your email address</p>
              `,
@@ -54,3 +55,12 @@ export const forgetPassword = createAsyncThunk('user/forgetPassword', async (dat
         return thunkAPI.rejectWithValue(error.response);
     })
 })
+
+export const getUserInfo = createAsyncThunk('user/getUserInfo', async (data, thunkAPI) => {
+    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${data.customerId}`, setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});

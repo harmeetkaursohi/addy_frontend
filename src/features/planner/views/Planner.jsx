@@ -6,8 +6,14 @@ import instagram_img from '../../../images/instagram.png'
 import linkedin from '../../../images/linkedin.svg'
 import jsondata from '../../../locales/data/initialdata.json'
 import {Link} from "react-router-dom";
+import {useEffect} from "react";
 
 const Planner = () => {
+
+    useEffect(() => {
+        document.title = 'Planner';
+    }, []);
+
     const events = [
         {title: 'Instagram post', start: new Date(), imageUrl: instagram_img}, {
             title: "Twitter",

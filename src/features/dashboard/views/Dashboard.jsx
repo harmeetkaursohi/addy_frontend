@@ -25,25 +25,29 @@ import {
     socialAccountConnectActions
 } from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
-import ConfirmModal from "../../common/components/ConfirmModal.jsx";
 import axios from "axios";
 import {showErrorToast} from "../../common/components/Toast.jsx";
+import Swal from "sweetalert2";
+import {getUserInfo} from "../../../app/actions/userActions/userActions";
 
 const Dashboard = () => {
 
     const [showFacebookModal, setShowFacebookModal] = useState(false)
-    const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [facebookDropDown, setFacebookDropDown] = useState(false)
-    const [userData, setUserData] = useState(null);
     const dispatch = useDispatch();
     const token = getToken();
 
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
     const facebookPageLoading = useSelector(state => state.facebook.getFacebookPageReducer.loading);
     const facebookConnectedPages = useSelector(state => state.facebook.getFacebookConnectedPagesReducer.facebookConnectedPages);
-
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+    const userData = useSelector(state => state.user.userInfoReducer.data);
+
+    useEffect(() => {
+        document.title = 'Dashboard';
+    }, []);
+
 
     useEffect(() => {
         if (token) {
@@ -54,22 +58,16 @@ const Dashboard = () => {
 
 
     useEffect(() => {
-        if (token) {
+        if (token && !userData) {
             const decodeJwt = decodeJwtToken(token);
-            axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${decodeJwt.customerId}`, setAuthenticationHeader(token)).then(res => {
-                setUserData({
-                    username: res.data.username,
-                    fullName: res.data.fullName,
-                    profilePic: res.data.profilePic,
-                    email: res.data.email,
-                })
-                return res.data;
-            }).catch(error => {
-                showErrorToast(error.response.data.message);
-                return thunkAPI.rejectWithValue(error.response);
-            });
+            const requestBody = {
+                customerId: decodeJwt.customerId,
+                token: token
+            }
+            dispatch(getUserInfo(requestBody))
         }
-    }, []);
+    }, [token, dispatch, userData]);
+
 
     useEffect(() => {
         if ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
@@ -98,34 +96,54 @@ const Dashboard = () => {
             })
         }).catch((error) => {
             console.log("--->error", error)
+            showErrorToast(error.response.data.message);
         })
     }
 
     const disConnectSocialMediaAccountToCustomer = () => {
-        const decodeJwt = decodeJwtToken(token);
-        dispatch(disconnectSocialAccountAction({
-            customerId: decodeJwt?.customerId,
-            socialAccountId: getAllConnectedSocialAccountData?.data?.find(c => c.provider === "FACEBOOK")?.id,
-            token: token
-        })).then(() => {
-            dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt?.customerId, token: token}))
-        }).catch((error) => {
-            console.log("--->error", error)
+        Swal.fire({
+            icon: 'warning',
+            title: 'Disconnect Facebook Account',
+            text: 'Are you sure you want to disconnect your Facebook account?',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const decodeJwt = decodeJwtToken(token);
+                dispatch(disconnectSocialAccountAction({
+                    customerId: decodeJwt?.customerId,
+                    socialAccountId: getAllConnectedSocialAccountData?.data?.find(c => c.provider === "FACEBOOK")?.id,
+                    token: token
+                })).then((response) => {
+                    dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt?.customerId, token: token}));
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Facebook Account Disconnected',
+                        text: 'Your Facebook account has been disconnected successfully.',
+                    });
+                }).catch((error) => {
+                    console.error('Error disconnecting Facebook account:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while disconnecting your Facebook account. Please try again later.',
+                    });
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire('Cancelled', 'Your Facebook account is still connected.', 'info');
+            }
         });
-    }
 
-    const confirmModalHandler = () => {
-        setShowConfirmModal(true)
     }
-
-    console.log("socialAccount", socialAccountConnectData);
 
     return (
         <>
-            <SideBar userData={userData}/>
+            <SideBar/>
             <div className="cmn_container">
                 <div className="cmn_wrapper_outer">
-                    <Header userData={userData} getAllConnectedSocialAccountData={getAllConnectedSocialAccountData}/>
+                    <Header userData={userData} getAllConnectedSocialAccountData={getAllConnectedSocialAccountData}
+                            facebookPageList={facebookPageList}/>
                     <div className="dashboard_outer">
                         <div className="row">
                             <div className="col-lg-8 col-md-12 col-sm-12">
@@ -323,19 +341,20 @@ const Dashboard = () => {
 
                                                         }
                                                         <li>
-                                                            <div className="connectDisconnect_btn_outer">
-                                                                <button className="DisConnectBtn  cmn_connect_btn"
-                                                                        disabled={getAllConnectedSocialAccountData?.loading}
-                                                                        onClick={() => {
-                                                                            confirmModalHandler()
-                                                                        }}
-                                                                >
-                                                                    Disconnect
-                                                                </button>
-                                                                <button className="ConnectBtn cmn_connect_btn"
-                                                                        onClick={() => facebook()}>Connect More
-                                                                </button>
-                                                            </div>
+                                                            {
+                                                                (facebookPageList && facebookPageList?.length > 0) &&
+                                                                <div className="connectDisconnect_btn_outer">
+                                                                    <button className="DisConnectBtn cmn_connect_btn"
+                                                                            onClick={() => disConnectSocialMediaAccountToCustomer()}>
+                                                                        Disconnect
+                                                                    </button>
+                                                                    <button className="ConnectBtn cmn_connect_btn"
+                                                                            onClick={() => facebook()}>
+                                                                        Connect More
+                                                                    </button>
+                                                                </div>
+
+                                                            }
                                                         </li>
                                                     </ul>}
 
@@ -441,17 +460,6 @@ const Dashboard = () => {
                 <FacebookModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal}
                                facebookPageList={facebookPageList}
                                facebookConnectedPages={facebookConnectedPages}/>}
-
-            {showConfirmModal &&
-                <ConfirmModal
-                    confirmModalAction={disConnectSocialMediaAccountToCustomer}
-                    setShowConfirmModal={setShowConfirmModal}
-                    showConfirmModal={showConfirmModal}
-                    icon={"warning"}
-                    title={"Are you sure ?"}
-                    confirmMessage={"You want to disconnect from facebook account ?"}
-
-                />}
         </>
     )
 }
