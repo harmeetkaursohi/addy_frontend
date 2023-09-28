@@ -1,14 +1,12 @@
 import './CreatePost.css'
 import ai_icon from '../../../images/ai_icon.svg'
 import instagram_img from '../../../images/instagram.png'
-import upload_video_img from '../../../images/video_img.svg'
-import upload_img from '../../../images/post_image.svg'
 import jsondata from '../../../locales/data/initialdata.json'
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
 import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
-import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth.js";
+import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import {Dropdown} from 'react-bootstrap'
@@ -19,9 +17,9 @@ import SideBar from "../../sidebar/views/Layout.jsx";
 import {BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
-import axios from "axios";
-import {showErrorToast} from "../../common/components/Toast.jsx";
 import {createFacebookPostAction} from "../../../app/actions/postActions/postActions.js";
+import {getUserInfo} from "../../../app/actions/userActions/userActions";
+import {RiDeleteBin5Fill} from "react-icons/ri";
 
 const CreatePost = () => {
 
@@ -42,31 +40,25 @@ const CreatePost = () => {
     const [selectedOptionLabels, setSelectedOptionLabels] = useState([]);
     const [selectAllCheckBox, setSelectAllCheckBox] = useState(false);
     const [socialAccountData, setSocialAccountData] = useState([]);
-    const [userData, setUserData] = useState(null);
     const [files, setFiles] = useState([]);
     const [selectedFileType, setSelectedFileType] = useState("");
     const [disableFileButton, setDisableFileButton] = useState(false);
     const [disableVideoButton, setDisableVideoButton] = useState(false);
 
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
+    const userData = useSelector(state => state.user.userInfoReducer.data);
 
 
     useEffect(() => {
-        if (token) {
+        if (token && !userData) {
             const decodeJwt = decodeJwtToken(token);
-            axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${decodeJwt.customerId}`, setAuthenticationHeader(token)).then(res => {
-                setUserData({
-                    username: res.data.username,
-                    profilePic: res.data.profilePic,
-                    email: res.data.email,
-                })
-                return res.data;
-            }).catch(error => {
-                showErrorToast(error.response.data.message);
-                return thunkAPI.rejectWithValue(error.response);
-            });
+            const requestBody = {
+                customerId: decodeJwt.customerId,
+                token: token
+            }
+            dispatch(getUserInfo(requestBody))
         }
-    }, []);
+    }, [token, dispatch, userData]);
 
     useEffect(() => {
         if (socialAccounts) {
@@ -94,7 +86,7 @@ const CreatePost = () => {
 
             socialAccountData.map(el => {
                 el.pageAccessToken.map(obj => {
-                    if (obj.id === option.id) {
+                    if (obj.pageId === option.id) {
                         obj.selected = false;
                         el.selected = false;
                     }
@@ -122,7 +114,7 @@ const CreatePost = () => {
                 selected: false,
                 pageAccessToken: socialAccount?.pageAccessToken?.map((page) => ({
                     ...page,
-                    selected: page?.selected === undefined ? page.id === option.id : (page.id === option.id ? true : page.selected)
+                    selected: page?.selected === undefined ? page.pageId === option.id : (page.pageId === option.id ? true : page.selected)
                 })) || [],
             }));
 
@@ -150,7 +142,7 @@ const CreatePost = () => {
 
             socialAccountData.map(el => {
                 el.pageAccessToken.map(obj => {
-                    if (obj.id === option.id) {
+                    if (obj.pageId === option.id) {
                         obj.selected = false;
                         el.selected = false;
                     }
@@ -171,28 +163,23 @@ const CreatePost = () => {
         const userInfo = decodeJwtToken(token);
         const combinedDateTimeString = `${scheduleDate}T${scheduleTime}:00`;
         const scheduleDateTime = new Date(combinedDateTimeString);
-
         const requestBody = {
             token: token,
             customerId: userInfo?.customerId,
             postRequestDto: {
-                attachments: [{
-                    mediaType: selectedFileType,
-                    file: files[0],
-                    pageId: "115612628302302"
-                }],
+                attachments: files.map((file) => ({mediaType: selectedFileType, file: file})),
                 hashTag: hashTag,
                 caption: caption,
                 scheduleDate: scheduleDateTime,
                 boostPost: boostPost,
+                pageIds: selectedOptionLabels.map((obj) => obj.id)
             }
         }
 
         console.log("requestBody", requestBody)
 
         dispatch(createFacebookPostAction(requestBody));
-        handleReset();
-
+        // handleReset();
     }
 
     const handleReset = () => {
@@ -234,12 +221,12 @@ const CreatePost = () => {
                 if (el.pageAccessToken != null && el.pageAccessToken.length > 0) {
                     el.pageAccessToken.forEach(option => {
                         let obj = {
-                            id: option.id,
+                            id: option.pageId,
                             label: option.name,
                             imageUrl: option.imageUrl
                         }
                         selectedOptionLabels.push(obj);
-                        selectedOptions.push(option.id);
+                        selectedOptions.push(option.pageId);
                         setSelectedOptionLabels(selectedOptionLabels);
                         setSelectedOptions(selectedOptions);
                     })
@@ -255,6 +242,25 @@ const CreatePost = () => {
         const uploadedFiles = Array.from(e.target.files);
         setFiles([...files, ...uploadedFiles]);
     }
+
+    // const checkDimensions = (imgUrl) => {
+    //     const img = new Image();
+    //     img.src = imgUrl;
+    //     img.onload = () => {
+    //         const width = img.naturalWidth;
+    //         const height = img.naturalHeight;
+    //
+    //         console.log(width, height)
+    //
+    //         // if (width > 200 || height > 200) {
+    //         //     // Image dimensions are larger than the maximum allowed
+    //         //     // You can either return false to prevent the image from being uploaded
+    //         //     // or display an error message to the user
+    //         //     return false;
+    //         // }
+    //         // return true;
+    //     }
+    // }
 
 
     return (
@@ -396,7 +402,7 @@ const CreatePost = () => {
                                                                                             name={page.name}
                                                                                             checked={page?.selected === true}
                                                                                             onChange={(e) => toggleOption({
-                                                                                                id: page.id,
+                                                                                                id: page.pageId,
                                                                                                 label: page.name,
                                                                                                 imageUrl: page?.imageUrl
                                                                                             }, e)}
@@ -422,13 +428,30 @@ const CreatePost = () => {
 
                                         </div>
 
-                                        {/* add media */
-                                        }
+                                        {/* add media */}
                                         <div className="media_outer">
                                             <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                             <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+                                            <div className="drag_scroll">
+                                                {files?.map((file, index) => {
+                                                        console.log("file--->",file);
+                                                        return (
+                                                            <div className="file_outer dragable_files" key={index}>
+                                                                <div className="flex-grow-1">
+                                                                    <img className={"upload_image"}
+                                                                         src={URL.createObjectURL(file)}
+                                                                         alt={`Image ${index}`}/>
+                                                                </div>
+                                                                <button className="delete_upload">
+                                                                    <RiDeleteBin5Fill style={{fontSize: '24px'}}/>
+                                                                </button>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
 
-                                            <div className="file_outer">
+                                            <div className="darg_navs file_outer">
                                                 <div
                                                     className={disableFileButton ? "disable_color add_media_outer" : "cmn_blue_border add_media_outer"}>
                                                     <input type="file" id='image'
@@ -448,23 +471,24 @@ const CreatePost = () => {
                                                     </label>
                                                 </div>
 
-                                                <div
-                                                    className={`${disableVideoButton ? "disable_color add_media_outer" : 'cmn_blue_border add_media_outer'}`}>
-                                                    <input
-                                                        type="file"
-                                                        id='video'
-                                                        disabled={disableVideoButton}
-                                                        onChange={(e) => {
-                                                            setSelectedFileType("VIDEO");
-                                                            setDisableFileButton(true);
-                                                            handleSelectedFile(e);
-                                                        }}/>
-                                                    <label htmlFor='video' className='cmn_headings'>
-                                                        <i className="fa fa-video-camera" style={{marginTop: "2px"}}/>Add
-                                                        Video
-                                                    </label>
-                                                </div>
-
+                                                {
+                                                    !disableVideoButton && <div
+                                                        className={`${disableVideoButton ? "disable_color add_media_outer" : 'cmn_blue_border add_media_outer'}`}>
+                                                        <input
+                                                            type="file"
+                                                            id='video'
+                                                            disabled={disableVideoButton}
+                                                            onChange={(e) => {
+                                                                setSelectedFileType("VIDEO");
+                                                                setDisableFileButton(true);
+                                                                handleSelectedFile(e);
+                                                            }}/>
+                                                        <label htmlFor='video' className='cmn_headings'>
+                                                            <i className="fa fa-video-camera" style={{marginTop: "2px"}}/>Add
+                                                            Video
+                                                        </label>
+                                                    </div>
+                                                }
                                             </div>
 
                                             <h2 className='cmn_heading'>{jsondata.OR}</h2>
@@ -617,6 +641,7 @@ const CreatePost = () => {
                                                        files={files}
                                                        selectedFileType={selectedFileType}
                                                        caption={caption}
+                                                       hashTag={hashTag}
 
                                     />
                                 </div>

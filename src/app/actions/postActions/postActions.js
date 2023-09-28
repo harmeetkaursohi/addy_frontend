@@ -12,15 +12,20 @@ export const createFacebookPostAction = createAsyncThunk('post/createFacebookPos
     formData.append('boostPost', data.postRequestDto.boostPost);
     formData.append('scheduleDate', data.postRequestDto.scheduleDate);
 
+    data.postRequestDto.pageIds.forEach((pageId, index) => {
+        formData.append(`pageIds[${index}]`, pageId);
+    });
+
     // Loop through the attachments array and append each attachment's data.
     data.postRequestDto.attachments.forEach((attachment, index) => {
         formData.append(`attachments[${index}].mediaType`, attachment.mediaType);
         formData.append(`attachments[${index}].file`, attachment.file);
-        formData.append(`attachments[${index}].pageId`, attachment.pageId);
     });
 
+
+
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.customerId}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
-        showSuccessToast("Post Uploaded Success")
+        showSuccessToast("Post has uploaded successfully")
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

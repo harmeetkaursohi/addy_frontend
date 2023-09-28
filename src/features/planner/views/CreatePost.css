@@ -724,6 +724,44 @@ button.disabledButton {
     color: white; /* Change the text color to white or any color you prefer */
     cursor: not-allowed; /* Change the cursor to indicate that the button is disabled */
 }
+button.delete_upload {
+    padding: 5px 10px;
+    border-radius: 4px;
+    background: white;
+    border: 1px solid #38a2f7;
+}
+.upload_image {
+    border-radius: 10px;
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    object-position: top;
+}
+.darg_navs.file_outer .add_media_outer {
+    padding: 10px;
+}
+.file_outer.dragable_files {
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    transition: ease all .3s;
+    background: #fff;
+    border-radius: 6px;
 
+}
+.dragable_files:hover{
+    background-color: #eee;
+}
+.file_outer.dragable_files>div {
+    width: 100%;
+}
 
+.drag_scroll {
+    max-height: 344px;
+    overflow: auto;
+    margin-top: 15px;
+}
 
+.drag_scroll .dragable_files:first-child {
+    margin-top: 0px;
+}

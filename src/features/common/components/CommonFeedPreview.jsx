@@ -7,7 +7,7 @@ import React from "react";
 import CommonSlider from "./CommonSlider.jsx";
 
 
-const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType,caption}) => {
+const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType,caption,hashTag}) => {
 
     return (
         <>
@@ -26,7 +26,8 @@ const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFil
                     </div>
                 </div>
 
-                <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption}/>
+
+                <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
 
                 <div className='like_comment_outer'>
                     <div className="fb_likes">

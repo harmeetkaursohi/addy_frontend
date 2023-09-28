@@ -1,10 +1,15 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import AddressInfo from './tabs/AddressInfo';
 import UserInfo from './tabs/UserInfo';
 
 const Signup = () => {
 
     const [showTab, setShowTab] = useState(1);
+
+    useEffect(() => {
+        document.title = 'Signup';
+    }, []);
+
     const [formData, setFormData] = useState({
         fullName: "",
         username: "",
