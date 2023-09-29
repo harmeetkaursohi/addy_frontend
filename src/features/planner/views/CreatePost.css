@@ -85,6 +85,7 @@ overflow-y:scroll;
 .unselectedpages{
     border: 1px solid #E0E0E0;
     background: #FFF;
+    cursor: pointer;
 }
 
 .checkbox-button_outer {
@@ -728,7 +729,7 @@ button.delete_upload {
     padding: 5px 10px;
     border-radius: 4px;
     background: white;
-    border: 1px solid #38a2f7;
+    border: 1px solid #dde1e4;
 }
 .upload_image {
     border-radius: 10px;
@@ -755,7 +756,10 @@ button.delete_upload {
 .file_outer.dragable_files>div {
     width: 100%;
 }
-
+.file_dimention_text {
+    color: rgba(28,43,51,1);
+    font-size: 14px;
+}
 .drag_scroll {
     max-height: 344px;
     overflow: auto;
@@ -763,5 +767,5 @@ button.delete_upload {
 }
 
 .drag_scroll .dragable_files:first-child {
-    margin-top: 0px;
+    margin-top: 0;
 }

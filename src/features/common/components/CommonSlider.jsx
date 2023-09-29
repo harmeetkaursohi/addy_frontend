@@ -18,14 +18,13 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag}) => {
     return (
         <>
             <Slider {...settings} >
-
                 {
                     (selectedFileType === "IMAGE") &&
 
                     files?.map((file, index) => (
                         <div key={index}>
                             <p className="caption_text">{`${caption} ${hashTag}`}</p>
-                            <img src={URL.createObjectURL(file)} alt={`Image ${index}`} className='post_img'/>
+                            <img src={file.url} alt={`Image ${index}`} className='post_img'/>
                         </div>
                     ))
                 }
@@ -35,7 +34,7 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag}) => {
 
                     files?.map((file, index) => (
                         <div key={index}>
-                            <video src={URL.createObjectURL(file)} alt={`Videos ${index}`} className='post_img'
+                            <video src={file.url} alt={`Videos ${index}`} className='post_img'
                                    autoPlay={true}/>
                         </div>
                     ))

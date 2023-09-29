@@ -1,6 +1,5 @@
 import './CreatePost.css'
 import ai_icon from '../../../images/ai_icon.svg'
-import instagram_img from '../../../images/instagram.png'
 import jsondata from '../../../locales/data/initialdata.json'
 import React, {useEffect, useState} from "react";
 import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
@@ -10,9 +9,6 @@ import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import {Dropdown} from 'react-bootstrap'
-import facebook_img from '../../../images/fb.svg'
-import linkedin_img from '../../../images/linkedin.svg'
-import twitter_img from '../../../images/twitter.svg'
 import SideBar from "../../sidebar/views/Layout.jsx";
 import {BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
@@ -20,6 +16,11 @@ import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
 import {createFacebookPostAction} from "../../../app/actions/postActions/postActions.js";
 import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {RiDeleteBin5Fill} from "react-icons/ri";
+import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
+import {useNavigate} from "react-router-dom";
+import {checkDimensions, checkVideoDimensions, convertToUnixTimestamp} from "../../../utils/commonUtils";
+import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
+import Button from "../../common/components/Button";
 
 const CreatePost = () => {
 
@@ -33,6 +34,7 @@ const CreatePost = () => {
     const [scheduleTime, setScheduleTime] = useState("");
     const [boostPost, setBoostPost] = useState(false);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const token = getToken();
 
@@ -47,6 +49,7 @@ const CreatePost = () => {
 
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
+    const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading)
 
 
     useEffect(() => {
@@ -157,42 +160,6 @@ const CreatePost = () => {
         }
     }
 
-    const handlePostSubmit = (e) => {
-        e.preventDefault();
-
-        const userInfo = decodeJwtToken(token);
-        const combinedDateTimeString = `${scheduleDate}T${scheduleTime}:00`;
-        const scheduleDateTime = new Date(combinedDateTimeString);
-        const requestBody = {
-            token: token,
-            customerId: userInfo?.customerId,
-            postRequestDto: {
-                attachments: files.map((file) => ({mediaType: selectedFileType, file: file})),
-                hashTag: hashTag,
-                caption: caption,
-                scheduleDate: scheduleDateTime,
-                boostPost: boostPost,
-                pageIds: selectedOptionLabels.map((obj) => obj.id)
-            }
-        }
-
-        console.log("requestBody", requestBody)
-
-        dispatch(createFacebookPostAction(requestBody));
-        // handleReset();
-    }
-
-    const handleReset = () => {
-        setScheduleTime("");
-        setScheduleDate("");
-        setBoostPost(false);
-        setCaption("");
-        setHashTag("");
-        setSelectedOptionLabels([]);
-        setSelectedOptions([]);
-        setFiles([]);
-    }
-
     const handleSelectAllChange = (e) => {
 
         const checked = e.target.checked;
@@ -240,27 +207,108 @@ const CreatePost = () => {
     const handleSelectedFile = (e) => {
         e.preventDefault();
         const uploadedFiles = Array.from(e.target.files);
-        setFiles([...files, ...uploadedFiles]);
+
+        // Create an array of Promises that check dimensions for each uploaded file
+        const dimensionPromises = uploadedFiles.map((file) => checkDimensions(file));
+
+        // Wait for all Promises to resolve
+        Promise.all(dimensionPromises)
+            .then((results) => {
+                setFiles([...files, ...results]);
+            })
+            .catch((error) => {
+                console.error("Error checking dimensions:", error);
+            });
     }
 
-    // const checkDimensions = (imgUrl) => {
-    //     const img = new Image();
-    //     img.src = imgUrl;
-    //     img.onload = () => {
-    //         const width = img.naturalWidth;
-    //         const height = img.naturalHeight;
-    //
-    //         console.log(width, height)
-    //
-    //         // if (width > 200 || height > 200) {
-    //         //     // Image dimensions are larger than the maximum allowed
-    //         //     // You can either return false to prevent the image from being uploaded
-    //         //     // or display an error message to the user
-    //         //     return false;
-    //         // }
-    //         // return true;
-    //     }
-    // }
+    const handleSelectedVideoFile = (e) => {
+        e.preventDefault();
+
+        const uploadedVideoFiles = Array.from(e.target.files);
+
+        const dimensionPromises = uploadedVideoFiles.map((file) => checkVideoDimensions(file));
+
+        // Wait for all Promises to resolve
+        Promise.all(dimensionPromises)
+            .then((results) => {
+                console.log(results);
+                setFiles([...files, ...results]);
+            })
+            .catch((error) => {
+                console.error("Error checking dimensions:", error);
+            });
+
+    }
+
+    const handleRemoveSelectFile = (fileToRemove) => {
+        const updatedFiles = files.filter((file) => file.url !== fileToRemove.url);
+        setFiles(updatedFiles);
+    };
+
+    const handleDragStart = (e, file) => {
+        e.dataTransfer.setData('file', JSON.stringify(file));
+    };
+
+    const handleDrop = (e, index) => {
+        e.preventDefault();
+        const draggedFile = JSON.parse(e.dataTransfer.getData('file'));
+        const oldIndex = files.findIndex((file) => file.url === draggedFile.url);
+
+        if (oldIndex === -1) {
+            return;
+        }
+        const updatedFiles = [...files];
+        updatedFiles.splice(oldIndex, 1);
+        updatedFiles.splice(index, 0, draggedFile);
+
+        updatedFiles.forEach((file, index) => {
+            file.position = index;
+        });
+        setFiles(updatedFiles);
+    };
+
+    const createPost = (e, postStatus, scheduleDate, scheduleTime) => {
+        e.preventDefault();
+        const userInfo = decodeJwtToken(token);
+
+        const requestBody = {
+            token: token,
+            customerId: userInfo?.customerId,
+            postRequestDto: {
+                attachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
+                hashTag: hashTag,
+                caption: caption,
+                postStatus: postStatus,
+                boostPost: boostPost,
+                pageIds: selectedOptionLabels?.map((obj) => obj.id),
+                scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+            },
+        };
+
+        console.log("@@@ requestBody ", requestBody)
+
+        dispatch(createFacebookPostAction(requestBody)).then((response) => {
+            if (response.meta.requestStatus == "fulfilled") {
+                showSuccessToast("Post has uploaded successfully");
+                navigate("/planner");
+            }
+        }).catch((error) => {
+            showErrorToast(error.response.data.message);
+        });
+
+    };
+
+    const handlePostSubmit = (e) => {
+        createPost(e, 'PUBLISHED');
+    };
+
+    const handleDraftPost = (e) => {
+        createPost(e, 'DRAFT');
+    };
+
+    const handleSchedulePost = (e) => {
+        createPost(e, 'SCHEDULED', scheduleDate, scheduleTime);
+    };
 
 
     return (
@@ -279,33 +327,36 @@ const CreatePost = () => {
                                     <form onSubmit={handlePostSubmit}>
 
                                         <div className="createPost_outer">
-                                            <label className='create_post_label'>{jsondata.mediaPlatform}</label>
+                                            <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
 
 
                                             {/*    dropdown select platform=====*/}
                                             <Dropdown className='insta_dropdown_btn mt-2'>
                                                 <Dropdown.Toggle id="instagram"
                                                                  className="instagram_dropdown tabs_grid">
-                                                    {selectedOptionLabels.length > 0 ? (
-                                                        selectedOptionLabels.map((data, index) => (
-                                                            <div key={index} className="selected-option">
-                                                                <img src={data.imageUrl} alt={data.label}/>
-                                                                <span>{data.label}</span>
-                                                                <RxCross2 onClick={() => {
-                                                                    handleUncheck(data);
-                                                                }}/>
+                                                    {selectedOptionLabels.length > 0 ?
+                                                        (
+                                                            selectedOptionLabels.map((data, index) => (
+                                                                <div key={index} className="selected-option">
+                                                                    <img src={data.imageUrl} alt={data.label}/>
+                                                                    <span>{data.label}</span>
+                                                                    <RxCross2 onClick={() => {
+                                                                        handleUncheck(data);
+                                                                    }}/>
+                                                                </div>
+                                                            ))
+                                                        )
+                                                        :
+                                                        (
+                                                            <div className="social_inner_content">
+                                                                <div>
+                                                                    <BiUser/>
+                                                                </div>
+                                                                <h6 className="cmn_headings">
+                                                                    Select platform
+                                                                </h6>
                                                             </div>
-                                                        ))
-                                                    ) : (
-                                                        <div className="social_inner_content">
-                                                            <div>
-                                                                <BiUser/>
-                                                            </div>
-                                                            <h6 className="cmn_headings">
-                                                                Select platform
-                                                            </h6>
-                                                        </div>
-                                                    )}
+                                                        )}
                                                 </Dropdown.Toggle>
 
 
@@ -342,47 +393,10 @@ const CreatePost = () => {
                                                                                        checked={(socialAccount && socialAccount?.selected) ? socialAccount?.selected : false}
                                                                                        onChange={handleSelectAllChange}
                                                                                 />
-                                                                                {
-                                                                                    socialAccount && socialAccount.provider === "FACEBOOK" &&
-                                                                                    <>
-                                                                                        <img src={facebook_img}
-                                                                                             height="20px"
-                                                                                             width="20px"/>
-                                                                                        <h3 className="cmn_headings">{socialAccount.provider.toLowerCase()}</h3>
-                                                                                    </>
-                                                                                }
 
-                                                                                {
-                                                                                    socialAccount && socialAccount.provider === "INSTAGRAM" &&
-                                                                                    <>
-                                                                                        <img src={instagram_img}
-                                                                                             height="20px"
-                                                                                             width="20px"/>
-                                                                                        <h3 className="cmn_headings">{socialAccount.provider.toLowerCase()}</h3>
-                                                                                    </>
-                                                                                }
-
-                                                                                {
-                                                                                    socialAccount && socialAccount.provider === "LINKEDIN" &&
-                                                                                    <>
-                                                                                        <img src={linkedin_img}
-                                                                                             height="20px"
-                                                                                             width="20px"/>
-                                                                                        <h3 className="cmn_headings">{socialAccount.provider.toLowerCase()}</h3>
-                                                                                    </>
-                                                                                }
-
-                                                                                {
-                                                                                    socialAccount && socialAccount.provider === "TWITTER" &&
-                                                                                    <>
-                                                                                        <img src={twitter_img}
-                                                                                             height="20px"
-                                                                                             width="20px"/>
-                                                                                        <h3 className="cmn_headings">{socialAccount.provider.toLowerCase()}</h3>
-                                                                                    </>
-
-
-                                                                                }
+                                                                                {socialAccount &&
+                                                                                    <SocialMediaProviderBadge
+                                                                                        provider={socialAccount.provider}/>}
 
                                                                             </div>
 
@@ -390,7 +404,14 @@ const CreatePost = () => {
                                                                                 socialAccount?.pageAccessToken?.map((page, index) => (
                                                                                     <div
                                                                                         className="instagramPages unselectedpages"
-                                                                                        key={index}>
+                                                                                        key={index}
+                                                                                        style={{background: page?.selected === true ? "rgb(215 244 215)" : ""}}
+                                                                                        onClick={(e) => toggleOption({
+                                                                                            id: page.pageId,
+                                                                                            label: page.name,
+                                                                                            imageUrl: page?.imageUrl
+                                                                                        }, e)}
+                                                                                    >
                                                                                         <div
                                                                                             className="checkbox-button_outer">
                                                                                             <img src={page?.imageUrl}/>
@@ -434,20 +455,41 @@ const CreatePost = () => {
                                             <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
                                             <div className="drag_scroll">
                                                 {files?.map((file, index) => {
-                                                        console.log("file--->",file);
-                                                        return (
-                                                            <div className="file_outer dragable_files" key={index}>
-                                                                <div className="flex-grow-1">
-                                                                    <img className={"upload_image"}
-                                                                         src={URL.createObjectURL(file)}
+                                                    return (
+                                                        <div
+                                                            className="file_outer dragable_files"
+                                                            key={index}
+                                                            draggable="true"
+                                                            onDragStart={(e) => handleDragStart(e, file)}
+                                                            onDrop={(e) => handleDrop(e, index)}
+                                                            onDragOver={(e) => e.preventDefault()}
+                                                        >
+                                                            <div className="flex-grow-1 d-flex align-items-center">
+                                                                <i className="fas fa-grip-vertical me-2"></i>
+                                                                {
+                                                                    file.file.type.startsWith('image/') &&
+                                                                    <img className={"upload_image me-3"} src={file.url}
                                                                          alt={`Image ${index}`}/>
-                                                                </div>
-                                                                <button className="delete_upload">
-                                                                    <RiDeleteBin5Fill style={{fontSize: '24px'}}/>
-                                                                </button>
+                                                                }
+                                                                {
+                                                                    file.file.type.startsWith('video/') &&
+                                                                    <video className={"upload_image me-3"}
+                                                                           src={file.url} alt={`Videos ${index}`}
+                                                                           autoPlay={true}/>
+                                                                }
+                                                                <span
+                                                                    className="file_dimention_text">{`${file.dimension.width}X${file.dimension.height}`}</span>
                                                             </div>
-                                                        )
-                                                    })
+                                                            <button className="delete_upload">
+                                                                <RiDeleteBin5Fill style={{fontSize: '24px'}}
+                                                                                  onClick={(e) => {
+                                                                                      e.preventDefault();
+                                                                                      handleRemoveSelectFile(file);
+                                                                                  }}/>
+                                                            </button>
+                                                        </div>
+                                                    )
+                                                })
                                                 }
                                             </div>
 
@@ -459,6 +501,7 @@ const CreatePost = () => {
                                                            multiple
                                                            name={'file'}
                                                            disabled={disableFileButton}
+                                                           accept={"image/png, image/jpeg"}
                                                            onChange={(e) => {
                                                                setSelectedFileType("IMAGE")
                                                                setDisableVideoButton(true);
@@ -472,19 +515,20 @@ const CreatePost = () => {
                                                 </div>
 
                                                 {
-                                                    !disableVideoButton && <div
-                                                        className={`${disableVideoButton ? "disable_color add_media_outer" : 'cmn_blue_border add_media_outer'}`}>
+                                                    <div className="cmn_blue_border add_media_outer">
                                                         <input
                                                             type="file"
                                                             id='video'
                                                             disabled={disableVideoButton}
+                                                            accept={"video/mp4,video/x-m4v,video/*"}
                                                             onChange={(e) => {
                                                                 setSelectedFileType("VIDEO");
                                                                 setDisableFileButton(true);
-                                                                handleSelectedFile(e);
+                                                                handleSelectedVideoFile(e);
                                                             }}/>
                                                         <label htmlFor='video' className='cmn_headings'>
-                                                            <i className="fa fa-video-camera" style={{marginTop: "2px"}}/>Add
+                                                            <i className="fa fa-video-camera"
+                                                               style={{marginTop: "2px"}}/>Add
                                                             Video
                                                         </label>
                                                     </div>
@@ -512,7 +556,7 @@ const CreatePost = () => {
                                         <div className='post_caption_outer media_outer'>
                                             <div className='caption_header'>
                                                 <h5 className='post_heading create_post_text'>Add
-                                                    Post Caption</h5>
+                                                    Post Caption *</h5>
 
                                                 <button className="ai_btn cmn_white_text"
                                                         onClick={(e) => {
@@ -535,7 +579,7 @@ const CreatePost = () => {
                                             </div>
                                             <div className='caption_header hashtag_outer'>
                                                 <h5 className='post_heading create_post_text'>Add
-                                                    Hashtag</h5>
+                                                    Hashtag *</h5>
 
                                                 <button className="ai_btn cmn_white_text"
                                                         onClick={(e) => {
@@ -559,18 +603,20 @@ const CreatePost = () => {
 
                                         </div>
 
-                                        {/* schedule */
-                                        }
+                                        {/* schedule */}
                                         <div className='schedule_outer media_outer'>
+
                                             <div className='schedule_btn_outer'>
                                                 <h5 className='create_post_text post_heading'>{jsondata.setSchedule}</h5>
                                                 <div className='schedule_btn_wrapper'>
-                                                    <button
-                                                        className='cmn_bg_btn schedule_btn '>{jsondata.schedule}</button>
-                                                    <button
-                                                        className='save_btn cmn_bg_btn'>{jsondata.saveasdraft}</button>
+                                                    <button className='cmn_bg_btn schedule_btn'
+                                                            onClick={handleSchedulePost}>{jsondata.schedule}</button>
+                                                    <button className='save_btn cmn_bg_btn'
+                                                            onClick={handleDraftPost}>{jsondata.saveasdraft}</button>
                                                 </div>
                                             </div>
+
+
                                             <div className='schedule_date_outer'>
 
                                                 <div className='date_time_outer'>
@@ -600,8 +646,7 @@ const CreatePost = () => {
                                             </div>
                                         </div>
 
-                                        {/* boost post */
-                                        }
+                                        {/* boost post */}
                                         <div className='publish_post_outer media_outer'>
 
                                             <div className="form-check form-switch">
@@ -614,17 +659,16 @@ const CreatePost = () => {
                                                            setBoostPost(!boostPost);
                                                        }}
                                                 />
-                                                <label
-                                                    className="form-check-label create_post_label boost_post_text"
-                                                    htmlFor="flexSwitchCheckChecked">Boost
-                                                    Post</label>
+                                                <label className="form-check-label create_post_label boost_post_text"
+                                                       htmlFor="flexSwitchCheckChecked">Boost Post</label>
                                             </div>
 
                                             <div className='cancel_publish_btn_outer'>
-                                                <button
-                                                    className='cancel_btn cmn_bg_btn'>{jsondata.cancel}</button>
+                                                <button className='cancel_btn cmn_bg_btn'>{jsondata.cancel}</button>
                                                 <button
                                                     className='publish_btn cmn_bg_btn'>{jsondata.publishnow}</button>
+
+                                                {/*<Button/>*/}
                                             </div>
                                         </div>
 
