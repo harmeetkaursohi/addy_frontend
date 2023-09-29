@@ -769,3 +769,11 @@ button.delete_upload {
 .drag_scroll .dragable_files:first-child {
     margin-top: 0;
 }
+button.loading {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    justify-content: center;
+}
+
+

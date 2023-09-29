@@ -149,5 +149,15 @@ export function convertToUnixTimestamp(scheduleDate, scheduleTime) {
 }
 
 
+// Function to validate schedule date and time
+export const validateScheduleDateAndTime = (scheduleDate, scheduleTime) => {
+    const inputDateTime = new Date(`${scheduleDate}T${scheduleTime}`);
+    const currentDate = new Date();
+    const minAllowedDate = new Date(currentDate.getTime() + 10 * 60000);
+    return (inputDateTime >= minAllowedDate)
+};
+
+
+
 
 

@@ -18,9 +18,14 @@ import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {RiDeleteBin5Fill} from "react-icons/ri";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
-import {checkDimensions, checkVideoDimensions, convertToUnixTimestamp} from "../../../utils/commonUtils";
+import {
+    checkDimensions,
+    checkVideoDimensions,
+    convertToUnixTimestamp,
+    validateScheduleDateAndTime
+} from "../../../utils/commonUtils";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
-import Button from "../../common/components/Button";
+import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 
 const CreatePost = () => {
 
@@ -46,6 +51,7 @@ const CreatePost = () => {
     const [selectedFileType, setSelectedFileType] = useState("");
     const [disableFileButton, setDisableFileButton] = useState(false);
     const [disableVideoButton, setDisableVideoButton] = useState(false);
+    const [reference, setReference] = useState("");
 
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
@@ -271,6 +277,13 @@ const CreatePost = () => {
         e.preventDefault();
         const userInfo = decodeJwtToken(token);
 
+        if (scheduleDate && scheduleTime) {
+            if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
+                showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
+                return;
+            }
+        }
+
         const requestBody = {
             token: token,
             customerId: userInfo?.customerId,
@@ -284,8 +297,6 @@ const CreatePost = () => {
                 scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
             },
         };
-
-        console.log("@@@ requestBody ", requestBody)
 
         dispatch(createFacebookPostAction(requestBody)).then((response) => {
             if (response.meta.requestStatus == "fulfilled") {
@@ -608,11 +619,23 @@ const CreatePost = () => {
 
                                             <div className='schedule_btn_outer'>
                                                 <h5 className='create_post_text post_heading'>{jsondata.setSchedule}</h5>
-                                                <div className='schedule_btn_wrapper'>
-                                                    <button className='cmn_bg_btn schedule_btn'
-                                                            onClick={handleSchedulePost}>{jsondata.schedule}</button>
-                                                    <button className='save_btn cmn_bg_btn'
-                                                            onClick={handleDraftPost}>{jsondata.saveasdraft}</button>
+                                                <div className='schedule_btn_wrapper d-flex'>
+
+                                                    <GenericButtonWithLoader label={jsondata.schedule}
+                                                                             onClick={(e) => {
+                                                                                 setReference("Scheduled")
+                                                                                 handleSchedulePost(e);
+                                                                             }}
+                                                                             className={"cmn_bg_btn schedule_btn loading"}
+                                                                             isLoading={reference === "Scheduled" && loadingCreateFacebookPost}/>
+
+                                                    <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                                             onClick={(e) => {
+                                                                                 setReference("Draft")
+                                                                                 handleDraftPost(e);
+                                                                             }}
+                                                                             className={"save_btn cmn_bg_btn loading"}
+                                                                             isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
                                                 </div>
                                             </div>
 
@@ -663,12 +686,19 @@ const CreatePost = () => {
                                                        htmlFor="flexSwitchCheckChecked">Boost Post</label>
                                             </div>
 
-                                            <div className='cancel_publish_btn_outer'>
-                                                <button className='cancel_btn cmn_bg_btn'>{jsondata.cancel}</button>
-                                                <button
-                                                    className='publish_btn cmn_bg_btn'>{jsondata.publishnow}</button>
+                                            <div className='cancel_publish_btn_outer d-flex'>
+                                                <button className='cancel_btn cmn_bg_btn' onClick={(e) => {
+                                                    e.preventDefault();
+                                                    console.log("Cancel")
+                                                }}>{jsondata.cancel}</button>
 
-                                                {/*<Button/>*/}
+                                                <GenericButtonWithLoader label={jsondata.publishnow}
+                                                                         onClick={(e) => {
+                                                                             setReference("Published")
+                                                                             handlePostSubmit(e);
+                                                                         }}
+                                                                         className={"publish_btn cmn_bg_btn loading"}
+                                                                         isLoading={reference === "Published" && loadingCreateFacebookPost}/>
                                             </div>
                                         </div>
 
