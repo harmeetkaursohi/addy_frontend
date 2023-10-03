@@ -107,40 +107,6 @@ export const facebookPageConnectAction = (dispatch, token, facebookData) => {
     }
 }
 
-
-export const checkVideoDimensions = (file) => {
-    return new Promise((resolve, reject) => {
-        const mediaElement = document.createElement("video");
-        const videoUrl = URL.createObjectURL(file);
-        mediaElement.src = videoUrl;
-
-        mediaElement.onloadedmetadata = () => {
-            const width = mediaElement.videoWidth;
-            const height = mediaElement.videoHeight;
-            resolve({file: file, dimension: {width: width, height: height}, url: videoUrl});
-        };
-        mediaElement.onerror = (error) => {
-            reject(error);
-        };
-    });
-};
-
-export const checkDimensions = (file) => {
-    return new Promise((resolve, reject) => {
-        const img = new Image();
-        const imageUrl = URL.createObjectURL(file);
-        img.src = imageUrl;
-        img.onload = () => {
-            const width = img.naturalWidth;
-            const height = img.naturalHeight;
-            resolve({file: file, dimension: {width: width, height: height}, url: imageUrl});
-        };
-        img.onerror = (error) => {
-            reject(error);
-        };
-    });
-};
-
 // Define a function to convert combined date and time string to Unix timestamp
 export function convertToUnixTimestamp(scheduleDate, scheduleTime) {
     const combinedDateTimeString = `${scheduleDate}T${scheduleTime}:00`;
@@ -168,6 +134,43 @@ export const validateScheduleDateAndTime = (postStatus, scheduleDate, scheduleTi
         return;
     }
 };
+
+export const checkDimensions = (file) => {
+
+    if (file.type.startsWith('image/')) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            const imageUrl = URL.createObjectURL(file);
+            img.src = imageUrl;
+            img.onload = () => {
+                const width = img.naturalWidth;
+                const height = img.naturalHeight;
+                resolve({file: file, dimension: {width: width, height: height}, url: imageUrl});
+            };
+            img.onerror = (error) => {
+                reject(error);
+            };
+        });
+    }
+
+    if (file.type.startsWith('video/')) {
+        return new Promise((resolve, reject) => {
+            const mediaElement = document.createElement("video");
+            const videoUrl = URL.createObjectURL(file);
+            mediaElement.src = videoUrl;
+
+            mediaElement.onloadedmetadata = () => {
+                const width = mediaElement.videoWidth;
+                const height = mediaElement.videoHeight;
+                resolve({file: file, dimension: {width: width, height: height}, url: videoUrl});
+            };
+            mediaElement.onerror = (error) => {
+                reject(error);
+            };
+        });
+    }
+};
+
 
 
 
