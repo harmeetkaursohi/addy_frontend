@@ -13,7 +13,7 @@ import SideBar from "../../sidebar/views/Layout.jsx";
 import {BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
-import {createFacebookPostAction} from "../../../app/actions/postActions/postActions.js";
+import {createFacebookPostAction, getAllPostsForPlannerAction} from "../../../app/actions/postActions/postActions.js";
 import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {RiDeleteBin5Fill} from "react-icons/ri";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
@@ -56,7 +56,6 @@ const CreatePost = () => {
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading)
-
 
     useEffect(() => {
         if (token && !userData) {
@@ -167,8 +166,10 @@ const CreatePost = () => {
     }
 
     const handleSelectAllChange = (e) => {
-
         const checked = e.target.checked;
+
+        const newSelectedOptionLabels = [];
+        const newSelectedOptions = [];
 
         const updatedSocialAccountData = socialAccountData.map((socialAccount) => ({
             ...socialAccount,
@@ -185,7 +186,6 @@ const CreatePost = () => {
             setSelectAllCheckBox(false);
             setSelectedOptionLabels([]);
             setSelectedOptions([]);
-
         }
 
         if (checked === true && updatedSocialAccountData.filter(el => el.selected === false).length === 0) {
@@ -197,27 +197,29 @@ const CreatePost = () => {
                             id: option.pageId,
                             label: option.name,
                             imageUrl: option.imageUrl
+                        };
+
+                        // Check if the option is already selected before adding
+                        if (!newSelectedOptions.includes(option.pageId)) {
+                            newSelectedOptionLabels.push(obj);
+                            newSelectedOptions.push(option.pageId);
                         }
-                        selectedOptionLabels.push(obj);
-                        selectedOptions.push(option.pageId);
-                        setSelectedOptionLabels(selectedOptionLabels);
-                        setSelectedOptions(selectedOptions);
-                    })
+                    });
                 }
             });
 
+            // Update the selected option labels and options state
+            setSelectedOptionLabels(newSelectedOptionLabels);
+            setSelectedOptions(newSelectedOptions);
         }
-
     };
+
 
     const handleSelectedFile = (e) => {
         e.preventDefault();
         const uploadedFiles = Array.from(e.target.files);
-
-        // Create an array of Promises that check dimensions for each uploaded file
         const dimensionPromises = uploadedFiles.map((file) => checkDimensions(file));
 
-        // Wait for all Promises to resolve
         Promise.all(dimensionPromises)
             .then((results) => {
                 setFiles([...files, ...results]);
@@ -229,12 +231,9 @@ const CreatePost = () => {
 
     const handleSelectedVideoFile = (e) => {
         e.preventDefault();
-
         const uploadedVideoFiles = Array.from(e.target.files);
-
         const dimensionPromises = uploadedVideoFiles.map((file) => checkVideoDimensions(file));
 
-        // Wait for all Promises to resolve
         Promise.all(dimensionPromises)
             .then((results) => {
                 console.log(results);
@@ -249,6 +248,7 @@ const CreatePost = () => {
     const handleRemoveSelectFile = (fileToRemove) => {
         const updatedFiles = files.filter((file) => file.url !== fileToRemove.url);
         setFiles(updatedFiles);
+        setDisableVideoButton(!disableFileButton);
     };
 
     const handleDragStart = (e, file) => {
@@ -274,40 +274,38 @@ const CreatePost = () => {
     };
 
     const createPost = (e, postStatus, scheduleDate, scheduleTime) => {
-        e.preventDefault();
-        const userInfo = decodeJwtToken(token);
+            e.preventDefault();
+            const userInfo = decodeJwtToken(token);
 
-        if (scheduleDate && scheduleTime) {
-            if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
-                showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
-                return;
+            if (postStatus === 'SCHEDULED') {
+                validateScheduleDateAndTime('SCHEDULED', scheduleDate, scheduleTime);
             }
+
+            const requestBody = {
+                token: token,
+                customerId: userInfo?.customerId,
+                postRequestDto: {
+                    attachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
+                    hashTag: hashTag,
+                    caption: caption,
+                    postStatus: postStatus,
+                    boostPost: boostPost,
+                    pageIds: selectedOptionLabels?.map((obj) => obj.id),
+                    scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+                },
+            };
+
+            dispatch(createFacebookPostAction(requestBody)).then((response) => {
+                if (response.meta.requestStatus === "fulfilled") {
+                    showSuccessToast("Post has uploaded successfully");
+                    navigate("/planner");
+                }
+            }).catch((error) => {
+                showErrorToast(error.response.data.message);
+            });
+
         }
-
-        const requestBody = {
-            token: token,
-            customerId: userInfo?.customerId,
-            postRequestDto: {
-                attachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
-                hashTag: hashTag,
-                caption: caption,
-                postStatus: postStatus,
-                boostPost: boostPost,
-                pageIds: selectedOptionLabels?.map((obj) => obj.id),
-                scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
-            },
-        };
-
-        dispatch(createFacebookPostAction(requestBody)).then((response) => {
-            if (response.meta.requestStatus == "fulfilled") {
-                showSuccessToast("Post has uploaded successfully");
-                navigate("/planner");
-            }
-        }).catch((error) => {
-            showErrorToast(error.response.data.message);
-        });
-
-    };
+    ;
 
     const handlePostSubmit = (e) => {
         createPost(e, 'PUBLISHED');
@@ -320,6 +318,27 @@ const CreatePost = () => {
     const handleSchedulePost = (e) => {
         createPost(e, 'SCHEDULED', scheduleDate, scheduleTime);
     };
+
+    const resetForm = (e) => {
+        e.preventDefault();
+        setFiles([]);
+        setSelectAllCheckBox(false);
+        setSelectedOptionLabels([]);
+        setSelectedOptions([]);
+        setHashTag("");
+        setCaption("");
+        setScheduleTime("");
+        setScheduleDate("");
+        setBoostPost(false);
+        socialAccountData.map(el => {
+            el.pageAccessToken.map(obj => {
+                obj.selected = false;
+                el.selected = false;
+            })
+        });
+
+        setSocialAccountData(socialAccountData);
+    }
 
 
     return (
@@ -385,7 +404,8 @@ const CreatePost = () => {
                                                                            handleSelectAllChange(e);
                                                                        }}
                                                                 />
-                                                                <h3 className="cmn_headings">Select all Platform</h3>
+                                                                <h3 className="cmn_headings">Select all
+                                                                    Platform</h3>
                                                             </div>
 
                                                             {
@@ -425,7 +445,8 @@ const CreatePost = () => {
                                                                                     >
                                                                                         <div
                                                                                             className="checkbox-button_outer">
-                                                                                            <img src={page?.imageUrl}/>
+                                                                                            <img
+                                                                                                src={page?.imageUrl}/>
                                                                                             <h2 className="cmn_text_style">{page?.name}</h2>
                                                                                         </div>
                                                                                         <input
@@ -479,7 +500,8 @@ const CreatePost = () => {
                                                                 <i className="fas fa-grip-vertical me-2"></i>
                                                                 {
                                                                     file.file.type.startsWith('image/') &&
-                                                                    <img className={"upload_image me-3"} src={file.url}
+                                                                    <img className={"upload_image me-3"}
+                                                                         src={file.url}
                                                                          alt={`Image ${index}`}/>
                                                                 }
                                                                 {
@@ -506,16 +528,18 @@ const CreatePost = () => {
 
                                             <div className="darg_navs file_outer">
                                                 <div
-                                                    className={disableFileButton ? "disable_color add_media_outer" : "cmn_blue_border add_media_outer"}>
+                                                    className={"cmn_blue_border add_media_outer"}>
                                                     <input type="file" id='image'
                                                            className='file'
                                                            multiple
                                                            name={'file'}
-                                                           disabled={disableFileButton}
+                                                           onClick={e => (e.target.value = null)}
+                                                        // disabled={disableFileButton}
                                                            accept={"image/png, image/jpeg"}
                                                            onChange={(e) => {
+                                                               console.log("@@@@ handleSelectedFile ::: ")
                                                                setSelectedFileType("IMAGE")
-                                                               setDisableVideoButton(true);
+                                                               setDisableVideoButton(!disableFileButton);
                                                                handleSelectedFile(e);
                                                            }}
                                                     />
@@ -525,31 +549,30 @@ const CreatePost = () => {
                                                     </label>
                                                 </div>
 
-                                                {
-                                                    <div className="cmn_blue_border add_media_outer">
-                                                        <input
-                                                            type="file"
-                                                            id='video'
-                                                            disabled={disableVideoButton}
-                                                            accept={"video/mp4,video/x-m4v,video/*"}
-                                                            onChange={(e) => {
-                                                                setSelectedFileType("VIDEO");
-                                                                setDisableFileButton(true);
-                                                                handleSelectedVideoFile(e);
-                                                            }}/>
-                                                        <label htmlFor='video' className='cmn_headings'>
-                                                            <i className="fa fa-video-camera"
-                                                               style={{marginTop: "2px"}}/>Add
-                                                            Video
-                                                        </label>
-                                                    </div>
-                                                }
+                                                <div className="cmn_blue_border add_media_outer">
+                                                    <input
+                                                        type="file"
+                                                        id='video'
+                                                        onClick={e => (e.target.value = null)}
+                                                        // disabled={disableVideoButton}
+                                                        accept={"video/mp4,video/x-m4v,video/*"}
+                                                        onChange={(e) => {
+                                                            setSelectedFileType("VIDEO");
+                                                            setDisableFileButton(true);
+                                                            handleSelectedVideoFile(e);
+                                                        }}/>
+                                                    <label htmlFor='video' className='cmn_headings'>
+                                                        <i className="fa fa-video-camera"
+                                                           style={{marginTop: "2px"}}/>Add
+                                                        Video
+                                                    </label>
+                                                </div>
                                             </div>
 
                                             <h2 className='cmn_heading'>{jsondata.OR}</h2>
                                             <div className="ai_outer_btn">
                                                 <button
-                                                    className={`${disableFileButton ? 'disabledButton ai_btn' : 'ai_btn cmn_white_text mt-2'}`}
+                                                    className={`ai_btn cmn_white_text mt-2`}
                                                     disabled={disableFileButton}
                                                     onClick={(e) => {
                                                         e.preventDefault();
@@ -682,14 +705,16 @@ const CreatePost = () => {
                                                            setBoostPost(!boostPost);
                                                        }}
                                                 />
-                                                <label className="form-check-label create_post_label boost_post_text"
-                                                       htmlFor="flexSwitchCheckChecked">Boost Post</label>
+                                                <label
+                                                    className="form-check-label create_post_label boost_post_text"
+                                                    htmlFor="flexSwitchCheckChecked">Boost Post</label>
                                             </div>
 
                                             <div className='cancel_publish_btn_outer d-flex'>
                                                 <button className='cancel_btn cmn_bg_btn' onClick={(e) => {
                                                     e.preventDefault();
                                                     console.log("Cancel")
+                                                    resetForm(e);
                                                 }}>{jsondata.cancel}</button>
 
                                                 <GenericButtonWithLoader label={jsondata.publishnow}

@@ -1,10 +1,10 @@
-// GenericButton component with loader
-function GenericButtonWithLoader({label, onClick, className, isLoading}) {
+function GenericButtonWithLoader({label, onClick, className, isLoading, loaderClassName = ""}) {
     return (
-        <button  className={className} onClick={onClick} disabled={isLoading}>
+        <button className={className} onClick={onClick} disabled={isLoading}>
             {isLoading ? (
                     <>
-                        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"/>
+                        <span className={loaderClassName ? loaderClassName : "spinner-border spinner-border-sm me-1"}
+                              role="status" aria-hidden="true"/>
                         Loading...
                     </>
                 ) :

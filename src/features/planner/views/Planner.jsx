@@ -6,13 +6,38 @@ import instagram_img from '../../../images/instagram.png'
 import linkedin from '../../../images/linkedin.svg'
 import jsondata from '../../../locales/data/initialdata.json'
 import {Link} from "react-router-dom";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {decodeJwtToken, getToken} from "../../../app/auth/auth";
+import {getAllPostsForPlannerAction} from "../../../app/actions/postActions/postActions";
+import {showErrorToast} from "../../common/components/Toast";
+import {useDispatch, useSelector} from "react-redux";
 
 const Planner = () => {
+
+    const dispatch = useDispatch();
+    const token = getToken();
+    const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer.data);
+
+    console.log("@@@ getAllPostsForPlannerData ::: ", getAllPostsForPlannerData)
+    console.log("@@@ getAllPostsForPlannerData ::: ", JSON.stringify(getAllPostsForPlannerData));
 
     useEffect(() => {
         document.title = 'Planner';
     }, []);
+
+    useEffect(() => {
+        const decodeJwt = decodeJwtToken(token);
+        const requestBody = {
+            customerId: decodeJwt.customerId,
+            token: token,
+            auditableSearchParams: {}
+        }
+
+        if (!getAllPostsForPlannerData) {
+            dispatch(getAllPostsForPlannerAction(requestBody));
+        }
+    }, []);
+
 
     const events = [
         {title: 'Instagram post', start: new Date(), imageUrl: instagram_img}, {
@@ -21,6 +46,24 @@ const Planner = () => {
             imageUrl: linkedin
         }
     ]
+
+    // const events = () => {
+    //     const events = Object.keys(responseData).map(date => {
+    //         console.log()
+    //         const dateEvents = responseData[date];
+    //         return Object.keys(dateEvents).map(batchId => {
+    //             return dateEvents[batchId].map(event => {
+    //                 return {
+    //                     title: event.socialAccountType, // Use appropriate title
+    //                     start: new Date(event.feedPostDate),
+    //                     imageUrl: event.attachments[0].attachmentId, // Use appropriate image URL
+    //                 };
+    //             });
+    //         });
+    //     }).flat();
+    //     return events;
+    // }
+
     // render event content
     const eventContent = ({event}) => (
         <div className="custom_event">
@@ -47,7 +90,8 @@ const Planner = () => {
                                 <h6>Here you find all the upcoming Posts you scheduled.</h6>
                             </div>
                             <div>
-                                <Link className='cmn_btn_color create_post_btn cmn_white_text' to="/post">{jsondata.createpost}</Link>
+                                <Link className='cmn_btn_color create_post_btn cmn_white_text'
+                                      to="/post">{jsondata.createpost}</Link>
                             </div>
                         </div>
                         <div className='events_wrapper'>

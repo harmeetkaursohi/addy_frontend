@@ -3,6 +3,15 @@ import axios from "axios";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 
+export const getAllPostsForPlannerAction = createAsyncThunk('get/getAllPostsForPlannerAction', async (data, thunkAPI) => {
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner/${data.customerId}`, data.auditableSearchParams, setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});
+
 export const createFacebookPostAction = createAsyncThunk('post/createFacebookPostAction', async (data, thunkAPI) => {
     const formData = new FormData();
 

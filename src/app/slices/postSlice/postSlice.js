@@ -3,7 +3,8 @@ import {
     generateAIImageAction,
     generateAIHashTagAction,
     generateAICaptionAction,
-    createFacebookPostAction
+    createFacebookPostAction,
+    getAllPostsForPlannerAction
 } from "../../actions/postActions/postActions.js";
 
 
@@ -13,9 +14,21 @@ const postSlice = createSlice({
         generateAIImageReducer: {loading: false},
         generateAIHashTagReducer: {loading: false},
         generateAICaptionReducer: {loading: false},
-        createFacebookPostActionReducer: {loading: false}
+        createFacebookPostActionReducer: {loading: false},
+        getAllPostsForPlannerReducer: {loading: false}
     },
     extraReducers: {
+
+        //get all posts for planner
+        [getAllPostsForPlannerAction.pending]: (state) => {
+            state.getAllPostsForPlannerReducer = {loading: true}
+        },
+        [getAllPostsForPlannerAction.fulfilled]: (state, action) => {
+            state.getAllPostsForPlannerReducer = {loading: false, data: action.payload}
+        },
+        [getAllPostsForPlannerAction.rejected]: (state) => {
+            state.getAllPostsForPlannerReducer = {loading: false}
+        },
 
         //ai generate image
         [generateAIImageAction.pending]: (state) => {
