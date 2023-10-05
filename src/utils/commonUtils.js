@@ -4,6 +4,9 @@ import {exchangeForLongLivedToken} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
 import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/facebookActions/facebookActions.js";
 import {showErrorToast} from "../features/common/components/Toast";
+import fb from "../images/fb.svg";
+import instagram_img from "../images/instagram.png";
+import linkedin from "../images/linkedin.svg";
 
 const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
 
@@ -213,6 +216,76 @@ export async function urlsToFiles(fileUrlList) {
     return files;
 }
 
+
+
+export const computeAndReturnPlannerEvent = (currentObject) => {
+
+    let a = [];
+    Object.keys(currentObject).map(c => {
+        a.push({
+            start: new Date(c),
+            showMoreContent: Object.keys(currentObject[c]).length - 1,
+            batchId: Object.keys(currentObject[c])[0],
+            postDate: new Date(c),
+            childCardContent: computeAndBuildChildCard(currentObject[c], Object.keys(currentObject[c])[0])
+        });
+    })
+    console.log("a---->", a);
+
+    return a;
+}
+
+export const computeAndBuildChildCard = (childCardProps, key) => {
+    function computeTitle(providerType) {
+        switch (providerType) {
+            case 'FACEBOOK':
+                return "Facebook";
+            case 'INSTAGRAM':
+                return "Intagram"
+            case 'LINKEDIN':
+                return "Linkdin";
+                break;
+            case 'TWITTER':
+                return "Twitter"
+                break;
+            default: {
+                return "Pinterest"
+            }
+        }
+    }
+
+    function computeImageURL(providerType) {
+        switch (providerType) {
+            case 'FACEBOOK':
+                return fb;
+            case 'INSTAGRAM':
+                return instagram_img
+            case 'LINKEDIN':
+                return linkedin;
+                break;
+            case 'TWITTER':
+                return "Twitter"
+                break;
+            default: {
+                return "Pinterest"
+            }
+        }
+    }
+
+
+    return Object.keys(childCardProps[key]).map((c) => {
+
+        console.log("c--->",c);
+        return {
+            id: childCardProps[key][c][0]?.id,
+            socialMediaPostId: childCardProps[key][c][0]?.referenceId,
+            title: computeTitle(c),
+            imageUrl: computeImageURL(c),
+        }
+
+    })
+
+}
 
 
 

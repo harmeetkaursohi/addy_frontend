@@ -1,6 +1,9 @@
 export const SocialAccountProvider = Object.freeze({
-    FACEBOOK:"facebook",
-    INSTAGRAM: "instagram"
+    FACEBOOK:"Facebook",
+    INSTAGRAM: "Instagram",
+    TWITTER: "Twitter",
+    LINKEDIN: "Linkedin",
+    PINTEREST:"Pinterest"
 });
 
 

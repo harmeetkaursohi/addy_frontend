@@ -4,7 +4,7 @@ import {
     generateAIHashTagAction,
     generateAICaptionAction,
     createFacebookPostAction,
-    getAllPostsForPlannerAction, getAllPostsByBatchIdAction, updatePostOnSocialMediaAction
+    getAllPostsForPlannerAction, getAllPostsByBatchIdAction, updatePostOnSocialMediaAction,getPlannerPostCountAction
 } from "../../actions/postActions/postActions.js";
 
 
@@ -18,6 +18,7 @@ const postSlice = createSlice({
         getAllPostsForPlannerReducer: {loading: false},
         getAllPostsByBatchIdReducer: {loading: false},
         updatePostOnSocialMediaReducer: {loading: false},
+        getPlannerPostCountReportReducer: {loading: false},
     },
     extraReducers: {
 
@@ -51,6 +52,17 @@ const postSlice = createSlice({
         },
         [getAllPostsForPlannerAction.rejected]: (state) => {
             state.getAllPostsForPlannerReducer = {loading: false}
+        },
+
+        //get all posts for planner
+        [getPlannerPostCountAction.pending]: (state) => {
+            state.getPlannerPostCountReportReducer = {loading: true}
+        },
+        [getPlannerPostCountAction.fulfilled]: (state, action) => {
+            state.getPlannerPostCountReportReducer = {loading: false, data: action.payload}
+        },
+        [getPlannerPostCountAction.rejected]: (state) => {
+            state.getPlannerPostCountReportReducer = {loading: false}
         },
 
         //ai generate image
