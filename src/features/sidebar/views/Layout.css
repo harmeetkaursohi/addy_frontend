@@ -232,40 +232,11 @@ border-radius: 20px;
         padding: 10px 16px;
     }
 
-    div.followers_outer {
-        display: block;
-    }
-
-    .sidebar_inner_content {
-
-        padding: 16px 11px;
-    }
-
-    div.social_media_outer {
-        display: block;
-    }
-
-    .delete_post_btn {
-        padding: 8px 38px
-    }
-
-    .sidebar_content {
-        width: 51px;
-    }
-
-    .sidebar_item li {
-        margin-top: 15px;
-    }
-
-    .sidebar_item_outer {
-        padding: 0px;
-    }
-
-}
 
 .connect_text {
     color: #038000;
     line-height: 18px;
     letter-spacing: -0.01px;
     font-size: 13px;
+}
 }

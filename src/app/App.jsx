@@ -24,6 +24,7 @@ import FacebookModal from '../features/modals/views/facebookModal/FacebookModal'
 import Oauth2RedirectComponent from '../features/authentication/Oauth2RedirectComponent'
 import CreatePost from "../features/planner/views/CreatePost";
 import UpdatePost from "../features/planner/views/UpdatePost";
+import DraftComponent from "../features/draftPage/views/DraftComponent";
 
 const App = () => {
     const PrivateRoute = () => {
@@ -48,6 +49,7 @@ const App = () => {
                         <Route path="/image" element={<AI_ImageModal/>}/>
                         <Route path="/comment" element={<CommentPage/>}/>
                         <Route path="/address" element={<AddressForm/>}/>
+                        <Route path="/draft" element={<DraftComponent/>}/>
                     </Route>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/" element={<Signup/>}/>
