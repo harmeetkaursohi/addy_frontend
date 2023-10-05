@@ -7,9 +7,7 @@ import React from "react";
 import CommonSlider from "./CommonSlider.jsx";
 
 
-const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType,caption,hashTag}) => {
-
-    console.log("@@@ CommonFeedPreview",files)
+const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType, caption, hashTag}) => {
 
 
     return (

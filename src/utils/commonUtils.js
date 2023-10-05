@@ -230,7 +230,6 @@ export const computeAndReturnPlannerEvent = (currentObject) => {
             childCardContent: computeAndBuildChildCard(currentObject[c], Object.keys(currentObject[c])[0])
         });
     })
-    console.log("a---->", a);
 
     return a;
 }
@@ -274,8 +273,6 @@ export const computeAndBuildChildCard = (childCardProps, key) => {
 
 
     return Object.keys(childCardProps[key]).map((c) => {
-
-        console.log("c--->",c);
         return {
             id: childCardProps[key][c][0]?.id,
             socialMediaPostId: childCardProps[key][c][0]?.referenceId,

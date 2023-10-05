@@ -5,8 +5,6 @@ import React from "react";
 
 const CommonSlider = ({files, selectedFileType, caption, hashTag}) => {
 
-    console.log("@@@ files ",files)
-
     const settings = {
         arrows: false,
         dots: true,

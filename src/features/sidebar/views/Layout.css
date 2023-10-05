@@ -172,13 +172,14 @@ a.active {
 .user_profile_wrapper {
     display: flex;
     justify-content: space-evenly;
-    padding-top: 24px;
+    padding-top: 12px;
     align-items: center;
+    border-top: 1px solid #D1D9E2;
 }
 
 .user_profile_outer {
     border-bottom: 1px solid #D1D9E2;
-    padding-bottom: 24px;
+    padding-bottom: 12px;
 }
 
 .sidebar_container {

@@ -2,6 +2,7 @@
   "sidebarContent": {
     "home": "Home",
     "planner": "Planner",
+    "draft": "Drafts",
     "comment": "Comment/Reviews",
     "gallery": "Gallery",
     "insight": "Insights",
@@ -9,12 +10,11 @@
     "privacyPolicy": "Privacy Policy",
     "contact": "Contact Us"
   },
-  "createPassword":{
-    "createPassword":"Create Password"
+  "createPassword": {
+    "createPassword": "Create Password"
   },
-  "forgetPassword":{
-    "forgetPassword":"Forget Password"
-
+  "forgetPassword": {
+    "forgetPassword": "Forget Password"
   },
   "post": "Post",
   "socialmedia": "Social Media",
@@ -24,8 +24,8 @@
   "likecomment": "Like/Comments",
   "addbutton": "Add button",
   "cancel": "Cancel",
-  "loginwithfb":"Login with Facebook",
-  "loginwithgoogle":"Login with Google",
+  "loginwithfb": "Login with Facebook",
+  "loginwithgoogle": "Login with Google",
   "publishnow": "Publish Now",
   "schedule": "Schedule",
   "generateAi": "Generate Image with AI",
@@ -59,11 +59,11 @@
   "oneStepAway": "Just One Step Away.",
   "state": "State",
   "county": "County",
-  "contactNo":"Contact No",
+  "contactNo": "Contact No",
   "houseNo": "House No.",
-  "addressLine1":"Address Line1 ",
-  "addressLine2":"Address Line2 ",
-  "city":"City",
+  "addressLine1": "Address Line1 ",
+  "addressLine2": "Address Line2 ",
+  "city": "City",
   "pinCode": "Pin Code",
   "address": "Enter Your Address",
   "signUp": "Sign up",
@@ -73,7 +73,6 @@
   "cardnumber": "Card Number",
   "expireDate": "Expire Date",
   "cvv": "CVV",
-
   "payNow": "Pay Now",
   "paypal": "Paypal",
   "credit": "Credit/Debit Card",
@@ -82,6 +81,8 @@
   "createad": "Create Ad",
   "createpost": "Create Post",
   "updatepost": "Update Post",
+  "draftPost": "Drafts",
+  "backToPlanner": "Back to Planner",
   "upcomingpost": "Upcoming Posts",
   "heythere": "Hey there,",
   "viewpost": "View Post",

@@ -9,22 +9,26 @@ import {Link} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {getAllPostsForPlannerAction, getPlannerPostCountAction} from "../../../app/actions/postActions/postActions";
-import {Provider, useDispatch, useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {computeAndReturnPlannerEvent} from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
+import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
+import DraftComponent from "../../draftPage/views/DraftComponent";
 
 const Planner = () => {
 
     const dispatch = useDispatch();
     const token = getToken();
+    const [isLoading, setIsLoading] = useState(false);
     const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer);
     const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
     const calendarRef = useRef(null);
     const [baseSearchQuery, setBaseSearchQuery] = useState({});
+    const [isDraftPost, setDraftPost] = useState(false);
 
 
     useEffect(() => {
-        document.title = 'Planner';
+        document.title = isDraftPost ? 'Draft' : 'Planner';
     }, []);
 
 
@@ -45,23 +49,20 @@ const Planner = () => {
         }
     }, [getAllPostsForPlannerData]);
 
-    console.log("---->", baseSearchQuery);
-
-
     // render event content
     const renderCalendarCards = ({event}) => {
-        console.log("---->", event);
-        return (<>
-            <div className={"cal_Div w-100 tesssst"}
+        return (
+            <div className={"cal_Div w-100 test"}
                  style={{pointerEvents: event?._def?.extendedProps?.postDate < new Date() ? "none" : ""}}>
 
                 <div className="w-100 p-2 calendar_card">
 
                     {event?._def?.extendedProps?.childCardContent?.map((c, index) => {
                         return (
-                            <div className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"} onClick={() => {
-                                console.log("handle singlr click if needed----->")
-                            }}>
+                            <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}
+                                 onClick={() => {
+                                     console.log("handle singlr click if needed----->")
+                                 }}>
                                 <img src={c?.imageUrl} alt={event.title}/>
                                 <h3>{c.title}</h3>
                             </div>
@@ -70,16 +71,11 @@ const Planner = () => {
                 </div>
                 {event?._def?.extendedProps?.showMoreContent > 0 && <button
                     className={"createPost_btn crate_btn cmn_btn_color w-100 ms-0 mt-2 mb-3"}>{"View " + event?._def?.extendedProps?.showMoreContent + " more"}</button>}
-            </div>
-
-        </>)
+            </div>)
     }
 
 
-    console.log("--->planner events");
-
     const customDayHeaderContent = (args) => {
-        // You can customize the day names here
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         return days[args.date.getDay()];
     };
@@ -117,6 +113,13 @@ const Planner = () => {
 
     };
 
+    const handleDraft = (e) => {
+        setIsLoading(true);
+        setDraftPost(!isDraftPost);
+        setIsLoading(false);
+    }
+
+    console.log("isDraft", isDraftPost)
 
     return (
         <>
@@ -126,86 +129,134 @@ const Planner = () => {
                     <div className='planner_outer'>
                         <div className='planner_header_outer'>
                             <div className='planner_header'>
-                                <h2>{jsondata.sidebarContent.planner}</h2>
+                                <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
                                 <h6>Here you find all the upcoming Posts you scheduled.</h6>
                             </div>
                             <div>
+                                <GenericButtonWithLoader
+                                    label={isDraftPost ? jsondata.backToPlanner : jsondata.draftPost}
+                                    className={"draft_btn create_post_btn cmn_white_text"}
+                                    isLoading={isLoading}
+                                    onClick={handleDraft}
+                                />
+
                                 <Link className='cmn_btn_color create_post_btn cmn_white_text'
                                       to="/post">{jsondata.createpost}</Link>
                             </div>
                         </div>
-                        <div className='events_wrapper'>
-                            <div className='row'>
+                        {
+                            isDraftPost === false && <div className='events_wrapper'>
+                                <div className='row'>
 
-                                {getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data).map((key, index) => {
+                                    {getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data).map((key, index) => {
 
-                                    return (
-                                        <div className='col-lg-4 col-md-6 col-sm-12'>
+                                        return (
+                                            <div className='col-lg-4 col-md-6 col-sm-12' key={index}>
 
-                                            <div className='event_group'
-                                                 style={{borderRight: index === 2 ? "unset" : ""}}>
-                                                <h2 className='cmn_text_heading'>{getPlannerPostCountReportData.data[key]}</h2>
-                                                <h5 className='cmn_small_heading'>{key}</h5>
+                                                <div className='event_group'
+                                                     style={{borderRight: index === 2 ? "unset" : ""}}>
+                                                    <h2 className='cmn_text_heading'>{getPlannerPostCountReportData.data[key]}</h2>
+                                                    <h5 className='cmn_small_heading'>{key}</h5>
+                                                </div>
+
                                             </div>
-
-                                        </div>
-                                    )
-                                })}
-
-                            </div>
-                        </div>
-                        {/* select option */}
-                        <div className='calender_outer_wrapper'>
-                            <div className="custom-header">
-                                <select className=" filter_options cmn_text_style box_shadow"
-                                        value={baseSearchQuery?.socialAccountType}
-                                        onChange={(e) => {
-                                            setBaseSearchQuery({
-                                                ...baseSearchQuery,
-                                                socialAccountType: e.target.value === "All" ? null : e.target.value
-                                            });
-                                        }}>
-                                    <option value={"All"}>All</option>
-                                    {Object.keys(SocialAccountProvider).map((cur) => {
-                                        return (<option value={cur}>{SocialAccountProvider[cur]}</option>)
+                                        )
                                     })}
-                                </select>
+
+                                </div>
                             </div>
+                        }
+                        {/* select option */}
 
-                            <FullCalendar
-                                ref={calendarRef}
-                                plugins={[dayGridPlugin]}
-                                initialView='dayGridMonth'
-                                weekends={true}
-                                events={events}
-                                eventContent={renderCalendarCards}
-                                dayHeaderContent={customDayHeaderContent}
-                                dayCellClassNames={(arg) => {
-                                    if (arg?.isPast) {
-                                        return "calendar_card_disable";
-                                    }
-                                }}
-                                headerToolbar={{
-                                    left: '  prev',
-                                    center: 'title',
-                                    right: 'next,timeGridDay,',
-                                }}
+                        <div className='calender_outer_wrapper'>
 
-                                customButtons={{
-                                    prev: {text: 'Custom Prev', click: () => customHeaderClick("Prev")},
-                                    next: {text: 'Custom Next', click: () => customHeaderClick("Next")},
-                                }}
+                            {
+                                isDraftPost === false &&
+                                <div className="custom-header">
+                                    <select className=" filter_options cmn_text_style box_shadow"
+                                            value={baseSearchQuery?.socialAccountType}
+                                            onChange={(e) => {
+                                                setBaseSearchQuery({
+                                                    ...baseSearchQuery,
+                                                    socialAccountType: e.target.value === "All" ? null : e.target.value
+                                                });
+                                            }}>
+                                        <option value={"All"}>All</option>
+                                        {Object.keys(SocialAccountProvider).map((cur) => {
+                                            return (<option value={cur}>{SocialAccountProvider[cur]}</option>)
+                                        })}
+                                    </select>
 
-                                dayCellContent={(arg) => {
-                                    const cellDate = arg.date;
-                                    if (cellDate !== null) {
-                                        return <div c>{arg?.dayNumberText}</div>
-                                    }
-                                }}
-                            >
 
-                            </FullCalendar>
+                                </div>
+                            }
+
+                            <div className={`${isDraftPost ? 'calendar-container hidden' : ''}`}>
+
+                                    <FullCalendar
+                                        ref={calendarRef}
+                                        plugins={[dayGridPlugin]}
+                                        initialView='dayGridMonth'
+                                        weekends={true}
+                                        events={events}
+
+                                        eventContent={renderCalendarCards}
+                                        dayHeaderContent={customDayHeaderContent}
+                                        dayCellClassNames={(arg) => {
+                                            if (arg?.isPast) {
+                                                return "calendar_card_disable";
+                                            }
+                                        }}
+                                        headerToolbar={{
+                                            left: '  prev',
+                                            center: 'title',
+                                            right: 'next,timeGridDay,',
+                                        }}
+
+                                        customButtons={{
+                                            prev: {text: 'Custom Prev', click: () => customHeaderClick("Prev")},
+                                            next: {text: 'Custom Next', click: () => customHeaderClick("Next")},
+                                        }}
+
+                                        dayCellContent={(arg) => {
+                                            const cellDate = arg.date;
+                                            if (cellDate !== null) {
+                                                return <div c>{arg?.dayNumberText}</div>
+                                            }
+                                        }}
+                                    />
+
+
+                            < /div>
+
+                            <div className={"hr-line"}></div>
+
                         </div>
+
+                        {
+                            isDraftPost === true &&
+                            <div className={"draft-post-list-outer row m-0"}>
+                                <div className="col-lg-6">
+                                    <DraftComponent/>
+                                </div>
+                                <div className="col-lg-6">
+                                    <DraftComponent/>
+                                </div>
+                                <div className="col-lg-6">
+                                    <DraftComponent/>
+                                </div>
+                                <div className="col-lg-6">
+                                    <DraftComponent/>
+                                </div>
+                                <div className="col-lg-6">
+                                    <DraftComponent/>
+                                </div>
+                                <div className="col-lg-6">
+                                    <DraftComponent/>
+                                </div>
+                            </div>
+                        }
+
                     </div>
                 </div>
             </section>

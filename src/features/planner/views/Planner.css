@@ -11,14 +11,27 @@
 
 .planner_outer {
     padding: 24px;
-    background: #FDFAFF;
 }
-.calendar_card{
+
+.calendar_card {
     background: #F4F8FE;
     border: transparent;
     border-radius: 4px;
-    position:relative;
+    position: relative;
 }
+
+.draft_btn {
+    border-radius: 6px;
+    border: 1px solid #D1D9E2;
+    background: #FFF;
+    padding: 8px 16px;
+    min-width: 97px;
+    color: black;
+    margin-right: 15px;
+
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
+}
+
 .edit_calendar_event {
     width: 30px;
     height: 30px;
@@ -26,12 +39,13 @@
     background: #fff;
     text-align: center;
     line-height: 30px;
-    box-shadow: 0px 0px 5px rgba(0,0,0,9%);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 9%);
     border-radius: 50%;
     top: -12px;
     right: 0;
     cursor: pointer;
 }
+
 .filter_options {
     position: absolute;
     top: 22px;
@@ -44,12 +58,14 @@
     min-width: 152px;
 
 }
-.draft-post-list-outer{
+
+.draft-post-list-outer {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
 }
+
 .calender_outer_wrapper {
     position: relative;
 }
@@ -152,8 +168,7 @@ padding: 9px 25px;
 }
 
 .Pastevent_outer {
-    background: #DDD;
-    ;
+    background: #DDD;;
 }
 
 .events_wrapper {
@@ -235,14 +250,17 @@ button.fc-customText-button.fc-button.fc-button-primary {
     gap: 10px;
 
 }
-.calendar_card_disable{
+
+.calendar_card_disable {
     opacity: 0.3;
 }
+
 .fc-h-event {
     background-color: unset;
     border: unset
-   
+
 }
+
 .custom_event img {
     height: 14px;
     width: 14px;
@@ -257,10 +275,12 @@ button.fc-customText-button.fc-button.fc-button-primary {
     font-weight: 500;
     line-height: normal;
 }
+
 button.fc--button.fc-button.fc-button-primary {
     display: none;
 }
-@media screen and (max-width:991px) {
+
+@media screen and (max-width: 991px) {
     .planner_header_outer {
         display: block;
     }
@@ -278,7 +298,7 @@ button.fc--button.fc-button.fc-button-primary {
     }
 }
 
-@media screen and (max-width:767px) {
+@media screen and (max-width: 767px) {
     .planner_header h6 {
         font-size: 14px;
     }
@@ -287,9 +307,11 @@ button.fc--button.fc-button.fc-button-primary {
         display: block;
 
     }
+
     .custom-header {
         margin-top: 13px;
     }
+
     .event_group {
         border-right: unset;
     }
@@ -305,4 +327,24 @@ button.fc--button.fc-button.fc-button-primary {
         font-size: 14px;
     }
 
+}
+.hr-line {
+    display: inline-block;
+    height: 2px;
+    width: 100%;
+    background: gray;
+    opacity: 0.1;
+}
+
+/* CSS to hide the calendar's body and other elements */
+.calendar-container.hidden .fc-view, /* Hide the calendar view */
+.calendar-container.hidden .fc-toolbar.fc-header-toolbar .fc-center, /* Hide the center part of the toolbar */
+.calendar-container.hidden .fc-toolbar.fc-header-toolbar .fc-right, /* Hide the right part of the toolbar */
+.calendar-container.hidden .fc-dayGridMonth-view {
+    display: none;
+}
+
+/*Full Calender Set Height*/
+.calendar-container .fc-view-harness.fc-view-harness-active {
+    height: 100% !important;
 }
