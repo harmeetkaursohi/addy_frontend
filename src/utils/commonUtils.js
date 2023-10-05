@@ -9,8 +9,7 @@ const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S
 
 export const validationSchemas = {
     login: yup.object().shape({
-        username: yup.string().required('Username is required').email('Invalid email format'),
-        password: yup.string()
+        username: yup.string().required('Username is required').email('Invalid email format'), password: yup.string()
             .min(5, 'Password must be at least 5 characters')
             .required('Password is required')
     }),
@@ -51,9 +50,7 @@ export const computeAndSocialAccountJSONForFacebook = async (jsonObj) => {
     const decodeJwt = decodeJwtToken(token);
 
     return {
-        customerId: decodeJwt.customerId,
-        token: token,
-        socialAccountData: {
+        customerId: decodeJwt.customerId, token: token, socialAccountData: {
             name: jsonObj?.data?.name || null,
             email: jsonObj?.data?.email || null,
             imageUrl: jsonObj?.data?.picture?.data?.url || null,
@@ -89,15 +86,13 @@ export const facebookPageConnectAction = (dispatch, token, facebookData) => {
     const decodeJwt = decodeJwtToken(token);
     if (facebookData) {
         const requestBody = {
-            customerId: decodeJwt?.customerId,
-            pageAccessTokenDTO: {
+            customerId: decodeJwt?.customerId, pageAccessTokenDTO: {
                 pageId: facebookData?.id,
                 name: facebookData?.name,
                 imageUrl: facebookData.picture?.data?.url,
                 about: facebookData?.about,
                 access_token: facebookData?.access_token
-            },
-            token: token
+            }, token: token
         }
         dispatch(facebookPageConnect(requestBody)).then((response) => {
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
@@ -135,7 +130,7 @@ export const validateScheduleDateAndTime = (postStatus, scheduleDate, scheduleTi
     }
 };
 
-export const checkDimensions = (file) => {
+export const checkDimensions = (file, referenceId = "") => {
 
     if (file.type.startsWith('image/')) {
         return new Promise((resolve, reject) => {
@@ -170,6 +165,53 @@ export const checkDimensions = (file) => {
         });
     }
 };
+
+
+export const handleSeparateCaptionHashtag = (inputText) => {
+    const hashtagIndex = inputText.indexOf('#');
+    if (hashtagIndex !== -1) {
+        const extractedCaption = inputText.substring(0, hashtagIndex).trim();
+        const extractedHashtag = inputText.substring(hashtagIndex).trim();
+        return {caption: extractedCaption, hashtag: extractedHashtag}
+
+    } else {
+        return {caption: extractedCaption, hashtag: ''};
+    }
+};
+
+// Function to convert an image URL to a File object
+export async function urlToBlob(imageUrl) {
+    try {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+
+        // Generate a random string for the filename
+        const randomString = Math.random().toString(36).substring(7);
+        const timestamp = new Date().getTime();
+        const fileExtension = blob.type.split("/")[1];
+        const filename = `${timestamp}_${randomString}.${fileExtension}`;
+
+        // Create a File object with the blob
+        const file = new File([blob], filename, {type: blob.type});
+        return file;
+    } catch (error) {
+        console.error("Error converting URL to File:", error);
+        return null;
+    }
+}
+
+// Function to convert a list of image URLs to a list of File objects
+export async function urlsToFiles(fileUrlList) {
+    const files = [];
+    for (const fileUrl of fileUrlList) {
+        const file = await urlToBlob(fileUrl.imageURL);
+        if (file) {
+            files.push({referenceId: fileUrl.referenceId, file: file});
+        }
+    }
+
+    return files;
+}
 
 
 

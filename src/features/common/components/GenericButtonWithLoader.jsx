@@ -1,4 +1,4 @@
-function GenericButtonWithLoader({label, onClick, className, isLoading, loaderClassName = ""}) {
+function GenericButtonWithLoader({label, onClick = null, className, isLoading = false, loaderClassName = ""}) {
     return (
         <button className={className} onClick={onClick} disabled={isLoading}>
             {isLoading ? (

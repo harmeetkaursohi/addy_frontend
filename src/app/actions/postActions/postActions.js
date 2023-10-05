@@ -3,7 +3,40 @@ import axios from "axios";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 
-export const getAllPostsByBatchIdAction = createAsyncThunk('get/getAllPostsByBatchIdAction', async (data, thunkAPI) => {
+
+export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOnSocialMediaAction', async (data, thunkAPI) => {
+
+    const formData = new FormData();
+
+    // Create a FormData object to hold the data.
+    formData.append('caption', data.updatePostRequestDTO.caption);
+    formData.append('hashTag', data.updatePostRequestDTO.hashTag);
+    formData.append('boostPost', data.updatePostRequestDTO.boostPost);
+    formData.append('postStatus', data.updatePostRequestDTO.postStatus);
+
+    if (data.updatePostRequestDTO.scheduleDate) {
+        formData.append('scheduleDate', data.updatePostRequestDTO.scheduleDate);
+    }
+
+    data.updatePostRequestDTO.pageIds.forEach((pageId, index) => {
+        formData.append(`pageIds[${index}]`, pageId);
+    });
+
+    // Loop through the attachments array and append each attachment's data.
+    data.updatePostRequestDTO.attachments.forEach((attachment, index) => {
+        formData.append(`attachments[${index}].mediaType`, attachment.mediaType);
+        formData.append(`attachments[${index}].file`, attachment.file);
+    });
+
+    return await axios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.customerId}/${data.batchId}`, data.updatePostRequestDTO, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});
+
+export const getAllPostsByBatchIdAction = createAsyncThunk('post/getAllPostsByBatchIdAction', async (data, thunkAPI) => {
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/batch/${data.batchId}`, null, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
@@ -12,7 +45,7 @@ export const getAllPostsByBatchIdAction = createAsyncThunk('get/getAllPostsByBat
     });
 });
 
-export const getAllPostsForPlannerAction = createAsyncThunk('get/getAllPostsForPlannerAction', async (data, thunkAPI) => {
+export const getAllPostsForPlannerAction = createAsyncThunk('post/getAllPostsForPlannerAction', async (data, thunkAPI) => {
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner/${data.customerId}`, data.auditableSearchParams, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {

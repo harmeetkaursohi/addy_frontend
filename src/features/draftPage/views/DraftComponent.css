@@ -1,0 +1,107 @@
+.selected-option {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    border: 1px solid #DCDCDC;
+    background: #FFF;
+    padding: 7px;
+}
+.draft-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 40px 0px 40px 20px;
+    flex-wrap: wrap;
+}
+.draft-outer{
+    /*width: 48%;*/
+    /*display: inline-block;*/
+    border-radius: 30px;
+    box-shadow: 1px 1px 5px #89858538;
+}
+.post-image{
+    width: 100%;
+}
+posted-on-txt {
+    font-size: 21px;
+    font-weight: 500;
+    color: #000000;
+    font-family: 'Nunito', sans-serif;
+}
+.social-media-icon {
+    height: 18px;
+    width: 20px;
+}
+.social-media-page-name {
+    font-size: 10px;
+    font-weight: 500;
+    font-family: 'Nunito', sans-serif;
+}
+.card-body.post_card {
+    padding: 20px;
+    padding-bottom: 24px;
+}
+
+span.post_caption {
+    color: #000;
+    font-family: Nunito;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+h3.caption {
+    color: #5F6D7E;
+    font-family: Nunito;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 10px !important;
+}
+
+.card-body.post_card h5 {
+    color: #000;
+    font-family: Nunito;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-bottom: 3px !important;
+}
+
+span.hash_tags {
+    color: #5F6D7E;
+    font-family: Nunito;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+button.un_selected {
+    border-radius: 6px;
+    border: 1px solid rgba(192, 57, 57, 0.27);
+    background: rgba(255, 0, 0, 0.18);
+    color: #5F6D7E;
+    font-family: Nunito;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 5px 17px;
+}
+
+button.post_now.cmn_bg_btn, button.outline_btn.schedule_btn {
+    max-width: 192px;
+    width: 100%;
+}
+
+button.outline_btn.schedule_btn {
+    border-radius: 6px;
+    border: 1px solid #00A3FF;
+    background: #FFF;
+    padding: 10px 15px;
+    font-size: 10px;
+}

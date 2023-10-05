@@ -5,6 +5,8 @@ import React from "react";
 
 const CommonSlider = ({files, selectedFileType, caption, hashTag}) => {
 
+    console.log("@@@ files ",files)
+
     const settings = {
         arrows: false,
         dots: true,
@@ -19,7 +21,7 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag}) => {
         <>
             <Slider {...settings} >
                 {
-                    (selectedFileType === "IMAGE") &&
+                    // (selectedFileType === "IMAGE") &&
 
                     files?.map((file, index) => (
                         <div key={index}>

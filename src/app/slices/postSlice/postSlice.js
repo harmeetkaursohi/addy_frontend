@@ -4,7 +4,7 @@ import {
     generateAIHashTagAction,
     generateAICaptionAction,
     createFacebookPostAction,
-    getAllPostsForPlannerAction, getAllPostsByBatchIdAction
+    getAllPostsForPlannerAction, getAllPostsByBatchIdAction, updatePostOnSocialMediaAction
 } from "../../actions/postActions/postActions.js";
 
 
@@ -16,9 +16,20 @@ const postSlice = createSlice({
         generateAICaptionReducer: {loading: false},
         createFacebookPostActionReducer: {loading: false},
         getAllPostsForPlannerReducer: {loading: false},
-        getAllPostsByBatchIdReducer: {loading: false}
+        getAllPostsByBatchIdReducer: {loading: false},
+        updatePostOnSocialMediaReducer: {loading: false},
     },
     extraReducers: {
+
+        [updatePostOnSocialMediaAction.pending]: (state) => {
+            state.updatePostOnSocialMediaReducer = {loading: true}
+        },
+        [updatePostOnSocialMediaAction.fulfilled]: (state, action) => {
+            state.updatePostOnSocialMediaReducer = {loading: false, data: action.payload}
+        },
+        [updatePostOnSocialMediaAction.rejected]: (state) => {
+            state.updatePostOnSocialMediaReducer = {loading: false}
+        },
 
         //get all posts by batch id
         [getAllPostsByBatchIdAction.pending]: (state) => {

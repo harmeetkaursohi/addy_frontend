@@ -33,9 +33,10 @@ const Layout = () => {
                 customerId: decodeJwt.customerId,
                 token: token
             }
+            // Dispatch the API call only when userData is not available
             dispatch(getUserInfo(requestBody))
         }
-    }, [token, dispatch, userData])
+    }, [token, userData, dispatch])
 
 
     const LogOut = () => {

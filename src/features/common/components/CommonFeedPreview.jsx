@@ -9,6 +9,9 @@ import CommonSlider from "./CommonSlider.jsx";
 
 const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType,caption,hashTag}) => {
 
+    console.log("@@@ CommonFeedPreview",files)
+
+
     return (
         <>
             <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>{previewTitle}</h2>

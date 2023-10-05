@@ -26,7 +26,12 @@
     min-width: 152px;
 
 }
-
+.draft-post-list-outer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
 .calender_outer_wrapper {
     position: relative;
 }
