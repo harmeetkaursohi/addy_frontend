@@ -115,22 +115,11 @@ export function convertToUnixTimestamp(scheduleDate, scheduleTime) {
 
 
 // Function to validate schedule date and time
-export const validateScheduleDateAndTime = (postStatus, scheduleDate, scheduleTime) => {
-    if (postStatus === 'SCHEDULED') {
-        if (!scheduleDate && !scheduleTime) {
-            showErrorToast("Please enter scheduleDate and scheduleTime!!");
-            return;
-        }
-    }
-
+export const validateScheduleDateAndTime = (scheduleDate, scheduleTime) => {
     const inputDateTime = new Date(`${scheduleDate}T${scheduleTime}`);
     const currentDate = new Date();
     const minAllowedDate = new Date(currentDate.getTime() + 10 * 60000);
-
-    if (!(inputDateTime >= minAllowedDate)) {
-        showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
-        return;
-    }
+    return inputDateTime >= minAllowedDate;
 };
 
 export const checkDimensions = (file, referenceId = "") => {

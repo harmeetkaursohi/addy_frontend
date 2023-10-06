@@ -107,7 +107,7 @@ font-family: 'Nunito';
 font-size: 14px;
 font-style: normal;
 font-weight: 700;
-line-height: 20px; 
+line-height: 20px;
 letter-spacing: -0.014px;
 border-radius: 6px;
 border: 1px solid #C3C3C3;
@@ -280,6 +280,67 @@ button.fc--button.fc-button.fc-button-primary {
     display: none;
 }
 
+.fc-dayGridMonth-view.fc-view.fc-daygrid {
+    background: white !important;
+}
+
+/*.fc-theme-standard .fc-scrollgrid {*/
+/*    border-top-left-radius: 20px !important;*/
+/*    border-top-right-radius: 20px !important;*/
+
+/*}*/
+/*6 oct*/
+.calender_outer_wrapper thead tr th:first-child {
+    border-top-left-radius: 10px;
+
+}
+
+.calender_outer_wrapper tbody tr:last-child > td:first-child {
+    border-bottom-left-radius: 20px
+}
+
+.calender_outer_wrapper tbody tr:first-child > td:first-child {
+    border-top-left-radius: 20px
+}
+
+.calender_outer_wrapper tbody tr:last-child > td:last-child {
+    border-bottom-right-radius: 20px
+}
+
+.calender_outer_wrapper tbody tr:first-child > td:last-child {
+    border-top-right-radius: 20px
+}
+
+.calender_outer_wrapper thead tr th:last-child {
+    border-top-right-radius: 20px;
+}
+
+.calender_outer_wrapper table {
+    border-radius: 20px;
+    border: transparent !important;
+
+}
+
+.calender_outer_wrapper table tbody {
+    background: #fff;
+
+}
+
+.calender_outer_wrapper .fc-theme-standard th, .calender_outer_wrapper table tbody tr td[role="presentation"] {
+    border: transparent;
+}
+
+.calender_outer_wrapper table tbody tr td {
+    outline: 1px solid #ddd;
+    border: transparent;
+}
+
+.calender_outer_wrapper .fc-dayGridMonth-view.fc-view.fc-daygrid {
+    background: transparent !important;
+    border: transparent;
+}
+
+
 @media screen and (max-width: 991px) {
     .planner_header_outer {
         display: block;
@@ -328,6 +389,7 @@ button.fc--button.fc-button.fc-button-primary {
     }
 
 }
+
 .hr-line {
     display: inline-block;
     height: 2px;
@@ -347,4 +409,16 @@ button.fc--button.fc-button.fc-button-primary {
 /*Full Calender Set Height*/
 .calendar-container .fc-view-harness.fc-view-harness-active {
     height: 100% !important;
+}
+div.fc .fc-daygrid-day-frame {
+     min-height: unset;
+    /* position: relative; */
+    max-height: 80px;
+}
+a.fc-daygrid-dot-event:hover {
+    background: transparent;
+}
+
+.fc-daygrid-day-top {
+    height: 34px;
 }

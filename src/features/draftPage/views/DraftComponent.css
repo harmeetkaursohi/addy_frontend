@@ -7,6 +7,7 @@
     background: #FFF;
     padding: 7px;
 }
+
 .draft-heading {
     display: flex;
     align-items: center;
@@ -14,54 +15,65 @@
     padding: 40px 0px 40px 20px;
     flex-wrap: wrap;
 }
-.draft-outer{
-    /*width: 48%;*/
-    /*display: inline-block;*/
+
+.draft-outer {
     border-radius: 30px;
     margin-top: 36px;
     box-shadow: 1px 1px 5px #89858538;
+    background: white;
 }
+
 .draft-post-list-outer.row.m-0.mt-5 {
     border-top: 2px solid #D1D9E2;
 }
-.fc-toolbar-chunk:first-child{
+
+.fc-toolbar-chunk:first-child {
     background: white;
     border-top-left-radius: 15px;
     border-bottom-left-radius: 15px;
 }
-.fc-toolbar-chunk:last-child{
+
+.fc-toolbar-chunk:last-child {
     background: white;
     border-top-right-radius: 15px;
     border-bottom-right-radius: 15px;
 }
-.fc-toolbar-chunk{
+
+.fc-toolbar-chunk {
     padding: 6px 0px;
     background-color: white;
 }
+
 button.fc-timeGridDay-button.fc-button.fc-button-primary {
     display: none;
 }
+
 .fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
     margin-left: 0px !important;
 }
-.post-image{
+
+.post-image {
     width: 100%;
 }
+
 posted-on-txt {
     font-size: 21px;
     font-weight: 500;
     color: #000000;
     font-family: 'Nunito', sans-serif;
 }
+
 .social-media-icon {
     height: 18px;
     width: 20px;
 }
+
 .social-media-page-name {
     font-size: 10px;
     font-weight: 500;
     font-family: 'Nunito', sans-serif;
 }
+
 .card-body.post_card {
     padding: 20px;
     padding-bottom: 24px;
@@ -104,6 +116,7 @@ span.hash_tags {
     font-weight: 500;
     line-height: normal;
 }
+
 button.un_selected {
     border-radius: 6px;
     border: 1px solid rgba(192, 57, 57, 0.27);

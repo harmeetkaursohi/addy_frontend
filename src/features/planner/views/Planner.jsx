@@ -52,10 +52,9 @@ const Planner = () => {
     // render event content
     const renderCalendarCards = ({event}) => {
         return (
-            <div className={"cal_Div w-100 test"}
-                 style={{pointerEvents: event?._def?.extendedProps?.postDate < new Date() ? "none" : ""}}>
+            <div className={"cal_Div w-100 test"} style={{pointerEvents: event?._def?.extendedProps?.postDate < new Date() ? "none" : ""}}>
 
-                <div className="w-100 p-2 calendar_card">
+                <div className="w-100 p-0 calendar_card">
 
                     {event?._def?.extendedProps?.childCardContent?.map((c, index) => {
                         return (
@@ -63,7 +62,7 @@ const Planner = () => {
                                  onClick={() => {
                                      console.log("handle singlr click if needed----->")
                                  }}>
-                                <img src={c?.imageUrl} alt={event.title}/>
+                                <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>
                                 <h3>{c.title}</h3>
                             </div>
                         )
@@ -193,38 +192,38 @@ const Planner = () => {
 
                             <div className={`${isDraftPost ? 'calendar-container hidden' : ''}`}>
 
-                                    <FullCalendar
-                                        ref={calendarRef}
-                                        plugins={[dayGridPlugin]}
-                                        initialView='dayGridMonth'
-                                        weekends={true}
-                                        events={events}
+                                <FullCalendar
+                                    ref={calendarRef}
+                                    plugins={[dayGridPlugin]}
+                                    initialView='dayGridMonth'
+                                    weekends={true}
+                                    events={events}
 
-                                        eventContent={renderCalendarCards}
-                                        dayHeaderContent={customDayHeaderContent}
-                                        dayCellClassNames={(arg) => {
-                                            if (arg?.isPast) {
-                                                return "calendar_card_disable";
-                                            }
-                                        }}
-                                        headerToolbar={{
-                                            left: '  prev',
-                                            center: 'title',
-                                            right: 'next,timeGridDay,',
-                                        }}
+                                    eventContent={renderCalendarCards}
+                                    dayHeaderContent={customDayHeaderContent}
+                                    dayCellClassNames={(arg) => {
+                                        if (arg?.isPast) {
+                                            return "calendar_card_disable";
+                                        }
+                                    }}
+                                    headerToolbar={{
+                                        left: '  prev',
+                                        center: 'title',
+                                        right: 'next,timeGridDay,',
+                                    }}
 
-                                        customButtons={{
-                                            prev: {text: 'Custom Prev', click: () => customHeaderClick("Prev")},
-                                            next: {text: 'Custom Next', click: () => customHeaderClick("Next")},
-                                        }}
+                                    customButtons={{
+                                        prev: {text: 'Custom Prev', click: () => customHeaderClick("Prev")},
+                                        next: {text: 'Custom Next', click: () => customHeaderClick("Next")},
+                                    }}
 
-                                        dayCellContent={(arg) => {
-                                            const cellDate = arg.date;
-                                            if (cellDate !== null) {
-                                                return <div c>{arg?.dayNumberText}</div>
-                                            }
-                                        }}
-                                    />
+                                    dayCellContent={(arg) => {
+                                        const cellDate = arg.date;
+                                        if (cellDate !== null) {
+                                            return <div c>{arg?.dayNumberText}</div>
+                                        }
+                                    }}
+                                />
 
 
                             < /div>

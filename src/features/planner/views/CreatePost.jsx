@@ -272,8 +272,18 @@ const CreatePost = () => {
             e.preventDefault();
             const userInfo = decodeJwtToken(token);
 
+
             if (postStatus === 'SCHEDULED') {
-                validateScheduleDateAndTime('SCHEDULED', scheduleDate, scheduleTime);
+
+                if (!scheduleDate && !scheduleTime) {
+                    showErrorToast("Please enter scheduleDate and scheduleTime!!");
+                    return;
+                }
+
+                if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
+                    showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
+                    return;
+                }
             }
 
             const requestBody = {
@@ -357,7 +367,8 @@ const CreatePost = () => {
 
                                             {/*    dropdown select platform=====*/}
                                             <Dropdown className='insta_dropdown_btn mt-2'>
-                                                <Dropdown.Toggle id="instagram" className="instagram_dropdown tabs_grid">
+                                                <Dropdown.Toggle id="instagram"
+                                                                 className="instagram_dropdown tabs_grid">
                                                     {selectedOptionLabels.length > 0 ?
                                                         (
                                                             selectedOptionLabels.map((data, index) => (
