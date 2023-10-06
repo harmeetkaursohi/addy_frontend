@@ -6,13 +6,14 @@
     border: 1px solid #DCDCDC;
     background: #FFF;
     padding: 7px;
+    cursor: pointer;
 }
 
 .draft-heading {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 40px 0px 40px 20px;
+    padding: 30px 20px;
     flex-wrap: wrap;
 }
 

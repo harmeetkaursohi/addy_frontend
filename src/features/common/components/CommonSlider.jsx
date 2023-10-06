@@ -3,7 +3,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import React from "react";
 
-const CommonSlider = ({files, selectedFileType, caption, hashTag}) => {
+const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToSocialMedia = true}) => {
 
     const settings = {
         arrows: false,
@@ -14,34 +14,51 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag}) => {
         slidesToScroll: 1
     };
 
+    console.log("files---->", files);
+
 
     return (
         <>
-            <Slider {...settings} >
-                {
-                    // (selectedFileType === "IMAGE") &&
+            {viewSimilarToSocialMedia ? <Slider {...settings} >
+                    {
+                        (selectedFileType === "IMAGE") &&
 
-                    files?.map((file, index) => (
-                        <div key={index}>
-                            <p className="caption_text">{`${caption} ${hashTag}`}</p>
-                            <img src={file.url} alt={`Image ${index}`} className='post_img'/>
-                        </div>
-                    ))
-                }
+                        files?.map((file, index) => (
+                            <div key={index}>
+                                <p className="caption_text">{`${caption} ${hashTag}`}</p>
+                                <img src={file.url} alt={`Image ${index}`} className='post_img'/>
+                            </div>
+                        ))
+                    }
 
-                {
-                    (selectedFileType === "VIDEO") &&
+                    {
+                        (selectedFileType === "VIDEO") &&
 
-                    files?.map((file, index) => (
-                        <div key={index}>
-                            <video src={file.url} alt={`Videos ${index}`} className='post_img'
-                                   autoPlay={true}/>
-                        </div>
-                    ))
-                }
+                        files?.map((file, index) => (
+                            <div key={index}>
+                                <video src={file.url} alt={`Videos ${index}`} className='post_img'
+                                       autoPlay={true}/>
+                            </div>
+                        ))
+                    }
 
 
-            </Slider>
+                </Slider>
+
+                :
+
+                <Slider {...settings} >
+
+                    {
+                        files?.map((file, index) => (
+                            <div key={index}>
+                                <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
+                            </div>
+                        ))
+                    }
+                </Slider>
+            }
+
         </>
     )
 

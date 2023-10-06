@@ -17,6 +17,7 @@ import {computeAndReturnPlannerEvent} from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import DraftComponent from "../../draftPage/views/DraftComponent";
+import {ParentDraftComponent} from "../../draftPage/views/ParentDraftComponent";
 
 const Planner = () => {
     const dispatch = useDispatch();
@@ -237,9 +238,10 @@ const Planner = () => {
                                     dayCellContent={(arg) => {
                                         const cellDate = arg.date;
                                         if (cellDate !== null) {
-                                            return <div c>{arg?.dayNumberText}</div>
+                                            return <div className="calendar_card1">{arg?.dayNumberText}</div>;
                                         }
                                     }}
+
                                 />
 
 
@@ -251,26 +253,7 @@ const Planner = () => {
 
                         {
                             isDraftPost === true &&
-                            <div className={"draft-post-list-outer row m-0"}>
-                                <div className="col-lg-6">
-                                    <DraftComponent/>
-                                </div>
-                                <div className="col-lg-6">
-                                    <DraftComponent/>
-                                </div>
-                                <div className="col-lg-6">
-                                    <DraftComponent/>
-                                </div>
-                                <div className="col-lg-6">
-                                    <DraftComponent/>
-                                </div>
-                                <div className="col-lg-6">
-                                    <DraftComponent/>
-                                </div>
-                                <div className="col-lg-6">
-                                    <DraftComponent/>
-                                </div>
-                            </div>
+                                <ParentDraftComponent />
                         }
 
                     </div>

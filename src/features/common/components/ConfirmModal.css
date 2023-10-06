@@ -2,39 +2,48 @@
     text-align: center;
     padding: 30px 0px;
 }
+
 .confirm_btn {
     margin-top: 30px;
     display: flex;
     justify-content: center;
     gap: 20px;
 }
-.alert_modal_body div.modal-content{
+
+.alert_modal_body div.modal-content {
     border-radius: 10px;
 }
-.confirm_text{
+
+.confirm_text {
     padding-top: 20px;
 }
-.confirm_container h2{
+
+.confirm_container h2 {
     font-size: 36px;
     font-weight: 500;
 }
-.confirm_btn button{
+
+.confirm_btn button {
     border-radius: 5px;
     height: 40px;
-    width:110px
+    width: 110px
 }
+
 img.post_img {
     height: 350px;
     object-fit: cover;
-    object-position: top;
+    object-position: center;
 }
-ul.slick-dots{
+
+ul.slick-dots {
     bottom: 18px;
 }
-ul.slick-dots li.slick-active button:before{
+
+ul.slick-dots li.slick-active button:before {
     color: #ff5c00;
 }
-ul.slick-dots li button:before{
+
+ul.slick-dots li button:before {
     opacity: 1;
     color: #fff;
 }

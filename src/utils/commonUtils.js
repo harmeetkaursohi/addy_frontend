@@ -171,6 +171,11 @@ export const handleSeparateCaptionHashtag = (inputText) => {
     }
 };
 
+
+export const redirectToURL = (redirectedURL) => {
+    window.open(redirectedURL, '_blank');
+}
+
 // Function to convert an image URL to a File object
 export async function urlToBlob(imageUrl) {
     try {
@@ -204,7 +209,6 @@ export async function urlsToFiles(fileUrlList) {
 
     return files;
 }
-
 
 
 export const computeAndReturnPlannerEvent = (currentObject) => {
@@ -242,24 +246,6 @@ export const computeAndBuildChildCard = (childCardProps, key) => {
         }
     }
 
-    function computeImageURL(providerType) {
-        switch (providerType) {
-            case 'FACEBOOK':
-                return fb;
-            case 'INSTAGRAM':
-                return instagram_img
-            case 'LINKEDIN':
-                return linkedin;
-                break;
-            case 'TWITTER':
-                return "Twitter"
-                break;
-            default: {
-                return "Pinterest"
-            }
-        }
-    }
-
 
     return Object.keys(childCardProps[key]).map((c) => {
         return {
@@ -273,6 +259,23 @@ export const computeAndBuildChildCard = (childCardProps, key) => {
 
 }
 
+export function computeImageURL(providerType) {
+    switch (providerType) {
+        case 'FACEBOOK':
+            return fb;
+        case 'INSTAGRAM':
+            return instagram_img
+        case 'LINKEDIN':
+            return linkedin;
+            break;
+        case 'TWITTER':
+            return "Twitter"
+            break;
+        default: {
+            return "Pinterest"
+        }
+    }
+}
 
 
 

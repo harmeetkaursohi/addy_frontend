@@ -4,7 +4,11 @@ import {
     generateAIHashTagAction,
     generateAICaptionAction,
     createFacebookPostAction,
-    getAllPostsForPlannerAction, getAllPostsByBatchIdAction, updatePostOnSocialMediaAction,getPlannerPostCountAction
+    getAllPostsForPlannerAction,
+    getAllPostsByBatchIdAction,
+    updatePostOnSocialMediaAction,
+    getPlannerPostCountAction,
+    getAllDraftPostsByCustomerAndPeriodAction, publishedPostAction
 } from "../../actions/postActions/postActions.js";
 
 
@@ -19,8 +23,20 @@ const postSlice = createSlice({
         getAllPostsByBatchIdReducer: {loading: false},
         updatePostOnSocialMediaReducer: {loading: false},
         getPlannerPostCountReportReducer: {loading: false},
+        getAllDraftPostsByCustomerAndPeriodReducer: {loading: false},
+        publishedPostReducer: {loading: false}
     },
     extraReducers: {
+
+        [publishedPostAction.pending]: (state) => {
+            state.publishedPostReducer = {loading: true}
+        },
+        [publishedPostAction.fulfilled]: (state, action) => {
+            state.publishedPostReducer = {loading: false, data: action.payload}
+        },
+        [publishedPostAction.rejected]: (state) => {
+            state.publishedPostReducer = {loading: false}
+        },
 
         [updatePostOnSocialMediaAction.pending]: (state) => {
             state.updatePostOnSocialMediaReducer = {loading: true}
@@ -52,6 +68,16 @@ const postSlice = createSlice({
         },
         [getAllPostsForPlannerAction.rejected]: (state) => {
             state.getAllPostsForPlannerReducer = {loading: false}
+        },
+
+        [getAllDraftPostsByCustomerAndPeriodAction.pending]: (state) => {
+            state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: true}
+        },
+        [getAllDraftPostsByCustomerAndPeriodAction.fulfilled]: (state, action) => {
+            state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: false, data: action.payload}
+        },
+        [getAllDraftPostsByCustomerAndPeriodAction.rejected]: (state) => {
+            state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: false}
         },
 
         //get all posts for planner
