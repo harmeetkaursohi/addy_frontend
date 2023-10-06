@@ -333,6 +333,7 @@ button.fc--button.fc-button.fc-button-primary {
 .calender_outer_wrapper table tbody tr td {
     outline: 1px solid #ddd;
     border: transparent;
+    height: 100px;
 }
 
 .calender_outer_wrapper .fc-dayGridMonth-view.fc-view.fc-daygrid {
@@ -410,11 +411,13 @@ button.fc--button.fc-button.fc-button-primary {
 .calendar-container .fc-view-harness.fc-view-harness-active {
     height: 100% !important;
 }
-
+.calendar-container td {
+    height: 10px;
+}
 div.fc .fc-daygrid-day-frame {
-    min-height: unset;
+
     /* position: relative; */
-    max-height: 80px;
+    /*min-height: 220px;*/
 }
 
 a.fc-daygrid-dot-event:hover {

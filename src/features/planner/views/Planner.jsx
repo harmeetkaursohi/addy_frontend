@@ -8,7 +8,10 @@ import jsondata from '../../../locales/data/initialdata.json'
 import {Link} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
-import {getAllPostsForPlannerAction, getPlannerPostCountAction} from "../../../app/actions/postActions/postActions";
+import {
+    getAllPostsForPlannerAction,
+    getPlannerPostCountAction
+} from "../../../app/actions/postActions/postActions";
 import {useDispatch, useSelector} from "react-redux";
 import {computeAndReturnPlannerEvent} from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
@@ -16,15 +19,20 @@ import GenericButtonWithLoader from "../../common/components/GenericButtonWithLo
 import DraftComponent from "../../draftPage/views/DraftComponent";
 
 const Planner = () => {
-
     const dispatch = useDispatch();
     const token = getToken();
+
     const [isLoading, setIsLoading] = useState(false);
-    const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer);
-    const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
     const calendarRef = useRef(null);
     const [baseSearchQuery, setBaseSearchQuery] = useState({});
     const [isDraftPost, setDraftPost] = useState(false);
+
+    const [events, setEvents] = useState([
+        {title: 'Instagram post', start: new Date(), imageUrl: instagram_img},
+        {title: "Twitter", start: new Date(), imageUrl: linkedin}]);
+
+    const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer);
+    const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
 
 
     useEffect(() => {
@@ -40,19 +48,18 @@ const Planner = () => {
     }, []);
 
 
-    const [events, setEvents] = useState([{title: 'Instagram post', start: new Date(), imageUrl: instagram_img},
-        {title: "Twitter", start: new Date(), imageUrl: linkedin}]);
-
     useEffect(() => {
         if (!getAllPostsForPlannerData.loading && getAllPostsForPlannerData?.data) {
             setEvents(computeAndReturnPlannerEvent(getAllPostsForPlannerData?.data));
         }
     }, [getAllPostsForPlannerData]);
 
+
     // render event content
     const renderCalendarCards = ({event}) => {
         return (
-            <div className={"cal_Div w-100 test"} style={{pointerEvents: event?._def?.extendedProps?.postDate < new Date() ? "none" : ""}}>
+            <div className={"cal_Div w-100 test"}
+                 style={{pointerEvents: event?._def?.extendedProps?.postDate < new Date() ? "none" : ""}}>
 
                 <div className="w-100 p-0 calendar_card">
 
@@ -119,6 +126,16 @@ const Planner = () => {
     }
 
     console.log("isDraft", isDraftPost)
+
+    function eventAddStyle(arg) {
+        if (arg.event.extendedProps.demanding) {
+            console.log("if eventAddStyle")
+            return ['maxLevel']; //maxLevel and lowLevel are two CSS classes defined in a .css file
+        } else {
+            console.log("else eventAddStyle")
+            return ['lowLevel'];
+        }
+    }
 
     return (
         <>
@@ -193,12 +210,12 @@ const Planner = () => {
                             <div className={`${isDraftPost ? 'calendar-container hidden' : ''}`}>
 
                                 <FullCalendar
+                                    // height={}
                                     ref={calendarRef}
                                     plugins={[dayGridPlugin]}
                                     initialView='dayGridMonth'
                                     weekends={true}
                                     events={events}
-
                                     eventContent={renderCalendarCards}
                                     dayHeaderContent={customDayHeaderContent}
                                     dayCellClassNames={(arg) => {
