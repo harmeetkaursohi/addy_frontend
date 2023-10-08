@@ -57,7 +57,7 @@ export const forgetPassword = createAsyncThunk('user/forgetPassword', async (dat
 })
 
 export const getUserInfo = createAsyncThunk('user/getUserInfo', async (data, thunkAPI) => {
-    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/${data.customerId}`, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/customers`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

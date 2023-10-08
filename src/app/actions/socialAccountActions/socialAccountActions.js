@@ -5,7 +5,7 @@ import {setAuthenticationHeader} from "../../auth/auth.js";
 
 
 export const socialAccountConnectActions = createAsyncThunk('socialAccount/socialAccountConnectActions', async (data, thunkAPI) => {
-    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/connect/${data.customerId}`, data.socialAccountData, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/connect}`, data.socialAccountData, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -14,7 +14,7 @@ export const socialAccountConnectActions = createAsyncThunk('socialAccount/socia
 })
 
 export const disconnectSocialAccountAction = createAsyncThunk('socialAccount/disconnectSocialAccountAction', async (data, thunkAPI) => {
-    return await axios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/disconnect/${data.customerId}/${data.socialAccountId}`, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/disconnect/${data.socialAccountId}`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -23,7 +23,7 @@ export const disconnectSocialAccountAction = createAsyncThunk('socialAccount/dis
 })
 
 export const getAllConnectedSocialAccountAction = createAsyncThunk('socialAccount/getAllConnectedSocialAccountAction', async (data, thunkAPI) => {
-    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/${data.customerId}`, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -42,7 +42,7 @@ export const findSocialAccountByProviderAndCustomerIdAction = createAsyncThunk('
 });
 
 export const getAllByCustomerIdAction = createAsyncThunk('socialAccount/getAllByCustomerIdAction', async (data, thunkAPI) => {
-    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/${data.customerId}`, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

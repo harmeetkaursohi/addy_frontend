@@ -37,7 +37,7 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
         formData.append(`attachments[${index}].file`, attachment.file);
     });
 
-    return await axios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.customerId}/${data.batchId}`, data.updatePostRequestDTO, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
+    return await axios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts}/${data.batchId}`, data.updatePostRequestDTO, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -46,7 +46,7 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
 });
 
 export const getAllPostsByBatchIdAction = createAsyncThunk('post/getAllPostsByBatchIdAction', async (data, thunkAPI) => {
-    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/batch/${data.batchId}`, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.batchId}`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -55,7 +55,7 @@ export const getAllPostsByBatchIdAction = createAsyncThunk('post/getAllPostsByBa
 });
 
 export const getAllPostsForPlannerAction = createAsyncThunk('post/getAllPostsForPlannerAction', async (data, thunkAPI) => {
-    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner/${data.customerId}`, data?.query, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner`, data?.query, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -74,7 +74,7 @@ export const getAllDraftPostsByCustomerAndPeriodAction = createAsyncThunk('post/
 
 
 export const getPlannerPostCountAction = createAsyncThunk('get/getPlannerPostCountAction', async (data, thunkAPI) => {
-    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner-report/${data.customerId}`, data?.query, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner-report`, data?.query, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -106,7 +106,7 @@ export const createFacebookPostAction = createAsyncThunk('post/createFacebookPos
         formData.append(`attachments[${index}].file`, attachment.file);
     });
 
-    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.customerId}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

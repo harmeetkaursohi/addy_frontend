@@ -33,7 +33,7 @@ const getPageFullInfoByPageAccessToken = async (pageAccessToken) => {
 };
 
 export const facebookPageConnect = createAsyncThunk('facebook/facebookPageConnect', async (data, thunkAPI) => {
-    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/facebook/page-connect/${data.customerId}`, data.pageAccessTokenDTO, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/facebook/page-connect`, data.pageAccessTokenDTO, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -43,7 +43,7 @@ export const facebookPageConnect = createAsyncThunk('facebook/facebookPageConnec
 });
 
 export const getFacebookConnectedPages = createAsyncThunk('facebook/getFacebookConnectedPages', async (data, thunkAPI) => {
-    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/facebook/connected-pages/${data.customerId}`, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/facebook/connected-pages`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
