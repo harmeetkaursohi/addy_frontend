@@ -24,7 +24,7 @@ import FacebookModal from '../features/modals/views/facebookModal/FacebookModal'
 import Oauth2RedirectComponent from '../features/authentication/Oauth2RedirectComponent'
 import CreatePost from "../features/planner/views/CreatePost";
 import UpdatePost from "../features/planner/views/UpdatePost";
-import DraftComponent from "../features/draftPage/views/DraftComponent";
+import DraftComponent from "../features/unPublishedPages/views/DraftComponent";
 
 const App = () => {
     const PrivateRoute = () => {

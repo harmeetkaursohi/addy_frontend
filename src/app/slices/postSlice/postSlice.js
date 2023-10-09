@@ -8,6 +8,7 @@ import {
     getAllPostsByBatchIdAction,
     updatePostOnSocialMediaAction,
     getPlannerPostCountAction,
+    deletePostByBatchIdAction,
     getAllDraftPostsByCustomerAndPeriodAction, publishedPostAction
 } from "../../actions/postActions/postActions.js";
 
@@ -24,8 +25,16 @@ const postSlice = createSlice({
         updatePostOnSocialMediaReducer: {loading: false},
         getPlannerPostCountReportReducer: {loading: false},
         getAllDraftPostsByCustomerAndPeriodReducer: {loading: false},
-        publishedPostReducer: {loading: false}
+        publishedPostReducer: {loading: false},
+        deletePostByBatchIdReducer:{loading:false}
     },
+
+    reducers: {
+        resetPublishedPostReducer: (state) => {
+            state.publishedPostReducer = {loading: false, data: null}
+        }
+    },
+
     extraReducers: {
 
         [publishedPostAction.pending]: (state) => {
@@ -37,6 +46,15 @@ const postSlice = createSlice({
         [publishedPostAction.rejected]: (state) => {
             state.publishedPostReducer = {loading: false}
         },
+
+        [deletePostByBatchIdAction.pending]: (state) => {
+            state.deletePostByBatchIdReducer = {loading: true}
+        },
+        [deletePostByBatchIdAction.fulfilled]: (state, action) => {
+            console.log("====>",action);
+            state.deletePostByBatchIdReducer = {loading: false, data: "success"}},
+        [deletePostByBatchIdAction.rejected]: (state) => {state.deletePostByBatchIdReducer = {loading: false}},
+
 
         [updatePostOnSocialMediaAction.pending]: (state) => {
             state.updatePostOnSocialMediaReducer = {loading: true}
@@ -138,5 +156,5 @@ const postSlice = createSlice({
     }
 });
 
-export const {} = postSlice.actions;
+export const {resetPublishedPostReducer} = postSlice.actions;
 export default postSlice.reducer;

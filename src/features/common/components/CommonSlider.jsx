@@ -2,9 +2,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import React from "react";
+import noImageAvailable from "../../../images/no_img_posted.png"
+
 
 const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToSocialMedia = true}) => {
-
     const settings = {
         arrows: false,
         dots: true,
@@ -13,9 +14,6 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToS
         slidesToShow: 1,
         slidesToScroll: 1
     };
-
-    console.log("files---->", files);
-
 
     return (
         <>
@@ -50,12 +48,17 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToS
                 <Slider {...settings} >
 
                     {
-                        files?.map((file, index) => (
+                        files.length <= 0 && <img src={noImageAvailable} alt={`Image`} className='post_img'/>
+                    }
+
+                    {
+                        Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
                             <div key={index}>
                                 <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
                             </div>
                         ))
                     }
+
                 </Slider>
             }
 

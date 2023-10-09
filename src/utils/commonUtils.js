@@ -158,17 +158,49 @@ export const checkDimensions = (file, referenceId = "") => {
     }
 };
 
-
 export const handleSeparateCaptionHashtag = (inputText) => {
-    const hashtagIndex = inputText.indexOf('#');
-    if (hashtagIndex !== -1) {
-        const extractedCaption = inputText.substring(0, hashtagIndex).trim();
-        const extractedHashtag = inputText.substring(hashtagIndex).trim();
-        return {caption: extractedCaption, hashtag: extractedHashtag}
+    if (inputText) {
+        const hashtagIndex = inputText.indexOf('#');
+        if (hashtagIndex !== -1) {
+            const extractedCaption = inputText.substring(0, hashtagIndex).trim();
+            const extractedHashtag = inputText.substring(hashtagIndex).trim();
+            return {caption: extractedCaption, hashtag: extractedHashtag}
 
-    } else {
-        return {caption: extractedCaption, hashtag: ''};
+        } else {
+            return {caption: inputText, hashtag: ''};
+        }
     }
+};
+
+export function sortByKey(list, key) {
+    function sortBy(a, b) {
+        const dateA = new Date(a[key]).getTime();
+        const dateB = new Date(b[key]).getTime();
+        return dateA - dateB;
+    }
+    list.sort(sortBy);
+    return list; // return the sorted list
+}
+
+
+export const extractHashtags = (hastTag) => {
+    const hashtagRegex = /#[A-Za-z0-9_-]+/g;
+    return !hastTag.match(hashtagRegex) || [];
+}
+
+
+export const generateHashtags = (message) => {
+    const hashtags = extractHashtags(message)
+
+
+    console.log("@@@ hashtags",hashtags)
+
+    const keywords = message.split(/\s+/);
+    const generatedHashtags = keywords.filter((word) => word.length > 2).map((word) => `#${word}`);
+
+    console.log("@@@ generatedHashtags",generatedHashtags)
+
+    return generatedHashtags;
 };
 
 

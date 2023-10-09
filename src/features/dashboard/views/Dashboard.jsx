@@ -9,7 +9,6 @@ import twitter_img from '../../../images/twitter.svg'
 import instagram_img from '../../../images/instagram.png'
 import linkedin_img from '../../../images/linkedin.svg'
 import Chart from "../../react_chart/views/Chart.jsx";
-import UpcomingPost from "../../upcomingPost/views/UpcomingPost.jsx";
 import jsondata from '../../../locales/data/initialdata.json'
 import {useEffect, useState} from "react";
 import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
@@ -29,6 +28,8 @@ import axios from "axios";
 import {showErrorToast} from "../../common/components/Toast.jsx";
 import Swal from "sweetalert2";
 import {getUserInfo} from "../../../app/actions/userActions/userActions";
+import {getAllDraftPostsByCustomerAndPeriodAction} from "../../../app/actions/postActions/postActions";
+import ScheduledComponent from "../../unPublishedPages/views/ScheduledComponent";
 
 const Dashboard = () => {
 
@@ -43,6 +44,9 @@ const Dashboard = () => {
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const userData = useSelector(state => state.user.userInfoReducer.data);
+    const getAllPostsByCriteriaData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
+
+    console.log("facebookConnectedPages---->",facebookConnectedPages);
 
     useEffect(() => {
         document.title = 'Dashboard';
@@ -53,8 +57,9 @@ const Dashboard = () => {
         if (token) {
             const decodeJwt = decodeJwtToken(token);
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
+            dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query:{limit:5} }));
         }
-    }, [])
+    }, [token])
 
 
     useEffect(() => {
@@ -450,7 +455,7 @@ const Dashboard = () => {
                             </div>
                         </div>
                         {/* upcoming post */}
-                        <UpcomingPost/>
+                        <ScheduledComponent scheduledData={getAllPostsByCriteriaData}  />
                     </div>
 
                 </div>

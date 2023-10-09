@@ -1,3 +1,28 @@
+.upcoming_post_outer h2{
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: -0.2px;
+}
+
+.post_scheduled_content h4{
+    color: #585858;
+    font-family: Nunito;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px; /* 150% */
+    letter-spacing: 0.024px;
+    padding-top: 12px;
+}
+
+
+
+.selected-option p{
+
+    margin: 0;
+}
 .selected-option {
     display: flex;
     align-items: center;
@@ -7,23 +32,59 @@
     background: #FFF;
     padding: 7px;
     cursor: pointer;
+    align-items: center;
+    flex-shrink: 1;
+    min-width: 148px;
 }
+.page_tags {
+    display: flex;
+    overflow: hidden;
+    overflow-x: scroll;
+    width: 100%;
+    max-width: 98%;
+    gap: 10px;
+    padding: 4px 0px;
+    min-height: 57px;
+}
+/*/ width /*/
 
+.draft-heading h4.posted-on-txt{
+    min-width: 130px;
+}
 .draft-heading {
     display: flex;
     align-items: center;
     gap: 14px;
     padding: 30px 20px;
-    flex-wrap: wrap;
+    /*flex-wrap: wrap;*/
+    /*position: relative;*/
 }
 
 .draft-outer {
     border-radius: 30px;
-    margin-top: 36px;
+    margin-top: 15px;
     box-shadow: 1px 1px 5px #89858538;
     background: white;
+
+}
+.page_tags::-webkit-scrollbar {
+    width: 2px;
+    height:4px
 }
 
+/*/ Track /*/
+.page_tags::-webkit-scrollbar-track {
+    border-radius: 10px;
+    width: 4px;
+    background: transparent;
+}
+
+/*/ Handle /*/
+.page_tags::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+    width: 4px;
+}
 .draft-post-list-outer.row.m-0.mt-5 {
     border-top: 2px solid #D1D9E2;
 }

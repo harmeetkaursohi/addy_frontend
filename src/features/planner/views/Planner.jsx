@@ -9,6 +9,7 @@ import {Link} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {
+    getAllDraftPostsByCustomerAndPeriodAction,
     getAllPostsForPlannerAction,
     getPlannerPostCountAction
 } from "../../../app/actions/postActions/postActions";
@@ -16,8 +17,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {computeAndReturnPlannerEvent} from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
-import DraftComponent from "../../draftPage/views/DraftComponent";
-import {ParentDraftComponent} from "../../draftPage/views/ParentDraftComponent";
+import DraftComponent from "../../unPublishedPages/views/DraftComponent";
+import {ParentDraftComponent} from "../../unPublishedPages/views/ParentDraftComponent";
 
 const Planner = () => {
     const dispatch = useDispatch();
@@ -89,19 +90,30 @@ const Planner = () => {
 
 
     useEffect(() => {
-        if (Object.keys(baseSearchQuery).length > 0) {
-            const decodeJwt = decodeJwtToken(token);
-            dispatch(getAllPostsForPlannerAction({
-                customerId: decodeJwt.customerId,
-                token: token,
-                query: baseSearchQuery
-            }));
 
-            dispatch(getPlannerPostCountAction({
-                customerId: decodeJwt.customerId,
-                token: token,
-                query: baseSearchQuery
-            }));
+        if (Object.keys(baseSearchQuery).length > 0) {
+
+            const decodeJwt = decodeJwtToken(token);
+
+            if(isDraftPost){
+                dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query:baseSearchQuery }));
+            }else{
+                dispatch(getAllPostsForPlannerAction({
+                    customerId: decodeJwt.customerId,
+                    token: token,
+                    query: baseSearchQuery
+                }));
+
+                dispatch(getPlannerPostCountAction({
+                    customerId: decodeJwt.customerId,
+                    token: token,
+                    query: baseSearchQuery
+                }));
+            }
+
+
+
+
 
 
         }
@@ -253,7 +265,7 @@ const Planner = () => {
 
                         {
                             isDraftPost === true &&
-                                <ParentDraftComponent />
+                                <ParentDraftComponent setDraftPost={setDraftPost} />
                         }
 
                     </div>

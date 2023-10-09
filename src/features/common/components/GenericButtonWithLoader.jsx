@@ -1,6 +1,6 @@
-function GenericButtonWithLoader({label, onClick = null, className, isLoading = false, loaderClassName = ""}) {
+function GenericButtonWithLoader({label, onClick = null, className, isLoading = false, loaderClassName = "",id=new Date().getTime().toString()}) {
     return (
-        <button className={className} onClick={onClick} disabled={isLoading}>
+        <button className={className} id={id} onClick={onClick} disabled={isLoading}>
             {isLoading ? (
                     <>
                         <span className={loaderClassName ? loaderClassName : "spinner-border spinner-border-sm me-1"}

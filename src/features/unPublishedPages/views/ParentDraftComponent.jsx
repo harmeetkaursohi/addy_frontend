@@ -1,10 +1,12 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth";
+import {getToken} from "../../../app/auth/auth";
 import {getAllDraftPostsByCustomerAndPeriodAction} from "../../../app/actions/postActions/postActions";
 import DraftComponent from "./DraftComponent";
+import {sortByKey} from "../../../utils/commonUtils";
+import CommonLoader from "../../common/components/CommonLoader";
 
-export const ParentDraftComponent = () => {
+export const ParentDraftComponent = ({setDraftPost}) => {
 
     const dispatch = useDispatch();
     const token = getToken();
@@ -20,18 +22,18 @@ export const ParentDraftComponent = () => {
 
 
     useEffect(() => {
-        if (Array.isArray(drafts) && drafts.length===0 &&  getAllDraftPostsByCustomerAndPeriodData?.data) {
-            setDrafts(Object.keys(getAllDraftPostsByCustomerAndPeriodData?.data));
+        if (getAllDraftPostsByCustomerAndPeriodData?.data) {
+            setDrafts(Object.values(getAllDraftPostsByCustomerAndPeriodData?.data));
         }
     }, [getAllDraftPostsByCustomerAndPeriodData]);
 
     return (
 
-        <div className={"draft-post-list-outer row m-0"}>
+        <div className={"row m-0"}>
 
-            {drafts && Array.isArray(drafts) && drafts.map(curKey => (
+            {getAllDraftPostsByCustomerAndPeriodData.loading ? (<CommonLoader />) :  drafts && Array.isArray(drafts) && sortByKey(drafts,"createdAt").map(curDraftObject => (
                 <div className={drafts.length === 1 ? "col-lg-12" : "col-lg-6"}>
-                    <DraftComponent batchIdData={getAllDraftPostsByCustomerAndPeriodData?.data?.[curKey]}/>
+                    <DraftComponent batchIdData={curDraftObject} setDraftPost={setDraftPost} setDrafts={setDrafts}/>
                 </div>
             ))
             }
@@ -40,3 +42,4 @@ export const ParentDraftComponent = () => {
 
 
 }
+
