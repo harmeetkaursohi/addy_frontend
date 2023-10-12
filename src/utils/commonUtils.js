@@ -178,6 +178,7 @@ export function sortByKey(list, key) {
         const dateB = new Date(b[key]).getTime();
         return dateA - dateB;
     }
+
     list.sort(sortBy);
     return list; // return the sorted list
 }
@@ -193,12 +194,12 @@ export const generateHashtags = (message) => {
     const hashtags = extractHashtags(message)
 
 
-    console.log("@@@ hashtags",hashtags)
+    console.log("@@@ hashtags", hashtags)
 
     const keywords = message.split(/\s+/);
     const generatedHashtags = keywords.filter((word) => word.length > 2).map((word) => `#${word}`);
 
-    console.log("@@@ generatedHashtags",generatedHashtags)
+    console.log("@@@ generatedHashtags", generatedHashtags)
 
     return generatedHashtags;
 };
@@ -307,6 +308,14 @@ export function computeImageURL(providerType) {
             return "Pinterest"
         }
     }
+}
+
+export const dateFormat = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const isoDateString = `${year}-${month}-${day}T00:00:00.000+00:00`;
+    return isoDateString;
 }
 
 
