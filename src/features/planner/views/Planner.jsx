@@ -8,17 +8,13 @@ import jsondata from '../../../locales/data/initialdata.json'
 import {Link} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
-import {
-    getAllDraftPostsByCustomerAndPeriodAction,
-    getAllPostsForPlannerAction,
-    getPlannerPostCountAction
-} from "../../../app/actions/postActions/postActions";
+import {getAllDraftPostsByCustomerAndPeriodAction, getAllPlannerPostAction, getAllPostsForPlannerAction, getPlannerPostCountAction} from "../../../app/actions/postActions/postActions";
 import {useDispatch, useSelector} from "react-redux";
-import {computeAndReturnPlannerEvent} from "../../../utils/commonUtils";
+import {computeAndReturnPlannerEvent, dateFormat} from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
-import DraftComponent from "../../unPublishedPages/views/DraftComponent";
 import {ParentDraftComponent} from "../../unPublishedPages/views/ParentDraftComponent";
+import CommonShowMorePlannerModel from "../../common/components/CommonShowMorePlannerModal";
 
 const Planner = () => {
     const dispatch = useDispatch();
@@ -28,13 +24,18 @@ const Planner = () => {
     const calendarRef = useRef(null);
     const [baseSearchQuery, setBaseSearchQuery] = useState({});
     const [isDraftPost, setDraftPost] = useState(false);
+    const [showMorePlannerModel, setShowMorePlannerModel] = useState(false);
+    const [plannerPosts, setPlannerPosts] = useState([]);
+    const [eventDate, setEventDate] = useState(null);
+    const [batchIds, setBatchIds] = useState([]);
 
     const [events, setEvents] = useState([
-        {title: 'Instagram post', start: new Date(), imageUrl: instagram_img},
-        {title: "Twitter", start: new Date(), imageUrl: linkedin}]);
+        {title: 'Instagram post', start: new Date().getTime(), imageUrl: instagram_img},
+        {title: "Twitter", start: new Date().getTime(), imageUrl: linkedin}]);
 
     const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer);
     const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
+    const getAllPlannerPostsData = useSelector(state => state.post.getAllPlannerPostReducer);
 
 
     useEffect(() => {
@@ -56,37 +57,12 @@ const Planner = () => {
         }
     }, [getAllPostsForPlannerData]);
 
+    useEffect(() => {
+        if (getAllPlannerPostsData?.data) {
+            setPlannerPosts(Object.values(getAllPlannerPostsData?.data))
+        }
+    }, [getAllPlannerPostsData]);
 
-    // render event content
-    const renderCalendarCards = ({event}) => {
-        return (
-            <div className={"cal_Div w-100 test"}
-                 style={{pointerEvents: event?._def?.extendedProps?.postDate < new Date() ? "none" : ""}}>
-
-                <div className="w-100 p-0 calendar_card">
-
-                    {event?._def?.extendedProps?.childCardContent?.map((c, index) => {
-                        return (
-                            <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}
-                                 onClick={() => {
-                                     console.log("handle singlr click if needed----->")
-                                 }}>
-                                <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>
-                                <h3>{c.title}</h3>
-                            </div>
-                        )
-                    })}
-                </div>
-                {event?._def?.extendedProps?.showMoreContent > 0 && <button
-                    className={"createPost_btn crate_btn cmn_btn_color w-100 ms-0 mt-2 mb-3"}>{"View " + event?._def?.extendedProps?.showMoreContent + " more"}</button>}
-            </div>)
-    }
-
-
-    const customDayHeaderContent = (args) => {
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        return days[args.date.getDay()];
-    };
 
 
     useEffect(() => {
@@ -95,9 +71,9 @@ const Planner = () => {
 
             const decodeJwt = decodeJwtToken(token);
 
-            if(isDraftPost){
-                dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query:baseSearchQuery }));
-            }else{
+            if (isDraftPost) {
+                dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query: baseSearchQuery}));
+            } else {
                 dispatch(getAllPostsForPlannerAction({
                     customerId: decodeJwt.customerId,
                     token: token,
@@ -112,12 +88,45 @@ const Planner = () => {
             }
 
 
-
-
-
-
         }
     }, [baseSearchQuery]);
+
+
+    // render event content
+    const renderCalendarCards = ({event}) => {
+        return (
+            <div className={"cal_Div w-100 test"}
+                 style={{pointerEvents: event?._def?.extendedProps?.postDate < new Date().getTime() ? "none" : ""}}>
+
+                <div className="w-100 p-0 calendar_card">
+
+                    {event?._def?.extendedProps?.childCardContent?.map((c, index) => {
+                        return (
+                            <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}
+                                 onClick={(e) => {
+                                     console.log("handle singlr click if needed----->")
+                                 }}>
+                                <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>
+                                <h3>{c.title}</h3>
+                            </div>
+                        )
+                    })}
+                </div>
+                {event?._def?.extendedProps?.showMoreContent > 0 &&
+                    <button className="createPost_btn crate_btn cmn_btn_color w-100 ms-0 mt-2 mb-3"
+                            onClick={(e) => handleShowMorePostModal(event)}
+                    >
+                        {"View " + event?._def?.extendedProps?.showMoreContent + " more"}
+                    </button>
+                }
+            </div>)
+    }
+
+
+    const customDayHeaderContent = (args) => {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        return days[args.date.getDay()];
+    };
 
 
     const customHeaderClick = (eventType) => {
@@ -138,17 +147,41 @@ const Planner = () => {
         setIsLoading(false);
     }
 
-    console.log("isDraft", isDraftPost)
+    const handleShowMorePostModal = (event) => {
+        const startDate = event.start;
+        const targetDate = dateFormat(startDate);
 
-    function eventAddStyle(arg) {
-        if (arg.event.extendedProps.demanding) {
-            console.log("if eventAddStyle")
-            return ['maxLevel']; //maxLevel and lowLevel are two CSS classes defined in a .css file
-        } else {
-            console.log("else eventAddStyle")
-            return ['lowLevel'];
-        }
-    }
+        setEventDate(new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }).format(startDate));
+
+        const plannerPostList = {};
+        const batchIdList = [];
+
+        Object.keys(getAllPostsForPlannerData?.data)?.filter((key) => {
+            const datePart = key.substring(0, 10);
+            if (datePart === targetDate.substring(0, 10)) {
+                plannerPostList.plannerPostData = getAllPostsForPlannerData.data[key]
+            }
+        })
+
+        Object.keys(plannerPostList.plannerPostData)?.map((batchId) => {
+            batchIdList.push(batchId);
+        })
+
+        setBatchIds(batchIdList);
+
+        dispatch(getAllPlannerPostAction({
+            token: token, query: {batchIds: batchIdList, postStatus: "SCHEDULED"}
+        }));
+
+        setShowMorePlannerModel(true);
+
+    };
+
+
 
     return (
         <>
@@ -195,7 +228,7 @@ const Planner = () => {
                                 </div>
                             </div>
                         }
-                        {/* select option */}
+
 
                         <div className='calender_outer_wrapper'>
 
@@ -223,13 +256,13 @@ const Planner = () => {
                             <div className={`${isDraftPost ? 'calendar-container hidden' : ''}`}>
 
                                 <FullCalendar
-                                    // height={}
                                     ref={calendarRef}
                                     plugins={[dayGridPlugin]}
                                     initialView='dayGridMonth'
                                     weekends={true}
                                     events={events}
                                     eventContent={renderCalendarCards}
+                                    // eventClick={handleShowMore}
                                     dayHeaderContent={customDayHeaderContent}
                                     dayCellClassNames={(arg) => {
                                         if (arg?.isPast) {
@@ -265,13 +298,27 @@ const Planner = () => {
 
                         {
                             isDraftPost === true &&
-                                <ParentDraftComponent setDraftPost={setDraftPost} />
+                            <ParentDraftComponent setDraftPost={setDraftPost}/>
+                        }
+
+
+                        {
+                            showMorePlannerModel &&
+                            <CommonShowMorePlannerModel
+                                commonShowMorePlannerModal={showMorePlannerModel}
+                                setCommonShowMorePlannerModal={setShowMorePlannerModel}
+                                plannerPosts={plannerPosts}
+                                setPlannerPosts={setPlannerPosts}
+                                eventDate={eventDate}
+                                baseSearchQuery={baseSearchQuery}
+                            />
                         }
 
                     </div>
                 </div>
             </section>
+
         </>
     )
 }
-export default Planner
+export default Planner;

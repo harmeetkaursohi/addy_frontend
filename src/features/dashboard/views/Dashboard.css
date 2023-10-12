@@ -533,3 +533,81 @@ select.page_title_options {
     height: 100%;
     margin-top: 15px;
 }
+
+
+.btn-with-fixed-width {
+    /*min-width: 120px; !* Adjust this value to your desired maximum width *!*/
+    /*overflow: hidden;*/
+    text-overflow: ellipsis;
+}
+.dropdown_btn .dropdown-menu.show {
+    width: 193px;
+}
+button.not_connect {
+    position: absolute;
+    border-radius: 2px;
+    background: #F44455;
+    border-color: transparent;
+    color: #fff;
+    font-size: 10px;
+    left: 11px;
+    top: -13px;
+    border-radius: 3px;
+}
+.report_section_enable_btn{
+    cursor: pointer;
+    color: #eeeeee;
+    background: #1a1d20;
+}
+
+.report_section_disable_btn{
+    pointer-events: none;
+    background-color: #eeeeee;
+    color: #999999;
+}
+
+.report_section_selected_btn{
+    background-color: #eeeeee;
+    color: #F07C33;
+    text-wrap: normal;
+}
+.tabs_pages{
+    overflow-x: auto;
+    white-space: nowrap;
+    margin: 0px 23px;
+    padding-bottom: 4px;
+    padding-top: 20px;
+}
+/* width */
+.tabs_pages::-webkit-scrollbar {
+    width: 10px;
+    height: 4px;
+}
+
+/* Track */
+.tabs_pages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.tabs_pages::-webkit-scrollbar-thumb {
+    background: #ddd;
+}
+
+/* Handle on hover */
+.tabs_pages::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+.tabs_pages button.btn-with-fixed-width {
+    border: 1px solid transparent;
+    padding: 10PX 10px;
+    border-radius: 4px;
+
+
+}
+
+.tabs_pages
+button.btn-with-fixed-width.report_section_selected_btn {
+    border-color: #f07c3a;
+    background-color: rgb(240 124 58 / 14%);
+}

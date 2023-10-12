@@ -30,8 +30,15 @@ ul {
 .cmn_container {
     padding-left: 280px;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
     background-color: #F4F8FE;
+}
+
+.comment_container {
+    padding-left: 280px;
+    width: 100%;
+    /*overflow: hidden;*/
+    background-color: #FFF;
 }
 
 .cmn_wrapper_outer {

@@ -4,7 +4,9 @@ import {
     findSocialAccountByProviderAndCustomerIdAction,
     getAllConnectedSocialAccountAction,
     socialAccountConnectActions,
-    getAllByCustomerIdAction
+    getAllByCustomerIdAction,
+    getSocialMediaReportByProviderTypeAction,
+    getSocialMediaGraphByProviderTypeAction
 } from "../../actions/socialAccountActions/socialAccountActions.js";
 
 
@@ -16,6 +18,8 @@ const socialAccountSlice = createSlice({
         disconnectSocialAccountReducer: {loading: false},
         findSocialAccountByProviderAndCustomerIdReducer: {loading: false},
         getAllByCustomerIdReducer: {loading: false},
+        getSocialMediaReportByProviderTypeReducer: {loading: false},
+        getSocialMediaGraphByProviderTypeReducer: {loading: false},
     },
     reducers: {
         resetSocialAccountReducer: (state) => {
@@ -24,6 +28,29 @@ const socialAccountSlice = createSlice({
     },
 
     extraReducers: {
+
+
+        // get social account by customer id and provider
+        [getSocialMediaReportByProviderTypeAction.pending]: (state) => {
+            state.getSocialMediaReportByProviderTypeReducer = {loading: true}
+        },
+        [getSocialMediaReportByProviderTypeAction.fulfilled]: (state, action) => {
+            state.getSocialMediaReportByProviderTypeReducer = {loading: false, data: action.payload}
+        },
+        [getSocialMediaReportByProviderTypeAction.rejected]: (state) => {
+            state.getSocialMediaReportByProviderTypeReducer = {loading: false}
+        },
+
+
+        [getSocialMediaGraphByProviderTypeAction.pending]: (state) => {
+            state.getSocialMediaGraphByProviderTypeReducer = {loading: true}
+        },
+        [getSocialMediaGraphByProviderTypeAction.fulfilled]: (state, action) => {
+            state.getSocialMediaGraphByProviderTypeReducer = {loading: false, data: action.payload}
+        },
+        [getSocialMediaGraphByProviderTypeAction.rejected]: (state) => {
+            state.getSocialMediaGraphByProviderTypeReducer = {loading: false}
+        },
 
         // social account connect
         [socialAccountConnectActions.pending]: (state) => {

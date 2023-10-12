@@ -3,7 +3,6 @@ import {SocialAccountProvider} from "./contantData.js";
 import {exchangeForLongLivedToken} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
 import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/facebookActions/facebookActions.js";
-import {showErrorToast} from "../features/common/components/Toast";
 import fb from "../images/fb.svg";
 import instagram_img from "../images/instagram.png";
 import linkedin from "../images/linkedin.svg";
@@ -178,6 +177,7 @@ export function sortByKey(list, key) {
         const dateB = new Date(b[key]).getTime();
         return dateA - dateB;
     }
+
     list.sort(sortBy);
     return list; // return the sorted list
 }
@@ -193,12 +193,12 @@ export const generateHashtags = (message) => {
     const hashtags = extractHashtags(message)
 
 
-    console.log("@@@ hashtags",hashtags)
+    console.log("@@@ hashtags", hashtags)
 
     const keywords = message.split(/\s+/);
     const generatedHashtags = keywords.filter((word) => word.length > 2).map((word) => `#${word}`);
 
-    console.log("@@@ generatedHashtags",generatedHashtags)
+    console.log("@@@ generatedHashtags", generatedHashtags)
 
     return generatedHashtags;
 };
@@ -243,6 +243,15 @@ export async function urlsToFiles(fileUrlList) {
 }
 
 
+export const dateFormat = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const isoDateString = `${year}-${month}-${day}T00:00:00.000+00:00`;
+    return isoDateString;
+}
+
+
 export const computeAndReturnPlannerEvent = (currentObject) => {
 
     let a = [];
@@ -251,7 +260,7 @@ export const computeAndReturnPlannerEvent = (currentObject) => {
             start: new Date(c),
             showMoreContent: Object.keys(currentObject[c]).length - 1,
             batchId: Object.keys(currentObject[c])[0],
-            postDate: new Date(c),
+            postDate: new Date(c).getTime(),
             childCardContent: computeAndBuildChildCard(currentObject[c], Object.keys(currentObject[c])[0])
         });
     })
@@ -310,5 +319,69 @@ export function computeImageURL(providerType) {
 }
 
 
+export const notConnectedSocialMediaAccount = (provider, connectedList) => {
+    if (connectedList === undefined || (Array.isArray(connectedList) && connectedList.filter(c => c.provider !== "GOOGLE").length === 0)) {
+        return true;
+    }
+
+    return !connectedList.some(curProv => curProv?.provider === provider);
+}
 
 
+export const isPageConnected = (connectedPaged, currentPage) => {
+
+    const c = connectedPaged.some((obj) => {
+        return obj?.pageId === currentPage?.id;
+    });
+    return c;
+}
+
+export const computeAndReturnSummedDateValues = (data) => {
+
+    const result = data.reduce((accumulator, current) => {
+        const date = current.end_time.split('T')[0]; // Extract the date part
+
+        if (accumulator[date]) {
+            accumulator[date].value += current.value;
+        } else {
+            accumulator[date] = {"count": current.value, "endDate": date};
+        }
+
+        return accumulator;
+    }, {})
+
+    return Object.values(result);
+}
+
+
+export const calculatePercentageGrowth = async (data) => {
+    for (let i = 1; i < data.length; i++) {
+        const currentCount = data[i].count;
+        const previousCount = data[i - 1].count;
+
+        if (previousCount === 0) {
+            data[i].percentageGrowth = currentCount * 100; // Show 300% instead of 0
+        } else {
+            data[i].percentageGrowth = ((currentCount - previousCount) / previousCount) * 100;
+        }
+    }
+    if(data.length>0){
+        data.shift()
+    }
+
+    return data;
+}
+
+
+export function getCustomDateEarlierUnixDateTime(dateToElapse) {
+    console.log("------>dateToElapse",dateToElapse);
+    if (dateToElapse === 0) {
+        return Math.floor(new Date().getTime() / 1000);
+    }
+    let currentDate = new Date();
+    let unixValue = new Date(currentDate.getTime() - dateToElapse * 24 * 60 * 60 * 1000).getTime() / 1000;
+
+    return Math.floor(unixValue);
+
+
+}

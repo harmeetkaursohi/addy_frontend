@@ -1,0 +1,178 @@
+.more_plans_grid {
+    display: flex;
+    gap: 15px;
+    border-radius: 10px;
+    border: 1px solid #C9C9C9;
+    background: #FFF;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.09);
+    padding: 10px;
+}
+
+.plan_grid_img {
+    width: 125px;
+    height: 114px;
+    overflow: hidden;
+    border-radius: 6px;
+    flex: 0 0 125px;
+}
+
+.plan_grid_img img {
+    width: 100%;
+    height: 114px;
+
+    object-fit: cover;
+}
+
+.plan_grid_content {
+    flex-grow: 1;
+}
+
+.plan_content_header {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.hide_modal {
+    position: absolute;
+    z-index: 2;
+    right: 20px;
+    top: 19px;
+    cursor: pointer;
+}
+
+.plans_tags_wrapper {
+    display: flex;
+    gap: 10px;
+    position: relative;
+    width: 100%;
+    min-height: 60px;
+}
+
+.plans_tags_wrapper .d-flex.page_tags {
+    min-height: unset;
+}
+
+.plans_tags_wrapper .d-flex {
+    overflow-x: scroll;
+    width: 100%;
+    position: absolute;
+    white-space: nowrap;
+}
+
+.plan_grid_navigations {
+    min-width: 80px;
+}
+
+.plan_tags {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.plan_grid_navigations button {
+    border-radius: 9px;
+    border: 1px solid #D7D7D7;
+    background: #F07C33;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.15);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+}
+
+.plan_grid_navigations button:first-child {
+    margin-right: 16px;
+}
+
+.plan_grid_navigations button:last-child {
+    background: rgba(216, 43, 43, 0.96);
+}
+
+.plan_tags {
+    border-radius: 8px;
+    border: 1px solid rgba(254, 73, 160, 0.21);
+    background: rgba(255, 88, 101, 0.18);
+    padding: 5px 10px;
+}
+
+.plan_tags p {
+    color: #000;
+    font-family: Nunito;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.plan_tags.facebook {
+    border-radius: 8px;
+    border: 1px solid rgba(0, 130, 203, 0.50);
+    background: rgba(0, 130, 203, 0.04);
+}
+
+.plan_tag_img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+img.plan_social_img {
+    position: absolute;
+    bottom: 0;
+    right: -7px;
+    width: 15px;
+    height: 15px;
+}
+
+.plan_tag_img img.plan_image {
+    width: 100%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.more_plans h2 {
+    color: #000;
+    font-family: Nunito;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #C9C9C9;
+    margin-bottom: 20px;
+}
+
+.more_plans_wrapper {
+    margin-top: 20px;
+}
+
+p.hasTags {
+    color: #00A3FF;
+    font-family: Nunito;
+    font-size: 10px;
+}
+@media only screen and (max-width: 1024px) and (min-width: 576px)  {
+    .modal-dialog.modal-lg.plannner_modal {
+        max-width: 94%;
+    }
+}
+@media(max-width:576px){
+    .more_plans_grid{
+        flex-wrap: wrap;
+        position:relative;
+    }
+    .plan_grid_img img {
+        height: unset;
+    }
+
+    .plan_grid_img {
+        flex: 0 0 100%;
+        height: unset;
+    }
+    .plan_grid_navigations {
+        position: absolute;
+        right: 5px;
+        bottom: 8px;
+    }
+}

@@ -1,14 +1,11 @@
 import Header from "../../head/views/Header"
 import SideBar from "../../sidebar/views/Layout"
 import './Dashboard.css'
-import Dropdown from 'react-bootstrap/Dropdown';
-import polygon_img from '../../../images/polygon.svg'
 import fb_img from '../../../images/fb.svg'
 import tiktok_img from '../../../images/tiktok.svg'
 import twitter_img from '../../../images/twitter.svg'
 import instagram_img from '../../../images/instagram.png'
 import linkedin_img from '../../../images/linkedin.svg'
-import Chart from "../../react_chart/views/Chart.jsx";
 import jsondata from '../../../locales/data/initialdata.json'
 import {useEffect, useState} from "react";
 import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
@@ -24,17 +21,18 @@ import {
     socialAccountConnectActions
 } from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
-import axios from "axios";
 import {showErrorToast} from "../../common/components/Toast.jsx";
 import Swal from "sweetalert2";
 import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {getAllDraftPostsByCustomerAndPeriodAction} from "../../../app/actions/postActions/postActions";
 import ScheduledComponent from "../../unPublishedPages/views/ScheduledComponent";
+import {DashboardReports} from "./reports/DashboardReports";
 
 const Dashboard = () => {
 
-    const [showFacebookModal, setShowFacebookModal] = useState(false)
-    const [facebookDropDown, setFacebookDropDown] = useState(false)
+    const [showFacebookModal, setShowFacebookModal] = useState(false);
+    const [facebookDropDown, setFacebookDropDown] = useState(false);
+
     const dispatch = useDispatch();
     const token = getToken();
 
@@ -46,8 +44,6 @@ const Dashboard = () => {
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const getAllPostsByCriteriaData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
 
-    console.log("facebookConnectedPages---->",facebookConnectedPages);
-
     useEffect(() => {
         document.title = 'Dashboard';
     }, []);
@@ -57,7 +53,7 @@ const Dashboard = () => {
         if (token) {
             const decodeJwt = decodeJwtToken(token);
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
-            dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query:{limit:5} }));
+            dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query: {limit: 5}}));
         }
     }, [token])
 
@@ -72,6 +68,8 @@ const Dashboard = () => {
             dispatch(getUserInfo(requestBody))
         }
     }, [token, dispatch, userData]);
+
+
 
 
     useEffect(() => {
@@ -151,103 +149,13 @@ const Dashboard = () => {
                             facebookPageList={facebookPageList}/>
                     <div className="dashboard_outer">
                         <div className="row">
-                            <div className="col-lg-8 col-md-12 col-sm-12">
-                                <div className="post_activity_outer cmn_background">
-                                    <Dropdown className="dropdown_btn">
-                                        <Dropdown.Toggle variant="success" id="dropdown-basic"
-                                                         className="social_dropdowns">
-                                            <img src={instagram_img} className="me-3"/>Instagram
-                                        </Dropdown.Toggle>
-                                        <Dropdown.Menu>
-                                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                    <div className="followers_outer ">
-                                        <div className="followers_wrapper ">
-                                            <h5>{jsondata.followers}</h5>
-                                            <div className="followers_inner_content">
-                                                <h2>15,452</h2>
-                                                <div className="monthly_growth">
-                                                    <button className="cmn_followers_btn">
-                                                        <img src={polygon_img} className="polygon_img"/>
-                                                        1255
-                                                    </button>
-                                                    <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="followers_wrapper">
-                                            <h5>{jsondata.accountsReach} </h5>
-                                            <div className="followers_inner_content">
-                                                <h2>15,452</h2>
-                                                <div className="monthly_growth">
-                                                    <button className="cmn_followers_btn">
-                                                        <img src={polygon_img} className="polygon_img"/>
-                                                        1255
-                                                    </button>
-                                                    <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="followers_wrapper">
-                                            <h5>{jsondata.postActivity}</h5>
-                                            <div className="followers_inner_content">
-                                                <h2>15,452</h2>
-                                                <div className="monthly_growth">
-                                                    <button className="cmn_followers_btn">
-                                                        <img src={polygon_img} className="polygon_img"/>
-                                                        1255
-                                                    </button>
-                                                    <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {/* chart */}
-                                    <div className="page_title_header">
-                                        <div className="page_title_container">
-                                            <div className="page_title_dropdown">
-                                                <select className="page_title_options cmn_headings">
-                                                    <option>Page title</option>
-                                                    <option>22</option>
-                                                    <option>22</option>
-                                                </select>
-                                                <h3 className="cmn_white_text instagram_overview_heading">Instagram
-                                                    Overview</h3>
-                                            </div>
-                                            <div className="days_outer">
-                                                <select className=" dropdown_days box_shadow">
-                                                    <option>Last 7 days</option>
-                                                    <option>Last 7 days</option>
-                                                    <option>Last 7 days</option>
-                                                </select>
-                                            </div>
 
-                                        </div>
-                                        <Chart/>
-                                        <div className="account_info mt-2">
-                                            <div className="account_group">
-                                                <div className="account_reached cmn_chart_btn">
-                                                </div>
-                                                <h4 className="cmn_headings">Accounts Reached</h4>
-                                            </div>
-                                            <div className="account_group">
-                                                <div className="total_follower cmn_chart_btn">
-                                                </div>
-                                                <h4 className="cmn_headings">Total Followers</h4>
+                            <DashboardReports  />
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             <div className="col-lg-4 col-md-12 col-sm-12">
 
                                 {/* socail media */}
                                 <div className="cmn_background social_media_wrapper">
-
                                     <div className="social_media_account">
                                         <h3>{jsondata.socialAccount}</h3>
                                     </div>
@@ -270,7 +178,6 @@ const Dashboard = () => {
                                                 appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                                 redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                                 onResolve={(response) => {
-                                                    console.log("fb response", response)
                                                     connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
                                                 }}
                                                 onReject={(error) => {
@@ -399,10 +306,8 @@ const Dashboard = () => {
                                             scope={`${import.meta.env.VITE_APP_INSTAGRAM_SCOPE}`}
                                             redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                             onResolve={(response) => {
-                                                console.log("------>response", response);
                                             }}
                                             onReject={(error) => {
-                                                console.log("------>error", error);
                                                 console.log(error);
                                             }}
                                         >
@@ -455,7 +360,7 @@ const Dashboard = () => {
                             </div>
                         </div>
                         {/* upcoming post */}
-                        <ScheduledComponent scheduledData={getAllPostsByCriteriaData}  />
+                        <ScheduledComponent scheduledData={getAllPostsByCriteriaData}/>
                     </div>
 
                 </div>
