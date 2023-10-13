@@ -3,6 +3,20 @@ import axios from "axios";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 
+export const getPostsPage = async (pageParam = 1, options = {}) => {
+    const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${pageParam}`, options)
+    return response.data
+}
+
+export const getAllPlannerPostAction = createAsyncThunk('post/getAllPlannerPostAction', async (data, thunkAPI) => {
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/by-criteria`, data?.query, setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});
+
 
 export const publishedPostAction = createAsyncThunk('post/publishedPostAction', async (data, thunkAPI) => {
     return await axios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/publish/${data?.batchId}`,null, setAuthenticationHeader(data.token)).then(res => {

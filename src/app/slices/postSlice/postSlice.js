@@ -9,7 +9,7 @@ import {
     updatePostOnSocialMediaAction,
     getPlannerPostCountAction,
     deletePostByBatchIdAction,
-    getAllDraftPostsByCustomerAndPeriodAction, publishedPostAction
+    getAllDraftPostsByCustomerAndPeriodAction, publishedPostAction, getAllPlannerPostAction
 } from "../../actions/postActions/postActions.js";
 
 
@@ -26,7 +26,8 @@ const postSlice = createSlice({
         getPlannerPostCountReportReducer: {loading: false},
         getAllDraftPostsByCustomerAndPeriodReducer: {loading: false},
         publishedPostReducer: {loading: false},
-        deletePostByBatchIdReducer:{loading:false}
+        deletePostByBatchIdReducer: {loading: false},
+        getAllPlannerPostReducer: {loading: false}
     },
 
     reducers: {
@@ -36,6 +37,16 @@ const postSlice = createSlice({
     },
 
     extraReducers: {
+
+        [getAllPlannerPostAction.pending]: (state) => {
+            state.getAllPlannerPostReducer = {loading: true}
+        },
+        [getAllPlannerPostAction.fulfilled]: (state, action) => {
+            state.getAllPlannerPostReducer = {loading: false, data: action.payload}
+        },
+        [getAllPlannerPostAction.rejected]: (state) => {
+            state.getAllPlannerPostReducer = {loading: false}
+        },
 
         [publishedPostAction.pending]: (state) => {
             state.publishedPostReducer = {loading: true}
@@ -50,10 +61,12 @@ const postSlice = createSlice({
         [deletePostByBatchIdAction.pending]: (state) => {
             state.deletePostByBatchIdReducer = {loading: true}
         },
-        [deletePostByBatchIdAction.fulfilled]: (state, action) => {
-            console.log("====>",action);
-            state.deletePostByBatchIdReducer = {loading: false, data: "success"}},
-        [deletePostByBatchIdAction.rejected]: (state) => {state.deletePostByBatchIdReducer = {loading: false}},
+        [deletePostByBatchIdAction.fulfilled]: (state) => {
+            state.deletePostByBatchIdReducer = {loading: false, data: "success"}
+        },
+        [deletePostByBatchIdAction.rejected]: (state) => {
+            state.deletePostByBatchIdReducer = {loading: false}
+        },
 
 
         [updatePostOnSocialMediaAction.pending]: (state) => {

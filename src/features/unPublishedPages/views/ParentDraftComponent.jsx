@@ -5,6 +5,7 @@ import {getAllDraftPostsByCustomerAndPeriodAction} from "../../../app/actions/po
 import DraftComponent from "./DraftComponent";
 import {sortByKey} from "../../../utils/commonUtils";
 import CommonLoader from "../../common/components/CommonLoader";
+import noDraftPosts from "../../../images/no_draft_posts.png";
 
 export const ParentDraftComponent = ({setDraftPost}) => {
 
@@ -31,7 +32,11 @@ export const ParentDraftComponent = ({setDraftPost}) => {
 
         <div className={"row m-0"}>
 
-            {getAllDraftPostsByCustomerAndPeriodData.loading ? (<CommonLoader />) :  drafts && Array.isArray(drafts) && sortByKey(drafts,"createdAt").map(curDraftObject => (
+            {getAllDraftPostsByCustomerAndPeriodData.loading && (<CommonLoader />) }
+
+            {!getAllDraftPostsByCustomerAndPeriodData.loading   && drafts && Array.isArray(drafts) && drafts.length===0 &&  <img src={noDraftPosts} alt={"No Drafts"}/>}
+
+            {!getAllDraftPostsByCustomerAndPeriodData.loading && drafts && Array.isArray(drafts) && sortByKey(drafts,"createdAt").map(curDraftObject => (
                 <div className={drafts.length === 1 ? "col-lg-12" : "col-lg-6"}>
                     <DraftComponent batchIdData={curDraftObject} setDraftPost={setDraftPost} setDrafts={setDrafts}/>
                 </div>
