@@ -36,15 +36,17 @@ const CreatePassword = () => {
 
     const formik = useFormik({
         initialValues: {
-            password: "", customerId: userId, customerToken: token
-        }, validationSchema: validationSchemas.createPassword, onSubmit: (values) => {
+            password: "",
+            customerId: userId,
+            customerToken: token
+        },
+        validationSchema: validationSchemas.createPassword,
+        onSubmit: (values) => {
             const obj = {
                 newPassword: values.password, customerId: values.customerId, customerToken: values.customerToken,
             }
             dispatch(createPassword({values: obj, navigate: navigate}))
-
-
-        },
+        }
     });
 
     return (<section className='Container'>

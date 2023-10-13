@@ -522,7 +522,36 @@ createPost_outer select {
 .add_btn {
     font-size: 9px;
 }
+@media(max-width:1440px){
+    .fb_likes h3 {
+        font-size: 16px;
+    }
+    .fb_likes svg {
+        height: 18px;
+        width: 18px;
+    }
+    .fb_likes {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 
+}
+@media(max-width:1299px){
+    .create_post_content {
+        padding: 30px 20px;
+    }
+    .fb_likes svg {
+        height: 16px;
+        width: 16px;
+    }.fb_likes h3 {
+         font-size: 14px;
+     }.post_preview_outer {
+          padding: 2em;
+      }
+
+
+}
 @media screen and (max-width: 1024px) {
     .get_messages_outer {
         display: block;

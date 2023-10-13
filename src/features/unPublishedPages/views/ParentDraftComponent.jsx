@@ -34,7 +34,9 @@ export const ParentDraftComponent = ({setDraftPost}) => {
 
             {getAllDraftPostsByCustomerAndPeriodData.loading && (<CommonLoader />) }
 
-            {!getAllDraftPostsByCustomerAndPeriodData.loading   && drafts && Array.isArray(drafts) && drafts.length===0 &&  <img src={noDraftPosts} alt={"No Drafts"}/>}
+            {!getAllDraftPostsByCustomerAndPeriodData.loading   && drafts && Array.isArray(drafts) && drafts.length===0 &&
+                <div className="cmn_background p-5 text-center mt-3"><img src={noDraftPosts} alt={"No Drafts"} className="img-fluid"/></div>
+            }
 
             {!getAllDraftPostsByCustomerAndPeriodData.loading && drafts && Array.isArray(drafts) && sortByKey(drafts,"createdAt").map(curDraftObject => (
                 <div className={drafts.length === 1 ? "col-lg-12" : "col-lg-6"}>

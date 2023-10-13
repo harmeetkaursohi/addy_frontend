@@ -7,9 +7,8 @@ import fb from "../images/fb.svg";
 import instagram_img from "../images/instagram.png";
 import linkedin from "../images/linkedin.svg";
 
-const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
-
 export const validationSchemas = {
+
     login: yup.object().shape({
         username: yup.string().required('Username is required').email('Invalid email format'), password: yup.string()
             .min(5, 'Password must be at least 5 characters')
@@ -20,14 +19,19 @@ export const validationSchemas = {
         fullName: yup.string().required('Full Name is required'),
         username: yup.string().required('Username is required'),
         email: yup.string().required('Email is required').email('Invalid email format'),
-        contactNo: yup.number().required('Contact No is required')
     }),
 
     createPassword: yup.object().shape({
         password: yup.string()
-            .min(8, 'Password must be at least 8 characters')
-            .required('Password is required'),
-        confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
+            .required('Password is required')
+            .matches(/^(?=.*[0-9])/, 'Password must contain at least one digit (0-9)')
+            .matches(/^(?=.*[a-z])/, 'Password must contain at least one lowercase letter (a-z)')
+            .matches(/^(?=.*[A-Z])/, 'Password must contain at least one uppercase letter (A-Z)')
+            .matches(/^(?=.*[@#$%^&+=])/, 'Password must contain at least one special character (@#$%^&+=)')
+            .matches(/^(?=\S+$)/, 'Password cannot contain whitespace')
+            .matches(/.{8,}$/, 'Password must be at least 8 characters long'),
+        confirmPassword: yup.string()
+            .oneOf([yup.ref('password'), null], 'Passwords must match')
             .required('Confirm Password is required'),
 
     }),
@@ -243,15 +247,6 @@ export async function urlsToFiles(fileUrlList) {
 }
 
 
-export const dateFormat = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const isoDateString = `${year}-${month}-${day}T00:00:00.000+00:00`;
-    return isoDateString;
-}
-
-
 export const computeAndReturnPlannerEvent = (currentObject) => {
 
     let a = [];
@@ -373,7 +368,7 @@ export const calculatePercentageGrowth = async (data) => {
             data[i].percentageGrowth = ((currentCount - previousCount) / previousCount) * 100;
         }
     }
-    if(data.length>0){
+    if (data.length > 0) {
         data.shift()
     }
 
@@ -382,7 +377,7 @@ export const calculatePercentageGrowth = async (data) => {
 
 
 export function getCustomDateEarlierUnixDateTime(dateToElapse) {
-    console.log("------>dateToElapse",dateToElapse);
+    console.log("------>dateToElapse", dateToElapse);
     if (dateToElapse === 0) {
         return Math.floor(new Date().getTime() / 1000);
     }

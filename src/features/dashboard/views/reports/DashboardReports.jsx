@@ -92,10 +92,10 @@ export const DashboardReports = () => {
 
         <>
 
-            <div className="col-lg-8 col-md-12 col-sm-12">
+            <div className="col-lg-7 col-xl-8 col-sm-12">
 
                 {getAllConnectedSocialAccountData?.loading || connectedPagesReducer?.loading || facebookPageListReducer?.loading ?
-                    <div className="cmn_background p-5 text-center mt-3">
+                    <div className="cmn_background p-5 text-center ">
                         <CommonLoader/>
                     </div> :
 
@@ -103,16 +103,16 @@ export const DashboardReports = () => {
 
                         ?
 
-                        <div className="cmn_background p-5 text-center mt-3">
-                            <img src={noAccountData} alt=""/>
+                        <div className="cmn_background p-5 text-center ">
+                            <img src={noAccountData} alt="" className="img-fluid"/>
                         </div>
 
                         :
 
                         allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
 
-                            <div className="cmn_background p-5 text-center mt-3">
-                                <img src={noAccountData} alt=""/>
+                            <div className="cmn_background p-5 text-center ">
+                                <img src={noAccountData} className="img-fluid" alt=""/>
                             </div>
 
                             :

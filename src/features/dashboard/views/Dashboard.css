@@ -150,7 +150,6 @@ button#dropdown-basic::after {
 }
 
 
-
 element.style {
     display: flex;
 }
@@ -255,11 +254,13 @@ element.style {
     padding: 16px 0px;
     margin-top: 12px;
     border-bottom: 1px solid #C6D2E0;
-    cursor:pointer;
+    cursor: pointer;
 }
-.social_media_outer:first-child{
+
+.social_media_outer:first-child {
     border-bottom: unset;
 }
+
 .social_media_content {
     display: flex;
     gap: 12px;
@@ -540,9 +541,11 @@ select.page_title_options {
     /*overflow: hidden;*/
     text-overflow: ellipsis;
 }
+
 .dropdown_btn .dropdown-menu.show {
     width: 193px;
 }
+
 button.not_connect {
     position: absolute;
     border-radius: 2px;
@@ -554,30 +557,33 @@ button.not_connect {
     top: -13px;
     border-radius: 3px;
 }
-.report_section_enable_btn{
+
+.report_section_enable_btn {
     cursor: pointer;
     color: #eeeeee;
     background: #1a1d20;
 }
 
-.report_section_disable_btn{
+.report_section_disable_btn {
     pointer-events: none;
     background-color: #eeeeee;
     color: #999999;
 }
 
-.report_section_selected_btn{
+.report_section_selected_btn {
     background-color: #eeeeee;
     color: #F07C33;
     text-wrap: normal;
 }
-.tabs_pages{
+
+.tabs_pages {
     overflow-x: auto;
     white-space: nowrap;
     margin: 0px 23px;
     padding-bottom: 4px;
     padding-top: 20px;
 }
+
 /* width */
 .tabs_pages::-webkit-scrollbar {
     width: 10px;
@@ -598,6 +604,7 @@ button.not_connect {
 .tabs_pages::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
 .tabs_pages button.btn-with-fixed-width {
     border: 1px solid transparent;
     padding: 10PX 10px;

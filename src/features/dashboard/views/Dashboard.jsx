@@ -2,12 +2,8 @@ import Header from "../../head/views/Header"
 import SideBar from "../../sidebar/views/Layout"
 import './Dashboard.css'
 import fb_img from '../../../images/fb.svg'
-import tiktok_img from '../../../images/tiktok.svg'
-import twitter_img from '../../../images/twitter.svg'
-import instagram_img from '../../../images/instagram.png'
-import linkedin_img from '../../../images/linkedin.svg'
 import jsondata from '../../../locales/data/initialdata.json'
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
 import {useDispatch, useSelector} from "react-redux";
 import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth.js";
@@ -70,8 +66,6 @@ const Dashboard = () => {
     }, [token, dispatch, userData]);
 
 
-
-
     useEffect(() => {
         if ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
             let faceBookSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK');
@@ -98,7 +92,6 @@ const Dashboard = () => {
                 dispatch(getAllConnectedSocialAccountAction(res))
             })
         }).catch((error) => {
-            console.log("--->error", error)
             showErrorToast(error.response.data.message);
         })
     }
@@ -150,9 +143,9 @@ const Dashboard = () => {
                     <div className="dashboard_outer">
                         <div className="row">
 
-                            <DashboardReports  />
+                            <DashboardReports/>
 
-                            <div className="col-lg-4 col-md-12 col-sm-12">
+                            <div className="col-lg-5 col-xl-4 col-sm-12">
 
                                 {/* socail media */}
                                 <div className="cmn_background social_media_wrapper">
@@ -166,7 +159,8 @@ const Dashboard = () => {
 
                                         <div className="social_media_outer">
                                             <div className="social_media_content">
-                                                <img className="cmn_width" src={fb_img}/>
+                                                <i className={`fa-brands fa-facebook`}
+                                                   style={{color: "#0866ff", fontSize: "24px"}}/>
                                                 <div>
                                                     <h5 className="">Facebook account</h5>
                                                     <h6 className="cmn_headings">www.facebook.com</h6>
@@ -194,7 +188,8 @@ const Dashboard = () => {
                                                                          border: '1px solid #F07C33',
                                                                          height: "39px",
                                                                          minWidth: "111px",
-                                                                         margin: "0px"
+                                                                         margin: "10px",
+                                                                         width: "11px"
                                                                      }}/>
                                             </LoginSocialFacebook>
 
@@ -235,7 +230,7 @@ const Dashboard = () => {
                                                                 facebookPageList?.slice(0, 3).map((data, index) => {
                                                                     return (
                                                                         <>
-                                                                            <li href="#/action-2" key={index}>
+                                                                            <li key={index}>
                                                                                 <div
                                                                                     className="user_profileInfo_wrapper">
                                                                                     <div className="user_Details">
@@ -276,24 +271,12 @@ const Dashboard = () => {
 
                                     {/*facebook connect ends */}
 
+                                    {/* start instagram connect */}
 
-                                    {/* */}
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
-                                            <img className="cmn_width" src={twitter_img}/>
-                                            <div>
-                                                <h5 className="">Twitter account</h5>
-                                                <h6 className="cmn_headings">www.twitter.com</h6>
-                                            </div>
-                                        </div>
-                                        <button
-                                            className="cmn_btn_color cmn_connect_btn disconnect_btn ">Disconnect
-                                        </button>
-                                    </div>
-                                    {/* instagram */}
-                                    <div className="social_media_outer">
-                                        <div className="social_media_content">
-                                            <img className="cmn_width" src={instagram_img}/>
+                                            <i className="fa-brands fa-instagram"
+                                               style={{color: "purple", fontSize: "24px"}}/>
                                             <div>
                                                 <h5 className=""> Instagram account</h5>
                                                 <h6 className="cmn_headings">www.facebook.com</h6>
@@ -324,38 +307,14 @@ const Dashboard = () => {
                                                                       border: '1px solid #F07C33',
                                                                       height: "39px",
                                                                       minWidth: "111px",
-                                                                      margin: "0px"
+                                                                      margin: "10px",
+                                                                      width: "11px"
                                                                   }}/>
                                         </LoginSocialInstagram>
 
+                                    </div>
 
-                                    </div>
-                                    <div className="cmn_drop_down">
-                                        <div className="social_media_outer">
-                                            <div className="social_media_content">
-                                                <img className="cmn_width" src={linkedin_img}/>
-                                                <div>
-                                                    <h5 className="">Linkedin account</h5>
-                                                    <h6 className="cmn_headings">www.facebook.com</h6>
-                                                </div>
-                                            </div>
-                                            <button
-                                                className="cmn_btn_color cmn_connect_btn connect_btn ">Connect
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className="social_media_outer">
-                                        <div className="social_media_content">
-                                            <img className="cmn_width" src={tiktok_img}/>
-                                            <div>
-                                                <h5 className="">Tiktok account</h5>
-                                                <h6 className="cmn_headings">www.facebook.com</h6>
-                                            </div>
-                                        </div>
-                                        <button
-                                            className="cmn_btn_color cmn_connect_btn connect_btn ">Connect
-                                        </button>
-                                    </div>
+                                    {/* end instagram connect */}
                                 </div>
                             </div>
                         </div>

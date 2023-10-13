@@ -368,7 +368,8 @@ const CreatePost = () => {
                                             {/*    dropdown select platform=====*/}
                                             <Dropdown className='insta_dropdown_btn mt-2'>
                                                 <Dropdown.Toggle id="instagram"
-                                                                 className="instagram_dropdown tabs_grid">
+                                                                 className="instagram_dropdown tabs_grid"
+                                                                 disabled={!socialAccountData?.some(obj => Array.isArray(obj.pageAccessToken) && obj.pageAccessToken.length > 0)}>
                                                     {selectedOptionLabels.length > 0 ?
                                                         (
                                                             selectedOptionLabels.map((data, index) => (
@@ -394,11 +395,11 @@ const CreatePost = () => {
                                                         )}
                                                 </Dropdown.Toggle>
 
-
                                                 <Dropdown.Menu className='w-100 social_media_list'>
                                                     <div className="dropdown-options">
 
                                                         <div className='_'>
+
                                                             <div className="select_platform_outer">
                                                                 <input type="checkbox"
                                                                        id="choice1-2"
@@ -429,10 +430,8 @@ const CreatePost = () => {
                                                                                        checked={(socialAccount && socialAccount?.selected) ? socialAccount?.selected : false}
                                                                                        onChange={handleSelectAllChange}
                                                                                 />
-
-                                                                                {socialAccount &&
-                                                                                    <SocialMediaProviderBadge
-                                                                                        provider={socialAccount.provider}/>}
+                                                                                <SocialMediaProviderBadge
+                                                                                    provider={socialAccount.provider}/>
 
                                                                             </div>
 
@@ -588,8 +587,7 @@ const CreatePost = () => {
                                         }
                                         <div className='post_caption_outer media_outer'>
                                             <div className='caption_header'>
-                                                <h5 className='post_heading create_post_text'>Add
-                                                    Post Caption *</h5>
+                                                <h5 className='post_heading create_post_text'>Add Caption *</h5>
 
                                                 <button className="ai_btn cmn_white_text"
                                                         onClick={(e) => {
@@ -693,20 +691,20 @@ const CreatePost = () => {
 
                                         {/* boost post */}
                                         <div className='publish_post_outer media_outer'>
+                                            <div className="d-flex align-items-center gap-2 ps-0 form-switch">
 
-                                            <div className="form-check form-switch">
-                                                <input className="form-check-input"
-                                                       type="checkbox"
-                                                       id="flexSwitchCheckChecked"
-                                                       checked={boostPost}
-                                                       onChange={(e) => {
-                                                           e.preventDefault();
-                                                           setBoostPost(!boostPost);
-                                                       }}
+                                                <i
+                                                    className={`fa ${boostPost ? "fa-toggle-on" : "fa-toggle-off"}`}
+                                                    style={{fontSize: "24px", color: "#0d6efd"}}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setBoostPost(!boostPost);
+                                                    }}
+                                                    aria-hidden="true"
                                                 />
-                                                <label
-                                                    className="form-check-label create_post_label boost_post_text"
-                                                    htmlFor="flexSwitchCheckChecked">Boost Post</label>
+
+                                                <label className="form-check-label create_post_label boost_post_text"
+                                                       htmlFor="flexSwitchCheckChecked">Boost Post</label>
                                             </div>
 
                                             <div className='cancel_publish_btn_outer d-flex'>
