@@ -9,7 +9,10 @@ import {
     updatePostOnSocialMediaAction,
     getPlannerPostCountAction,
     deletePostByBatchIdAction,
-    getAllDraftPostsByCustomerAndPeriodAction, publishedPostAction, getAllPlannerPostAction, getPostsPageAction
+    publishedPostAction,
+    getAllPlannerPostAction,
+    getPostsPageAction,
+    getAllSocialMediaPostsByCriteria
 } from "../../actions/postActions/postActions.js";
 
 
@@ -115,13 +118,13 @@ const postSlice = createSlice({
             state.getAllPostsForPlannerReducer = {loading: false}
         },
 
-        [getAllDraftPostsByCustomerAndPeriodAction.pending]: (state) => {
+        [getAllSocialMediaPostsByCriteria.pending]: (state) => {
             state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: true}
         },
-        [getAllDraftPostsByCustomerAndPeriodAction.fulfilled]: (state, action) => {
+        [getAllSocialMediaPostsByCriteria.fulfilled]: (state, action) => {
             state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: false, data: action.payload}
         },
-        [getAllDraftPostsByCustomerAndPeriodAction.rejected]: (state) => {
+        [getAllSocialMediaPostsByCriteria.rejected]: (state) => {
             state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: false}
         },
 

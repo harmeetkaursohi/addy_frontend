@@ -49,7 +49,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
                             }}>
                                 <div>
                                     <img className={"me-1 social-media-icon"}
-                                         src={computeImageURL(curPage?.socialAccountType)}
+                                         src={computeImageURL(curPage?.socialMediaType)}
                                          alt={"instagram"}/>
                                 </div>
                                 <p className={"social-media-page-name"}>{curPage?.pageName}</p>

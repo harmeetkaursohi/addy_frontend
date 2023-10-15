@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getToken} from "../../../app/auth/auth";
-import {getAllDraftPostsByCustomerAndPeriodAction} from "../../../app/actions/postActions/postActions";
+import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import DraftComponent from "./DraftComponent";
 import {sortByKey} from "../../../utils/commonUtils";
 import CommonLoader from "../../common/components/CommonLoader";
@@ -17,7 +17,7 @@ export const ParentDraftComponent = ({setDraftPost}) => {
     const getAllDraftPostsByCustomerAndPeriodData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
 
     useEffect(() => {
-        dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query:{} }));
+        dispatch(getAllSocialMediaPostsByCriteria({token: token, query:{} }));
 
     }, [])
 

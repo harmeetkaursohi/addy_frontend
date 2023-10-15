@@ -20,7 +20,7 @@ import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import {showErrorToast} from "../../common/components/Toast.jsx";
 import Swal from "sweetalert2";
 import {getUserInfo} from "../../../app/actions/userActions/userActions";
-import {getAllDraftPostsByCustomerAndPeriodAction} from "../../../app/actions/postActions/postActions";
+import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import ScheduledComponent from "../../unPublishedPages/views/ScheduledComponent";
 import {DashboardReports} from "./reports/DashboardReports";
 
@@ -49,7 +49,7 @@ const Dashboard = () => {
         if (token) {
             const decodeJwt = decodeJwtToken(token);
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
-            dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query: {limit: 5}}));
+            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
         }
     }, [token])
 
@@ -90,6 +90,7 @@ const Dashboard = () => {
         object.then((res) => {
             dispatch(socialAccountConnectActions(res)).then(() => {
                 dispatch(getAllConnectedSocialAccountAction(res))
+                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
             })
         }).catch((error) => {
             showErrorToast(error.response.data.message);
@@ -109,10 +110,11 @@ const Dashboard = () => {
                 const decodeJwt = decodeJwtToken(token);
                 dispatch(disconnectSocialAccountAction({
                     customerId: decodeJwt?.customerId,
-                    socialAccountId: getAllConnectedSocialAccountData?.data?.find(c => c.provider === "FACEBOOK")?.id,
+                    socialMediaAccountId: getAllConnectedSocialAccountData?.data?.find(c => c.provider === "FACEBOOK")?.id,
                     token: token
                 })).then((response) => {
                     dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt?.customerId, token: token}));
+                    dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
                     Swal.fire({
                         icon: 'success',
                         title: 'Facebook Account Disconnected',

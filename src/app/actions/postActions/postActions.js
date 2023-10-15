@@ -9,12 +9,14 @@ export const getPostsPage = async (pageParam = 1, options = {}) => {
 }
 
 export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
-    return await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${data.pageNum}`, data.options).then(res => {
+
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data,setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
         return thunkAPI.rejectWithValue(error.response);
     });
+
 });
 
 export const getAllPlannerPostAction = createAsyncThunk('post/getAllPlannerPostAction', async (data, thunkAPI) => {
@@ -97,7 +99,7 @@ export const getAllPostsForPlannerAction = createAsyncThunk('post/getAllPostsFor
     });
 });
 
-export const getAllDraftPostsByCustomerAndPeriodAction = createAsyncThunk('post/getAllDraftPostsByCustomerAndPeriodAction', async (data, thunkAPI) => {
+export const getAllSocialMediaPostsByCriteria = createAsyncThunk('post/getAllSocialMediaPostsByCriteria', async (data, thunkAPI) => {
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/by-criteria`, data?.query, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {

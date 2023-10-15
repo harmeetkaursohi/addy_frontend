@@ -43,7 +43,7 @@ const CommonModal = ({
     const handleSubmit = () => {
         switch (socialMediaType) {
             case SocialAccountProvider.FACEBOOK: {
-                facebookPageConnectAction(dispatch, token, mediaPageData);
+                facebookPageConnectAction(dispatch, token, mediaPageData)
             }
             //handle other case as well...
             case SocialAccountProvider.INSTAGRAM: {

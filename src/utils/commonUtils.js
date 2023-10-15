@@ -6,6 +6,7 @@ import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/fac
 import fb from "../images/fb.svg";
 import instagram_img from "../images/instagram.png";
 import linkedin from "../images/linkedin.svg";
+import {getAllSocialMediaPostsByCriteria} from "../app/actions/postActions/postActions";
 
 export const validationSchemas = {
 
@@ -102,6 +103,7 @@ export const facebookPageConnectAction = (dispatch, token, facebookData) => {
         }
         dispatch(facebookPageConnect(requestBody)).then((response) => {
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
         }).catch((error) => {
             console.log("--->error", error)
         })
@@ -125,7 +127,7 @@ export const validateScheduleDateAndTime = (scheduleDate, scheduleTime) => {
     return inputDateTime >= minAllowedDate;
 };
 
-export const checkDimensions = (file, referenceId = "") => {
+export const checkDimensions = (file, socialMediaPostId = "") => {
 
     if (file.type.startsWith('image/')) {
         return new Promise((resolve, reject) => {
@@ -239,7 +241,7 @@ export async function urlsToFiles(fileUrlList) {
     for (const fileUrl of fileUrlList) {
         const file = await urlToBlob(fileUrl.imageURL);
         if (file) {
-            files.push({referenceId: fileUrl.referenceId, file: file});
+            files.push({socialMediaPostId: fileUrl.socialMediaPostId, file: file});
         }
     }
 
@@ -286,7 +288,7 @@ export const computeAndBuildChildCard = (childCardProps, key) => {
     return Object.keys(childCardProps[key]).map((c) => {
         return {
             id: childCardProps[key][c][0]?.id,
-            socialMediaPostId: childCardProps[key][c][0]?.referenceId,
+            socialMediaPostId: childCardProps[key][c][0]?.socialMediaPostId,
             title: computeTitle(c),
             imageUrl: computeImageURL(c),
         }

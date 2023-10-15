@@ -53,11 +53,11 @@ const Review = () => {
                                         scheduled.</h6>
                                 </div>
                                 <select className="filter_select_btn cmn_text_style"
-                                        value={baseSearchQuery?.socialAccountType}
+                                        value={baseSearchQuery?.socialMediaType}
                                         onChange={(e) => {
                                             setBaseSearchQuery({
                                                 ...baseSearchQuery,
-                                                socialAccountType: e.target.value === "All" ? null : e.target.value
+                                                socialMediaType: e.target.value === "All" ? null : e.target.value
                                             });
                                         }}
                                 >

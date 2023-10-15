@@ -8,9 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import jsondata from "../../../locales/data/initialdata.json";
 import {useEffect, useState} from "react";
 import {
-    deletePostByBatchIdAction,
-    getAllDraftPostsByCustomerAndPeriodAction,
-} from "../../../app/actions/postActions/postActions";
+    deletePostByBatchIdAction, getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import {getToken} from "../../../app/auth/auth";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import noPostScheduled from "../../../images/no_post_scheduled.png";
@@ -44,7 +42,7 @@ const ScheduledComponent = ({scheduledData}) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         setDeleteIdRef(null);
                         showSuccessToast("Posts has been deleted successfully");
-                        dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query: {limit: 5}}));
+                        dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus:"SCHEDULED"} }));
                     }
                 }).catch((error) => {
                 setDeleteIdRef(null);
@@ -98,7 +96,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                                         <div className="selected-option">
                                                             <div>
                                                                 <img className={"me-1 social-media-icon"}
-                                                                     src={computeImageURL(curPage?.socialAccountType)}
+                                                                     src={computeImageURL(curPage?.socialMediaType)}
                                                                      alt={"instagram"}/>
                                                             </div>
                                                             <p className={"social-media-page-name"}>{curPage?.pageName}</p>

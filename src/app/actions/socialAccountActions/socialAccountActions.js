@@ -6,7 +6,7 @@ import {getDashBoardFacebookGraphReport, getFacebookConnectedPageIdsReport} from
 
 
 export const socialAccountConnectActions = createAsyncThunk('socialAccount/socialAccountConnectActions', async (data, thunkAPI) => {
-    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/connect`, data.socialAccountData, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account`, data.socialAccountData, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -15,7 +15,7 @@ export const socialAccountConnectActions = createAsyncThunk('socialAccount/socia
 })
 
 export const disconnectSocialAccountAction = createAsyncThunk('socialAccount/disconnectSocialAccountAction', async (data, thunkAPI) => {
-    return await axios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/disconnect/${data.socialAccountId}`, setAuthenticationHeader(data.token)).then(res => {
+    return await axios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/${data.socialMediaAccountId}`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -28,7 +28,7 @@ export const getSocialMediaReportByProviderTypeAction = createAsyncThunk('social
 
     console.log("reportSelectPages---->",data);
 
-    switch (data?.socialAccountType) {
+    switch (data?.socialMediaType) {
 
         case "FACEBOOK": {
               return await  getFacebookConnectedPageIdsReport(data?.pages).then((res)=>{
@@ -63,7 +63,7 @@ export const getSocialMediaGraphByProviderTypeAction = createAsyncThunk('socialA
 
     console.log("reportSelectPages---->",data);
 
-    switch (data?.socialAccountType) {
+    switch (data?.socialMediaType) {
 
         case "FACEBOOK": {
             return await  getDashBoardFacebookGraphReport(data?.pages || [],data?.query || {}).then((res)=>{

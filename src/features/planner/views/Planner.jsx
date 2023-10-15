@@ -8,7 +8,12 @@ import jsondata from '../../../locales/data/initialdata.json'
 import {Link} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
-import {getAllDraftPostsByCustomerAndPeriodAction, getAllPlannerPostAction, getAllPostsForPlannerAction, getPlannerPostCountAction} from "../../../app/actions/postActions/postActions";
+import {
+    getAllSocialMediaPostsByCriteria,
+    getAllPlannerPostAction,
+    getAllPostsForPlannerAction,
+    getPlannerPostCountAction,
+} from "../../../app/actions/postActions/postActions";
 import {useDispatch, useSelector} from "react-redux";
 import {computeAndReturnPlannerEvent, dateFormat} from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
@@ -72,7 +77,7 @@ const Planner = () => {
             const decodeJwt = decodeJwtToken(token);
 
             if (isDraftPost) {
-                dispatch(getAllDraftPostsByCustomerAndPeriodAction({token: token, query: baseSearchQuery}));
+                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: baseSearchQuery}));
             } else {
                 dispatch(getAllPostsForPlannerAction({
                     customerId: decodeJwt.customerId,
@@ -236,11 +241,11 @@ const Planner = () => {
                                 isDraftPost === false &&
                                 <div className="custom-header">
                                     <select className=" filter_options cmn_text_style box_shadow"
-                                            value={baseSearchQuery?.socialAccountType}
+                                            value={baseSearchQuery?.socialMediaType}
                                             onChange={(e) => {
                                                 setBaseSearchQuery({
                                                     ...baseSearchQuery,
-                                                    socialAccountType: e.target.value === "All" ? null : e.target.value
+                                                    socialMediaType: e.target.value === "All" ? null : e.target.value
                                                 });
                                             }}>
                                         <option value={"All"}>All</option>

@@ -68,13 +68,13 @@ export const DashboardReports = () => {
 
         !searchGraphOnly && dispatch(getSocialMediaReportByProviderTypeAction({
             pages: pages === null ? reportSelectPages : pages,
-            socialAccountType: reportSelectedAccountType,
+            socialMediaType: reportSelectedAccountType,
             socialAccountData: socialAccountData === null ? reportSelectedAccountData : socialAccountData
         }))
 
         dispatch(getSocialMediaGraphByProviderTypeAction({
             pages: pages === null ? reportSelectPages : pages,
-            socialAccountType: reportSelectedAccountType,
+            socialMediaType: reportSelectedAccountType,
             socialAccountData: socialAccountData === null ? reportSelectedAccountData : socialAccountData,
             query: {
                 createdFrom: getCustomDateEarlierUnixDateTime(graphDaysSelected),

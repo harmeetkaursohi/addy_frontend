@@ -100,7 +100,7 @@ const CommonShowMorePlannerModal = ({
                                                                         {plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
                                                                             plannerPost?.postPages.map((curPage, index) => (
 
-                                                                                <div className={`plan_tags ${curPage.socialAccountType.toLowerCase()}`}
+                                                                                <div className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}
                                                                                     onClick={() => {
                                                                                     redirectToURL(`https://www.facebook.com/${curPage?.id}`)
                                                                                 }}
@@ -112,7 +112,7 @@ const CommonShowMorePlannerModal = ({
                                                                                              alt="fb"/>
                                                                                         <img
                                                                                             className="plan_social_img"
-                                                                                            src={computeImageURL(curPage?.socialAccountType)}
+                                                                                            src={computeImageURL(curPage?.socialMediaType)}
                                                                                             alt="fb"/>
 
                                                                                     </div>
