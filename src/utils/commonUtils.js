@@ -50,24 +50,68 @@ export const validationSchemas = {
 };
 
 
-export const computeAndSocialAccountJSONForFacebook = async (jsonObj) => {
+export const computeAndSocialAccountJSONToConnect = async (jsonObj,type) => {
 
-    const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.accessToken);
     const token = localStorage.getItem("token");
     const decodeJwt = decodeJwtToken(token);
 
-    return {
-        customerId: decodeJwt.customerId, token: token, socialAccountData: {
-            name: jsonObj?.data?.name || null,
-            email: jsonObj?.data?.email || null,
-            imageUrl: jsonObj?.data?.picture?.data?.url || null,
-            provider: getKeyFromValueOfObject(SocialAccountProvider, jsonObj?.provider) || null,
-            providerId: jsonObj?.data?.userID || null,
-            accessToken: longLivedToken || null,
-            pageAccessToken: []
-        }
-    }
+    switch (type){
 
+        case SocialAccountProvider.FACEBOOK:{
+            const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.accessToken,SocialAccountProvider.FACEBOOK);
+
+
+            return {
+                customerId: decodeJwt.customerId,
+                token: token, socialAccountData: {
+                    name: jsonObj?.data?.name || null,
+                    email: jsonObj?.data?.email || null,
+                    imageUrl: jsonObj?.data?.picture?.data?.url || null,
+                    provider: getKeyFromValueOfObject(SocialAccountProvider, jsonObj?.provider) || null,
+                    providerId: jsonObj?.data?.userID || null,
+                    accessToken: longLivedToken || null,
+                    pageAccessToken: []
+                }
+            }
+        }
+
+
+        case SocialAccountProvider.INSTAGRAM:{
+
+            const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.access_token,SocialAccountProvider.INSTAGRAM);
+
+            return {
+                customerId: decodeJwt.customerId,
+                token: token, socialAccountData: {
+                    name: jsonObj?.data?.username || null,
+                    email: jsonObj?.data?.email || null,
+                    imageUrl: jsonObj?.data?.picture?.data?.url || null,
+                    provider: getKeyFromValueOfObject(SocialAccountProvider, jsonObj?.provider) || null,
+                    providerId: jsonObj?.data?.user_id || null,
+                    accessToken: longLivedToken || jsonObj?.data?.accessToken,
+                    pageAccessToken: []
+                }
+            }
+
+        }
+
+
+    }
+}
+
+
+export  function getAccountTypeToDisconnect(key) {
+        switch (key){
+            case SocialAccountProvider.FACEBOOK:{
+                return "FACEBOOK";
+            }
+            case SocialAccountProvider.INSTAGRAM:{
+                return "INSTAGRAM";
+            }
+            case SocialAccountProvider.LINKEDIN:{
+                return "LINKEDIN";
+            }
+        }
 }
 
 

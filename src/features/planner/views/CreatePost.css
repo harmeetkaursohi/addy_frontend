@@ -18,7 +18,13 @@
 .facebook_outer {
     background: rgba(0, 130, 203, 0.10);
 }
-
+.cmn_social_pages_outer> div {
+    border-bottom: 1px solid #ddd;
+}
+.cmn_social_pages_outer> div:last-child {
+    padding-bottom: 20px;
+    border-bottom: unset;
+}
 .checkbox-button_outer h2 {
     font-size: 14px;
 }
@@ -27,7 +33,7 @@
     padding: 0px;
 }
 .cmn_social_pages_outer{
-    height: 200px;
+    max-height: 271px;
 overflow-y:scroll;
     overflow-x: hidden;
 }

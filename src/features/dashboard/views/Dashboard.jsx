@@ -10,7 +10,9 @@ import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/au
 import {getAllFacebookPages, getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions.js";
 import {LoginSocialFacebook, LoginSocialInstagram} from "reactjs-social-login";
 import {FacebookLoginButton, InstagramLoginButton} from "react-social-login-buttons";
-import {computeAndSocialAccountJSONForFacebook} from "../../../utils/commonUtils.js";
+import {
+    computeAndSocialAccountJSONToConnect,
+    getAccountTypeToDisconnect} from "../../../utils/commonUtils.js";
 import {
     disconnectSocialAccountAction,
     getAllConnectedSocialAccountAction,
@@ -23,6 +25,7 @@ import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import ScheduledComponent from "../../unPublishedPages/views/ScheduledComponent";
 import {DashboardReports} from "./reports/DashboardReports";
+import {SocialAccountProvider} from "../../../utils/contantData";
 
 const Dashboard = () => {
 
@@ -49,7 +52,7 @@ const Dashboard = () => {
         if (token) {
             const decodeJwt = decodeJwtToken(token);
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
-            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
+            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: "SCHEDULED"}}));
         }
     }, [token])
 
@@ -81,6 +84,9 @@ const Dashboard = () => {
     }, [getAllConnectedSocialAccountData]);
 
 
+    console.log("getAllConnectedSocialAccountData------>", getAllConnectedSocialAccountData);
+
+
     const facebook = () => {
         setShowFacebookModal(true)
     }
@@ -90,18 +96,34 @@ const Dashboard = () => {
         object.then((res) => {
             dispatch(socialAccountConnectActions(res)).then(() => {
                 dispatch(getAllConnectedSocialAccountAction(res))
-                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
+                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: "SCHEDULED"}}));
             })
         }).catch((error) => {
             showErrorToast(error.response.data.message);
         })
     }
 
-    const disConnectSocialMediaAccountToCustomer = () => {
+    const disConnectSocialMediaAccountToCustomer = (providerType) => {
+
+        function getAccountType(type) {
+            switch (type) {
+                case SocialAccountProvider.FACEBOOK: {
+                    return "Facebook";
+                }
+                case SocialAccountProvider.INSTAGRAM: {
+                    return "Instagram";
+                }
+            }
+        }
+
+
+        const accountType = getAccountType(providerType);
+
+
         Swal.fire({
             icon: 'warning',
-            title: 'Disconnect Facebook Account',
-            text: 'Are you sure you want to disconnect your Facebook account?',
+            title: `Disconnect ${accountType} Account`,
+            text: `Are you sure you want to disconnect your ${accountType} account?`,
             showCancelButton: true,
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
@@ -110,26 +132,29 @@ const Dashboard = () => {
                 const decodeJwt = decodeJwtToken(token);
                 dispatch(disconnectSocialAccountAction({
                     customerId: decodeJwt?.customerId,
-                    socialMediaAccountId: getAllConnectedSocialAccountData?.data?.find(c => c.provider === "FACEBOOK")?.id,
+                    socialMediaAccountId: getAllConnectedSocialAccountData?.data?.find(c => c.provider === getAccountTypeToDisconnect(providerType))?.id,
                     token: token
                 })).then((response) => {
                     dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt?.customerId, token: token}));
-                    dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
+                    dispatch(getAllSocialMediaPostsByCriteria({
+                        token: token,
+                        query: {limit: 5, postStatus: "SCHEDULED"}
+                    }));
                     Swal.fire({
                         icon: 'success',
-                        title: 'Facebook Account Disconnected',
-                        text: 'Your Facebook account has been disconnected successfully.',
+                        title: `${accountType} Account Disconnected`,
+                        text: `Your ${accountType} account has been disconnected successfully.`,
                     });
                 }).catch((error) => {
-                    console.error('Error disconnecting Facebook account:', error);
+                    console.error(`Error disconnecting ${accountType}  account:`, error);
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'An error occurred while disconnecting your Facebook account. Please try again later.',
+                        text: `An error occurred while disconnecting your ${accountType} account. Please try again later.`,
                     });
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire('Cancelled', 'Your Facebook account is still connected.', 'info');
+                Swal.fire('Cancelled', `Your ${accountType} account is still connected.`, 'info');
             }
         });
 
@@ -174,9 +199,10 @@ const Dashboard = () => {
                                                 appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                                 redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                                 onResolve={(response) => {
-                                                    connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
+                                                    connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONToConnect(response, SocialAccountProvider.FACEBOOK))
                                                 }}
                                                 onReject={(error) => {
+                                                    showErrorToast("Something Went Wrong!");
                                                 }}>
 
                                                 <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
@@ -254,7 +280,7 @@ const Dashboard = () => {
                                                                 (facebookPageList && facebookPageList?.length > 0) &&
                                                                 <div className="connectDisconnect_btn_outer">
                                                                     <button className="DisConnectBtn cmn_connect_btn"
-                                                                            onClick={() => disConnectSocialMediaAccountToCustomer()}>
+                                                                            onClick={() => disConnectSocialMediaAccountToCustomer(SocialAccountProvider.FACEBOOK)}>
                                                                         Disconnect
                                                                     </button>
                                                                     <button className="ConnectBtn cmn_connect_btn"
@@ -275,46 +301,78 @@ const Dashboard = () => {
 
                                     {/* start instagram connect */}
 
-                                    <div className="social_media_outer">
-                                        <div className="social_media_content">
-                                            <i className="fa-brands fa-instagram"
-                                               style={{color: "purple", fontSize: "24px"}}/>
-                                            <div>
-                                                <h5 className=""> Instagram account</h5>
-                                                <h6 className="cmn_headings">www.facebook.com</h6>
+
+                                    {!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM').length === 0 ?
+
+                                        <div className="social_media_outer">
+
+
+                                            <div className="social_media_content">
+                                                <i className="fa-brands fa-instagram"
+                                                   style={{color: "purple", fontSize: "24px"}}/>
+                                                <div>
+                                                    <h5 className=""> Instagram account</h5>
+                                                    <h6 className="cmn_headings">www.instagram.com</h6>
+                                                </div>
                                             </div>
+
+                                            <LoginSocialInstagram
+                                                client_id={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_ID}`}
+                                                client_secret={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_SECRET}`}
+                                                scope={`${import.meta.env.VITE_APP_INSTAGRAM_SCOPE}`}
+                                                redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
+                                                onResolve={(response) => {
+                                                    console.log("response------>", response);
+                                                    connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONToConnect(response, SocialAccountProvider.INSTAGRAM))
+
+                                                }}
+                                                onReject={(error) => {
+                                                    console.log(error);
+                                                    showErrorToast("Something Went Wrong!");
+                                                }}
+                                            >
+                                                <InstagramLoginButton text={"Connect"}
+                                                                      className={"facebook_connect"}
+                                                                      icon={() => null}
+                                                                      preventActiveStyles={true}
+                                                                      style={{
+                                                                          borderRadius: '5px',
+                                                                          background: "#F07C33",
+                                                                          boxShadow: "unset",
+                                                                          fontSize: "12px",
+                                                                          color: "#fff",
+                                                                          border: '1px solid #F07C33',
+                                                                          height: "39px",
+                                                                          minWidth: "111px",
+                                                                          margin: "10px",
+                                                                          width: "11px"
+                                                                      }}/>
+                                            </LoginSocialInstagram>
                                         </div>
 
-                                        <LoginSocialInstagram
-                                            client_id={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_ID}`}
-                                            client_secret={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_SECRET}`}
-                                            scope={`${import.meta.env.VITE_APP_INSTAGRAM_SCOPE}`}
-                                            redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
-                                            onResolve={(response) => {
-                                            }}
-                                            onReject={(error) => {
-                                                console.log(error);
-                                            }}
-                                        >
-                                            <InstagramLoginButton text={"Connect"}
-                                                                  className={"facebook_connect"}
-                                                                  icon={() => null}
-                                                                  preventActiveStyles={true}
-                                                                  style={{
-                                                                      borderRadius: '5px',
-                                                                      background: "#F07C33",
-                                                                      boxShadow: "unset",
-                                                                      fontSize: "12px",
-                                                                      color: "#fff",
-                                                                      border: '1px solid #F07C33',
-                                                                      height: "39px",
-                                                                      minWidth: "111px",
-                                                                      margin: "10px",
-                                                                      width: "11px"
-                                                                  }}/>
-                                        </LoginSocialInstagram>
+                                        :
 
-                                    </div>
+                                        <div className="social_media_outer">
+
+
+                                            <div className="social_media_content">
+                                                <i className="fa-brands fa-instagram"
+                                                   style={{color: "purple", fontSize: "24px"}}/>
+                                                <div>
+                                                    <h5 className=""> Instagram account</h5>
+                                                    <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                </div>
+                                            </div>
+
+                                            <div className="connectDisconnect_btn_outer">
+                                                <button className="DisConnectBtn cmn_connect_btn"
+                                                        onClick={() => disConnectSocialMediaAccountToCustomer(SocialAccountProvider.INSTAGRAM)}>
+                                                    Disconnect
+                                                </button>
+                                            </div>
+
+
+                                        </div>}
 
                                     {/* end instagram connect */}
                                 </div>

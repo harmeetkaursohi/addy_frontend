@@ -414,65 +414,67 @@ const CreatePost = () => {
                                                                     Platform</h3>
                                                             </div>
 
-                                                            {
-                                                                socialAccountData?.map((socialAccount, index) => {
-                                                                    return (
+                                                            <div className="cmn_social_pages_outer">
+                                                                {
+                                                                    socialAccountData?.map((socialAccount, index) => {
+                                                                        return (
 
-                                                                        <div
-                                                                            className='instagram_outer facebook_outer cmn_social_pages_outer'
-                                                                            key={index}>
+                                                                            <div
+                                                                                className='instagram_outer facebook_outer'
+                                                                                key={index}>
 
-                                                                            <div className="checkbox-button_outer">
-                                                                                <input type="checkbox"
-                                                                                       className=""
-                                                                                       id="choice1-1"
-                                                                                       name="choice1"
-                                                                                       checked={(socialAccount && socialAccount?.selected) ? socialAccount?.selected : false}
-                                                                                       onChange={handleSelectAllChange}
-                                                                                />
-                                                                                <SocialMediaProviderBadge
-                                                                                    provider={socialAccount.provider}/>
+                                                                                <div className="checkbox-button_outer">
+                                                                                    <input type="checkbox"
+                                                                                           className=""
+                                                                                           id="choice1-1"
+                                                                                           name="choice1"
+                                                                                           checked={(socialAccount && socialAccount?.selected) ? socialAccount?.selected : false}
+                                                                                           onChange={handleSelectAllChange}
+                                                                                    />
+                                                                                    <SocialMediaProviderBadge
+                                                                                        provider={socialAccount.provider}/>
 
-                                                                            </div>
+                                                                                </div>
 
-                                                                            {
-                                                                                socialAccount?.pageAccessToken?.map((page, index) => (
-                                                                                    <div
-                                                                                        className="instagramPages unselectedpages"
-                                                                                        key={index}
-                                                                                        style={{background: page?.selected === true ? "rgb(215 244 215)" : ""}}
-                                                                                        onClick={(e) => toggleOption({
-                                                                                            id: page.pageId,
-                                                                                            label: page.name,
-                                                                                            imageUrl: page?.imageUrl
-                                                                                        }, e)}
-                                                                                    >
+                                                                                {
+                                                                                    socialAccount?.pageAccessToken?.map((page, index) => (
                                                                                         <div
-                                                                                            className="checkbox-button_outer">
-                                                                                            <img
-                                                                                                src={page?.imageUrl}/>
-                                                                                            <h2 className="cmn_text_style">{page?.name}</h2>
-                                                                                        </div>
-                                                                                        <input
-                                                                                            type="checkbox"
-                                                                                            id={page.id}
-                                                                                            name={page.name}
-                                                                                            checked={page?.selected === true}
-                                                                                            onChange={(e) => toggleOption({
+                                                                                            className="instagramPages unselectedpages"
+                                                                                            key={index}
+                                                                                            style={{background: page?.selected === true ? "rgb(215 244 215)" : ""}}
+                                                                                            onClick={(e) => toggleOption({
                                                                                                 id: page.pageId,
                                                                                                 label: page.name,
                                                                                                 imageUrl: page?.imageUrl
                                                                                             }, e)}
-                                                                                        />
-                                                                                    </div>
-                                                                                ))
-                                                                            }
+                                                                                        >
+                                                                                            <div
+                                                                                                className="checkbox-button_outer">
+                                                                                                <img
+                                                                                                    src={page?.imageUrl}/>
+                                                                                                <h2 className="cmn_text_style">{page?.name}</h2>
+                                                                                            </div>
+                                                                                            <input
+                                                                                                type="checkbox"
+                                                                                                id={page.id}
+                                                                                                name={page.name}
+                                                                                                checked={page?.selected === true}
+                                                                                                onChange={(e) => toggleOption({
+                                                                                                    id: page.pageId,
+                                                                                                    label: page.name,
+                                                                                                    imageUrl: page?.imageUrl
+                                                                                                }, e)}
+                                                                                            />
+                                                                                        </div>
+                                                                                    ))
+                                                                                }
 
 
-                                                                        </div>
-                                                                    )
-                                                                })
-                                                            }
+                                                                            </div>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </div>
 
 
                                                         </div>

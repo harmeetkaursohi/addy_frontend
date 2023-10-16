@@ -1,23 +1,51 @@
 import axios from 'axios';
 import {
     calculatePercentageGrowth,
-    computeAndReturnSummedDateValues} from "../utils/commonUtils";
+    computeAndReturnSummedDateValues
+} from "../utils/commonUtils";
+import {SocialAccountProvider} from "../utils/contantData";
 
-export async function exchangeForLongLivedToken(shortLivedToken) {
-    const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/oauth/access_token`;
-    const client_Id = import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID;
-    const client_secret = import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET;
 
-    const params = {
-        grant_type: 'fb_exchange_token',
-        client_id: client_Id,
-        fb_exchange_token: shortLivedToken,
-        client_secret: client_secret
-    };
+export async function exchangeForLongLivedToken(shortLivedToken, type) {
+
+    let url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/oauth/access_token`;
+    let client_Id = import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID;
+    let client_secret = import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET;
+    let grant_type = 'fb_exchange_token';
+
+    let params = {};
+
+    switch (type) {
+        case SocialAccountProvider.FACEBOOK: {
+
+            params = {
+                grant_type: grant_type,
+                client_id: client_Id,
+                fb_exchange_token: shortLivedToken,
+                client_secret: client_secret
+            };
+            break;
+        }
+        case SocialAccountProvider.INSTAGRAM: {
+            url = `${import.meta.env.VITE_APP_INSTAGRAM_BASE_URL}/access_token`;
+            client_secret = import.meta.env.VITE_APP_INSTAGRAM_CLIENT_SECRET;
+            grant_type = 'ig_exchange_token';
+
+            params = {
+                grant_type: grant_type,
+                access_token: shortLivedToken,
+                client_secret: client_secret
+            };
+
+        }
+        default: {
+            break;
+        }
+    }
 
     try {
-        const response = await axios.get(url, {params});
 
+        const response = await axios.get(url, {params});
         if (response.status === 200 && response.data && response.data.access_token) {
             return response.data.access_token;
         } else {
@@ -165,8 +193,8 @@ export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
                     followersReportCount?.push(...response.data?.data[1].values || [])
                 }
             }).catch((error) => {
-                    console.error('Error:', error);
-                });
+                console.error('Error:', error);
+            });
 
         }
     }

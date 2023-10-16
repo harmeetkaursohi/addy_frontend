@@ -4,6 +4,7 @@ import axios from "axios";
 import {setAuthenticationHeader} from "../../auth/auth.js";
 import {cleanAndValidateRequestURL} from "../../../utils/commonUtils.js";
 import {exchangeForLongLivedToken} from "../../../services/facebookService.js";
+import {SocialAccountProvider} from "../../../utils/contantData";
 
 export const getAllFacebookPages = createAsyncThunk('facebook/getAllFacebookPages', async (data, thunkAPI) => {
         try {
@@ -13,7 +14,7 @@ export const getAllFacebookPages = createAsyncThunk('facebook/getAllFacebookPage
             const pageInfoList = [];
             for (let obj of response.data.data) {
                 const pageInfoResponse = await getPageFullInfoByPageAccessToken(obj.access_token);
-                const longLivedToken = await exchangeForLongLivedToken(pageInfoResponse?.data?.access_token);
+                const longLivedToken = await exchangeForLongLivedToken(pageInfoResponse?.data?.access_token,SocialAccountProvider.FACEBOOK);
                 pageInfoResponse.data.access_token = longLivedToken;
                 pageInfoList.push(pageInfoResponse.data);
             }
