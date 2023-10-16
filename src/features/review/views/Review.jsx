@@ -4,20 +4,16 @@ import jsondata from "../../../locales/data/initialdata.json"
 import {SocialAccountProvider} from "../../../utils/contantData";
 import {useCallback, useRef, useState} from "react";
 import usePosts from "../../common/hooks/usePosts";
+import {computeImageURL} from "../../../utils/commonUtils";
+import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({});
-
-    const [pageNum, setPageNum] = useState(1);
-    const {
-        isLoading,
-        isError,
-        error,
-        results,
-        hasNextPage
-    } = usePosts(pageNum);
-
+    const [pageNum, setPageNum] = useState(0);
+    const {isLoading, isError, error, results, hasNextPage} = usePosts(pageNum, baseSearchQuery?.socialMediaType);
+    const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
+    const [postId, setPostId] = useState("");
     console.log("@@@ results ", results);
 
     const intObserver = useRef();
@@ -59,6 +55,7 @@ const Review = () => {
                                                 ...baseSearchQuery,
                                                 socialMediaType: e.target.value === "All" ? null : e.target.value
                                             });
+                                            setPageNum(0);
                                         }}
                                 >
                                     <option value={"All"}>All</option>
@@ -73,12 +70,16 @@ const Review = () => {
                                 <table className={"review_data"}>
 
                                     <thead className="table-responsive position-sticky" style={{top: "0"}}>
+
                                     <tr>
-                                        <th>UserId</th>
-                                        <th>Id</th>
-                                        <th>Title</th>
-                                        <th>Body</th>
+                                        <th>{jsondata.post}</th>
+                                        <th>{jsondata.socialmedia}</th>
+                                        <th>{jsondata.likes}</th>
+                                        <th>{jsondata.comments}</th>
+                                        <th>{jsondata.share}</th>
+                                        <th>{jsondata.action}</th>
                                     </tr>
+
                                     </thead>
 
                                     <tbody>
@@ -88,10 +89,24 @@ const Review = () => {
                                             key={index}
                                             ref={index === results.length - 1 ? lastPostRef : null}
                                         >
-                                            <td>{post?.userId}</td>
-                                            <td>{post?.id}</td>
-                                            <td>{post?.title}</td>
-                                            <td>{post?.body}</td>
+                                            <td>
+                                                <img src={post?.attachments[0]?.imageURL} className="bg_img"/>
+                                            </td>
+                                            <td>
+                                                <img className={"me-2"} src={computeImageURL(post?.socialMediaType)}/>
+                                                <span >{post?.page?.name}</span>
+                                            </td>
+                                            <td>{post?.likes} Likes</td>
+                                            <td>{post?.comments} Comments</td>
+                                            <td>{post?.shares} Share</td>
+                                            <td>
+                                                <button
+                                                    className="view_post_btn cmn_bg_btn"
+                                                    onClick={(e) => {
+                                                        setPostId(post.id)
+                                                        setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
+                                                    }}>{jsondata.viewpost}</button>
+                                            </td>
                                         </tr>
                                     ))}
 
@@ -108,6 +123,13 @@ const Review = () => {
                         </div>
                     </div>
                 </div>
+
+                {
+                    isOpenCommentReviewsSectionModal &&
+                    <CommentReviewsSectionModal isOpenCommentReviewsSectionModal={isOpenCommentReviewsSectionModal}
+                                                setOpenCommentReviewsSectionModal={setOpenCommentReviewsSectionModal}
+                                                postId={postId}/>
+                }
             </section>
         </>
     )

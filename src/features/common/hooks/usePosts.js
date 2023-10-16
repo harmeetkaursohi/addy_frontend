@@ -3,16 +3,15 @@ import {getPostsPageAction} from "../../../app/actions/postActions/postActions";
 import {useDispatch} from "react-redux";
 import {getToken} from "../../../app/auth/auth";
 
-const usePosts = (pageNum = 0) => {
+const usePosts = (pageNum = 0, filter = null) => {
     const [results, setResults] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
     const [error, setError] = useState({})
     const [hasNextPage, setHasNextPage] = useState(false)
-    console.log("setResults----->",results);
 
     const dispatch = useDispatch();
-    const token=getToken();
+    const token = getToken();
 
     useEffect(() => {
         setIsLoading(true)
@@ -24,15 +23,23 @@ const usePosts = (pageNum = 0) => {
 
         const requestBody = {
             options: {signal},
-            postStatus:"PUBLISHED",
-            token:token
+            postStatus: "PUBLISHED",
+            token: token,
+            pageNumber: pageNum
+        }
+
+        if (filter) {
+            requestBody.socialMediaType = filter;
         }
 
         dispatch(getPostsPageAction(requestBody))
             .then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
-                    console.log("response---",response);
-                    setResults((prev) => [...prev, ...response?.payload]);
+                    if (pageNum === 0 && filter) {
+                        setResults(response?.payload);
+                    } else {
+                        setResults((prev) => [...prev, ...response.payload]);
+                    }
                     setHasNextPage(Boolean(response?.payload.length));
                     setIsLoading(false);
                 }
@@ -46,7 +53,7 @@ const usePosts = (pageNum = 0) => {
 
         return () => controller.abort()
 
-    }, [pageNum])
+    }, [pageNum, filter])
 
     return {isLoading, isError, error, results, hasNextPage}
 }
