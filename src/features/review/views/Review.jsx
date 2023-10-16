@@ -6,6 +6,7 @@ import {useCallback, useRef, useState} from "react";
 import usePosts from "../../common/hooks/usePosts";
 import {computeImageURL} from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
+import noImageAvailable from "../../../images/no_img_posted.png"
 
 const Review = () => {
 
@@ -90,7 +91,7 @@ const Review = () => {
                                             ref={index === results.length - 1 ? lastPostRef : null}
                                         >
                                             <td>
-                                                <img src={post?.attachments[0]?.imageURL} className="bg_img"/>
+                                                <img src={post?.attachments[0]?.imageURL || noImageAvailable} className="bg_img"/>
                                             </td>
                                             <td>
                                                 <img className={"me-2"} src={computeImageURL(post?.socialMediaType)}/>

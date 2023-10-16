@@ -73,7 +73,7 @@ const Login = () => {
                                                 <label>{jsondata.email} or {jsondata.username}</label>
                                                 <input
                                                     className="form-control mt-1"
-                                                    type='email'
+                                                    type='text'
                                                     placeholder='Email'
                                                     name="username"
                                                     onChange={formik.handleChange}

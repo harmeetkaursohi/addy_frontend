@@ -11,9 +11,8 @@ import {getAllSocialMediaPostsByCriteria} from "../app/actions/postActions/postA
 export const validationSchemas = {
 
     login: yup.object().shape({
-        username: yup.string().required('Username is required').email('Invalid email format'), password: yup.string()
-            .min(5, 'Password must be at least 5 characters')
-            .required('Password is required')
+        username: yup.string().required('Username is required'),
+        password: yup.string().required('Password is required')
     }),
 
     register: yup.object().shape({
