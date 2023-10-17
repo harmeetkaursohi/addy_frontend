@@ -57,8 +57,8 @@ const CreatePost = () => {
 
     useEffect(() => {
         if (files && files.length <= 0) {
-           setDisableVideo(false);
-           setDisableImage(false);
+            setDisableVideo(false);
+            setDisableImage(false);
         }
     }, [files])
 
@@ -242,8 +242,7 @@ const CreatePost = () => {
 
         Promise.all(dimensionPromises)
             .then((results) => {
-                console.log(results);
-                setFiles([...files, ...results]);
+                setFiles([...results]);
             })
             .catch((error) => {
                 console.error("Error checking dimensions:", error);

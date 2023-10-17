@@ -36,6 +36,8 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToS
                         files?.map((file, index) => (
                             <div key={index}>
                                 <ReactPlayer
+                                    height={"100%"}
+                                    width={"100%"}
                                     className='post_img'
                                     url={file.url}
                                     controls={true}
