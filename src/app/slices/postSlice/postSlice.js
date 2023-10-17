@@ -12,7 +12,7 @@ import {
     publishedPostAction,
     getAllPlannerPostAction,
     getPostsPageAction,
-    getAllSocialMediaPostsByCriteria
+    getAllSocialMediaPostsByCriteria, getPostPageInfoAction
 } from "../../actions/postActions/postActions.js";
 
 
@@ -31,7 +31,8 @@ const postSlice = createSlice({
         publishedPostReducer: {loading: false},
         deletePostByBatchIdReducer: {loading: false},
         getAllPlannerPostReducer: {loading: false},
-        getPostsPageReducer: {loading: false}
+        getPostsPageReducer: {loading: false},
+        getPostPageInfoReducer:{loading: false}
     },
 
     reducers: {
@@ -41,6 +42,17 @@ const postSlice = createSlice({
     },
 
     extraReducers: {
+
+        // Start Review
+        [getPostPageInfoAction.pending]: (state) => {
+            state.getPostPageInfoReducer = {loading: true}
+        },
+        [getPostPageInfoAction.fulfilled]: (state, action) => {
+            state.getPostPageInfoReducer = {loading: false, data: action.payload}
+        },
+        [getPostPageInfoAction.rejected]: (state) => {
+            state.getPostPageInfoReducer = {loading: false}
+        },
 
         // Start Review
         [getPostsPageAction.pending]: (state) => {

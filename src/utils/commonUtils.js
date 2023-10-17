@@ -183,12 +183,6 @@ export function sortByKey(list, key) {
     return list; // return the sorted list
 }
 
-
-export const extractHashtags = (hastTag) => {
-    const hashtagRegex = /#[A-Za-z0-9_-]+/g;
-    return !hastTag.match(hashtagRegex) || [];
-}
-
 export const redirectToURL = (redirectedURL) => {
     window.open(redirectedURL, '_blank');
 }

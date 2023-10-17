@@ -3,14 +3,21 @@ import axios from "axios";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 
-export const getPostsPage = async (pageParam = 1, options = {}) => {
-    const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_page=${pageParam}`, options)
-    return response.data
-}
+
+export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoAction', async (data, thunkAPI) => {
+    const postIds = data.postIds.map(id => id).join(',');
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,attachments,created_time,is_published,likes.summary(true),comments.summary(true),shares`;
+    return await axios.get(apiUrl).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});
 
 export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
 
-    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data,setAuthenticationHeader(data.token)).then(res => {
+    return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

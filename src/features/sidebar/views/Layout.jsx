@@ -5,9 +5,7 @@ import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
 import './Layout.css'
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
-import {decodeJwtToken, getToken, setAuthenticationHeader} from "../../../app/auth/auth";
-import axios from "axios";
-import {showErrorToast} from "../../common/components/Toast";
+import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {useDispatch, useSelector} from "react-redux";
 

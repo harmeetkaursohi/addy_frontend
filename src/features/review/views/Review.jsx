@@ -2,22 +2,35 @@ import SideBar from "../../sidebar/views/Layout"
 import "./Review.css"
 import jsondata from "../../../locales/data/initialdata.json"
 import {SocialAccountProvider} from "../../../utils/contantData";
-import {useCallback, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import usePosts from "../../common/hooks/usePosts";
 import {computeImageURL} from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png"
 import CommonLoader from "../../common/components/CommonLoader";
+import {useDispatch, useSelector} from "react-redux";
+import {getPostPageInfoAction} from "../../../app/actions/postActions/postActions";
 
 const Review = () => {
 
-    const [baseSearchQuery, setBaseSearchQuery] = useState({
-        pageNum:0
-    });
+    const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: 0});
     const {isLoading, isError, error, results, hasNextPage} = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
-    const [postId, setPostId] = useState("");
+    const [postData, setPostData] = useState(null);
+    const dispatch = useDispatch();
+    const postPageInfoData = useSelector((state)=> state.post.getPostPageInfoReducer.data);
+
     console.log("@@@ results ", results);
+
+
+    useEffect(() => {
+        const requestBody = {
+            postIds: [postData?.id],
+            pageAccessToken: postData?.page?.access_token
+        }
+        dispatch(getPostPageInfoAction(requestBody));
+    }, [postData])
+
 
     const intObserver = useRef();
     const lastPostRef = useCallback(post => {
@@ -112,7 +125,7 @@ const Review = () => {
                                                 <button
                                                     className="view_post_btn cmn_bg_btn"
                                                     onClick={(e) => {
-                                                        setPostId(post.id)
+                                                        setPostData(post);
                                                         setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
                                                     }}>{jsondata.viewpost}</button>
                                             </td>
@@ -136,7 +149,7 @@ const Review = () => {
                     isOpenCommentReviewsSectionModal &&
                     <CommentReviewsSectionModal isOpenCommentReviewsSectionModal={isOpenCommentReviewsSectionModal}
                                                 setOpenCommentReviewsSectionModal={setOpenCommentReviewsSectionModal}
-                                                postId={postId}/>
+                                                postData={postData} postPageInfoData={postPageInfoData}/>
                 }
             </section>
         </>

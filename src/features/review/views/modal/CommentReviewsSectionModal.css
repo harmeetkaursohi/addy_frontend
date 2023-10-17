@@ -231,3 +231,15 @@ p.post_hashtags {
 .comment_msg {
     padding: 8px;
 }
+
+.circle {
+    width: 100px; /* Adjust the width and height as needed for your circle */
+    height: 100px;
+    background-color: #3498db; /* Background color for the circle */
+    border-radius: 50%; /* Makes the element a perfect circle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff; /* Text color */
+    font-size: 12px; /* Text size */
+}
