@@ -49,7 +49,7 @@ const Dashboard = () => {
         if (token) {
             const decodeJwt = decodeJwtToken(token);
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
-            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
+            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: "SCHEDULED"}}));
         }
     }, [token])
 
@@ -90,7 +90,7 @@ const Dashboard = () => {
         object.then((res) => {
             dispatch(socialAccountConnectActions(res)).then(() => {
                 dispatch(getAllConnectedSocialAccountAction(res))
-                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
+                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: "SCHEDULED"}}));
             })
         }).catch((error) => {
             showErrorToast(error.response.data.message);
@@ -105,6 +105,8 @@ const Dashboard = () => {
             showCancelButton: true,
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
+            confirmButtonColor: "#F07C33",
+            cancelButtonColor: "#E6E9EC",
         }).then((result) => {
             if (result.isConfirmed) {
                 const decodeJwt = decodeJwtToken(token);
@@ -114,11 +116,17 @@ const Dashboard = () => {
                     token: token
                 })).then((response) => {
                     dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt?.customerId, token: token}));
-                    dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
+                    dispatch(getAllSocialMediaPostsByCriteria({
+                        token: token,
+                        query: {limit: 5, postStatus: "SCHEDULED"}
+                    }));
                     Swal.fire({
                         icon: 'success',
                         title: 'Facebook Account Disconnected',
                         text: 'Your Facebook account has been disconnected successfully.',
+                        showConfirmButton: true,
+                        showCancelButton: false,
+                        confirmButtonColor: '#F07C33',
                     });
                 }).catch((error) => {
                     console.error('Error disconnecting Facebook account:', error);
@@ -129,7 +137,14 @@ const Dashboard = () => {
                     });
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire('Cancelled', 'Your Facebook account is still connected.', 'info');
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'Your Facebook account is still connected.',
+                    icon: 'info',
+                    showConfirmButton: false,
+                    showCancelButton: true,
+                    cancelButtonColor: '#E6E9EC'
+                });
             }
         });
 

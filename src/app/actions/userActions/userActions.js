@@ -1,14 +1,11 @@
 import axios from "axios";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {showErrorToast, showSuccessToast} from "../../../features/common/components/Toast";
-import Swal from "sweetalert2";
 import {setAuthenticationHeader} from "../../auth/auth";
 
 
 export const loginUser = createAsyncThunk('user/loginUser', async (data, thunkAPI) => {
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/auth/login`, data.values).then(res => {
-        showSuccessToast('User logged in successfully');
-        data.navigate("/dashboard")
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -18,15 +15,6 @@ export const loginUser = createAsyncThunk('user/loginUser', async (data, thunkAP
 
 export const signUpUser = createAsyncThunk('user/signUpUser', async (data, thunkAPI) => {
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/auth/register`, data).then(res => {
-        Swal.fire({
-            icon: 'success',
-            title: 'Registration Successful',
-            html: `
-                 <p>Your registration is complete, and we've sent a confirmation email to your email address</p>
-             `,
-            showConfirmButton: true,
-            showCancelButton: false,
-        });
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

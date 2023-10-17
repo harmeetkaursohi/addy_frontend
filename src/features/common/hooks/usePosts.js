@@ -13,6 +13,9 @@ const usePosts = (pageNum = 0, filter = null) => {
     const dispatch = useDispatch();
     const token = getToken();
 
+
+    console.log("@@@ filter ::: ", filter)
+
     useEffect(() => {
         setIsLoading(true)
         setIsError(false)
@@ -35,10 +38,10 @@ const usePosts = (pageNum = 0, filter = null) => {
         dispatch(getPostsPageAction(requestBody))
             .then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
-                    if (pageNum === 0 && filter) {
+                    if (pageNum === 0) {
                         setResults(response?.payload);
-                    } else {
-                        setResults((prev) => [...prev, ...response.payload]);
+                    } else if(pageNum>1 ){
+                        setResults((prev) => [...prev, ...response?.payload]);
                     }
                     setHasNextPage(Boolean(response?.payload.length));
                     setIsLoading(false);

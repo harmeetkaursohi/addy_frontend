@@ -19,7 +19,7 @@ import {RiDeleteBin5Fill} from "react-icons/ri";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
 import {
-    checkDimensions,
+    checkDimensions, convertSentenceToHashtags,
     convertToUnixTimestamp,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
@@ -47,6 +47,8 @@ const CreatePost = () => {
     const [files, setFiles] = useState([]);
     const [selectedFileType, setSelectedFileType] = useState("");
     const [reference, setReference] = useState("");
+    const [disableImage, setDisableImage] = useState(false);
+    const [disableVideo, setDisableVideo] = useState(false);
 
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
@@ -243,28 +245,6 @@ const CreatePost = () => {
 
     const handleRemoveSelectFile = (fileToRemove) => {
         const updatedFiles = files.filter((file) => file.url !== fileToRemove.url);
-        setFiles(updatedFiles);
-    };
-
-    const handleDragStart = (e, file) => {
-        e.dataTransfer.setData('file', JSON.stringify(file));
-    };
-
-    const handleDrop = (e, index) => {
-        e.preventDefault();
-        const draggedFile = JSON.parse(e.dataTransfer.getData('file'));
-        const oldIndex = files.findIndex((file) => file.url === draggedFile.url);
-
-        if (oldIndex === -1) {
-            return;
-        }
-        const updatedFiles = [...files];
-        updatedFiles.splice(oldIndex, 1);
-        updatedFiles.splice(index, 0, draggedFile);
-
-        updatedFiles.forEach((file, index) => {
-            file.position = index;
-        });
         setFiles(updatedFiles);
     };
 
@@ -490,15 +470,12 @@ const CreatePost = () => {
                                             <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                             <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
                                             <div className="drag_scroll">
+
                                                 {files?.map((file, index) => {
                                                     return (
                                                         <div
                                                             className="file_outer dragable_files"
                                                             key={index}
-                                                            draggable="true"
-                                                            onDragStart={(e) => handleDragStart(e, file)}
-                                                            onDrop={(e) => handleDrop(e, index)}
-                                                            onDragOver={(e) => e.preventDefault()}
                                                         >
                                                             <div className="flex-grow-1 d-flex align-items-center">
                                                                 <i className="fas fa-grip-vertical me-2"></i>
@@ -514,8 +491,6 @@ const CreatePost = () => {
                                                                            src={file.url} alt={`Videos ${index}`}
                                                                            autoPlay={true}/>
                                                                 }
-                                                                <span
-                                                                    className="file_dimention_text">{`${file.dimension.width}X${file.dimension.height}`}</span>
                                                             </div>
                                                             <button className="delete_upload">
                                                                 <RiDeleteBin5Fill style={{fontSize: '24px'}}
@@ -531,56 +506,66 @@ const CreatePost = () => {
                                             </div>
 
                                             <div className="darg_navs file_outer">
-                                                <div
-                                                    className={"cmn_blue_border add_media_outer"}>
-                                                    <input type="file" id='image'
-                                                           className='file'
-                                                           multiple
-                                                           name={'file'}
-                                                           onClick={e => (e.target.value = null)}
-                                                           accept={"image/png, image/jpeg"}
-                                                           onChange={(e) => {
-                                                               console.log("@@@@ handleSelectedFile ::: ")
-                                                               setSelectedFileType("IMAGE")
-                                                               handleSelectedFile(e);
-                                                           }}
-                                                    />
-                                                    <label htmlFor='image' className='cmn_headings'>
-                                                        <i className="fa fa-image"
-                                                           style={{marginTop: "2px"}}/>{"Add Photo"}
-                                                    </label>
-                                                </div>
+                                                {
+                                                    disableImage === false && <div
+                                                        className={"cmn_blue_border add_media_outer"}>
+                                                        <input type="file" id='image'
+                                                               className='file'
+                                                               multiple
+                                                               name={'file'}
+                                                               onClick={e => (e.target.value = null)}
+                                                               accept={"image/png, image/jpeg"}
+                                                               onChange={(e) => {
+                                                                   setDisableVideo(true);
+                                                                   setSelectedFileType("IMAGE")
+                                                                   handleSelectedFile(e);
+                                                               }}
+                                                        />
+                                                        <label htmlFor='image' className='cmn_headings'>
+                                                            <i className="fa fa-image"
+                                                               style={{marginTop: "2px"}}/>{"Add Photo"}
+                                                        </label>
+                                                    </div>
+                                                }
 
-                                                <div className="cmn_blue_border add_media_outer">
-                                                    <input
-                                                        type="file"
-                                                        id='video'
-                                                        onClick={e => (e.target.value = null)}
-                                                        accept={"video/mp4,video/x-m4v,video/*"}
-                                                        onChange={(e) => {
-                                                            setSelectedFileType("VIDEO");
-                                                            handleSelectedVideoFile(e);
-                                                        }}/>
-                                                    <label htmlFor='video' className='cmn_headings'>
-                                                        <i className="fa fa-video-camera"
-                                                           style={{marginTop: "2px"}}/>Add
-                                                        Video
-                                                    </label>
-                                                </div>
+                                                {
+                                                    disableVideo === false &&
+                                                    <div className="cmn_blue_border add_media_outer">
+                                                        <input
+                                                            type="file"
+                                                            id='video'
+                                                            onClick={e => (e.target.value = null)}
+                                                            accept={"video/mp4,video/x-m4v,video/*"}
+                                                            onChange={(e) => {
+                                                                setDisableImage(true);
+                                                                setSelectedFileType("VIDEO");
+                                                                handleSelectedVideoFile(e);
+                                                            }}/>
+                                                        <label htmlFor='video' className='cmn_headings'>
+                                                            <i className="fa fa-video-camera"
+                                                               style={{marginTop: "2px"}}/>Add
+                                                            Video
+                                                        </label>
+                                                    </div>
+                                                }
                                             </div>
 
-                                            <h2 className='cmn_heading'>{jsondata.OR}</h2>
-                                            <div className="ai_outer_btn">
-                                                <button
-                                                    className={`ai_btn cmn_white_text mt-2`}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        setAIGenerateImageModal(true);
-                                                    }}>
-                                                    <i className="fa-solid fa-robot ai_icon me-2"
-                                                       style={{fontSize: "15px"}}/> {jsondata.generateAi}
-                                                </button>
-                                            </div>
+                                            {
+                                                disableImage === false && <>
+                                                    <h2 className='cmn_heading'>{jsondata.OR}</h2>
+                                                    <div className="ai_outer_btn">
+                                                        <button
+                                                            className={`ai_btn cmn_white_text mt-2`}
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                setAIGenerateImageModal(true);
+                                                            }}>
+                                                            <i className="fa-solid fa-robot ai_icon me-2"
+                                                               style={{fontSize: "15px"}}/> {jsondata.generateAi}
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            }
                                         </div>
 
                                         {/* post caption */
@@ -628,7 +613,9 @@ const CreatePost = () => {
                                                           value={hashTag}
                                                           onChange={(e) => {
                                                               e.preventDefault();
-                                                              setHashTag(e.target.value);
+                                                              const inputValue = e.target.value;
+                                                              const hashtags = convertSentenceToHashtags(inputValue);
+                                                              setHashTag(hashtags);
                                                           }}></textarea>
                                             </div>
 

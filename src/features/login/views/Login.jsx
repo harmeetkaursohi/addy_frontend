@@ -10,6 +10,7 @@ import {useDispatch} from "react-redux";
 import {loginUser} from "../../../app/actions/userActions/userActions.js";
 import {validationSchemas} from "../../../utils/commonUtils.js";
 import {useEffect} from "react";
+import {showErrorToast} from "../../common/components/Toast";
 
 
 const Login = () => {
@@ -29,7 +30,13 @@ const Login = () => {
         },
         validationSchema: validationSchemas.login,
         onSubmit: (values) => {
-            dispatch(loginUser({values, navigate}));
+            dispatch(loginUser({values})).then((response) => {
+                if (response.meta.requestStatus === "fulfilled") {
+                    navigate("/dashboard")
+                }
+            }).catch((error) => {
+                showErrorToast(error.response.data.message);
+            });
         },
     });
 

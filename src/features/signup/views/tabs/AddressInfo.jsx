@@ -10,6 +10,7 @@ import React, {useEffect, useState} from "react";
 import {Country, State, City} from 'country-state-city';
 import {signUpUser} from "../../../../app/actions/userActions/userActions";
 import {showErrorToast} from "../../../common/components/Toast";
+import Swal from "sweetalert2";
 
 const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
@@ -50,8 +51,20 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
             }
 
             dispatch(signUpUser({...formData, address: addressObj, navigate})).then((response) => {
-                formik.resetForm();
-                setFormData(resetUserInfo)
+                if (response.meta.requestStatus === "fulfilled") {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registration Successful',
+                        html: `
+                             <p>Your registration is complete, and we've sent a confirmation email to your email address</p>
+                         `,
+                        showConfirmButton: true,
+                        confirmButtonColor: "#F07C33",
+                        showCancelButton: false,
+                    });
+                    formik.resetForm();
+                    setFormData(resetUserInfo);
+                }
             }).catch((error) => {
                 showErrorToast(error.response.data.message);
                 formik.resetForm();

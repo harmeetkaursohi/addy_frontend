@@ -7,12 +7,14 @@ import usePosts from "../../common/hooks/usePosts";
 import {computeImageURL} from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png"
+import CommonLoader from "../../common/components/CommonLoader";
 
 const Review = () => {
 
-    const [baseSearchQuery, setBaseSearchQuery] = useState({});
-    const [pageNum, setPageNum] = useState(0);
-    const {isLoading, isError, error, results, hasNextPage} = usePosts(pageNum, baseSearchQuery?.socialMediaType);
+    const [baseSearchQuery, setBaseSearchQuery] = useState({
+        pageNum:0
+    });
+    const {isLoading, isError, error, results, hasNextPage} = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postId, setPostId] = useState("");
     console.log("@@@ results ", results);
@@ -26,7 +28,11 @@ const Review = () => {
         intObserver.current = new IntersectionObserver(posts => {
             if (posts[0].isIntersecting && hasNextPage) {
                 console.log('We are near the last post!')
-                setPageNum(prev => prev + 1)
+                setBaseSearchQuery({
+                        ...baseSearchQuery,
+                        pageNum: baseSearchQuery.pageNum + 1
+                    }
+                )
             }
         })
 
@@ -54,9 +60,10 @@ const Review = () => {
                                         onChange={(e) => {
                                             setBaseSearchQuery({
                                                 ...baseSearchQuery,
+                                                pageNum: 0,
                                                 socialMediaType: e.target.value === "All" ? null : e.target.value
                                             });
-                                            setPageNum(0);
+
                                         }}
                                 >
                                     <option value={"All"}>All</option>
@@ -91,11 +98,12 @@ const Review = () => {
                                             ref={index === results.length - 1 ? lastPostRef : null}
                                         >
                                             <td>
-                                                <img src={post?.attachments[0]?.imageURL || noImageAvailable} className="bg_img"/>
+                                                <img src={post?.attachments[0]?.imageURL || noImageAvailable}
+                                                     className="bg_img"/>
                                             </td>
                                             <td>
                                                 <img className={"me-2"} src={computeImageURL(post?.socialMediaType)}/>
-                                                <span >{post?.page?.name}</span>
+                                                <span>{post?.page?.name}</span>
                                             </td>
                                             <td>{post?.likes} Likes</td>
                                             <td>{post?.comments} Comments</td>
@@ -118,8 +126,7 @@ const Review = () => {
                             </div>
 
                             <div className={"m-auto mt-5"}>
-                                {isLoading && <p className="text-center">Loading More Posts...</p>}
-                                {<p className="text-center"><a href="#top">Back to Top</a></p>}
+                                {isLoading && <CommonLoader/>}
                             </div>
                         </div>
                     </div>

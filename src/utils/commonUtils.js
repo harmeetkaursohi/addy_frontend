@@ -102,7 +102,7 @@ export const facebookPageConnectAction = (dispatch, token, facebookData) => {
         }
         dispatch(facebookPageConnect(requestBody)).then((response) => {
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5 , postStatus:"SCHEDULED"}}));
+            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: "SCHEDULED"}}));
         }).catch((error) => {
             console.log("--->error", error)
         })
@@ -134,9 +134,7 @@ export const checkDimensions = (file, socialMediaPostId = "") => {
             const imageUrl = URL.createObjectURL(file);
             img.src = imageUrl;
             img.onload = () => {
-                const width = img.naturalWidth;
-                const height = img.naturalHeight;
-                resolve({file: file, dimension: {width: width, height: height}, url: imageUrl});
+                resolve({file: file, url: imageUrl});
             };
             img.onerror = (error) => {
                 reject(error);
@@ -151,9 +149,7 @@ export const checkDimensions = (file, socialMediaPostId = "") => {
             mediaElement.src = videoUrl;
 
             mediaElement.onloadedmetadata = () => {
-                const width = mediaElement.videoWidth;
-                const height = mediaElement.videoHeight;
-                resolve({file: file, dimension: {width: width, height: height}, url: videoUrl});
+                resolve({file: file, url: videoUrl});
             };
             mediaElement.onerror = (error) => {
                 reject(error);
@@ -192,22 +188,6 @@ export const extractHashtags = (hastTag) => {
     const hashtagRegex = /#[A-Za-z0-9_-]+/g;
     return !hastTag.match(hashtagRegex) || [];
 }
-
-
-export const generateHashtags = (message) => {
-    const hashtags = extractHashtags(message)
-
-
-    console.log("@@@ hashtags", hashtags)
-
-    const keywords = message.split(/\s+/);
-    const generatedHashtags = keywords.filter((word) => word.length > 2).map((word) => `#${word}`);
-
-    console.log("@@@ generatedHashtags", generatedHashtags)
-
-    return generatedHashtags;
-};
-
 
 export const redirectToURL = (redirectedURL) => {
     window.open(redirectedURL, '_blank');
@@ -389,3 +369,19 @@ export function getCustomDateEarlierUnixDateTime(dateToElapse) {
 
 
 }
+
+export const convertToHashtag = (str) => {
+    if (str.startsWith('#')) {
+        return str;
+    } else {
+        return `#${str}`;
+    }
+}
+
+export const convertSentenceToHashtags = (sentence) => {
+    const words = sentence.split(' ');
+    const hashtags = words.map(word => convertToHashtag(word));
+    const result = hashtags.join(' ');
+    return result;
+}
+
