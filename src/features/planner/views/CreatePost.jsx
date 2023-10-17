@@ -25,6 +25,7 @@ import {
 } from "../../../utils/commonUtils";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
+import ReactPlayer from "react-player";
 
 const CreatePost = () => {
 
@@ -53,6 +54,13 @@ const CreatePost = () => {
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
+
+    useEffect(() => {
+        if (files && files.length <= 0) {
+           setDisableVideo(false);
+           setDisableImage(false);
+        }
+    }, [files])
 
 
     useEffect(() => {
@@ -489,8 +497,10 @@ const CreatePost = () => {
                                                                     file.file.type.startsWith('video/') &&
                                                                     <video className={"upload_image me-3"}
                                                                            src={file.url} alt={`Videos ${index}`}
-                                                                           autoPlay={true}/>
+                                                                           autoPlay={false}
+                                                                    />
                                                                 }
+
                                                             </div>
                                                             <button className="delete_upload">
                                                                 <RiDeleteBin5Fill style={{fontSize: '24px'}}

@@ -3,6 +3,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import React from "react";
 import noImageAvailable from "../../../images/no_img_posted.png"
+import ReactPlayer from "react-player";
 
 
 const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToSocialMedia = true}) => {
@@ -34,10 +35,14 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToS
 
                         files?.map((file, index) => (
                             <div key={index}>
-                                <video src={file.url} alt={`Videos ${index}`} className='post_img'
-                                       autoPlay={true}/>
+                                <ReactPlayer
+                                    className='post_img'
+                                    url={file.url}
+                                    controls={true}
+                                />
                             </div>
                         ))
+
                     }
 
 
