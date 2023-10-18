@@ -61,10 +61,24 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToS
                     {
                         Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
                             <div key={index}>
-                                <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
+                                {file?.mediaType === "IMAGE" ?
+                                    <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
+                                    :
+                                    <ReactPlayer
+                                        height={"350px"}
+                                        width={"100%"}
+                                        className=''
+                                        url={file.sourceURL}
+                                        controls={true}
+                                    />
+
+                                }
+
+
                             </div>
                         ))
                     }
+
 
                 </Slider>
             }
