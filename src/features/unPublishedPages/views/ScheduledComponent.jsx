@@ -8,7 +8,8 @@ import {useDispatch, useSelector} from "react-redux";
 import jsondata from "../../../locales/data/initialdata.json";
 import {useEffect, useState} from "react";
 import {
-    deletePostByBatchIdAction, getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
+    deletePostByBatchIdAction, getAllSocialMediaPostsByCriteria
+} from "../../../app/actions/postActions/postActions";
 import {getToken} from "../../../app/auth/auth";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import noPostScheduled from "../../../images/no_post_scheduled.png";
@@ -42,7 +43,10 @@ const ScheduledComponent = ({scheduledData}) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         setDeleteIdRef(null);
                         showSuccessToast("Posts has been deleted successfully");
-                        dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus:"SCHEDULED"} }));
+                        dispatch(getAllSocialMediaPostsByCriteria({
+                            token: token,
+                            query: {limit: 5, postStatus: "SCHEDULED"}
+                        }));
                     }
                 }).catch((error) => {
                 setDeleteIdRef(null);
@@ -83,8 +87,9 @@ const ScheduledComponent = ({scheduledData}) => {
                             :
                             scheduledPosts && Array.isArray(scheduledPosts) && sortByKey(scheduledPosts, "feedPostDate").map(curBatch => (
 
-                                <div className={"col-lg-6"}>
+                                // <div className={scheduledPosts.length===1 ? "col-lg-12" : scheduledPosts.length===2 ? "col-lg-6" :"col-lg-4"}>
 
+                                <div className={"col-lg-4"}>
                                     <div className="draft-outer mb-3">
 
                                         <div className={"draft-heading"}>
