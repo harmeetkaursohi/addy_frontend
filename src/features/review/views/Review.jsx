@@ -14,21 +14,29 @@ import {getPostPageInfoAction} from "../../../app/actions/postActions/postAction
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: 0});
-    const {isLoading, isError, error, results, hasNextPage} = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
+    const {
+        isLoading,
+        isError,
+        error,
+        results,
+        hasNextPage
+    } = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
     const dispatch = useDispatch();
-    const postPageInfoData = useSelector((state)=> state.post.getPostPageInfoReducer.data);
+    const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
 
     console.log("@@@ results ", results);
 
 
     useEffect(() => {
-        const requestBody = {
-            postIds: [postData?.id],
-            pageAccessToken: postData?.page?.access_token
+        if (postData && postData != undefined) {
+            const requestBody = {
+                postIds: [postData?.id],
+                pageAccessToken: postData?.page?.access_token
+            }
+            dispatch(getPostPageInfoAction(requestBody));
         }
-        dispatch(getPostPageInfoAction(requestBody));
     }, [postData])
 
 
@@ -40,12 +48,7 @@ const Review = () => {
 
         intObserver.current = new IntersectionObserver(posts => {
             if (posts[0].isIntersecting && hasNextPage) {
-                console.log('We are near the last post!')
-                setBaseSearchQuery({
-                        ...baseSearchQuery,
-                        pageNum: baseSearchQuery.pageNum + 1
-                    }
-                )
+                setBaseSearchQuery({...baseSearchQuery, pageNum: baseSearchQuery.pageNum + 1})
             }
         })
 
@@ -76,7 +79,6 @@ const Review = () => {
                                                 pageNum: 0,
                                                 socialMediaType: e.target.value === "All" ? null : e.target.value
                                             });
-
                                         }}
                                 >
                                     <option value={"All"}>All</option>

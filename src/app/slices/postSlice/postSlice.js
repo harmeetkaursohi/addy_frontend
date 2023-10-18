@@ -12,7 +12,10 @@ import {
     publishedPostAction,
     getAllPlannerPostAction,
     getPostsPageAction,
-    getAllSocialMediaPostsByCriteria, getPostPageInfoAction
+    getAllSocialMediaPostsByCriteria,
+    getPostPageInfoAction,
+    likePostAction,
+    dislikePostAction, addCommentOnPostAction
 } from "../../actions/postActions/postActions.js";
 
 
@@ -32,7 +35,10 @@ const postSlice = createSlice({
         deletePostByBatchIdReducer: {loading: false},
         getAllPlannerPostReducer: {loading: false},
         getPostsPageReducer: {loading: false},
-        getPostPageInfoReducer:{loading: false}
+        getPostPageInfoReducer: {loading: false},
+        likePostReducer: {loading: false},
+        dislikePostReducer: {loading: false},
+        addCommentOnPostActionReducer: {loading: false}
     },
 
     reducers: {
@@ -42,6 +48,40 @@ const postSlice = createSlice({
     },
 
     extraReducers: {
+
+        // Start dis Likes
+        [addCommentOnPostAction.pending]: (state) => {
+            state.addCommentOnPostActionReducer = {loading: true}
+        },
+        [addCommentOnPostAction.fulfilled]: (state, action) => {
+            state.addCommentOnPostActionReducer = {loading: false, data: action.payload}
+        },
+        [addCommentOnPostAction.rejected]: (state) => {
+            state.addCommentOnPostActionReducer = {loading: false}
+        },
+
+
+        // Start dis Likes
+        [dislikePostAction.pending]: (state) => {
+            state.dislikePostReducer = {loading: true}
+        },
+        [dislikePostAction.fulfilled]: (state, action) => {
+            state.dislikePostReducer = {loading: false, data: action.payload}
+        },
+        [dislikePostAction.rejected]: (state) => {
+            state.dislikePostReducer = {loading: false}
+        },
+
+
+        [likePostAction.pending]: (state) => {
+            state.likePostReducer = {loading: true}
+        },
+        [likePostAction.fulfilled]: (state, action) => {
+            state.likePostReducer = {loading: false, data: action.payload}
+        },
+        [likePostAction.rejected]: (state) => {
+            state.likePostReducer = {loading: false}
+        },
 
         // Start Review
         [getPostPageInfoAction.pending]: (state) => {

@@ -267,7 +267,6 @@ const Planner = () => {
                                     weekends={true}
                                     events={events}
                                     eventContent={renderCalendarCards}
-                                    // eventClick={handleShowMore}
                                     dayHeaderContent={customDayHeaderContent}
                                     dayCellClassNames={(arg) => {
                                         if (arg?.isPast) {

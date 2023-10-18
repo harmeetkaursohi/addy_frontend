@@ -3,6 +3,36 @@ import axios from "axios";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 
+export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAction', async (data, thunkAPI) => {
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.postId}/comments?message=${data.comment}&access_token=${data?.pageAccessToken}`;
+    return axios.post(apiUrl, null).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.message);
+    });
+});
+
+export const dislikePostAction = createAsyncThunk('post/dislikePostAction', async (data, thunkAPI) => {
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.postId}/likes?access_token=${data?.pageAccessToken}`;
+    return axios.delete(apiUrl).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.message);
+    });
+});
+
+export const likePostAction = createAsyncThunk('post/likePostAction', async (data, thunkAPI) => {
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.postId}/likes?access_token=${data?.pageAccessToken}`;
+    return axios.post(apiUrl, null).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.message);
+    });
+});
+
 
 export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoAction', async (data, thunkAPI) => {
     const postIds = data.postIds.map(id => id).join(',');
