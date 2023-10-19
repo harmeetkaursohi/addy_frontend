@@ -19,17 +19,10 @@ import {
     updatePostOnSocialMediaAction
 } from "../../../app/actions/postActions/postActions.js";
 import {RiDeleteBin5Fill} from "react-icons/ri";
-import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {useNavigate, useParams} from "react-router-dom";
-import {
-    checkDimensions,
-    convertToUnixTimestamp,
-    handleSeparateCaptionHashtag,
-    urlsToFiles,
-    validateScheduleDateAndTime
-} from "../../../utils/commonUtils";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
+
 
 const UpdatePost = () => {
 
@@ -41,26 +34,42 @@ const UpdatePost = () => {
         const [aiGenerateImageModal, setAIGenerateImageModal] = useState(false);
         const [aiGenerateCaptionModal, setAIGenerateCaptionModal] = useState(false);
         const [aiGenerateHashTagModal, setAIGenerateHashTagModal] = useState(false);
+
         const [hashTag, setHashTag] = useState("");
         const [caption, setCaption] = useState("");
         const [scheduleDate, setScheduleDate] = useState("");
         const [scheduleTime, setScheduleTime] = useState("");
         const [boostPost, setBoostPost] = useState(false);
-        const [selectedOptions, setSelectedOptions] = useState([]);
-        const [selectedOptionLabels, setSelectedOptionLabels] = useState([]);
-        const [selectAllCheckBox, setSelectAllCheckBox] = useState(false);
         const [socialAccountData, setSocialAccountData] = useState([]);
         const [files, setFiles] = useState([]);
         const [selectedFileType, setSelectedFileType] = useState("");
         const [reference, setReference] = useState("");
         const [isPopulated, setIsPopulated] = useState(false);
 
+        const [allOptions, setAllOptions] = useState([]);
+        const [selectedOptions, setSelectedOptions] = useState([]);
+        const [selectedGroups, setSelectedGroups] = useState([]);
+
         const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
         const userData = useSelector(state => state.user.userInfoReducer.data);
         const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading)
         const getPostsByBatchIdList = useSelector(state => state.post.getAllPostsByBatchIdReducer.data);
 
-        console.log("@@@ getPostsByBatchIdList ", getPostsByBatchIdList);
+        console.log("getPostsByBatchIdList--->",getPostsByBatchIdList);
+
+
+        useEffect(() => {
+            if (socialAccounts) {
+                setSocialAccountData(socialAccounts);
+            }
+        }, [socialAccounts]);
+
+
+        useEffect(() => {
+            if (socialAccountData && batchId) {
+                dispatch(getAllPostsByBatchIdAction({batchId: batchId, token: token}))
+            }
+        }, [socialAccountData, batchId]);
 
 
         useEffect(() => {
@@ -73,396 +82,91 @@ const UpdatePost = () => {
 
         }, []);
 
-
+        // Create all Options
         useEffect(() => {
-            if (socialAccounts) {
-                setSocialAccountData(socialAccounts);
-            }
-        }, [socialAccounts]);
-
-
-        useEffect(() => {
-            const requestBody = {
-                batchId: "651bd80bba5a9f1c1706d6161696326736681",
-                token: token
-            }
-
             if (socialAccountData) {
-                dispatch(getAllPostsByBatchIdAction(requestBody))
+                const optionList = socialAccountData.map((socialAccount) => {
+                    return {group: socialAccount?.provider, allOptions: socialAccount?.pageAccessToken}
+                });
+                setAllOptions(optionList);
             }
         }, [socialAccountData]);
 
 
-        useEffect(() => {
+        // handle Group Dropdown Logic
+        const handleGroupCheckboxChange = (group) => {
+            const updatedSelectedGroups = new Set(selectedGroups);
+            const updatedSelectedOptions = new Set(selectedOptions);
 
-                if (isPopulated === false && getPostsByBatchIdList) {
-
-                    const {FACEBOOK} = getPostsByBatchIdList;
-                    const messageObject = handleSeparateCaptionHashtag(FACEBOOK[0]?.message);
-                    setHashTag(messageObject.hashtag);
-                    setCaption(messageObject.caption);
-
-                    const pageIds = FACEBOOK.map(data => data.id.split("_")[0]);
-
-                    if (socialAccountData) {
-                        const updatedSocialAccountData = socialAccountData.map(el => {
-                            const updatedPageAccessToken = el.pageAccessToken.map(obj => {
-                                if (pageIds.includes(obj.pageId)) {
-                                    return {...obj, selected: true};
-                                } else {
-                                    return {...obj, selected: false}
-                                }
-                            });
-
-                            return {
-                                ...el,
-                                pageAccessToken: updatedPageAccessToken,
-                                selected: updatedPageAccessToken.every(obj => obj.selected)
-                            };
-                        });
-
-                        // Check if the updatedSocialAccountData is different before setting it
-                        if (JSON.stringify(updatedSocialAccountData) !== JSON.stringify(socialAccountData)) {
-                            setSocialAccountData(updatedSocialAccountData);
-
-                            const newSelectedOptionLabels = updatedSocialAccountData.flatMap((socialAccount) =>
-                                socialAccount.pageAccessToken
-                                    .filter(page => pageIds.includes(page.pageId))
-                                    .map(page => ({id: page.pageId, label: page.name, imageUrl: page.imageUrl}))
-                            );
-
-                            const newSelectedOptions = updatedSocialAccountData.flatMap((socialAccount) =>
-                                socialAccount.pageAccessToken
-                                    .filter(page => pageIds.includes(page.pageId))
-                                    .map(page => page.pageId)
-                            );
-
-                            // Create Sets to store unique values
-                            const uniqueSelectedOptionLabels = new Set(selectedOptionLabels);
-                            const uniqueSelectedOptions = new Set(selectedOptions);
-
-                            // Add new values to the Sets
-                            newSelectedOptionLabels.forEach((label) => uniqueSelectedOptionLabels.add(label));
-                            newSelectedOptions.forEach((option) => uniqueSelectedOptions.add(option));
-
-                            // Convert Sets back to arrays
-                            const updatedSelectedOptionLabels = [...uniqueSelectedOptionLabels];
-                            const updatedSelectedOptions = [...uniqueSelectedOptions];
-
-                            // Update state with unique values
-                            setSelectedOptionLabels(updatedSelectedOptionLabels);
-                            setSelectedOptions(updatedSelectedOptions);
-
-                            // const fileUrlList = FACEBOOK?.flatMap((object) => {
-                            //     return object.attachments.map((attachment) => {
-                            //         return {
-                            //             imageURL: attachment.imageURL,
-                            //             referenceId: attachment.id
-                            //         };
-                            //     })
-                            // });
-
-                            // console.log("@@@ imageUrlList1 ::: ",imageUrlList1)
-                            //
-                            //
-                            const imageUrlList = FACEBOOK?.flatMap((object) => {
-                                return object.attachments.map((attachment) => {
-                                    return attachment.imageURL;
-                                })
-                            });
-
-
-                            urlsToFiles(imageUrlList)
-                                .then((fileList) => {
-                                    if (fileList.length > 0) {
-                                        console.log("List of File objects:", fileList);
-                                        const dimensionPromises = fileList.map((file) => checkDimensions(file));
-                                        return Promise.all(dimensionPromises);
-                                    } else {
-                                        console.error("No valid files were converted.");
-                                        return [];
-                                    }
-                                })
-                                .then((results) => {
-                                    console.log("@@@ results", results);
-                                    setFiles([...files, ...results]);
-                                })
-                                .catch((error) => {
-                                    console.error("Error converting URLs to Files:", error);
-                                });
-
-
-                        }
-
-                        setIsPopulated(true);
-                    }
-                }
-            }, [socialAccountData, getPostsByBatchIdList]
-        );
-
-
-        const toggleOption = (option, e) => {
-            const optionIndex = selectedOptions.indexOf(option.id);
-            if (optionIndex !== -1) {
-                setSelectedOptions(selectedOptions.filter((id) => id !== option.id));
-                setSelectedOptionLabels(selectedOptionLabels.filter((item) => item.label !== option.label));
-
-                socialAccountData.map(el => {
-                    el.pageAccessToken.map(obj => {
-                        if (obj.pageId === option.id) {
-                            obj.selected = false;
-                            el.selected = false;
-                        }
-                    })
-                });
-
-                setSocialAccountData(socialAccountData);
-
-                if (socialAccountData.filter(el => el.selected === false).length > 0) {
-                    setSelectAllCheckBox(false);
-                }
-
-
+            if (selectedGroups.includes(group)) {
+                updatedSelectedGroups.delete(group);
+                allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.delete(opt.pageId));
             } else {
-                setSelectedOptions([...selectedOptions, option.id]);
-                setSelectedOptionLabels([...selectedOptionLabels, {
-                    id: option.id,
-                    label: option.label,
-                    imageUrl: option.imageUrl
-                }]);
+                updatedSelectedGroups.add(group);
+                allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.add(opt.pageId));
+            }
+
+            setSelectedGroups(Array.from(updatedSelectedGroups));
+            setSelectedOptions(Array.from(updatedSelectedOptions));
+        };
 
 
-                const updatedSocialAccountData = socialAccountData.map((socialAccount) => ({
-                    ...socialAccount,
-                    selected: false,
-                    pageAccessToken: socialAccount?.pageAccessToken?.map((page) => ({
-                        ...page,
-                        selected: page?.selected === undefined ? page.pageId === option.id : (page.pageId === option.id ? true : page.selected)
-                    })) || [],
-                }));
+        //handle single selector
+        const handleCheckboxChange = (option) => {
+            const {group, selectOption} = option;
 
-                const updatedSocialAccount = updatedSocialAccountData.map((socialAccount) => ({
-                    ...socialAccount,
-                    selected: socialAccount?.pageAccessToken.filter(el => el.selected === false).length === 0
-                }));
+            const updatedSelectedOptions = [...selectedOptions];
+            const updatedSelectedGroups = [...selectedGroups];
 
-                setSocialAccountData(updatedSocialAccount);
+            const groupOptionIds = allOptions.find((cur) => cur.group === group).allOptions.map((opt) => opt.pageId);
 
-                if (updatedSocialAccount.filter(el => el.selected === false).length === 0) {
-                    setSelectAllCheckBox(true);
+            if (selectedOptions.includes(selectOption.pageId)) {
+                updatedSelectedOptions.splice(updatedSelectedOptions.indexOf(selectOption.pageId), 1);
+            } else {
+                updatedSelectedOptions.push(selectOption.pageId);
+            }
+
+            const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
+
+            if (isGroupFullySelected) {
+                if (!updatedSelectedGroups.includes(group)) {
+                    updatedSelectedGroups.push(group);
                 }
-            }
-        };
-
-        const handleUncheck = (option) => {
-
-            const optionIndex = selectedOptions.indexOf(option.id);
-
-            if (optionIndex !== -1) {
-
-                setSelectedOptions(selectedOptions.filter((id) => id !== option.id));
-                setSelectedOptionLabels(selectedOptionLabels.filter((item) => item.label !== option.label));
-
-                socialAccountData.map(el => {
-                    el.pageAccessToken.map(obj => {
-                        if (obj.pageId === option.id) {
-                            obj.selected = false;
-                            el.selected = false;
-                        }
-                    })
-                });
-
-                setSocialAccountData(socialAccountData);
-
-                if (socialAccountData.filter(el => el.selected === false).length > 0) {
-                    setSelectAllCheckBox(false);
-                }
-            }
-        }
-
-        const handleSelectAllChange = (e) => {
-            const checked = e.target.checked;
-
-            const newSelectedOptionLabels = [];
-            const newSelectedOptions = [];
-
-            const updatedSocialAccountData = socialAccountData.map((socialAccount) => ({
-                ...socialAccount,
-                selected: checked,
-                pageAccessToken: socialAccount?.pageAccessToken?.map((page) => ({
-                    ...page,
-                    selected: checked
-                })) || []
-            }));
-
-            setSocialAccountData(updatedSocialAccountData);
-
-            if (checked === false) {
-                setSelectAllCheckBox(false);
-                setSelectedOptionLabels([]);
-                setSelectedOptions([]);
+            } else {
+                updatedSelectedGroups.splice(updatedSelectedGroups.indexOf(group), 1);
             }
 
-            if (checked === true && updatedSocialAccountData.filter(el => el.selected === false).length === 0) {
-                setSelectAllCheckBox(true);
-                socialAccountData.forEach((el) => {
-                    if (el.pageAccessToken != null && el.pageAccessToken.length > 0) {
-                        el.pageAccessToken.forEach(option => {
-                            let obj = {
-                                id: option.pageId,
-                                label: option.name,
-                                imageUrl: option.imageUrl
-                            };
-
-                            // Check if the option is already selected before adding
-                            if (!newSelectedOptions.includes(option.pageId)) {
-                                newSelectedOptionLabels.push(obj);
-                                newSelectedOptions.push(option.pageId);
-                            }
-                        });
-                    }
-                });
-
-                // Update the selected option labels and options state
-                setSelectedOptionLabels(newSelectedOptionLabels);
-                setSelectedOptions(newSelectedOptions);
-            }
+            setSelectedOptions(updatedSelectedOptions);
+            setSelectedGroups(updatedSelectedGroups);
         };
 
 
-        const handleSelectedFile = (e) => {
-            e.preventDefault();
-            const uploadedFiles = Array.from(e.target.files);
-            const dimensionPromises = uploadedFiles.map((file) => checkDimensions(file));
-
-            Promise.all(dimensionPromises)
-                .then((results) => {
-                    setFiles([...files, ...results]);
-                })
-                .catch((error) => {
-                    console.error("Error checking dimensions:", error);
-                });
-        }
-
-        const handleSelectedVideoFile = (e) => {
-            e.preventDefault();
-            const uploadedVideoFiles = Array.from(e.target.files);
-            const dimensionPromises = uploadedVideoFiles.map((file) => checkDimensions(file));
-
-            Promise.all(dimensionPromises)
-                .then((results) => {
-                    console.log(results);
-                    setFiles([...files, ...results]);
-                })
-                .catch((error) => {
-                    console.error("Error checking dimensions:", error);
-                });
-
-        }
-
-        const handleRemoveSelectFile = (fileToRemove) => {
-            const updatedFiles = files.filter((file) => file.url !== fileToRemove.url);
-            setFiles(updatedFiles);
+        // Handle Select All Method
+        const handleSelectAll = () => {
+            const allOptionIds = allOptions.flatMap((group) => group.allOptions.map((option) => option.pageId));
+            setSelectedOptions(allOptionIds);
+            setSelectedGroups(allOptions.map((group) => group.group));
         };
 
-        const handleDragStart = (e, file) => {
-            e.dataTransfer.setData('file', JSON.stringify(file));
-        };
-
-        const handleDrop = (e, index) => {
-            e.preventDefault();
-            const draggedFile = JSON.parse(e.dataTransfer.getData('file'));
-            const oldIndex = files.findIndex((file) => file.url === draggedFile.url);
-
-            if (oldIndex === -1) {
-                return;
-            }
-            const updatedFiles = [...files];
-            updatedFiles.splice(oldIndex, 1);
-            updatedFiles.splice(index, 0, draggedFile);
-
-            updatedFiles.forEach((file, index) => {
-                file.position = index;
-            });
-            setFiles(updatedFiles);
-        };
-
-        const createPost = (e, postStatus, scheduleDate, scheduleTime) => {
-                e.preventDefault();
-                const userInfo = decodeJwtToken(token);
-
-                const {FACEBOOK} = getPostsByBatchIdList;
-
-                const attachmentIdList = FACEBOOK?.flatMap((object) => {
-                    return object.attachments.map((attachment) => {
-                        return attachment.id;
-                    })
-                });
-
-                if (postStatus === 'SCHEDULED') {
-                    validateScheduleDateAndTime('SCHEDULED', scheduleDate, scheduleTime);
-                }
-
-                const requestBody = {
-                    token: token,
-                    customerId: userInfo?.customerId,
-                    batchId: batchId,
-                    updatePostRequestDTO: {
-                        attachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
-                        updatePostAttachments: [],
-                        hashTag: hashTag,
-                        caption: caption,
-                        postStatus: postStatus,
-                        boostPost: boostPost,
-                        pageIds: selectedOptionLabels?.map((obj) => obj.id),
-                        scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
-                    },
-                };
-
-                dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
-                    if (response.meta.requestStatus === "fulfilled") {
-                        showSuccessToast("Post has uploaded successfully");
-                        navigate("/planner");
-                    }
-                }).catch((error) => {
-                    showErrorToast(error.response.data.message);
-                });
-
-            }
-        ;
-
-        const handlePostSubmit = (e) => {
-            createPost(e, 'PUBLISHED');
-        };
-
-        const handleDraftPost = (e) => {
-            createPost(e, 'DRAFT');
-        };
-
-        const handleSchedulePost = (e) => {
-            createPost(e, 'SCHEDULED', scheduleDate, scheduleTime);
-        };
-
-        const resetForm = (e) => {
-            e.preventDefault();
-            setFiles([]);
-            setSelectAllCheckBox(false);
-            setSelectedOptionLabels([]);
+        // Handle UnSelect All Method
+        const handleUnselectAll = () => {
             setSelectedOptions([]);
-            setHashTag("");
-            setCaption("");
-            setScheduleTime("");
-            setScheduleDate("");
-            setBoostPost(false);
-            socialAccountData.map(el => {
-                el.pageAccessToken.map(obj => {
-                    obj.selected = false;
-                    el.selected = false;
-                })
-            });
+            setSelectedGroups([]);
+        };
 
-            setSocialAccountData(socialAccountData);
-        }
+        const areAllOptionsSelected = allOptions.flatMap((group) => group.allOptions).every((option) => selectedOptions.includes(option.pageId));
+
+        const selectedAllDropdownData = allOptions?.flatMap((groupOption) => groupOption.allOptions)
+            .filter((option) => selectedOptions.includes(option.pageId))
+            .map((option) => {
+                const group = allOptions.find((data) =>
+                    data.allOptions.some((cur) => cur.pageId === option.pageId)
+                )?.group;
+                return {
+                    group,
+                    selectOption: option
+                };
+            });
 
 
         return (
@@ -478,7 +182,7 @@ const UpdatePost = () => {
 
                                         <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
 
-                                        <form onSubmit={handlePostSubmit}>
+                                        <form onSubmit={null}>
 
                                             <div className="createPost_outer">
                                                 <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
@@ -488,14 +192,15 @@ const UpdatePost = () => {
                                                 <Dropdown className='insta_dropdown_btn mt-2'>
                                                     <Dropdown.Toggle id="instagram"
                                                                      className="instagram_dropdown tabs_grid">
-                                                        {selectedOptionLabels.length > 0 ?
+                                                        {selectedAllDropdownData.length > 0 ?
                                                             (
-                                                                selectedOptionLabels.map((data, index) => (
+                                                                selectedAllDropdownData.map((data, index) => (
                                                                     <div key={index} className="selected-option">
-                                                                        <img src={data.imageUrl} alt={data.label}/>
-                                                                        <span>{data.label}</span>
-                                                                        <RxCross2 onClick={() => {
-                                                                            handleUncheck(data);
+                                                                        <img src={data?.selectOption?.imageUrl}
+                                                                             alt={data?.selectOption?.name}/>
+                                                                        <span>{data?.selectOption?.name}</span>
+                                                                        <RxCross2 onClick={(e) => {
+                                                                            handleCheckboxChange(data)
                                                                         }}/>
                                                                     </div>
                                                                 ))
@@ -522,11 +227,8 @@ const UpdatePost = () => {
                                                                     <input type="checkbox"
                                                                            id="choice1-2"
                                                                            name="choice2"
-                                                                           checked={selectAllCheckBox}
-                                                                           onChange={(e) => {
-                                                                               setSelectAllCheckBox(!selectAllCheckBox);
-                                                                               handleSelectAllChange(e);
-                                                                           }}
+                                                                           checked={areAllOptionsSelected}
+                                                                           onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
                                                                     />
                                                                     <h3 className="cmn_headings">Select all
                                                                         Platform</h3>
@@ -545,8 +247,8 @@ const UpdatePost = () => {
                                                                                            className=""
                                                                                            id="choice1-1"
                                                                                            name="choice1"
-                                                                                           checked={(socialAccount && socialAccount?.selected) ? socialAccount?.selected : false}
-                                                                                           onChange={handleSelectAllChange}
+                                                                                           checked={selectedGroups.includes(socialAccount?.provider)}
+                                                                                           onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
                                                                                     />
 
                                                                                     {socialAccount &&
@@ -561,11 +263,11 @@ const UpdatePost = () => {
                                                                                             className="instagramPages unselectedpages"
                                                                                             key={index}
                                                                                             style={{background: page?.selected === true ? "rgb(215 244 215)" : ""}}
-                                                                                            onClick={(e) => toggleOption({
-                                                                                                id: page.pageId,
-                                                                                                label: page.name,
-                                                                                                imageUrl: page?.imageUrl
-                                                                                            }, e)}
+                                                                                            onClick={(e) =>
+                                                                                                handleCheckboxChange({
+                                                                                                    group: socialAccount?.provider,
+                                                                                                    selectOption: page
+                                                                                                })}
                                                                                         >
                                                                                             <div
                                                                                                 className="checkbox-button_outer">
@@ -577,14 +279,13 @@ const UpdatePost = () => {
                                                                                                 type="checkbox"
                                                                                                 id={page.id}
                                                                                                 name={page.name}
-                                                                                                checked={page?.selected === true}
-                                                                                                onChange={(e) => {
-                                                                                                    toggleOption({
-                                                                                                        id: page.pageId,
-                                                                                                        label: page.name,
-                                                                                                        imageUrl: page?.imageUrl
-                                                                                                    }, e)
-                                                                                                }}
+                                                                                                value={page.id}
+                                                                                                checked={selectedOptions.includes(page.pageId)}
+                                                                                                onChange={() =>
+                                                                                                    handleCheckboxChange({
+                                                                                                        group: socialAccount?.provider,
+                                                                                                        selectOption: page
+                                                                                                    })}
                                                                                             />
                                                                                         </div>
                                                                                     ))
@@ -617,10 +318,6 @@ const UpdatePost = () => {
                                                             <div
                                                                 className="file_outer dragable_files"
                                                                 key={index}
-                                                                draggable="true"
-                                                                onDragStart={(e) => handleDragStart(e, file)}
-                                                                onDrop={(e) => handleDrop(e, index)}
-                                                                onDragOver={(e) => e.preventDefault()}
                                                             >
                                                                 <div className="flex-grow-1 d-flex align-items-center">
                                                                     <i className="fas fa-grip-vertical me-2"></i>
@@ -643,7 +340,7 @@ const UpdatePost = () => {
                                                                     <RiDeleteBin5Fill style={{fontSize: '24px'}}
                                                                                       onClick={(e) => {
                                                                                           e.preventDefault();
-                                                                                          handleRemoveSelectFile(file);
+                                                                                          // handleRemoveSelectFile(file);
                                                                                       }}/>
                                                                 </button>
                                                             </div>
@@ -663,7 +360,7 @@ const UpdatePost = () => {
                                                                accept={"image/png, image/jpeg"}
                                                                onChange={(e) => {
                                                                    setSelectedFileType("IMAGE")
-                                                                   handleSelectedFile(e);
+                                                                   // handleSelectedFile(e);
                                                                }}
                                                         />
                                                         <label htmlFor='image' className='cmn_headings'>
@@ -680,7 +377,7 @@ const UpdatePost = () => {
                                                             accept={"video/mp4,video/x-m4v,video/*"}
                                                             onChange={(e) => {
                                                                 setSelectedFileType("VIDEO");
-                                                                handleSelectedVideoFile(e);
+                                                                // handleSelectedVideoFile(e);
                                                             }}/>
                                                         <label htmlFor='video' className='cmn_headings'>
                                                             <i className="fa fa-video-camera"
@@ -766,7 +463,7 @@ const UpdatePost = () => {
                                                         <GenericButtonWithLoader label={jsondata.schedule}
                                                                                  onClick={(e) => {
                                                                                      setReference("Scheduled")
-                                                                                     handleSchedulePost(e);
+                                                                                     // handleSchedulePost(e);
                                                                                  }}
                                                                                  className={"cmn_bg_btn schedule_btn loading"}
                                                                                  isLoading={reference === "Scheduled" && loadingCreateFacebookPost}/>
@@ -774,7 +471,7 @@ const UpdatePost = () => {
                                                         <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                                  onClick={(e) => {
                                                                                      setReference("Draft")
-                                                                                     handleDraftPost(e);
+                                                                                     // handleDraftPost(e);
                                                                                  }}
                                                                                  className={"save_btn cmn_bg_btn loading"}
                                                                                  isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
@@ -833,7 +530,7 @@ const UpdatePost = () => {
                                                     <button className='cancel_btn cmn_bg_btn' onClick={(e) => {
                                                         e.preventDefault();
                                                         console.log("Cancel")
-                                                        resetForm(e);
+                                                        // resetForm(e);
                                                     }}>{jsondata.cancel}</button>
 
                                                     <GenericButtonWithLoader label={jsondata.publishnow}
