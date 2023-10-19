@@ -4,8 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import img from '../../../../images/draft.png'
 import {Link} from "react-router-dom";
-import user from '../../../../images/user.png'
-import {handleSeparateCaptionHashtag} from "../../../../utils/commonUtils";
+import { handleSeparateCaptionHashtag} from "../../../../utils/commonUtils";
 import {useEffect, useState} from "react";
 import {TbShare3} from "react-icons/tb";
 import {useDispatch} from "react-redux";
@@ -17,6 +16,8 @@ import {
 } from "../../../../app/actions/postActions/postActions";
 import {showErrorToast} from "../../../common/components/Toast";
 import {AiFillHeart, AiOutlineHeart} from "react-icons/ai";
+import CommonSlider from "../../../common/components/CommonSlider";
+import Comments from "../Comments";
 // import io from 'socket.io-client';
 
 
@@ -32,7 +33,9 @@ const CommentReviewsSectionModal = ({
     const handleClose = () => setOpenCommentReviewsSectionModal(false);
     const [comment, setComment] = useState("");
 
+
     console.log("@@@ postPageInfoData", postPageInfoData)
+    console.log("@@@ postData", postData)
 
     useEffect(() => {
         if (postData && postPageInfoData) {
@@ -40,6 +43,9 @@ const CommentReviewsSectionModal = ({
             setLike(postPageInfoData[[postData?.id]]?.likes?.summary?.has_liked)
         }
     }, [postData, postPageInfoData])
+
+
+
 
 
     const handleAddLikesOnPost = (e) => {
@@ -105,7 +111,6 @@ const CommentReviewsSectionModal = ({
         dispatch(addCommentOnPostAction(requestBody));
     }
 
-
     return (
         <>
             <div className='comment_review_container'>
@@ -123,7 +128,13 @@ const CommentReviewsSectionModal = ({
                                         <i className="fa fa-download"></i>
 
                                     </div>
-                                    <img src={  postData?.attachments[0]?.imageURL  } alt={"image"} className="img-fluid"/>
+                                    <CommonSlider files={postData?.attachments}
+                                                  selectedFileType={null}
+                                                  caption={null}
+                                                  hashTag={null}
+                                                  showThumbnail={true}
+
+                                                  viewSimilarToSocialMedia={false}/>
                                 </div>
                             </Col>
                             <Col lg="5" className="p-0">
@@ -146,56 +157,9 @@ const CommentReviewsSectionModal = ({
                                         <h4>{handleSeparateCaptionHashtag(postData?.message)?.caption}</h4>
                                         <p className="post_hashtags">{handleSeparateCaptionHashtag(postData?.message)?.hashtag}</p>
 
-                                        <div className="comment_wrap">
-                                            <div className="user_card">
-                                                <div className="user_image">
-                                                    <img src={user} alt=""/>
-                                                </div>
-                                                <div className="user">
-                                                    <p className="user_name">
-                                                        Eathan johnsan
-                                                    </p>
-                                                    <p>
-                                                        Absolutely breathtaking! Nature's beauty never fails to amaze
-                                                        me. 😍🍃
-                                                    </p>
-                                                    <div className="user_impressions d-flex gap-3 mt-2 mb-2">
-                                                        <p>20 min</p>
-                                                        <p>1 Like</p>
-                                                        <p>Reply</p>
-                                                    </div>
-                                                    <div className="reply_wrap">
-                                                        <input type="text" placeholder="reply"
-                                                               className="form-control"/>
-                                                        <button className="view_post_btn cmn_bg_btn">Submit</button>
-                                                    </div>
-                                                    <p className="reply_toggle">Hide replies</p>
-                                                    <div className="comment_wrap mt-2">
-                                                        <div className="user_card">
-                                                            <div className="user_image">
-                                                                <img src={user} alt=""/>
 
-                                                            </div>
-                                                            <div className="user">
-                                                                <p className="user_name">
-                                                                    Pento
-                                                                </p>
-                                                                <p>
-                                                                    yes
-                                                                </p>
-                                                                <div
-                                                                    className="user_impressions d-flex gap-3 mt-2 mb-2">
-                                                                    <p>20 min</p>
-                                                                    <p>1 Like</p>
-                                                                    <p>Reply</p>
-                                                                </div>
-                                                                <p className="reply_toggle">Hide replies</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <Comments postData={postData}/>
+
                                     </div>
 
                                     <div className="comments_footer">
@@ -255,7 +219,7 @@ const CommentReviewsSectionModal = ({
                                                 setComment(e.target.value);
                                             }} placeholder="Add comment..."/>
                                             <button onClick={(e) => {
-                                               handleAddCommentOnPost(e);
+                                                handleAddCommentOnPost(e);
                                             }}>Post
                                             </button>
                                         </div>

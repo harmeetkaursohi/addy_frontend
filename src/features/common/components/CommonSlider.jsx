@@ -58,35 +58,37 @@ const CommonSlider = ({
 
                 :
 
-                <Slider {...settings} >
+             <div className={"coment_view_carousal w-100"}>
+                 <Slider {...settings}>
 
-                    {
-                        files.length === 0 && <img src={noImageAvailable} alt={`Image`} className='post_img'/>
-                    }
+                     {
+                         files.length === 0 && <img src={noImageAvailable} alt={`Image`} className='post_img'/>
+                     }
 
-                    {
-                        Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
-                            <div key={index}>
-                                {file?.mediaType === "IMAGE" || showThumbnail ?
-                                    <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
-                                    :
-                                        <ReactPlayer
-                                            height={"350px"}
-                                            width={"100%"}
-                                            className=''
-                                            url={file.sourceURL}
-                                            controls={true}
-                                        />
+                     {
+                         Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
+                             <div key={index}>
+                                 {file?.mediaType === "IMAGE" || showThumbnail ?
+                                     <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
+                                     :
+                                     <ReactPlayer
+                                         height={"350px"}
+                                         width={"100%"}
+                                         className=''
+                                         url={file.sourceURL}
+                                         controls={true}
+                                     />
 
-                                }
-
-
-                            </div>
-                        ))
-                    }
+                                 }
 
 
-                </Slider>
+                             </div>
+                         ))
+                     }
+
+
+                 </Slider>
+             </div>
             }
 
         </>

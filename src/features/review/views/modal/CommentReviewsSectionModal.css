@@ -13,6 +13,9 @@
 .comments_footer {
     background: #F4F7FC;
 }
+.cursor-pointer{
+    cursor: pointer;
+}
 
 .comments_footer ul {border-bottom: 1px solid #DDE3EA;border-top: 1px solid #dde3ea;padding: 10px;padding-left: 10px !important;}
 .view_profile .modal-dialog .modal-content {

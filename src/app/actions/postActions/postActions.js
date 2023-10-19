@@ -12,6 +12,16 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
         return thunkAPI.rejectWithValue(error.message);
     });
 });
+export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostAction', async (data, thunkAPI) => {
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.postId}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,message,from,to,created_time,attachment,comments{message,from,to,attachment,created_time}`;
+    return axios.get(apiUrl, null).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.message);
+    });
+});
+
 
 export const dislikePostAction = createAsyncThunk('post/dislikePostAction', async (data, thunkAPI) => {
     const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.postId}/likes?access_token=${data?.pageAccessToken}`;
