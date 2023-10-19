@@ -1,6 +1,12 @@
 import Modal from 'react-bootstrap/Modal';
 import './CommonShowMorePlannerModal.css'
-import {computeImageURL, handleSeparateCaptionHashtag, redirectToURL} from "../../../utils/commonUtils";
+import {
+    computeImageURL,
+    handleSeparateCaptionHashtag,
+    isPlannerPostEditable,
+    redirectToURL,
+    sortByKey
+} from "../../../utils/commonUtils";
 import CommonSlider from "./CommonSlider";
 import CommonLoader from "./CommonLoader";
 import {useNavigate} from "react-router-dom";
@@ -76,14 +82,17 @@ const CommonShowMorePlannerModal = ({
                                     {
                                         getAllPlannerPostsDataLoading ? (
                                                 <CommonLoader/>) :
-                                            plannerPosts?.map((plannerPost, index) => {
+                                            sortByKey(plannerPosts,"feedPostDate")?.map((plannerPost, index) => {
+
                                                 return (
-                                                    <div className="more_plans_grid mb-3" key={index}>
+                                                    <div className={ !isPlannerPostEditable(plannerPost?.feedPostDate) ? "more_plans_grid mb-3 disable_more_plans_grid":"more_plans_grid mb-3"} key={index}>
                                                         <div className="plan_grid_img">
                                                             {plannerPost?.attachments &&
                                                                 <CommonSlider files={plannerPost?.attachments}
                                                                               selectedFileType={null} caption={null}
                                                                               hashTag={null}
+                                                                              showThumbnail={true}
+
                                                                               viewSimilarToSocialMedia={false}/>
                                                             }
                                                         </div>

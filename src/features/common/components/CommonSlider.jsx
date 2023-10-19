@@ -6,7 +6,14 @@ import noImageAvailable from "../../../images/no_img_posted.png"
 import ReactPlayer from "react-player";
 
 
-const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToSocialMedia = true}) => {
+const CommonSlider = ({
+                          files,
+                          selectedFileType,
+                          caption,
+                          hashTag,
+                          showThumbnail = false,
+                          viewSimilarToSocialMedia = true
+                      }) => {
     const settings = {
         arrows: false,
         dots: true,
@@ -15,7 +22,6 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToS
         slidesToShow: 1,
         slidesToScroll: 1
     };
-
     return (
         <>
             {viewSimilarToSocialMedia ? <Slider {...settings} >
@@ -55,22 +61,22 @@ const CommonSlider = ({files, selectedFileType, caption, hashTag, viewSimilarToS
                 <Slider {...settings} >
 
                     {
-                        files.length <= 0 && <img src={noImageAvailable} alt={`Image`} className='post_img'/>
+                        files.length === 0 && <img src={noImageAvailable} alt={`Image`} className='post_img'/>
                     }
 
                     {
                         Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
                             <div key={index}>
-                                {file?.mediaType === "IMAGE" ?
+                                {file?.mediaType === "IMAGE" || showThumbnail ?
                                     <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
                                     :
-                                    <ReactPlayer
-                                        height={"350px"}
-                                        width={"100%"}
-                                        className=''
-                                        url={file.sourceURL}
-                                        controls={true}
-                                    />
+                                        <ReactPlayer
+                                            height={"350px"}
+                                            width={"100%"}
+                                            className=''
+                                            url={file.sourceURL}
+                                            controls={true}
+                                        />
 
                                 }
 

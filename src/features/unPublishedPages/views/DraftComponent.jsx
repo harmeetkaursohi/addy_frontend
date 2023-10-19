@@ -8,27 +8,32 @@ import {useDispatch, useSelector} from "react-redux";
 import {publishedPostAction} from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {getToken} from "../../../app/auth/auth";
+import {useState} from "react";
 
 
 const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const token = getToken();
     const publishedPostData = useSelector((state) => state.post.publishedPostReducer);
+    const [batchToDelete,setBatchToDelete]=useState(null);
 
     const handlePublishedPost = (e) => {
         e.preventDefault();
         console.log("batchIdData?.id-->",batchIdData?.id);
+        setBatchToDelete(batchIdData?.id)
         dispatch(publishedPostAction({batchId: batchIdData?.id, token: token}))
             .then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
+                    setBatchToDelete(null);
                     showSuccessToast("Post has been published successfully");
                     setDrafts!==null && setDrafts([]);
                     setDraftPost!==null && setDraftPost(false)
+
                 }
             }).catch((error) => {
+            setBatchToDelete(null);
             showErrorToast(error.response.data.message);
         });
 
@@ -93,7 +98,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
 
                 <div className="mt-4 ms-3 d-flex gap-2 justify-content-center align-items-center">
                     <GenericButtonWithLoader className={"post_now cmn_bg_btn loading"} label={"Post Now"}
-                                             isLoading={publishedPostData?.loading}
+                                             isLoading={batchIdData?.id===batchToDelete && publishedPostData?.loading}
                                              onClick={handlePublishedPost}
                     />
                     <GenericButtonWithLoader className={"outline_btn schedule_btn loading"} label={"Schedule Post"}

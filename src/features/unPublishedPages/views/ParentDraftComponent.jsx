@@ -17,7 +17,7 @@ export const ParentDraftComponent = ({setDraftPost}) => {
     const getAllDraftPostsByCustomerAndPeriodData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
 
     useEffect(() => {
-        dispatch(getAllSocialMediaPostsByCriteria({token: token, query:{} }));
+        dispatch(getAllSocialMediaPostsByCriteria({token: token, query:{postStatus:["DRAFT"]} }));
 
     }, [])
 

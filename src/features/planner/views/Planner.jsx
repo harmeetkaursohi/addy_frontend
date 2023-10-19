@@ -15,7 +15,11 @@ import {
     getPlannerPostCountAction,
 } from "../../../app/actions/postActions/postActions";
 import {useDispatch, useSelector} from "react-redux";
-import {computeAndReturnPlannerEvent, dateFormat} from "../../../utils/commonUtils";
+import {
+    isPostDatesOnSameDayOrInFuture,
+    computeAndReturnPlannerEvent,
+    dateFormat
+} from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {ParentDraftComponent} from "../../unPublishedPages/views/ParentDraftComponent";
@@ -42,6 +46,7 @@ const Planner = () => {
     const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
     const getAllPlannerPostsData = useSelector(state => state.post.getAllPlannerPostReducer);
 
+    console.log("plannerPosts----->",plannerPosts);
 
     useEffect(() => {
         document.title = isDraftPost ? 'Draft' : 'Planner';
@@ -101,7 +106,7 @@ const Planner = () => {
     const renderCalendarCards = ({event}) => {
         return (
             <div className={"cal_Div w-100 test"}
-                 style={{pointerEvents: event?._def?.extendedProps?.postDate < new Date().getTime() ? "none" : ""}}>
+                 style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate,new Date()) ? "" : "none"}}>
 
                 <div className="w-100 p-0 calendar_card">
 
@@ -177,9 +182,8 @@ const Planner = () => {
         })
 
         setBatchIds(batchIdList);
-
         dispatch(getAllPlannerPostAction({
-            token: token, query: {batchIds: batchIdList, postStatus: "SCHEDULED"}
+            token: token, query: {batchIds: batchIdList}
         }));
 
         setShowMorePlannerModel(true);

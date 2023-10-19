@@ -102,7 +102,7 @@ export const facebookPageConnectAction = (dispatch, token, facebookData) => {
         }
         dispatch(facebookPageConnect(requestBody)).then((response) => {
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: "SCHEDULED"}}));
+            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: ["SCHEDULED"]}}));
         }).catch((error) => {
             console.log("--->error", error)
         })
@@ -173,6 +173,8 @@ export const handleSeparateCaptionHashtag = (inputText) => {
 };
 
 export function sortByKey(list, key) {
+    console.log("lisyttttttt->", list);
+
     function sortBy(a, b) {
         const dateA = new Date(a[key]).getTime();
         const dateB = new Date(b[key]).getTime();
@@ -185,6 +187,12 @@ export function sortByKey(list, key) {
 
 export const redirectToURL = (redirectedURL) => {
     window.open(redirectedURL, '_blank');
+}
+
+export const isPlannerPostEditable = (feedPostDate) => {
+
+    return (new Date(feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0;
+
 }
 
 // Function to convert an image URL to a File object
@@ -223,7 +231,6 @@ export async function urlsToFiles(fileUrlList) {
 
 
 export const computeAndReturnPlannerEvent = (currentObject) => {
-
     let a = [];
     Object.keys(currentObject).map(c => {
         a.push({
@@ -236,6 +243,12 @@ export const computeAndReturnPlannerEvent = (currentObject) => {
     })
 
     return a;
+}
+export const isPostDatesOnSameDayOrInFuture = (postDate, currentDate) => {
+    const d1 = new Date(postDate);
+    const d2 = new Date(currentDate);
+    return d1.getUTCDate() >= d2.getUTCDate() && d1.getUTCMonth() >= d2.getUTCMonth() && d1.getUTCFullYear() >= d2.getUTCFullYear();
+
 }
 
 export const computeAndBuildChildCard = (childCardProps, key) => {
@@ -367,9 +380,10 @@ export function getCustomDateEarlierUnixDateTime(dateToElapse) {
 export const convertToHashtag = (str) => {
     if (str.startsWith('#')) {
         return str;
-    } else {
+    } else if (str) {
         return `#${str}`;
     }
+    return ""
 }
 
 export const convertSentenceToHashtags = (sentence) => {

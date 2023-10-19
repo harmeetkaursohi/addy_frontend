@@ -45,7 +45,7 @@ const ScheduledComponent = ({scheduledData}) => {
                         showSuccessToast("Posts has been deleted successfully");
                         dispatch(getAllSocialMediaPostsByCriteria({
                             token: token,
-                            query: {limit: 5, postStatus: "SCHEDULED"}
+                            query: {limit: 5, postStatus: ["SCHEDULED"]}
                         }));
                     }
                 }).catch((error) => {

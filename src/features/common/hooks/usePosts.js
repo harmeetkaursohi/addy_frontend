@@ -26,7 +26,7 @@ const usePosts = (pageNum = 0, filter = null) => {
 
         const requestBody = {
             options: {signal},
-            postStatus: "PUBLISHED",
+            postStatus: ["PUBLISHED"],
             token: token,
             pageNumber: pageNum
         }
