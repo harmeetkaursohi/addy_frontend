@@ -24,8 +24,6 @@ const CommonSlider = ({
         slidesToScroll: 1
     };
 
-    console.log("@@@@ condition file ======>>> ", files.every((file) => file.mediaType === "IMAGE"))
-
     return (
         <>
             {viewSimilarToSocialMedia ?
@@ -38,15 +36,10 @@ const CommonSlider = ({
                             (selectedFileType === "IMAGE" || files.every(file => file.mediaType === "IMAGE")) &&
 
                             files?.map((file, index) => {
-                                return (
-                                    <>
-
-                                        <div key={index}>
-                                            <img src={selectedFileType === "IMAGE" ? file.url : file?.imageUrl}
-                                                 alt={`Image ${index}`} className='post_img'/>
-                                        </div>
-                                    </>
-                                )
+                                return (<div key={index}>
+                                    <img src={selectedFileType === "IMAGE" ? file.url : file?.imageUrl}
+                                         alt={`Image ${index}`} className='post_img'/>
+                                </div>)
                             })
                         }
 

@@ -173,8 +173,6 @@ export const handleSeparateCaptionHashtag = (inputText) => {
 };
 
 export function sortByKey(list, key) {
-    console.log("lisyttttttt->", list);
-
     function sortBy(a, b) {
         const dateA = new Date(a[key]).getTime();
         const dateB = new Date(b[key]).getTime();

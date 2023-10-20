@@ -46,8 +46,6 @@ const Planner = () => {
     const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
     const getAllPlannerPostsData = useSelector(state => state.post.getAllPlannerPostReducer);
 
-    console.log("plannerPosts----->",plannerPosts);
-
     useEffect(() => {
         document.title = isDraftPost ? 'Draft' : 'Planner';
     }, []);
