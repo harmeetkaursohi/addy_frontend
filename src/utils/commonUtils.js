@@ -393,7 +393,7 @@ export const convertSentenceToHashtags = (sentence) => {
     return result;
 }
 
-export  const getCommentCreationTime = (date) => {
+export const getCommentCreationTime = (date) => {
     const currentDate = new Date();
     const createdDate = new Date(date);
     const timeDifference = currentDate - createdDate;
@@ -412,9 +412,10 @@ export  const getCommentCreationTime = (date) => {
     const days = Math.floor(hours / 24);
     return `${days} day${days !== 1 ? 's' : ''} ago`;
 }
-export const handleShowCommentReplyBox=(showReplyBox,index)=>{
-    let updatedShowReplyBox=new Array(showReplyBox?.size).fill(false)
-    updatedShowReplyBox[index]=!showReplyBox[index];
+
+export const handleShowCommentReplyBox = (showReplyBox, index) => {
+    let updatedShowReplyBox = new Array(showReplyBox?.size).fill(false)
+    updatedShowReplyBox[index] = !showReplyBox[index];
     return updatedShowReplyBox
 
 }
@@ -479,3 +480,12 @@ export const parseComments=(socialMediaType,data,hasParentComment,parentComments
         }
     }
 }
+
+export const getImagePostList = (postData) => {
+    return postData?.flatMap(object => object.attachments.map(attachment => ({
+        file: null,
+        imageUrl: attachment.sourceURL || attachment.imageURL,
+        attachmentReferenceId: attachment.id,
+        mediaType: attachment.mediaType
+    }))) || [];
+};
