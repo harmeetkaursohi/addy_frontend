@@ -195,41 +195,6 @@ export const isPlannerPostEditable = (feedPostDate) => {
 
 }
 
-// Function to convert an image URL to a File object
-export async function urlToBlob(imageUrl) {
-    try {
-        const response = await fetch(imageUrl);
-        const blob = await response.blob();
-
-        // Generate a random string for the filename
-        const randomString = Math.random().toString(36).substring(7);
-        const timestamp = new Date().getTime();
-        const fileExtension = blob.type.split("/")[1];
-        const filename = `${timestamp}_${randomString}.${fileExtension}`;
-
-        // Create a File object with the blob
-        const file = new File([blob], filename, {type: blob.type});
-        return file;
-    } catch (error) {
-        console.error("Error converting URL to File:", error);
-        return null;
-    }
-}
-
-// Function to convert a list of image URLs to a list of File objects
-export async function urlsToFiles(fileUrlList) {
-    const files = [];
-    for (const fileUrl of fileUrlList) {
-        const file = await urlToBlob(fileUrl.imageURL);
-        if (file) {
-            files.push({socialMediaPostId: fileUrl.socialMediaPostId, file: file});
-        }
-    }
-
-    return files;
-}
-
-
 export const computeAndReturnPlannerEvent = (currentObject) => {
     let a = [];
     Object.keys(currentObject).map(c => {
@@ -393,7 +358,7 @@ export const convertSentenceToHashtags = (sentence) => {
     return result;
 }
 
-export  const getCommentCreationTime = (date) => {
+export const getCommentCreationTime = (date) => {
     const currentDate = new Date();
     const createdDate = new Date(date);
     const timeDifference = currentDate - createdDate;
@@ -412,9 +377,18 @@ export  const getCommentCreationTime = (date) => {
     const days = Math.floor(hours / 24);
     return `${days} day${days !== 1 ? 's' : ''} ago`;
 }
-export const handleShowCommentReplyBox=(showReplyBox,index)=>{
-    let updatedShowReplyBox=new Array(showReplyBox?.size).fill(false)
-    updatedShowReplyBox[index]=!showReplyBox[index];
-    return updatedShowReplyBox
 
+export const handleShowCommentReplyBox = (showReplyBox, index) => {
+    let updatedShowReplyBox = new Array(showReplyBox?.size).fill(false)
+    updatedShowReplyBox[index] = !showReplyBox[index];
+    return updatedShowReplyBox
 }
+
+export const getImagePostList = (postData) => {
+    return postData?.flatMap(object => object.attachments.map(attachment => ({
+        file: null,
+        imageUrl: attachment.sourceURL || attachment.imageURL,
+        attachmentReferenceId: attachment.id,
+        mediaType: attachment.mediaType
+    }))) || [];
+};

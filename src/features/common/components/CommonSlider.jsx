@@ -8,12 +8,13 @@ import ReactPlayer from "react-player";
 
 const CommonSlider = ({
                           files,
-                          selectedFileType,
+                          selectedFileType = "",
                           caption,
                           hashTag,
                           showThumbnail = false,
                           viewSimilarToSocialMedia = true
                       }) => {
+
     const settings = {
         arrows: false,
         dots: true,
@@ -26,18 +27,21 @@ const CommonSlider = ({
         <>
             {viewSimilarToSocialMedia ? <Slider {...settings} >
                     {
-                        (selectedFileType === "IMAGE") &&
+                        (selectedFileType === "IMAGE") || files.every((file) => file.mediaType === "IMAGE") &&
 
-                        files?.map((file, index) => (
-                            <div key={index}>
-                                <p className="caption_text">{`${caption} ${hashTag}`}</p>
-                                <img src={file.url} alt={`Image ${index}`} className='post_img'/>
-                            </div>
-                        ))
+                        files?.map((file, index) => {
+                            console.log("@@@ filw", file)
+                            return (
+                                <div key={index}>
+                                    <p className="caption_text">{`${caption} ${hashTag}`}</p>
+                                    <img src={file?.imageUrl} alt={`Image ${index}`} className='post_img'/>
+                                </div>
+                            )
+                        })
                     }
 
                     {
-                        (selectedFileType === "VIDEO") &&
+                        ((selectedFileType === "VIDEO") || files.every((file) => file.mediaType === "VIDEO")) &&
 
                         files?.map((file, index) => (
                             <div key={index}>
@@ -58,37 +62,37 @@ const CommonSlider = ({
 
                 :
 
-             <div className={"coment_view_carousal w-100"}>
-                 <Slider {...settings}>
+                <div className={"coment_view_carousal w-100"}>
+                    <Slider {...settings}>
 
-                     {
-                         files.length === 0 && <img src={noImageAvailable} alt={`Image`} className='post_img'/>
-                     }
+                        {
+                            files.length === 0 && <img src={noImageAvailable} alt={`Image`} className='post_img'/>
+                        }
 
-                     {
-                         Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
-                             <div key={index}>
-                                 {file?.mediaType === "IMAGE" || showThumbnail ?
-                                     <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
-                                     :
-                                     <ReactPlayer
-                                         height={"350px"}
-                                         width={"100%"}
-                                         className=''
-                                         url={file.sourceURL}
-                                         controls={true}
-                                     />
+                        {
+                            Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
+                                <div key={index}>
+                                    {file?.mediaType === "IMAGE" || showThumbnail ?
+                                        <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
+                                        :
+                                        <ReactPlayer
+                                            height={"350px"}
+                                            width={"100%"}
+                                            className=''
+                                            url={file.sourceURL}
+                                            controls={true}
+                                        />
 
-                                 }
-
-
-                             </div>
-                         ))
-                     }
+                                    }
 
 
-                 </Slider>
-             </div>
+                                </div>
+                            ))
+                        }
+
+
+                    </Slider>
+                </div>
             }
 
         </>

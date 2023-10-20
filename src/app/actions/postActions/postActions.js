@@ -114,13 +114,28 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
         formData.append(`pageIds[${index}]`, pageId);
     });
 
-    // Loop through the attachments array and append each attachment's data.
-    data.updatePostRequestDTO.attachments.forEach((attachment, index) => {
-        formData.append(`attachments[${index}].mediaType`, attachment.mediaType);
-        formData.append(`attachments[${index}].file`, attachment.file);
-    });
 
-    return await axios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.batchId}`, data.updatePostRequestDTO, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
+    if (data.updatePostRequestDTO.updatePostAttachments.length > 0) {
+        data.updatePostRequestDTO.updatePostAttachments.forEach((attachment, index) => {
+            if (attachment?.file !== null && attachment?.file !== "null") {
+                formData.append(`updatePostAttachments[${index}].file`, attachment?.file);
+            }
+            if (attachment.attachmentReferenceId !== null && attachment.attachmentReferenceId !== "null") {
+                formData.append(`updatePostAttachments[${index}].attachmentReferenceId`, attachment.attachmentReferenceId);
+            }
+            formData.append(`updatePostAttachments[${index}].mediaType`, attachment.mediaType);
+        });
+    }
+
+    // Iterate through the FormData entries and log them to the console
+    for (const entry of formData.entries()) {
+        const [key, value] = entry;
+        console.log("entries", `${key}: ${value}`);
+    }
+
+    console.log("data----->", data);
+
+    return await axios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.batchId}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -168,7 +183,7 @@ export const getPlannerPostCountAction = createAsyncThunk('get/getPlannerPostCou
 
 export const createFacebookPostAction = createAsyncThunk('post/createFacebookPostAction', async (data, thunkAPI) => {
 
-    console.log("@@@@ RequestBody ::: ",data)
+    console.log("@@@@ RequestBody ::: ", data)
 
     const formData = new FormData();
 

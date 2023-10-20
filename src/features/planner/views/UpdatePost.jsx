@@ -14,7 +14,6 @@ import {BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
 import {
-    createFacebookPostAction,
     getAllPostsByBatchIdAction,
     updatePostOnSocialMediaAction
 } from "../../../app/actions/postActions/postActions.js";
@@ -22,6 +21,13 @@ import {RiDeleteBin5Fill} from "react-icons/ri";
 import {useNavigate, useParams} from "react-router-dom";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
+import {
+    convertToUnixTimestamp,
+    getImagePostList,
+    handleSeparateCaptionHashtag,
+    validateScheduleDateAndTime
+} from "../../../utils/commonUtils";
+import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 
 
 const UpdatePost = () => {
@@ -44,18 +50,32 @@ const UpdatePost = () => {
         const [files, setFiles] = useState([]);
         const [selectedFileType, setSelectedFileType] = useState("");
         const [reference, setReference] = useState("");
-        const [isPopulated, setIsPopulated] = useState(false);
 
         const [allOptions, setAllOptions] = useState([]);
         const [selectedOptions, setSelectedOptions] = useState([]);
         const [selectedGroups, setSelectedGroups] = useState([]);
+        const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
 
         const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
         const userData = useSelector(state => state.user.userInfoReducer.data);
         const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading)
         const getPostsByBatchIdList = useSelector(state => state.post.getAllPostsByBatchIdReducer.data);
 
-        console.log("getPostsByBatchIdList--->",getPostsByBatchIdList);
+
+        console.log("--->getPostsByBatchIdList", getPostsByBatchIdList);
+
+        useEffect(() => {
+
+            if (getPostsByBatchIdList && Object.keys(getPostsByBatchIdList).length > 0) {
+                setSelectedOptions(Object.values(getPostsByBatchIdList).flatMap((batch) => batch.map((post) => post.page.pageId)));
+                const postData = Object.values(getPostsByBatchIdList).flatMap((batch) => batch.map((post) => post));
+                const {caption, hashtag} = handleSeparateCaptionHashtag(postData[0].message);
+                setCaption(caption);
+                setHashTag(hashtag);
+                const imagePostList = getImagePostList(postData);
+                setFiles(imagePostList);
+            }
+        }, [allOptions, getPostsByBatchIdList]);
 
 
         useEffect(() => {
@@ -66,34 +86,44 @@ const UpdatePost = () => {
 
 
         useEffect(() => {
-            if (socialAccountData && batchId) {
+            if (batchId) {
                 dispatch(getAllPostsByBatchIdAction({batchId: batchId, token: token}))
             }
-        }, [socialAccountData, batchId]);
+        }, [batchId]);
 
 
         useEffect(() => {
             const userInfo = decodeJwtToken(token);
-            const requestBody = {
-                token: token,
-                customerId: userInfo?.customerId
-            };
-            dispatch(getAllByCustomerIdAction(requestBody));
+            dispatch(getAllByCustomerIdAction({token: token, customerId: userInfo?.customerId}));
 
         }, []);
+
 
         // Create all Options
         useEffect(() => {
             if (socialAccountData) {
                 const optionList = socialAccountData.map((socialAccount) => {
-                    return {group: socialAccount?.provider, allOptions: socialAccount?.pageAccessToken}
+                    return {
+                        group: socialAccount?.provider,
+                        allOptions: socialAccount?.pageAccessToken
+                    }
                 });
                 setAllOptions(optionList);
             }
         }, [socialAccountData]);
 
+        useEffect(() => {
+            //select dropdown label
+            const selectedAllDropdownList = allOptions?.flatMap((groupOption) => groupOption.allOptions)
+                .filter((option) => selectedOptions.includes(option.pageId)).map((option) => {
+                    const group = allOptions.find((data) => data.allOptions.some((cur) => cur.pageId === option.pageId))?.group;
+                    return {group: group, selectOption: option};
+                });
+            setSelectedAllDropdownData(selectedAllDropdownList);
+        }, [allOptions, selectedOptions]);
 
-        // handle Group Dropdown Logic
+
+        // handle Group selector
         const handleGroupCheckboxChange = (group) => {
             const updatedSelectedGroups = new Set(selectedGroups);
             const updatedSelectedOptions = new Set(selectedOptions);
@@ -156,17 +186,111 @@ const UpdatePost = () => {
 
         const areAllOptionsSelected = allOptions.flatMap((group) => group.allOptions).every((option) => selectedOptions.includes(option.pageId));
 
-        const selectedAllDropdownData = allOptions?.flatMap((groupOption) => groupOption.allOptions)
-            .filter((option) => selectedOptions.includes(option.pageId))
-            .map((option) => {
-                const group = allOptions.find((data) =>
-                    data.allOptions.some((cur) => cur.pageId === option.pageId)
-                )?.group;
+        const handleSelectedImageFile = (e) => {
+            e.preventDefault();
+            const uploadedFiles = Array.from(e.target.files);
+            const imageObjects = uploadedFiles.map((file) => {
                 return {
-                    group,
-                    selectOption: option
+                    file: file,
+                    imageUrl: URL.createObjectURL(file),
+                    attachmentReferenceId: null,
+                    mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO"
                 };
             });
+
+            setFiles([...files, ...imageObjects]);
+            console.log("dimensionPromises", imageObjects)
+
+        }
+
+        const handleSelectedVideoFile = (e) => {
+            e.preventDefault();
+            const uploadedVideoFiles = Array.from(e.target.files);
+            const videoImage = uploadedVideoFiles.map((file) => {
+                return {
+                    file: file,
+                    imageUrl: URL.createObjectURL(file),
+                    attachmentReferenceId: null,
+                    mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO"
+                }
+            });
+
+            console.log("dimensionPromises Videos", videoImage);
+        }
+
+        const updatePost = (e, postStatus, scheduleDate, scheduleTime) => {
+                e.preventDefault();
+                const userInfo = decodeJwtToken(token);
+
+                if (postStatus === 'SCHEDULED') {
+                    validateScheduleDateAndTime('SCHEDULED', scheduleDate, scheduleTime);
+                }
+
+
+                const updatePostAttachments = files.map((curFile) => {
+                    return {
+                        file: curFile?.file || null,
+                        mediaType: curFile?.mediaType,
+                        attachmentReferenceId: curFile?.attachmentReferenceId
+                    }
+                });
+
+                const requestBody = {
+                    token: token,
+                    customerId: userInfo?.customerId,
+                    batchId: batchId,
+                    updatePostRequestDTO: {
+                        updatePostAttachments: updatePostAttachments,
+                        hashTag: hashTag,
+                        caption: caption,
+                        postStatus: postStatus,
+                        boostPost: boostPost,
+                        pageIds: selectedOptions,
+                        scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+                    },
+                };
+
+                console.log("@@@ RequestBody ", requestBody);
+
+                dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
+                    if (response.meta.requestStatus === "fulfilled") {
+                        showSuccessToast("Post has uploaded successfully");
+                        navigate("/planner");
+                    }
+                }).catch((error) => {
+                    showErrorToast(error.response.data.message);
+                });
+
+            }
+        ;
+
+        const handlePostSubmit = (e) => {
+            updatePost(e, 'PUBLISHED');
+        };
+
+        const handleDraftPost = (e) => {
+            updatePost(e, 'DRAFT');
+        };
+
+        const handleSchedulePost = (e) => {
+            updatePost(e, 'SCHEDULED', scheduleDate, scheduleTime);
+        };
+
+        const handleRemoveSelectFile = (indexToRemove) => {
+            const updatedFiles = files.filter((_, index) => index !== indexToRemove);
+            setFiles(updatedFiles);
+        };
+
+        const resetForm = (e) => {
+            e.preventDefault();
+            setFiles([]);
+            setSelectedOptions([]);
+            setHashTag("");
+            setCaption("");
+            setScheduleTime("");
+            setScheduleDate("");
+            setBoostPost(false);
+        }
 
 
         return (
@@ -322,25 +446,23 @@ const UpdatePost = () => {
                                                                 <div className="flex-grow-1 d-flex align-items-center">
                                                                     <i className="fas fa-grip-vertical me-2"></i>
                                                                     {
-                                                                        file?.file?.type?.startsWith('image/') &&
+                                                                        file.mediaType === "IMAGE" &&
                                                                         <img className={"upload_image me-3"}
-                                                                             src={file.url}
+                                                                             src={file.imageUrl}
                                                                              alt={`Image ${index}`}/>
                                                                     }
                                                                     {
-                                                                        file?.file?.type?.startsWith('video/') &&
+                                                                        file.mediaType === "VIDEO" &&
                                                                         <video className={"upload_image me-3"}
                                                                                src={file.url} alt={`Videos ${index}`}
                                                                                autoPlay={true}/>
                                                                     }
-                                                                    <span
-                                                                        className="file_dimention_text">{`${file?.dimension?.width}X${file?.dimension?.height}`}</span>
                                                                 </div>
                                                                 <button className="delete_upload">
                                                                     <RiDeleteBin5Fill style={{fontSize: '24px'}}
                                                                                       onClick={(e) => {
                                                                                           e.preventDefault();
-                                                                                          // handleRemoveSelectFile(file);
+                                                                                          handleRemoveSelectFile(index);
                                                                                       }}/>
                                                                 </button>
                                                             </div>
@@ -359,8 +481,8 @@ const UpdatePost = () => {
                                                                onClick={e => (e.target.value = null)}
                                                                accept={"image/png, image/jpeg"}
                                                                onChange={(e) => {
-                                                                   setSelectedFileType("IMAGE")
-                                                                   // handleSelectedFile(e);
+                                                                   setSelectedFileType("IMAGE");
+                                                                   handleSelectedImageFile(e);
                                                                }}
                                                         />
                                                         <label htmlFor='image' className='cmn_headings'>
@@ -377,7 +499,7 @@ const UpdatePost = () => {
                                                             accept={"video/mp4,video/x-m4v,video/*"}
                                                             onChange={(e) => {
                                                                 setSelectedFileType("VIDEO");
-                                                                // handleSelectedVideoFile(e);
+                                                                handleSelectedVideoFile(e);
                                                             }}/>
                                                         <label htmlFor='video' className='cmn_headings'>
                                                             <i className="fa fa-video-camera"
@@ -463,7 +585,7 @@ const UpdatePost = () => {
                                                         <GenericButtonWithLoader label={jsondata.schedule}
                                                                                  onClick={(e) => {
                                                                                      setReference("Scheduled")
-                                                                                     // handleSchedulePost(e);
+                                                                                     handleSchedulePost(e);
                                                                                  }}
                                                                                  className={"cmn_bg_btn schedule_btn loading"}
                                                                                  isLoading={reference === "Scheduled" && loadingCreateFacebookPost}/>
@@ -471,7 +593,7 @@ const UpdatePost = () => {
                                                         <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                                  onClick={(e) => {
                                                                                      setReference("Draft")
-                                                                                     // handleDraftPost(e);
+                                                                                     handleDraftPost(e);
                                                                                  }}
                                                                                  className={"save_btn cmn_bg_btn loading"}
                                                                                  isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
@@ -529,8 +651,7 @@ const UpdatePost = () => {
                                                 <div className='cancel_publish_btn_outer d-flex'>
                                                     <button className='cancel_btn cmn_bg_btn' onClick={(e) => {
                                                         e.preventDefault();
-                                                        console.log("Cancel")
-                                                        // resetForm(e);
+                                                        resetForm(e);
                                                     }}>{jsondata.cancel}</button>
 
                                                     <GenericButtonWithLoader label={jsondata.publishnow}
