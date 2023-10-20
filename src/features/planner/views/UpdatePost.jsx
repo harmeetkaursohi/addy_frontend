@@ -454,16 +454,17 @@ const UpdatePost = () => {
                                                                     {
                                                                         file.mediaType === "VIDEO" &&
                                                                         <video className={"upload_image me-3"}
-                                                                               src={file.url} alt={`Videos ${index}`}
+                                                                               src={file.imageUrl} alt={`Videos ${index}`}
                                                                                autoPlay={true}/>
                                                                     }
                                                                 </div>
-                                                                <button className="delete_upload">
-                                                                    <RiDeleteBin5Fill style={{fontSize: '24px'}}
+                                                                <button className="delete_upload" disabled={file?.mediaType==="VIDEO"}>
+                                                                    <RiDeleteBin5Fill
+                                                                        style={{fontSize: '24px'}}
                                                                                       onClick={(e) => {
                                                                                           e.preventDefault();
                                                                                           handleRemoveSelectFile(index);
-                                                                                      }}/>
+                                                                                      }} />
                                                                 </button>
                                                             </div>
                                                         )
@@ -675,7 +676,7 @@ const UpdatePost = () => {
                                                            pageName={`Team Musafirrr`}
                                                            userData={userData}
                                                            files={files}
-                                                           selectedFileType={selectedFileType}
+                                                           selectedFileType={null}
                                                            caption={caption}
                                                            hashTag={hashTag}
 

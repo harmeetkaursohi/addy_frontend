@@ -26,8 +26,8 @@ const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFil
                     </div>
                 </div>
 
-
                 <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
+
 
                 <div className='like_comment_outer'>
                     <div className="fb_likes">

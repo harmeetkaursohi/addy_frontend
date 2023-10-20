@@ -23,42 +23,55 @@ const CommonSlider = ({
         slidesToShow: 1,
         slidesToScroll: 1
     };
+
+    console.log("@@@@ condition file ======>>> ", files.every((file) => file.mediaType === "IMAGE"))
+
     return (
         <>
-            {viewSimilarToSocialMedia ? <Slider {...settings} >
-                    {
-                        (selectedFileType === "IMAGE") || files.every((file) => file.mediaType === "IMAGE") &&
+            {viewSimilarToSocialMedia ?
+                <div>
+                    <p className="caption_text">{`${caption} ${hashTag}`}</p>
 
-                        files?.map((file, index) => {
-                            console.log("@@@ filw", file)
-                            return (
+                    <Slider {...settings} >
+
+                        {
+                            (selectedFileType === "IMAGE" || files.every(file => file.mediaType === "IMAGE")) &&
+
+                            files?.map((file, index) => {
+                                return (
+                                    <>
+
+                                        <div key={index}>
+                                            <img src={selectedFileType === "IMAGE" ? file.url : file?.imageUrl}
+                                                 alt={`Image ${index}`} className='post_img'/>
+                                        </div>
+                                    </>
+                                )
+                            })
+                        }
+
+                        {
+                            (selectedFileType === "VIDEO" || files.every(file => file.mediaType === "VIDEO")) &&
+
+                            files?.map((file, index) => (
                                 <div key={index}>
-                                    <p className="caption_text">{`${caption} ${hashTag}`}</p>
-                                    <img src={file?.imageUrl} alt={`Image ${index}`} className='post_img'/>
+                                    <ReactPlayer
+                                        height={"100%"}
+                                        width={"100%"}
+                                        className='post_img'
+                                        url={selectedFileType === "VIDEO" ? file.url : file?.imageUrl}
+                                        controls={true}
+                                    />
                                 </div>
-                            )
-                        })
-                    }
+                            ))
 
-                    {
-                        ((selectedFileType === "VIDEO") || files.every((file) => file.mediaType === "VIDEO")) &&
-
-                        files?.map((file, index) => (
-                            <div key={index}>
-                                <ReactPlayer
-                                    height={"100%"}
-                                    width={"100%"}
-                                    className='post_img'
-                                    url={file.url}
-                                    controls={true}
-                                />
-                            </div>
-                        ))
-
-                    }
+                        }
 
 
-                </Slider>
+                    </Slider>
+
+                </div>
+
 
                 :
 

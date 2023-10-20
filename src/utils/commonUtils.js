@@ -482,10 +482,10 @@ export const parseComments=(socialMediaType,data,hasParentComment,parentComments
 }
 
 export const getImagePostList = (postData) => {
-    return postData?.flatMap(object => object.attachments.map(attachment => ({
+    return postData[0].attachments.map(attachment => ({
         file: null,
         imageUrl: attachment.sourceURL || attachment.imageURL,
         attachmentReferenceId: attachment.id,
         mediaType: attachment.mediaType
-    }))) || [];
+    })) || [];
 };
