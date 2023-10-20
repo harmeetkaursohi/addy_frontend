@@ -7,10 +7,10 @@ import {Link} from "react-router-dom";
 import { handleSeparateCaptionHashtag} from "../../../../utils/commonUtils";
 import {useEffect, useState} from "react";
 import {TbShare3} from "react-icons/tb";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {
     addCommentOnPostAction,
-    dislikePostAction,
+    dislikePostAction, getCommentsOnPostAction,
     getPostPageInfoAction,
     likePostAction
 } from "../../../../app/actions/postActions/postActions";
@@ -32,6 +32,7 @@ const CommentReviewsSectionModal = ({
     const [like, setLike] = useState(false);
     const handleClose = () => setOpenCommentReviewsSectionModal(false);
     const [comment, setComment] = useState("");
+    const addCommentOnPostActionData=useSelector(state => state.post.addCommentOnPostActionReducer)
 
 
     console.log("@@@ postPageInfoData", postPageInfoData)
@@ -103,12 +104,23 @@ const CommentReviewsSectionModal = ({
     const handleAddCommentOnPost = (e) => {
         e.preventDefault();
         const requestBody = {
-            postId: postData?.id,
-            message: comment,
+            socialMediaType: postData?.socialMediaType,
+            // socialMediaType: "FACEBOOK",
+            id: postData?.id,
+            // id: "126684520526450_122128482242030808",
+            data:{
+                message:comment
+            },
             pageAccessToken: postData?.page?.access_token,
+            // pageAccessToken: "EAAIhoNvCxpwBO9LI6dgCq71CLIgu2mY1IfBHnQc3VsBHM5m53sVIOpOz5m7RfRe4VWgQVudVT3mrYAciyefyRWR6ZBdF61QMRE5BU8ML2UJeHvSWgT93P1neSjhlYZAqjRP8EhnWhywZBuGM8lZACAvEL9glz9HJBgoPwSFtiZBSaZCFu3yHHEH3NeAo2ViYoZD",
         }
 
-        dispatch(addCommentOnPostAction(requestBody));
+        dispatch(addCommentOnPostAction(requestBody)).then(response=>{
+            if(response.meta.requestStatus==="fulfilled"){
+                setComment("")
+                dispatch(getCommentsOnPostAction(requestBody))
+            }
+        });
     }
 
     return (
@@ -214,11 +226,11 @@ const CommentReviewsSectionModal = ({
                                                     d="M11 15.4C9.372 15.4 7.975 14.509 7.205 13.2H5.368C6.248 15.455 8.437 17.05 11 17.05C13.563 17.05 15.752 15.455 16.632 13.2H14.795C14.025 14.509 12.628 15.4 11 15.4ZM10.989 0C4.917 0 0 4.928 0 11C0 17.072 4.917 22 10.989 22C17.072 22 22 17.072 22 11C22 4.928 17.072 0 10.989 0ZM11 19.8C6.138 19.8 2.2 15.862 2.2 11C2.2 6.138 6.138 2.2 11 2.2C15.862 2.2 19.8 6.138 19.8 11C19.8 15.862 15.862 19.8 11 19.8Z"
                                                     fill="#323232"/>
                                             </svg>
-                                            <input type="text" className="form-control" onChange={(e) => {
+                                            <input value={comment} type="text" className="form-control" onChange={(e) => {
                                                 e.preventDefault();
                                                 setComment(e.target.value);
                                             }} placeholder="Add comment..."/>
-                                            <button onClick={(e) => {
+                                            <button disabled={addCommentOnPostActionData?.loading} onClick={(e) => {
                                                 handleAddCommentOnPost(e);
                                             }}>Post
                                             </button>

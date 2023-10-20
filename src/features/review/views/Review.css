@@ -108,6 +108,9 @@ table.review_data tbody tr {
     border-radius: 10px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
 }
+p.disable-reply-comment {
+    opacity: .5;
+}
 
 @media screen and (max-width: 1024px) {
     .post_review_wrapper table th {

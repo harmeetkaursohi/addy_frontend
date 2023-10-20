@@ -418,3 +418,64 @@ export const handleShowCommentReplyBox=(showReplyBox,index)=>{
     return updatedShowReplyBox
 
 }
+export const handleShowCommentReplies=(showCommentReply,index)=>{
+    let updatedShowCommentReply=[...showCommentReply]
+    updatedShowCommentReply[index]=!showCommentReply[index];
+    console.log("updatedShowCommentReply",updatedShowCommentReply)
+    return updatedShowCommentReply
+
+}
+
+export const parseCommentsForFacebook=(data,hasParentComment,parentComments)=>{
+    const getCommentsStructure=(data)=>{
+        return data?.map(comment=>{
+            return {
+                id:comment?.id,
+                message:comment?.message,
+                like_count:comment?.like_count,
+                reply_count:comment?.comment_count,
+                created_time:comment?.created_time,
+                attachment:comment?.attachment,
+                can_comment:comment?.can_comment,
+                reply:[],
+                from:{
+                    id:comment?.from?.id,
+                    name:comment?.from?.name,
+
+                }
+            }
+        })
+    }
+    if(hasParentComment){
+        console.log("yes has parent comment")
+        const parentCommentIndex = parentComments.findIndex(comment => comment.id === data?.data[0]?.parent?.id);
+        let updatedParentComments=[...parentComments];
+        updatedParentComments[parentCommentIndex]={...updatedParentComments[parentCommentIndex],reply:getCommentsStructure(data?.data)}
+        return updatedParentComments
+    }else {
+        return getCommentsStructure(data?.data)
+    }
+}
+export const parseComments=(socialMediaType,data,hasParentComment,parentComments)=>{
+    console.log("hasParentComment",hasParentComment)
+    console.log("data",data)
+    //  When There Are No Comments
+    if(data?.data?.length===0){
+        return [];
+    }
+    switch (socialMediaType){
+        case "FACEBOOK":
+        {
+            return parseCommentsForFacebook(data,hasParentComment,parentComments)
+        }
+        case "INSTAGRAM":{
+
+        }
+        case "LINKEDIN":{
+
+        }
+        case "PINTEREST":{
+
+        }
+    }
+}

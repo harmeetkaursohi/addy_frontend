@@ -2,24 +2,61 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
+import {getFacebookConnectedPageIdsReport} from "../../../services/facebookService";
+import {parseComments} from "../../../utils/commonUtils";
 
 export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAction', async (data, thunkAPI) => {
-    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.postId}/comments?message=${data.comment}&access_token=${data?.pageAccessToken}`;
-    return axios.post(apiUrl, null).then((response) => {
-        return response.data;
-    }).catch((error) => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.message);
-    });
+    switch (data?.socialMediaType) {
+
+        case "FACEBOOK": {
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?&access_token=${data?.pageAccessToken}`;
+            return axios.post(apiUrl, data?.data).then((response) => {
+                return response.data;
+            }).catch((error) => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.message);
+            });
+
+        }
+        case  "INSTAGRAM": {
+
+        }
+        case  "LINKEDIN": {
+
+        }
+        default : {
+
+        }
+
+    }
+
 });
 export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostAction', async (data, thunkAPI) => {
-    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.postId}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,message,from,to,created_time,attachment,comments{message,from,to,attachment,created_time}`;
-    return axios.get(apiUrl, null).then((response) => {
-        return response.data;
-    }).catch((error) => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.message);
-    });
+    switch (data?.socialMediaType) {
+
+        case "FACEBOOK": {
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,message,from,parent,to,created_time,attachment,comment_count,can_comment`;
+            return axios.get(apiUrl, null).then((response) => {
+                return parseComments(data?.socialMediaType,response.data,data?.hasParentComment,data.hasParentComment?data.parentComments:[]);
+            }).catch((error) => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.message);
+            });
+
+        }
+        case  "INSTAGRAM": {
+
+        }
+        case  "LINKEDIN": {
+
+        }
+        default : {
+
+        }
+
+    }
+
+
 });
 
 
