@@ -37,6 +37,7 @@ const usePosts = (pageNum = 0, filter = null) => {
 
         dispatch(getPostsPageAction(requestBody))
             .then((response) => {
+                console.log("responseresponseresponseresponseresponseresponse",response)
                 if (response.meta.requestStatus === "fulfilled") {
                     if (pageNum === 0) {
                         setResults(response?.payload);

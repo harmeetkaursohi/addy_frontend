@@ -35,7 +35,7 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
     switch (data?.socialMediaType) {
 
         case "FACEBOOK": {
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,message,from,parent,to,created_time,attachment,comment_count,can_comment`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags`;
             return axios.get(apiUrl, null).then((response) => {
                 return parseComments(data?.socialMediaType,response.data,data?.hasParentComment,data.hasParentComment?data.parentComments:[]);
             }).catch((error) => {
@@ -95,6 +95,7 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
 export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
 
     return await axios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data, setAuthenticationHeader(data.token)).then(res => {
+        console.log('res.datares.datares.data',res.data)
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

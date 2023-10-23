@@ -413,67 +413,76 @@ export const getCommentCreationTime = (date) => {
 
 export const handleShowCommentReplyBox = (showReplyBox, index) => {
     let updatedShowReplyBox = new Array(showReplyBox?.size).fill(false)
-    updatedShowReplyBox[index] = !showReplyBox[index];
+    updatedShowReplyBox[index] = true;
     return updatedShowReplyBox
 
 }
-export const handleShowCommentReplies=(showCommentReply,index)=>{
-    let updatedShowCommentReply=[...showCommentReply]
-    updatedShowCommentReply[index]=!showCommentReply[index];
-    console.log("updatedShowCommentReply",updatedShowCommentReply)
+export const handleShowCommentReplies = (showCommentReply, index) => {
+    let updatedShowCommentReply = [...showCommentReply]
+    updatedShowCommentReply[index] = !showCommentReply[index];
     return updatedShowCommentReply
 
 }
 
-export const parseCommentsForFacebook=(data,hasParentComment,parentComments)=>{
-    const getCommentsStructure=(data)=>{
-        return data?.map(comment=>{
+export const parseCommentsForFacebook = (data, hasParentComment, parentComments) => {
+    const getCommentsStructure = (data) => {
+        return data?.map(comment => {
             return {
-                id:comment?.id,
-                message:comment?.message,
-                like_count:comment?.like_count,
-                reply_count:comment?.comment_count,
-                created_time:comment?.created_time,
-                attachment:comment?.attachment,
-                can_comment:comment?.can_comment,
-                reply:[],
-                from:{
-                    id:comment?.from?.id,
-                    name:comment?.from?.name,
+                id: comment?.id,
+                message: comment?.message,
+                like_count: comment?.like_count,
+                reply_count: comment?.comment_count,
+                created_time: comment?.created_time,
+                attachment: comment?.attachment,
+                can_comment: comment?.can_comment,
+                can_like:comment?.can_like,
+                user_likes:comment?.user_likes,
+                reply: [],
+                from: {
+                    id: comment?.from?.id,
+                    name: comment?.from?.name,
+                    picture:comment?.from?.picture?.data?.url
 
-                }
+                },
+                ...(hasParentComment ? {
+                    message_tags: {
+                        id: comment?.message_tags?.id,
+                        name: comment?.message_tags?.name,
+                        type: comment?.message_tags?.type
+                    }
+                } : {})
+
             }
         })
     }
-    if(hasParentComment){
-        console.log("yes has parent comment")
+    if (hasParentComment) {
         const parentCommentIndex = parentComments.findIndex(comment => comment.id === data?.data[0]?.parent?.id);
-        let updatedParentComments=[...parentComments];
-        updatedParentComments[parentCommentIndex]={...updatedParentComments[parentCommentIndex],reply:getCommentsStructure(data?.data)}
+        let updatedParentComments = [...parentComments];
+        updatedParentComments[parentCommentIndex] = {
+            ...updatedParentComments[parentCommentIndex],
+            reply: getCommentsStructure(data?.data)
+        }
         return updatedParentComments
-    }else {
+    } else {
         return getCommentsStructure(data?.data)
     }
 }
-export const parseComments=(socialMediaType,data,hasParentComment,parentComments)=>{
-    console.log("hasParentComment",hasParentComment)
-    console.log("data",data)
+export const parseComments = (socialMediaType, data, hasParentComment, parentComments) => {
     //  When There Are No Comments
-    if(data?.data?.length===0){
+    if (data?.data?.length === 0) {
         return [];
     }
-    switch (socialMediaType){
-        case "FACEBOOK":
-        {
-            return parseCommentsForFacebook(data,hasParentComment,parentComments)
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            return parseCommentsForFacebook(data, hasParentComment, parentComments)
         }
-        case "INSTAGRAM":{
+        case "INSTAGRAM": {
 
         }
-        case "LINKEDIN":{
+        case "LINKEDIN": {
 
         }
-        case "PINTEREST":{
+        case "PINTEREST": {
 
         }
     }
@@ -487,3 +496,7 @@ export const getImagePostList = (postData) => {
         mediaType: attachment.mediaType
     })) || [];
 };
+
+export const getTagCommentsFormat = (replyComment) => {
+    return !replyComment?.message.includes(replyComment?.mentionedPageName) ? replyComment?.message : replyComment?.message.replace(replyComment?.mentionedPageName, `@[${replyComment?.mentionedPageId}]`)
+}

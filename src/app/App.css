@@ -204,6 +204,9 @@ h2.openEye {
 .form-group {
     position: relative;
 }
+.cursor_pointer{
+    cursor: pointer;
+}
 
 @keyframes shimmer {
     100% {

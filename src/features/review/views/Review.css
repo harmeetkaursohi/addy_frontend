@@ -111,6 +111,9 @@ table.review_data tbody tr {
 p.disable-reply-comment {
     opacity: .5;
 }
+.color-blue{
+    color: blue !important;
+}
 
 @media screen and (max-width: 1024px) {
     .post_review_wrapper table th {
