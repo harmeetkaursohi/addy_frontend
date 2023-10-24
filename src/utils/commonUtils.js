@@ -394,7 +394,13 @@ export const convertSentenceToHashtags = (sentence) => {
 export const getCommentCreationTime = (date) => {
     const currentDate = new Date();
     const createdDate = new Date(date);
-    const timeDifference = currentDate - createdDate;
+    let timeDifference = currentDate - createdDate;
+    if(timeDifference<0){
+        timeDifference=timeDifference-timeDifference
+    }
+    if(timeDifference<10000){
+        return 'just now'
+    }
     const seconds = Math.floor(timeDifference / 1000);
     if (seconds < 60) {
         return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
@@ -437,6 +443,7 @@ export const parseCommentsForFacebook = (data, hasParentComment, parentComments)
                 can_comment: comment?.can_comment,
                 can_like:comment?.can_like,
                 user_likes:comment?.user_likes,
+                can_remove:comment?.can_remove,
                 reply: [],
                 from: {
                     id: comment?.from?.id,

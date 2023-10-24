@@ -35,10 +35,63 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
     switch (data?.socialMediaType) {
 
         case "FACEBOOK": {
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags`;
             return axios.get(apiUrl, null).then((response) => {
                 return parseComments(data?.socialMediaType,response.data,data?.hasParentComment,data.hasParentComment?data.parentComments:[]);
             }).catch((error) => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.message);
+            });
+
+        }
+        case  "INSTAGRAM": {
+
+        }
+        case  "LINKEDIN": {
+
+        }
+        default : {
+
+        }
+
+    }
+
+
+});
+export const deleteCommentsOnPostAction = createAsyncThunk('post/deleteCommentsOnPostAction', async (data, thunkAPI) => {
+    switch (data?.socialMediaType) {
+        case "FACEBOOK": {
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}?access_token=${data?.pageAccessToken}`;
+            return axios.delete(apiUrl, null).then((response) => {
+                return response.data;
+            }).catch((error) => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.message);
+            });
+
+        }
+        case  "INSTAGRAM": {
+
+        }
+        case  "LINKEDIN": {
+
+        }
+        default : {
+
+        }
+
+    }
+
+
+});
+export const updateCommentsOnPostAction = createAsyncThunk('post/updateCommentsOnPostAction', async (data, thunkAPI) => {
+    switch (data?.socialMediaType) {
+        case "FACEBOOK": {
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}?access_token=${data?.pageAccessToken}`;
+            return axios.post(apiUrl, data?.data).then((response) => {
+                return response.data;
+            }).catch((error) => {
+                console.log("errorerrorerrorerrorerrorerrorerrorerrorerror ",error.response)
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.message);
             });

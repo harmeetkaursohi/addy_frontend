@@ -15,7 +15,7 @@ import {
     getAllSocialMediaPostsByCriteria,
     getPostPageInfoAction,
     likePostAction,
-    dislikePostAction, addCommentOnPostAction, getCommentsOnPostAction
+    dislikePostAction, addCommentOnPostAction, getCommentsOnPostAction,deleteCommentsOnPostAction,updateCommentsOnPostAction
 } from "../../actions/postActions/postActions.js";
 
 
@@ -39,7 +39,9 @@ const postSlice = createSlice({
         likePostReducer: {loading: false},
         dislikePostReducer: {loading: false},
         addCommentOnPostActionReducer: {loading: false},
-        getCommentsOnPostActionReducer: {loading: false}
+        getCommentsOnPostActionReducer: {loading: false},
+        deleteCommentsOnPostActionReducer: {loading: false},
+        updateCommentsOnPostActionReducer:{loading: false},
     },
 
     reducers: {
@@ -70,6 +72,30 @@ const postSlice = createSlice({
         [getCommentsOnPostAction.rejected]: (state) => {
             state.getCommentsOnPostActionReducer = {loading: false}
         },
+
+        // Delete Comments On Post Action Reducer
+        [deleteCommentsOnPostAction.pending]: (state) => {
+            state.deleteCommentsOnPostActionReducer = {loading: true}
+        },
+        [deleteCommentsOnPostAction.fulfilled]: (state, action) => {
+            state.deleteCommentsOnPostActionReducer = {loading: false, data: action.payload}
+        },
+        [deleteCommentsOnPostAction.rejected]: (state) => {
+            state.deleteCommentsOnPostActionReducer = {loading: false}
+        },
+
+        // Update Comments On Post Action Reducer
+        [updateCommentsOnPostAction.pending]: (state) => {
+            state.updateCommentsOnPostActionReducer = {loading: true}
+        },
+        [updateCommentsOnPostAction.fulfilled]: (state, action) => {
+            console.log("success action.payload",action.payload)
+            state.updateCommentsOnPostActionReducer = {loading: false, data: action.payload}
+        },
+        [updateCommentsOnPostAction.rejected]: (state) => {
+            state.updateCommentsOnPostActionReducer = {loading: false}
+        },
+
 
 
         // Start dis Likes

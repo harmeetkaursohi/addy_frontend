@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import img from '../../../../images/draft.png'
 import {Link} from "react-router-dom";
-import { handleSeparateCaptionHashtag} from "../../../../utils/commonUtils";
+import {handleSeparateCaptionHashtag} from "../../../../utils/commonUtils";
 import {useEffect, useState} from "react";
 import {TbShare3} from "react-icons/tb";
 import {useDispatch, useSelector} from "react-redux";
@@ -18,6 +18,8 @@ import {showErrorToast} from "../../../common/components/Toast";
 import {AiFillHeart, AiOutlineHeart} from "react-icons/ai";
 import CommonSlider from "../../../common/components/CommonSlider";
 import Comments from "../Comments";
+import EmojiPicker from "emoji-picker-react";
+import {EmojiStyle} from "emoji-picker-react";
 // import io from 'socket.io-client';
 
 
@@ -32,7 +34,8 @@ const CommentReviewsSectionModal = ({
     const [like, setLike] = useState(false);
     const handleClose = () => setOpenCommentReviewsSectionModal(false);
     const [comment, setComment] = useState("");
-    const addCommentOnPostActionData=useSelector(state => state.post.addCommentOnPostActionReducer)
+    const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+    const addCommentOnPostActionData = useSelector(state => state.post.addCommentOnPostActionReducer)
 
 
     console.log("@@@ postPageInfoData", postPageInfoData)
@@ -44,9 +47,6 @@ const CommentReviewsSectionModal = ({
             setLike(postPageInfoData[[postData?.id]]?.likes?.summary?.has_liked)
         }
     }, [postData, postPageInfoData])
-
-
-
 
 
     const handleAddLikesOnPost = (e) => {
@@ -105,22 +105,26 @@ const CommentReviewsSectionModal = ({
         e.preventDefault();
         const requestBody = {
             socialMediaType: postData?.socialMediaType,
-            // socialMediaType: "FACEBOOK",
             id: postData?.id,
-            // id: "126684520526450_122128482242030808",
-            data:{
-                message:comment
+            data: {
+                message: comment
             },
             pageAccessToken: postData?.page?.access_token,
-            // pageAccessToken: "EAAIhoNvCxpwBO9LI6dgCq71CLIgu2mY1IfBHnQc3VsBHM5m53sVIOpOz5m7RfRe4VWgQVudVT3mrYAciyefyRWR6ZBdF61QMRE5BU8ML2UJeHvSWgT93P1neSjhlYZAqjRP8EhnWhywZBuGM8lZACAvEL9glz9HJBgoPwSFtiZBSaZCFu3yHHEH3NeAo2ViYoZD",
         }
 
-        dispatch(addCommentOnPostAction(requestBody)).then(response=>{
-            if(response.meta.requestStatus==="fulfilled"){
+        dispatch(addCommentOnPostAction(requestBody)).then(response => {
+            if (response.meta.requestStatus === "fulfilled") {
                 setComment("")
                 dispatch(getCommentsOnPostAction(requestBody))
             }
         });
+    }
+
+    function handleOnEmojiClick(emojiData) {
+        setComment(
+            (prevInput) =>
+                prevInput + (emojiData.isCustom ? emojiData.unified : emojiData.emoji)
+        );
     }
 
     return (
@@ -214,8 +218,10 @@ const CommentReviewsSectionModal = ({
                                         </p>
                                         <p className="comment_date">July 31</p>
                                         <div className="comment_msg">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
-                                                 viewBox="0 0 22 22" fill="none">
+                                            <svg className="cursor_pointer" xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                                                 viewBox="0 0 22 22" fill="none" onClick={() => {
+                                                setShowEmojiPicker(!showEmojiPicker)
+                                            }}>
                                                 <path
                                                     d="M14.8496 9.89961C15.7609 9.89961 16.4996 9.16088 16.4996 8.24961C16.4996 7.33834 15.7609 6.59961 14.8496 6.59961C13.9383 6.59961 13.1996 7.33834 13.1996 8.24961C13.1996 9.16088 13.9383 9.89961 14.8496 9.89961Z"
                                                     fill="#323232"/>
@@ -226,17 +232,34 @@ const CommentReviewsSectionModal = ({
                                                     d="M11 15.4C9.372 15.4 7.975 14.509 7.205 13.2H5.368C6.248 15.455 8.437 17.05 11 17.05C13.563 17.05 15.752 15.455 16.632 13.2H14.795C14.025 14.509 12.628 15.4 11 15.4ZM10.989 0C4.917 0 0 4.928 0 11C0 17.072 4.917 22 10.989 22C17.072 22 22 17.072 22 11C22 4.928 17.072 0 10.989 0ZM11 19.8C6.138 19.8 2.2 15.862 2.2 11C2.2 6.138 6.138 2.2 11 2.2C15.862 2.2 19.8 6.138 19.8 11C19.8 15.862 15.862 19.8 11 19.8Z"
                                                     fill="#323232"/>
                                             </svg>
-                                            <input value={comment} type="text" className="form-control" onChange={(e) => {
-                                                e.preventDefault();
-                                                setComment(e.target.value);
-                                            }} placeholder="Add comment..."/>
+                                            <input value={comment} type="text" className="form-control"
+                                                   onChange={(e) => {
+                                                       e.preventDefault();
+                                                       setComment(e.target.value);
+                                                   }} placeholder="Add comment..."/>
                                             <button disabled={addCommentOnPostActionData?.loading} onClick={(e) => {
                                                 handleAddCommentOnPost(e);
                                             }}>Post
                                             </button>
+                                            <div className={"emoji-picker-outer"}>
+                                                {
+                                                    showEmojiPicker && <EmojiPicker
+                                                        onEmojiClick={(value) => {handleOnEmojiClick(value)}}
+                                                        autoFocusSearch={false}
+                                                        emojiStyle={EmojiStyle.NATIVE}
+                                                        width={'100%'}
+                                                    />
+                                                }
+                                            </div>
+
                                         </div>
+
+
+
                                     </div>
+
                                 </div>
+
                             </Col>
                         </Row>
 
