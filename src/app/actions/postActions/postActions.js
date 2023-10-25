@@ -4,6 +4,7 @@ import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 import {getFacebookConnectedPageIdsReport} from "../../../services/facebookService";
 import {parseComments} from "../../../utils/commonUtils";
+import {UpdateCommentFailedMsg} from "../../../utils/contantData";
 
 export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
@@ -91,8 +92,7 @@ export const updateCommentsOnPostAction = createAsyncThunk('post/updateCommentsO
             return axios.post(apiUrl, data?.data).then((response) => {
                 return response.data;
             }).catch((error) => {
-                console.log("errorerrorerrorerrorerrorerrorerrorerrorerror ",error.response)
-                showErrorToast(error.response.data.message);
+                showErrorToast(UpdateCommentFailedMsg);
                 return thunkAPI.rejectWithValue(error.message);
             });
 

@@ -114,6 +114,14 @@ p.disable-reply-comment {
 .color-blue{
     color: blue !important;
 }
+.comment_message {
+    font-size: 14px;
+    font-weight: 400;
+    opacity: .8;
+}
+.comments_attachments img {
+    height: 150px;
+}
 
 @media screen and (max-width: 1024px) {
     .post_review_wrapper table th {

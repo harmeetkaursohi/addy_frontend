@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import img from '../../../../images/draft.png'
 import {Link} from "react-router-dom";
-import {handleSeparateCaptionHashtag} from "../../../../utils/commonUtils";
+import {getFormattedDate, getCommentCreationTime, handleSeparateCaptionHashtag} from "../../../../utils/commonUtils";
 import {useEffect, useState} from "react";
 import {TbShare3} from "react-icons/tb";
 import {useDispatch, useSelector} from "react-redux";
@@ -127,6 +127,8 @@ const CommentReviewsSectionModal = ({
         );
     }
 
+    console.log("postDa",postPageData)
+
     return (
         <>
             <div className='comment_review_container'>
@@ -138,10 +140,11 @@ const CommentReviewsSectionModal = ({
                                 <div className='comment_review_wrapper'>
                                     <div className="comment_header d-flex">
                                         <Link to={""} className="flex-grow-1">
-                                            <i className="fa fa-chevron-left me-2"></i> Back <i
-                                            className="fa-brands fa-instagram ms-2"></i>
+                                            <span onClick={()=>{setOpenCommentReviewsSectionModal(false)}}><i className="fa fa-chevron-left me-2"></i> Back</span>
+
+                                            <i className="fa-brands fa-facebook ms-2"></i>
                                         </Link>
-                                        <i className="fa fa-download"></i>
+                                        {/*<i className="fa fa-download"></i>*/}
 
                                     </div>
                                     <CommonSlider files={postData?.attachments}
@@ -156,21 +159,26 @@ const CommentReviewsSectionModal = ({
                             <Col lg="5" className="p-0">
                                 <div className="">
                                     <div className="comments_messages pb-0">
-                                        <div className="user_card main_user">
-                                            <div className="user_image">
-                                                <img src={postData?.page?.imageUrl} alt=""/>
+                                       <div className="main_user">
+                                           <div className="user_card main_user">
+                                               <div className="user_image">
+                                                   <img src={postData?.page?.imageUrl} alt=""/>
 
-                                            </div>
-                                            <div className="user">
-                                                <p className="user_name">
-                                                    {postData?.page?.name}
-                                                </p>
-                                                <p>
-                                                    1 day ago
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <h4>{handleSeparateCaptionHashtag(postData?.message)?.caption}</h4>
+                                               </div>
+                                               <div className="user">
+                                                   <p className="user_name">
+                                                       {postData?.page?.name}
+                                                   </p>
+                                                   <p>
+                                                       {getCommentCreationTime(postData?.feedPostDate)}
+
+                                                   </p>
+                                               </div>
+                                           </div>
+                                           <h4>{handleSeparateCaptionHashtag(postData?.message)?.caption}</h4>
+
+                                       </div>
+
                                         <p className="post_hashtags">{handleSeparateCaptionHashtag(postData?.message)?.hashtag}</p>
 
 
@@ -214,9 +222,20 @@ const CommentReviewsSectionModal = ({
                                             <li className="w-100"><i className="fa fa-comment me-2"/>Comment</li>
                                         </ul>
                                         <p className="liked_by">
-                                            Liked by <strong>Lucas Williams</strong> and <strong>Others</strong>
+                                            {
+                                                postPageData?.likes?.summary?.total_count===1 &&  <>
+                                                    Liked by <strong> {postPageData?.likes?.summary?.has_liked?postData?.page?.name:postPageData?.likes?.data[0]?.name}</strong>
+                                                </>
+                                            }
+                                            {
+                                                postPageData?.likes?.summary?.total_count>1 && <>
+                                                    Liked by <strong>{postPageData?.likes?.data[0]?.name}</strong> and <strong> {JSON.stringify(postPageData?.likes?.summary?.total_count-1)} Others</strong>
+                                                </>
+                                            }
+
+
                                         </p>
-                                        <p className="comment_date">July 31</p>
+                                        <p className="comment_date">{getFormattedDate(postData?.feedPostDate)}</p>
                                         <div className="comment_msg">
                                             <svg className="cursor_pointer" xmlns="http://www.w3.org/2000/svg" width="22" height="22"
                                                  viewBox="0 0 22 22" fill="none" onClick={() => {

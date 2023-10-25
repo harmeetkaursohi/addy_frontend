@@ -395,10 +395,10 @@ export const getCommentCreationTime = (date) => {
     const currentDate = new Date();
     const createdDate = new Date(date);
     let timeDifference = currentDate - createdDate;
-    if(timeDifference<0){
-        timeDifference=timeDifference-timeDifference
+    if (timeDifference < 0) {
+        timeDifference = timeDifference - timeDifference
     }
-    if(timeDifference<10000){
+    if (timeDifference < 10000) {
         return 'just now'
     }
     const seconds = Math.floor(timeDifference / 1000);
@@ -431,6 +431,21 @@ export const handleShowCommentReplies = (showCommentReply, index) => {
 }
 
 export const parseCommentsForFacebook = (data, hasParentComment, parentComments) => {
+    const getMessageTags = (messageTags) => {
+        if (messageTags?.length === 0 || messageTags?.length === undefined || messageTags?.length === null) {
+            return []
+        } else {
+            return messageTags?.map(tags => {
+                return {
+                    id: tags?.id,
+                    name: tags?.name,
+                    type: tags?.type
+                }
+            })
+        }
+    }
+
+
     const getCommentsStructure = (data) => {
         return data?.map(comment => {
             return {
@@ -441,23 +456,17 @@ export const parseCommentsForFacebook = (data, hasParentComment, parentComments)
                 created_time: comment?.created_time,
                 attachment: comment?.attachment,
                 can_comment: comment?.can_comment,
-                can_like:comment?.can_like,
-                user_likes:comment?.user_likes,
-                can_remove:comment?.can_remove,
+                can_like: comment?.can_like,
+                user_likes: comment?.user_likes,
+                can_remove: comment?.can_remove,
                 reply: [],
                 from: {
                     id: comment?.from?.id,
                     name: comment?.from?.name,
-                    picture:comment?.from?.picture?.data?.url
+                    picture: comment?.from?.picture?.data?.url
 
                 },
-                ...(hasParentComment ? {
-                    message_tags: {
-                        id: comment?.message_tags?.id,
-                        name: comment?.message_tags?.name,
-                        type: comment?.message_tags?.type
-                    }
-                } : {})
+                message_tags: getMessageTags(comment?.message_tags)
 
             }
         })
@@ -506,4 +515,26 @@ export const getImagePostList = (postData) => {
 
 export const getTagCommentsFormat = (replyComment) => {
     return !replyComment?.message.includes(replyComment?.mentionedPageName) ? replyComment?.message : replyComment?.message.replace(replyComment?.mentionedPageName, `@[${replyComment?.mentionedPageId}]`)
+}
+export const getUpdateCommentMessage = (commentToUpdate) => {
+    let updatedMessage = commentToUpdate?.message
+    if (commentToUpdate?.message_tags?.length === 0) {
+        return commentToUpdate?.message
+    }
+    const mentionedAccounts = commentToUpdate?.message_tags?.filter(tags => tags?.type === "user")
+    if (mentionedAccounts?.length === 0) {
+        return commentToUpdate?.message
+    } else {
+        mentionedAccounts?.map(accounts => {
+            updatedMessage = updatedMessage?.replace(accounts?.name, `@[${accounts?.id}]`)
+        })
+    }
+    return updatedMessage
+
+
+}
+export const  getFormattedDate=(inputDate)=> {
+    const date = new Date(inputDate);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleString(undefined, options);
 }

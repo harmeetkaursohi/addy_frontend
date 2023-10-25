@@ -12,7 +12,8 @@ const CommonSlider = ({
                           caption,
                           hashTag,
                           showThumbnail = false,
-                          viewSimilarToSocialMedia = true
+                          viewSimilarToSocialMedia = true,
+                          height="350px"
                       }) => {
 
     const settings = {
@@ -82,7 +83,7 @@ const CommonSlider = ({
                                         <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
                                         :
                                         <ReactPlayer
-                                            height={"350px"}
+                                            height={height}
                                             width={"100%"}
                                             className=''
                                             url={file.sourceURL}

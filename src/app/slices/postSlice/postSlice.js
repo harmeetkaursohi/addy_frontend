@@ -89,7 +89,6 @@ const postSlice = createSlice({
             state.updateCommentsOnPostActionReducer = {loading: true}
         },
         [updateCommentsOnPostAction.fulfilled]: (state, action) => {
-            console.log("success action.payload",action.payload)
             state.updateCommentsOnPostActionReducer = {loading: false, data: action.payload}
         },
         [updateCommentsOnPostAction.rejected]: (state) => {

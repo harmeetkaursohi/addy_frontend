@@ -87,10 +87,12 @@ p.comment_date {}
     /*overflow: auto;*/
     /*min-height: 213px;*/
 }
-.user_card.main_user {
+div.main_user {
     position: sticky;
-    top: 0;
     background: #fff;
+    z-index: 9;
+    top: -20px;
+    padding-top: 10px;
 }
 .comment_header a, .comment_header i {
     color: #fff;
