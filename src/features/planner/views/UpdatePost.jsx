@@ -27,7 +27,7 @@ import {
     handleSeparateCaptionHashtag,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
-import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
+import {showInfoToast} from "../../common/components/Toast";
 
 
 const UpdatePost = () => {
@@ -63,6 +63,8 @@ const UpdatePost = () => {
 
 
         console.log("--->getPostsByBatchIdList", getPostsByBatchIdList);
+        console.log("@@@@ files", files)
+
 
         useEffect(() => {
 
@@ -72,8 +74,19 @@ const UpdatePost = () => {
                 const {caption, hashtag} = handleSeparateCaptionHashtag(postData[0].message);
                 setCaption(caption);
                 setHashTag(hashtag);
-                const imagePostList = getImagePostList(postData);
-                setFiles(imagePostList);
+
+
+                getImagePostList(postData)
+                    .then((result) => {
+                        return Promise.all(result);
+                    })
+                    .then((results) => {
+                        setFiles([...results]);
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
+                    });
+
             }
         }, [allOptions, getPostsByBatchIdList]);
 
@@ -112,6 +125,7 @@ const UpdatePost = () => {
             }
         }, [socialAccountData]);
 
+
         useEffect(() => {
             //select dropdown label
             const selectedAllDropdownList = allOptions?.flatMap((groupOption) => groupOption.allOptions)
@@ -128,12 +142,45 @@ const UpdatePost = () => {
             const updatedSelectedGroups = new Set(selectedGroups);
             const updatedSelectedOptions = new Set(selectedOptions);
 
+            // console.log("@@@@ updatedSelectedGroups ::: ", updatedSelectedGroups)
+            // console.log("@@@ updatedSelectedOptions ::: ", updatedSelectedOptions)
+            // console.log("@@@ selectedOptions ::: ",selectedOptions)
+
+
             if (selectedGroups.includes(group)) {
+                console.log("deselected")
                 updatedSelectedGroups.delete(group);
                 allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.delete(opt.pageId));
+
             } else {
                 updatedSelectedGroups.add(group);
                 allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.add(opt.pageId));
+
+                console.log("updatedSelectedOptions", updatedSelectedOptions);
+
+
+                // console.log("@@@@ PageIds ",data)
+                // const selectedPageIds = allOptionIds?.filter(optionId => !selectedOptions.includes(optionId))
+                // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
+                //
+                // const updatedPostData = [...files]
+
+                // selectedPageIds?.map(pageId => {
+                //     existingFileReference?.map(postData => {
+                //         return updatedPostData.push(
+                //             {
+                //                 ...postData, attachmentReferenceId: null,
+                //                 imageUrl: null,
+                //                 attachmentReferenceURL: null,
+                //                 pageId: pageId
+                //             }
+                //         )
+                //     })
+                //
+                // })
+                // setFiles([...updatedPostData])
+
+
             }
 
             setSelectedGroups(Array.from(updatedSelectedGroups));
@@ -152,8 +199,28 @@ const UpdatePost = () => {
 
             if (selectedOptions.includes(selectOption.pageId)) {
                 updatedSelectedOptions.splice(updatedSelectedOptions.indexOf(selectOption.pageId), 1);
+
+                // const filteredPostData = files?.filter(postData => {
+                //     return postData.pageId !== selectOption?.pageId
+                // })
+                // setFiles([...filteredPostData])
+
+
             } else {
                 updatedSelectedOptions.push(selectOption.pageId);
+
+                // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
+                // const newPostData = [...files];
+                // existingFileReference?.forEach(file => {
+                //     newPostData.push({
+                //         ...file,
+                //         attachmentReferenceId: null,
+                //         imageUrl: null,
+                //         attachmentReferenceURL: null,
+                //         pageId: selectOption.pageId
+                //     })
+                // })
+                // setFiles([...newPostData])
             }
 
             const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
@@ -174,14 +241,41 @@ const UpdatePost = () => {
         // Handle Select All Method
         const handleSelectAll = () => {
             const allOptionIds = allOptions.flatMap((group) => group.allOptions.map((option) => option.pageId));
+            // const selectedPageIds = allOptionIds?.filter(optionId => !selectedOptions.includes(optionId))
+            // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
+
+            // const updatedPostData = [...files]
+            //
+            // selectedPageIds?.map(pageId => {
+            //     existingFileReference?.map(postData => {
+            //         return updatedPostData.push(
+            //             {
+            //                 ...postData, attachmentReferenceId: null,
+            //                 imageUrl: null,
+            //                 attachmentReferenceURL: null,
+            //                 pageId: pageId
+            //             }
+            //         )
+            //     })
+            //
+            // })
+            // setFiles([...updatedPostData])
+
+
             setSelectedOptions(allOptionIds);
             setSelectedGroups(allOptions.map((group) => group.group));
+            // const updatePostData = files.filter((file) => {
+            //     console.log("@@@ file ", file)
+            // });
+            // console.log("@@@ updatePostData ", updatePostData)
+            // setFiles(updatePostData);
         };
 
         // Handle UnSelect All Method
         const handleUnselectAll = () => {
             setSelectedOptions([]);
             setSelectedGroups([]);
+            setFiles([]);
         };
 
         const areAllOptionsSelected = allOptions.flatMap((group) => group.allOptions).every((option) => selectedOptions.includes(option.pageId));
@@ -189,19 +283,23 @@ const UpdatePost = () => {
         const handleSelectedImageFile = (e) => {
             e.preventDefault();
             const uploadedFiles = Array.from(e.target.files);
-            const imageObjects = uploadedFiles.map((file) => {
-                return {
-                    file: file,
-                    imageUrl: URL.createObjectURL(file),
-                    attachmentReferenceId: null,
-                    mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO",
-                    attachmentReferenceURL:null
-                };
+            const newPostData = [];
+            uploadedFiles.forEach((file, index) => {
+                selectedOptions?.forEach(pageId => {
+                    newPostData.push({
+                        file: file,
+                        imageUrl: URL.createObjectURL(file),
+                        attachmentReferenceId: null,
+                        mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO",
+                        attachmentReferenceURL: null,
+                        attachmentReferenceName: file?.name,
+                        pageId: pageId,
+                    })
+                });
             });
 
-            setFiles([...files, ...imageObjects]);
-            console.log("dimensionPromises", imageObjects)
 
+            setFiles([...files, ...newPostData]);
         }
 
         const handleSelectedVideoFile = (e) => {
@@ -233,7 +331,7 @@ const UpdatePost = () => {
                         file: curFile?.file || null,
                         mediaType: curFile?.mediaType,
                         attachmentReferenceId: curFile?.attachmentReferenceId,
-                        attachmentReferenceURL:curFile?.attachmentReferenceURL
+                        attachmentReferenceURL: curFile?.attachmentReferenceURL
                     }
                 });
 
@@ -253,15 +351,16 @@ const UpdatePost = () => {
                 };
 
                 console.log("@@@ RequestBody ", requestBody);
+                showInfoToast("Post Update Successfully to need Backend...")
 
-                dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
-                    if (response.meta.requestStatus === "fulfilled") {
-                        showSuccessToast("Post has uploaded successfully");
-                        navigate("/planner");
-                    }
-                }).catch((error) => {
-                    showErrorToast(error.response.data.message);
-                });
+                // dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
+                //     if (response.meta.requestStatus === "fulfilled") {
+                //         showSuccessToast("Post has uploaded successfully");
+                //         navigate("/planner");
+                //     }
+                // }).catch((error) => {
+                //     showErrorToast(error.response.data.message);
+                // });
 
             }
         ;
@@ -278,8 +377,8 @@ const UpdatePost = () => {
             updatePost(e, 'SCHEDULED', scheduleDate, scheduleTime);
         };
 
-        const handleRemoveSelectFile = (indexToRemove) => {
-            const updatedFiles = files.filter((_, index) => index !== indexToRemove);
+        const handleRemoveSelectFile = (attachmentReferenceNameToRemove) => {
+            const updatedFiles = files.filter((file) => file.attachmentReferenceName !== attachmentReferenceNameToRemove);
             setFiles(updatedFiles);
         };
 
@@ -293,6 +392,8 @@ const UpdatePost = () => {
             setScheduleDate("");
             setBoostPost(false);
         }
+
+        console.log("files", files)
 
 
         return (
@@ -439,7 +540,7 @@ const UpdatePost = () => {
                                                 <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                                 <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
                                                 <div className="drag_scroll">
-                                                    {files?.map((file, index) => {
+                                                    {files?.filter((file) => file.pageId === selectedOptions[0]).map((file, index) => {
                                                         return (
                                                             <div
                                                                 className="file_outer dragable_files"
@@ -460,13 +561,14 @@ const UpdatePost = () => {
                                                                                autoPlay={true}/>
                                                                     }
                                                                 </div>
-                                                                <button className="delete_upload" disabled={file?.mediaType==="VIDEO"}>
+                                                                <button className="delete_upload"
+                                                                        disabled={file?.mediaType === "VIDEO"}>
                                                                     <RiDeleteBin5Fill
                                                                         style={{fontSize: '24px'}}
-                                                                                      onClick={(e) => {
-                                                                                          e.preventDefault();
-                                                                                          handleRemoveSelectFile(index);
-                                                                                      }} />
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            handleRemoveSelectFile(file?.attachmentReferenceName);
+                                                                        }}/>
                                                                 </button>
                                                             </div>
                                                         )
@@ -714,3 +816,4 @@ const UpdatePost = () => {
     }
 ;
 export default UpdatePost
+

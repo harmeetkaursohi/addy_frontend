@@ -193,40 +193,6 @@ export const isPlannerPostEditable = (feedPostDate) => {
 
 }
 
-// Function to convert an image URL to a File object
-export async function urlToBlob(imageUrl) {
-    try {
-        const response = await fetch(imageUrl);
-        const blob = await response.blob();
-
-        // Generate a random string for the filename
-        const randomString = Math.random().toString(36).substring(7);
-        const timestamp = new Date().getTime();
-        const fileExtension = blob.type.split("/")[1];
-        const filename = `${timestamp}_${randomString}.${fileExtension}`;
-
-        // Create a File object with the blob
-        const file = new File([blob], filename, {type: blob.type});
-        return file;
-    } catch (error) {
-        console.error("Error converting URL to File:", error);
-        return null;
-    }
-}
-
-// Function to convert a list of image URLs to a list of File objects
-export async function urlsToFiles(fileUrlList) {
-    const files = [];
-    for (const fileUrl of fileUrlList) {
-        const file = await urlToBlob(fileUrl.imageURL);
-        if (file) {
-            files.push({socialMediaPostId: fileUrl.socialMediaPostId, file: file});
-        }
-    }
-
-    return files;
-}
-
 
 export const computeAndReturnPlannerEvent = (currentObject) => {
     let a = [];
@@ -504,16 +470,6 @@ export const parseComments = (socialMediaType, data, hasParentComment, parentCom
     }
 }
 
-export const getImagePostList = (postData) => {
-    return postData[0].attachments.map(attachment => ({
-        file: null,
-        imageUrl: attachment.sourceURL || attachment.imageURL,
-        attachmentReferenceId: attachment.id,
-        mediaType: attachment.mediaType,
-        attachmentReferenceURL:attachment.sourceURL || attachment.imageURL
-    })) || [];
-};
-
 export const getTagCommentsFormat = (replyComment) => {
     return !replyComment?.message.includes(replyComment?.mentionedPageName) ? replyComment?.message : replyComment?.message.replace(replyComment?.mentionedPageName, `@[${replyComment?.mentionedPageId}]`)
 }
@@ -531,11 +487,65 @@ export const getUpdateCommentMessage = (commentToUpdate) => {
         })
     }
     return updatedMessage
-
-
 }
-export const  getFormattedDate=(inputDate)=> {
+
+export const getFormattedDate = (inputDate) => {
     const date = new Date(inputDate);
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const options = {year: 'numeric', month: 'short', day: 'numeric'};
     return date.toLocaleString(undefined, options);
 }
+
+// Function to convert an image URL to a File object
+export async function urlToFile(imageUrl, fileNameWithExtension, mediaType) {
+    try {
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+
+        const fileExtension = (mediaType === "IMAGE") ? `image/${fileNameWithExtension.split(".")[1]}` : `video/${fileNameWithExtension.split(".")[1]}`;
+
+        const file = new File([blob], fileNameWithExtension, {type: fileExtension});
+        return file;
+    } catch (error) {
+        console.error("Error converting URL to File:", error);
+        return null;
+    }
+}
+
+// Function to convert a list of image URLs to a list of File objects
+export async function urlsToFiles(fileUrlList) {
+    const files = [];
+    for (const fileUrl of fileUrlList) {
+        const file = await urlToFile(fileUrl.imageURL);
+        if (file) {
+            files.push({socialMediaPostId: fileUrl.socialMediaPostId, file: file});
+        }
+    }
+
+    return files;
+}
+
+export const getImagePostList = async (postData) => {
+    return postData.flatMap(post => post.attachments).map(async attachment => {
+        let file = null;
+
+        if (attachment.mediaType === "IMAGE") {
+            file = await urlToFile(attachment.imageURL, attachment?.attachmentName, attachment.mediaType);
+        } else {
+            file = await urlToFile(attachment.sourceURL, attachment?.attachmentName, attachment.mediaType);
+        }
+
+        const attachmentList = {
+            file: file,
+            imageUrl: attachment.sourceURL || attachment.imageURL,
+            attachmentReferenceId: attachment.id,
+            attachmentReferenceName: attachment.attachmentName,
+            attachmentReferenceURL: attachment.sourceURL || attachment.imageURL,
+            mediaType: attachment.mediaType,
+            pageId: attachment.pageId
+        }
+
+        return attachmentList;
+
+    }) || [];
+};
+
