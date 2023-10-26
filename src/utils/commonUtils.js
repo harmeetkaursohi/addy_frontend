@@ -509,7 +509,8 @@ export const getImagePostList = (postData) => {
         file: null,
         imageUrl: attachment.sourceURL || attachment.imageURL,
         attachmentReferenceId: attachment.id,
-        mediaType: attachment.mediaType
+        mediaType: attachment.mediaType,
+        attachmentReferenceURL:attachment.sourceURL || attachment.imageURL
     })) || [];
 };
 

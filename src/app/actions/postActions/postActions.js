@@ -214,7 +214,12 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
             if (attachment.attachmentReferenceId !== null && attachment.attachmentReferenceId !== "null") {
                 formData.append(`updatePostAttachments[${index}].attachmentReferenceId`, attachment.attachmentReferenceId);
             }
-            formData.append(`updatePostAttachments[${index}].mediaType`, attachment.mediaType);
+            if(attachment.mediaType !== null && attachment.mediaType !== "null"){
+                formData.append(`updatePostAttachments[${index}].mediaType`, attachment.mediaType);
+            }
+            if(attachment.attachmentReferenceURL !== null && attachment.attachmentReferenceURL !== "null"){
+                formData.append(`updatePostAttachments[${index}].attachmentReferenceURL`, attachment.attachmentReferenceURL);
+            }
         });
     }
 

@@ -31,7 +31,7 @@ const Planner = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const calendarRef = useRef(null);
-    const [baseSearchQuery, setBaseSearchQuery] = useState({});
+    const [baseSearchQuery, setBaseSearchQuery] = useState({postStatus:["SCHEDULED","PUBLISHED"]});
     const [isDraftPost, setDraftPost] = useState(false);
     const [showMorePlannerModel, setShowMorePlannerModel] = useState(false);
     const [plannerPosts, setPlannerPosts] = useState([]);

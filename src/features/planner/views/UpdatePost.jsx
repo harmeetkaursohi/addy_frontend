@@ -194,7 +194,8 @@ const UpdatePost = () => {
                     file: file,
                     imageUrl: URL.createObjectURL(file),
                     attachmentReferenceId: null,
-                    mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO"
+                    mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO",
+                    attachmentReferenceURL:null
                 };
             });
 
@@ -231,7 +232,8 @@ const UpdatePost = () => {
                     return {
                         file: curFile?.file || null,
                         mediaType: curFile?.mediaType,
-                        attachmentReferenceId: curFile?.attachmentReferenceId
+                        attachmentReferenceId: curFile?.attachmentReferenceId,
+                        attachmentReferenceURL:curFile?.attachmentReferenceURL
                     }
                 });
 
