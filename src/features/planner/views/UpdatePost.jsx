@@ -27,7 +27,7 @@ import {
     handleSeparateCaptionHashtag,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
-import {showInfoToast} from "../../common/components/Toast";
+import {showErrorToast, showInfoToast, showSuccessToast} from "../../common/components/Toast";
 
 
 const UpdatePost = () => {
@@ -58,8 +58,8 @@ const UpdatePost = () => {
 
         const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
         const userData = useSelector(state => state.user.userInfoReducer.data);
-        const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading)
         const getPostsByBatchIdList = useSelector(state => state.post.getAllPostsByBatchIdReducer.data);
+        const loadingUpdatePost = useSelector(state=> state.post.updatePostOnSocialMediaReducer.loading);
 
 
         console.log("--->getPostsByBatchIdList", getPostsByBatchIdList);
@@ -142,45 +142,13 @@ const UpdatePost = () => {
             const updatedSelectedGroups = new Set(selectedGroups);
             const updatedSelectedOptions = new Set(selectedOptions);
 
-            // console.log("@@@@ updatedSelectedGroups ::: ", updatedSelectedGroups)
-            // console.log("@@@ updatedSelectedOptions ::: ", updatedSelectedOptions)
-            // console.log("@@@ selectedOptions ::: ",selectedOptions)
-
-
             if (selectedGroups.includes(group)) {
-                console.log("deselected")
                 updatedSelectedGroups.delete(group);
                 allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.delete(opt.pageId));
 
             } else {
                 updatedSelectedGroups.add(group);
                 allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.add(opt.pageId));
-
-                console.log("updatedSelectedOptions", updatedSelectedOptions);
-
-
-                // console.log("@@@@ PageIds ",data)
-                // const selectedPageIds = allOptionIds?.filter(optionId => !selectedOptions.includes(optionId))
-                // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
-                //
-                // const updatedPostData = [...files]
-
-                // selectedPageIds?.map(pageId => {
-                //     existingFileReference?.map(postData => {
-                //         return updatedPostData.push(
-                //             {
-                //                 ...postData, attachmentReferenceId: null,
-                //                 imageUrl: null,
-                //                 attachmentReferenceURL: null,
-                //                 pageId: pageId
-                //             }
-                //         )
-                //     })
-                //
-                // })
-                // setFiles([...updatedPostData])
-
-
             }
 
             setSelectedGroups(Array.from(updatedSelectedGroups));
@@ -199,28 +167,8 @@ const UpdatePost = () => {
 
             if (selectedOptions.includes(selectOption.pageId)) {
                 updatedSelectedOptions.splice(updatedSelectedOptions.indexOf(selectOption.pageId), 1);
-
-                // const filteredPostData = files?.filter(postData => {
-                //     return postData.pageId !== selectOption?.pageId
-                // })
-                // setFiles([...filteredPostData])
-
-
             } else {
                 updatedSelectedOptions.push(selectOption.pageId);
-
-                // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
-                // const newPostData = [...files];
-                // existingFileReference?.forEach(file => {
-                //     newPostData.push({
-                //         ...file,
-                //         attachmentReferenceId: null,
-                //         imageUrl: null,
-                //         attachmentReferenceURL: null,
-                //         pageId: selectOption.pageId
-                //     })
-                // })
-                // setFiles([...newPostData])
             }
 
             const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
@@ -241,41 +189,14 @@ const UpdatePost = () => {
         // Handle Select All Method
         const handleSelectAll = () => {
             const allOptionIds = allOptions.flatMap((group) => group.allOptions.map((option) => option.pageId));
-            // const selectedPageIds = allOptionIds?.filter(optionId => !selectedOptions.includes(optionId))
-            // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
-
-            // const updatedPostData = [...files]
-            //
-            // selectedPageIds?.map(pageId => {
-            //     existingFileReference?.map(postData => {
-            //         return updatedPostData.push(
-            //             {
-            //                 ...postData, attachmentReferenceId: null,
-            //                 imageUrl: null,
-            //                 attachmentReferenceURL: null,
-            //                 pageId: pageId
-            //             }
-            //         )
-            //     })
-            //
-            // })
-            // setFiles([...updatedPostData])
-
-
             setSelectedOptions(allOptionIds);
             setSelectedGroups(allOptions.map((group) => group.group));
-            // const updatePostData = files.filter((file) => {
-            //     console.log("@@@ file ", file)
-            // });
-            // console.log("@@@ updatePostData ", updatePostData)
-            // setFiles(updatePostData);
         };
 
         // Handle UnSelect All Method
         const handleUnselectAll = () => {
             setSelectedOptions([]);
             setSelectedGroups([]);
-            setFiles([]);
         };
 
         const areAllOptionsSelected = allOptions.flatMap((group) => group.allOptions).every((option) => selectedOptions.includes(option.pageId));
@@ -326,21 +247,36 @@ const UpdatePost = () => {
                 }
 
 
-                const updatePostAttachments = files.map((curFile) => {
-                    return {
-                        file: curFile?.file || null,
-                        mediaType: curFile?.mediaType,
-                        attachmentReferenceId: curFile?.attachmentReferenceId,
-                        attachmentReferenceURL: curFile?.attachmentReferenceURL
-                    }
-                });
+                // const updatePostAttachments = files.map((curFile) => {
+                //     return {
+                //         file: curFile?.file || null,
+                //         mediaType: curFile?.mediaType,
+                //         attachmentReferenceId: curFile?.attachmentReferenceId,
+                //         attachmentReferenceURL: curFile?.attachmentReferenceURL
+                //     }
+                // });
+
+                // const requestBody = {
+                //     token: token,
+                //     customerId: userInfo?.customerId,
+                //     batchId: batchId,
+                //     updatePostRequestDTO: {
+                //         updatePostAttachments: updatePostAttachments,
+                //         hashTag: hashTag,
+                //         caption: caption,
+                //         postStatus: postStatus,
+                //         boostPost: boostPost,
+                //         pageIds: selectedOptions,
+                //         scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+                //     },
+                // };
 
                 const requestBody = {
                     token: token,
                     customerId: userInfo?.customerId,
-                    batchId: batchId,
+                        batchId: batchId,
                     updatePostRequestDTO: {
-                        updatePostAttachments: updatePostAttachments,
+                        updatePostAttachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
                         hashTag: hashTag,
                         caption: caption,
                         postStatus: postStatus,
@@ -351,16 +287,16 @@ const UpdatePost = () => {
                 };
 
                 console.log("@@@ RequestBody ", requestBody);
-                showInfoToast("Post Update Successfully to need Backend...")
+                // showInfoToast("Post Update Successfully to need Backend...")
 
-                // dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
-                //     if (response.meta.requestStatus === "fulfilled") {
-                //         showSuccessToast("Post has uploaded successfully");
-                //         navigate("/planner");
-                //     }
-                // }).catch((error) => {
-                //     showErrorToast(error.response.data.message);
-                // });
+                dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
+                    if (response.meta.requestStatus === "fulfilled") {
+                        showSuccessToast("Post has uploaded successfully");
+                        navigate("/planner");
+                    }
+                }).catch((error) => {
+                    showErrorToast(error.response.data.message);
+                });
 
             }
         ;
@@ -489,7 +425,7 @@ const UpdatePost = () => {
                                                                                         <div
                                                                                             className="instagramPages unselectedpages"
                                                                                             key={index}
-                                                                                            style={{background: page?.selected === true ? "rgb(215 244 215)" : ""}}
+                                                                                            style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
                                                                                             onClick={(e) =>
                                                                                                 handleCheckboxChange({
                                                                                                     group: socialAccount?.provider,
@@ -693,7 +629,7 @@ const UpdatePost = () => {
                                                                                      handleSchedulePost(e);
                                                                                  }}
                                                                                  className={"cmn_bg_btn schedule_btn loading"}
-                                                                                 isLoading={reference === "Scheduled" && loadingCreateFacebookPost}/>
+                                                                                 isLoading={reference === "Scheduled" && loadingUpdatePost}/>
 
                                                         <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                                  onClick={(e) => {
@@ -701,7 +637,7 @@ const UpdatePost = () => {
                                                                                      handleDraftPost(e);
                                                                                  }}
                                                                                  className={"save_btn cmn_bg_btn loading"}
-                                                                                 isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
+                                                                                 isLoading={reference === "Draft" && loadingUpdatePost}/>
                                                     </div>
                                                 </div>
 
@@ -765,7 +701,7 @@ const UpdatePost = () => {
                                                                                  handlePostSubmit(e);
                                                                              }}
                                                                              className={"publish_btn cmn_bg_btn loading"}
-                                                                             isLoading={reference === "Published" && loadingCreateFacebookPost}/>
+                                                                             isLoading={reference === "Published" && loadingUpdatePost}/>
                                                 </div>
                                             </div>
 
