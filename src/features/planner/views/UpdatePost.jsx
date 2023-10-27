@@ -22,7 +22,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {
-    checkDimensions,
+    checkDimensions, convertSentenceToHashtags,
     convertToUnixTimestamp,
     getImagePostList, groupByKey,
     handleSeparateCaptionHashtag,
@@ -736,7 +736,9 @@ const UpdatePost = () => {
                                                               value={hashTag}
                                                               onChange={(e) => {
                                                                   e.preventDefault();
-                                                                  setHashTag(e.target.value);
+                                                                  const inputValue = e.target.value;
+                                                                  const hashtags = convertSentenceToHashtags(inputValue);
+                                                                  setHashTag(hashtags);
                                                               }}></textarea>
                                                 </div>
 
