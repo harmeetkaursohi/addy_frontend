@@ -48,7 +48,9 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
 
                 <div className="page_tags">
                     {  batchIdData?.postPages && Array.isArray(batchIdData?.postPages) &&
-                        batchIdData?.postPages.map((curPage) => (
+                        Array.from(new Set(batchIdData.postPages.map((item) => item.id)))
+                            .map((id) => batchIdData.postPages.find((page) => page.id === id))
+                            .map((curPage) => (
                             <div className="selected-option" onClick={() => {
                                 redirectToURL(`https://www.facebook.com/${curPage?.id}`)
                             }}>
