@@ -25,6 +25,7 @@ const CommonSlider = ({
         slidesToScroll: 1
     };
 
+    console.log("files--->",files);
     return (
         <>
             {viewSimilarToSocialMedia ?
@@ -38,7 +39,7 @@ const CommonSlider = ({
 
                             files?.map((file, index) => {
                                 return (<div key={index}>
-                                    <img src={selectedFileType === "IMAGE" ? file.url : file?.imageUrl}
+                                    <img src={file?.url}
                                          alt={`Image ${index}`} className='post_img'/>
                                 </div>)
                             })
@@ -53,7 +54,7 @@ const CommonSlider = ({
                                         height={"100%"}
                                         width={"100%"}
                                         className='post_img'
-                                        url={selectedFileType === "VIDEO" ? file.url : file?.imageUrl}
+                                        url={file?.url}
                                         controls={true}
                                     />
                                 </div>

@@ -22,12 +22,14 @@ import {useNavigate, useParams} from "react-router-dom";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {
+    checkDimensions,
     convertToUnixTimestamp,
-    getImagePostList,
+    getImagePostList, groupByKey,
     handleSeparateCaptionHashtag,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import {showErrorToast, showInfoToast, showSuccessToast} from "../../common/components/Toast";
+import {resetReducers} from "../../../app/actions/commonActions/commonActions";
 
 
 const UpdatePost = () => {
@@ -50,6 +52,8 @@ const UpdatePost = () => {
         const [files, setFiles] = useState([]);
         const [selectedFileType, setSelectedFileType] = useState("");
         const [reference, setReference] = useState("");
+        const [disableImage, setDisableImage] = useState(false);
+        const [disableVideo, setDisableVideo] = useState(false);
 
         const [allOptions, setAllOptions] = useState([]);
         const [selectedOptions, setSelectedOptions] = useState([]);
@@ -59,11 +63,41 @@ const UpdatePost = () => {
         const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
         const userData = useSelector(state => state.user.userInfoReducer.data);
         const getPostsByBatchIdList = useSelector(state => state.post.getAllPostsByBatchIdReducer.data);
-        const loadingUpdatePost = useSelector(state=> state.post.updatePostOnSocialMediaReducer.loading);
+        const loadingUpdatePost = useSelector(state => state.post.updatePostOnSocialMediaReducer.loading);
 
 
         console.log("--->getPostsByBatchIdList", getPostsByBatchIdList);
         console.log("@@@@ files", files)
+
+
+        useEffect(() => {
+            return () => {
+                dispatch(resetReducers({sliceNames: ["getAllPostsByBatchIdReducer"]}))
+            }
+        }, []);
+
+        useEffect(() => {
+            if (files && files.length <= 0) {
+                setDisableVideo(false);
+                setDisableImage(false);
+            }
+
+            if (files && files.length > 0) {
+                if (files.every(file => file.mediaType === "VIDEO")) {
+                    setDisableImage(true);
+                } else {
+                    setDisableVideo(true);
+                }
+            }
+        }, []);
+
+
+        useEffect(() => {
+            if (files && files.length <= 0) {
+                setDisableVideo(false);
+                setDisableImage(false);
+            }
+        }, [files])
 
 
         useEffect(() => {
@@ -75,13 +109,13 @@ const UpdatePost = () => {
                 setCaption(caption);
                 setHashTag(hashtag);
 
-
                 getImagePostList(postData)
                     .then((result) => {
                         return Promise.all(result);
                     })
                     .then((results) => {
-                        setFiles([...results]);
+                        // setFiles([...results]);
+                        setFiles(groupByKey([...results]))
                     })
                     .catch((error) => {
                         console.error("Error:", error);
@@ -146,9 +180,29 @@ const UpdatePost = () => {
                 updatedSelectedGroups.delete(group);
                 allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.delete(opt.pageId));
 
+                /// Update File
+                // const groupOptionIds = allOptions.find((groupItem) => groupItem.group === group).allOptions.map((opt) => opt.pageId);
+                // const filteredPostData = files?.filter(postData => !groupOptionIds.includes(postData.pageId));
+                // setFiles([...filteredPostData])
+
             } else {
                 updatedSelectedGroups.add(group);
                 allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.add(opt.pageId));
+
+                /// Update File
+                // const groupOptionIds = allOptions.find((groupItem) => groupItem.group === group).allOptions.map((opt) => opt.pageId);
+                // const selectedPageIds = groupOptionIds?.filter(optionId => !selectedOptions.includes(optionId))
+                // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
+                //
+                // const updatedPostData = [...files]
+                //
+                // selectedPageIds?.map(pageId => {
+                //     existingFileReference?.map(postData => {
+                //         return updatedPostData.push({...postData, attachmentReferenceId: null, imageUrl: null, attachmentReferenceURL: null, pageId: pageId})
+                //     })
+                // })
+
+                // setFiles([...updatedPostData]);
             }
 
             setSelectedGroups(Array.from(updatedSelectedGroups));
@@ -167,8 +221,21 @@ const UpdatePost = () => {
 
             if (selectedOptions.includes(selectOption.pageId)) {
                 updatedSelectedOptions.splice(updatedSelectedOptions.indexOf(selectOption.pageId), 1);
+
+                // update Files
+                // const filteredPostData = files?.filter(postData => postData.pageId !== selectOption?.pageId);
+                // setFiles([...filteredPostData])
+
             } else {
                 updatedSelectedOptions.push(selectOption.pageId);
+
+                // update Files
+                // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
+                // const newPostData = [...files];
+                // existingFileReference?.forEach(file => {
+                //     newPostData.push({...file, attachmentReferenceId: null, imageUrl: null, attachmentReferenceURL: null, pageId: selectOption.pageId})
+                // })
+                // setFiles([...newPostData])
             }
 
             const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
@@ -191,51 +258,89 @@ const UpdatePost = () => {
             const allOptionIds = allOptions.flatMap((group) => group.allOptions.map((option) => option.pageId));
             setSelectedOptions(allOptionIds);
             setSelectedGroups(allOptions.map((group) => group.group));
+
+            /// Update File
+            // const selectedPageIds = allOptionIds?.filter(optionId => !selectedOptions.includes(optionId))
+            // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
+
+            // const updatedPostData = [...files]
+
+            // selectedPageIds?.map(pageId => {
+            //     existingFileReference?.map(postData => {
+            //         return updatedPostData.push({
+            //             ...postData,
+            //             attachmentReferenceId: null,
+            //             imageUrl: null,
+            //             attachmentReferenceURL: null,
+            //             pageId: pageId
+            //         })
+            //     })
+            //
+            // })
+            // setFiles([...updatedPostData])
         };
 
         // Handle UnSelect All Method
         const handleUnselectAll = () => {
             setSelectedOptions([]);
             setSelectedGroups([]);
+
+            /// Update File
+            // setFiles([]);
         };
 
         const areAllOptionsSelected = allOptions.flatMap((group) => group.allOptions).every((option) => selectedOptions.includes(option.pageId));
 
+        // const handleSelectedImageFile = (e) => {
+        //     e.preventDefault();
+        //     const uploadedFiles = Array.from(e.target.files);
+        //     const newPostData = [];
+        //
+        //     uploadedFiles.forEach((file, index) => {
+        //         selectedOptions?.forEach(pageId => {
+        //             newPostData.push({
+        //                 file: file,
+        //                 imageUrl: URL.createObjectURL(file),
+        //                 attachmentReferenceId: null,
+        //                 mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO",
+        //                 attachmentReferenceURL: null,
+        //                 attachmentReferenceName: file?.name,
+        //                 pageId: pageId,
+        //             })
+        //         });
+        //     });
+        //
+        //     setFiles([...files, ...newPostData]);
+        // }
+
         const handleSelectedImageFile = (e) => {
             e.preventDefault();
             const uploadedFiles = Array.from(e.target.files);
-            const newPostData = [];
-            uploadedFiles.forEach((file, index) => {
-                selectedOptions?.forEach(pageId => {
-                    newPostData.push({
-                        file: file,
-                        imageUrl: URL.createObjectURL(file),
-                        attachmentReferenceId: null,
-                        mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO",
-                        attachmentReferenceURL: null,
-                        attachmentReferenceName: file?.name,
-                        pageId: pageId,
-                    })
+            const dimensionPromises = uploadedFiles.map((file) => checkDimensions(file));
+
+            Promise.all(dimensionPromises)
+                .then((results) => {
+                    setFiles(groupByKey([...files, ...results]))
+                    // setFiles([...files, ...results]);
+                })
+                .catch((error) => {
+                    console.error("Error checking dimensions:", error);
                 });
-            });
-
-
-            setFiles([...files, ...newPostData]);
         }
 
         const handleSelectedVideoFile = (e) => {
             e.preventDefault();
             const uploadedVideoFiles = Array.from(e.target.files);
-            const videoImage = uploadedVideoFiles.map((file) => {
-                return {
-                    file: file,
-                    imageUrl: URL.createObjectURL(file),
-                    attachmentReferenceId: null,
-                    mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO"
-                }
-            });
+            const dimensionPromises = uploadedVideoFiles.map((file) => checkDimensions(file));
 
-            console.log("dimensionPromises Videos", videoImage);
+            Promise.all(dimensionPromises)
+                .then((results) => {
+                    // setFiles([...results]);
+                    setFiles(groupByKey([...files, ...results]))
+                })
+                .catch((error) => {
+                    console.error("Error checking dimensions:", error);
+                });
         }
 
         const updatePost = (e, postStatus, scheduleDate, scheduleTime) => {
@@ -243,9 +348,17 @@ const UpdatePost = () => {
                 const userInfo = decodeJwtToken(token);
 
                 if (postStatus === 'SCHEDULED') {
-                    validateScheduleDateAndTime('SCHEDULED', scheduleDate, scheduleTime);
-                }
 
+                    if (!scheduleDate && !scheduleTime) {
+                        showErrorToast("Please enter scheduleDate and scheduleTime!!");
+                        return;
+                    }
+
+                    if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
+                        showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
+                        return;
+                    }
+                }
 
                 // const updatePostAttachments = files.map((curFile) => {
                 //     return {
@@ -255,7 +368,7 @@ const UpdatePost = () => {
                 //         attachmentReferenceURL: curFile?.attachmentReferenceURL
                 //     }
                 // });
-
+                //
                 // const requestBody = {
                 //     token: token,
                 //     customerId: userInfo?.customerId,
@@ -270,11 +383,13 @@ const UpdatePost = () => {
                 //         scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                 //     },
                 // };
+                //
+                // console.log("@@@ RequestBody ", requestBody);
 
                 const requestBody = {
                     token: token,
                     customerId: userInfo?.customerId,
-                        batchId: batchId,
+                    batchId: batchId,
                     updatePostRequestDTO: {
                         updatePostAttachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
                         hashTag: hashTag,
@@ -476,7 +591,7 @@ const UpdatePost = () => {
                                                 <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                                 <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
                                                 <div className="drag_scroll">
-                                                    {files?.filter((file) => file.pageId === selectedOptions[0]).map((file, index) => {
+                                                    {files?.map((file, index) => {
                                                         return (
                                                             <div
                                                                 className="file_outer dragable_files"
@@ -487,18 +602,17 @@ const UpdatePost = () => {
                                                                     {
                                                                         file.mediaType === "IMAGE" &&
                                                                         <img className={"upload_image me-3"}
-                                                                             src={file.imageUrl}
+                                                                             src={file.url}
                                                                              alt={`Image ${index}`}/>
                                                                     }
                                                                     {
                                                                         file.mediaType === "VIDEO" &&
                                                                         <video className={"upload_image me-3"}
-                                                                               src={file.imageUrl} alt={`Videos ${index}`}
+                                                                               src={file.url} alt={`Videos ${index}`}
                                                                                autoPlay={true}/>
                                                                     }
                                                                 </div>
-                                                                <button className="delete_upload"
-                                                                        disabled={file?.mediaType === "VIDEO"}>
+                                                                <button className="delete_upload">
                                                                     <RiDeleteBin5Fill
                                                                         style={{fontSize: '24px'}}
                                                                         onClick={(e) => {
@@ -513,55 +627,67 @@ const UpdatePost = () => {
                                                 </div>
 
                                                 <div className="darg_navs file_outer">
-                                                    <div
-                                                        className={"cmn_blue_border add_media_outer"}>
-                                                        <input type="file" id='image'
-                                                               className='file'
-                                                               multiple
-                                                               name={'file'}
-                                                               onClick={e => (e.target.value = null)}
-                                                               accept={"image/png, image/jpeg"}
-                                                               onChange={(e) => {
-                                                                   setSelectedFileType("IMAGE");
-                                                                   handleSelectedImageFile(e);
-                                                               }}
-                                                        />
-                                                        <label htmlFor='image' className='cmn_headings'>
-                                                            <i className="fa fa-image"
-                                                               style={{marginTop: "2px"}}/>{"Add Photo"}
-                                                        </label>
-                                                    </div>
 
-                                                    <div className="cmn_blue_border add_media_outer">
-                                                        <input
-                                                            type="file"
-                                                            id='video'
-                                                            onClick={e => (e.target.value = null)}
-                                                            accept={"video/mp4,video/x-m4v,video/*"}
-                                                            onChange={(e) => {
-                                                                setSelectedFileType("VIDEO");
-                                                                handleSelectedVideoFile(e);
-                                                            }}/>
-                                                        <label htmlFor='video' className='cmn_headings'>
-                                                            <i className="fa fa-video-camera"
-                                                               style={{marginTop: "2px"}}/>Add
-                                                            Video
-                                                        </label>
-                                                    </div>
+                                                    {disableImage === false &&
+                                                        <div
+                                                            className={"cmn_blue_border add_media_outer"}>
+                                                            <input type="file" id='image'
+                                                                   className='file'
+                                                                   multiple
+                                                                   name={'file'}
+                                                                   onClick={e => (e.target.value = null)}
+                                                                   accept={"image/png, image/jpeg"}
+                                                                   onChange={(e) => {
+                                                                       setSelectedFileType("IMAGE");
+                                                                       setDisableVideo(true);
+                                                                       handleSelectedImageFile(e);
+                                                                   }}
+                                                            />
+                                                            <label htmlFor='image' className='cmn_headings'>
+                                                                <i className="fa fa-image"
+                                                                   style={{marginTop: "2px"}}/>{"Add Photo"}
+                                                            </label>
+                                                        </div>
+                                                    }
+
+                                                    {disableVideo === false &&
+                                                        <div className="cmn_blue_border add_media_outer">
+                                                            <input
+                                                                type="file"
+                                                                id='video'
+                                                                onClick={e => (e.target.value = null)}
+                                                                accept={"video/mp4,video/x-m4v,video/*"}
+                                                                onChange={(e) => {
+                                                                    setSelectedFileType("VIDEO");
+                                                                    setDisableImage(true);
+                                                                    handleSelectedVideoFile(e);
+                                                                }}/>
+                                                            <label htmlFor='video' className='cmn_headings'>
+                                                                <i className="fa fa-video-camera"
+                                                                   style={{marginTop: "2px"}}/>Add
+                                                                Video
+                                                            </label>
+                                                        </div>
+                                                    }
+
                                                 </div>
 
-                                                <h2 className='cmn_heading'>{jsondata.OR}</h2>
-                                                <div className="ai_outer_btn">
-                                                    <button
-                                                        className={`ai_btn cmn_white_text mt-2`}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            setAIGenerateImageModal(true);
-                                                        }}>
-                                                        <i className="fa-solid fa-robot ai_icon me-2"
-                                                           style={{fontSize: "15px"}}/> {jsondata.generateAi}
-                                                    </button>
-                                                </div>
+                                                {
+                                                    disableImage === false && <>
+                                                        <h2 className='cmn_heading'>{jsondata.OR}</h2>
+                                                        <div className="ai_outer_btn">
+                                                            <button
+                                                                className={`ai_btn cmn_white_text mt-2`}
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    setAIGenerateImageModal(true);
+                                                                }}>
+                                                                <i className="fa-solid fa-robot ai_icon me-2"
+                                                                   style={{fontSize: "15px"}}/> {jsondata.generateAi}
+                                                            </button>
+                                                        </div>
+                                                    </>
+                                                }
                                             </div>
 
                                             {/* post caption */
@@ -715,7 +841,7 @@ const UpdatePost = () => {
                                         <CommonFeedPreview previewTitle={`Facebook feed Preview`}
                                                            pageName={`Team Musafirrr`}
                                                            userData={userData}
-                                                           files={files}
+                                                           files={groupByKey(files) || []}
                                                            selectedFileType={null}
                                                            caption={caption}
                                                            hashTag={hashTag}

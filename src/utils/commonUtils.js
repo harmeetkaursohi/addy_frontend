@@ -134,7 +134,7 @@ export const checkDimensions = (file, socialMediaPostId = "") => {
             const imageUrl = URL.createObjectURL(file);
             img.src = imageUrl;
             img.onload = () => {
-                resolve({file: file, url: imageUrl});
+                resolve({file: file, url: imageUrl,attachmentReferenceName:file?.name ,mediaType:"IMAGE"});
             };
             img.onerror = (error) => {
                 reject(error);
@@ -149,7 +149,7 @@ export const checkDimensions = (file, socialMediaPostId = "") => {
             mediaElement.src = videoUrl;
 
             mediaElement.onloadedmetadata = () => {
-                resolve({file: file, url: videoUrl});
+                resolve({file: file, url: videoUrl,mediaType:"VIDEO",attachmentReferenceName:file?.name });
             };
             mediaElement.onerror = (error) => {
                 reject(error);
@@ -536,7 +536,7 @@ export const getImagePostList = async (postData) => {
 
         const attachmentList = {
             file: file,
-            imageUrl: attachment.sourceURL || attachment.imageURL,
+            url: attachment.sourceURL || attachment.imageURL,
             attachmentReferenceId: attachment.id,
             attachmentReferenceName: attachment.attachmentName,
             attachmentReferenceURL: attachment.sourceURL || attachment.imageURL,
@@ -548,4 +548,20 @@ export const getImagePostList = async (postData) => {
 
     }) || [];
 };
+
+
+export const groupByKey=(data)=>{
+
+    const groupedData = data.reduce((result, item) => {
+        const key = item?.attachmentReferenceName;
+        if (!result[key]) {
+            result[key] = item;
+        }
+        return result;
+    }, {});
+
+    return Object.values(groupedData);
+
+}
+
 
