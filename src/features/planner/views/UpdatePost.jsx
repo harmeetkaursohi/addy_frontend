@@ -28,7 +28,7 @@ import {
     handleSeparateCaptionHashtag,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
-import {showErrorToast, showInfoToast, showSuccessToast} from "../../common/components/Toast";
+import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {resetReducers} from "../../../app/actions/commonActions/commonActions";
 
 
@@ -114,7 +114,6 @@ const UpdatePost = () => {
                         return Promise.all(result);
                     })
                     .then((results) => {
-                        // setFiles([...results]);
                         setFiles(groupByKey([...results]))
                     })
                     .catch((error) => {
@@ -180,29 +179,9 @@ const UpdatePost = () => {
                 updatedSelectedGroups.delete(group);
                 allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.delete(opt.pageId));
 
-                /// Update File
-                // const groupOptionIds = allOptions.find((groupItem) => groupItem.group === group).allOptions.map((opt) => opt.pageId);
-                // const filteredPostData = files?.filter(postData => !groupOptionIds.includes(postData.pageId));
-                // setFiles([...filteredPostData])
-
             } else {
                 updatedSelectedGroups.add(group);
                 allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.add(opt.pageId));
-
-                /// Update File
-                // const groupOptionIds = allOptions.find((groupItem) => groupItem.group === group).allOptions.map((opt) => opt.pageId);
-                // const selectedPageIds = groupOptionIds?.filter(optionId => !selectedOptions.includes(optionId))
-                // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
-                //
-                // const updatedPostData = [...files]
-                //
-                // selectedPageIds?.map(pageId => {
-                //     existingFileReference?.map(postData => {
-                //         return updatedPostData.push({...postData, attachmentReferenceId: null, imageUrl: null, attachmentReferenceURL: null, pageId: pageId})
-                //     })
-                // })
-
-                // setFiles([...updatedPostData]);
             }
 
             setSelectedGroups(Array.from(updatedSelectedGroups));
@@ -222,20 +201,9 @@ const UpdatePost = () => {
             if (selectedOptions.includes(selectOption.pageId)) {
                 updatedSelectedOptions.splice(updatedSelectedOptions.indexOf(selectOption.pageId), 1);
 
-                // update Files
-                // const filteredPostData = files?.filter(postData => postData.pageId !== selectOption?.pageId);
-                // setFiles([...filteredPostData])
-
             } else {
                 updatedSelectedOptions.push(selectOption.pageId);
 
-                // update Files
-                // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
-                // const newPostData = [...files];
-                // existingFileReference?.forEach(file => {
-                //     newPostData.push({...file, attachmentReferenceId: null, imageUrl: null, attachmentReferenceURL: null, pageId: selectOption.pageId})
-                // })
-                // setFiles([...newPostData])
             }
 
             const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
@@ -258,60 +226,15 @@ const UpdatePost = () => {
             const allOptionIds = allOptions.flatMap((group) => group.allOptions.map((option) => option.pageId));
             setSelectedOptions(allOptionIds);
             setSelectedGroups(allOptions.map((group) => group.group));
-
-            /// Update File
-            // const selectedPageIds = allOptionIds?.filter(optionId => !selectedOptions.includes(optionId))
-            // const existingFileReference = [...files].filter(existingFile => existingFile?.pageId === selectedOptions[0]);
-
-            // const updatedPostData = [...files]
-
-            // selectedPageIds?.map(pageId => {
-            //     existingFileReference?.map(postData => {
-            //         return updatedPostData.push({
-            //             ...postData,
-            //             attachmentReferenceId: null,
-            //             imageUrl: null,
-            //             attachmentReferenceURL: null,
-            //             pageId: pageId
-            //         })
-            //     })
-            //
-            // })
-            // setFiles([...updatedPostData])
         };
 
         // Handle UnSelect All Method
         const handleUnselectAll = () => {
             setSelectedOptions([]);
             setSelectedGroups([]);
-
-            /// Update File
-            // setFiles([]);
         };
 
         const areAllOptionsSelected = allOptions.flatMap((group) => group.allOptions).every((option) => selectedOptions.includes(option.pageId));
-
-        // const handleSelectedImageFile = (e) => {
-        //     e.preventDefault();
-        //     const uploadedFiles = Array.from(e.target.files);
-        //     const newPostData = [];
-        //
-        //     uploadedFiles.forEach((file, index) => {
-        //         selectedOptions?.forEach(pageId => {
-        //             newPostData.push({
-        //                 file: file,
-        //                 imageUrl: URL.createObjectURL(file),
-        //                 attachmentReferenceId: null,
-        //                 mediaType: file?.type.includes("image") ? "IMAGE" : "VIDEO",
-        //                 attachmentReferenceURL: null,
-        //                 attachmentReferenceName: file?.name,
-        //                 pageId: pageId,
-        //             })
-        //         });
-        //     });
-        //
-        //     setFiles([...files, ...newPostData]);
-        // }
 
         const handleSelectedImageFile = (e) => {
             e.preventDefault();
@@ -321,7 +244,6 @@ const UpdatePost = () => {
             Promise.all(dimensionPromises)
                 .then((results) => {
                     setFiles(groupByKey([...files, ...results]))
-                    // setFiles([...files, ...results]);
                 })
                 .catch((error) => {
                     console.error("Error checking dimensions:", error);
@@ -335,7 +257,6 @@ const UpdatePost = () => {
 
             Promise.all(dimensionPromises)
                 .then((results) => {
-                    // setFiles([...results]);
                     setFiles(groupByKey([...files, ...results]))
                 })
                 .catch((error) => {
@@ -360,38 +281,12 @@ const UpdatePost = () => {
                     }
                 }
 
-                // const updatePostAttachments = files.map((curFile) => {
-                //     return {
-                //         file: curFile?.file || null,
-                //         mediaType: curFile?.mediaType,
-                //         attachmentReferenceId: curFile?.attachmentReferenceId,
-                //         attachmentReferenceURL: curFile?.attachmentReferenceURL
-                //     }
-                // });
-                //
-                // const requestBody = {
-                //     token: token,
-                //     customerId: userInfo?.customerId,
-                //     batchId: batchId,
-                //     updatePostRequestDTO: {
-                //         updatePostAttachments: updatePostAttachments,
-                //         hashTag: hashTag,
-                //         caption: caption,
-                //         postStatus: postStatus,
-                //         boostPost: boostPost,
-                //         pageIds: selectedOptions,
-                //         scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
-                //     },
-                // };
-                //
-                // console.log("@@@ RequestBody ", requestBody);
-
                 const requestBody = {
                     token: token,
                     customerId: userInfo?.customerId,
                     batchId: batchId,
                     updatePostRequestDTO: {
-                        updatePostAttachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
+                        attachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
                         hashTag: hashTag,
                         caption: caption,
                         postStatus: postStatus,
@@ -402,8 +297,6 @@ const UpdatePost = () => {
                 };
 
                 console.log("@@@ RequestBody ", requestBody);
-                // showInfoToast("Post Update Successfully to need Backend...")
-
                 dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         showSuccessToast("Post has uploaded successfully");

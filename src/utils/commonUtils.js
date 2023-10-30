@@ -533,7 +533,6 @@ export const getImagePostList = async (postData) => {
         } else {
             file = await urlToFile(attachment.sourceURL, attachment?.attachmentName, attachment.mediaType);
         }
-
         const attachmentList = {
             file: file,
             url: attachment.sourceURL || attachment.imageURL,

@@ -197,7 +197,7 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
     formData.append('boostPost', data.updatePostRequestDTO.boostPost);
     formData.append('postStatus', data.updatePostRequestDTO.postStatus);
 
-    if (data.updatePostRequestDTO.scheduleDate) {
+    if (data.updatePostRequestDTO.scheduleDate!==null) {
         formData.append('scheduleDate', data.updatePostRequestDTO.scheduleDate);
     }
 
@@ -206,19 +206,12 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
     });
 
 
-    if (data.updatePostRequestDTO.updatePostAttachments.length > 0) {
-        data.updatePostRequestDTO.updatePostAttachments.forEach((attachment, index) => {
+    if (data.updatePostRequestDTO.attachments.length > 0) {
+        data.updatePostRequestDTO.attachments.forEach((attachment, index) => {
             if (attachment?.file !== null && attachment?.file !== "null") {
-                formData.append(`updatePostAttachments[${index}].file`, attachment?.file);
-            }
-            if (attachment.attachmentReferenceId !== null && attachment.attachmentReferenceId !== "null") {
-                formData.append(`updatePostAttachments[${index}].attachmentReferenceId`, attachment.attachmentReferenceId);
-            }
-            if(attachment.mediaType !== null && attachment.mediaType !== "null"){
-                formData.append(`updatePostAttachments[${index}].mediaType`, attachment.mediaType);
-            }
-            if(attachment.attachmentReferenceURL !== null && attachment.attachmentReferenceURL !== "null"){
-                formData.append(`updatePostAttachments[${index}].attachmentReferenceURL`, attachment.attachmentReferenceURL);
+                console.log("attachment?.file--->",attachment?.file);
+                formData.append(`attachments[${index}].file`, attachment?.file);
+                formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE":"VIDEO");
             }
         });
     }

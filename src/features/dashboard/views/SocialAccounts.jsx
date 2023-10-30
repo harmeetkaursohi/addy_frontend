@@ -28,6 +28,22 @@ const SocialAccounts=()=>{
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
+
+    const [currentConnectedFacebookPages,setCurrentConnectedFacebookPages]=useState([]);
+
+    console.log("facebookConnectedPages--->",facebookConnectedPages);
+
+    useEffect(()=>{
+        if(facebookConnectedPages && Array.isArray(facebookConnectedPages)){
+
+            const newIds = facebookConnectedPages.map(c => c.id);
+            const objectsToAdd = facebookConnectedPages.filter(obj => !currentConnectedFacebookPages.some(existingObj => existingObj.id === obj.id));
+            const objectsToRemove = currentConnectedFacebookPages.filter(obj => !newIds.includes(obj.id));
+            const updatedConnectedPages = [...currentConnectedFacebookPages, ...objectsToAdd].filter(obj => !objectsToRemove.some(remObj => remObj.id === obj.id));
+            setCurrentConnectedFacebookPages(updatedConnectedPages);
+        }
+    },[facebookConnectedPages]);
+
     useEffect(() => {
         if (token) {
             const decodeJwt = decodeJwtToken(token);
@@ -213,7 +229,7 @@ const SocialAccounts=()=>{
                                                                          width="30px"/>
                                                                     <h4 className="cmn_text_style">{data.name}</h4>
                                                                 </div>
-                                                                <h4 className={facebookConnectedPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "connect_text cmn_text_style" : "connect_text_not_connect cmn_text_style"}>{facebookConnectedPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "Connected" : "Not Connected"}</h4>
+                                                                <h4 className={currentConnectedFacebookPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "connect_text cmn_text_style" : "connect_text_not_connect cmn_text_style"}>{currentConnectedFacebookPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "Connected" : "Not Connected"}</h4>
                                                             </div>
                                                         </li>
                                                     </>
