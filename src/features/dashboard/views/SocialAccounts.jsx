@@ -31,7 +31,6 @@ const SocialAccounts=()=>{
 
     const [currentConnectedFacebookPages,setCurrentConnectedFacebookPages]=useState([]);
 
-    console.log("facebookConnectedPages--->",facebookConnectedPages);
 
     useEffect(()=>{
         if(facebookConnectedPages && Array.isArray(facebookConnectedPages)){

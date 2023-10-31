@@ -207,6 +207,7 @@ const Planner = () => {
                                     className={"draft_btn create_post_btn cmn_white_text"}
                                     isLoading={isLoading}
                                     onClick={handleDraft}
+                                    isDisabled={false}
                                 />
 
                                 <Link className='cmn_btn_color create_post_btn cmn_white_text'

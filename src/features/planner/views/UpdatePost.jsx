@@ -54,6 +54,8 @@ const UpdatePost = () => {
         const [reference, setReference] = useState("");
         const [disableImage, setDisableImage] = useState(false);
         const [disableVideo, setDisableVideo] = useState(false);
+        const [postStatus, setPostStatus] = useState("DRAFT");
+
 
         const [allOptions, setAllOptions] = useState([]);
         const [selectedOptions, setSelectedOptions] = useState([]);
@@ -99,6 +101,7 @@ const UpdatePost = () => {
             }
         }, [files])
 
+        console.log("postStatus-->", postStatus);
 
         useEffect(() => {
 
@@ -108,6 +111,8 @@ const UpdatePost = () => {
                 const {caption, hashtag} = handleSeparateCaptionHashtag(postData[0].message);
                 setCaption(caption);
                 setHashTag(hashtag);
+                console.log("Object.values(getPostsByBatchIdList)--->",Object.values(getPostsByBatchIdList)[0][0]);
+                setPostStatus(Object.values(getPostsByBatchIdList)[0][0]?.postStatus || "DRAFT" )
 
                 getImagePostList(postData)
                     .then((result) => {
@@ -329,6 +334,7 @@ const UpdatePost = () => {
         const resetForm = (e) => {
             e.preventDefault();
             setFiles([]);
+            setPostStatus(null)
             setSelectedOptions([]);
             setHashTag("");
             setCaption("");
@@ -649,6 +655,7 @@ const UpdatePost = () => {
                                                                                      setReference("Scheduled")
                                                                                      handleSchedulePost(e);
                                                                                  }}
+                                                                                 isDisabled={false}
                                                                                  className={"cmn_bg_btn schedule_btn loading"}
                                                                                  isLoading={reference === "Scheduled" && loadingUpdatePost}/>
 
@@ -657,6 +664,7 @@ const UpdatePost = () => {
                                                                                      setReference("Draft")
                                                                                      handleDraftPost(e);
                                                                                  }}
+                                                                                 isDisabled={postStatus==="SCHEDULED"}
                                                                                  className={"save_btn cmn_bg_btn loading"}
                                                                                  isLoading={reference === "Draft" && loadingUpdatePost}/>
                                                     </div>
@@ -714,7 +722,7 @@ const UpdatePost = () => {
                                                     <button className='cancel_btn cmn_bg_btn' onClick={(e) => {
                                                         e.preventDefault();
                                                         resetForm(e);
-                                                    }}>{jsondata.cancel}</button>
+                                                    }}>{jsondata.reset}</button>
 
                                                     <GenericButtonWithLoader label={jsondata.publishnow}
                                                                              onClick={(e) => {

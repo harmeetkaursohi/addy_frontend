@@ -102,9 +102,10 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
                     <GenericButtonWithLoader className={"post_now cmn_bg_btn loading"} label={"Post Now"}
                                              isLoading={batchIdData?.id===batchToDelete && publishedPostData?.loading}
                                              onClick={handlePublishedPost}
+                                             isDisabled={false}
                     />
                     <GenericButtonWithLoader className={"outline_btn schedule_btn loading"} label={"Schedule Post"}
-                                             onClick={() => navigate("/post/" + batchIdData?.id)}/>
+                                             onClick={() => navigate("/post/" + batchIdData?.id)} isDisabled={false}/>
                 </div>
 
             </div>

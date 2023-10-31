@@ -642,6 +642,7 @@ const CreatePost = () => {
                                                                                  setReference("Scheduled")
                                                                                  handleSchedulePost(e);
                                                                              }}
+                                                                             isDisabled={false}
                                                                              className={"cmn_bg_btn schedule_btn loading"}
                                                                              isLoading={reference === "Scheduled" && loadingCreateFacebookPost}/>
 
@@ -650,6 +651,7 @@ const CreatePost = () => {
                                                                                  setReference("Draft")
                                                                                  handleDraftPost(e);
                                                                              }}
+                                                                             isDisabled={false}
                                                                              className={"save_btn cmn_bg_btn loading"}
                                                                              isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
                                                 </div>
@@ -714,7 +716,8 @@ const CreatePost = () => {
                                                                          onClick={(e) => {
                                                                              setReference("Published")
                                                                              handlePostSubmit(e);
-                                                                         }}
+                                                                         }}                                                                             isDisabled={false}
+                                                                         isDisabled={false}
                                                                          className={"publish_btn cmn_bg_btn loading"}
                                                                          isLoading={reference === "Published" && loadingCreateFacebookPost}/>
                                             </div>

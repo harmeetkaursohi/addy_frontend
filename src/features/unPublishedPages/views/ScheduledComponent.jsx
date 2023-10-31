@@ -154,10 +154,13 @@ const ScheduledComponent = ({scheduledData}) => {
                                                                          onClick={handleDeletePost}
                                                                          id={curBatch?.id}
                                                                          contentText={"Deleting..."}
+                                                                         isDisabled={false}
                                                 />
                                                 <GenericButtonWithLoader className={"post_now cmn_bg_btn loading"}
                                                                          label={"Change Post"}
-                                                                         onClick={() => navigate("/post/" + curBatch?.id)}/>
+                                                                         onClick={() => navigate("/post/" + curBatch?.id)}
+                                                                         isDisabled={false}
+                                                />
                                             </div>
 
                                         </div>
