@@ -716,7 +716,7 @@ const CreatePost = () => {
                                                                          onClick={(e) => {
                                                                              setReference("Published")
                                                                              handlePostSubmit(e);
-                                                                         }}                                                                             isDisabled={false}
+                                                                         }}
                                                                          isDisabled={false}
                                                                          className={"publish_btn cmn_bg_btn loading"}
                                                                          isLoading={reference === "Published" && loadingCreateFacebookPost}/>

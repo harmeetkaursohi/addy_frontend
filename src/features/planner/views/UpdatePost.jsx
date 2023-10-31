@@ -729,6 +729,7 @@ const UpdatePost = () => {
                                                                                  setReference("Published")
                                                                                  handlePostSubmit(e);
                                                                              }}
+                                                                             isDisabled={false}
                                                                              className={"publish_btn cmn_bg_btn loading"}
                                                                              isLoading={reference === "Published" && loadingUpdatePost}/>
                                                 </div>
