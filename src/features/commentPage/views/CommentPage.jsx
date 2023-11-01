@@ -1,7 +1,7 @@
 import instagram_img from '../../../images/instagram.png'
 import download_img from '../../../images/download_icon.svg'
 import bg_img from '../../../images/bg_img.png'
-import user_profile_img from '../../../images/profile_img.png'
+import default_user_icon from "../../../images/default_user_icon.svg"
 import comment_icon from '../../../images/comment_img.png'
 import share_icon from '../../../images/share.svg'
 import like_icon from '../../../images/thumbsup.png'
@@ -34,7 +34,7 @@ const CommentPage = () => {
                         <div className="col-lg-4 col-md-6 col-sm-12 p-0">
                             <div className='user_comment_outer'>
                                 <div className='user_profile_info cmn_padding'>
-                                    <img src={user_profile_img} className='user_img' />
+                                    <img src={default_user_icon} className='user_img' />
                                     <div className='user_heading'>
                                         <h5 className='cmn_white_text user_name_heading'>Ethan Johnson</h5>
                                         <h6 className='cmn_headings'>1d ago</h6>
@@ -47,7 +47,7 @@ const CommentPage = () => {
                                 {/* comments ======================== */}
                                 <div className='users_comments'>
                                     <div className='user_profile_info cmn_padding'>
-                                        <img src={user_profile_img} className='user_img' />
+                                        <img src={default_user_icon} className='user_img' />
                                         <div className='comments_container'>
                                             <h6 className='cmn_white_text user_name_heading'>Lucas Williams</h6>
                                             <h5 className='cmn_headings mt-2'>Absolutely breathtaking! Nature's beauty never fails to amaze me. 😍🍃</h5>
@@ -62,7 +62,7 @@ const CommentPage = () => {
                                     <h5 className='reply_heading cmn_headings'>Hide replies</h5>
                                     {/* repley section */}
                                     <div className='user_profile_info user_reply_outer '>
-                                        <img src={user_profile_img} className='user_img' />
+                                        <img src={default_user_icon} className='user_img' />
                                         <div className='comments_container'>
                                             <h6 className='cmn_white_text user_name_heading'>Lucas Williams</h6>
                                             <h5 className='cmn_headings mt-2'>Yes</h5>

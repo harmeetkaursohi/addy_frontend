@@ -7,7 +7,12 @@ export const getToken = () => {
 };
 
 export const decodeJwtToken = (token) => {
-    return jwt_decode(token);
+    try {
+        return jwt_decode(token);
+    } catch (error) {
+        window.location.href="/login";
+        localStorage.clear();
+    }
 }
 
 export const setAuthenticationHeader = (token) => {

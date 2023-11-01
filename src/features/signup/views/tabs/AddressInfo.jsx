@@ -11,6 +11,7 @@ import {Country, State, City} from 'country-state-city';
 import {signUpUser} from "../../../../app/actions/userActions/userActions";
 import {showErrorToast} from "../../../common/components/Toast";
 import Swal from "sweetalert2";
+import Frame from "../../../../images/Frame.svg";
 
 const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
@@ -61,7 +62,11 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                         showConfirmButton: true,
                         confirmButtonColor: "#F07C33",
                         showCancelButton: false,
-                    });
+                    }).then(result=>{
+                        if(result.isConfirmed){
+                            navigate("/login");
+                        }
+                    })
                     formik.resetForm();
                     setFormData(resetUserInfo);
                 }
@@ -116,14 +121,13 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                 <div className="login_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12 ">
-                            <div className='addy_container bg_color'>
-                                <div className='login_outer'>
-
-                                    <div className='reach_user_outer'>
-                                        <img src={men_img} className='girl_img_width'/>
-                                        <h2 className='mt-5'>Reach your users with new tools. Reach your users with new
+                            <div className='addy_container bg_pastel_blue'>
+                                <div className='login_outer bg_white_cream'>
+                                    <div className='reach_user_outer text-center'>
+                                        <img src={Frame} className=' w-100 mt-4'/>
+                                        <h2 className='mt-5 text-dark'>Reach your users with new tools. Reach your users with new
                                             tools. Reach your users with new tools.</h2>
-                                        <p>Efficiently unleash cross-media information without cross-media value.
+                                        <p className={"text-dark mb-4"}>Efficiently unleash cross-media information without cross-media value.
                                             Quickly maximize.Efficiently unleash cross-media information without
                                             cross-media value. Quickly maximize.Efficiently unleash cross-media.</p>
                                     </div>

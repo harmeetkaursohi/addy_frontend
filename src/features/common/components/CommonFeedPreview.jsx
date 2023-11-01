@@ -1,4 +1,4 @@
-import user_propfile from "../../../images/profile_img.png";
+import default_user_icon from "../../../images/default_user_icon.svg";
 import ellipse_img from "../../../images/Ellipse.svg";
 import {FiThumbsUp} from "react-icons/fi";
 import {GoComment} from "react-icons/go";
@@ -15,7 +15,7 @@ const CommonFeedPreview = ({previewTitle, pageName, userData, files, selectedFil
 
             <div className='preview_wrapper'>
                 <div className='user_profile_info'>
-                    <img src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : user_propfile}
+                    <img src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
                          height="36px"
                          width="36px"/>
                     <div>

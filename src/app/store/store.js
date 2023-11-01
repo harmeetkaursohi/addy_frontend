@@ -20,6 +20,7 @@ const rootReducers = combineReducers({
 
 //reset reducer mechanism...
 const rootReducer = (state, action) => {
+
     if (action.type === resetReducers.type) {
         const {sliceNames} = action.payload;
         let newState = {...state};

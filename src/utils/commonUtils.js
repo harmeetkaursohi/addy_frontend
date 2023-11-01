@@ -7,6 +7,8 @@ import fb from "../images/fb.svg";
 import instagram_img from "../images/instagram.png";
 import linkedin from "../images/linkedin.svg";
 import {getAllSocialMediaPostsByCriteria} from "../app/actions/postActions/postActions";
+import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 export const validationSchemas = {
 
@@ -134,7 +136,7 @@ export const checkDimensions = (file, socialMediaPostId = "") => {
             const imageUrl = URL.createObjectURL(file);
             img.src = imageUrl;
             img.onload = () => {
-                resolve({file: file, url: imageUrl,attachmentReferenceName:file?.name ,mediaType:"IMAGE"});
+                resolve({file: file, url: imageUrl, attachmentReferenceName: file?.name, mediaType: "IMAGE"});
             };
             img.onerror = (error) => {
                 reject(error);
@@ -149,7 +151,7 @@ export const checkDimensions = (file, socialMediaPostId = "") => {
             mediaElement.src = videoUrl;
 
             mediaElement.onloadedmetadata = () => {
-                resolve({file: file, url: videoUrl,mediaType:"VIDEO",attachmentReferenceName:file?.name });
+                resolve({file: file, url: videoUrl, mediaType: "VIDEO", attachmentReferenceName: file?.name});
             };
             mediaElement.onerror = (error) => {
                 reject(error);
@@ -549,7 +551,7 @@ export const getImagePostList = async (postData) => {
 };
 
 
-export const groupByKey=(data)=>{
+export const groupByKey = (data) => {
 
     const groupedData = data.reduce((result, item) => {
         const key = item?.attachmentReferenceName;
@@ -563,4 +565,35 @@ export const groupByKey=(data)=>{
 
 }
 
+export const baseAxios = axios.create();
+baseAxios.interceptors.request.use(
+    response => {
+        if (isTokenValid()) {
+            return response
+        } else {
+            window.location.href = '/login';
+            localStorage.clear();
+        }
+    },
+    error => Promise.reject(error)
+)
+baseAxios.interceptors.response.use(
+    response => response,
+    error => {
+        if (error?.response?.status === 403) {
+            window.location.href = '/login';
+            // localStorage.clear();
+        }
+        return Promise.reject(error)
+    }
+)
 
+export const isTokenValid = () => {
+    let token;
+    try {
+        token=jwtDecode(localStorage.getItem("token"));
+    } catch (error) {
+        return false;
+    }
+    return token?.exp > Math.floor(Date.now() / 1000);
+}

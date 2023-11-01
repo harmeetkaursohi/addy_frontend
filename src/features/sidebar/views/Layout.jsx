@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {useLocation, useNavigate} from "react-router-dom"
-import profile_img from '../../../images/profile_img.png'
+import default_user_icon from '../../../images/default_user_icon.svg'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
 import './Layout.css'
@@ -54,7 +54,7 @@ const Layout = () => {
                         </div>
                         <div className='user_profile_wrapper'>
                             <img
-                                src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : profile_img}
+                                src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
                                 className='profile_img'/>
                             <div>
                                 <h3 className='profile_container'>{userData?.fullName || "name"}</h3>

@@ -1,7 +1,8 @@
-import axios from 'axios';
 import {
+    baseAxios,
     calculatePercentageGrowth,
-    computeAndReturnSummedDateValues} from "../utils/commonUtils";
+    computeAndReturnSummedDateValues
+} from "../utils/commonUtils";
 
 export async function exchangeForLongLivedToken(shortLivedToken) {
     const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/oauth/access_token`;
@@ -16,7 +17,7 @@ export async function exchangeForLongLivedToken(shortLivedToken) {
     };
 
     try {
-        const response = await axios.get(url, {params});
+        const response = await baseAxios.get(url, {params});
 
         if (response.status === 200 && response.data && response.data.access_token) {
             return response.data.access_token;
@@ -61,7 +62,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
             const fullPathTotalFollowers = `${baseUrl}/${pageId}?fields=name,followers_count&access_token=${accessToken}`;
 
             //total lifeTime followers
-            await axios.get(fullPathTotalFollowers)
+            await baseAxios.get(fullPathTotalFollowers)
                 .then((response) => {
                     const pageData = response.data;
                     if (pageData) {
@@ -74,7 +75,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
                 });
 
             //last 1 month
-            await axios.get(await computeInsightURL(pageId, "page_follows", accessToken, false))
+            await baseAxios.get(await computeInsightURL(pageId, "page_follows", accessToken, false))
                 .then((response) => {
                     const lastMonthCount = response.data?.data.find(item => item.period === "month")?.values[0]?.value || 0;
                     initialObject.Followers.month += lastMonthCount;
@@ -86,7 +87,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
 
             //Post activities lifetime
-            await axios.get(await computeInsightURL(pageId, "page_engaged_users", accessToken, true))
+            await baseAxios.get(await computeInsightURL(pageId, "page_engaged_users", accessToken, true))
                 .then((response) => {
                     const lifeTimeCount = response.data?.data.find(item => item.period === "total_over_range")?.values[0]?.value || 0;
                     initialObject.Post_Activity.lifeTime += lifeTimeCount;
@@ -98,7 +99,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
 
             //last 1 month
-            await axios.get(await computeInsightURL(pageId, "page_engaged_users", accessToken, false))
+            await baseAxios.get(await computeInsightURL(pageId, "page_engaged_users", accessToken, false))
                 .then((response) => {
                     const lastMonthCount = response.data?.data.find(item => item.period === "month")?.values[0]?.value || 0;
                     initialObject.Post_Activity.month += lastMonthCount;
@@ -110,7 +111,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
 
             //Page reach lifetime
-            await axios.get(await computeInsightURL(pageId, "page_impressions", accessToken, true))
+            await baseAxios.get(await computeInsightURL(pageId, "page_impressions", accessToken, true))
                 .then((response) => {
                     const lifeTimeCount = response.data?.data.find(item => item.period === "total_over_range")?.values[0]?.value || 0;
                     initialObject.Accounts_Reached.lifeTime += lifeTimeCount;
@@ -122,7 +123,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
 
             //reach reach 1 month
-            await axios.get(await computeInsightURL(pageId, "page_impressions", accessToken, false))
+            await baseAxios.get(await computeInsightURL(pageId, "page_impressions", accessToken, false))
                 .then((response) => {
                     const lastMonthCount = response.data?.data.find(item => item.period === "month")?.values[0]?.value || 0;
                     initialObject.Accounts_Reached.month += lastMonthCount;
@@ -156,7 +157,7 @@ export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
             const accessToken = curPage?.access_token;
 
             //Page reach by provided date
-            await axios.get(await computeInsightURL(pageId, "page_impressions,page_fan_adds", accessToken, false, {
+            await baseAxios.get(await computeInsightURL(pageId, "page_impressions,page_fan_adds", accessToken, false, {
                 period: 'day', since: query?.createdFrom,
                 until: query?.createdTo
             })).then((response) => {

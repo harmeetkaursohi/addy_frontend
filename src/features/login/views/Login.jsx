@@ -9,8 +9,9 @@ import {useFormik} from 'formik';
 import {useDispatch} from "react-redux";
 import {loginUser} from "../../../app/actions/userActions/userActions.js";
 import {validationSchemas} from "../../../utils/commonUtils.js";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {showErrorToast} from "../../common/components/Toast";
+import Frame from "../../../images/Frame.svg";
 
 
 const Login = () => {
@@ -47,14 +48,14 @@ const Login = () => {
                 <div className="login_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12 ">
-                            <div className='addy_container bg_color'>
-                                <div className='login_outer'>
+                            <div className='addy_container bg_pastel_blue'>
+                                <div className='login_outer bg_white_cream'>
 
-                                    <div className='reach_user_outer'>
-                                        <img src={girl_img} className='girl_img_width'/>
-                                        <h2 className='mt-5'>Reach your users with new tools. Reach your users with new
+                                    <div className='reach_user_outer text-center'>
+                                        <img src={Frame} className=' w-100 mt-4'/>
+                                        <h2 className='mt-5 text-dark'>Reach your users with new tools. Reach your users with new
                                             tools. Reach your users with new tools.</h2>
-                                        <p>Efficiently unleash cross-media information without cross-media value.
+                                        <p className={"text-dark mb-4"}>Efficiently unleash cross-media information without cross-media value.
                                             Quickly maximize.Efficiently unleash cross-media information without
                                             cross-media value. Quickly maximize.Efficiently unleash cross-media.</p>
                                     </div>
@@ -117,7 +118,7 @@ const Login = () => {
                                                     <div></div>
                                                     <Link to="/forget-password">
                                                         <label
-                                                            className='forgetPass_heading'>{jsondata.forgotpassword}?</label>
+                                                            className='forgetPass_heading cursor_pointer'>{jsondata.forgotpassword}?</label>
                                                     </Link>
 
                                                 </div>
