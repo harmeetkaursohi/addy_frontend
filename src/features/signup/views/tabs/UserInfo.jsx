@@ -109,7 +109,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                     type='text'
                                                     placeholder='Username'
                                                     onChange={(e)=>{
-                                                        formik.handleChange({ target: { name: e.target.name, value: event.target.value.replace(/\s/g, '') } });
+                                                        formik.handleChange({ target: { name: e.target.name, value: e.target.value.replace(/\s/g, '') } });
                                                     }}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.username}

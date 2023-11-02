@@ -18,8 +18,8 @@ import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
 import {getAllFacebookPages, getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
 
-const SocialAccounts=()=>{
-    const dispatch=useDispatch();
+const SocialAccounts = () => {
+    const dispatch = useDispatch();
     const token = getToken();
     const [facebookDropDown, setFacebookDropDown] = useState(false);
     const [showFacebookModal, setShowFacebookModal] = useState(false);
@@ -29,11 +29,11 @@ const SocialAccounts=()=>{
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
 
-    const [currentConnectedFacebookPages,setCurrentConnectedFacebookPages]=useState([]);
+    const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState([]);
 
 
-    useEffect(()=>{
-        if(facebookConnectedPages && Array.isArray(facebookConnectedPages)){
+    useEffect(() => {
+        if (facebookConnectedPages && Array.isArray(facebookConnectedPages)) {
 
             const newIds = facebookConnectedPages.map(c => c.id);
             const objectsToAdd = facebookConnectedPages.filter(obj => !currentConnectedFacebookPages.some(existingObj => existingObj.id === obj.id));
@@ -41,7 +41,7 @@ const SocialAccounts=()=>{
             const updatedConnectedPages = [...currentConnectedFacebookPages, ...objectsToAdd].filter(obj => !objectsToRemove.some(remObj => remObj.id === obj.id));
             setCurrentConnectedFacebookPages(updatedConnectedPages);
         }
-    },[facebookConnectedPages]);
+    }, [facebookConnectedPages]);
 
     useEffect(() => {
         if (token) {
@@ -66,7 +66,10 @@ const SocialAccounts=()=>{
         object.then((res) => {
             dispatch(socialAccountConnectActions(res)).then(() => {
                 dispatch(getAllConnectedSocialAccountAction(res))
-                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: ["SCHEDULED"]}}));
+                dispatch(getAllSocialMediaPostsByCriteria({
+                    token: token,
+                    query: {limit: 5, postStatus: ["SCHEDULED"]}
+                }));
             })
         }).catch((error) => {
             showErrorToast(error.response.data.message);
@@ -138,124 +141,128 @@ const SocialAccounts=()=>{
 
                 {/*facebook connect starts */}
 
-                {!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0 ?
+                {
+                    getAllConnectedSocialAccountData?.loading ?
+                        <SkeletonEffect count={1}></SkeletonEffect> :
+                        getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0 ?
 
-                    <div className="social_media_outer">
-                        <div className="social_media_content">
-                            <i className={`fa-brands fa-facebook`}
-                               style={{color: "#0866ff", fontSize: "24px"}}/>
-                            <div>
-                                <h5 className="">Facebook account</h5>
-                                <h6 className="cmn_headings">www.facebook.com</h6>
-                            </div>
-                        </div>
-
-                        <LoginSocialFacebook
-                            isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
-                            appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
-                            redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
-                            onResolve={(response) => {
-                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
-                            }}
-                            onReject={(error) => {
-                            }}>
-
-                            <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
-                                                 icon={() => null} preventActiveStyles={true}
-                                                 style={{
-                                                     borderRadius: '5px',
-                                                     background: "#F07C33",
-                                                     boxShadow: "unset",
-                                                     fontSize: "12px",
-                                                     color: "#fff",
-                                                     border: '1px solid #F07C33',
-                                                     height: "39px",
-                                                     minWidth: "111px",
-                                                     margin: "10px",
-                                                     width: "11px"
-                                                 }}/>
-                        </LoginSocialFacebook>
-
-                    </div>
-
-                    :
-
-                    <div className=" cmn_drop_down dropdown">
-                        <div className="dropdown_header">
                             <div className="social_media_outer">
-                                <div className="social_media_content"
-                                     onClick={() => setFacebookDropDown(!facebookDropDown)}>
-                                    <img className="cmn_width" src={fb_img}/>
-                                    <div className="text-start">
-                                        <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
-                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                <div className="social_media_content">
+                                    <i className={`fa-brands fa-facebook`}
+                                       style={{color: "#0866ff", fontSize: "24px"}}/>
+                                    <div>
+                                        <h5 className="">Facebook account</h5>
+                                        <h6 className="cmn_headings">www.facebook.com</h6>
                                     </div>
-                                    <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg"
-                                         // onClick={() =>
-                                         //     setFacebookDropDown(!facebookDropDown)}
-                                        onClick={()=>{
-                                            console.log("asdasdasdasdasd")
-                                        }
-                                        }
-                                    >
-                                        <path id="Icon"
-                                              d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                              stroke="#5F6D7E" strokeWidth="1.67"
-                                              strokeLinecap="round"/>
-                                    </svg>
+                                </div>
+
+                                <LoginSocialFacebook
+                                    isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
+                                    appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
+                                    redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
+                                    onResolve={(response) => {
+                                        connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response))
+                                    }}
+                                    onReject={(error) => {
+                                    }}>
+
+                                    <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
+                                                         icon={() => null} preventActiveStyles={true}
+                                                         style={{
+                                                             borderRadius: '5px',
+                                                             background: "#F07C33",
+                                                             boxShadow: "unset",
+                                                             fontSize: "12px",
+                                                             color: "#fff",
+                                                             border: '1px solid #F07C33',
+                                                             height: "39px",
+                                                             minWidth: "111px",
+                                                             margin: "10px",
+                                                             width: "11px"
+                                                         }}/>
+                                </LoginSocialFacebook>
+
+                            </div>
+
+                            :
+
+                            <div className=" cmn_drop_down dropdown">
+                                <div className="dropdown_header">
+                                    <div className="social_media_outer">
+                                        <div className="social_media_content"
+                                             onClick={() => setFacebookDropDown(!facebookDropDown)}>
+                                            <img className="cmn_width" src={fb_img}/>
+                                            <div className="text-start">
+                                                <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
+                                                <h4 className="connect_text cmn_text_style">Connected</h4>
+                                            </div>
+                                            <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg"
+                                                // onClick={() =>
+                                                //     setFacebookDropDown(!facebookDropDown)}
+                                                 onClick={() => {
+                                                     console.log("asdasdasdasdasd")
+                                                 }
+                                                 }
+                                            >
+                                                <path id="Icon"
+                                                      d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                      stroke="#5F6D7E" strokeWidth="1.67"
+                                                      strokeLinecap="round"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    {
+                                        facebookDropDown === true &&
+
+                                        <ul className="menu_items">
+                                            {
+                                                facebookPageLoading === true ?
+                                                    <SkeletonEffect count={3}/> :
+
+                                                    !(getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0) &&
+                                                    facebookPageList?.slice(0, 3).map((data, index) => {
+                                                        return (
+                                                            <>
+                                                                <li key={index}>
+                                                                    <div
+                                                                        className="user_profileInfo_wrapper">
+                                                                        <div className="user_Details">
+                                                                            <img src={data.picture.data.url}
+                                                                                 height="30px"
+                                                                                 width="30px"/>
+                                                                            <h4 className="cmn_text_style">{data.name}</h4>
+                                                                        </div>
+                                                                        <h4 className={currentConnectedFacebookPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "connect_text cmn_text_style" : "connect_text_not_connect cmn_text_style"}>{currentConnectedFacebookPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "Connected" : "Not Connected"}</h4>
+                                                                    </div>
+                                                                </li>
+                                                            </>
+                                                        )
+                                                    })
+
+                                            }
+                                            <li>
+                                                {
+                                                    (facebookPageList && facebookPageList?.length > 0) &&
+                                                    <div className="connectDisconnect_btn_outer">
+                                                        <button className="DisConnectBtn cmn_connect_btn"
+                                                                onClick={() => disConnectSocialMediaAccountToCustomer()}>
+                                                            Disconnect
+                                                        </button>
+                                                        <button className="ConnectBtn cmn_connect_btn"
+                                                                onClick={() => facebook()}>
+                                                            Connect More
+                                                        </button>
+                                                    </div>
+
+                                                }
+                                            </li>
+                                        </ul>}
+
                                 </div>
                             </div>
 
-                            {
-                                facebookDropDown === true &&
-
-                                <ul className="menu_items">
-                                    {
-                                        facebookPageLoading === true ?
-                                            <SkeletonEffect count={3}/> :
-
-                                            !(getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0) &&
-                                            facebookPageList?.slice(0, 3).map((data, index) => {
-                                                return (
-                                                    <>
-                                                        <li key={index}>
-                                                            <div
-                                                                className="user_profileInfo_wrapper">
-                                                                <div className="user_Details">
-                                                                    <img src={data.picture.data.url}
-                                                                         height="30px"
-                                                                         width="30px"/>
-                                                                    <h4 className="cmn_text_style">{data.name}</h4>
-                                                                </div>
-                                                                <h4 className={currentConnectedFacebookPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "connect_text cmn_text_style" : "connect_text_not_connect cmn_text_style"}>{currentConnectedFacebookPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "Connected" : "Not Connected"}</h4>
-                                                            </div>
-                                                        </li>
-                                                    </>
-                                                )
-                                            })
-
-                                    }
-                                    <li>
-                                        {
-                                            (facebookPageList && facebookPageList?.length > 0) &&
-                                            <div className="connectDisconnect_btn_outer">
-                                                <button className="DisConnectBtn cmn_connect_btn"
-                                                        onClick={() => disConnectSocialMediaAccountToCustomer()}>
-                                                    Disconnect
-                                                </button>
-                                                <button className="ConnectBtn cmn_connect_btn"
-                                                        onClick={() => facebook()}>
-                                                    Connect More
-                                                </button>
-                                            </div>
-
-                                        }
-                                    </li>
-                                </ul>}
-
-                        </div>
-                    </div>
                 }
 
                 {/*facebook connect ends */}

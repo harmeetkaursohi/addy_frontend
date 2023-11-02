@@ -3,7 +3,7 @@ import {
     getCommentCreationTime,
     getTagCommentsFormat, getUpdateCommentMessage,
     handleShowCommentReplies,
-    handleShowCommentReplyBox
+    handleShowCommentReplyBox, isNullOrEmpty, isReplyCommentEmpty
 } from "../../../utils/commonUtils";
 import {useEffect, useState} from "react";
 import {
@@ -53,7 +53,7 @@ const Comments = ({postData}) => {
         }
         dispatch(getCommentsOnPostAction(requestBody)).then(response => {
             if (response.meta.requestStatus === "fulfilled") {
-                // showReplyComments.length === 0 && setShowReplyComments(new Array(response.payload.length).fill(false))
+                !isGetChildComments && setShowReplyComments(new Array(response.payload.length).fill(false))
                 // showReplyBox.length === 0 && setShowReplyComments(new Array(response.payload.length).fill(false))
 
             }
@@ -207,9 +207,6 @@ const Comments = ({postData}) => {
                                                     </div>
 
 
-
-
-
                                                 }
                                                 <div
                                                     className="user_impressions d-flex gap-3 mt-2 mb-2">
@@ -280,11 +277,12 @@ const Comments = ({postData}) => {
                                                                })
                                                            }}
                                                     />
-                                                    <button disabled={updateCommentsOnPostActionData?.loading} onClick={(e) => {
-                                                        handleUpdateComment()
-                                                        setShowEmojiPicker(false)
-                                                    }}
-                                                            className=" update_comment_btn px-2">
+                                                    <button disabled={updateCommentsOnPostActionData?.loading || isNullOrEmpty(updateComment?.message)}
+                                                            onClick={(e) => {
+                                                                !isNullOrEmpty(updateComment?.message) && handleUpdateComment()
+                                                                setShowEmojiPicker(false)
+                                                            }}
+                                                            className={isNullOrEmpty(updateComment?.message)?" update_comment_btn px-2 opacity-50":" update_comment_btn px-2 "}>
                                                         <BiSolidSend className={"cursor-pointer update_comment_icon"}/>
                                                     </button>
 
@@ -342,10 +340,11 @@ const Comments = ({postData}) => {
                                                                                         <Dropdown.Menu>
                                                                                             {
                                                                                                 childComment?.from?.id === postData?.page?.pageId &&
-                                                                                                <Dropdown.Item onClick={() => {
-                                                                                                    !updateCommentsOnPostActionData?.loading && setUpdateComment(childComment)
-                                                                                                }
-                                                                                                }>Edit</Dropdown.Item>
+                                                                                                <Dropdown.Item
+                                                                                                    onClick={() => {
+                                                                                                        !updateCommentsOnPostActionData?.loading && setUpdateComment(childComment)
+                                                                                                    }
+                                                                                                    }>Edit</Dropdown.Item>
                                                                                             }
                                                                                             {
                                                                                                 childComment?.can_remove &&
@@ -460,11 +459,13 @@ const Comments = ({postData}) => {
                                                                                                })
                                                                                            }}
                                                                                     />
-                                                                                    <button disabled={updateCommentsOnPostActionData?.loading} onClick={(e) => {
-                                                                                        handleUpdateComment()
-                                                                                        setShowEmojiPicker(false)
-                                                                                    }}
-                                                                                            className=" update_comment_btn px-2">
+                                                                                    <button
+                                                                                        disabled={updateCommentsOnPostActionData?.loading || isNullOrEmpty(updateComment?.message)}
+                                                                                        onClick={(e) => {
+                                                                                            !isNullOrEmpty(updateComment?.message) && handleUpdateComment()
+                                                                                            setShowEmojiPicker(false)
+                                                                                        }}
+                                                                                        className={isNullOrEmpty(updateComment?.message)?" update_comment_btn px-2 opacity-50":" update_comment_btn px-2 "}>
                                                                                         <BiSolidSend
                                                                                             className={"cursor-pointer update_comment_icon"}/>
                                                                                     </button>
@@ -520,7 +521,9 @@ const Comments = ({postData}) => {
                                             </svg>
                                             <input type="text" placeholder="reply"
                                                    value={replyComment?.message}
-                                                   onClick={()=>{setShowEmojiPicker(false)}}
+                                                   onClick={() => {
+                                                       setShowEmojiPicker(false)
+                                                   }}
                                                    className="form-control "
                                                    onChange={(e) => {
                                                        e.preventDefault();
@@ -528,11 +531,13 @@ const Comments = ({postData}) => {
                                                        setReplyComment({...replyComment, message: e.target.value})
                                                    }}
                                             />
-                                            <button disabled={addCommentOnPostActionData?.loading} onClick={(e) => {
-                                                handleAddCommentOnPost(e);
-                                                setShowEmojiPicker(false)
-                                            }}
-                                                    className="view_post_btn cmn_bg_btn px-2">Submit
+                                            <button
+                                                disabled={addCommentOnPostActionData?.loading || isReplyCommentEmpty(replyComment)}
+                                                onClick={(e) => {
+                                                    !isReplyCommentEmpty(replyComment) && handleAddCommentOnPost(e);
+                                                    setShowEmojiPicker(false)
+                                                }}
+                                                className={isReplyCommentEmpty(replyComment)?"view_post_btn cmn_bg_btn px-2 opacity-50":"view_post_btn cmn_bg_btn px-2"}>Submit
                                             </button>
                                             <div>
                                                 <div className={"reply-emoji-picker-outer"}>

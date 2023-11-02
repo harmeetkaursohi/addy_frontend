@@ -34,7 +34,7 @@ const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList}) 
                                         {/*</button>*/}
                                         {
                                             ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && facebookPageList?.length > 0) &&
-                                                <Link to="/post" className="createPost_btn crate_btn cmn_btn_color">
+                                                <Link to="/planner/post" className="createPost_btn crate_btn cmn_btn_color">
                                                     {jsondata.createpost}
                                                 </Link>
 

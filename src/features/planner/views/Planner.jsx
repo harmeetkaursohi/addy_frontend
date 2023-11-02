@@ -211,7 +211,7 @@ const Planner = () => {
                                 />
 
                                 <Link className='cmn_btn_color create_post_btn cmn_white_text'
-                                      to="/post">{jsondata.createpost}</Link>
+                                      to="/planner/post">{jsondata.createpost}</Link>
                             </div>
                         </div>
                         {

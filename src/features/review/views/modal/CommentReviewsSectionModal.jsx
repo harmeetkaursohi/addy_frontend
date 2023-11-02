@@ -4,7 +4,12 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import img from '../../../../images/draft.png'
 import {Link} from "react-router-dom";
-import {getFormattedDate, getCommentCreationTime, handleSeparateCaptionHashtag} from "../../../../utils/commonUtils";
+import {
+    getFormattedDate,
+    getCommentCreationTime,
+    handleSeparateCaptionHashtag,
+    isNullOrEmpty
+} from "../../../../utils/commonUtils";
 import {useEffect, useState} from "react";
 import {TbShare3} from "react-icons/tb";
 import {useDispatch, useSelector} from "react-redux";
@@ -126,8 +131,6 @@ const CommentReviewsSectionModal = ({
                 prevInput + (emojiData.isCustom ? emojiData.unified : emojiData.emoji)
         );
     }
-
-    console.log("postDa",postPageData)
 
     return (
         <>
@@ -256,8 +259,8 @@ const CommentReviewsSectionModal = ({
                                                        e.preventDefault();
                                                        setComment(e.target.value);
                                                    }} placeholder="Add comment..."/>
-                                            <button disabled={addCommentOnPostActionData?.loading} onClick={(e) => {
-                                                handleAddCommentOnPost(e);
+                                            <button className={ isNullOrEmpty(comment)?"opacity-50":""} disabled={addCommentOnPostActionData?.loading ||  isNullOrEmpty(comment)} onClick={(e) => {
+                                                !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
                                             }}>Post
                                             </button>
                                             <div className={"emoji-picker-outer"}>

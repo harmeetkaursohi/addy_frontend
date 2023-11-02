@@ -351,9 +351,19 @@ export const convertToHashtag = (str) => {
     }
     return ""
 }
+const eliminateDuplicateHashTags = (hashtags) => {
+    const uniqueSet = new Set(hashtags);
+    const uniqueHashTags = Array.from(uniqueSet);
+    return uniqueHashTags;
+}
 
 export const convertSentenceToHashtags = (sentence) => {
-    const words = sentence.split(' ');
+    let words = sentence.split(' ');
+
+    // Eliminate Duplicate Tags
+    if(words[words.length-1]===""){
+        words=eliminateDuplicateHashTags(words)
+    }
     const hashtags = words.map(word => convertToHashtag(word));
     const result = hashtags.join(' ');
     return result;
@@ -568,7 +578,14 @@ export const groupByKey = (data) => {
 export const baseAxios = axios.create();
 baseAxios.interceptors.request.use(
     response => {
-        if (isTokenValid()) {
+        // List Of Urls that does not requires Token to Call API
+        return response
+
+        const exemptedURLs=["/auth/register","/auth/login","/auth/forgot-password","/auth/reset-password"]
+        const isExempted=exemptedURLs.some(url=>{
+            return response.url.includes(url)
+        })
+        if (isTokenValid() || isExempted) {
             return response
         } else {
             window.location.href = '/login';
@@ -580,9 +597,13 @@ baseAxios.interceptors.request.use(
 baseAxios.interceptors.response.use(
     response => response,
     error => {
-        if (error?.response?.status === 403) {
+        const exemptedURLs=["/api/auth/login","https://graph.facebook.com/v17.0"]
+        const isExempted=exemptedURLs.some(url=>{
+            return response.url.includes(url)
+        })
+        if (error?.response?.status === 403 && !isExempted) {
             window.location.href = '/login';
-            // localStorage.clear();
+            localStorage.clear();
         }
         return Promise.reject(error)
     }
@@ -596,4 +617,11 @@ export const isTokenValid = () => {
         return false;
     }
     return token?.exp > Math.floor(Date.now() / 1000);
+}
+
+export const isNullOrEmpty=(value)=>{
+    return value===null || value===undefined || value?.trim()===""
+}
+export const isReplyCommentEmpty=(replyComment)=>{
+    return replyComment?.message===null ||replyComment?.message===undefined ||replyComment?.message?.trim()==="" || replyComment?.message?.trim()===replyComment?.mentionedPageName
 }
