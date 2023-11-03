@@ -1,10 +1,10 @@
 import "./Loader.css"
 
-const Loader = () => {
+const Loader = ({className=""}) => {
 
     return (
         <>
-            <span className="spinner-border spinner-border-sm loader" role="status" aria-hidden="true"></span>
+            <span className={"spinner-border spinner-border-sm loader "+className } role="status" aria-hidden="true"></span>
         </>
     )
 }

@@ -613,7 +613,8 @@ const CreatePost = () => {
                                                         }}>
                                                     <img src={ai_icon}
                                                          className='ai_icon me-2'/>
-                                                    {jsondata.generateHashtagAi} </button>
+                                                    {jsondata.generateHashtagAi}
+                                                </button>
 
                                             </div>
                                             <div className='textarea_outer'>
@@ -758,7 +759,7 @@ const CreatePost = () => {
             {
                 aiGenerateCaptionModal && <AiCaptionModal
                     aiGenerateCaptionModal={aiGenerateCaptionModal}
-                    setAIGenerateCaptionModal={setAIGenerateCaptionModal}/>
+                    setAIGenerateCaptionModal={setAIGenerateCaptionModal} addCaption={setCaption}/>
             }
 
             {

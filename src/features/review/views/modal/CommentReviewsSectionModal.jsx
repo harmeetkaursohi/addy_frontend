@@ -25,6 +25,7 @@ import CommonSlider from "../../../common/components/CommonSlider";
 import Comments from "../Comments";
 import EmojiPicker from "emoji-picker-react";
 import {EmojiStyle} from "emoji-picker-react";
+import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 // import io from 'socket.io-client';
 
 
@@ -32,6 +33,7 @@ const CommentReviewsSectionModal = ({
                                         isOpenCommentReviewsSectionModal,
                                         setOpenCommentReviewsSectionModal,
                                         postData,
+                                        isResetData,
                                         postPageInfoData
                                     }) => {
     const [postPageData, setPostPageData] = useState(null);
@@ -132,6 +134,12 @@ const CommentReviewsSectionModal = ({
         );
     }
 
+    useEffect(()=>{
+        return ()=>{
+            dispatch(resetReducers({sliceNames: ["getPostPageInfoReducer"]}))
+            isResetData(true);
+        }
+    },[])
     return (
         <>
             <div className='comment_review_container'>

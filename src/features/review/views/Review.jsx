@@ -14,23 +14,24 @@ import {getPostPageInfoAction} from "../../../app/actions/postActions/postAction
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: 0});
-    const {
-        isLoading,
-        isError,
-        error,
-        results,
-        hasNextPage
-    } = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
+    const {isLoading, isError, error, results ,setResults, hasNextPage} = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
+    const [resetData, isResetData] = useState(false);
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
 
-    console.log("@@@ results ", results);
+    useEffect(()=>{
+        if(resetData){
+            setResults([])
+            setBaseSearchQuery({pageNum: 0})
+            isResetData(false)
 
+        }
+    },[resetData]);
 
     useEffect(() => {
-        if (postData && postData != undefined) {
+        if (postData && postData !== undefined) {
             const requestBody = {
                 postIds: [postData?.id],
                 pageAccessToken: postData?.page?.access_token
@@ -152,7 +153,7 @@ const Review = () => {
                     isOpenCommentReviewsSectionModal &&
                     <CommentReviewsSectionModal isOpenCommentReviewsSectionModal={isOpenCommentReviewsSectionModal}
                                                 setOpenCommentReviewsSectionModal={setOpenCommentReviewsSectionModal}
-                                                postData={postData} postPageInfoData={postPageInfoData}/>
+                                                postData={postData} postPageInfoData={postPageInfoData} isResetData={isResetData}  />
                 }
             </section>
         </>

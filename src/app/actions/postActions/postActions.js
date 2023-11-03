@@ -307,7 +307,7 @@ export const generateAIImageAction = createAsyncThunk('post/generateAIImageActio
     return generateAIImageService(data).then(res => {
         return res.data;
     }).catch(error => {
-        showErrorToast(error.response.data.message);
+        showErrorToast(error.response.data.error.message);
         return thunkAPI.rejectWithValue(error.response);
     })
 });
@@ -316,8 +316,8 @@ export const generateAICaptionAction = createAsyncThunk('post/generateAICaptionA
     return generateAICaptionAndHashTagService(data).then(res => {
         return res.data;
     }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
+        showErrorToast(error.response.data.error.message);
+        return thunkAPI.rejectWithValue(error);
     })
 });
 
@@ -325,7 +325,7 @@ export const generateAIHashTagAction = createAsyncThunk('post/generateAIHashTagA
     return generateAICaptionAndHashTagService(data).then(res => {
         return res.data;
     }).catch(error => {
-        showErrorToast(error.response.data.message);
+        showErrorToast(error.response.data.error.message);
         return thunkAPI.rejectWithValue(error.response);
     })
 });

@@ -33,12 +33,14 @@ export async function exchangeForLongLivedToken(shortLivedToken) {
 export const conventStringToArrayString = (captionData) => {
     const response = captionData?.choices[0]?.message?.content;
     const arrayOfStrings = response?.replaceAll('\"', "")?.split('\n');
-
     const captionList = arrayOfStrings?.map((str) => {
         return str.replace(/^\d+\.\s/, '');
     });
 
-    return captionList;
+    // Filter Empty Array Elements
+    return captionList?.filter(caption=>{
+        return caption!=="";
+    });
 }
 
 

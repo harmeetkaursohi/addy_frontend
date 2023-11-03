@@ -770,7 +770,7 @@ const UpdatePost = () => {
                 {
                     aiGenerateCaptionModal && <AiCaptionModal
                         aiGenerateCaptionModal={aiGenerateCaptionModal}
-                        setAIGenerateCaptionModal={setAIGenerateCaptionModal}/>
+                        setAIGenerateCaptionModal={setAIGenerateCaptionModal} addCaption={setCaption}/>
                 }
 
                 {

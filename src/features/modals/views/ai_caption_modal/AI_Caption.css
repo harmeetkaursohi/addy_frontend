@@ -1,3 +1,20 @@
+.loading_txt {
+    display: flex;
+    align-items: center;
+}
+li.selectedCaption{
+    background: #00A3FF !important;
+    color:white !important;
+}
+.captions_lists{
+    max-height:200px;
+    overflow-x:hidden ;
+    overflow-y: scroll;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+
 .captions_lists li{
     border-radius: 10px;
     background: #F4F7FC;

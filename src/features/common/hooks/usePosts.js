@@ -59,7 +59,7 @@ const usePosts = (pageNum = 0, filter = null) => {
 
     }, [pageNum, filter])
 
-    return {isLoading, isError, error, results, hasNextPage}
+    return {isLoading, isError, error, results, setResults,hasNextPage}
 }
 
 export default usePosts;

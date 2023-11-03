@@ -576,7 +576,7 @@ export const groupByKey = (data) => {
 }
 
 export const baseAxios = axios.create();
-baseAxios.interceptors.request.use(
+baseAxios?.interceptors?.request.use(
     response => {
         // List Of Urls that does not requires Token to Call API
         return response
@@ -597,9 +597,9 @@ baseAxios.interceptors.request.use(
 baseAxios.interceptors.response.use(
     response => response,
     error => {
-        const exemptedURLs=["/api/auth/login","https://graph.facebook.com/v17.0"]
+        const exemptedURLs=["/api/auth/login","https://graph.facebook.com/v17.0","https://api.openai.com/"]
         const isExempted=exemptedURLs.some(url=>{
-            return response.url.includes(url)
+            return error?.request?.responseURL?.includes(url);
         })
         if (error?.response?.status === 403 && !isExempted) {
             window.location.href = '/login';
