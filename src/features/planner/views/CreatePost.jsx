@@ -765,6 +765,8 @@ const CreatePost = () => {
             {
                 aiGenerateHashTagModal && <AI_Hashtag
                     aiGenerateHashTagModal={aiGenerateHashTagModal}
+                    parentHashTag={hashTag}
+                    setParentHashTag={setHashTag}
                     setAIGenerateHashTagModal={setAIGenerateHashTagModal}/>
             }
         </>)

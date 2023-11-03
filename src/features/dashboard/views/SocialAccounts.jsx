@@ -285,10 +285,10 @@ const SocialAccounts = () => {
                         scope={`${import.meta.env.VITE_APP_INSTAGRAM_SCOPE}`}
                         redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                         onResolve={(response) => {
-                            console.log("response,,,---->",response)
+                            console.log("repsonse----->",response);
                         }}
                         onReject={(error) => {
-                            console.log(error);
+                            console.log("error----->",error);
                         }}
                     >
                         <InstagramLoginButton text={"Connect"}

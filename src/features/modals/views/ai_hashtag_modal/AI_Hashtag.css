@@ -16,13 +16,17 @@ color: #FFF;
 background: #00A3FF;
 
 }
-.unselected_hashtag{
+.unselected_hashtag_btn{
 background: #F4F7FC;
 color: black;
 }
+
+
 .selected_hashtag_outer{
 border-radius: 8px;
 border: 1px solid #C3C3C3;
+    max-height: 160px;
+    overflow: auto;
 }
 .regenerate_btn_outer{
     display: flex;
@@ -37,3 +41,13 @@ border: 1px solid #C3C3C3;
         display: block;
     }
  }
+
+.hashtag_btn_outer{
+    max-height: 160px;
+    overflow: auto;
+    color: #d4d4d4;
+    border: 1px solid #d3d7d9;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}

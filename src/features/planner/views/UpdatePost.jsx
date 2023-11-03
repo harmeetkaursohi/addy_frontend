@@ -776,7 +776,10 @@ const UpdatePost = () => {
                 {
                     aiGenerateHashTagModal && <AI_Hashtag
                         aiGenerateHashTagModal={aiGenerateHashTagModal}
-                        setAIGenerateHashTagModal={setAIGenerateHashTagModal}/>
+                        setAIGenerateHashTagModal={setAIGenerateHashTagModal}
+                        parentHashTag={hashTag}
+                        setParentHashTag={setHashTag}
+                    />
                 }
             </>)
     }
