@@ -13,7 +13,8 @@ const CommonModal = ({
                          setShowModal,
                          allPagesList,
                          connectedPagesList,
-                         socialMediaType
+                         socialMediaType,
+                         noPageFoundMessage
                      }) => {
 
 
@@ -70,35 +71,41 @@ const CommonModal = ({
                     <Modal.Body>
                         <div className='facebook_content_outer'>
                             <div className=''>
-                                {allPagesList?.map((data, index) => {
-                                    return (
-                                        <div key={index} className={`modal_inner_content ${(currentConnectedPages?.includes(data?.id) ? '' : (currentConnectedPages.length > 0 ? 'disconnect_wrapper' : ''))}`}>
-                                            <div className="user_info_container">
-                                                <div className='users_profile'>
-                                                    <img src={data.picture.data.url}/>
+                                {Array.isArray(allPagesList) && allPagesList.length > 0 ? allPagesList?.map((data, index) => {
+                                        return (
+                                            <div key={index}
+                                                 className={`modal_inner_content ${(currentConnectedPages?.includes(data?.id) ? '' : (currentConnectedPages.length > 0 ? 'disconnect_wrapper' : ''))}`}>
+
+                                                <div className="user_info_container">
+                                                    <div className='users_profile'>
+                                                        <img src={data.picture.data.url}/>
+                                                    </div>
+                                                    <div className='users_name'>
+                                                        <h2 className={`cmn_text_style ${currentConnectedPages?.includes(data?.id) ? 'text-success' : ''}`}>{data.name}</h2>
+                                                        {data.about && <p className="cmn_text_style mb-0">{data.about}</p>}
+                                                    </div>
                                                 </div>
-                                                <div className='users_name'>
-                                                    <h2 className={`cmn_text_style ${currentConnectedPages?.includes(data?.id) ? 'text-success' : ''}`}>{data.name}</h2>
-                                                    {data.about && <p className="cmn_text_style mb-0">{data.about}</p>}
+
+                                                <div className='connect_btn_outer'>
+                                                    <button
+                                                        className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : (currentConnectedPages.length > 0 ? 'disabled-button' : 'default-button')}`}
+                                                        onClick={(e) => {
+                                                            setMediaPageData(data);
+                                                            setShowConfirmModal(true);
+                                                        }}
+
+                                                    >
+                                                        {currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"}
+                                                    </button>
                                                 </div>
+
                                             </div>
+                                        )
+                                    })
 
-                                            <div className='connect_btn_outer'>
-                                                <button
-                                                    className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : (currentConnectedPages.length > 0 ? 'disabled-button' : 'default-button')}`}
-                                                    onClick={(e) => {
-                                                        setMediaPageData(data);
-                                                        setShowConfirmModal(true);
-                                                    }}
-
-                                                >
-                                                    {currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"}
-                                                </button>
-                                            </div>
-
-                                        </div>
-                                    )
-                                })}
+                                    :
+                                    <h3 className={"text-center"}>{noPageFoundMessage}</h3>
+                                }
                             </div>
                         </div>
                     </Modal.Body>

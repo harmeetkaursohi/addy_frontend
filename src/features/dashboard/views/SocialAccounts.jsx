@@ -244,7 +244,7 @@ const SocialAccounts = () => {
                                             }
                                             <li>
                                                 {
-                                                    (facebookPageList && facebookPageList?.length > 0) &&
+                                                    (facebookPageList && Array.isArray(facebookPageList)) &&
                                                     <div className="connectDisconnect_btn_outer">
                                                         <button className="DisConnectBtn cmn_connect_btn"
                                                                 onClick={() => disConnectSocialMediaAccountToCustomer()}>
@@ -316,7 +316,7 @@ const SocialAccounts = () => {
             {showFacebookModal &&
                 <FacebookModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal}
                                facebookPageList={facebookPageList}
-                               facebookConnectedPages={facebookConnectedPages}/>}
+                               facebookConnectedPages={facebookConnectedPages} noPageFoundMessage={"No Page Found!"} />}
         </div>
 
     );
