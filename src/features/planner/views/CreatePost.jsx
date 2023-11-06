@@ -277,7 +277,7 @@ const CreatePost = () => {
                 token: token,
                 customerId: userInfo?.customerId,
                 postRequestDto: {
-                    attachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
+                    attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file,fileName:file?.attachmentReferenceName})),
                     hashTag: hashTag,
                     caption: caption,
                     postStatus: postStatus,
@@ -287,6 +287,7 @@ const CreatePost = () => {
                 },
             };
 
+            console.log("requestBody---->", requestBody);
             dispatch(createFacebookPostAction(requestBody)).then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     showSuccessToast("Post has uploaded successfully");
@@ -753,7 +754,7 @@ const CreatePost = () => {
             {
                 aiGenerateImageModal && <AI_ImageModal
                     aiGenerateImageModal={aiGenerateImageModal}
-                    setAIGenerateImageModal={setAIGenerateImageModal}/>
+                    setAIGenerateImageModal={setAIGenerateImageModal} files={files} setFiles={setFiles}/>
             }
 
             {

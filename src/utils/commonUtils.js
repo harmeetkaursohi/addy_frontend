@@ -128,8 +128,10 @@ export const validateScheduleDateAndTime = (scheduleDate, scheduleTime) => {
     return inputDateTime >= minAllowedDate;
 };
 
-export const checkDimensions = (file, socialMediaPostId = "") => {
+export const checkDimensions = (file) => {
 
+    console.log("file.tpye",file?.type)
+    console.log("file.name",file?.name)
     if (file.type.startsWith('image/')) {
         return new Promise((resolve, reject) => {
             const img = new Image();
@@ -522,6 +524,26 @@ export async function urlToFile(imageUrl, fileNameWithExtension, mediaType) {
         return null;
     }
 }
+export const base64StringToFile=(base64String, fileName, fileType)=> {
+    try{
+        const byteCharacters = atob(base64String); // Decode the Base64 string
+        const byteNumbers = new Array(byteCharacters.length);
+
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+
+        const blob = new Blob([byteArray], { type: fileType });
+
+
+        return new File([blob], fileName, { type:fileType });
+    }catch (error){
+        console.error("Error converting base64 to File:", error);
+        return null;
+    }
+}
 
 // Function to convert a list of image URLs to a list of File objects
 export async function urlsToFiles(fileUrlList) {
@@ -620,6 +642,9 @@ export const isTokenValid = () => {
 }
 
 export const isNullOrEmpty=(value)=>{
+    if (Array.isArray(value)) {
+        return value.length === 0;
+    }
     return value===null || value===undefined || value?.trim()===""
 }
 export const isReplyCommentEmpty=(replyComment)=>{

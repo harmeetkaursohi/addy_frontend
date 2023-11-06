@@ -12,7 +12,9 @@ background: #97A1AD;
     padding: 11px 15px
 
 }
-
+.selectedImg {
+    border: 2px solid #F07C33;
+}
 .generate_image_wrapper_box {
     padding: 30px;
 }

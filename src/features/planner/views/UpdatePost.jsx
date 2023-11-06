@@ -69,7 +69,7 @@ const UpdatePost = () => {
 
 
         console.log("--->getPostsByBatchIdList", getPostsByBatchIdList);
-        console.log("@@@@ files", files)
+        console.log("@@@@ files---->", files)
 
 
         useEffect(() => {
@@ -111,8 +111,8 @@ const UpdatePost = () => {
                 const {caption, hashtag} = handleSeparateCaptionHashtag(postData[0].message);
                 setCaption(caption);
                 setHashTag(hashtag);
-                console.log("Object.values(getPostsByBatchIdList)--->",Object.values(getPostsByBatchIdList)[0][0]);
-                setPostStatus(Object.values(getPostsByBatchIdList)[0][0]?.postStatus || "DRAFT" )
+                console.log("Object.values(getPostsByBatchIdList)--->", Object.values(getPostsByBatchIdList)[0][0]);
+                setPostStatus(Object.values(getPostsByBatchIdList)[0][0]?.postStatus || "DRAFT")
 
                 getImagePostList(postData)
                     .then((result) => {
@@ -285,13 +285,14 @@ const UpdatePost = () => {
                         return;
                     }
                 }
+            console.log("file----->",files)
 
                 const requestBody = {
                     token: token,
                     customerId: userInfo?.customerId,
                     batchId: batchId,
                     updatePostRequestDTO: {
-                        attachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file})),
+                        attachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file ,fileName:file.attachmentReferenceName})),
                         hashTag: hashTag,
                         caption: caption,
                         postStatus: postStatus,
@@ -664,7 +665,7 @@ const UpdatePost = () => {
                                                                                      setReference("Draft")
                                                                                      handleDraftPost(e);
                                                                                  }}
-                                                                                 isDisabled={postStatus==="SCHEDULED"}
+                                                                                 isDisabled={postStatus === "SCHEDULED"}
                                                                                  className={"save_btn cmn_bg_btn loading"}
                                                                                  isLoading={reference === "Draft" && loadingUpdatePost}/>
                                                     </div>
@@ -764,7 +765,7 @@ const UpdatePost = () => {
                 {
                     aiGenerateImageModal && <AI_ImageModal
                         aiGenerateImageModal={aiGenerateImageModal}
-                        setAIGenerateImageModal={setAIGenerateImageModal}/>
+                        setAIGenerateImageModal={setAIGenerateImageModal} files={files} setFiles={setFiles}/>
                 }
 
                 {

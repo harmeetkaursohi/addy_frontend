@@ -208,7 +208,6 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
     if (data.updatePostRequestDTO.attachments.length > 0) {
         data.updatePostRequestDTO.attachments.forEach((attachment, index) => {
             if (attachment?.file !== null && attachment?.file !== "null") {
-                console.log("attachment?.file--->",attachment?.file);
                 formData.append(`attachments[${index}].file`, attachment?.file);
                 formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE":"VIDEO");
             }
@@ -220,9 +219,6 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
         const [key, value] = entry;
         console.log("entries", `${key}: ${value}`);
     }
-
-    console.log("data----->", data);
-
     return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.batchId}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
         return res.data;
     }).catch(error => {
@@ -291,6 +287,7 @@ export const createFacebookPostAction = createAsyncThunk('post/createFacebookPos
 
     // Loop through the attachments array and append each attachment's data.
     data.postRequestDto.attachments.forEach((attachment, index) => {
+        console.log("attachment.file",attachment.file)
         formData.append(`attachments[${index}].mediaType`, attachment.mediaType);
         formData.append(`attachments[${index}].file`, attachment.file);
     });
@@ -334,7 +331,8 @@ export const generateAIImageService = async (imageRequestBody) => {
     const requestBody = {
         prompt: imageRequestBody.prompt,
         n: imageRequestBody.noOfImg,
-        size: imageRequestBody.imageSize
+        size: imageRequestBody.imageSize,
+        response_format:imageRequestBody.response_format
     }
     return await baseAxios.post(`${import.meta.env.VITE_APP_AI_GENERATE_IMAGE_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
 }
