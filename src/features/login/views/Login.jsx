@@ -15,7 +15,7 @@ const[password,setPassword]=useState("")
 const[check,setCheck]=useState("")
 
 const loginForm=(e)=>{
-e.preventDefault()
+e.preventDefault() 
 if(name===""){
     setValidName(true)
 }else{
