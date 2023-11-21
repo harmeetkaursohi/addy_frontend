@@ -15,6 +15,7 @@ const usePosts = (pageNum = 0, filter = null) => {
 
 
     console.log("@@@ filter ::: ", filter)
+    console.log("@@@ pageNum ::: ", pageNum)
 
     useEffect(() => {
         setIsLoading(true)

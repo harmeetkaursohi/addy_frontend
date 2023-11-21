@@ -79,7 +79,9 @@ const CommonSlider = ({
                             Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
                                 <div key={index}>
                                     {file?.mediaType === "IMAGE" || showThumbnail ?
-                                        <img src={"data:image/jpeg; base64,"+ file?.imageURL} alt={`Image ${index}`} className='post_img'/>
+                                        // <img src={"data:image/jpeg; base64,"+ file?.imageURL} alt={`Image ${index}`} className='post_img'/>
+                                        <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
+
                                         :
                                         <ReactPlayer
                                             height={height}
