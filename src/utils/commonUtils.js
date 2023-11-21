@@ -114,9 +114,12 @@ export const facebookPageConnectAction = (dispatch, token, facebookData) => {
 // Define a function to convert combined date and time string to Unix timestamp
 export function convertToUnixTimestamp(scheduleDate, scheduleTime) {
     const combinedDateTimeString = `${scheduleDate}T${scheduleTime}:00`;
-    const scheduleDateTime = new Date(combinedDateTimeString);
-    const unixTimestamp = scheduleDateTime.getTime() / 1000; // Convert to Unix time (seconds since epoch)
-    return unixTimestamp;
+    const localDateTime = new Date(combinedDateTimeString);
+
+    //converting date to utc date with provided offset
+    const utcDateTime = new Date(localDateTime.getTime() + localDateTime.getTimezoneOffset() * 60000);
+    // fetching unix from utc offset
+    return utcDateTime.getTime() / 1000;
 }
 
 
@@ -130,15 +133,15 @@ export const validateScheduleDateAndTime = (scheduleDate, scheduleTime) => {
 
 export const checkDimensions = (file) => {
 
-    console.log("file.tpye",file?.type)
-    console.log("file.name",file?.name)
+    console.log("file.tpye", file?.type)
+    console.log("file.name", file?.name)
     if (file.type.startsWith('image/')) {
         return new Promise((resolve, reject) => {
             const img = new Image();
             const imageUrl = URL.createObjectURL(file);
             img.src = imageUrl;
             img.onload = () => {
-                resolve({file: file, url: imageUrl, attachmentReferenceName: file?.name, mediaType: "IMAGE"});
+                resolve({file: file, url: imageUrl, fileName: file?.name, mediaType: "IMAGE"});
             };
             img.onerror = (error) => {
                 reject(error);
@@ -153,7 +156,7 @@ export const checkDimensions = (file) => {
             mediaElement.src = videoUrl;
 
             mediaElement.onloadedmetadata = () => {
-                resolve({file: file, url: videoUrl, mediaType: "VIDEO", attachmentReferenceName: file?.name});
+                resolve({file: file, url: videoUrl, mediaType: "VIDEO", fileName: file?.name});
             };
             mediaElement.onerror = (error) => {
                 reject(error);
@@ -363,8 +366,8 @@ export const convertSentenceToHashtags = (sentence) => {
     let words = sentence.split(' ');
 
     // Eliminate Duplicate Tags
-    if(words[words.length-1]===""){
-        words=eliminateDuplicateHashTags(words)
+    if (words[words.length - 1] === "") {
+        words = eliminateDuplicateHashTags(words)
     }
     const hashtags = words.map(word => convertToHashtag(word));
     const result = hashtags.join(' ');
@@ -524,8 +527,9 @@ export async function urlToFile(imageUrl, fileNameWithExtension, mediaType) {
         return null;
     }
 }
-export const base64StringToFile=(base64String, fileName, fileType)=> {
-    try{
+
+export const base64StringToFile = (base64String, fileName, fileType) => {
+    try {
         const byteCharacters = atob(base64String); // Decode the Base64 string
         const byteNumbers = new Array(byteCharacters.length);
 
@@ -535,11 +539,11 @@ export const base64StringToFile=(base64String, fileName, fileType)=> {
 
         const byteArray = new Uint8Array(byteNumbers);
 
-        const blob = new Blob([byteArray], { type: fileType });
+        const blob = new Blob([byteArray], {type: fileType});
 
 
-        return new File([blob], fileName, { type:fileType });
-    }catch (error){
+        return new File([blob], fileName, {type: fileType});
+    } catch (error) {
         console.error("Error converting base64 to File:", error);
         return null;
     }
@@ -559,6 +563,8 @@ export async function urlsToFiles(fileUrlList) {
 }
 
 export const getImagePostList = async (postData) => {
+    console.log("postData---->", postData);
+
     return postData.flatMap(post => post.attachments).map(async attachment => {
         let file = null;
 
@@ -586,7 +592,7 @@ export const getImagePostList = async (postData) => {
 export const groupByKey = (data) => {
 
     const groupedData = data.reduce((result, item) => {
-        const key = item?.attachmentReferenceName;
+        const key = item?.fileName;
         if (!result[key]) {
             result[key] = item;
         }
@@ -597,14 +603,22 @@ export const groupByKey = (data) => {
 
 }
 
+
+export function trimToNull(str) {
+    const trimmed = str.trim();
+
+    return trimmed.length === 0 ? null : trimmed;
+}
+
+
 export const baseAxios = axios.create();
 baseAxios?.interceptors?.request.use(
     response => {
         // List Of Urls that does not requires Token to Call API
         return response
 
-        const exemptedURLs=["/auth/register","/auth/login","/auth/forgot-password","/auth/reset-password"]
-        const isExempted=exemptedURLs.some(url=>{
+        const exemptedURLs = ["/auth/register", "/auth/login", "/auth/forgot-password", "/auth/reset-password"]
+        const isExempted = exemptedURLs.some(url => {
             return response.url.includes(url)
         })
         if (isTokenValid() || isExempted) {
@@ -619,8 +633,8 @@ baseAxios?.interceptors?.request.use(
 baseAxios.interceptors.response.use(
     response => response,
     error => {
-        const exemptedURLs=["/api/auth/login","https://graph.facebook.com/v17.0","https://api.openai.com/"]
-        const isExempted=exemptedURLs.some(url=>{
+        const exemptedURLs = ["/api/auth/login", "https://graph.facebook.com/v17.0", "https://api.openai.com/"]
+        const isExempted = exemptedURLs.some(url => {
             return error?.request?.responseURL?.includes(url);
         })
         if (error?.response?.status === 403 && !isExempted) {
@@ -634,19 +648,19 @@ baseAxios.interceptors.response.use(
 export const isTokenValid = () => {
     let token;
     try {
-        token=jwtDecode(localStorage.getItem("token"));
+        token = jwtDecode(localStorage.getItem("token"));
     } catch (error) {
         return false;
     }
     return token?.exp > Math.floor(Date.now() / 1000);
 }
 
-export const isNullOrEmpty=(value)=>{
+export const isNullOrEmpty = (value) => {
     if (Array.isArray(value)) {
         return value.length === 0;
     }
-    return value===null || value===undefined || value?.trim()===""
+    return value === null || value === undefined || value?.trim() === ""
 }
-export const isReplyCommentEmpty=(replyComment)=>{
-    return replyComment?.message===null ||replyComment?.message===undefined ||replyComment?.message?.trim()==="" || replyComment?.message?.trim()===replyComment?.mentionedPageName
+export const isReplyCommentEmpty = (replyComment) => {
+    return replyComment?.message === null || replyComment?.message === undefined || replyComment?.message?.trim() === "" || replyComment?.message?.trim() === replyComment?.mentionedPageName
 }

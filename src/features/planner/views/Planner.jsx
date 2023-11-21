@@ -55,7 +55,6 @@ const Planner = () => {
         const decodeJwt = decodeJwtToken(token);
         dispatch(getAllPostsForPlannerAction({customerId: decodeJwt.customerId, token: token, query: baseSearchQuery}));
         dispatch(getPlannerPostCountAction({customerId: decodeJwt.customerId, token: token, query: baseSearchQuery}));
-
     }, []);
 
 
@@ -80,7 +79,7 @@ const Planner = () => {
             const decodeJwt = decodeJwtToken(token);
 
             if (isDraftPost) {
-                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: baseSearchQuery}));
+                dispatch(getAllSocialMediaPostsByCriteria({token: token, query:{postStatus:["DRAFT"]} }));
             } else {
                 dispatch(getAllPostsForPlannerAction({
                     customerId: decodeJwt.customerId,

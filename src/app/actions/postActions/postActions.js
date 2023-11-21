@@ -37,7 +37,7 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
         case "FACEBOOK": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags`;
             return baseAxios.get(apiUrl, null).then((response) => {
-                return parseComments(data?.socialMediaType,response.data,data?.hasParentComment,data.hasParentComment?data.parentComments:[]);
+                return parseComments(data?.socialMediaType, response.data, data?.hasParentComment, data.hasParentComment ? data.parentComments : []);
             }).catch((error) => {
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.message);
@@ -147,7 +147,7 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
 export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
 
     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data, setAuthenticationHeader(data.token)).then(res => {
-        console.log('res.datares.datares.data',res.data)
+        console.log('res.datares.datares.data', res.data)
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -167,7 +167,7 @@ export const getAllPlannerPostAction = createAsyncThunk('post/getAllPlannerPostA
 
 
 export const publishedPostAction = createAsyncThunk('post/publishedPostAction', async (data, thunkAPI) => {
-    return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/publish/${data?.batchId}`, null, setAuthenticationHeader(data.token)).then(res => {
+    return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/publish/${data?.postId}`, null, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -177,7 +177,7 @@ export const publishedPostAction = createAsyncThunk('post/publishedPostAction', 
 
 
 export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatchIdAction', async (data, thunkAPI) => {
-    return await baseAxios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data?.batchId}`, setAuthenticationHeader(data.token)).then(res => {
+    return await baseAxios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data?.postId}`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -190,18 +190,28 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
 
     const formData = new FormData();
 
-    // Create a FormData object to hold the data.
-    formData.append('caption', data.updatePostRequestDTO.caption);
-    formData.append('hashTag', data.updatePostRequestDTO.hashTag);
-    formData.append('boostPost', data.updatePostRequestDTO.boostPost);
-    formData.append('postStatus', data.updatePostRequestDTO.postStatus);
+    console.log("updatePostRequestDTO---->",data);
 
-    if (data.updatePostRequestDTO.scheduleDate!==null) {
-        formData.append('scheduleDate', data.updatePostRequestDTO.scheduleDate);
+    // Create a FormData object to hold the data.
+    if (data.updatePostRequestDTO.caption !== null) {
+        formData.append('caption', data.updatePostRequestDTO.caption);
+    }
+    if (data.updatePostRequestDTO.hashTag !== null) {
+        formData.append('hashTag', data.updatePostRequestDTO.hashTag);
     }
 
-    data.updatePostRequestDTO.pageIds.forEach((pageId, index) => {
-        formData.append(`pageIds[${index}]`, pageId);
+    formData.append('boostPost', data.updatePostRequestDTO?.boostPost);
+    formData.append('postStatus', data.updatePostRequestDTO.postStatus);
+
+    if (data.updatePostRequestDTO.scheduledPostDate !== null) {
+        formData.append('scheduledPostDate', data.updatePostRequestDTO.scheduledPostDate);
+    }
+
+    data.updatePostRequestDTO.postPageInfos.forEach((pageInfo, index) => {
+        formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
+        if (pageInfo?.id !== null) {
+            formData.append(`postPageInfos[${index}].id`, pageInfo?.id);
+        }
     });
 
 
@@ -209,17 +219,27 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
         data.updatePostRequestDTO.attachments.forEach((attachment, index) => {
             if (attachment?.file !== null && attachment?.file !== "null") {
                 formData.append(`attachments[${index}].file`, attachment?.file);
-                formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE":"VIDEO");
+                formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE" : "VIDEO");
+            }
+            if (attachment?.id !== null) {
+                formData.append(`attachments[${index}].id`, attachment?.id);
+            }
+            if (attachment?.gridFsId !== null) {
+                formData.append(`attachments[${index}].gridFsId`, attachment?.gridFsId);
             }
         });
     }
+
+    console.log("postbbupdate", data?.id);
+
 
     // Iterate through the FormData entries and log them to the console
     for (const entry of formData.entries()) {
         const [key, value] = entry;
         console.log("entries", `${key}: ${value}`);
     }
-    return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.batchId}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
+
+    return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.id}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -227,8 +247,8 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
     });
 });
 
-export const getAllPostsByBatchIdAction = createAsyncThunk('post/getAllPostsByBatchIdAction', async (data, thunkAPI) => {
-    return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/batch/${data.batchId}`, setAuthenticationHeader(data.token)).then(res => {
+export const getPostsByIdAction = createAsyncThunk('post/getPostsByIdAction', async (data, thunkAPI) => {
+    return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.id}`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -272,24 +292,29 @@ export const createFacebookPostAction = createAsyncThunk('post/createFacebookPos
     const formData = new FormData();
 
     // Create a FormData object to hold the data.
-    formData.append('caption', data.postRequestDto.caption);
-    formData.append('hashTag', data.postRequestDto.hashTag);
-    formData.append('boostPost', data.postRequestDto.boostPost);
-    formData.append('postStatus', data.postRequestDto.postStatus);
-
-    if (data.postRequestDto.scheduleDate) {
-        formData.append('scheduleDate', data.postRequestDto.scheduleDate);
+    if (data.postRequestDto.caption !== null) {
+        formData.append('caption', data.postRequestDto.caption);
+    }
+    if (data.postRequestDto.hashTag !== null) {
+        formData.append('hashTag', data.postRequestDto.hashTag);
     }
 
-    data.postRequestDto.pageIds.forEach((pageId, index) => {
-        formData.append(`pageIds[${index}]`, pageId);
+    formData.append('boostPost', data.postRequestDto?.boostPost);
+    formData.append('postStatus', data.postRequestDto.postStatus);
+
+    if (data.postRequestDto.scheduledPostDate) {
+        formData.append('scheduledPostDate', data.postRequestDto.scheduledPostDate);
+    }
+
+    data.postRequestDto.postPageInfos.forEach((pageInfo, index) => {
+        formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
     });
+
 
     // Loop through the attachments array and append each attachment's data.
     data.postRequestDto.attachments.forEach((attachment, index) => {
-        console.log("attachment.file",attachment.file)
-        formData.append(`attachments[${index}].mediaType`, attachment.mediaType);
-        formData.append(`attachments[${index}].file`, attachment.file);
+        formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
+        formData.append(`attachments[${index}].file`, attachment?.file);
     });
 
     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
@@ -332,7 +357,7 @@ export const generateAIImageService = async (imageRequestBody) => {
         prompt: imageRequestBody.prompt,
         n: imageRequestBody.noOfImg,
         size: imageRequestBody.imageSize,
-        response_format:imageRequestBody.response_format
+        response_format: imageRequestBody.response_format
     }
     return await baseAxios.post(`${import.meta.env.VITE_APP_AI_GENERATE_IMAGE_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
 }

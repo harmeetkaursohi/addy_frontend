@@ -43,7 +43,7 @@ const App = () => {
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/planner" element={<Planner/>}/>
                         <Route path="/planner/post" element={<CreatePost/>}/>
-                        <Route path="/post/:batchId" element={<UpdatePost/>}/>
+                        <Route path="/post/:id" element={<UpdatePost/>}/>
                         <Route path="/review" element={<Review/>}/>
                         <Route path="/gallery" element={<Gallery/>}/>
                         <Route path="/image" element={<AI_ImageModal/>}/>

@@ -5,7 +5,7 @@ import {
     generateAICaptionAction,
     createFacebookPostAction,
     getAllPostsForPlannerAction,
-    getAllPostsByBatchIdAction,
+    getPostsByIdAction,
     updatePostOnSocialMediaAction,
     getPlannerPostCountAction,
     deletePostByBatchIdAction,
@@ -27,7 +27,7 @@ const postSlice = createSlice({
         generateAICaptionReducer: {loading: false},
         createFacebookPostActionReducer: {loading: false},
         getAllPostsForPlannerReducer: {loading: false},
-        getAllPostsByBatchIdReducer: {loading: false},
+        getPostsByIdReducer: {loading: false},
         updatePostOnSocialMediaReducer: {loading: false},
         getPlannerPostCountReportReducer: {loading: false},
         getAllDraftPostsByCustomerAndPeriodReducer: {loading: false},
@@ -185,14 +185,14 @@ const postSlice = createSlice({
         },
 
         //get all posts by batch id
-        [getAllPostsByBatchIdAction.pending]: (state) => {
-            state.getAllPostsByBatchIdReducer = {loading: true}
+        [getPostsByIdAction.pending]: (state) => {
+            state.getPostsByIdReducer = {loading: true}
         },
-        [getAllPostsByBatchIdAction.fulfilled]: (state, action) => {
-            state.getAllPostsByBatchIdReducer = {loading: false, data: action.payload}
+        [getPostsByIdAction.fulfilled]: (state, action) => {
+            state.getPostsByIdReducer = {loading: false, data: action.payload}
         },
-        [getAllPostsByBatchIdAction.rejected]: (state) => {
-            state.getAllPostsByBatchIdReducer = {loading: false}
+        [getPostsByIdAction.rejected]: (state) => {
+            state.getPostsByIdReducer = {loading: false}
         },
 
         //get all posts for planner

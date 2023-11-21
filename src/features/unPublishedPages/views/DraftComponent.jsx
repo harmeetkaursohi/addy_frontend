@@ -23,7 +23,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
         e.preventDefault();
         console.log("batchIdData?.id-->",batchIdData?.id);
         setBatchToDelete(batchIdData?.id)
-        dispatch(publishedPostAction({batchId: batchIdData?.id, token: token}))
+        dispatch(publishedPostAction({postId: batchIdData?.id, token: token}))
             .then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     setBatchToDelete(null);
@@ -39,6 +39,8 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
 
     }
 
+    console.log("batchIdData?.postPages--->",batchIdData?.postPages);
+
     return (<>
 
         <div className="draft-outer mb-3">
@@ -48,12 +50,10 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
 
                 <div className="page_tags">
                     {  batchIdData?.postPages && Array.isArray(batchIdData?.postPages) &&
-                        Array.from(new Set(batchIdData.postPages.map((item) => item.id)))
-                            .map((id) => batchIdData.postPages.find((page) => page.id === id))
+                        Array.from(new Set(batchIdData.postPages.map((item) => item.pageId)))
+                            .map((id) => batchIdData.postPages.find((page) => page.pageId === id))
                             .map((curPage) => (
-                            <div className="selected-option" onClick={() => {
-                                redirectToURL(`https://www.facebook.com/${curPage?.id}`)
-                            }}>
+                            <div className="selected-option">
                                 <div>
                                     <img className={"me-1 social-media-icon"}
                                          src={computeImageURL(curPage?.socialMediaType)}

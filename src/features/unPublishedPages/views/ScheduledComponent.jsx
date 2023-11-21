@@ -27,6 +27,7 @@ const ScheduledComponent = ({scheduledData}) => {
     const token = getToken();
 
     const [scheduledPosts, setScheduledPosts] = useState([]);
+    console.log("scheduledPosts---->",scheduledPosts);
     const [deleteIdRef, setDeleteIdRef] = useState(null);
 
     useEffect(() => {
@@ -38,7 +39,7 @@ const ScheduledComponent = ({scheduledData}) => {
         e.preventDefault();
         if (e?.target?.id !== null) {
             setDeleteIdRef(e?.target?.id);
-            dispatch(deletePostByBatchIdAction({batchId: e?.target?.id, token: token}))
+            dispatch(deletePostByBatchIdAction({postId: e?.target?.id, token: token}))
                 .then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         setDeleteIdRef(null);
@@ -86,6 +87,7 @@ const ScheduledComponent = ({scheduledData}) => {
 
                             :
                             scheduledPosts && Array.isArray(scheduledPosts) && sortByKey(scheduledPosts, "feedPostDate").map(curBatch => (
+
 
                                 // <div className={scheduledPosts.length===1 ? "col-lg-12" : scheduledPosts.length===2 ? "col-lg-6" :"col-lg-4"}>
 
@@ -141,7 +143,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                             <div className={""}>
                                                 <h5>Scheduled For:</h5>
                                                 <div className={'mb-2'}>
-                                                    <span className={"hash_tags"}>{formatDate(curBatch?.createdAt)}</span>
+                                                    <span className={"hash_tags"}>{formatDate(curBatch?.feedPostDate)}</span>
                                                 </div>
                                             </div>
 

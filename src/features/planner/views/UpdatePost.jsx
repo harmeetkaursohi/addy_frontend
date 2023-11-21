@@ -14,7 +14,7 @@ import {BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
 import {
-    getAllPostsByBatchIdAction,
+    getPostsByIdAction,
     updatePostOnSocialMediaAction
 } from "../../../app/actions/postActions/postActions.js";
 import {RiDeleteBin5Fill} from "react-icons/ri";
@@ -22,10 +22,11 @@ import {useNavigate, useParams} from "react-router-dom";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {
-    checkDimensions, convertSentenceToHashtags,
+    checkDimensions,
+    convertSentenceToHashtags,
     convertToUnixTimestamp,
-    getImagePostList, groupByKey,
-    handleSeparateCaptionHashtag,
+    groupByKey,
+    trimToNull,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
@@ -37,7 +38,7 @@ const UpdatePost = () => {
         const dispatch = useDispatch();
         const navigate = useNavigate();
         const token = getToken();
-        const {batchId} = useParams();
+        const {id} = useParams();
 
         const [aiGenerateImageModal, setAIGenerateImageModal] = useState(false);
         const [aiGenerateCaptionModal, setAIGenerateCaptionModal] = useState(false);
@@ -64,17 +65,18 @@ const UpdatePost = () => {
 
         const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
         const userData = useSelector(state => state.user.userInfoReducer.data);
-        const getPostsByBatchIdList = useSelector(state => state.post.getAllPostsByBatchIdReducer.data);
+        const getPostsByIdData = useSelector(state => state.post.getPostsByIdReducer?.data);
         const loadingUpdatePost = useSelector(state => state.post.updatePostOnSocialMediaReducer.loading);
 
 
-        console.log("--->getPostsByBatchIdList", getPostsByBatchIdList);
+        console.log("--->getPostsByIdData", getPostsByIdData);
         console.log("@@@@ files---->", files)
+        console.log("@@@@ selectedOptions---->", selectedOptions)
 
 
         useEffect(() => {
             return () => {
-                dispatch(resetReducers({sliceNames: ["getAllPostsByBatchIdReducer"]}))
+                dispatch(resetReducers({sliceNames: ["getPostsByIdReducer"]}))
             }
         }, []);
 
@@ -99,34 +101,25 @@ const UpdatePost = () => {
                 setDisableVideo(false);
                 setDisableImage(false);
             }
+            if (files.length > 0) {
+                files.filter((c) => c.mediaType === "IMAGE").length > 0 && setDisableVideo(true);
+                files.filter((c) => c.mediaType === "VIDEO").length > 0 && setDisableImage(true);
+            }
         }, [files])
 
         console.log("postStatus-->", postStatus);
 
         useEffect(() => {
 
-            if (getPostsByBatchIdList && Object.keys(getPostsByBatchIdList).length > 0) {
-                setSelectedOptions(Object.values(getPostsByBatchIdList).flatMap((batch) => batch.map((post) => post.page.pageId)));
-                const postData = Object.values(getPostsByBatchIdList).flatMap((batch) => batch.map((post) => post));
-                const {caption, hashtag} = handleSeparateCaptionHashtag(postData[0].message);
-                setCaption(caption);
-                setHashTag(hashtag);
-                console.log("Object.values(getPostsByBatchIdList)--->", Object.values(getPostsByBatchIdList)[0][0]);
-                setPostStatus(Object.values(getPostsByBatchIdList)[0][0]?.postStatus || "DRAFT")
+            if (getPostsByIdData && Object.keys(getPostsByIdData).length > 0) {
 
-                getImagePostList(postData)
-                    .then((result) => {
-                        return Promise.all(result);
-                    })
-                    .then((results) => {
-                        setFiles(groupByKey([...results]))
-                    })
-                    .catch((error) => {
-                        console.error("Error:", error);
-                    });
-
+                setSelectedOptions(getPostsByIdData?.postPageInfos?.map(c => c.pageId));
+                setCaption(getPostsByIdData?.caption || "");
+                setHashTag(getPostsByIdData?.hashtag || "");
+                setPostStatus(getPostsByIdData?.postStatus)
+                setFiles(getPostsByIdData?.attachments || []);
             }
-        }, [allOptions, getPostsByBatchIdList]);
+        }, [allOptions, getPostsByIdData]);
 
 
         useEffect(() => {
@@ -137,10 +130,10 @@ const UpdatePost = () => {
 
 
         useEffect(() => {
-            if (batchId) {
-                dispatch(getAllPostsByBatchIdAction({batchId: batchId, token: token}))
+            if (id) {
+                dispatch(getPostsByIdAction({id: id, token: token}))
             }
-        }, [batchId]);
+        }, [id]);
 
 
         useEffect(() => {
@@ -155,8 +148,7 @@ const UpdatePost = () => {
             if (socialAccountData) {
                 const optionList = socialAccountData.map((socialAccount) => {
                     return {
-                        group: socialAccount?.provider,
-                        allOptions: socialAccount?.pageAccessToken
+                        group: socialAccount?.provider, allOptions: socialAccount?.pageAccessToken
                     }
                 });
                 setAllOptions(optionList);
@@ -245,7 +237,6 @@ const UpdatePost = () => {
             e.preventDefault();
             const uploadedFiles = Array.from(e.target.files);
             const dimensionPromises = uploadedFiles.map((file) => checkDimensions(file));
-
             Promise.all(dimensionPromises)
                 .then((results) => {
                     setFiles(groupByKey([...files, ...results]))
@@ -262,12 +253,13 @@ const UpdatePost = () => {
 
             Promise.all(dimensionPromises)
                 .then((results) => {
-                    setFiles(groupByKey([...files, ...results]))
+                    setFiles([...results]);
                 })
                 .catch((error) => {
                     console.error("Error checking dimensions:", error);
                 });
         }
+
 
         const updatePost = (e, postStatus, scheduleDate, scheduleTime) => {
                 e.preventDefault();
@@ -285,20 +277,29 @@ const UpdatePost = () => {
                         return;
                     }
                 }
-            console.log("file----->",files)
+                console.log("file----->", files)
 
                 const requestBody = {
                     token: token,
                     customerId: userInfo?.customerId,
-                    batchId: batchId,
+                    id: id,
                     updatePostRequestDTO: {
-                        attachments: files?.map((file) => ({mediaType: selectedFileType, file: file.file ,fileName:file.attachmentReferenceName})),
-                        hashTag: hashTag,
-                        caption: caption,
+                        attachments: files?.map((file) => ({
+                            mediaType: selectedFileType,
+                            file: file?.file || null,
+                            fileName: file.fileName,
+                            id: file?.id || null,
+                            gridFsId: file?.gridFsId || null
+                        })),
+                        hashTag: trimToNull(hashTag),
+                        caption: trimToNull(caption),
                         postStatus: postStatus,
                         boostPost: boostPost,
-                        pageIds: selectedOptions,
-                        scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+                        postPageInfos: selectedOptions?.map((obj) => ({
+                            pageId: obj,
+                            id: getPostsByIdData?.postPageInfos.find(c => c.pageId === obj)?.id || null
+                        })),
+                        scheduledPostDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
                 };
 
@@ -328,7 +329,7 @@ const UpdatePost = () => {
         };
 
         const handleRemoveSelectFile = (attachmentReferenceNameToRemove) => {
-            const updatedFiles = files.filter((file) => file.attachmentReferenceName !== attachmentReferenceNameToRemove);
+            const updatedFiles = files.filter((file) => file.fileName !== attachmentReferenceNameToRemove);
             setFiles(updatedFiles);
         };
 
@@ -417,10 +418,10 @@ const UpdatePost = () => {
                                                                         return (
 
                                                                             <div
-                                                                                className='instagram_outer facebook_outer cmn_social_pages_outer'
+                                                                                className='instagram_outer facebook_outer '
                                                                                 key={index}>
-
                                                                                 <div className="checkbox-button_outer">
+
                                                                                     <input type="checkbox"
                                                                                            className=""
                                                                                            id="choice1-1"
@@ -502,14 +503,17 @@ const UpdatePost = () => {
                                                                     {
                                                                         file.mediaType === "IMAGE" &&
                                                                         <img className={"upload_image me-3"}
-                                                                             src={file.url}
+                                                                             src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
                                                                              alt={`Image ${index}`}/>
                                                                     }
                                                                     {
                                                                         file.mediaType === "VIDEO" &&
                                                                         <video className={"upload_image me-3"}
-                                                                               src={file.url} alt={`Videos ${index}`}
-                                                                               autoPlay={true}/>
+                                                                               src={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
+                                                                               alt={`Videos ${index}`}
+                                                                               autoPlay={true}
+                                                                               muted={true}
+                                                                        />
                                                                     }
                                                                 </div>
                                                                 <button className="delete_upload">
@@ -517,7 +521,7 @@ const UpdatePost = () => {
                                                                         style={{fontSize: '24px'}}
                                                                         onClick={(e) => {
                                                                             e.preventDefault();
-                                                                            handleRemoveSelectFile(file?.attachmentReferenceName);
+                                                                            handleRemoveSelectFile(file?.fileName);
                                                                         }}/>
                                                                 </button>
                                                             </div>
@@ -569,7 +573,6 @@ const UpdatePost = () => {
                                                             </label>
                                                         </div>
                                                     }
-
                                                 </div>
 
                                                 {
@@ -590,8 +593,8 @@ const UpdatePost = () => {
                                                 }
                                             </div>
 
-                                            {/* post caption */
-                                            }
+                                            {/* post caption */}
+
                                             <div className='post_caption_outer media_outer'>
                                                 <div className='caption_header'>
                                                     <h5 className='post_heading create_post_text'>Add
@@ -656,7 +659,6 @@ const UpdatePost = () => {
                                                                                      setReference("Scheduled")
                                                                                      handleSchedulePost(e);
                                                                                  }}
-                                                                                 isDisabled={false}
                                                                                  className={"cmn_bg_btn schedule_btn loading"}
                                                                                  isLoading={reference === "Scheduled" && loadingUpdatePost}/>
 
@@ -665,7 +667,6 @@ const UpdatePost = () => {
                                                                                      setReference("Draft")
                                                                                      handleDraftPost(e);
                                                                                  }}
-                                                                                 isDisabled={postStatus === "SCHEDULED"}
                                                                                  className={"save_btn cmn_bg_btn loading"}
                                                                                  isLoading={reference === "Draft" && loadingUpdatePost}/>
                                                     </div>
@@ -746,7 +747,7 @@ const UpdatePost = () => {
                                         <CommonFeedPreview previewTitle={`Facebook feed Preview`}
                                                            pageName={`Team Musafirrr`}
                                                            userData={userData}
-                                                           files={groupByKey(files) || []}
+                                                           files={files || []}
                                                            selectedFileType={null}
                                                            caption={caption}
                                                            hashTag={hashTag}

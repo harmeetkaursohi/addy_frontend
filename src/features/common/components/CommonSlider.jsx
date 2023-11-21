@@ -13,7 +13,7 @@ const CommonSlider = ({
                           hashTag,
                           showThumbnail = false,
                           viewSimilarToSocialMedia = true,
-                          height="350px"
+                          height = "350px"
                       }) => {
 
     const settings = {
@@ -25,7 +25,6 @@ const CommonSlider = ({
         slidesToScroll: 1
     };
 
-    console.log("files--->",files);
     return (
         <>
             {viewSimilarToSocialMedia ?
@@ -39,7 +38,7 @@ const CommonSlider = ({
 
                             files?.map((file, index) => {
                                 return (<div key={index}>
-                                    <img src={file?.url}
+                                    <img src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
                                          alt={`Image ${index}`} className='post_img'/>
                                 </div>)
                             })
@@ -47,14 +46,13 @@ const CommonSlider = ({
 
                         {
                             (selectedFileType === "VIDEO" || files.every(file => file.mediaType === "VIDEO")) &&
-
                             files?.map((file, index) => (
                                 <div key={index}>
                                     <ReactPlayer
                                         height={"100%"}
                                         width={"100%"}
                                         className='post_img'
-                                        url={file?.url}
+                                        url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
                                         controls={true}
                                     />
                                 </div>
@@ -81,13 +79,13 @@ const CommonSlider = ({
                             Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
                                 <div key={index}>
                                     {file?.mediaType === "IMAGE" || showThumbnail ?
-                                        <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
+                                        <img src={"data:image/jpeg; base64,"+ file?.imageURL} alt={`Image ${index}`} className='post_img'/>
                                         :
                                         <ReactPlayer
                                             height={height}
                                             width={"100%"}
                                             className=''
-                                            url={file.sourceURL}
+                                            url={`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
                                             controls={true}
                                         />
 

@@ -47,6 +47,8 @@ overflow-y:scroll;
     inset: unset !important;
     transform: unset !important;
     position: relative !important;
+    overflow-y: scroll;
+    max-height: 360px;
 }
 .createPost_outer button.tabs_grid {
     display: flex;

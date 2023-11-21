@@ -25,7 +25,6 @@ import {
 } from "../../../utils/commonUtils";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
-import ReactPlayer from "react-player";
 
 const CreatePost = () => {
 
@@ -277,17 +276,16 @@ const CreatePost = () => {
                 token: token,
                 customerId: userInfo?.customerId,
                 postRequestDto: {
-                    attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file,fileName:file?.attachmentReferenceName})),
+                    attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file})),
                     hashTag: hashTag,
                     caption: caption,
                     postStatus: postStatus,
                     boostPost: boostPost,
-                    pageIds: selectedOptionLabels?.map((obj) => obj.id),
-                    scheduleDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+                    postPageInfos: selectedOptionLabels?.map((obj) => ({pageId: obj.id})),
+                    scheduledPostDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                 },
             };
 
-            console.log("requestBody---->", requestBody);
             dispatch(createFacebookPostAction(requestBody)).then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     showSuccessToast("Post has uploaded successfully");
@@ -407,7 +405,7 @@ const CreatePost = () => {
                                                                     return (
 
                                                                         <div
-                                                                            className='instagram_outer facebook_outer cmn_social_pages_outer'
+                                                                            className='instagram_outer facebook_outer '
                                                                             key={index}>
 
                                                                             <div className="checkbox-button_outer">
