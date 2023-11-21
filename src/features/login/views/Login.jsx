@@ -1,5 +1,4 @@
 import addyads_img from '../../../images/addylogo.png'
-import girl_img from '../../../images/girl.png'
 import google_img from '../../../images/Google_img.svg'
 import fbImg from "../../../images/fb.svg"
 import {Link, useNavigate} from "react-router-dom"
@@ -9,7 +8,7 @@ import {useFormik} from 'formik';
 import {useDispatch} from "react-redux";
 import {loginUser} from "../../../app/actions/userActions/userActions.js";
 import {validationSchemas} from "../../../utils/commonUtils.js";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {showErrorToast} from "../../common/components/Toast";
 import Frame from "../../../images/Frame.svg";
 
@@ -18,6 +17,7 @@ const Login = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         document.title = 'Login';
@@ -40,6 +40,10 @@ const Login = () => {
             });
         },
     });
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    }
 
 
     return (
@@ -95,22 +99,36 @@ const Login = () => {
 
                                             </div>
 
-                                            <div className='form-group'>
+                                            
+                                            <div className='form-group '>
                                                 <label>{jsondata.password}</label>
                                                 <input
                                                     className="form-control mt-1"
-                                                    type='password'
+                                                    type={showPassword ? 'text' : 'password'}
                                                     placeholder='Password'
                                                     name="password"
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.password}
                                                 />
+                                                <span className="password-toggle" onClick={togglePasswordVisibility}>
+                                            {showPassword ? (
+                                                <h2 className="openEye">
+                                                    <i className="fa-solid fa-eye"></i>
+                                                </h2>
+                                            ) : (
+                                                <h2 className="closeEyeIcon">
+                                                    <i className="fa fa-eye-slash" aria-hidden="true"/>
+                                                </h2>
+                                            )}
+                                            </span>
+
                                                 {formik.touched.password && formik.errors.password ? (
-                                                    <p className="error_message">{formik.errors.password}</p>
-                                                ) : null}
+                                                    <p className="error_message">{formik.errors.password}</p>) : null}
 
                                             </div>
+
+
 
                                             <div className='rememberPass_outer mt-2'>
 

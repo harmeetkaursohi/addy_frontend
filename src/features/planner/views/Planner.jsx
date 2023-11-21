@@ -31,7 +31,7 @@ const Planner = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const calendarRef = useRef(null);
-    const [baseSearchQuery, setBaseSearchQuery] = useState({postStatus:["SCHEDULED","PUBLISHED"]});
+    const [baseSearchQuery, setBaseSearchQuery] = useState({postStatus: ["SCHEDULED", "PUBLISHED"]});
     const [isDraftPost, setDraftPost] = useState(false);
     const [showMorePlannerModel, setShowMorePlannerModel] = useState(false);
     const [plannerPosts, setPlannerPosts] = useState([]);
@@ -53,8 +53,8 @@ const Planner = () => {
 
     useEffect(() => {
         const decodeJwt = decodeJwtToken(token);
-        dispatch(getAllPostsForPlannerAction({customerId: decodeJwt.customerId, token: token, query: baseSearchQuery}));
-        dispatch(getPlannerPostCountAction({customerId: decodeJwt.customerId, token: token, query: baseSearchQuery}));
+        dispatch(getAllPostsForPlannerAction({token: token, query: {...baseSearchQuery, customerId: decodeJwt.customerId}}));
+        dispatch(getPlannerPostCountAction({token: token, query: {...baseSearchQuery, customerId: decodeJwt.customerId}}));
     }, []);
 
 
@@ -71,7 +71,6 @@ const Planner = () => {
     }, [getAllPlannerPostsData]);
 
 
-
     useEffect(() => {
 
         if (Object.keys(baseSearchQuery).length > 0) {
@@ -79,7 +78,7 @@ const Planner = () => {
             const decodeJwt = decodeJwtToken(token);
 
             if (isDraftPost) {
-                dispatch(getAllSocialMediaPostsByCriteria({token: token, query:{postStatus:["DRAFT"]} }));
+                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {postStatus: ["DRAFT"]}}));
             } else {
                 dispatch(getAllPostsForPlannerAction({
                     customerId: decodeJwt.customerId,
@@ -103,7 +102,7 @@ const Planner = () => {
     const renderCalendarCards = ({event}) => {
         return (
             <div className={"cal_Div w-100 test"}
-                 style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate,new Date()) ? "" : "none"}}>
+                 style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
 
                 <div className="w-100 p-0 calendar_card">
 
@@ -186,7 +185,6 @@ const Planner = () => {
         setShowMorePlannerModel(true);
 
     };
-
 
 
     return (
