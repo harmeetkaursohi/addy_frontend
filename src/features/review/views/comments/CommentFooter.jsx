@@ -1,19 +1,19 @@
 import {TbShare3} from "react-icons/tb";
 import {AiFillHeart, AiOutlineHeart} from "react-icons/ai";
-import {getFormattedDate, isNullOrEmpty} from "../../../utils/commonUtils";
+import {getFormattedDate, isNullOrEmpty} from "../../../../utils/commonUtils";
 import EmojiPicker, {EmojiStyle} from "emoji-picker-react";
 import {
     addCommentOnPostAction,
     dislikePostAction, getCommentsOnPostAction,
     getPostPageInfoAction,
     likePostAction
-} from "../../../app/actions/postActions/postActions";
-import {showErrorToast} from "../../common/components/Toast";
+} from "../../../../app/actions/postActions/postActions";
+import {showErrorToast} from "../../../common/components/Toast";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import Loader from "../../loader/Loader";
+import Loader from "../../../loader/Loader";
 import {RotatingLines} from "react-loader-spinner";
-import CommonLoader from "../../common/components/CommonLoader";
+import CommonLoader from "../../../common/components/CommonLoader";
 
 const CommentFooter = ({postData, postPageData}) => {
     const [comment, setComment] = useState("");

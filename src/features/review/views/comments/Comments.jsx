@@ -1,21 +1,21 @@
-import img from "../../../images/draft.png";
+import img from "../../../../images/draft.png";
 import {
     getCommentCreationTime,
     getTagCommentsFormat, getUpdateCommentMessage,
     handleShowCommentReplies,
     handleShowCommentReplyBox, isNullOrEmpty, isReplyCommentEmpty
-} from "../../../utils/commonUtils";
+} from "../../../../utils/commonUtils";
 import {useEffect, useState} from "react";
 import {
     addCommentOnPostAction, deleteCommentsOnPostAction, dislikePostAction,
     getCommentsOnPostAction, getPostPageInfoAction,
     likePostAction, updateCommentsOnPostAction
-} from "../../../app/actions/postActions/postActions";
+} from "../../../../app/actions/postActions/postActions";
 import {useDispatch, useSelector} from "react-redux";
-import CommonLoader from "../../common/components/CommonLoader";
-import CommonSlider from "../../common/components/CommonSlider";
+import CommonLoader from "../../../common/components/CommonLoader";
+import CommonSlider from "../../../common/components/CommonSlider";
 import {LiaThumbsUpSolid} from "react-icons/lia";
-import {showErrorToast} from "../../common/components/Toast";
+import {showErrorToast} from "../../../common/components/Toast";
 import {BiSolidSend} from "react-icons/bi";
 import {PiDotsThreeVerticalBold} from "react-icons/pi";
 import EmojiPicker, {EmojiStyle} from "emoji-picker-react";

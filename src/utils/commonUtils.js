@@ -664,3 +664,6 @@ export const isNullOrEmpty = (value) => {
 export const isReplyCommentEmpty = (replyComment) => {
     return replyComment?.message === null || replyComment?.message === undefined || replyComment?.message?.trim() === "" || replyComment?.message?.trim() === replyComment?.mentionedPageName
 }
+export const isErrorInInstagramMention=(socialMediaType,error)=>{
+    return socialMediaType==="INSTAGRAM" && error?.response?.data?.error?.code===20 && error?.response?.data?.error?.error_subcode===1772179
+}

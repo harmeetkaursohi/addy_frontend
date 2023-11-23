@@ -22,12 +22,12 @@ import {
 import {showErrorToast} from "../../../common/components/Toast";
 import {AiFillHeart, AiOutlineHeart} from "react-icons/ai";
 import CommonSlider from "../../../common/components/CommonSlider";
-import Comments from "../Comments";
+import Comments from "../comments/Comments";
 import EmojiPicker from "emoji-picker-react";
 import {EmojiStyle} from "emoji-picker-react";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
-import CommentFooter from "../CommentFooter";
-import InstagramCommentsSection from "../InstagramCommentsSection";
+import CommentFooter from "../comments/CommentFooter";
+import InstagramCommentsSection from "../comments/InstagramCommentsSection";
 // import io from 'socket.io-client';
 
 

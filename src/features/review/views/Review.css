@@ -21,6 +21,9 @@
 .z-index-1{
     z-index: 1;
 }
+span.highlight {
+    color: #0064e0;
+}
 
 .disable-comment {
     font-size: 11px;

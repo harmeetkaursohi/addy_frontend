@@ -1,13 +1,11 @@
-import img from "../../../images/draft.png";
+import img from "../../../../images/draft.png";
 import {Dropdown} from "react-bootstrap";
 import {PiDotsThreeVerticalBold} from "react-icons/pi";
-import CommonSlider from "../../common/components/CommonSlider";
 import {
     getCommentCreationTime,
     handleShowCommentReplies,
-    handleShowCommentReplyBox,
-    isNullOrEmpty, isReplyCommentEmpty
-} from "../../../utils/commonUtils";
+    isNullOrEmpty,
+} from "../../../../utils/commonUtils";
 import {LiaThumbsUpSolid} from "react-icons/lia";
 import {BiSolidSend} from "react-icons/bi";
 import EmojiPicker, {EmojiStyle} from "emoji-picker-react";
@@ -15,11 +13,13 @@ import {
     deleteCommentsOnPostAction,
     getPostPageInfoAction,
     replyCommentOnPostAction
-} from "../../../app/actions/postActions/postActions";
+} from "../../../../app/actions/postActions/postActions";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import default_user_icon from "../../../images/default_user_icon.svg"
-import Skeleton from "../../loader/skeletonEffect/Skeleton";
+import default_user_icon from "../../../../images/default_user_icon.svg"
+import Skeleton from "../../../loader/skeletonEffect/Skeleton";
+import {RotatingLines} from "react-loader-spinner";
+import CommentText from "./CommentText";
 
 const InstagramCommentsSection = ({postData, postPageData}) => {
     const dispatch = useDispatch();
@@ -37,7 +37,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
 
     useEffect(() => {
         if (postPageData) {
-            setShowReplies(showReplies.length===0?new Array(postPageData?.comments?.data?.length).fill(false):[...showReplies])
+            setShowReplies(showReplies.length === 0 ? new Array(postPageData?.comments?.data?.length).fill(false) : [...showReplies])
         }
     }, [postPageData])
 
@@ -68,14 +68,15 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
         })
     }
 
+
     const handleReplyCommentOnPost = (e) => {
         e.preventDefault();
         const requestBody = {
+            ...baseQuery,
             id: reply.parentId,
             data: {
                 message: reply.message
             },
-            pageAccessToken: postData.page.access_token
         }
         dispatch(replyCommentOnPostAction(requestBody)).then(res => {
             if (res.meta.requestStatus === "fulfilled") {
@@ -106,14 +107,14 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                 <div className="user_card">
                                     <div className="user_image">
                                         <img
-                                            src={postData?.page?.pageId === comment?.user?.id ? postData?.page?.imageUrl : default_user_icon}
+                                            src={postData?.page?.pageId === comment?.from?.id ? comment?.user?.profile_picture_url : default_user_icon}
                                             alt=""/>
                                     </div>
                                     <div className="user">
                                         <>
                                             <div className={"user_name_edit_btn_outer"}>
                                                 <p className="user_name">
-                                                    {comment?.username}
+                                                    {comment?.from?.username}
                                                 </p>
                                                 <Dropdown>
                                                     <Dropdown.Toggle className={"comment-edit-del-button"}
@@ -131,7 +132,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
 
 
                                             <div className={"comment_message"}>
-                                                {comment?.text}
+                                                <CommentText comment={comment?.text} className={"highlight cursor-pointer"}/>
                                             </div>
                                             <div
                                                 className="user_impressions d-flex gap-3 mt-2 mb-2">
@@ -156,7 +157,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                        setReplyToComment(comment)
                                                        setReply({
                                                            parentId: comment.id,
-                                                           message: ""
+                                                           message: "@" + comment.from.username + " "
                                                        })
                                                    }}>Reply</p>
                                             </div>
@@ -182,7 +183,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                                         <div className="user_card">
                                                                             <div className="user_image">
                                                                                 <img
-                                                                                    src={postData?.page?.pageId === childComment?.user?.id ? postData?.page?.imageUrl : default_user_icon}
+                                                                                    src={postData?.page?.pageId === childComment?.from?.id ? postData?.page?.imageUrl : default_user_icon}
                                                                                     alt=""/>
                                                                             </div>
                                                                             <div className="user">
@@ -190,7 +191,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                                                     <div
                                                                                         className={"user_name_edit_btn_outer"}>
                                                                                         <p className="user_name">
-                                                                                            {childComment?.username}
+                                                                                            {childComment?.from?.username}
                                                                                         </p>
                                                                                         <Dropdown>
                                                                                             <Dropdown.Toggle
@@ -211,7 +212,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                                                     </div>
 
                                                                                     <p>
-                                                                                        {childComment?.text}
+                                                                                        <CommentText comment={childComment?.text} className={"highlight cursor-pointer"}/>
                                                                                     </p>
 
                                                                                     <div
@@ -236,7 +237,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                                                                setReplyToComment(childComment)
                                                                                                setReply({
                                                                                                    parentId: childComment.parent_id,
-                                                                                                   message: ""
+                                                                                                   message: "@" + childComment.from.username + " "
                                                                                                })
 
                                                                                            }}>Reply</p>
@@ -273,7 +274,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                                                                    onClick={() => {
                                                                                                        setShowEmojiPicker(false)
                                                                                                    }}
-                                                                                                   className="form-control "
+                                                                                                   className={replyCommentOnPostData?.loading?"form-control opacity-50":"form-control "}
                                                                                                    onChange={(e) => {
                                                                                                        setShowEmojiPicker(false)
                                                                                                        e.preventDefault();
@@ -290,9 +291,19 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                                                                     !isNullOrEmpty(reply?.message) && handleReplyCommentOnPost(e)
 
                                                                                                 }}
-                                                                                                className={isNullOrEmpty(reply?.message) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
-                                                                                                <BiSolidSend
-                                                                                                    className={"cursor-pointer update_comment_icon"}/>
+                                                                                                className={replyCommentOnPostData?.loading ||isNullOrEmpty(reply?.message) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
+                                                                                                {
+                                                                                                    replyCommentOnPostData?.loading ?
+                                                                                                        <RotatingLines
+                                                                                                            strokeColor="white"
+                                                                                                            strokeWidth="5"
+                                                                                                            animationDuration="0.75"
+                                                                                                            width="20"
+                                                                                                            visible={true}></RotatingLines> :
+                                                                                                        <BiSolidSend
+                                                                                                            className={"cursor-pointer update_comment_icon"}/>
+                                                                                                }
+
                                                                                             </button>
 
                                                                                             <div>
@@ -350,7 +361,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                        onClick={() => {
                                                            setShowEmojiPicker(false)
                                                        }}
-                                                       className="form-control "
+                                                       className={replyCommentOnPostData?.loading ? "form-control opacity-50" : "form-control "}
                                                        onChange={(e) => {
                                                            e.preventDefault();
                                                            setShowEmojiPicker(false)
@@ -363,8 +374,16 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                         setShowEmojiPicker(false)
                                                         !isNullOrEmpty(reply.message) && handleReplyCommentOnPost(e);
                                                     }}
-                                                    className={isNullOrEmpty(reply.message) ? "view_post_btn cmn_bg_btn px-2 opacity-50" : "view_post_btn cmn_bg_btn px-2"}>Submit
+                                                    className={replyCommentOnPostData?.loading || isNullOrEmpty(reply.message) ? "view_post_btn cmn_bg_btn px-2 opacity-50" : "view_post_btn cmn_bg_btn px-2"}>{
+                                                    replyCommentOnPostData?.loading ?
+                                                        <RotatingLines strokeColor="white"
+                                                                       strokeWidth="5"
+                                                                       animationDuration="0.75" width="20"
+                                                                       visible={true}></RotatingLines>
+                                                        : "Submit"
+                                                }
                                                 </button>
+
                                                 <div>
                                                     <div className={"reply-emoji-picker-outer"}>
                                                         {
