@@ -14,7 +14,7 @@ import {
     getPostsPageAction,
     getAllSocialMediaPostsByCriteria,
     getPostPageInfoAction,
-    likePostAction,
+    likePostAction,replyCommentOnPostAction,
     dislikePostAction, addCommentOnPostAction, getCommentsOnPostAction,deleteCommentsOnPostAction,updateCommentsOnPostAction
 } from "../../actions/postActions/postActions.js";
 
@@ -42,6 +42,7 @@ const postSlice = createSlice({
         getCommentsOnPostActionReducer: {loading: false},
         deleteCommentsOnPostActionReducer: {loading: false},
         updateCommentsOnPostActionReducer:{loading: false},
+        replyCommentOnPostActionReducer:{loading: false},
     },
 
     reducers: {
@@ -268,6 +269,16 @@ const postSlice = createSlice({
         },
         [createFacebookPostAction.rejected]: (state) => {
             state.createFacebookPostActionReducer = {loading: false}
+        },
+
+        [replyCommentOnPostAction.pending]: (state) => {
+            state.replyCommentOnPostActionReducer = {loading: true}
+        },
+        [replyCommentOnPostAction.fulfilled]: (state,action) => {
+            state.replyCommentOnPostActionReducer = {loading: false,data: action.payload}
+        },
+        [replyCommentOnPostAction.rejected]: (state) => {
+            state.replyCommentOnPostActionReducer = {loading: false}
         },
 
 

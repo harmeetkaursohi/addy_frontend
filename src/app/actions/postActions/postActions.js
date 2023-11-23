@@ -8,7 +8,8 @@ import {UpdateCommentFailedMsg} from "../../../utils/contantData";
 export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
 
-        case "FACEBOOK": {
+        case "FACEBOOK":
+        case  "INSTAGRAM": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?&access_token=${data?.pageAccessToken}`;
             return baseAxios.post(apiUrl, data?.data).then((response) => {
                 return response.data;
@@ -16,9 +17,6 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.message);
             });
-
-        }
-        case  "INSTAGRAM": {
 
         }
         case  "LINKEDIN": {
@@ -29,6 +27,17 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
         }
 
     }
+
+});
+export  const replyCommentOnPostAction=createAsyncThunk('post/getCommentsOnPostAction', async (data, thunkAPI) => {
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/replies?access_token=${data?.pageAccessToken}`;
+    return baseAxios.post(apiUrl, data?.data).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.message);
+    });
+
 
 });
 export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostAction', async (data, thunkAPI) => {
@@ -60,6 +69,7 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
 });
 export const deleteCommentsOnPostAction = createAsyncThunk('post/deleteCommentsOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
+        case  "INSTAGRAM":
         case "FACEBOOK": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}?access_token=${data?.pageAccessToken}`;
             return baseAxios.delete(apiUrl, null).then((response) => {
@@ -68,10 +78,7 @@ export const deleteCommentsOnPostAction = createAsyncThunk('post/deleteCommentsO
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.message);
             });
-
-        }
-        case  "INSTAGRAM": {
-
+            break;
         }
         case  "LINKEDIN": {
 
@@ -134,14 +141,38 @@ export const likePostAction = createAsyncThunk('post/likePostAction', async (dat
 
 
 export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoAction', async (data, thunkAPI) => {
-    const postIds = data.postIds.map(id => id).join(',');
-    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,attachments,created_time,is_published,likes.summary(true),comments.summary(true),shares`;
-    return await baseAxios.get(apiUrl).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
+    switch (data?.socialMediaType) {
+
+        case "FACEBOOK": {
+            const postIds = data.postIds.map(id => id).join(',');
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,attachments,created_time,is_published,likes.summary(true),comments.summary(true),shares`;
+            return await baseAxios.get(apiUrl).then(res => {
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+            break;
+        }
+        case  "INSTAGRAM": {
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.postIds[0]}?access_token=${data?.pageAccessToken}&fields=id,caption,is_comment_enabled,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url},comments{id,text,timestamp,like_count,user{id,username,profile_picture_url},username,replies{id,text,timestamp,username,like_count,parent_id,user{id,profile_picture_url,username}}}`;
+            return await baseAxios.get(apiUrl).then(res => {
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+            break;
+        }
+        case  "LINKEDIN": {
+
+        }
+        default : {
+
+        }
+
+    }
+
 });
 
 export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
@@ -186,7 +217,7 @@ export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatc
 });
 
 
-export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOnSocialMediaAction', async (data, thunkAPI) => {
+    export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOnSocialMediaAction', async (data, thunkAPI) => {
 
     const formData = new FormData();
 

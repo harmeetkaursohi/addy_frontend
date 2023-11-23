@@ -20,6 +20,9 @@ const Review = () => {
     const [resetData, isResetData] = useState(false);
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
+    console.log("postPageInfoData---->",postPageInfoData)
+    console.log("results---->",results)
+    console.log("postData---->",postData)
 
     useEffect(()=>{
         if(resetData){
@@ -34,7 +37,8 @@ const Review = () => {
         if (postData && postData !== undefined) {
             const requestBody = {
                 postIds: [postData?.id],
-                pageAccessToken: postData?.page?.access_token
+                pageAccessToken: postData?.page?.access_token,
+                socialMediaType:postData?.socialMediaType
             }
             dispatch(getPostPageInfoAction(requestBody));
         }

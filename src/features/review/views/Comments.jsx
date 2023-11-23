@@ -115,6 +115,12 @@ const Comments = ({postData}) => {
         dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
             if (response.meta.requestStatus === "fulfilled") {
                 handleGetComments(postData?.id)
+                const requestBody={
+                    postIds: [postData?.id],
+                    pageAccessToken: postData?.page?.access_token,
+                    socialMediaType: postData?.socialMediaType
+                }
+                dispatch(getPostPageInfoAction(requestBody))
             }
         })
     }
