@@ -17,24 +17,23 @@ import Swal from "sweetalert2";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
 import {getAllFacebookPages, getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
+import {Link} from "react-router-dom";
 
 const SocialAccounts = () => {
     const dispatch = useDispatch();
     const token = getToken();
+    const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState([]);
     const [facebookDropDown, setFacebookDropDown] = useState(false);
     const [showFacebookModal, setShowFacebookModal] = useState(false);
+
     const facebookPageLoading = useSelector(state => state.facebook.getFacebookPageReducer.loading);
     const facebookConnectedPages = useSelector(state => state.facebook.getFacebookConnectedPagesReducer.facebookConnectedPages);
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
 
-    const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState([]);
-
-
-    useEffect(() => {
+        useEffect(() => {
         if (facebookConnectedPages && Array.isArray(facebookConnectedPages)) {
-
             const newIds = facebookConnectedPages.map(c => c.id);
             const objectsToAdd = facebookConnectedPages.filter(obj => !currentConnectedFacebookPages.some(existingObj => existingObj.id === obj.id));
             const objectsToRemove = currentConnectedFacebookPages.filter(obj => !newIds.includes(obj.id));
@@ -49,6 +48,7 @@ const SocialAccounts = () => {
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
         }
     }, [token])
+
     useEffect(() => {
         if ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
             let faceBookSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK');
@@ -62,6 +62,7 @@ const SocialAccounts = () => {
         }
 
     }, [getAllConnectedSocialAccountData]);
+
     const connectSocialMediaAccountToCustomer = (object) => {
         object.then((res) => {
             dispatch(socialAccountConnectActions(res)).then(() => {
@@ -75,6 +76,7 @@ const SocialAccounts = () => {
             showErrorToast(error.response.data.message);
         })
     }
+
     const disConnectSocialMediaAccountToCustomer = () => {
         Swal.fire({
             icon: 'warning',
@@ -127,9 +129,29 @@ const SocialAccounts = () => {
         });
 
     }
+
+    const handleLoginClick = () => {
+        // Redirect the user to the Instagram login page
+        window.location.href = `https://www.facebook.com/v17.0/dialog/oauth?client_id=599924718880412&display=page&extras={'setup':{'channel':'IG_API_ONBOARDING'}}&response_type=token&scope=instagram_basic,instagram_content_publish,instagram_manage_comments,instagram_manage_insights,pages_show_list,pages_read_engagement&redirect_uri=https://9788-103-36-77-54.ngrok-free.app/auth-redirect/instagram`;
+    };
+
     const facebook = () => {
         setShowFacebookModal(true)
     }
+
+    const commonButtonStyle = {
+        borderRadius: '5px',
+        background: "#F07C33",
+        boxShadow: "unset",
+        fontSize: "12px",
+        color: "#fff",
+        border: '1px solid #F07C33',
+        height: "39px",
+        minWidth: "111px",
+        margin: "10px",
+        width: "11px",
+    };
+
     return (
         <div className="col-lg-5 col-xl-4 col-sm-12">
 
@@ -168,18 +190,7 @@ const SocialAccounts = () => {
 
                                     <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
                                                          icon={() => null} preventActiveStyles={true}
-                                                         style={{
-                                                             borderRadius: '5px',
-                                                             background: "#F07C33",
-                                                             boxShadow: "unset",
-                                                             fontSize: "12px",
-                                                             color: "#fff",
-                                                             border: '1px solid #F07C33',
-                                                             height: "39px",
-                                                             minWidth: "111px",
-                                                             margin: "10px",
-                                                             width: "11px"
-                                                         }}/>
+                                                         style={commonButtonStyle}/>
                                 </LoginSocialFacebook>
 
                             </div>
@@ -202,8 +213,7 @@ const SocialAccounts = () => {
                                                 //     setFacebookDropDown(!facebookDropDown)}
                                                  onClick={() => {
                                                      console.log("asdasdasdasdasd")
-                                                 }
-                                                 }
+                                                 }}
                                             >
                                                 <path id="Icon"
                                                       d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
@@ -279,35 +289,7 @@ const SocialAccounts = () => {
                         </div>
                     </div>
 
-                    <LoginSocialInstagram
-                        client_id={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_ID}`}
-                        client_secret={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_SECRET}`}
-                        scope={`${import.meta.env.VITE_APP_INSTAGRAM_SCOPE}`}
-                        redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
-                        onResolve={(response) => {
-                            console.log("repsonse----->",response);
-                        }}
-                        onReject={(error) => {
-                            console.log("error----->",error);
-                        }}
-                    >
-                        <InstagramLoginButton text={"Connect"}
-                                              className={"facebook_connect"}
-                                              icon={() => null}
-                                              preventActiveStyles={true}
-                                              style={{
-                                                  borderRadius: '5px',
-                                                  background: "#F07C33",
-                                                  boxShadow: "unset",
-                                                  fontSize: "12px",
-                                                  color: "#fff",
-                                                  border: '1px solid #F07C33',
-                                                  height: "39px",
-                                                  minWidth: "111px",
-                                                  margin: "10px",
-                                                  width: "11px"
-                                              }}/>
-                    </LoginSocialInstagram>
+                    <button style={commonButtonStyle} onClick={handleLoginClick}>Connect</button>
 
                 </div>
 
