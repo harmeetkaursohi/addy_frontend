@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import {SocialAccountProvider} from "./contantData.js";
-import {exchangeForLongLivedToken} from "../services/facebookService.js";
+import {exchangeForLongLivedToken, getAllFacebookConnectedSocialMediaAccounts} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
 import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/facebookActions/facebookActions.js";
 import fb from "../images/fb.svg";
@@ -51,23 +51,33 @@ export const validationSchemas = {
 };
 
 
-export const computeAndSocialAccountJSONForFacebook = async (jsonObj) => {
-
+export const computeAndSocialAccountJSONForFacebook = async (jsonObj,tokenProvider) => {
     const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.accessToken);
+    if(tokenProvider===SocialAccountProvider.INSTAGRAM){
+        const facebookConnectedSocialMediaAccountsData=await getAllFacebookConnectedSocialMediaAccounts(longLivedToken);
+        const instagramBusinessAccount=facebookConnectedSocialMediaAccountsData?.filter(accountData=>{
+            return accountData.hasOwnProperty("instagram_business_account")
+        })
+        if(isNullOrEmpty(instagramBusinessAccount)){
+            return null;
+        }
+    }
     const token = localStorage.getItem("token");
     const decodeJwt = decodeJwtToken(token);
-
     return {
         customerId: decodeJwt.customerId, token: token, socialAccountData: {
             name: jsonObj?.data?.name || null,
             email: jsonObj?.data?.email || null,
             imageUrl: jsonObj?.data?.picture?.data?.url || null,
-            provider: getKeyFromValueOfObject(SocialAccountProvider, jsonObj?.provider) || null,
+            provider: getKeyFromValueOfObject(SocialAccountProvider, tokenProvider) || null,
             providerId: jsonObj?.data?.userID || null,
             accessToken: longLivedToken || null,
             pageAccessToken: []
         }
     }
+
+
+
 
 }
 
@@ -90,16 +100,17 @@ export const cleanAndValidateRequestURL = (baseUrl, path, fields, token) => {
 }
 
 
-export const facebookPageConnectAction = (dispatch, token, facebookData) => {
+export const facebookPageConnectAction = (dispatch, token, facebookData,socialMediaAccountInfo) => {
     const decodeJwt = decodeJwtToken(token);
     if (facebookData) {
         const requestBody = {
             customerId: decodeJwt?.customerId, pageAccessTokenDTO: {
                 pageId: facebookData?.id,
                 name: facebookData?.name,
-                imageUrl: facebookData.picture?.data?.url,
+                imageUrl:socialMediaAccountInfo?.provider==="FACEBOOK"? facebookData.picture?.data?.url : facebookData?.profile_picture_url,
                 about: facebookData?.about,
-                access_token: facebookData?.access_token
+                access_token:socialMediaAccountInfo?.provider==="FACEBOOK"?facebookData?.access_token: socialMediaAccountInfo.accessToken,
+                socialMediaAccountId:socialMediaAccountInfo.id
             }, token: token
         }
         dispatch(facebookPageConnect(requestBody)).then((response) => {
@@ -659,4 +670,15 @@ export const isNullOrEmpty = (value) => {
 }
 export const isReplyCommentEmpty = (replyComment) => {
     return replyComment?.message === null || replyComment?.message === undefined || replyComment?.message?.trim() === "" || replyComment?.message?.trim() === replyComment?.mentionedPageName
+}
+export const getInstagramBusinessAccounts = (accountsData) => {
+    const businessAccounts=accountsData?.filter(data=>{
+        return data.hasOwnProperty("instagram_business_account")
+    })
+    if(isNullOrEmpty(businessAccounts)){
+        return [];
+    }
+    return businessAccounts?.map(data=>{
+        return data["instagram_business_account"]
+    })
 }

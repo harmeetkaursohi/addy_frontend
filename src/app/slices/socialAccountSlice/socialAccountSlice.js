@@ -6,7 +6,7 @@ import {
     socialAccountConnectActions,
     getAllByCustomerIdAction,
     getSocialMediaReportByProviderTypeAction,
-    getSocialMediaGraphByProviderTypeAction
+    getSocialMediaGraphByProviderTypeAction,getAllInstagramBusinessAccounts
 } from "../../actions/socialAccountActions/socialAccountActions.js";
 
 
@@ -20,6 +20,8 @@ const socialAccountSlice = createSlice({
         getAllByCustomerIdReducer: {loading: false},
         getSocialMediaReportByProviderTypeReducer: {loading: false},
         getSocialMediaGraphByProviderTypeReducer: {loading: false},
+        getAllInstagramBusinessAccountsReducer: {loading: false},
+
     },
     reducers: {
         resetSocialAccountReducer: (state) => {
@@ -105,6 +107,15 @@ const socialAccountSlice = createSlice({
         },
         [getAllByCustomerIdAction.rejected]: (state) => {
             state.getAllByCustomerIdReducer = {loading: false}
+        },
+        [getAllInstagramBusinessAccounts.pending]: (state) => {
+            state.getAllInstagramBusinessAccountsReducer = {loading: true}
+        },
+        [getAllInstagramBusinessAccounts.fulfilled]: (state, action) => {
+            state.getAllInstagramBusinessAccountsReducer = {loading: false, data: action.payload}
+        },
+        [getAllInstagramBusinessAccounts.rejected]: (state) => {
+            state.getAllInstagramBusinessAccountsReducer = {loading: false}
         },
 
     }
