@@ -1,6 +1,5 @@
 import {useEffect} from 'react';
-import {useLocation, Navigate, useParams} from 'react-router-dom';
-import {getToken} from '../../app/auth/auth';
+import {useLocation, useParams} from 'react-router-dom';
 
 const Oauth2RedirectComponent = () => {
     const location = useLocation();
@@ -15,10 +14,7 @@ const Oauth2RedirectComponent = () => {
     };
 
     const token = getUrlParameter('token');
-    const jwtToken = getUrlParameter('access_token');
     const error = getUrlParameter('error');
-   // console.log("jwtToken", jwtToken)
-    console.log("token----->", token);
 
     useEffect(() => {
         if (token) {
@@ -29,27 +25,6 @@ const Oauth2RedirectComponent = () => {
             window.location.href="/login";
         }
     }, []);
-
-    useEffect(() => {
-        const jwtToken = getAccessTokenFromHash();
-        console.log("jwtToken", jwtToken);
-    }, [location.search]);
-
-
-    const getAccessTokenFromHash = () => {
-        const hash = location.hash;
-        const tokenIndex = hash.indexOf('access_token=');
-
-        if (tokenIndex !== -1) {
-            const tokenStart = tokenIndex + 'access_token='.length;
-            const tokenEnd = hash.indexOf('&', tokenStart);
-            const jwtToken = hash.substring(tokenStart, tokenEnd !== -1 ? tokenEnd : undefined);
-
-            return jwtToken;
-        }
-
-        return null;
-    };
 
 
     return (
