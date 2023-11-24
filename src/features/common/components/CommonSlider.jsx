@@ -13,6 +13,7 @@ const CommonSlider = ({
                           hashTag,
                           showThumbnail = false,
                           viewSimilarToSocialMedia = true,
+                          isPublished = false,
                           height = "350px"
                       }) => {
 
@@ -24,6 +25,8 @@ const CommonSlider = ({
         slidesToShow: 1,
         slidesToScroll: 1
     };
+
+    console.log("files=====>", files);
 
     return (
         <>
@@ -79,15 +82,15 @@ const CommonSlider = ({
                             Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
                                 <div key={index}>
                                     {file?.mediaType === "IMAGE" || showThumbnail ?
-                                        // <img src={"data:image/jpeg; base64,"+ file?.imageURL} alt={`Image ${index}`} className='post_img'/>
-                                        <img src={file?.imageURL} alt={`Image ${index}`} className='post_img'/>
-
+                                        <img
+                                            src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
+                                            alt={`Image ${index}`} className='post_img'/>
                                         :
                                         <ReactPlayer
                                             height={height}
                                             width={"100%"}
                                             className=''
-                                            url={`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
+                                            url={isPublished ? file.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
                                             controls={true}
                                         />
 

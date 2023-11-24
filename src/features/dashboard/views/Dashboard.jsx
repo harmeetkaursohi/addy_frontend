@@ -19,21 +19,16 @@ const Dashboard = () => {
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const getAllPostsByCriteriaData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
 
+
     useEffect(() => {
         document.title = 'Dashboard';
         token && dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: ["SCHEDULED"]}}));
     }, [token]);
 
+
     useEffect(() => {
-        if (token && !userData) {
-            const decodeJwt = decodeJwtToken(token);
-            const requestBody = {
-                customerId: decodeJwt.customerId,
-                token: token
-            }
-            dispatch(getUserInfo(requestBody))
-        }
-    }, [token, dispatch, userData]);
+
+    }, [token]);
 
 
     return (

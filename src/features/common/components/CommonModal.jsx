@@ -9,18 +9,18 @@ import {facebookPageConnectAction} from "../../../utils/commonUtils.js";
 
 
 const CommonModal = ({
+                         socialMediaAccountInfo,
                          showModal,
                          setShowModal,
                          allPagesList,
                          connectedPagesList,
                          socialMediaType,
-                         noPageFoundMessage
+                         noPageFoundMessage,
                      }) => {
 
 
     const handleClose = () => setShowModal(false);
     const dispatch = useDispatch();
-
     const token = getToken();
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [mediaPageData, setMediaPageData] = useState(null);
@@ -44,10 +44,13 @@ const CommonModal = ({
     const handleSubmit = () => {
         switch (socialMediaType) {
             case SocialAccountProvider.FACEBOOK: {
-                facebookPageConnectAction(dispatch, token, mediaPageData)
+                facebookPageConnectAction(dispatch, token, mediaPageData, socialMediaAccountInfo)
+                break;
             }
             //handle other case as well...
             case SocialAccountProvider.INSTAGRAM: {
+                facebookPageConnectAction(dispatch, token, mediaPageData, socialMediaAccountInfo)
+                break;
             }
             default: {
             }
@@ -78,7 +81,15 @@ const CommonModal = ({
 
                                                 <div className="user_info_container">
                                                     <div className='users_profile'>
-                                                        <img src={data.picture.data.url}/>
+                                                        {
+                                                            socialMediaType === SocialAccountProvider.FACEBOOK &&
+                                                            <img src={data.picture.data.url}/>
+                                                        }
+                                                        {
+                                                            socialMediaType === SocialAccountProvider.INSTAGRAM &&
+                                                            <img src={data.profile_picture_url}/>
+                                                        }
+
                                                     </div>
                                                     <div className='users_name'>
                                                         <h2 className={`cmn_text_style ${currentConnectedPages?.includes(data?.id) ? 'text-success' : ''}`}>{data.name}</h2>
@@ -121,7 +132,7 @@ const CommonModal = ({
                     showConfirmModal={showConfirmModal}
                     icon={currentConnectedPages?.includes(mediaPageData?.id) ? "warning" : "success"}
                     title={"Are you sure ?"}
-                    confirmMessage={currentConnectedPages?.includes(mediaPageData?.id) ? "You want to dis-connect from facebook page ?" : "You want to connect from facebook page ?"}
+                    confirmMessage={currentConnectedPages?.includes(mediaPageData?.id) ? `You want to dis-connect from ${socialMediaType} page ?` : `You want to connect from ${socialMediaType} page ?`}
                 />}
         </>
     );

@@ -118,7 +118,8 @@ const CreatePost = () => {
             setSelectedOptionLabels([...selectedOptionLabels, {
                 id: option.id,
                 label: option.label,
-                imageUrl: option.imageUrl
+                imageUrl: option.imageUrl,
+                provider:option.provider
             }]);
 
 
@@ -201,7 +202,8 @@ const CreatePost = () => {
                         let obj = {
                             id: option.pageId,
                             label: option.name,
-                            imageUrl: option.imageUrl
+                            imageUrl: option.imageUrl,
+                            provider:el.provider
                         };
 
                         // Check if the option is already selected before adding
@@ -255,6 +257,7 @@ const CreatePost = () => {
     };
 
     const createPost = (e, postStatus, scheduleDate, scheduleTime) => {
+        console.log("e--->",selectedOptionLabels)
             e.preventDefault();
             const userInfo = decodeJwtToken(token);
 
@@ -281,11 +284,10 @@ const CreatePost = () => {
                     caption: caption,
                     postStatus: postStatus,
                     boostPost: boostPost,
-                    postPageInfos: selectedOptionLabels?.map((obj) => ({pageId: obj.id})),
+                    postPageInfos: selectedOptionLabels?.map((obj) => ({pageId: obj.id,provider:obj.provider})),
                     scheduledPostDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                 },
             };
-
             dispatch(createFacebookPostAction(requestBody)).then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     showSuccessToast("Post has uploaded successfully");
@@ -430,9 +432,11 @@ const CreatePost = () => {
                                                                                         onClick={(e) => toggleOption({
                                                                                             id: page.pageId,
                                                                                             label: page.name,
-                                                                                            imageUrl: page?.imageUrl
+                                                                                            imageUrl: page?.imageUrl,
+                                                                                            provider:socialAccount?.provider
                                                                                         }, e)}
                                                                                     >
+
                                                                                         <div
                                                                                             className="checkbox-button_outer">
                                                                                             <img
@@ -447,7 +451,8 @@ const CreatePost = () => {
                                                                                             onChange={(e) => toggleOption({
                                                                                                 id: page.pageId,
                                                                                                 label: page.name,
-                                                                                                imageUrl: page?.imageUrl
+                                                                                                imageUrl: page?.imageUrl,
+                                                                                                provider:socialAccount?.provider
                                                                                             }, e)}
                                                                                         />
                                                                                     </div>
@@ -688,7 +693,7 @@ const CreatePost = () => {
                                         </div>
 
                                         {/* boost post */}
-                                        <div className='publish_post_outer media_outer'>
+                                        <div className='publ_post_outer media_outer'>
                                             <div className="d-flex align-items-center gap-2 ps-0 form-switch">
 
                                                 <i
@@ -708,7 +713,6 @@ const CreatePost = () => {
                                             <div className='cancel_publish_btn_outer d-flex'>
                                                 <button className='cancel_btn cmn_bg_btn' onClick={(e) => {
                                                     e.preventDefault();
-                                                    console.log("Cancel")
                                                     resetForm(e);
                                                 }}>{jsondata.cancel}</button>
 

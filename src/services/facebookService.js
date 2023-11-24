@@ -3,6 +3,8 @@ import {
     calculatePercentageGrowth,
     computeAndReturnSummedDateValues
 } from "../utils/commonUtils";
+import {showErrorToast} from "../features/common/components/Toast";
+import {SomethingWentWrong} from "../utils/contantData";
 
 export async function exchangeForLongLivedToken(shortLivedToken) {
     const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/oauth/access_token`;
@@ -26,6 +28,20 @@ export async function exchangeForLongLivedToken(shortLivedToken) {
         }
     } catch (error) {
         console.error(error.message);
+        throw error;
+    }
+}
+export async function getAllFacebookConnectedSocialMediaAccounts(accessToken) {
+    const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/me/accounts?access_token=${accessToken}&fields=instagram_business_account{id,name,username,profile_picture_url},access_token,name,id`;
+    try {
+        const response = await baseAxios.get(url);
+        if (response.status === 200 ) {
+            return response.data.data;
+        } else {
+            throw new Error(SomethingWentWrong);
+        }
+    } catch (error) {
+        showErrorToast(SomethingWentWrong)
         throw error;
     }
 }

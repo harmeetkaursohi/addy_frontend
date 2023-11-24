@@ -167,8 +167,8 @@ const CommentReviewsSectionModal = ({
                                                   selectedFileType={null}
                                                   caption={null}
                                                   hashTag={null}
-                                                  showThumbnail={true}
-
+                                                  showThumbnail={false}
+                                                  isPublished={true}
                                                   viewSimilarToSocialMedia={false}/>
                                 </div>
                             </Col>

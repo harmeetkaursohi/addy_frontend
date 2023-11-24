@@ -6,5 +6,6 @@ export const SocialAccountProvider = Object.freeze({
     PINTEREST:"pinterest"
 });
 export const UpdateCommentFailedMsg="Update Fail: User can only edit comments made from Addy."
-export const CouldNotPostComment="Couldn't post comment."
+export const SomethingWentWrong="Something went wrong!"
+export const NoInstagramBusinessAccountFound="No business account found for Instagram to connect!"
 

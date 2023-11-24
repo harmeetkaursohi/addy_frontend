@@ -224,10 +224,10 @@ export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatc
     console.log("updatePostRequestDTO---->",data);
 
     // Create a FormData object to hold the data.
-    if (data.updatePostRequestDTO.caption !== null) {
+    if (data.updatePostRequestDTO.caption !== null && data.updatePostRequestDTO.caption!=="null") {
         formData.append('caption', data.updatePostRequestDTO.caption);
     }
-    if (data.updatePostRequestDTO.hashTag !== null) {
+    if (data.updatePostRequestDTO.hashTag !== null && data.updatePostRequestDTO.hashTag!=="null") {
         formData.append('hashTag', data.updatePostRequestDTO.hashTag);
     }
 
@@ -323,10 +323,10 @@ export const createFacebookPostAction = createAsyncThunk('post/createFacebookPos
     const formData = new FormData();
 
     // Create a FormData object to hold the data.
-    if (data.postRequestDto.caption !== null) {
+    if (data.postRequestDto.caption !== null && data.postRequestDto.caption !== "null") {
         formData.append('caption', data.postRequestDto.caption);
     }
-    if (data.postRequestDto.hashTag !== null) {
+    if (data.postRequestDto.hashTag !== null && data.postRequestDto.hashTag !== "null") {
         formData.append('hashTag', data.postRequestDto.hashTag);
     }
 
@@ -339,6 +339,7 @@ export const createFacebookPostAction = createAsyncThunk('post/createFacebookPos
 
     data.postRequestDto.postPageInfos.forEach((pageInfo, index) => {
         formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
+        formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.provider);
     });
 
 

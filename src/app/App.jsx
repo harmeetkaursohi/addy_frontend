@@ -57,6 +57,7 @@ const App = () => {
                     <Route path="/forget-password" element={<ForgetPassword/>}/>
                     <Route path="/fb" element={<FacebookModal/>}/>
                     <Route path="/auth-redirect" element={<Oauth2RedirectComponent/>}/>
+                    <Route path="/auth-redirect/:mediaType" element={<Oauth2RedirectComponent/>}/>
                     <Route path="*" element={<NotFound/>}/>
                 </Routes>
             </BrowserRouter>
