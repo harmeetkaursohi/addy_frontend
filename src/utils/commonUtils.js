@@ -682,3 +682,7 @@ export const getInstagramBusinessAccounts = (accountsData) => {
         return data["instagram_business_account"]
     })
 }
+export const isErrorInInstagramMention=(socialMediaType,error)=>{
+    return socialMediaType==="INSTAGRAM" && error?.response?.data?.error?.code===20 && error?.response?.data?.error?.error_subcode===1772179
+
+}
