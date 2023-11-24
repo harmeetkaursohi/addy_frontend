@@ -115,11 +115,7 @@ export const facebookPageConnectAction = (dispatch, token, facebookData) => {
 export function convertToUnixTimestamp(scheduleDate, scheduleTime) {
     const combinedDateTimeString = `${scheduleDate}T${scheduleTime}:00`;
     const localDateTime = new Date(combinedDateTimeString);
-
-    //converting date to utc date with provided offset
-    const utcDateTime = new Date(localDateTime.getTime() + localDateTime.getTimezoneOffset() * 60000);
-    // fetching unix from utc offset
-    return utcDateTime.getTime() / 1000;
+    return localDateTime.getTime() / 1000;
 }
 
 
