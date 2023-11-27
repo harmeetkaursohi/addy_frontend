@@ -279,6 +279,24 @@ export function computeImageURL(providerType) {
     }
 }
 
+export function getEnumValue(providerType) {
+    switch (providerType) {
+        case 'FACEBOOK':
+            return "Facebook";
+        case 'INSTAGRAM':
+            return "Instagram";
+        case 'LINKEDIN':
+            return "Linkedin";
+            break;
+        case 'TWITTER':
+            return "Twitter"
+            break;
+        default: {
+            return "Pinterest"
+        }
+    }
+}
+
 export const dateFormat = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');

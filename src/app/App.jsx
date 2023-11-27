@@ -25,6 +25,10 @@ import Oauth2RedirectComponent from '../features/authentication/Oauth2RedirectCo
 import CreatePost from "../features/planner/views/CreatePost";
 import UpdatePost from "../features/planner/views/UpdatePost";
 import DraftComponent from "../features/unPublishedPages/views/DraftComponent";
+import InsightsComponent from "../features/insights/InsightsComponent";
+import FaqComponent from "../features/faq/FaqComponent";
+import PrivacyComponent from "../features/privacy/PrivacyComponent";
+import ContactUs from "../features/contactUs/ContactUs";
 
 const App = () => {
     const PrivateRoute = () => {
@@ -50,6 +54,10 @@ const App = () => {
                         <Route path="/comment" element={<CommentPage/>}/>
                         <Route path="/address" element={<AddressForm/>}/>
                         <Route path="/draft" element={<DraftComponent/>}/>
+                        <Route path="/insights" element={<InsightsComponent/>}/>
+                        <Route path="/faq" element={<FaqComponent/>}/>
+                        <Route path="/privacy" element={<PrivacyComponent/>}/>
+                        <Route path="/contact" element={<ContactUs/>}/>
                     </Route>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/" element={<Signup/>}/>

@@ -20,7 +20,7 @@ import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
 import {
     checkDimensions, convertSentenceToHashtags,
-    convertToUnixTimestamp,
+    convertToUnixTimestamp, getEnumValue,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
@@ -40,9 +40,6 @@ const CreatePost = () => {
     const [scheduleDate, setScheduleDate] = useState("");
     const [scheduleTime, setScheduleTime] = useState("");
     const [boostPost, setBoostPost] = useState(false);
-    const [selectedOptions, setSelectedOptions] = useState([]);
-    const [selectedOptionLabels, setSelectedOptionLabels] = useState([]);
-    const [selectAllCheckBox, setSelectAllCheckBox] = useState(false);
     const [socialAccountData, setSocialAccountData] = useState([]);
     const [files, setFiles] = useState([]);
     const [selectedFileType, setSelectedFileType] = useState("");
@@ -53,6 +50,13 @@ const CreatePost = () => {
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
+
+
+    const [allOptions, setAllOptions] = useState([]);
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const [selectedGroups, setSelectedGroups] = useState([]);
+    const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
+
 
     useEffect(() => {
         if (files && files.length <= 0) {
@@ -69,13 +73,100 @@ const CreatePost = () => {
     }, [socialAccounts]);
 
 
+    // Create all Options
+    useEffect(() => {
+        if (socialAccountData) {
+            const optionList = socialAccountData.map((socialAccount) => {
+                return {
+                    group: socialAccount?.provider, allOptions: socialAccount?.pageAccessToken
+                }
+            });
+            setAllOptions(optionList);
+        }
+    }, [socialAccountData]);
+
+
+    useEffect(() => {
+        //select dropdown label
+        const selectedAllDropdownList = allOptions?.flatMap((groupOption) => groupOption.allOptions)
+            .filter((option) => selectedOptions.includes(option.pageId))
+            .map((option) => {
+                const group = allOptions.find((data) => data.allOptions.some((cur) => cur.pageId === option.pageId))?.group;
+                return {group: group, selectOption: option};
+            });
+        setSelectedAllDropdownData(selectedAllDropdownList);
+    }, [allOptions, selectedOptions]);
+
+
+    //handle single selector
+    const handleCheckboxChange = (option) => {
+        const {group, selectOption} = option;
+
+        const updatedSelectedOptions = [...selectedOptions];
+        const updatedSelectedGroups = [...selectedGroups];
+
+        const groupOptionIds = allOptions.find((cur) => cur.group === group).allOptions.map((opt) => opt.pageId);
+
+        if (selectedOptions.includes(selectOption.pageId)) {
+            updatedSelectedOptions.splice(updatedSelectedOptions.indexOf(selectOption.pageId), 1);
+
+        } else {
+            updatedSelectedOptions.push(selectOption.pageId);
+
+        }
+
+        const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
+
+        if (isGroupFullySelected) {
+            if (!updatedSelectedGroups.includes(group)) {
+                updatedSelectedGroups.push(group);
+            }
+        } else {
+            updatedSelectedGroups.splice(updatedSelectedGroups.indexOf(group), 1);
+        }
+
+        setSelectedOptions(updatedSelectedOptions);
+        setSelectedGroups(updatedSelectedGroups);
+    };
+
+
+    // handle Group selector
+    const handleGroupCheckboxChange = (group) => {
+        const updatedSelectedGroups = new Set(selectedGroups);
+        const updatedSelectedOptions = new Set(selectedOptions);
+
+        if (selectedGroups.includes(group)) {
+            updatedSelectedGroups.delete(group);
+            allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.delete(opt.pageId));
+
+        } else {
+            updatedSelectedGroups.add(group);
+            allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.add(opt.pageId));
+        }
+
+        setSelectedGroups(Array.from(updatedSelectedGroups));
+        setSelectedOptions(Array.from(updatedSelectedOptions));
+    };
+
+    // Handle Select All Method
+    const handleSelectAll = () => {
+        const allOptionIds = allOptions.flatMap((group) => group.allOptions.map((option) => option.pageId));
+        setSelectedOptions(allOptionIds);
+        setSelectedGroups(allOptions.map((group) => group.group));
+    };
+
+    // Handle UnSelect All Method
+    const handleUnselectAll = () => {
+        setSelectedOptions([]);
+        setSelectedGroups([]);
+    };
+
+    const areAllOptionsSelected = allOptions.flatMap((group) => group.allOptions).every((option) => selectedOptions.includes(option.pageId));
+
     useEffect(() => {
         if (token && !userData) {
             const decodeJwt = decodeJwtToken(token);
-            const requestBody = {
-                customerId: decodeJwt.customerId,
-                token: token
-            }
+            const requestBody = {customerId: decodeJwt.customerId, token: token}
             dispatch(getUserInfo(requestBody))
         }
     }, [token, dispatch, userData]);
@@ -83,144 +174,9 @@ const CreatePost = () => {
 
     useEffect(() => {
         const userInfo = decodeJwtToken(token);
-        const requestBody = {
-            token: token, customerId: userInfo?.customerId
-        }
+        const requestBody = {token: token, customerId: userInfo?.customerId}
         dispatch(getAllByCustomerIdAction(requestBody));
-
     }, []);
-
-    const toggleOption = (option, e) => {
-        const optionIndex = selectedOptions.indexOf(option.id);
-
-        if (optionIndex !== -1) {
-            setSelectedOptions(selectedOptions.filter((id) => id !== option.id));
-            setSelectedOptionLabels(selectedOptionLabels.filter((item) => item.label !== option.label));
-
-            socialAccountData.map(el => {
-                el.pageAccessToken.map(obj => {
-                    if (obj.pageId === option.id) {
-                        obj.selected = false;
-                        el.selected = false;
-                    }
-                })
-            });
-
-            setSocialAccountData(socialAccountData);
-
-            if (socialAccountData.filter(el => el.selected === false).length > 0) {
-                setSelectAllCheckBox(false);
-            }
-
-
-        } else {
-            setSelectedOptions([...selectedOptions, option.id]);
-            setSelectedOptionLabels([...selectedOptionLabels, {
-                id: option.id,
-                label: option.label,
-                imageUrl: option.imageUrl,
-                provider:option.provider
-            }]);
-
-
-            const updatedSocialAccountData = socialAccountData.map((socialAccount) => ({
-                ...socialAccount,
-                selected: false,
-                pageAccessToken: socialAccount?.pageAccessToken?.map((page) => ({
-                    ...page,
-                    selected: page?.selected === undefined ? page.pageId === option.id : (page.pageId === option.id ? true : page.selected)
-                })) || [],
-            }));
-
-            const updatedSocialAccount = updatedSocialAccountData.map((socialAccount) => ({
-                ...socialAccount,
-                selected: socialAccount?.pageAccessToken.filter(el => el.selected === false).length === 0
-            }));
-
-            setSocialAccountData(updatedSocialAccount);
-
-            if (updatedSocialAccount.filter(el => el.selected === false).length === 0) {
-                setSelectAllCheckBox(true);
-            }
-        }
-    };
-
-    const handleUncheck = (option) => {
-
-        const optionIndex = selectedOptions.indexOf(option.id);
-
-        if (optionIndex !== -1) {
-
-            setSelectedOptions(selectedOptions.filter((id) => id !== option.id));
-            setSelectedOptionLabels(selectedOptionLabels.filter((item) => item.label !== option.label));
-
-            socialAccountData.map(el => {
-                el.pageAccessToken.map(obj => {
-                    if (obj.pageId === option.id) {
-                        obj.selected = false;
-                        el.selected = false;
-                    }
-                })
-            });
-
-            setSocialAccountData(socialAccountData);
-
-            if (socialAccountData.filter(el => el.selected === false).length > 0) {
-                setSelectAllCheckBox(false);
-            }
-        }
-    }
-
-    const handleSelectAllChange = (e) => {
-        const checked = e.target.checked;
-
-        const newSelectedOptionLabels = [];
-        const newSelectedOptions = [];
-
-        const updatedSocialAccountData = socialAccountData.map((socialAccount) => ({
-            ...socialAccount,
-            selected: checked,
-            pageAccessToken: socialAccount?.pageAccessToken?.map((page) => ({
-                ...page,
-                selected: checked
-            })) || []
-        }));
-
-        setSocialAccountData(updatedSocialAccountData);
-
-        if (checked === false) {
-            setSelectAllCheckBox(false);
-            setSelectedOptionLabels([]);
-            setSelectedOptions([]);
-        }
-
-        if (checked === true && updatedSocialAccountData.filter(el => el.selected === false).length === 0) {
-            setSelectAllCheckBox(true);
-            socialAccountData.forEach((el) => {
-                if (el.pageAccessToken != null && el.pageAccessToken.length > 0) {
-                    el.pageAccessToken.forEach(option => {
-                        let obj = {
-                            id: option.pageId,
-                            label: option.name,
-                            imageUrl: option.imageUrl,
-                            provider:el.provider
-                        };
-
-                        // Check if the option is already selected before adding
-                        if (!newSelectedOptions.includes(option.pageId)) {
-                            newSelectedOptionLabels.push(obj);
-                            newSelectedOptions.push(option.pageId);
-                        }
-                    });
-                }
-            });
-
-            // Update the selected option labels and options state
-            setSelectedOptionLabels(newSelectedOptionLabels);
-            setSelectedOptions(newSelectedOptions);
-        }
-    };
-
 
     const handleSelectedFile = (e) => {
         e.preventDefault();
@@ -248,7 +204,6 @@ const CreatePost = () => {
             .catch((error) => {
                 console.error("Error checking dimensions:", error);
             });
-
     }
 
     const handleRemoveSelectFile = (fileToRemove) => {
@@ -257,48 +212,52 @@ const CreatePost = () => {
     };
 
     const createPost = (e, postStatus, scheduleDate, scheduleTime) => {
-        console.log("e--->",selectedOptionLabels)
-            e.preventDefault();
-            const userInfo = decodeJwtToken(token);
+        e.preventDefault();
+        const userInfo = decodeJwtToken(token);
 
+        if (postStatus === 'SCHEDULED') {
 
-            if (postStatus === 'SCHEDULED') {
-
-                if (!scheduleDate && !scheduleTime) {
-                    showErrorToast("Please enter scheduleDate and scheduleTime!!");
-                    return;
-                }
-
-                if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
-                    showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
-                    return;
-                }
+            if (!scheduleDate && !scheduleTime) {
+                showErrorToast("Please enter scheduleDate and scheduleTime!!");
+                return;
             }
 
-            const requestBody = {
-                token: token,
-                customerId: userInfo?.customerId,
-                postRequestDto: {
-                    attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file})),
-                    hashTag: hashTag,
-                    caption: caption,
-                    postStatus: postStatus,
-                    boostPost: boostPost,
-                    postPageInfos: selectedOptionLabels?.map((obj) => ({pageId: obj.id,provider:obj.provider})),
-                    scheduledPostDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
-                },
-            };
-            dispatch(createFacebookPostAction(requestBody)).then((response) => {
-                if (response.meta.requestStatus === "fulfilled") {
-                    showSuccessToast("Post has uploaded successfully");
-                    navigate("/planner");
-                }
-            }).catch((error) => {
-                showErrorToast(error.response.data.message);
-            });
-
+            if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
+                showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
+                return;
+            }
         }
-    ;
+
+        const requestBody = {
+            token: token,
+            customerId: userInfo?.customerId,
+            postRequestDto: {
+                attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file})),
+                hashTag: hashTag,
+                caption: caption,
+                postStatus: postStatus,
+                boostPost: boostPost,
+                postPageInfos: allOptions?.flatMap(obj => {
+                    const provider = obj.group;
+                    const selectedOptionsData = obj.allOptions
+                        .filter(option => selectedOptions.includes(option.pageId))
+                        .map(option => ({pageId: option.pageId, provider}));
+                    return selectedOptionsData;
+                }) || [],
+                scheduledPostDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+            },
+        };
+
+        dispatch(createFacebookPostAction(requestBody)).then((response) => {
+            if (response.meta.requestStatus === "fulfilled") {
+                showSuccessToast("Post has uploaded successfully");
+                navigate("/planner");
+            }
+        }).catch((error) => {
+            showErrorToast(error.response.data.message);
+        });
+
+    };
 
     const handlePostSubmit = (e) => {
         createPost(e, 'PUBLISHED');
@@ -315,21 +274,13 @@ const CreatePost = () => {
     const resetForm = (e) => {
         e.preventDefault();
         setFiles([]);
-        setSelectAllCheckBox(false);
-        setSelectedOptionLabels([]);
-        setSelectedOptions([]);
         setHashTag("");
         setCaption("");
         setScheduleTime("");
         setScheduleDate("");
         setBoostPost(false);
-        socialAccountData.map(el => {
-            el.pageAccessToken.map(obj => {
-                obj.selected = false;
-                el.selected = false;
-            })
-        });
-
+        setSelectedOptions([]);
+        setSelectedGroups([]);
         setSocialAccountData(socialAccountData);
     }
 
@@ -347,25 +298,27 @@ const CreatePost = () => {
 
                                     <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
 
-                                    <form onSubmit={handlePostSubmit}>
+                                    <form onSubmit={(e) => {
+                                        e.preventDefault();
+                                        handlePostSubmit(e);
+                                    }}>
 
                                         <div className="createPost_outer">
                                             <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
 
 
-                                            {/*    dropdown select platform=====*/}
                                             <Dropdown className='insta_dropdown_btn mt-2'>
                                                 <Dropdown.Toggle id="instagram"
-                                                                 className="instagram_dropdown tabs_grid"
-                                                                 disabled={!socialAccountData?.some(obj => Array.isArray(obj.pageAccessToken) && obj.pageAccessToken.length > 0)}>
-                                                    {selectedOptionLabels.length > 0 ?
+                                                                 className="instagram_dropdown tabs_grid">
+                                                    {selectedAllDropdownData.length > 0 ?
                                                         (
-                                                            selectedOptionLabels.map((data, index) => (
+                                                            selectedAllDropdownData.map((data, index) => (
                                                                 <div key={index} className="selected-option">
-                                                                    <img src={data.imageUrl} alt={data.label}/>
-                                                                    <span>{data.label}</span>
-                                                                    <RxCross2 onClick={() => {
-                                                                        handleUncheck(data);
+                                                                    <img src={data?.selectOption?.imageUrl}
+                                                                         alt={data?.selectOption?.name}/>
+                                                                    <span>{data?.selectOption?.name}</span>
+                                                                    <RxCross2 onClick={(e) => {
+                                                                        handleCheckboxChange(data);
                                                                     }}/>
                                                                 </div>
                                                             ))
@@ -383,20 +336,17 @@ const CreatePost = () => {
                                                         )}
                                                 </Dropdown.Toggle>
 
+
                                                 <Dropdown.Menu className='w-100 social_media_list'>
                                                     <div className="dropdown-options">
 
                                                         <div className='_'>
-
                                                             <div className="select_platform_outer">
                                                                 <input type="checkbox"
                                                                        id="choice1-2"
                                                                        name="choice2"
-                                                                       checked={selectAllCheckBox}
-                                                                       onChange={(e) => {
-                                                                           setSelectAllCheckBox(!selectAllCheckBox);
-                                                                           handleSelectAllChange(e);
-                                                                       }}
+                                                                       checked={areAllOptionsSelected}
+                                                                       onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
                                                                 />
                                                                 <h3 className="cmn_headings">Select all
                                                                     Platform</h3>
@@ -409,17 +359,19 @@ const CreatePost = () => {
                                                                         <div
                                                                             className='instagram_outer facebook_outer '
                                                                             key={index}>
-
                                                                             <div className="checkbox-button_outer">
+
                                                                                 <input type="checkbox"
                                                                                        className=""
                                                                                        id="choice1-1"
                                                                                        name="choice1"
-                                                                                       checked={(socialAccount && socialAccount?.selected) ? socialAccount?.selected : false}
-                                                                                       onChange={handleSelectAllChange}
+                                                                                       checked={selectedGroups.includes(socialAccount?.provider)}
+                                                                                       onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
                                                                                 />
-                                                                                <SocialMediaProviderBadge
-                                                                                    provider={socialAccount.provider}/>
+
+                                                                                {socialAccount &&
+                                                                                    <SocialMediaProviderBadge
+                                                                                        provider={socialAccount.provider}/>}
 
                                                                             </div>
 
@@ -428,15 +380,13 @@ const CreatePost = () => {
                                                                                     <div
                                                                                         className="instagramPages unselectedpages"
                                                                                         key={index}
-                                                                                        style={{background: page?.selected === true ? "rgb(215 244 215)" : ""}}
-                                                                                        onClick={(e) => toggleOption({
-                                                                                            id: page.pageId,
-                                                                                            label: page.name,
-                                                                                            imageUrl: page?.imageUrl,
-                                                                                            provider:socialAccount?.provider
-                                                                                        }, e)}
+                                                                                        style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
+                                                                                        onClick={(e) =>
+                                                                                            handleCheckboxChange({
+                                                                                                group: socialAccount?.provider,
+                                                                                                selectOption: page
+                                                                                            })}
                                                                                     >
-
                                                                                         <div
                                                                                             className="checkbox-button_outer">
                                                                                             <img
@@ -447,13 +397,13 @@ const CreatePost = () => {
                                                                                             type="checkbox"
                                                                                             id={page.id}
                                                                                             name={page.name}
-                                                                                            checked={page?.selected === true}
-                                                                                            onChange={(e) => toggleOption({
-                                                                                                id: page.pageId,
-                                                                                                label: page.name,
-                                                                                                imageUrl: page?.imageUrl,
-                                                                                                provider:socialAccount?.provider
-                                                                                            }, e)}
+                                                                                            value={page.id}
+                                                                                            checked={selectedOptions.includes(page.pageId)}
+                                                                                            onChange={() =>
+                                                                                                handleCheckboxChange({
+                                                                                                    group: socialAccount?.provider,
+                                                                                                    selectOption: page
+                                                                                                })}
                                                                                         />
                                                                                     </div>
                                                                                 ))
@@ -734,15 +684,24 @@ const CreatePost = () => {
 
                                 <div className='post_preview_outer'>
 
-                                    <CommonFeedPreview previewTitle={`Facebook feed Preview`}
-                                                       pageName={`Team Musafirrr`}
-                                                       userData={userData}
-                                                       files={files}
-                                                       selectedFileType={selectedFileType}
-                                                       caption={caption}
-                                                       hashTag={hashTag}
+                                    {
+                                        allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option) => {
+                                            return (<>
+                                                    <CommonFeedPreview
+                                                        socialMediaType={option.group}
+                                                        previewTitle={`${getEnumValue(option.group)} feed Preview`}
+                                                        pageName={"Team Musafir"}
+                                                        userData={userData}
+                                                        files={files}
+                                                        selectedFileType={selectedFileType}
+                                                        caption={caption}
+                                                        hashTag={hashTag}
 
-                                    />
+                                                    />
+                                                </>
+                                            )
+                                        })
+                                    }
                                 </div>
 
 

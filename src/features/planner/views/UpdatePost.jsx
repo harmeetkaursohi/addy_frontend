@@ -13,10 +13,7 @@ import SideBar from "../../sidebar/views/Layout.jsx";
 import {BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
-import {
-    getPostsByIdAction,
-    updatePostOnSocialMediaAction
-} from "../../../app/actions/postActions/postActions.js";
+import {getPostsByIdAction, updatePostOnSocialMediaAction} from "../../../app/actions/postActions/postActions.js";
 import {RiDeleteBin5Fill} from "react-icons/ri";
 import {useNavigate, useParams} from "react-router-dom";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
@@ -25,6 +22,7 @@ import {
     checkDimensions,
     convertSentenceToHashtags,
     convertToUnixTimestamp,
+    getEnumValue,
     groupByKey,
     trimToNull,
     validateScheduleDateAndTime
@@ -67,11 +65,6 @@ const UpdatePost = () => {
         const userData = useSelector(state => state.user.userInfoReducer.data);
         const getPostsByIdData = useSelector(state => state.post.getPostsByIdReducer?.data);
         const loadingUpdatePost = useSelector(state => state.post.updatePostOnSocialMediaReducer.loading);
-
-
-        console.log("--->getPostsByIdData", getPostsByIdData);
-        console.log("@@@@ files---->", files)
-        console.log("@@@@ selectedOptions---->", selectedOptions)
 
 
         useEffect(() => {
@@ -526,8 +519,7 @@ const UpdatePost = () => {
                                                                 </button>
                                                             </div>
                                                         )
-                                                    })
-                                                    }
+                                                    })}
                                                 </div>
 
                                                 <div className="darg_navs file_outer">
@@ -744,17 +736,25 @@ const UpdatePost = () => {
 
                                     <div className='post_preview_outer'>
 
-                                        <CommonFeedPreview previewTitle={`Facebook feed Preview`}
-                                                           pageName={`Team Musafirrr`}
-                                                           userData={userData}
-                                                           files={files || []}
-                                                           selectedFileType={null}
-                                                           caption={caption}
-                                                           hashTag={hashTag}
+                                        {
+                                            allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option) => {
+                                                return (<>
+                                                        <CommonFeedPreview
+                                                            socialMediaType={option.group}
+                                                            previewTitle={`${getEnumValue(option.group)} feed Preview`}
+                                                            pageName={"Team Musafirr"}
+                                                            userData={userData}
+                                                            files={files || []}
+                                                            selectedFileType={selectedFileType}
+                                                            caption={caption}
+                                                            hashTag={hashTag}
 
-                                        />
+                                                        />
+                                                    </>
+                                                )
+                                            })
+                                        }
                                     </div>
-
 
                                 </div>
                             </div>
