@@ -10,7 +10,7 @@ const CommonFeedPreview = ({
                                files,
                                selectedFileType,
                                caption,
-                               hashTag
+                               hashTag,
                            }) => {
     return (
         <>

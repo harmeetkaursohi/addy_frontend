@@ -7,7 +7,7 @@ const ContactUs = () => {
           <SideBar/>
           <p>Contexts</p>
       </>
-  )
+  );
 };
 
 export default ContactUs;

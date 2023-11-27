@@ -686,18 +686,24 @@ const CreatePost = () => {
 
                                     {
                                         allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option) => {
-                                            return (<>
-                                                    <CommonFeedPreview
-                                                        socialMediaType={option.group}
-                                                        previewTitle={`${getEnumValue(option.group)} feed Preview`}
-                                                        pageName={"Team Musafir"}
-                                                        userData={userData}
-                                                        files={files}
-                                                        selectedFileType={selectedFileType}
-                                                        caption={caption}
-                                                        hashTag={hashTag}
 
-                                                    />
+                                            let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
+
+                                            return (<>
+                                                    {selectedPageData &&
+                                                        <CommonFeedPreview
+                                                            socialMediaType={option.group}
+                                                            previewTitle={`${getEnumValue(option.group)} feed Preview`}
+                                                            pageName={selectedPageData?.name}
+                                                            userData={userData}
+                                                            files={files}
+                                                            selectedFileType={selectedFileType}
+                                                            caption={caption}
+                                                            hashTag={hashTag}
+
+                                                        />
+                                                    }
+
                                                 </>
                                             )
                                         })
