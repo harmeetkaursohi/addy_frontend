@@ -2,7 +2,8 @@ import {createSlice} from '@reduxjs/toolkit'
 import {
     facebookPageConnect,
     getAllFacebookPages,
-    getFacebookConnectedPages
+    getFacebookConnectedPages,
+    disconnectDisabledPages
 } from '../../actions/facebookActions/facebookActions.js';
 
 const facebookSlice = createSlice({
@@ -11,6 +12,8 @@ const facebookSlice = createSlice({
         getFacebookPageReducer: {loading: false},
         facebookPageConnectReducer: {loading: false},
         getFacebookConnectedPagesReducer: {loading: false},
+        disconnectDisabledPagesReducer: {loading: false},
+
     },
     reducers: {
         resetFacebookReducer: (state) => {
@@ -51,6 +54,16 @@ const facebookSlice = createSlice({
         },
         [getFacebookConnectedPages.rejected]: (state) => {
             state.getFacebookConnectedPagesReducer = {loading: false}
+        },
+        // Disconnect Disabled Pages
+        [disconnectDisabledPages.pending]: (state) => {
+            state.disconnectDisabledPagesReducer = {loading: true}
+        },
+        [disconnectDisabledPages.fulfilled]: (state, action) => {
+            state.disconnectDisabledPagesReducer = {loading: false, data: action.payload}
+        },
+        [disconnectDisabledPages.rejected]: (state) => {
+            state.disconnectDisabledPagesReducer = {loading: false}
         },
 
 

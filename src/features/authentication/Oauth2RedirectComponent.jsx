@@ -9,16 +9,16 @@ const Oauth2RedirectComponent = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [accessToken, setAccessToken] = useState(null);
-
     const getUrlParameter = (name) => {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
         const results = regex.exec(location.search);
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     };
-
     const token = getUrlParameter('token');
     const error = getUrlParameter('error');
+
+
 
 
     const getAccessTokenFromHash = () => {
@@ -45,14 +45,31 @@ const Oauth2RedirectComponent = () => {
 
     const {mediaType} = useParams();
 
+
+
+
+
+
+    // const jwtToken = getUrlParameter('access_token');
+
     useEffect(() => {
-        if (token && isNullOrEmpty(accessToken)) {
+        if (token ) {
             localStorage.setItem("token", token);
-            navigate("/dashboard")
-        } else {
+            window.location.href="/dashboard";
+        }
+        else{
             navigate("/login")
         }
-    }, []);
+    }, [token]);
+
+    // useEffect(() => {
+    //     const jwtToken = getAccessTokenFromHash();
+    //     console.log("jwtToken", jwtToken);
+    // }, [location.search]);
+
+
+
+
 
     return (
         <>
