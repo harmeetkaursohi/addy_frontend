@@ -27,11 +27,6 @@ export const SidebarMenuItems = [
         "icon": <FaRegCommentDots />
     },
     {
-        "name": "Gallery",
-        "path": "/gallery",
-        "icon": <AiOutlinePicture />
-    },
-    {
         "name": "Insights",
         "path": "/insights",
         "icon":<BsExclamationSquare />

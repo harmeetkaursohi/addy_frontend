@@ -32,14 +32,13 @@ const Layout = () => {
                 token: token
             }
             // Dispatch the API call only when userData is not available
-            dispatch(getUserInfo(requestBody))
+            dispatch(getUserInfo(requestBody));
         }
     }, [token, userData, dispatch])
 
-
     const LogOut = () => {
-        localStorage.removeItem("token")
-        navigate("/login")
+        localStorage.removeItem("token");
+        navigate("/login");
     }
 
     return (

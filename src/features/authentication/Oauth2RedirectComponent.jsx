@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
-import {useLocation, Navigate, useParams, useNavigate} from 'react-router-dom';
-import {getToken} from '../../app/auth/auth';
+import {useLocation, useParams, useNavigate} from 'react-router-dom';
 import {showErrorToast} from "../common/components/Toast";
 import {SomethingWentWrong} from "../../utils/contantData";
 import {isNullOrEmpty} from "../../utils/commonUtils";
@@ -9,6 +8,7 @@ const Oauth2RedirectComponent = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [accessToken, setAccessToken] = useState(null);
+    const {mediaType} = useParams();
 
     const getUrlParameter = (name) => {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -41,9 +41,6 @@ const Oauth2RedirectComponent = () => {
             access_token ? setAccessToken(access_token) : showErrorToast(SomethingWentWrong)
         }
     }, [location])
-
-
-    const {mediaType} = useParams();
 
     useEffect(() => {
         if (token && isNullOrEmpty(accessToken)) {
