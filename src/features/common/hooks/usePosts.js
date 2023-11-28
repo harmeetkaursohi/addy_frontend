@@ -38,11 +38,10 @@ const usePosts = (pageNum = 0, filter = null) => {
 
         dispatch(getPostsPageAction(requestBody))
             .then((response) => {
-                console.log("responseresponseresponseresponseresponseresponse",response)
                 if (response.meta.requestStatus === "fulfilled") {
                     if (pageNum === 0) {
                         setResults(response?.payload);
-                    } else if(pageNum>1 ){
+                    } else if (pageNum > 1) {
                         setResults((prev) => [...prev, ...response?.payload]);
                     }
                     setHasNextPage(Boolean(response?.payload.length));
@@ -60,7 +59,7 @@ const usePosts = (pageNum = 0, filter = null) => {
 
     }, [pageNum, filter])
 
-    return {isLoading, isError, error, results, setResults,hasNextPage}
+    return {isLoading, isError, error, results, setResults, hasNextPage}
 }
 
 export default usePosts;

@@ -176,9 +176,7 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
 });
 
 export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
-
     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data, setAuthenticationHeader(data.token)).then(res => {
-        console.log('res.datares.datares.data', res.data)
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

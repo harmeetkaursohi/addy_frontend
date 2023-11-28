@@ -6,7 +6,7 @@ const PrivacyComponent = () => {
    return (
        <>
            <SideBar/>
-        <h1>InsightsComponent</h1>
+           <h1>InsightsComponent</h1>
        </>
    )
 }
