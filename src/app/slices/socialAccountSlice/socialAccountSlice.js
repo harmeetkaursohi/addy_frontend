@@ -112,6 +112,7 @@ const socialAccountSlice = createSlice({
             state.getAllInstagramBusinessAccountsReducer = {loading: true}
         },
         [getAllInstagramBusinessAccounts.fulfilled]: (state, action) => {
+            console.log("action---->",action.payload)
             state.getAllInstagramBusinessAccountsReducer = {loading: false, data: action.payload}
         },
         [getAllInstagramBusinessAccounts.rejected]: (state) => {
