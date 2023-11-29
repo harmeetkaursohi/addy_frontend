@@ -46,6 +46,7 @@ export async function getAllFacebookConnectedSocialMediaAccounts(accessToken) {
     }
 }
 
+
 export const conventStringToArrayString = (captionData) => {
     const response = captionData?.choices[0]?.message?.content;
     const arrayOfStrings = response?.replaceAll('\"', "")?.split('\n');
@@ -71,9 +72,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
         for (const curPage of listOfPages) {
 
-
             const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`;
-
             const pageId = curPage?.pageId;
             const accessToken = curPage?.access_token;
 

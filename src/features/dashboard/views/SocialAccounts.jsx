@@ -1,7 +1,7 @@
 import jsondata from "../../../locales/data/initialdata.json";
-import {LoginSocialFacebook, LoginSocialInstagram} from "reactjs-social-login";
-import {computeAndSocialAccountJSONForFacebook, isNullOrEmpty} from "../../../utils/commonUtils";
-import {FacebookLoginButton, InstagramLoginButton} from "react-social-login-buttons";
+import {LoginSocialFacebook, LoginSocialLinkedin} from "reactjs-social-login";
+import {computeAndSocialAccountJSONForFacebook} from "../../../utils/commonUtils";
+import {FacebookLoginButton, LinkedInLoginButton} from "react-social-login-buttons";
 import fb_img from "../../../images/fb.svg";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import React, {useEffect, useState} from "react";
@@ -17,9 +17,9 @@ import Swal from "sweetalert2";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
 import {getAllFacebookPages, getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
-import {Link} from "react-router-dom";
 import {NoInstagramBusinessAccountFound, SocialAccountProvider} from "../../../utils/contantData";
-import {getAllFacebookConnectedSocialMediaAccounts} from "../../../services/facebookService";
+import {fetchUserProfile} from "../../../services/linkedinService";
+
 
 const SocialAccounts = () => {
     const dispatch = useDispatch();
@@ -142,10 +142,10 @@ const SocialAccounts = () => {
     }
 
 
-    const handleLoginClick = () => {
-        // Redirect the user to the Instagram login page
-        window.location.href = `https://www.facebook.com/v17.0/dialog/oauth?client_id=599924718880412&display=page&extras={'setup':{'channel':'IG_API_ONBOARDING'}}&response_type=token&scope=instagram_basic,instagram_content_publish,instagram_manage_comments,instagram_manage_insights,pages_show_list,pages_read_engagement&redirect_uri=https://0f41-103-239-234-102.ngrok-free.app/auth-redirect/instagram`;
-    };
+    // const handleLoginClick = () => {
+    //     // Redirect the user to the Instagram login page
+    //     window.location.href = `https://www.facebook.com/v17.0/dialog/oauth?client_id=599924718880412&display=page&extras={'setup':{'channel':'IG_API_ONBOARDING'}}&response_type=token&scope=instagram_basic,instagram_content_publish,instagram_manage_comments,instagram_manage_insights,pages_show_list,pages_read_engagement&redirect_uri=https://0f41-103-239-234-102.ngrok-free.app/auth-redirect/instagram`;
+    // };
 
     const facebook = () => {
         setShowFacebookModal(true)
@@ -195,6 +195,7 @@ const SocialAccounts = () => {
                                     appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                     redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                     onResolve={(response) => {
+                                        console.log("@@@ FB Response :::: ",response)
                                         connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response, SocialAccountProvider.FACEBOOK))
                                     }}
                                     onReject={(error) => {
@@ -221,8 +222,6 @@ const SocialAccounts = () => {
                                             </div>
                                             <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
                                                  xmlns="http://www.w3.org/2000/svg"
-                                                // onClick={() =>
-                                                //     setFacebookDropDown(!facebookDropDown)}
                                                  onClick={() => {
                                                      console.log("asdasdasdasdasd")
                                                  }}
@@ -304,8 +303,6 @@ const SocialAccounts = () => {
                                         <h6 className="cmn_headings">www.instagram.com</h6>
                                     </div>
                                 </div>
-
-                                {/*<button style={commonButtonStyle} onClick={handleLoginClick}>Connect</button>*/}
 
                                 <LoginSocialFacebook
                                     isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
@@ -403,6 +400,117 @@ const SocialAccounts = () => {
                 }
 
                 {/* end instagram connect */}
+
+                {/*start linkedin*/}
+                {/*{*/}
+                {/*    getAllConnectedSocialAccountData?.loading ?*/}
+                {/*        <SkeletonEffect count={1}></SkeletonEffect> :*/}
+                {/*        getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length === 0 ?*/}
+                {/*            <div className="social_media_outer">*/}
+                {/*                <div className="social_media_content">*/}
+                {/*                    <i className="fa-brands fa-linkedin"*/}
+                {/*                       style={{color: "blue", fontSize: "24px"}}/>*/}
+                {/*                    <div>*/}
+                {/*                        <h5 className="">Linkedin Account</h5>*/}
+                {/*                        <h6 className="cmn_headings">www.linkedin.com</h6>*/}
+                {/*                    </div>*/}
+                {/*                </div>*/}
+
+                {/*                <LoginSocialLinkedin*/}
+                {/*                    scope="r_organization_followers r_organization_social rw_organization_admin r_organization_social_feed w_member_social w_organization_social r_basicprofile w_organization_social_feed w_member_social_feed r_1st_connections_size"*/}
+                {/*                    client_id='78yw1ufa020d7u'*/}
+                {/*                    client_secret='aZ39uxHViGJ2sTZB'*/}
+                {/*                    redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}*/}
+                {/*                    onResolve={ async (response) => {*/}
+                {/*                        console.log("@@@@ response ===>>>> ",response);*/}
+                {/*                        // const res = await fetchUserProfile(response?.data?.access_token);*/}
+                {/*                        // console.log("res data ",res);*/}
+                {/*                    }}*/}
+                {/*                    onReject={(error) => {*/}
+                {/*                        console.log("error", error)*/}
+                {/*                    }}>*/}
+
+                {/*                    <LinkedInLoginButton text={"Connect"} className={"facebook_connect"}*/}
+                {/*                                         icon={() => null} preventActiveStyles={true}*/}
+                {/*                                         style={commonButtonStyle}/>*/}
+                {/*                </LoginSocialLinkedin>*/}
+                {/*            </div> :*/}
+
+                {/*            <div className=" cmn_drop_down dropdown">*/}
+                {/*                <div className="dropdown_header">*/}
+                {/*                    <div className="social_media_outer">*/}
+                {/*                        <div className="social_media_content"*/}
+                {/*                             onClick={() => setInstagramDropDown(!instagramDropDown)}>*/}
+                {/*                            <i className="fa-brands fa-instagram"*/}
+                {/*                               style={{color: "purple", fontSize: "24px"}}/>*/}
+                {/*                            /!*<img className="cmn_width " src={fb_img}/>*!/*/}
+                {/*                            <div className="text-start">*/}
+                {/*                                <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>*/}
+                {/*                                <h4 className="connect_text cmn_text_style">Connected</h4>*/}
+                {/*                            </div>*/}
+                {/*                            <svg width="14" height="8" viewBox="0 0 14 8" fill="none"*/}
+                {/*                                 xmlns="http://www.w3.org/2000/svg"*/}
+                {/*                            >*/}
+                {/*                                <path id="Icon"*/}
+                {/*                                      d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"*/}
+                {/*                                      stroke="#5F6D7E" strokeWidth="1.67"*/}
+                {/*                                      strokeLinecap="round"/>*/}
+                {/*                            </svg>*/}
+                {/*                        </div>*/}
+                {/*                    </div>*/}
+
+                {/*                    {*/}
+                {/*                        instagramDropDown === true &&*/}
+
+                {/*                        <ul className="menu_items">*/}
+                {/*                            {*/}
+                {/*                                instagramBusinessAccountsData?.loading ?*/}
+                {/*                                    <SkeletonEffect count={3}/> :*/}
+
+                {/*                                    !(instagramBusinessAccountsData?.loading && instagramBusinessAccountsData?.data?.filter(c => c.provider === 'INSTAGRAM').length === 0) &&*/}
+                {/*                                    instagramBusinessAccountsData?.data?.slice(0, 3).map((data, index) => {*/}
+                {/*                                        return (*/}
+                {/*                                            <>*/}
+                {/*                                                <li key={index}>*/}
+                {/*                                                    <div*/}
+                {/*                                                        className="user_profileInfo_wrapper">*/}
+                {/*                                                        <div className="user_Details">*/}
+                {/*                                                            <img src={data.profile_picture_url}*/}
+                {/*                                                                 height="30px"*/}
+                {/*                                                                 width="30px"/>*/}
+                {/*                                                            <h4 className="cmn_text_style">{data.name}</h4>*/}
+                {/*                                                        </div>*/}
+                {/*                                                        <h4 className={currentConnectedFacebookPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "connect_text cmn_text_style" : "connect_text_not_connect cmn_text_style"}>{currentConnectedFacebookPages?.findIndex(c => c?.pageId === data?.id) > -1 ? "Connected" : "Not Connected"}</h4>*/}
+                {/*                                                    </div>*/}
+                {/*                                                </li>*/}
+                {/*                                            </>*/}
+                {/*                                        )*/}
+                {/*                                    })*/}
+
+                {/*                            }*/}
+                {/*                            <li>*/}
+                {/*                                {*/}
+                {/*                                    (instagramBusinessAccountsData?.data && Array.isArray(instagramBusinessAccountsData?.data)) &&*/}
+                {/*                                    <div className="connectDisconnect_btn_outer">*/}
+                {/*                                        <button className="DisConnectBtn cmn_connect_btn"*/}
+                {/*                                                onClick={() => disConnectSocialMediaAccountToCustomer("INSTAGRAM")}*/}
+                {/*                                        >*/}
+                {/*                                            Disconnect*/}
+                {/*                                        </button>*/}
+                {/*                                        <button className="ConnectBtn cmn_connect_btn"*/}
+                {/*                                                onClick={() => setShowInstagramModal(true)}*/}
+                {/*                                        >*/}
+                {/*                                            Connect More*/}
+                {/*                                        </button>*/}
+                {/*                                    </div>*/}
+
+                {/*                                }*/}
+                {/*                            </li>*/}
+                {/*                        </ul>}*/}
+
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*}*/}
             </div>
             {showFacebookModal &&
                 <FacebookModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal}
@@ -412,7 +520,6 @@ const SocialAccounts = () => {
                                socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>}
             {showInstagramModal &&
                 <FacebookModal showFacebookModal={showInstagramModal} setShowFacebookModal={setShowInstagramModal}
-                    // facebookPageList={facebookPageList}
                                facebookPageList={instagramBusinessAccountsData?.data}
                                facebookConnectedPages={facebookConnectedPages} noPageFoundMessage={"No Page Found!"}
                                socialMediaType={SocialAccountProvider.INSTAGRAM}
