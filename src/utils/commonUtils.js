@@ -52,13 +52,7 @@ export const validationSchemas = {
 
 
 export const computeAndSocialAccountJSONForFacebook = async (jsonObj, tokenProvider) => {
-
-    console.log("@@@ jsonObj ::: ",jsonObj)
-
     const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.accessToken);
-    const token = localStorage.getItem("token");
-    const decodeJwt = decodeJwtToken(token);
-
     if (tokenProvider === SocialAccountProvider.INSTAGRAM) {
         const facebookConnectedSocialMediaAccountsData = await getAllFacebookConnectedSocialMediaAccounts(longLivedToken);
         const instagramBusinessAccount = facebookConnectedSocialMediaAccountsData?.filter(accountData => {
@@ -67,26 +61,11 @@ export const computeAndSocialAccountJSONForFacebook = async (jsonObj, tokenProvi
         if (isNullOrEmpty(instagramBusinessAccount)) {
             return null;
         }
-    } else if (tokenProvider === SocialAccountProvider.LINKEDIN) {
-        return {
-            customerId: decodeJwt.customerId,
-            token: token,
-            socialAccountData: {
-                name: `${jsonObj?.data?.localizedFirstName} ${jsonObj?.data?.localizedLastName}` || null,
-                email: jsonObj?.data?.email || null,
-                imageUrl: jsonObj?.data?.profilePicture['displayImage~'].elements[3]?.identifiers[0]?.identifier || null,
-                provider: getKeyFromValueOfObject(SocialAccountProvider, tokenProvider) || null,
-                providerId: jsonObj?.data?.userID || null,
-                accessToken: jsonObj?.data?.access_token || null,
-                pageAccessToken: []
-            }
-        }
     }
-
+    const token = localStorage.getItem("token");
+    const decodeJwt = decodeJwtToken(token);
     return {
-        customerId: decodeJwt.customerId,
-        token: token,
-        socialAccountData: {
+        customerId: decodeJwt.customerId, token: token, socialAccountData: {
             name: jsonObj?.data?.name || null,
             email: jsonObj?.data?.email || null,
             imageUrl: jsonObj?.data?.picture?.data?.url || null,
@@ -95,7 +74,8 @@ export const computeAndSocialAccountJSONForFacebook = async (jsonObj, tokenProvi
             accessToken: longLivedToken || null,
             pageAccessToken: []
         }
-    }}
+    }
+}
 
 
 export const getKeyFromValueOfObject = (object, value) => {
@@ -718,5 +698,12 @@ export const getInstagramBusinessAccounts = (accountsData) => {
 }
 export const isErrorInInstagramMention = (socialMediaType, error) => {
     return socialMediaType === "INSTAGRAM" && error?.response?.data?.error?.code === 20 && error?.response?.data?.error?.error_subcode === 1772179
+
+}
+export const getInitialLetterCap = (word) => {
+    if(isNullOrEmpty(word)){
+        return ""
+    }
+    return word.charAt(0).toUpperCase() + word.slice(1);
 
 }

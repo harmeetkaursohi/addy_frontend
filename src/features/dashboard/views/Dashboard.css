@@ -417,6 +417,15 @@ select.page_title_options {
     border: transparent;
     padding: 0;
 }
+.no-page-connected-outer {
+    font-weight: 300;
+    font-size: 14px;
+    color: gray;
+}
+.connect-page-btn {
+    color: #04a3ff;
+    text-decoration: underline;
+}
 
 @media screen and (max-width: 1280px) {
     .social_media_outer {

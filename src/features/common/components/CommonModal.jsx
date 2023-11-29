@@ -6,6 +6,7 @@ import {getToken} from "../../../app/auth/auth.js";
 import ConfirmModal from "./ConfirmModal.jsx";
 import {SocialAccountProvider} from "../../../utils/contantData.js";
 import {facebookPageConnectAction} from "../../../utils/commonUtils.js";
+import default_user_icon from "../../../images/default_user_icon.svg"
 
 
 const CommonModal = ({
@@ -77,17 +78,18 @@ const CommonModal = ({
                                 {Array.isArray(allPagesList) && allPagesList.length > 0 ? allPagesList?.map((data, index) => {
                                         return (
                                             <div key={index}
-                                                 className={`modal_inner_content ${(currentConnectedPages?.includes(data?.id) ? '' : (currentConnectedPages.length > 0 ? 'disconnect_wrapper' : ''))}`}>
+                                                 // className={`modal_inner_content ${(currentConnectedPages?.includes(data?.id) ? '' : (currentConnectedPages.length > 0 ? 'disconnect_wrapper' : ''))}`}>
+                                                 className={`modal_inner_content `}>
 
                                                 <div className="user_info_container">
                                                     <div className='users_profile'>
                                                         {
                                                             socialMediaType === SocialAccountProvider.FACEBOOK &&
-                                                            <img src={data.picture.data.url}/>
+                                                            <img src={data.picture.data.url || default_user_icon }/>
                                                         }
                                                         {
                                                             socialMediaType === SocialAccountProvider.INSTAGRAM &&
-                                                            <img src={data.profile_picture_url}/>
+                                                            <img src={data.profile_picture_url || default_user_icon}/>
                                                         }
 
                                                     </div>
@@ -99,7 +101,8 @@ const CommonModal = ({
 
                                                 <div className='connect_btn_outer'>
                                                     <button
-                                                        className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : (currentConnectedPages.length > 0 ? 'disabled-button' : 'default-button')}`}
+                                                        // className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : (currentConnectedPages.length > 0 ? 'disabled-button' : 'default-button')}`}
+                                                        className={`cmn_connect_btn connect_btn connect_btn default-button ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : ''}`}
                                                         onClick={(e) => {
                                                             setMediaPageData(data);
                                                             setShowConfirmModal(true);

@@ -40,6 +40,15 @@ export const facebookPageConnect = createAsyncThunk('facebook/facebookPageConnec
     });
 
 });
+export const disconnectDisabledPages = createAsyncThunk('facebook/disconnectDisabledPages', async (data, thunkAPI) => {
+    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/pages/disconnect`, data.pagesToDisconnect, setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+
+});
 
 export const getFacebookConnectedPages = createAsyncThunk('facebook/getFacebookConnectedPages', async (data, thunkAPI) => {
     return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/pages/connected`, setAuthenticationHeader(data.token)).then(res => {
