@@ -23,25 +23,27 @@ import {
 } from "../../../app/actions/facebookActions/facebookActions";
 import default_user_icon from "../../../images/default_user_icon.svg"
 import {NoInstagramBusinessAccountFound, SocialAccountProvider} from "../../../utils/contantData";
+import AccountAlreadyConnectedWarningModal from "./AccountAlreadyConnectedWarningModal";
 
 const SocialAccounts = () => {
     const dispatch = useDispatch();
     const token = getToken();
-    const [checkForDisablePages, setCheckForDisablePages] = useState(true);
-    const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState([]);
-    const [currentConnectedInstagramPages, setCurrentConnectedInstagramPages] = useState([]);
+    // const [checkForDisablePages, setCheckForDisablePages] = useState(true);
+    const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState(null);
+    const [currentConnectedInstagramPages, setCurrentConnectedInstagramPages] = useState(null);
+    const [showAccountAlreadyConnectedWarningModal, setShowAccountAlreadyConnectedWarningModal] = useState(false);
     const [facebookDropDown, setFacebookDropDown] = useState(false);
     const [instagramDropDown, setInstagramDropDown] = useState(false);
     const [showFacebookModal, setShowFacebookModal] = useState(false);
     const [showInstagramModal, setShowInstagramModal] = useState(false);
 
-    const facebookPageLoading = useSelector(state => state.facebook.getFacebookPageReducer.loading);
-    const connectedPages = useSelector(state => state.facebook.getFacebookConnectedPagesReducer.facebookConnectedPages);
-    const isConnectedPagesLoading = useSelector(state => state.facebook.getFacebookConnectedPagesReducer.loading);
-    const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
+
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
-    const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
+    const getAllFacebookPagesData = useSelector(state => state.facebook.getFacebookPageReducer);
     const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
+    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+    const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
+
 
 
     useEffect(() => {
@@ -81,57 +83,57 @@ const SocialAccounts = () => {
 
 
     useEffect(() => {
-        if (connectedPages && Array.isArray(connectedPages)) {
-            const connectedFacebookSocialAccount = getAllConnectedSocialAccountData?.data?.filter(socialAccount => socialAccount?.provider === "FACEBOOK")[0]
-            const connectedFacebookPages = connectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedFacebookSocialAccount?.id)
-            const currentConnectedFaceBookPages = facebookPageList?.filter(page =>
-                connectedFacebookPages?.some(fbPage => fbPage?.pageId === page?.id)
-            )
-            setCurrentConnectedFacebookPages(currentConnectedFaceBookPages || []);
-            // List of pages to remove from the database incase user has deactivated page but it will still be present in our db
-
-            const pagesToRemove = connectedFacebookPages?.filter(page =>
-                !facebookPageList?.some(fbPage => fbPage?.id === page?.pageId)
-            );
-            if (!isNullOrEmpty(pagesToRemove)) {
-                checkForDisablePages && removeDisabledPages(pagesToRemove)
-            } else {
-                setCheckForDisablePages(false);
-            }
-
-
-            // const newIds = connectedPages.map(c => c.id);
-            // const objectsToAdd = connectedPages.filter(obj => !currentConnectedFacebookPages.some(existingObj => existingObj.id === obj.id));
-            // const objectsToRemove = currentConnectedFacebookPages.filter(obj => !newIds.includes(obj.id));
-            // const updatedConnectedPages = [...currentConnectedFacebookPages, ...objectsToAdd].filter(obj => !objectsToRemove.some(remObj => remObj.id === obj.id));
-            // setCurrentConnectedFacebookPages(updatedConnectedPages);
-        }
-    }, [connectedPages]);
-    useEffect(() => {
-        if (connectedPages && Array.isArray(connectedPages)) {
+        if (connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
             const connectedInstagramSocialAccount = getAllConnectedSocialAccountData?.data?.filter(socialAccount => socialAccount?.provider === "INSTAGRAM")[0]
-            const connectedInstagramPages = connectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedInstagramSocialAccount?.id)
+            const connectedInstagramPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedInstagramSocialAccount?.id)
             const currentConnectedInstagramPages = instagramBusinessAccountsData?.data?.filter(page =>
                 connectedInstagramPages?.some(instaPage => instaPage?.pageId === page?.id)
             );
-            setCurrentConnectedInstagramPages(currentConnectedInstagramPages || []);
+            setCurrentConnectedInstagramPages(currentConnectedInstagramPages || null);
             // List of pages to remove from the database incase user has deactivated page but it will still be present in our db
-            const pagesToRemove = connectedInstagramPages?.filter(page =>
-                !instagramBusinessAccountsData?.data?.some(fbPage => fbPage?.id === page?.pageId)
-            );
-            if (!isNullOrEmpty(pagesToRemove)) {
-                checkForDisablePages && removeDisabledPages(pagesToRemove)
-            } else {
-                setCheckForDisablePages(false);
-            }
+            // const pagesToRemove = connectedInstagramPages?.filter(page =>
+            //     !instagramBusinessAccountsData?.data?.some(fbPage => fbPage?.id === page?.pageId)
+            // );
+            // if (!isNullOrEmpty(pagesToRemove)) {
+            //     checkForDisablePages && removeDisabledPages(pagesToRemove)
+            // } else {
+            //     setCheckForDisablePages(false);
+            // }
 
         }
-    }, [connectedPages]);
+    }, [connectedPagesData?.facebookConnectedPages]);
+
+    useEffect(() => {
+
+        if (connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+            const connectedFacebookSocialAccount = getAllConnectedSocialAccountData?.data?.filter(socialAccount => socialAccount?.provider === "FACEBOOK")[0]
+            const connectedFacebookPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedFacebookSocialAccount?.id)
+            const currentConnectedFaceBookPages = getAllFacebookPagesData?.facebookPageList?.filter(page =>
+                connectedFacebookPages?.some(fbPage => fbPage?.pageId === page?.id)
+            )
+            setCurrentConnectedFacebookPages(currentConnectedFaceBookPages || null);
+            // List of pages to remove from the database incase user has deactivated page but it will still be present in our db
+
+            // const pagesToRemove = connectedFacebookPages?.filter(page =>
+            //     !facebookPageList?.some(fbPage => fbPage?.id === page?.pageId)
+            // );
+            // if (!isNullOrEmpty(pagesToRemove)) {
+            //     checkForDisablePages && removeDisabledPages(pagesToRemove)
+            // } else {
+            //     setCheckForDisablePages(false);
+            // }
+        }
+    }, [connectedPagesData?.facebookConnectedPages]);
+
 
 
     const connectSocialMediaAccountToCustomer = (object) => {
         object.then((res) => {
-            dispatch(socialAccountConnectActions(res)).then(() => {
+            dispatch(socialAccountConnectActions(res)).then((response) => {
+                if (response.meta.requestStatus === "rejected" && response.payload.status === 409) {
+                    setShowAccountAlreadyConnectedWarningModal(true)
+                }
+
                 dispatch(getAllConnectedSocialAccountAction(res))
                 dispatch(getAllSocialMediaPostsByCriteria({
                     token: token,
@@ -143,7 +145,10 @@ const SocialAccounts = () => {
         })
     }
     const connectInstagramAccountToCustomer = (data) => {
-        dispatch(socialAccountConnectActions(data)).then(() => {
+        dispatch(socialAccountConnectActions(data)).then((response) => {
+            if (response.meta.requestStatus === "rejected" && response.payload.status === 409) {
+                setShowAccountAlreadyConnectedWarningModal(true)
+            }
             dispatch(getAllConnectedSocialAccountAction(data))
             dispatch(getAllSocialMediaPostsByCriteria({
                 token: token,
@@ -152,25 +157,25 @@ const SocialAccounts = () => {
         })
 
     }
-    const removeDisabledPages = (disabledPages, x) => {
-        const updatedData = disabledPages?.map(page => {
-            return {
-                pageId: page.pageId,
-                name: page.name,
-                imageUrl: page.imageUrl,
-                access_token: page.access_token,
-                socialMediaAccountId: page.socialMediaAccountId
-            }
-        })
-        const requestBody = {
-            token: token,
-            pagesToDisconnect: updatedData
-        }
-        dispatch(disconnectDisabledPages(requestBody)).then(res=>{
-            setCheckForDisablePages(false)
-        })
-
-    }
+    // const removeDisabledPages = (disabledPages, x) => {
+    //     const updatedData = disabledPages?.map(page => {
+    //         return {
+    //             pageId: page.pageId,
+    //             name: page.name,
+    //             imageUrl: page.imageUrl,
+    //             access_token: page.access_token,
+    //             socialMediaAccountId: page.socialMediaAccountId
+    //         }
+    //     })
+    //     const requestBody = {
+    //         token: token,
+    //         pagesToDisconnect: updatedData
+    //     }
+    //     // dispatch(disconnectDisabledPages(requestBody)).then(res => {
+    //     //     setCheckForDisablePages(false)
+    //     // })
+    //
+    // }
 
 
     const disConnectSocialMediaAccountToCustomer = (socialMediaType) => {
@@ -186,11 +191,11 @@ const SocialAccounts = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 if (socialMediaType === "INSTAGRAM") {
-                    currentConnectedFacebookPages.length === 0 ? setFacebookDropDown(true) : setFacebookDropDown(false)
+                    currentConnectedFacebookPages?.length === 0 ? setFacebookDropDown(true) : setFacebookDropDown(false)
                     setCurrentConnectedInstagramPages([])
                 }
                 if (socialMediaType === "FACEBOOK") {
-                    currentConnectedInstagramPages.length === 0 ? setInstagramDropDown(true) : setInstagramDropDown(false)
+                    currentConnectedInstagramPages?.length === 0 ? setInstagramDropDown(true) : setInstagramDropDown(false)
                     setCurrentConnectedFacebookPages([])
                 }
                 const decodeJwt = decodeJwtToken(token);
@@ -288,6 +293,8 @@ const SocialAccounts = () => {
                                         connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response, SocialAccountProvider.FACEBOOK))
                                     }}
                                     onReject={(error) => {
+                                        console.log("error",error)
+
                                     }}>
 
                                     <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
@@ -311,19 +318,23 @@ const SocialAccounts = () => {
                                                 <h4 className="connect_text cmn_text_style">Connected</h4>
                                             </div>
                                             {
-                                                (!facebookPageLoading || !getAllConnectedSocialAccountData?.loading || !isConnectedPagesLoading) && currentConnectedFacebookPages?.length === 0 &&
+                                                (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedFacebookPages?.length === 0 &&
                                                 <button className="DisConnectBtn cmn_connect_btn w-auto"
                                                         onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}>
                                                     Disconnect
                                                 </button>
                                             }
-                                            <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path id="Icon"
-                                                      d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                                      stroke="#5F6D7E" strokeWidth="1.67"
-                                                      strokeLinecap="round"/>
-                                            </svg>
+                                            <div className={ facebookDropDown? "upside-down":""}>
+                                                <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                                     xmlns="http://www.w3.org/2000/svg">
+                                                    <path id="Icon"
+                                                          d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                          stroke="#5F6D7E" strokeWidth="1.67"
+                                                          strokeLinecap="round"/>
+                                                </svg>
+
+                                            </div>
+
 
                                         </div>
                                     </div>
@@ -333,7 +344,7 @@ const SocialAccounts = () => {
 
                                         <ul className="menu_items">
                                             {
-                                                getAllConnectedSocialAccountData?.loading ?
+                                                getAllFacebookPagesData?.loading ?
                                                     <SkeletonEffect count={3}/> :
 
                                                     currentConnectedFacebookPages?.length === 0 ?
@@ -354,7 +365,7 @@ const SocialAccounts = () => {
                                                                                 className="user_profileInfo_wrapper">
                                                                                 <div className="user_Details">
                                                                                     <img
-                                                                                        src={data.picture.data.url || default_user_icon}
+                                                                                        src={data?.picture?.data?.url || default_user_icon}
                                                                                         height="30px"
                                                                                         width="30px"/>
                                                                                     <h4 className="cmn_text_style">{data.name}</h4>
@@ -368,7 +379,7 @@ const SocialAccounts = () => {
 
                                                             <li>
                                                                 {
-                                                                    (facebookPageList && Array.isArray(facebookPageList)) &&
+                                                                    (getAllFacebookPagesData?.facebookPageList && Array.isArray(getAllFacebookPagesData?.facebookPageList)) &&
                                                                     <div className="connectDisconnect_btn_outer">
                                                                         <button
                                                                             className="DisConnectBtn cmn_connect_btn"
@@ -417,7 +428,6 @@ const SocialAccounts = () => {
                                     </div>
                                 </div>
 
-                                {/*<button style={commonButtonStyle} onClick={handleLoginClick}>Connect</button>*/}
 
                                 <LoginSocialFacebook
                                     isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
@@ -452,20 +462,24 @@ const SocialAccounts = () => {
                                                 <h4 className="connect_text cmn_text_style">Connected</h4>
                                             </div>
                                             {
-                                                (!facebookPageLoading || !getAllConnectedSocialAccountData?.loading || !isConnectedPagesLoading) && currentConnectedInstagramPages?.length === 0 &&
+                                                (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedInstagramPages?.length === 0 &&
                                                 <button className="DisConnectBtn cmn_connect_btn w-auto"
                                                         onClick={() => disConnectSocialMediaAccountToCustomer("INSTAGRAM")}>
                                                     Disconnect
                                                 </button>
                                             }
-                                            <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path id="Icon"
-                                                      d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                                      stroke="#5F6D7E" strokeWidth="1.67"
-                                                      strokeLinecap="round"/>
-                                            </svg>
+                                            <div className={ instagramDropDown? "upside-down":""}>
+                                                <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                                     xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                    <path id="Icon"
+                                                          d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                          stroke="#5F6D7E" strokeWidth="1.67"
+                                                          strokeLinecap="round"/>
+                                                </svg>
+
+                                            </div>
+
                                         </div>
                                     </div>
 
@@ -545,16 +559,21 @@ const SocialAccounts = () => {
             </div>
             {showFacebookModal &&
                 <FacebookModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal}
-                               facebookPageList={facebookPageList}
-                               connectedPagesList={connectedPages} noPageFoundMessage={"No Page Found!"}
+                               facebookPageList={getAllFacebookPagesData?.facebookPageList}
+                               connectedPagesList={connectedPagesData?.facebookConnectedPages} noPageFoundMessage={"No Page Found!"}
                                socialMediaType={SocialAccountProvider.FACEBOOK}
                                socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>}
             {showInstagramModal &&
                 <FacebookModal showFacebookModal={showInstagramModal} setShowFacebookModal={setShowInstagramModal}
                                facebookPageList={instagramBusinessAccountsData?.data}
-                               connectedPagesList={connectedPages} noPageFoundMessage={"No Page Found!"}
+                               connectedPagesList={connectedPagesData?.facebookConnectedPages} noPageFoundMessage={"No Page Found!"}
                                socialMediaType={SocialAccountProvider.INSTAGRAM}
                                socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
+            {
+                showAccountAlreadyConnectedWarningModal &&
+                <AccountAlreadyConnectedWarningModal showModal={showAccountAlreadyConnectedWarningModal}
+                                                     setShowModal={setShowAccountAlreadyConnectedWarningModal}></AccountAlreadyConnectedWarningModal>
+            }
 
         </div>
 

@@ -5,15 +5,16 @@ import jsondata from "../../locales/data/initialdata.json"
 import {useDispatch, useSelector} from "react-redux"
 import {forgetPassword} from '../../app/actions/userActions/userActions';
 import {Link, useNavigate} from 'react-router-dom';
-import girl_img from "../../images/girl.png";
 import addyads_img from "../../images/addylogo.png";
 import Frame from "../../images/Frame.svg";
+import {RotatingLines} from "react-loader-spinner";
 
 
 function ForgetPassword() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const forgotPasswordData=useSelector(state => state.user.forgetPasswordReducer)
 
     useEffect(() => {
         document.title = "Forget Password"
@@ -82,7 +83,12 @@ function ForgetPassword() {
                                                 ) : null}
 
                                                 <button type="submit"
-                                                        className=' login_btn'>{jsondata.forgetPassword.forgetPassword}</button>
+                                                        disabled={forgotPasswordData?.loading}
+                                                        className={' login_btn '+(forgotPasswordData?.loading?"opacity-50":"")}>{jsondata.forgetPassword.forgetPassword}
+                                                    {
+                                                        forgotPasswordData?.loading && <span className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines width={30} strokeColor={"white"}></RotatingLines></span>
+                                                    }
+                                                </button>
                                             </div>
 
                                         </div>

@@ -153,6 +153,11 @@ input::-webkit-inner-spin-button {
     line-height: 38px;
     letter-spacing: -0.2px;
 }
+.connection-warning-text{
+    font-size: 25px;
+    color:red;
+}
+
 
 .skeleton {
     position: relative;

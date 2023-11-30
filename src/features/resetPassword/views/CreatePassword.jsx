@@ -4,7 +4,7 @@ import jsondata from "../../../locales/data/initialdata.json"
 import {useFormik} from 'formik';
 import {validationSchemas} from '../../../utils/commonUtils';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import girl_img from "../../../images/girl.png";
 import addyads_img from "../../../images/addylogo.png";
 import {createPassword} from "../../../app/actions/userActions/userActions.js";
@@ -20,6 +20,7 @@ const CreatePassword = () => {
     const userId = queryParamVale.get("id")
     const token = queryParamVale.get("token")
     const dispatch = useDispatch()
+    const createPasswordReducer=useSelector(state => state.user.createPasswordReducer)
 
     useEffect(() => {
         document.title = "Create Password"
@@ -139,7 +140,7 @@ const CreatePassword = () => {
 
                                         </div>
 
-                                        <button className=' login_btn'>{jsondata.createPassword.createPassword}</button>
+                                        <button disabled={createPasswordReducer?.loading} className=' login_btn'>{jsondata.createPassword.createPassword}</button>
 
                                     </form>
                                 </div>

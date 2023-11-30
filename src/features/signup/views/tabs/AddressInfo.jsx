@@ -29,13 +29,13 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
     const formik = useFormik({
         initialValues: {
-            addressLine1: "",
-            addressLine2: "",
-            country: "",
-            state: "",
-            county: "",
-            city: "",
-            pinCode: ""
+            addressLine1: formData.address.addressLine1,
+            addressLine2: formData.address.addressLine2,
+            country: formData.address.country,
+            state: formData.address.state,
+            county: formData.address.county,
+            city: formData.address.city,
+            pinCode: formData.address.pinCode
 
         },
         validationSchema: validationSchemas.address,
@@ -91,12 +91,12 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
     // handle previous tab
     const handlePreviousTab = (e) => {
         e.preventDefault();
-        setFormData((prevState) => {
-            return {...prevState, formData}
-        });
+        // setFormData((prevState) => {
+        //     return {...prevState, formData}
+        // });
+        setFormData({...formData,address:formik.values})
         setShowTab((prev) => prev - 1);
     }
-
     // Custom onChange handler for the country select element
     const handleCountryChange = (event) => {
         const selectedCountry = event.target.value;
@@ -289,7 +289,8 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                                                 <div className='col-lg-6'>
                                                     <Button text={"Previous"} loading={false} type=""
-                                                            handleOnClickFunction={(e) => handlePreviousTab(e)}/>
+                                                            handleOnClickFunction={(e) =>
+                                                                !signUpReducer?.loading && handlePreviousTab(e)}/>
                                                 </div>
                                                 <div className='col-lg-6'>
                                                     <Button type={"Submit"} text={jsondata.signUp}
@@ -299,7 +300,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                             </div>
                                         </form>
                                         <h3 className='cmn_heading'>{jsondata.alreadyAccount}
-                                            <Link to="/login" className="ms-2">
+                                            <Link to={signUpReducer?.loading ? "/" : "/login"} className="ms-2">
                                                 <span className='sign_up'>{jsondata.login}</span>
                                             </Link>
                                         </h3>
