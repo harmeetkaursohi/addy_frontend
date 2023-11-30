@@ -3,7 +3,7 @@ import noAccountData from "../../../../images/no_social_account.png";
 import Dropdown from "react-bootstrap/Dropdown";
 import {
     computeImageURL,
-    getCustomDateEarlierUnixDateTime,
+    getCustomDateEarlierUnixDateTime, getInitialLetterCap, isNullOrEmpty,
     isPageConnected,
     notConnectedSocialMediaAccount
 } from "../../../../utils/commonUtils";
@@ -25,6 +25,10 @@ export const DashboardReports = () => {
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesReducer = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const facebookPageListReducer = useSelector(state => state.facebook.getFacebookPageReducer);
+    // const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
+
+    // const[connectedPagesToSelectedSocialMediaAccount,setConnectedPagesToSelectedSocialMediaAccount]=useState([])
+    // const [selectedPage,setSelectedPage]=useState(null);
 
     const dispatch = useDispatch();
     const [reportSelectedAccountType, setReportSelectedAccountType] = useState("FACEBOOK");
@@ -50,6 +54,19 @@ export const DashboardReports = () => {
         }
 
     }, [connectedPagesReducer, facebookPageListReducer, getAllConnectedSocialAccountData]);
+
+
+    // useEffect(() => {
+    //     if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages) && Array.isArray(facebookPageListReducer?.facebookPageList)) {
+    //         const selectedSocialMediaAccount=getAllConnectedSocialAccountData?.data.find(c => c.provider === reportSelectedAccountType.toUpperCase())
+    //         setReportSelectedAccountData(selectedSocialMediaAccount);
+    //         const connectedPagesToSelectedSocialMediaAccount=connectedPagesReducer?.facebookConnectedPages?.filter(pageData=>pageData.socialMediaAccountId===selectedSocialMediaAccount.id);
+    //         setConnectedPagesToSelectedSocialMediaAccount(connectedPagesToSelectedSocialMediaAccount)
+    //         !isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) && setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
+    //     }
+    //
+    //
+    // }, [connectedPagesReducer, facebookPageListReducer, getAllConnectedSocialAccountData,reportSelectedAccountType]);
 
     useEffect(() => {
         if (reportSelectPages) {
@@ -138,15 +155,48 @@ export const DashboardReports = () => {
                                                     setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
                                                     setReportSelectedAccountType(cur)
 
+
                                                 }}><img width={24}
                                                         src={computeImageURL(cur)}
-                                                        className="me-3"/>{SocialAccountProvider[cur]}
+                                                        className="me-3"/>  {getInitialLetterCap(SocialAccountProvider[cur])}
                                             </Dropdown.Item>
                                         ))
 
                                         }
                                     </Dropdown.Menu>
                                 </Dropdown>
+                                {/*<Dropdown className="dropdown_btn">*/}
+
+                                {/*    <Dropdown.Toggle variant="success" id="dropdown-basic"*/}
+                                {/*                     className="social_dropdowns"*/}
+                                {/*                     disabled={getAllConnectedSocialAccountData?.laoding || reportSectionData?.loading || reportGraphSectionData?.loading}>*/}
+                                {/*        <img src={computeImageURL(reportSelectedAccountType)}*/}
+                                {/*             className="me-3"*/}
+                                {/*             alt={selectedPage?.name}/>{selectedPage?.name}*/}
+                                {/*    </Dropdown.Toggle>*/}
+
+                                {/*    <Dropdown.Menu>*/}
+                                {/*        {connectedPagesToSelectedSocialMediaAccount?.map(page => (*/}
+
+                                {/*            <Dropdown.Item*/}
+
+                                {/*                // disabled={notConnectedSocialMediaAccount(cur, getAllConnectedSocialAccountData?.data)}*/}
+                                {/*                onClick={() => {*/}
+                                {/*                    setSelectedPage(page)*/}
+                                {/*                    // setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))*/}
+                                {/*                    // setReportSelectedAccountType(cur)*/}
+
+
+                                {/*                }}><img width={24}*/}
+                                {/*                        src={computeImageURL(reportSelectedAccountData.provider)}*/}
+                                {/*                        className="me-3"/>  {page.name}*/}
+                                {/*            </Dropdown.Item>*/}
+                                {/*        ))*/}
+
+                                {/*        }*/}
+                                {/*    </Dropdown.Menu>*/}
+                                {/*</Dropdown>*/}
+
 
                                 <div className={"tabs_pages"}>
 

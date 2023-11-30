@@ -6,6 +6,7 @@ import {validationSchemas} from "../../../../utils/commonUtils.js";
 import {useFormik} from "formik";
 import Button from "../../../common/components/Button";
 import React, {useEffect} from 'react'
+import {useSelector} from "react-redux";
 
 
 const UserInfo = ({formData, setFormData, setShowTab}) => {
@@ -31,6 +32,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
             setShowTab(2);
         },
     });
+    const signUpReducer = useSelector(state => state?.user?.signUpReducer);
 
     useEffect(() => {
         if (formData) {
@@ -171,7 +173,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                 <Button type={"Submit"} text={jsondata.next}/>
                                             </div>
                                         </form>
-                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to="/login"><span
+                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/" : "/login"}><span
                                             className='sign_up'>{jsondata.login}</span></Link></h3>
                                     </div>
                                 </div>

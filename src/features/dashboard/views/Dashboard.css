@@ -408,7 +408,29 @@ select.page_title_options {
     width: 100%;
     padding: 0px;
 }
+img.connection-error-svg {
+    height: 200px;
+    width: 220px;
+    margin-bottom: 20px;
+    margin-top: -30px;
 
+}
+.upside-down{
+    transform: rotate(180deg);
+}
+.connection-error-close-btn{
+    border: 1px solid rgb(240, 124, 51);
+    border-radius: 5px;
+    box-shadow: unset;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 0px 10px;
+    height: 39px;
+    background: rgb(240, 124, 51);
+    min-width: 108px;
+}
 
 .cmn_drop_down.show.dropdown .menu_items.dropdown-menu {
     position: relative !important;

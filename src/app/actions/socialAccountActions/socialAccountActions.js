@@ -9,7 +9,7 @@ export const socialAccountConnectActions = createAsyncThunk('socialAccount/socia
     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account`, data.socialAccountData, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
-        showErrorToast(error.response.data.message);
+        error.response.data.status!=="409" && showErrorToast(error.response.data.message);
         return thunkAPI.rejectWithValue(error.response);
     });
 })
