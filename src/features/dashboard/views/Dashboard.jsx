@@ -40,11 +40,9 @@ const Dashboard = () => {
                             facebookPageList={facebookPageList}/>
                     <div className="dashboard_outer">
                         <div className="row">
-
                             <DashboardReports/>
                             <SocialAccounts/>
                         </div>
-                        {/* upcoming post */}
                         <ScheduledComponent scheduledData={getAllPostsByCriteriaData}/>
                     </div>
 

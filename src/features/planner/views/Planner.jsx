@@ -40,7 +40,8 @@ const Planner = () => {
 
     const [events, setEvents] = useState([
         {title: 'Instagram post', start: new Date().getTime(), imageUrl: instagram_img},
-        {title: "Twitter", start: new Date().getTime(), imageUrl: linkedin}]);
+        {title: "Twitter", start: new Date().getTime(), imageUrl: linkedin}
+    ]);
 
     const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer);
     const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
@@ -63,6 +64,7 @@ const Planner = () => {
             setEvents(computeAndReturnPlannerEvent(getAllPostsForPlannerData?.data));
         }
     }, [getAllPostsForPlannerData]);
+
 
     useEffect(() => {
         if (getAllPlannerPostsData?.data) {
@@ -101,8 +103,7 @@ const Planner = () => {
     // render event content
     const renderCalendarCards = ({event}) => {
         return (
-            <div className={"cal_Div w-100 test"}
-                 style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
+            <div className={"cal_Div w-100 test"} style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
 
                 <div className="w-100 p-0 calendar_card">
 

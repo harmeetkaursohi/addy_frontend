@@ -198,9 +198,7 @@ export const redirectToURL = (redirectedURL) => {
 }
 
 export const isPlannerPostEditable = (feedPostDate) => {
-
     return (new Date(feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0;
-
 }
 
 
@@ -211,7 +209,7 @@ export const computeAndReturnPlannerEvent = (currentObject) => {
             start: new Date(c),
             showMoreContent: Object.keys(currentObject[c]).length - 1,
             batchId: Object.keys(currentObject[c])[0],
-            postDate: new Date(c).getTime(),
+            postDate: new Date(c),
             childCardContent: computeAndBuildChildCard(currentObject[c], Object.keys(currentObject[c])[0])
         });
     })

@@ -25,6 +25,7 @@ import {
 } from "../../../utils/commonUtils";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
+import default_user_icon from "../../../images/default_user_icon.svg";
 
 const CreatePost = () => {
 
@@ -285,6 +286,8 @@ const CreatePost = () => {
     }
 
 
+    console.log("results ::: ", allOptions.flatMap((group) => group.allOptions).length > 0)
+
     return (
         <>
             <SideBar/>
@@ -306,15 +309,13 @@ const CreatePost = () => {
                                         <div className="createPost_outer">
                                             <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
 
-
                                             <Dropdown className='insta_dropdown_btn mt-2'>
-                                                <Dropdown.Toggle id="instagram"
-                                                                 className="instagram_dropdown tabs_grid">
+                                                <Dropdown.Toggle id="instagram" className="instagram_dropdown tabs_grid" disabled={allOptions.flatMap((group) => group.allOptions).length <= 0}>
                                                     {selectedAllDropdownData.length > 0 ?
                                                         (
                                                             selectedAllDropdownData.map((data, index) => (
                                                                 <div key={index} className="selected-option">
-                                                                    <img src={data?.selectOption?.imageUrl}
+                                                                    <img src={data?.selectOption?.imageUrl || default_user_icon}
                                                                          alt={data?.selectOption?.name}/>
                                                                     <span>{data?.selectOption?.name}</span>
                                                                     <RxCross2 onClick={(e) => {
@@ -341,6 +342,7 @@ const CreatePost = () => {
                                                     <div className="dropdown-options">
 
                                                         <div className='_'>
+
                                                             <div className="select_platform_outer">
                                                                 <input type="checkbox"
                                                                        id="choice1-2"
@@ -360,18 +362,21 @@ const CreatePost = () => {
                                                                             className='instagram_outer facebook_outer '
                                                                             key={index}>
                                                                             <div className="checkbox-button_outer">
+                                                                                {
+                                                                                    socialAccount && socialAccount?.pageAccessToken.length > 0 &&
+                                                                                    <>
+                                                                                        <input type="checkbox"
+                                                                                               className=""
+                                                                                               id="choice1-1"
+                                                                                               name="choice1"
+                                                                                               checked={selectedGroups.includes(socialAccount?.provider)}
+                                                                                               onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
+                                                                                        />
 
-                                                                                <input type="checkbox"
-                                                                                       className=""
-                                                                                       id="choice1-1"
-                                                                                       name="choice1"
-                                                                                       checked={selectedGroups.includes(socialAccount?.provider)}
-                                                                                       onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
-                                                                                />
-
-                                                                                {socialAccount &&
-                                                                                    <SocialMediaProviderBadge
-                                                                                        provider={socialAccount.provider}/>}
+                                                                                        <SocialMediaProviderBadge
+                                                                                            provider={socialAccount.provider}/>
+                                                                                    </>
+                                                                                }
 
                                                                             </div>
 
@@ -390,7 +395,7 @@ const CreatePost = () => {
                                                                                         <div
                                                                                             className="checkbox-button_outer">
                                                                                             <img
-                                                                                                src={page?.imageUrl}/>
+                                                                                                src={page?.imageUrl || default_user_icon}/>
                                                                                             <h2 className="cmn_text_style">{page?.name}</h2>
                                                                                         </div>
                                                                                         <input
@@ -408,8 +413,6 @@ const CreatePost = () => {
                                                                                     </div>
                                                                                 ))
                                                                             }
-
-
                                                                         </div>
                                                                     )
                                                                 })

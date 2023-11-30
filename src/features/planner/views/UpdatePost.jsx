@@ -29,6 +29,7 @@ import {
 } from "../../../utils/commonUtils";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {resetReducers} from "../../../app/actions/commonActions/commonActions";
+import default_user_icon from "../../../images/default_user_icon.svg";
 
 
 const UpdatePost = () => {
@@ -103,10 +104,8 @@ const UpdatePost = () => {
         console.log("postStatus-->", postStatus);
 
         useEffect(() => {
-
             if (getPostsByIdData && Object.keys(getPostsByIdData).length > 0) {
-
-                setSelectedOptions(getPostsByIdData?.postPageInfos?.map(c => c.pageId));
+                setSelectedOptions(getPostsByIdData?.postPageInfos?.map(c => c.pageId) || []);
                 setCaption(getPostsByIdData?.caption || "");
                 setHashTag(getPostsByIdData?.hashtag || "");
                 setPostStatus(getPostsByIdData?.postStatus)
@@ -338,8 +337,14 @@ const UpdatePost = () => {
             setBoostPost(false);
         }
 
-        console.log("files", files)
+        console.log("selectedOptions", selectedOptions);
 
+    const handleKeyDown = (event) => {
+        // Prevent the default behavior for both Enter and Space keys
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    };
 
         return (
             <>
@@ -359,7 +364,6 @@ const UpdatePost = () => {
                                             <div className="createPost_outer">
                                                 <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
 
-
                                                 {/*    dropdown select platform=====*/}
                                                 <Dropdown className='insta_dropdown_btn mt-2'>
                                                     <Dropdown.Toggle id="instagram"
@@ -368,8 +372,9 @@ const UpdatePost = () => {
                                                             (
                                                                 selectedAllDropdownData.map((data, index) => (
                                                                     <div key={index} className="selected-option">
-                                                                        <img src={data?.selectOption?.imageUrl}
-                                                                             alt={data?.selectOption?.name}/>
+                                                                        <img
+                                                                            src={data?.selectOption?.imageUrl || default_user_icon}
+                                                                            alt={data?.selectOption?.name}/>
                                                                         <span>{data?.selectOption?.name}</span>
                                                                         <RxCross2 onClick={(e) => {
                                                                             handleCheckboxChange(data)
@@ -415,17 +420,22 @@ const UpdatePost = () => {
                                                                                 key={index}>
                                                                                 <div className="checkbox-button_outer">
 
-                                                                                    <input type="checkbox"
-                                                                                           className=""
-                                                                                           id="choice1-1"
-                                                                                           name="choice1"
-                                                                                           checked={selectedGroups.includes(socialAccount?.provider)}
-                                                                                           onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
-                                                                                    />
+                                                                                    {
+                                                                                        socialAccount && socialAccount?.pageAccessToken &&
+                                                                                        <>
+                                                                                            <input type="checkbox"
+                                                                                                   className=""
+                                                                                                   id="choice1-1"
+                                                                                                   name="choice1"
+                                                                                                   checked={selectedGroups.includes(socialAccount?.provider)}
+                                                                                                   onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
+                                                                                            />
 
-                                                                                    {socialAccount &&
-                                                                                        <SocialMediaProviderBadge
-                                                                                            provider={socialAccount.provider}/>}
+                                                                                            <SocialMediaProviderBadge
+                                                                                                provider={socialAccount.provider}/>
+
+                                                                                        </>
+                                                                                    }
 
                                                                                 </div>
 
@@ -444,7 +454,7 @@ const UpdatePost = () => {
                                                                                             <div
                                                                                                 className="checkbox-button_outer">
                                                                                                 <img
-                                                                                                    src={page?.imageUrl}/>
+                                                                                                    src={page?.imageUrl || default_user_icon}/>
                                                                                                 <h2 className="cmn_text_style">{page?.name}</h2>
                                                                                             </div>
                                                                                             <input
@@ -629,8 +639,10 @@ const UpdatePost = () => {
                                                     <h6 className='create_post_text'>{jsondata.addText}</h6>
                                                     <textarea className='textarea mt-2' rows={3}
                                                               value={hashTag}
+                                                              onKeyDown={handleKeyDown}
                                                               onChange={(e) => {
                                                                   e.preventDefault();
+                                                                  console.log("@@@ key",e.key)
                                                                   const inputValue = e.target.value;
                                                                   const hashtags = convertSentenceToHashtags(inputValue);
                                                                   setHashTag(hashtags);
@@ -737,19 +749,23 @@ const UpdatePost = () => {
                                     <div className='post_preview_outer'>
 
                                         {
-                                            allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option) => {
-                                                return (<>
-                                                        <CommonFeedPreview
-                                                            socialMediaType={option.group}
-                                                            previewTitle={`${getEnumValue(option.group)} feed Preview`}
-                                                            pageName={"Team Musafirr"}
-                                                            userData={userData}
-                                                            files={files || []}
-                                                            selectedFileType={selectedFileType}
-                                                            caption={caption}
-                                                            hashTag={hashTag}
+                                            allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option) => {
 
-                                                        />
+                                                let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
+
+                                                return (<>
+                                                        {
+                                                            selectedPageData && <CommonFeedPreview
+                                                                socialMediaType={option.group}
+                                                                previewTitle={`${getEnumValue(option.group)} feed Preview`}
+                                                                pageName={selectedPageData?.name}
+                                                                userData={userData}
+                                                                files={files || []}
+                                                                selectedFileType={selectedFileType}
+                                                                caption={caption}
+                                                                hashTag={hashTag}
+                                                            />
+                                                        }
                                                     </>
                                                 )
                                             })

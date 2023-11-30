@@ -13,10 +13,6 @@ const usePosts = (pageNum = 0, filter = null) => {
     const dispatch = useDispatch();
     const token = getToken();
 
-
-    console.log("@@@ filter ::: ", filter)
-    console.log("@@@ pageNum ::: ", pageNum)
-
     useEffect(() => {
         setIsLoading(true)
         setIsError(false)
@@ -32,17 +28,22 @@ const usePosts = (pageNum = 0, filter = null) => {
             pageNumber: pageNum
         }
 
-        if (filter) {
-            requestBody.socialMediaType = filter;
-        }
 
         dispatch(getPostsPageAction(requestBody))
             .then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     if (pageNum === 0) {
-                        setResults(response?.payload);
+                        if (filter) {
+                            setResults(response?.payload?.filter(data => data.socialMediaType === filter));
+                        } else {
+                            setResults(response?.payload);
+                        }
                     } else if (pageNum > 1) {
-                        setResults((prev) => [...prev, ...response?.payload]);
+                        if (filter) {
+                            setResults((prev) => [...prev, ...response?.payload?.filter(data => data.socialMediaType === filter)]);
+                        } else {
+                            setResults((prev) => [...prev, ...response?.payload]);
+                        }
                     }
                     setHasNextPage(Boolean(response?.payload.length));
                     setIsLoading(false);

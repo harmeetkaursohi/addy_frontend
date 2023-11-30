@@ -1,5 +1,5 @@
 import SideBar from "../sidebar/views/Layout";
-import React from "react";
+import React, {useState} from "react";
 import './Contact.css'
 import {CiLocationOn} from "react-icons/ci";
 import {FaPhoneVolume} from "react-icons/fa6";
@@ -8,6 +8,28 @@ import GenericButtonWithLoader from "../common/components/GenericButtonWithLoade
 
 
 const ContactUs = () => {
+
+    const [formData, setFormData] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        contactNo: '',
+        message: '',
+    });
+
+    const handleOnChange = (e) => {
+        setFormData((prevState) => {
+            return {
+                ...prevState,
+                [e.target.name]: e.target.value
+            }
+        })
+    }
+
+    const handleSubmit = (e) => {
+        console.log("@@@ formData ", formData);
+    }
+
     return (
         <>
             <SideBar/>
@@ -16,7 +38,7 @@ const ContactUs = () => {
                     <div className="dashboard_outer">
                         <h2 className="cmn_title">Contact Us</h2>
                         <div className="row m-0">
-                            <div className="col-6">
+                            <div className="col-md-12 col-lg-6">
                                 <div className="contact_content">
                                     <h3>Let's talk with us</h3>
                                     <p>Questions, comments, or suggestions? Simply fill in the form and we’ll be in
@@ -38,31 +60,36 @@ const ContactUs = () => {
                                 </div>
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-md-12 col-lg-6">
                                 <div className="row m-0 contact_form">
 
                                     <div className="col-lg-6">
-                                        <input className="form-control" placeholder="First Name"/>
+                                        <input className="form-control" name="firstName" onChange={handleOnChange}
+                                               placeholder="First Name"/>
                                     </div>
 
                                     <div className="col-lg-6">
-                                        <input className="form-control" placeholder="Last Name"/>
+                                        <input className="form-control" name="lastName" onChange={handleOnChange}
+                                               placeholder="Last Name"/>
                                     </div>
 
                                     <div className="col-lg-12">
-                                        <input type="email" className="form-control" placeholder="Email"/>
+                                        <input type="email" className="form-control" name="email"
+                                               onChange={handleOnChange} placeholder="Email"/>
                                     </div>
 
                                     <div className="col-lg-12">
-                                        <input type="email" className="form-control" placeholder="Phone Number"/>
+                                        <input type="number" className="form-control" name="contactNo"
+                                               onChange={handleOnChange} placeholder="Phone Number"/>
                                     </div>
 
                                     <div className="col-lg-12">
-                                        <textarea rows="5" className="form-control"></textarea>
+                                        <textarea rows="5" name="message" className="form-control"
+                                                  onChange={handleOnChange}></textarea>
                                     </div>
 
                                     <div className="col-12 mt-3">
-                                        <GenericButtonWithLoader className="w-100 cmn_bg_btn schedule_btn loading" label="Send Message"/>
+                                        <GenericButtonWithLoader onClick={handleSubmit} className="w-100 cmn_bg_btn schedule_btn loading" label="Send Message"/>
                                     </div>
 
                                 </div>

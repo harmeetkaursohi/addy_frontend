@@ -13,9 +13,7 @@ const FacebookFeedPreview = ({previewTitle, pageName, userData, files, selectedF
 
             <div className='preview_wrapper'>
                 <div className='user_profile_info'>
-                    <img src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
-                         height="36px"
-                         width="36px"/>
+                    <img src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon} height="36px" width="36px"/>
                     <div>
                         <h3 className='create_post_text user_name boost_post_text'>{pageName}</h3>
                         <h6 className='status create_post_text'>just now

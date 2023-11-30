@@ -1,0 +1,15 @@
+.privacy_wrapper h4 {
+    font-weight: 600;
+    padding-bottom: 10px;
+    padding-top: 15px;
+}
+
+.privacy_wrapper {
+    border-radius: 10px;
+    background: #F4F7FC;
+    padding: 2em;
+}
+
+.privacy_wrapper p {
+    line-height: 28px;
+}

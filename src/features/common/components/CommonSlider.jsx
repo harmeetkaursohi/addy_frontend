@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import React from "react";
 import noImageAvailable from "../../../images/no_img_posted.png"
 import ReactPlayer from "react-player";
+import CommentText from "../../review/views/comments/CommentText";
 
 
 const CommonSlider = ({
@@ -32,8 +33,9 @@ const CommonSlider = ({
         <>
             {viewSimilarToSocialMedia ?
                 <div>
-                    <p className="caption_text">{`${caption} ${hashTag}`}</p>
-
+                    <div className={"ms-2"}>
+                        <CommentText comment={`${caption} ${hashTag}`} className={"highlight cursor-pointer"}/>
+                    </div>
                     <Slider {...settings} >
 
                         {
@@ -41,8 +43,7 @@ const CommonSlider = ({
 
                             files?.map((file, index) => {
                                 return (<div key={index}>
-                                    <img src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
-                                         alt={`Image ${index}`} className='post_img'/>
+                                    <img src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource} alt={`Image ${index}`} className='post_img'/>
                                 </div>)
                             })
                         }
