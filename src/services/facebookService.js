@@ -130,6 +130,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
             //Page reach lifetime
             await baseAxios.get(await computeInsightURL(pageId, "page_impressions", accessToken, true))
                 .then((response) => {
+
                     const lifeTimeCount = response.data?.data.find(item => item.period === "total_over_range")?.values[0]?.value || 0;
                     initialObject.Accounts_Reached.lifeTime += lifeTimeCount;
                 })
@@ -151,10 +152,8 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
                 });
         }
     }
-
     return initialObject;
 };
-
 
 export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
 
@@ -192,7 +191,7 @@ export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
 
     initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount));
     initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount));
-
+    console.log("initialObject--->1",initialObject);
     return initialObject;
 };
 

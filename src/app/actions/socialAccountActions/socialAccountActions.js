@@ -1,7 +1,14 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 import {setAuthenticationHeader} from "../../auth/auth.js";
-import {getDashBoardFacebookGraphReport, getFacebookConnectedPageIdsReport} from "../../../services/facebookService";
+import {
+    getDashBoardFacebookGraphReport,
+    getFacebookConnectedPageIdsReport,
+} from "../../../services/facebookService";
+import {
+    getDashBoardInstagramGraphReport,
+    getInstagramConnectedPageIdsReport
+} from "../../../services/instagramService";
 import {baseAxios, getInstagramBusinessAccounts} from "../../../utils/commonUtils";
 
 
@@ -34,22 +41,28 @@ export const getAllInstagramBusinessAccounts = createAsyncThunk('socialAccount/g
 
 export const getSocialMediaReportByProviderTypeAction = createAsyncThunk('socialAccount/getSocialMediaReportByProviderTypeAction', async (data, thunkAPI) => {
 
-    console.log("reportSelectPages---->",data);
+    console.log("reportSelectPages---->by myself",data);
 
     switch (data?.socialMediaType) {
 
         case "FACEBOOK": {
               return await  getFacebookConnectedPageIdsReport(data?.pages).then((res)=>{
-                  console.log("res getFacebookConnectedPageIdsReport---->",res);
                   return res;
               }).catch(error=>{
-                  console.log("error---->",res);
-
                   showErrorToast(error.response.data.message);
                   return thunkAPI.rejectWithValue(error.response);
               })
+            break;
         }
         case  "INSTAGRAM": {
+            return await  getInstagramConnectedPageIdsReport(data?.pages[0]).then((res)=>{
+                return res;
+            }).catch(error=>{
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            })
+
+             break;
 
         }
         case  "LINKEDIN": {
@@ -75,7 +88,6 @@ export const getSocialMediaGraphByProviderTypeAction = createAsyncThunk('socialA
 
         case "FACEBOOK": {
             return await  getDashBoardFacebookGraphReport(data?.pages || [],data?.query || {}).then((res)=>{
-                console.log("res getDashBoardFacebookGraphReport---->",res);
                 return res;
             }).catch(error=>{
                 console.log("error---->",res);
@@ -85,6 +97,14 @@ export const getSocialMediaGraphByProviderTypeAction = createAsyncThunk('socialA
             })
         }
         case  "INSTAGRAM": {
+            return await  getDashBoardInstagramGraphReport(data?.pages[0] ,data?.query || {}).then((res)=>{
+                return res;
+            }).catch(error=>{
+                console.log("error---->",res);
+
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            })
 
         }
         case  "LINKEDIN": {

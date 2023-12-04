@@ -307,6 +307,13 @@ export const notConnectedSocialMediaAccount = (provider, connectedList) => {
 
     return !connectedList.some(curProv => curProv?.provider === provider);
 }
+export const socialMediaAccountHasConnectedPages = (provider, socialMediaAccountList=[],connectedPagesList=[]) => {
+    if(!isNullOrEmpty(provider) && !isNullOrEmpty(socialMediaAccountList) && !isNullOrEmpty(connectedPagesList)){
+        const connectedAccount=socialMediaAccountList?.find(socialMediaAccount=> socialMediaAccount.provider=== provider )
+        return connectedAccount && connectedPagesList?.some(connectedPage=> connectedPage?.socialMediaAccountId===connectedAccount?.id)
+    }
+    return false;
+}
 
 
 export const isPageConnected = (connectedPaged, currentPage) => {
@@ -336,6 +343,7 @@ export const computeAndReturnSummedDateValues = (data) => {
 
 
 export const calculatePercentageGrowth = async (data) => {
+    console.log("data--->",data);
     for (let i = 1; i < data.length; i++) {
         const currentCount = data[i].count;
         const previousCount = data[i - 1].count;
@@ -346,21 +354,23 @@ export const calculatePercentageGrowth = async (data) => {
             data[i].percentageGrowth = ((currentCount - previousCount) / previousCount) * 100;
         }
     }
+    console.log("data-1>",data);
     if (data.length > 0) {
         data.shift()
     }
+
+    console.log("data-2>",data);
 
     return data;
 }
 
 
 export function getCustomDateEarlierUnixDateTime(dateToElapse) {
-    console.log("------>dateToElapse", dateToElapse);
     if (dateToElapse === 0) {
         return Math.floor(new Date().getTime() / 1000);
     }
     let currentDate = new Date();
-    let unixValue = new Date(currentDate.getTime() - dateToElapse * 24 * 60 * 60 * 1000).getTime() / 1000;
+    let unixValue = new Date(currentDate.getTime() - (dateToElapse * 24 * 60 * 60 * 1000)).getTime() / 1000;
 
     return Math.floor(unixValue);
 
@@ -703,5 +713,41 @@ export const getInitialLetterCap = (word) => {
         return ""
     }
     return word.charAt(0).toUpperCase() + word.slice(1);
+
+}
+export const generateUnixTimestampFor=(daysAgo)=>{
+    const currentDate = new Date();
+    if(isNullOrEmpty(daysAgo.toString())){
+        return "";
+    }
+     if(daysAgo==="now"){
+         return Math.floor(currentDate.getTime() / 1000);
+    }else{
+         const daysAgoDate = new Date(currentDate);
+         daysAgoDate.setDate(currentDate.getDate() - daysAgo);
+         return Math.floor(daysAgoDate.getTime() / 1000);
+     }
+}
+
+export const getQueryForGraphData=(socialMediaType,selectedGraphDays)=>{
+    switch (socialMediaType){
+        case "FACEBOOK":{
+           return  {
+                createdFrom: getCustomDateEarlierUnixDateTime(selectedGraphDays),
+               createdTo: getCustomDateEarlierUnixDateTime(1)
+            }
+            break;
+        }
+        case "INSTAGRAM":{
+            return  {
+                createdFrom: generateUnixTimestampFor(selectedGraphDays-1),
+                createdTo: generateUnixTimestampFor("now")
+            }
+
+            break;
+        }
+
+
+    }
 
 }

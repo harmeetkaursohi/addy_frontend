@@ -114,8 +114,10 @@ button#dropdown-basic {
     font-weight: 700;
     line-height: 20px;
     letter-spacing: -0.02px;
-    padding: 10px 10px 10px 0px;
-    width: 191px;
+    padding: 10px;
+    min-width: 191px;
+    padding-right: 35px;
+    position: relative;
 }
 
 button#dropdown-basic::after {
@@ -123,6 +125,7 @@ button#dropdown-basic::after {
     position: absolute;
     height: 50px;
     border: unset;
+    right: 11px;
 }
 
 .followers_outer {
@@ -230,7 +233,7 @@ element.style {
 }
 
 .dropdown_btn {
-    padding: 20px 24px 0px;
+    padding-top: 15px;
 }
 
 .cmn_connect_btn {
@@ -574,9 +577,20 @@ img.connection-error-svg {
 }
 
 .dropdown_btn .dropdown-menu.show {
-    width: 193px;
+    min-width: 193px;
+    width: 100%;
 }
-
+.dropdown-page-logo{
+    height:27px;
+    width:27px;
+    border-radius: 50%;
+}
+span.\39 0-day-txt {
+    font-size: 12px;
+    font-weight: 600;
+    color: #524f4f;
+    opacity: .8;
+}
 button.not_connect {
     position: absolute;
     border-radius: 2px;

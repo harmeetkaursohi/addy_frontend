@@ -3,9 +3,9 @@ import noAccountData from "../../../../images/no_social_account.png";
 import Dropdown from "react-bootstrap/Dropdown";
 import {
     computeImageURL,
-    getCustomDateEarlierUnixDateTime, getInitialLetterCap, isNullOrEmpty,
+    getCustomDateEarlierUnixDateTime, getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
     isPageConnected,
-    notConnectedSocialMediaAccount
+    notConnectedSocialMediaAccount, socialMediaAccountHasConnectedPages
 } from "../../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../../utils/contantData";
 import jsondata from "../../../../locales/data/initialdata.json";
@@ -17,6 +17,8 @@ import {
 } from "../../../../app/actions/socialAccountActions/socialAccountActions";
 import {LineGraph} from "./LineGraph";
 import {DashBoardReportLoader} from "./DashBoardReportLoader";
+import default_user_icon from "../../../../images/default_user_icon.svg"
+
 
 export const DashboardReports = () => {
 
@@ -25,55 +27,68 @@ export const DashboardReports = () => {
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesReducer = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const facebookPageListReducer = useSelector(state => state.facebook.getFacebookPageReducer);
-    // const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
+    const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
 
-    // const[connectedPagesToSelectedSocialMediaAccount,setConnectedPagesToSelectedSocialMediaAccount]=useState([])
-    // const [selectedPage,setSelectedPage]=useState(null);
+    const[connectedPagesToSelectedSocialMediaAccount,setConnectedPagesToSelectedSocialMediaAccount]=useState([])
+    const [selectedPage,setSelectedPage]=useState(null);
 
     const dispatch = useDispatch();
-    const [reportSelectedAccountType, setReportSelectedAccountType] = useState("FACEBOOK");
+    const [reportSelectedAccountType, setReportSelectedAccountType] = useState("");
     const [reportSelectedAccountData, setReportSelectedAccountData] = useState(null);
-    const [reportSelectPages, setReportSelectedPages] = useState(null);
-    const [allAvailablePages, setAllAvailablePages] = useState([]);
-    const [allSelected, isAllSelected] = useState(true);
     const [graphDaysSelected, setGraphDaysSelected] = useState(9);
+    // const [reportSelectPages, setReportSelectedPages] = useState(null);
+    // const [allAvailablePages, setAllAvailablePages] = useState([]);
+    // const [allSelected, isAllSelected] = useState(true);
 
-
-    useEffect(() => {
-
-        if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages) && Array.isArray(facebookPageListReducer?.facebookPageList)) {
-
-            if (reportSelectedAccountType) {
-                setAllAvailablePages(facebookPageListReducer?.facebookPageList?.map(c => {
-                    return {...c, isConnected: isPageConnected(connectedPagesReducer?.facebookConnectedPages, c)}
-                }))
-                isAllSelected(true)
-                setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === reportSelectedAccountType))
-                setReportSelectedPages(connectedPagesReducer?.facebookConnectedPages);
-            }
-        }
-
-    }, [connectedPagesReducer, facebookPageListReducer, getAllConnectedSocialAccountData]);
 
 
     // useEffect(() => {
+    //
     //     if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages) && Array.isArray(facebookPageListReducer?.facebookPageList)) {
-    //         const selectedSocialMediaAccount=getAllConnectedSocialAccountData?.data.find(c => c.provider === reportSelectedAccountType.toUpperCase())
-    //         setReportSelectedAccountData(selectedSocialMediaAccount);
-    //         const connectedPagesToSelectedSocialMediaAccount=connectedPagesReducer?.facebookConnectedPages?.filter(pageData=>pageData.socialMediaAccountId===selectedSocialMediaAccount.id);
-    //         setConnectedPagesToSelectedSocialMediaAccount(connectedPagesToSelectedSocialMediaAccount)
-    //         !isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) && setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
+    //
+    //         if (reportSelectedAccountType) {
+                // setAllAvailablePages(facebookPageListReducer?.facebookPageList?.map(c => {
+                //     return {...c, isConnected: isPageConnected(connectedPagesReducer?.facebookConnectedPages, c)}
+                // }))
+                // isAllSelected(true)
+                // setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === reportSelectedAccountType))
+                // setReportSelectedPages(connectedPagesReducer?.facebookConnectedPages);
+    //         }
     //     }
     //
-    //
-    // }, [connectedPagesReducer, facebookPageListReducer, getAllConnectedSocialAccountData,reportSelectedAccountType]);
+    // }, [connectedPagesReducer, facebookPageListReducer, getAllConnectedSocialAccountData]);
+
 
     useEffect(() => {
-        if (reportSelectPages) {
+        if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages) && (Array.isArray(facebookPageListReducer?.facebookPageList) || Array.isArray(instagramBusinessAccountsData?.data))) {
+            let selectedSocialMediaAccount=getAllConnectedSocialAccountData?.data?.find(c => c.provider === reportSelectedAccountType.toUpperCase() && connectedPagesReducer?.facebookConnectedPages?.some(connectedPage=>connectedPage?.socialMediaAccountId===c?.id))
+            //  In case any account is disconnected and it was selected on reports section selectedSocialMediaAccount will be null so set 1st account selected
+            if(selectedSocialMediaAccount===null || selectedSocialMediaAccount===undefined ){
+                if(connectedPagesReducer?.facebookConnectedPages?.length>0){
+                    selectedSocialMediaAccount=getAllConnectedSocialAccountData?.data?.find(accountData=>accountData?.id===connectedPagesReducer?.facebookConnectedPages[0].socialMediaAccountId)
+                }
+                setReportSelectedAccountType(selectedSocialMediaAccount?.provider ||"")
+            }
+            setReportSelectedAccountData(selectedSocialMediaAccount);
+            const connectedPagesToSelectedSocialMediaAccount=connectedPagesReducer?.facebookConnectedPages?.filter(pageData=> pageData?.socialMediaAccountId===selectedSocialMediaAccount?.id);
+            setConnectedPagesToSelectedSocialMediaAccount(connectedPagesToSelectedSocialMediaAccount)
+            !isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ? setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0]):setSelectedPage(null)
+        }
+    }, [connectedPagesReducer, facebookPageListReducer, getAllConnectedSocialAccountData,reportSelectedAccountType]);
+
+
+
+    useEffect(() => {
+        setGraphDaysSelected(9)
+
+    }, [reportSelectedAccountType]);
+
+    useEffect(() => {
+        if (selectedPage) {
             handleFetchSocialMediaReport(null, null, false)
         }
 
-    }, [reportSelectPages]);
+    }, [selectedPage]);
 
     useEffect(() => {
         if (graphDaysSelected) {
@@ -82,28 +97,24 @@ export const DashboardReports = () => {
     }, [graphDaysSelected]);
 
     const handleFetchSocialMediaReport = (socialAccountData, pages, searchGraphOnly = false) => {
-
         !searchGraphOnly && dispatch(getSocialMediaReportByProviderTypeAction({
-            pages: pages === null ? reportSelectPages : pages,
+            pages: [selectedPage],
             socialMediaType: reportSelectedAccountType,
-            socialAccountData: socialAccountData === null ? reportSelectedAccountData : socialAccountData
+            socialAccountData: reportSelectedAccountData
         }))
 
         dispatch(getSocialMediaGraphByProviderTypeAction({
-            pages: pages === null ? reportSelectPages : pages,
+            pages: [selectedPage],
             socialMediaType: reportSelectedAccountType,
-            socialAccountData: socialAccountData === null ? reportSelectedAccountData : socialAccountData,
-            query: {
-                createdFrom: getCustomDateEarlierUnixDateTime(graphDaysSelected),
-                createdTo: getCustomDateEarlierUnixDateTime(1)
-            }
+            socialAccountData: reportSelectedAccountData,
+            query: getQueryForGraphData(reportSelectedAccountType,graphDaysSelected)
         }))
     }
 
-    const handleClick = (type, pageParams) => {
-        isAllSelected(type === "All");
-        setReportSelectedPages(pageParams);
-    }
+    // const handleClick = (type, pageParams) => {
+    //     isAllSelected(type === "All");
+    //     setReportSelectedPages(pageParams);
+    // }
 
     return (
 
@@ -126,7 +137,8 @@ export const DashboardReports = () => {
 
                         :
 
-                        allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
+                        // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
+                        isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
 
                             <div className="cmn_background p-5 text-center ">
                                 <img src={noAccountData} className="img-fluid" alt=""/>
@@ -136,99 +148,102 @@ export const DashboardReports = () => {
 
                             <div className="post_activity_outer cmn_background">
 
-                                <Dropdown className="dropdown_btn">
+                               <div className="d-flex gap-2 ps-3">
+                                   <Dropdown className="dropdown_btn">
 
-                                    <Dropdown.Toggle variant="success" id="dropdown-basic"
-                                                     className="social_dropdowns"
-                                                     disabled={getAllConnectedSocialAccountData?.laoding || reportSectionData?.loading || reportGraphSectionData?.loading}>
-                                        <img src={computeImageURL(reportSelectedAccountType)}
-                                             className="me-3"
-                                             alt={SocialAccountProvider[reportSelectedAccountType]}/>{SocialAccountProvider[reportSelectedAccountType]}
-                                    </Dropdown.Toggle>
+                                       <Dropdown.Toggle variant="success" id="dropdown-basic"
+                                                        className="social_dropdowns"
+                                                        disabled={getAllConnectedSocialAccountData?.loading || reportSectionData?.loading || reportGraphSectionData?.loading}>
+                                           <img src={computeImageURL(reportSelectedAccountType)}
+                                                className="me-3"
+                                                alt={SocialAccountProvider[reportSelectedAccountType]}/>{SocialAccountProvider[reportSelectedAccountType]}
+                                       </Dropdown.Toggle>
 
-                                    <Dropdown.Menu>
-                                        {Object.keys(SocialAccountProvider).map(cur => (
+                                       <Dropdown.Menu>
+                                           {Object.keys(SocialAccountProvider).map(cur => (
 
-                                            <Dropdown.Item
-                                                disabled={notConnectedSocialMediaAccount(cur, getAllConnectedSocialAccountData?.data)}
-                                                onClick={() => {
-                                                    setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
-                                                    setReportSelectedAccountType(cur)
-
-
-                                                }}><img width={24}
-                                                        src={computeImageURL(cur)}
-                                                        className="me-3"/>  {getInitialLetterCap(SocialAccountProvider[cur])}
-                                            </Dropdown.Item>
-                                        ))
-
-                                        }
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                                {/*<Dropdown className="dropdown_btn">*/}
-
-                                {/*    <Dropdown.Toggle variant="success" id="dropdown-basic"*/}
-                                {/*                     className="social_dropdowns"*/}
-                                {/*                     disabled={getAllConnectedSocialAccountData?.laoding || reportSectionData?.loading || reportGraphSectionData?.loading}>*/}
-                                {/*        <img src={computeImageURL(reportSelectedAccountType)}*/}
-                                {/*             className="me-3"*/}
-                                {/*             alt={selectedPage?.name}/>{selectedPage?.name}*/}
-                                {/*    </Dropdown.Toggle>*/}
-
-                                {/*    <Dropdown.Menu>*/}
-                                {/*        {connectedPagesToSelectedSocialMediaAccount?.map(page => (*/}
-
-                                {/*            <Dropdown.Item*/}
-
-                                {/*                // disabled={notConnectedSocialMediaAccount(cur, getAllConnectedSocialAccountData?.data)}*/}
-                                {/*                onClick={() => {*/}
-                                {/*                    setSelectedPage(page)*/}
-                                {/*                    // setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))*/}
-                                {/*                    // setReportSelectedAccountType(cur)*/}
+                                               <Dropdown.Item
+                                                   disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data,connectedPagesReducer?.facebookConnectedPages)}
+                                                   onClick={() => {
+                                                       setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
+                                                       setReportSelectedAccountType(cur)
+                                                       setGraphDaysSelected(9)
 
 
-                                {/*                }}><img width={24}*/}
-                                {/*                        src={computeImageURL(reportSelectedAccountData.provider)}*/}
-                                {/*                        className="me-3"/>  {page.name}*/}
-                                {/*            </Dropdown.Item>*/}
-                                {/*        ))*/}
+                                                   }}><img width={24}
+                                                           src={computeImageURL(cur)}
+                                                           className="me-3"/>  {getInitialLetterCap(SocialAccountProvider[cur])}
+                                               </Dropdown.Item>
+                                           ))
 
+                                           }
+                                       </Dropdown.Menu>
+                                   </Dropdown>
+                                   <Dropdown className="dropdown_btn">
+
+                                       <Dropdown.Toggle variant="success" id="dropdown-basic"
+                                                        className="social_dropdowns"
+                                                        disabled={getAllConnectedSocialAccountData?.laoding || reportSectionData?.loading || reportGraphSectionData?.loading}>
+                                           <img src={selectedPage?.imageUrl?selectedPage?.imageUrl:default_user_icon}
+                                                className="me-3 dropdown-page-logo"
+                                                alt={selectedPage?.name}/>{selectedPage?.name}
+                                       </Dropdown.Toggle>
+
+                                       <Dropdown.Menu>
+                                           {connectedPagesToSelectedSocialMediaAccount?.map(page => (
+
+                                               <Dropdown.Item
+
+                                                   // disabled={notConnectedSocialMediaAccount(cur, getAllConnectedSocialAccountData?.data)}
+                                                   onClick={() => {
+                                                       setSelectedPage(page)
+                                                       // setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
+                                                       // setReportSelectedAccountType(cur)
+
+
+                                                   }}><img width={24}
+                                                           src={page?.imageUrl?page?.imageUrl:default_user_icon}
+                                                           className="me-3"/>  {page.name}
+                                               </Dropdown.Item>
+                                           ))
+
+                                           }
+                                       </Dropdown.Menu>
+                                   </Dropdown>
+                               </div>
+
+
+                                {/*<div className={"tabs_pages"}>*/}
+
+                                {/*    <div className={"d-flex gap-3"} style={{paddingRight: '2px'}}>*/}
+                                {/*        <button*/}
+                                {/*            disabled={reportSectionData?.loading || reportGraphSectionData?.loading}*/}
+                                {/*            className={allSelected ? "btn-with-fixed-width report_section_selected_btn position-relative" : "position-relative btn-with-fixed-width"}*/}
+                                {/*            onClick={(e) => {*/}
+                                {/*                handleClick("All", connectedPagesReducer?.facebookConnectedPages)*/}
+                                {/*            }}>*/}
+
+                                {/*            All Pages*/}
+                                {/*        </button>*/}
+
+                                {/*        {Array.isArray(allAvailablePages) && allAvailablePages.length > 0 &&*/}
+
+                                {/*            allAvailablePages.sort((a, b) => (b.isConnected - a.isConnected)).map(curBtn => (*/}
+                                {/*                <button*/}
+                                {/*                    disabled={reportSectionData?.loading || reportGraphSectionData?.loading}*/}
+                                {/*                    className={curBtn?.isConnected === true ? reportSelectPages?.find(c => c.pageId === curBtn?.id) && !allSelected ? "btn-with-fixed-width report_section_selected_btn" : "btn-with-fixed-width" : "btn-with-fixed-width report_section_disable_btn position-relative"}*/}
+                                {/*                    onClick={(e) => {*/}
+                                {/*                        handleClick("single", connectedPagesReducer?.facebookConnectedPages?.filter(curP => curP.pageId === curBtn?.id))*/}
+                                {/*                    }*/}
+                                {/*                    }>*/}
+                                {/*                    <button className="not_connect">Not Connected</button>*/}
+                                {/*                    {curBtn?.name}</button>*/}
+                                {/*            ))*/}
                                 {/*        }*/}
-                                {/*    </Dropdown.Menu>*/}
-                                {/*</Dropdown>*/}
 
 
-                                <div className={"tabs_pages"}>
-
-                                    <div className={"d-flex gap-3"} style={{paddingRight: '2px'}}>
-                                        <button
-                                            disabled={reportSectionData?.loading || reportGraphSectionData?.loading}
-                                            className={allSelected ? "btn-with-fixed-width report_section_selected_btn position-relative" : "position-relative btn-with-fixed-width"}
-                                            onClick={(e) => {
-                                                handleClick("All", connectedPagesReducer?.facebookConnectedPages)
-                                            }}>
-
-                                            All Pages
-                                        </button>
-
-                                        {Array.isArray(allAvailablePages) && allAvailablePages.length > 0 &&
-
-                                            allAvailablePages.sort((a, b) => (b.isConnected - a.isConnected)).map(curBtn => (
-                                                <button
-                                                    disabled={reportSectionData?.loading || reportGraphSectionData?.loading}
-                                                    className={curBtn?.isConnected === true ? reportSelectPages?.find(c => c.pageId === curBtn?.id) && !allSelected ? "btn-with-fixed-width report_section_selected_btn" : "btn-with-fixed-width" : "btn-with-fixed-width report_section_disable_btn position-relative"}
-                                                    onClick={(e) => {
-                                                        handleClick("single", connectedPagesReducer?.facebookConnectedPages?.filter(curP => curP.pageId === curBtn?.id))
-                                                    }
-                                                    }>
-                                                    <button className="not_connect">Not Connected</button>
-                                                    {curBtn?.name}</button>
-                                            ))
-                                        }
-
-
-                                    </div>
-                                </div>
+                                {/*    </div>*/}
+                                {/*</div>*/}
 
 
                                 {reportSectionData?.loading ?
@@ -242,7 +257,12 @@ export const DashboardReports = () => {
                                             Object.keys(reportSectionData?.data).map(curKey => (
 
                                                 <div className="followers_wrapper ">
-                                                    <h5>{curKey.replace(/_/g, ' ')}</h5>
+                                                    <h5>{curKey.replace(/_/g, ' ')  }
+                                                        {
+                                                            reportSelectedAccountType==="INSTAGRAM" && <span className={"90-day-txt"}> (90 days)</span>
+                                                        }
+
+                                                    </h5>
                                                     <div className="followers_inner_content">
                                                         <h2> {reportSectionData?.data[curKey]?.lifeTime || 0}</h2>
                                                         <div className="monthly_growth">
@@ -270,11 +290,15 @@ export const DashboardReports = () => {
                                         </div>
                                         <div className="days_outer">
                                             <select className=" dropdown_days box_shadow"
+                                                    value={graphDaysSelected}
                                                     onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
                                                     disabled={connectedPagesReducer?.loading || facebookPageListReducer?.loading || reportGraphSectionData?.loading}>
                                                 <option value={9}>Last 7 days</option>
                                                 <option value={17}>Last 15 days</option>
-                                                <option value={32}> Last 30 days</option>
+                                                {
+                                                    reportSelectedAccountType==="INSTAGRAM" ? <option value={30}> Last  28 days</option> :<option value={32}> Last  30 days</option>
+                                                }
+
                                             </select>
                                         </div>
 
