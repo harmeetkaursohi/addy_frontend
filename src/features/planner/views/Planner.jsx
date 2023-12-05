@@ -53,9 +53,29 @@ const Planner = () => {
 
 
     useEffect(() => {
-        const decodeJwt = decodeJwtToken(token);
-        dispatch(getAllPostsForPlannerAction({token: token, query: {...baseSearchQuery, customerId: decodeJwt.customerId}}));
-        dispatch(getPlannerPostCountAction({token: token, query: {...baseSearchQuery, customerId: decodeJwt.customerId}}));
+        if (calendarRef.current) {
+            const decodeJwt = decodeJwtToken(token);
+            const calendarApi = calendarRef.current.getApi();
+            const view = calendarApi.view;
+            const startDate = view.currentStart;
+            const endDate = view.currentEnd;
+
+            const requestBody = {
+                token: token,
+                query: {
+                    ...baseSearchQuery,
+                    customerId: decodeJwt.customerId,
+                    creationDateRange: {
+                        startDate: startDate,
+                        endDate: endDate
+                    }
+                }
+            }
+
+            console.log("@@@ requestBody ::: ", requestBody);
+            dispatch(getAllPostsForPlannerAction(requestBody));
+            dispatch(getPlannerPostCountAction(requestBody));
+        }
     }, []);
 
 
@@ -77,22 +97,31 @@ const Planner = () => {
 
         if (Object.keys(baseSearchQuery).length > 0) {
 
-            const decodeJwt = decodeJwtToken(token);
-
             if (isDraftPost) {
                 dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {postStatus: ["DRAFT"] ,plannerCardDate:baseSearchQuery?.plannerCardDate,limit:1000}}));
             } else {
-                dispatch(getAllPostsForPlannerAction({
-                    customerId: decodeJwt.customerId,
-                    token: token,
-                    query: baseSearchQuery
-                }));
 
-                dispatch(getPlannerPostCountAction({
-                    customerId: decodeJwt.customerId,
+                const decodeJwt = decodeJwtToken(token);
+                const calendarApi = calendarRef.current.getApi();
+                const view = calendarApi.view;
+                const startDate = view.currentStart;
+                const endDate = view.currentEnd;
+
+                const requestBody = {
                     token: token,
-                    query: baseSearchQuery
-                }));
+                    query: {
+                        ...baseSearchQuery,
+                        customerId: decodeJwt.customerId,
+                        creationDateRange: {
+                            startDate: startDate,
+                            endDate: endDate
+                        }
+                    }
+                }
+
+                dispatch(getAllPostsForPlannerAction(requestBody));
+
+                dispatch(getPlannerPostCountAction(requestBody));
             }
 
 
@@ -103,7 +132,8 @@ const Planner = () => {
     // render event content
     const renderCalendarCards = ({event}) => {
         return (
-            <div className={"cal_Div w-100 test"} style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
+            <div className={"cal_Div w-100 test"}
+                 style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
 
                 <div className="w-100 p-0 calendar_card">
 
@@ -144,8 +174,23 @@ const Planner = () => {
         }
         let inst = new Date(calendarRef?.current?.getApi()?.currentData?.viewTitle.toString());
         inst.setDate(inst.getDate() + 10);
-        setBaseSearchQuery({...baseSearchQuery, plannerCardDate: inst})
 
+        const decodeJwt = decodeJwtToken(token);
+
+        const calendarApi = calendarRef.current.getApi();
+        const view = calendarApi.view;
+        const startDate = view.currentStart;
+        const endDate = view.currentEnd;
+
+        setBaseSearchQuery({
+            ...baseSearchQuery,
+            customerId: decodeJwt.customerId,
+            creationDateRange: {
+                startDate: startDate,
+                endDate: endDate
+            },
+            plannerCardDate: inst
+        })
     };
     console.log('setBaseSearchQuery',baseSearchQuery.plannerCardDate)
 
@@ -185,7 +230,6 @@ const Planner = () => {
         }));
 
         setShowMorePlannerModel(true);
-
     };
 
 
@@ -245,8 +289,18 @@ const Planner = () => {
                                     <select className=" filter_options cmn_text_style box_shadow"
                                             value={baseSearchQuery?.socialMediaType}
                                             onChange={(e) => {
+                                                const decodeJwt = decodeJwtToken(token);
+                                                const calendarApi = calendarRef.current.getApi();
+                                                const view = calendarApi.view;
+                                                const startDate = view.currentStart;
+                                                const endDate = view.currentEnd;
                                                 setBaseSearchQuery({
                                                     ...baseSearchQuery,
+                                                    customerId: decodeJwt.customerId,
+                                                    creationDateRange: {
+                                                        startDate: startDate,
+                                                        endDate: endDate
+                                                    },
                                                     socialMediaType: e.target.value === "All" ? null : e.target.value
                                                 });
                                             }}>

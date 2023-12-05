@@ -115,7 +115,7 @@ const Comments = ({postData}) => {
         dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
             if (response.meta.requestStatus === "fulfilled") {
                 handleGetComments(postData?.id)
-                const requestBody={
+                const requestBody = {
                     postIds: [postData?.id],
                     pageAccessToken: postData?.page?.access_token,
                     socialMediaType: postData?.socialMediaType
@@ -283,12 +283,13 @@ const Comments = ({postData}) => {
                                                                })
                                                            }}
                                                     />
-                                                    <button disabled={updateCommentsOnPostActionData?.loading || isNullOrEmpty(updateComment?.message)}
-                                                            onClick={(e) => {
-                                                                !isNullOrEmpty(updateComment?.message) && handleUpdateComment()
-                                                                setShowEmojiPicker(false)
-                                                            }}
-                                                            className={isNullOrEmpty(updateComment?.message)?" update_comment_btn px-2 opacity-50":" update_comment_btn px-2 "}>
+                                                    <button
+                                                        disabled={updateCommentsOnPostActionData?.loading || isNullOrEmpty(updateComment?.message)}
+                                                        onClick={(e) => {
+                                                            !isNullOrEmpty(updateComment?.message) && handleUpdateComment()
+                                                            setShowEmojiPicker(false)
+                                                        }}
+                                                        className={isNullOrEmpty(updateComment?.message) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
                                                         <BiSolidSend className={"cursor-pointer update_comment_icon"}/>
                                                     </button>
 
@@ -471,7 +472,7 @@ const Comments = ({postData}) => {
                                                                                             !isNullOrEmpty(updateComment?.message) && handleUpdateComment()
                                                                                             setShowEmojiPicker(false)
                                                                                         }}
-                                                                                        className={isNullOrEmpty(updateComment?.message)?" update_comment_btn px-2 opacity-50":" update_comment_btn px-2 "}>
+                                                                                        className={isNullOrEmpty(updateComment?.message) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
                                                                                         <BiSolidSend
                                                                                             className={"cursor-pointer update_comment_icon"}/>
                                                                                     </button>
@@ -543,7 +544,7 @@ const Comments = ({postData}) => {
                                                     !isReplyCommentEmpty(replyComment) && handleAddCommentOnPost(e);
                                                     setShowEmojiPicker(false)
                                                 }}
-                                                className={isReplyCommentEmpty(replyComment)?"view_post_btn cmn_bg_btn px-2 opacity-50":"view_post_btn cmn_bg_btn px-2"}>Submit
+                                                className={isReplyCommentEmpty(replyComment) ? "view_post_btn cmn_bg_btn px-2 opacity-50" : "view_post_btn cmn_bg_btn px-2"}>Submit
                                             </button>
                                             <div>
                                                 <div className={"reply-emoji-picker-outer"}>

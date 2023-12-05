@@ -34,11 +34,11 @@ const CommonShowMorePlannerModal = ({
 
     const handleClose = () => setCommonShowMorePlannerModal(false);
 
-    const handleDeletePlannerPost = (e, batchId) => {
+    const handleDeletePlannerPost = (e, postId) => {
         e.preventDefault();
-        if (batchId !== null) {
-            setDeleteBatchIdRef(batchId);
-            dispatch(deletePostByBatchIdAction({batchId: batchId, token: token}))
+        if (postId !== null) {
+            setDeleteBatchIdRef(postId);
+            dispatch(deletePostByBatchIdAction({postId: postId, token: token}))
                 .then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         showSuccessToast("Posts has been deleted successfully");
@@ -83,7 +83,6 @@ const CommonShowMorePlannerModal = ({
                                         getAllPlannerPostsDataLoading ? (
                                                 <CommonLoader/>) :
                                             sortByKey(plannerPosts,"feedPostDate")?.map((plannerPost, index) => {
-
                                                 return (
                                                     <div className={ !isPlannerPostEditable(plannerPost?.feedPostDate) ? "more_plans_grid mb-3 disable_more_plans_grid":"more_plans_grid mb-3"} key={index}>
                                                         <div className="plan_grid_img">
@@ -104,28 +103,31 @@ const CommonShowMorePlannerModal = ({
 
                                                                     <div className="d-flex page_tags">
                                                                         {plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
-                                                                            plannerPost?.postPages.map((curPage, index) => (
+                                                                            plannerPost?.postPages.map((curPage, index) => {
+                                                                                return (
+                                                                                    <div
+                                                                                        className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}
+                                                                                        onClick={() => {
+                                                                                            redirectToURL(`https://www.facebook.com/${curPage?.id}`)
+                                                                                        }}
+                                                                                        key={index}
+                                                                                    >
+                                                                                        <div
+                                                                                            className="plan_tag_img position-relative">
+                                                                                            <img className="plan_image"
+                                                                                                 src={curPage?.imageURL}
+                                                                                                 alt="fb"/>
+                                                                                            <img
+                                                                                                className="plan_social_img"
+                                                                                                src={computeImageURL(curPage?.socialMediaType)}
+                                                                                                alt="fb"/>
 
-                                                                                <div className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}
-                                                                                     onClick={() => {
-                                                                                         redirectToURL(`https://www.facebook.com/${curPage?.id}`)
-                                                                                     }}
-                                                                                     key={index}
-                                                                                >
-                                                                                    <div  className="plan_tag_img position-relative">
-                                                                                        <img className="plan_image"
-                                                                                             src={curPage?.imageURL}
-                                                                                             alt="fb"/>
-                                                                                        <img
-                                                                                            className="plan_social_img"
-                                                                                            src={computeImageURL(curPage?.socialMediaType)}
-                                                                                            alt="fb"/>
-
+                                                                                        </div>
+                                                                                        <p className="mb-0">{curPage?.pageName}</p>
                                                                                     </div>
-                                                                                    <p className="mb-0">{curPage?.pageName}</p>
-                                                                                </div>
+                                                                                )
 
-                                                                            ))
+                                                                            })
                                                                         }
                                                                     </div>
 
