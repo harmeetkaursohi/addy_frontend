@@ -343,7 +343,6 @@ export const computeAndReturnSummedDateValues = (data) => {
 
 
 export const calculatePercentageGrowth = async (data) => {
-    console.log("data--->",data);
     for (let i = 1; i < data.length; i++) {
         const currentCount = data[i].count;
         const previousCount = data[i - 1].count;
@@ -354,12 +353,10 @@ export const calculatePercentageGrowth = async (data) => {
             data[i].percentageGrowth = ((currentCount - previousCount) / previousCount) * 100;
         }
     }
-    console.log("data-1>",data);
     if (data.length > 0) {
         data.shift()
     }
 
-    console.log("data-2>",data);
 
     return data;
 }
@@ -393,15 +390,35 @@ const eliminateDuplicateHashTags = (hashtags) => {
 
 export const convertSentenceToHashtags = (sentence) => {
     let words = sentence.split(' ');
+    // words=handleEnterOnHashtag(words);
 
     // Eliminate Duplicate Tags
     if (words[words.length - 1] === "") {
         words = eliminateDuplicateHashTags(words)
     }
+
     const hashtags = words.map(word => convertToHashtag(word));
     const result = hashtags.join(' ');
     return result;
 }
+
+// export const handleEnterOnHashtag=(words=[])=>{
+//     let updatedHashtags=words;
+//     if(isNullOrEmpty(words)){
+//         return []
+//     }
+//      updatedHashtags = words.reduce((result, str) => {
+//         const parts = str.split('\n');
+//         result.push(parts[0]); // Add the part before newline
+//         if (parts.length > 1) {
+//             result.push(parts[1]); // Add the part after newline, if it exists
+//         }
+//         return result;
+//     }, []);
+//
+//     return updatedHashtags
+//
+// }
 
 export const getCommentCreationTime = (date) => {
     const currentDate = new Date();
@@ -750,4 +767,29 @@ export const getQueryForGraphData=(socialMediaType,selectedGraphDays)=>{
 
     }
 
+}
+export const convertUnixTimestampToDateTime=(unixTimestamp)=> {
+    if(isNullOrEmpty(unixTimestamp.toString())){
+        return null
+    }
+    // Convert Unix timestamp to milliseconds
+    const timestampInMilliseconds = unixTimestamp * 1000;
+
+    // Create a new Date object
+    const dateObject = new Date(timestampInMilliseconds);
+
+    // Extract date components
+    const year = dateObject.getFullYear();
+    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObject.getDate()).padStart(2, '0');
+
+    // Extract time components
+    const hours = String(dateObject.getHours()).padStart(2, '0');
+    const minutes = String(dateObject.getMinutes()).padStart(2, '0');
+
+    // Format the date and time
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}:${minutes}`;
+
+    return { date: formattedDate, time: formattedTime };
 }

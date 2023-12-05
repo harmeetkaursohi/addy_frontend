@@ -411,6 +411,7 @@ select.page_title_options {
     width: 100%;
     padding: 0px;
 }
+
 img.connection-error-svg {
     height: 200px;
     width: 220px;
@@ -418,10 +419,12 @@ img.connection-error-svg {
     margin-top: -30px;
 
 }
-.upside-down{
+
+.upside-down {
     transform: rotate(180deg);
 }
-.connection-error-close-btn{
+
+.connection-error-close-btn {
     border: 1px solid rgb(240, 124, 51);
     border-radius: 5px;
     box-shadow: unset;
@@ -442,11 +445,13 @@ img.connection-error-svg {
     border: transparent;
     padding: 0;
 }
+
 .no-page-connected-outer {
     font-weight: 300;
     font-size: 14px;
     color: gray;
 }
+
 .connect-page-btn {
     color: #04a3ff;
     text-decoration: underline;
@@ -569,6 +574,10 @@ img.connection-error-svg {
     margin-top: 15px;
 }
 
+.insta-icon {
+    color: purple !important;
+    font-size: 24px ;
+}
 
 .btn-with-fixed-width {
     /*min-width: 120px; !* Adjust this value to your desired maximum width *!*/
@@ -580,17 +589,20 @@ img.connection-error-svg {
     min-width: 193px;
     width: 100%;
 }
-.dropdown-page-logo{
-    height:27px;
-    width:27px;
+
+.dropdown-page-logo {
+    height: 27px;
+    width: 27px;
     border-radius: 50%;
 }
+
 span.\39 0-day-txt {
     font-size: 12px;
     font-weight: 600;
     color: #524f4f;
     opacity: .8;
 }
+
 button.not_connect {
     position: absolute;
     border-radius: 2px;

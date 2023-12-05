@@ -454,8 +454,7 @@ const SocialAccounts = () => {
                                     <div className="social_media_outer">
                                         <div className="social_media_content"
                                              onClick={() => setInstagramDropDown(!instagramDropDown)}>
-                                            <i className="fa-brands fa-instagram"
-                                               style={{color: "purple", fontSize: "24px"}}/>
+                                            <i className="fa-brands fa-instagram insta-icon"/>
                                             {/*<img className="cmn_width " src={fb_img}/>*/}
                                             <div className="text-start flex-grow-1">
                                                 <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'INSTAGRAM')?.name || "instagram"}</h5>

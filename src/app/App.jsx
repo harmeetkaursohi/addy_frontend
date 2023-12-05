@@ -29,9 +29,12 @@ import InsightsComponent from "../features/insights/InsightsComponent";
 import FaqComponent from "../features/faq/FaqComponent";
 import PrivacyComponent from "../features/privacy/PrivacyComponent";
 import ContactUs from "../features/contactUs/ContactUs";
+import {ParentDraftComponent} from "../features/unPublishedPages/views/ParentDraftComponent";
+import Draft from "../features/unPublishedPages/Draft";
 
 const App = () => {
     const PrivateRoute = () => {
+
         const token = getToken();
         return token ? <Outlet/> : <Navigate to="/login"/>;
     }
@@ -53,7 +56,8 @@ const App = () => {
                         <Route path="/image" element={<AI_ImageModal/>}/>
                         <Route path="/comment" element={<CommentPage/>}/>
                         <Route path="/address" element={<AddressForm/>}/>
-                        <Route path="/draft" element={<DraftComponent/>}/>
+                        <Route path="/draft" element={<Draft/>}/>
+                        {/*<Route path="/draft" element={<DraftComponent/>}/>*/}
                         <Route path="/insights" element={<InsightsComponent/>}/>
                         <Route path="/faq" element={<FaqComponent/>}/>
                         <Route path="/privacy" element={<PrivacyComponent/>}/>

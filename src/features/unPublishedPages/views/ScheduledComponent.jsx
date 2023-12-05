@@ -1,6 +1,12 @@
 import './DraftComponent.css'
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
-import {computeImageURL, handleSeparateCaptionHashtag, redirectToURL, sortByKey} from "../../../utils/commonUtils";
+import {
+    computeImageURL,
+    getInitialLetterCap,
+    handleSeparateCaptionHashtag,
+    redirectToURL,
+    sortByKey
+} from "../../../utils/commonUtils";
 import {formatDate} from "@fullcalendar/core";
 import CommonSlider from "../../common/components/CommonSlider";
 import {useNavigate} from "react-router-dom";
@@ -10,15 +16,20 @@ import {useEffect, useState} from "react";
 import {
     deletePostByBatchIdAction, getAllSocialMediaPostsByCriteria
 } from "../../../app/actions/postActions/postActions";
-import {getToken} from "../../../app/auth/auth";
+import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import noPostScheduled from "../../../images/no_post_scheduled.png";
 import CommonLoader from "../../common/components/CommonLoader";
+import Swal from "sweetalert2";
+import {SocialAccountProvider} from "../../../utils/contantData";
+import {
+    disconnectSocialAccountAction,
+    getAllConnectedSocialAccountAction
+} from "../../../app/actions/socialAccountActions/socialAccountActions";
 
 
 const ScheduledComponent = ({scheduledData}) => {
 
-    console.log("scheduledData---->", scheduledData)
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -27,7 +38,6 @@ const ScheduledComponent = ({scheduledData}) => {
     const token = getToken();
 
     const [scheduledPosts, setScheduledPosts] = useState([]);
-    console.log("scheduledPosts---->",scheduledPosts);
     const [deleteIdRef, setDeleteIdRef] = useState(null);
 
     useEffect(() => {
@@ -37,26 +47,61 @@ const ScheduledComponent = ({scheduledData}) => {
 
     const handleDeletePost = (e) => {
         e.preventDefault();
-        if (e?.target?.id !== null) {
-            setDeleteIdRef(e?.target?.id);
-            dispatch(deletePostByBatchIdAction({postId: e?.target?.id, token: token}))
-                .then((response) => {
-                    if (response.meta.requestStatus === "fulfilled") {
+        Swal.fire({
+            icon: 'warning',
+            title: `Delete Post`,
+            text: `Are you sure you want to delete this post?`,
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: "#F07C33",
+            cancelButtonColor: "#E6E9EC",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (e?.target?.id !== null) {
+                    setDeleteIdRef(e?.target?.id);
+                    dispatch(deletePostByBatchIdAction({postId: e?.target?.id, token: token}))
+                        .then((response) => {
+                            if (response.meta.requestStatus === "fulfilled") {
+                                setDeleteIdRef(null);
+                                showSuccessToast("Post has been deleted successfully");
+                                dispatch(getAllSocialMediaPostsByCriteria({
+                                    token: token,
+                                    query: {limit: 5, postStatus: ["SCHEDULED"]}
+                                }));
+                            }
+                        }).catch((error) => {
                         setDeleteIdRef(null);
-                        showSuccessToast("Posts has been deleted successfully");
-                        dispatch(getAllSocialMediaPostsByCriteria({
-                            token: token,
-                            query: {limit: 5, postStatus: ["SCHEDULED"]}
-                        }));
-                    }
-                }).catch((error) => {
-                setDeleteIdRef(null);
-                showErrorToast(error.response.data.message);
-            });
-        }
+                        showErrorToast(error.response.data.message);
+                    });
+                }
+            }
+        });
 
 
     }
+    // const handleDeletePost = (e) => {
+    //      e.preventDefault();
+    //     if (e?.target?.id !== null) {
+    //         setDeleteIdRef(e?.target?.id);
+    //         dispatch(deletePostByBatchIdAction({postId: e?.target?.id, token: token}))
+    //             .then((response) => {
+    //                 if (response.meta.requestStatus === "fulfilled") {
+    //                     setDeleteIdRef(null);
+    //                     showSuccessToast("Posts has been deleted successfully");
+    //                     dispatch(getAllSocialMediaPostsByCriteria({
+    //                         token: token,
+    //                         query: {limit: 5, postStatus: ["SCHEDULED"]}
+    //                     }));
+    //                 }
+    //             }).catch((error) => {
+    //             setDeleteIdRef(null);
+    //             showErrorToast(error.response.data.message);
+    //         });
+    //     }
+    //
+    //
+    // }
 
     return (
         <>
@@ -143,7 +188,8 @@ const ScheduledComponent = ({scheduledData}) => {
                                             <div className={""}>
                                                 <h5>Scheduled For:</h5>
                                                 <div className={'mb-2'}>
-                                                    <span className={"hash_tags"}>{formatDate(curBatch?.feedPostDate)}</span>
+                                                    <span
+                                                        className={"hash_tags"}>{formatDate(curBatch?.feedPostDate)}</span>
                                                 </div>
                                             </div>
 

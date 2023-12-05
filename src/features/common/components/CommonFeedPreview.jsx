@@ -4,6 +4,7 @@ import InstagramFeedPreview from "./InstagramFeedPreview";
 
 const CommonFeedPreview = ({
                                socialMediaType,
+                               pageImageUrl,
                                previewTitle,
                                pageName,
                                userData,
@@ -19,6 +20,7 @@ const CommonFeedPreview = ({
                 <FacebookFeedPreview
                     previewTitle={previewTitle}
                     pageName={pageName}
+                    pageImage={pageImageUrl}
                     userData={userData}
                     files={files}
                     selectedFileType={selectedFileType}
@@ -32,6 +34,7 @@ const CommonFeedPreview = ({
                 <InstagramFeedPreview
                     previewTitle={previewTitle}
                     pageName={pageName}
+                    pageImage={pageImageUrl}
                     userData={userData}
                     files={files}
                     selectedFileType={selectedFileType}

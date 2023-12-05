@@ -80,7 +80,7 @@ const Planner = () => {
             const decodeJwt = decodeJwtToken(token);
 
             if (isDraftPost) {
-                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {postStatus: ["DRAFT"]}}));
+                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {postStatus: ["DRAFT"] ,plannerCardDate:baseSearchQuery?.plannerCardDate,limit:1000}}));
             } else {
                 dispatch(getAllPostsForPlannerAction({
                     customerId: decodeJwt.customerId,
@@ -147,6 +147,7 @@ const Planner = () => {
         setBaseSearchQuery({...baseSearchQuery, plannerCardDate: inst})
 
     };
+    console.log('setBaseSearchQuery',baseSearchQuery.plannerCardDate)
 
     const handleDraft = (e) => {
         setIsLoading(true);
@@ -303,7 +304,7 @@ const Planner = () => {
 
                         {
                             isDraftPost === true &&
-                            <ParentDraftComponent setDraftPost={setDraftPost}/>
+                            <ParentDraftComponent setDraftPost={setDraftPost}  reference={"PLANNER"} />
                         }
 
 

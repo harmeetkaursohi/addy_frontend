@@ -21,10 +21,9 @@ import GenericButtonWithLoader from "../../common/components/GenericButtonWithLo
 import {
     checkDimensions,
     convertSentenceToHashtags,
-    convertToUnixTimestamp,
+    convertToUnixTimestamp, convertUnixTimestampToDateTime,
     getEnumValue,
-    groupByKey,
-    trimToNull,
+    groupByKey, isNullOrEmpty,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
@@ -47,6 +46,7 @@ const UpdatePost = () => {
         const [caption, setCaption] = useState("");
         const [scheduleDate, setScheduleDate] = useState("");
         const [scheduleTime, setScheduleTime] = useState("");
+
         const [boostPost, setBoostPost] = useState(false);
         const [socialAccountData, setSocialAccountData] = useState([]);
         const [files, setFiles] = useState([]);
@@ -101,13 +101,16 @@ const UpdatePost = () => {
             }
         }, [files])
 
-        console.log("postStatus-->", postStatus);
 
         useEffect(() => {
             if (getPostsByIdData && Object.keys(getPostsByIdData).length > 0) {
+                if(getPostsByIdData.scheduledPostDate){
+                    setScheduleDate(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.date)
+                    setScheduleTime(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.time)
+                }
                 setSelectedOptions(getPostsByIdData?.postPageInfos?.map(c => c.pageId) || []);
                 setCaption(getPostsByIdData?.caption || "");
-                setHashTag(getPostsByIdData?.hashtag || "");
+                setHashTag(getPostsByIdData?.hashTag || "");
                 setPostStatus(getPostsByIdData?.postStatus)
                 setFiles(getPostsByIdData?.attachments || []);
             }
@@ -252,12 +255,11 @@ const UpdatePost = () => {
                 });
         }
 
-
         const updatePost = (e, postStatus, scheduleDate, scheduleTime) => {
                 e.preventDefault();
                 const userInfo = decodeJwtToken(token);
-
-                if (postStatus === 'SCHEDULED') {
+            const isScheduledTimeProvided= !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+                if (postStatus === 'SCHEDULED' || isScheduledTimeProvided ) {
 
                     if (!scheduleDate && !scheduleTime) {
                         showErrorToast("Please enter scheduleDate and scheduleTime!!");
@@ -283,19 +285,19 @@ const UpdatePost = () => {
                             id: file?.id || null,
                             gridFsId: file?.gridFsId || null
                         })),
-                        hashTag: trimToNull(hashTag),
-                        caption: trimToNull(caption),
+                        hashTag: isNullOrEmpty(hashTag)?"": hashTag.toString().trim(),
+                        caption: isNullOrEmpty(caption)?"": caption.toString().trim(),
                         postStatus: postStatus,
                         boostPost: boostPost,
                         postPageInfos: selectedOptions?.map((obj) => ({
                             pageId: obj,
                             id: getPostsByIdData?.postPageInfos.find(c => c.pageId === obj)?.id || null
                         })),
-                        scheduledPostDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+                        scheduledPostDate: (postStatus === 'SCHEDULED' ||  isScheduledTimeProvided  ) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
                 };
 
-                console.log("@@@ RequestBody ", requestBody);
+                console.log("@@@ RequestBody for scheduke time gicen ", requestBody);
                 dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         showSuccessToast("Post has uploaded successfully");
@@ -313,7 +315,7 @@ const UpdatePost = () => {
         };
 
         const handleDraftPost = (e) => {
-            updatePost(e, 'DRAFT');
+            updatePost(e, 'DRAFT',scheduleDate, scheduleTime);
         };
 
         const handleSchedulePost = (e) => {
@@ -337,7 +339,6 @@ const UpdatePost = () => {
             setBoostPost(false);
         }
 
-        console.log("selectedOptions", selectedOptions);
 
     const handleKeyDown = (event) => {
         // Prevent the default behavior for both Enter and Space keys
@@ -759,6 +760,7 @@ const UpdatePost = () => {
                                                                 socialMediaType={option.group}
                                                                 previewTitle={`${getEnumValue(option.group)} feed Preview`}
                                                                 pageName={selectedPageData?.name}
+                                                                pageImageUrl={selectedPageData?.imageUrl}
                                                                 userData={userData}
                                                                 files={files || []}
                                                                 selectedFileType={selectedFileType}

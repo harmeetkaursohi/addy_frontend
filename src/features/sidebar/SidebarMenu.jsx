@@ -7,6 +7,7 @@ import { BiCalendar } from "react-icons/bi";
 import { TbSmartHome } from "react-icons/tb";
 import { AiOutlinePicture } from "react-icons/ai";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
+import {RiDraftLine} from "react-icons/ri";
 
 
 export const SidebarMenuItems = [
@@ -25,6 +26,11 @@ export const SidebarMenuItems = [
         "name": "Comment/Reviews",
         "path": "/review",
         "icon": <FaRegCommentDots />
+    },
+    {
+        "name": "Drafts",
+        "path": "/draft",
+        "icon": <RiDraftLine />
     },
     {
         "name": "Insights",

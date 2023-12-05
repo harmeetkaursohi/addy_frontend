@@ -11,7 +11,7 @@ import {getToken} from "../../../app/auth/auth";
 import {useState} from "react";
 
 
-const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
+const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=""}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -21,7 +21,6 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
 
     const handlePublishedPost = (e) => {
         e.preventDefault();
-        console.log("batchIdData?.id-->",batchIdData?.id);
         setBatchToDelete(batchIdData?.id)
         dispatch(publishedPostAction({postId: batchIdData?.id, token: token}))
             .then((response) => {
@@ -29,7 +28,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null}) => {
                     setBatchToDelete(null);
                     showSuccessToast("Post has been published successfully");
                     setDrafts!==null && setDrafts([]);
-                    setDraftPost!==null && setDraftPost(false)
+                    reference==="PLANNER" && setDraftPost!==null && setDraftPost(false)
 
                 }
             }).catch((error) => {

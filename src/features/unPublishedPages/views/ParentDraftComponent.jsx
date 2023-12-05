@@ -6,8 +6,9 @@ import DraftComponent from "./DraftComponent";
 import {sortByKey} from "../../../utils/commonUtils";
 import CommonLoader from "../../common/components/CommonLoader";
 import noDraftPosts from "../../../images/no_draft_posts.png";
+import {useLocation} from "react-router-dom";
 
-export const ParentDraftComponent = ({setDraftPost}) => {
+export const ParentDraftComponent = ({setDraftPost,reference=""}) => {
 
     const dispatch = useDispatch();
     const token = getToken();
@@ -17,8 +18,7 @@ export const ParentDraftComponent = ({setDraftPost}) => {
     const getAllDraftPostsByCustomerAndPeriodData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
 
     useEffect(() => {
-        dispatch(getAllSocialMediaPostsByCriteria({token: token, query:{postStatus:["DRAFT"]} }));
-
+        dispatch(getAllSocialMediaPostsByCriteria({token: token, query:{postStatus:["DRAFT"]}}));
     }, [])
 
 
@@ -39,9 +39,14 @@ export const ParentDraftComponent = ({setDraftPost}) => {
             }
 
             {!getAllDraftPostsByCustomerAndPeriodData.loading && drafts && Array.isArray(drafts) && sortByKey(drafts,"createdAt").map(curDraftObject => (
-                <div className={drafts.length === 1 ? "col-lg-12" : "col-lg-6"}>
-                    <DraftComponent batchIdData={curDraftObject} setDraftPost={setDraftPost} setDrafts={setDrafts}/>
+                <div className={"col-lg-4"}>
+                    {
+                        <DraftComponent batchIdData={curDraftObject} setDraftPost={setDraftPost} setDrafts={setDrafts} reference={reference}/>
+                    }
+
+
                 </div>
+
             ))
             }
         </div>

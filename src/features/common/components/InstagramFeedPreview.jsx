@@ -8,15 +8,14 @@ import { RiBookmarkLine } from "react-icons/ri";
 
 import React from "react";
 
-const InstagramFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType, caption, hashTag}) => {
-
+const InstagramFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType, pageImage,caption, hashTag}) => {
     return (
         <>
             <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>{previewTitle}</h2>
 
             <div className='preview_wrapper'>
                 <div className='user_profile_info'>
-                    <img src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
+                    <img src={pageImage ? pageImage : default_user_icon}
                          height="36px"
                          width="36px"/>
                     <div>

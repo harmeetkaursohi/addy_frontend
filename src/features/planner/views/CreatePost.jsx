@@ -20,7 +20,7 @@ import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
 import {
     checkDimensions, convertSentenceToHashtags,
-    convertToUnixTimestamp, getEnumValue,
+    convertToUnixTimestamp, getEnumValue, isNullOrEmpty,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
@@ -40,6 +40,8 @@ const CreatePost = () => {
     const [caption, setCaption] = useState("");
     const [scheduleDate, setScheduleDate] = useState("");
     const [scheduleTime, setScheduleTime] = useState("");
+    console.log("scheduleDatescheduleDate",scheduleDate)
+    console.log("scheduleTimescheduleTime",scheduleTime)
     const [boostPost, setBoostPost] = useState(false);
     const [socialAccountData, setSocialAccountData] = useState([]);
     const [files, setFiles] = useState([]);
@@ -215,8 +217,8 @@ const CreatePost = () => {
     const createPost = (e, postStatus, scheduleDate, scheduleTime) => {
         e.preventDefault();
         const userInfo = decodeJwtToken(token);
-
-        if (postStatus === 'SCHEDULED') {
+        const isScheduledTimeProvided= !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+        if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
 
             if (!scheduleDate && !scheduleTime) {
                 showErrorToast("Please enter scheduleDate and scheduleTime!!");
@@ -234,8 +236,8 @@ const CreatePost = () => {
             customerId: userInfo?.customerId,
             postRequestDto: {
                 attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file})),
-                hashTag: hashTag,
-                caption: caption,
+                hashTag: hashTag?hashTag:"",
+                caption: caption?caption:"",
                 postStatus: postStatus,
                 boostPost: boostPost,
                 postPageInfos: allOptions?.flatMap(obj => {
@@ -245,7 +247,7 @@ const CreatePost = () => {
                         .map(option => ({pageId: option.pageId, provider}));
                     return selectedOptionsData;
                 }) || [],
-                scheduledPostDate: postStatus === 'SCHEDULED' ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+                scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
             },
         };
 
@@ -265,7 +267,7 @@ const CreatePost = () => {
     };
 
     const handleDraftPost = (e) => {
-        createPost(e, 'DRAFT');
+        createPost(e, 'DRAFT', scheduleDate, scheduleTime);
     };
 
     const handleSchedulePost = (e) => {
@@ -310,13 +312,15 @@ const CreatePost = () => {
                                             <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
 
                                             <Dropdown className='insta_dropdown_btn mt-2'>
-                                                <Dropdown.Toggle id="instagram" className="instagram_dropdown tabs_grid" disabled={allOptions.flatMap((group) => group.allOptions).length <= 0}>
+                                                <Dropdown.Toggle id="instagram" className="instagram_dropdown tabs_grid"
+                                                                 disabled={allOptions.flatMap((group) => group.allOptions).length <= 0}>
                                                     {selectedAllDropdownData.length > 0 ?
                                                         (
                                                             selectedAllDropdownData.map((data, index) => (
                                                                 <div key={index} className="selected-option">
-                                                                    <img src={data?.selectOption?.imageUrl || default_user_icon}
-                                                                         alt={data?.selectOption?.name}/>
+                                                                    <img
+                                                                        src={data?.selectOption?.imageUrl || default_user_icon}
+                                                                        alt={data?.selectOption?.name}/>
                                                                     <span>{data?.selectOption?.name}</span>
                                                                     <RxCross2 onClick={(e) => {
                                                                         handleCheckboxChange(data);
@@ -698,6 +702,7 @@ const CreatePost = () => {
                                                             socialMediaType={option.group}
                                                             previewTitle={`${getEnumValue(option.group)} feed Preview`}
                                                             pageName={selectedPageData?.name}
+                                                            pageImageUrl={selectedPageData?.imageUrl}
                                                             userData={userData}
                                                             files={files}
                                                             selectedFileType={selectedFileType}

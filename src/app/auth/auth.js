@@ -2,7 +2,7 @@ import {useSelector} from "react-redux";
 import jwt_decode from "jwt-decode";
 
 export const getToken = () => {
-    const token = useSelector((state) => state.user.token);
+    const token = localStorage.getItem("token");
     return token;
 };
 
