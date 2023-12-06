@@ -132,7 +132,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
 
 
                                             <div className={"comment_message"}>
-                                                <CommentText comment={comment?.text} className={"highlight cursor-pointer"}/>
+                                                <CommentText socialMediaType={"INSTAGRAM"} comment={comment?.text} className={"highlight cursor-pointer"}/>
                                             </div>
                                             <div
                                                 className="user_impressions d-flex gap-3 mt-2 mb-2">
@@ -212,7 +212,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                                                     </div>
 
                                                                                     <p>
-                                                                                        <CommentText comment={childComment?.text} className={"highlight cursor-pointer"}/>
+                                                                                        <CommentText socialMediaType={"INSTAGRAM"} comment={childComment?.text} className={"highlight cursor-pointer"}/>
                                                                                     </p>
 
                                                                                     <div

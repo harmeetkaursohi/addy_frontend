@@ -2,7 +2,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 import {getFacebookConnectedPageIdsReport} from "../../../services/facebookService";
-import {baseAxios, isErrorInInstagramMention, parseComments} from "../../../utils/commonUtils";
+import {baseAxios, isErrorInInstagramMention} from "../../../utils/commonUtils";
 import {CouldNotPostComment, UpdateCommentFailedMsg} from "../../../utils/contantData";
 
 export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAction', async (data, thunkAPI) => {
@@ -29,10 +29,10 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
     }
 
 });
-export  const replyCommentOnPostAction=createAsyncThunk('post/getCommentsOnPostAction', async (data, thunkAPI) => {
+export  const replyCommentOnPostAction=createAsyncThunk('post/replyCommentOnPostAction', async (data, thunkAPI) => {
     const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/replies?access_token=${data?.pageAccessToken}`;
     return baseAxios.post(apiUrl, data?.data).then((response) => {
-        return response.data;
+        return response.data.data;
     }).catch((error) => {
         showErrorToast(isErrorInInstagramMention(data?.socialMediaType,error)?CouldNotPostComment  : error.response.data.error.message);
         return thunkAPI.rejectWithValue(error.message);
@@ -44,9 +44,9 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
     switch (data?.socialMediaType) {
 
         case "FACEBOOK": {
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&order=reverse_chronological&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags,comments{id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags}`;
             return baseAxios.get(apiUrl, null).then((response) => {
-                return parseComments(data?.socialMediaType, response.data, data?.hasParentComment, data.hasParentComment ? data.parentComments : []);
+                return response?.data
             }).catch((error) => {
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.message);

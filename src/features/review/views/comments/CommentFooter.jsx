@@ -11,14 +11,16 @@ import {
 import {showErrorToast} from "../../../common/components/Toast";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import Loader from "../../../loader/Loader";
 import {RotatingLines} from "react-loader-spinner";
-import CommonLoader from "../../../common/components/CommonLoader";
 
 const CommentFooter = ({postData, postPageData}) => {
     const [comment, setComment] = useState("");
     const dispatch = useDispatch();
     const [like, setLike] = useState(false);
+    const likePostReducerData=useSelector(state => state.post.likePostReducer)
+    const disLikePostReducerData=useSelector(state => state.post.dislikePostReducer)
+    console.log("likePostReducerData",likePostReducerData)
+    console.log("disLikePostReducerData",disLikePostReducerData)
     const [baseQueryForGetPostPageInfoAction, setBaseQueryForGetPostPageInfoAction] = useState(
         {
             postIds: null,
@@ -116,10 +118,12 @@ const CommentFooter = ({postData, postPageData}) => {
                         setLike(true);
                     }
                 }).catch((error) => {
+                    setLike(false);
                     showErrorToast(error.response.data.message);
                 });
             }
         }).catch((error) => {
+            setLike(false);
             showErrorToast(error.response.data.message);
         })
     }
@@ -138,10 +142,12 @@ const CommentFooter = ({postData, postPageData}) => {
                         setLike(false);
                     }
                 }).catch((error) => {
+                    setLike(true);
                     showErrorToast(error.response.data.message);
                 });
             }
         }).catch((error) => {
+            setLike(true);
             showErrorToast(error.response.data.message);
         })
     }
@@ -184,21 +190,23 @@ const CommentFooter = ({postData, postPageData}) => {
 
             <ul className="d-flex">
                 {
-                    !like &&
+                    !like  &&
                     <li className="w-100" onClick={(e) => {
-                        handleAddLikesOnPost(e);
+                        !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  setLike(true)
+                        !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  handleAddLikesOnPost(e);
                     }}>
-                        <AiOutlineHeart className={"me-2"}
+                        <AiOutlineHeart className={"me-2 "}
                                         style={{color: "red", fontSize: "24px"}}/>Like
                     </li>
                 }
 
                 {
-                    like &&
+                    like  &&
                     <li className="w-100" onClick={(e) => {
-                        handleAddDisLikesOnPost(e);
+                        !likePostReducerData?.loading && !disLikePostReducerData?.loading && setLike(false)
+                        !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  handleAddDisLikesOnPost(e);
                     }}>
-                        <AiFillHeart className={"me-2"}
+                        <AiFillHeart className={"me-2 animated-icon"}
                                      style={{color: "red", fontSize: "24px"}}/>Dislike
                     </li>
                 }
@@ -224,11 +232,12 @@ const CommentFooter = ({postData, postPageData}) => {
             <p className="comment_date">{getFormattedDate(postData?.feedPostDate)}</p>
             <div className="comment_msg">
                 {
-                    addCommentOnPostActionData?.loading &&
+                    addCommentOnPostActionData?.loading && comment &&
                     <div className={"post-comment-loader z-index-1 mt-1"}><RotatingLines strokeColor="#F07C33"
-                                                                                    strokeWidth="5"
-                                                                                    animationDuration="0.75" width="30"
-                                                                                    visible={true}></RotatingLines>
+                                                                                         strokeWidth="5"
+                                                                                         animationDuration="0.75"
+                                                                                         width="30"
+                                                                                         visible={true}></RotatingLines>
                     </div>
                 }
 
@@ -251,7 +260,7 @@ const CommentFooter = ({postData, postPageData}) => {
                                     fill="#323232"/>
                             </svg>
                             <input value={comment} type="text"
-                                   className={addCommentOnPostActionData?.loading ? "form-control opacity-50" : "form-control"}
+                                   className={addCommentOnPostActionData?.loading && comment ? "form-control opacity-50" : "form-control"}
                                    onClick={() => {
                                        setShowEmojiPicker(false)
                                    }}
@@ -264,6 +273,7 @@ const CommentFooter = ({postData, postPageData}) => {
                                     disabled={addCommentOnPostActionData?.loading || isNullOrEmpty(comment)}
                                     onClick={(e) => {
                                         setShowEmojiPicker(false)
+
                                         !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
                                     }}>Post
                             </button>

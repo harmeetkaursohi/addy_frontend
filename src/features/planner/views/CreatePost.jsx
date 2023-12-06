@@ -650,7 +650,7 @@ const CreatePost = () => {
                                         </div>
 
                                         {/* boost post */}
-                                        <div className='publ_post_outer media_outer'>
+                                        <div className='publish_post_outer media_outer '>
                                             <div className="d-flex align-items-center gap-2 ps-0 form-switch">
 
                                                 <i

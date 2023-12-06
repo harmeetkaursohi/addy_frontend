@@ -458,81 +458,6 @@ export const handleShowCommentReplies = (showCommentReply, index) => {
     return updatedShowCommentReply
 
 }
-
-export const parseCommentsForFacebook = (data, hasParentComment, parentComments) => {
-    const getMessageTags = (messageTags) => {
-        if (messageTags?.length === 0 || messageTags?.length === undefined || messageTags?.length === null) {
-            return []
-        } else {
-            return messageTags?.map(tags => {
-                return {
-                    id: tags?.id,
-                    name: tags?.name,
-                    type: tags?.type
-                }
-            })
-        }
-    }
-
-
-    const getCommentsStructure = (data) => {
-        return data?.map(comment => {
-            return {
-                id: comment?.id,
-                message: comment?.message,
-                like_count: comment?.like_count,
-                reply_count: comment?.comment_count,
-                created_time: comment?.created_time,
-                attachment: comment?.attachment,
-                can_comment: comment?.can_comment,
-                can_like: comment?.can_like,
-                user_likes: comment?.user_likes,
-                can_remove: comment?.can_remove,
-                reply: [],
-                from: {
-                    id: comment?.from?.id,
-                    name: comment?.from?.name,
-                    picture: comment?.from?.picture?.data?.url
-
-                },
-                message_tags: getMessageTags(comment?.message_tags)
-
-            }
-        })
-    }
-    if (hasParentComment) {
-        const parentCommentIndex = parentComments.findIndex(comment => comment.id === data?.data[0]?.parent?.id);
-        let updatedParentComments = [...parentComments];
-        updatedParentComments[parentCommentIndex] = {
-            ...updatedParentComments[parentCommentIndex],
-            reply: getCommentsStructure(data?.data)
-        }
-        return updatedParentComments
-    } else {
-        return getCommentsStructure(data?.data)
-    }
-}
-export const parseComments = (socialMediaType, data, hasParentComment, parentComments) => {
-    //  When There Are No Comments
-    if (data?.data?.length === 0) {
-        return [];
-    }
-    switch (socialMediaType) {
-        case "FACEBOOK": {
-            return parseCommentsForFacebook(data, hasParentComment, parentComments)
-        }
-        case "INSTAGRAM": {
-
-        }
-        case "LINKEDIN": {
-
-        }
-        case "PINTEREST": {
-
-        }
-    }
-}
-
 export const getTagCommentsFormat = (replyComment) => {
     return !replyComment?.message.includes(replyComment?.mentionedPageName) ? replyComment?.message : replyComment?.message.replace(replyComment?.mentionedPageName, `@[${replyComment?.mentionedPageId}]`)
 }
@@ -708,6 +633,9 @@ export const isNullOrEmpty = (value) => {
     return value === null || value === undefined || value?.trim() === ""
 }
 export const isReplyCommentEmpty = (replyComment) => {
+    if(replyComment===null || replyComment===undefined || replyComment===""){
+        return true
+    }
     return replyComment?.message === null || replyComment?.message === undefined || replyComment?.message?.trim() === "" || replyComment?.message?.trim() === replyComment?.mentionedPageName
 }
 export const getInstagramBusinessAccounts = (accountsData) => {

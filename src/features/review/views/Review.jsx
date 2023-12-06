@@ -14,20 +14,20 @@ import {getPostPageInfoAction} from "../../../app/actions/postActions/postAction
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: 0});
-    const {isLoading, isError, error, results ,setResults, hasNextPage} = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
+    const {isLoading=true, isError, error, results ,setResults, hasNextPage} = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
     const [resetData, isResetData] = useState(false);
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
     console.log("postPageInfoData---->",postPageInfoData)
-    console.log("results---->",results)
     console.log("postData---->",postData)
+    console.log("results---->",results)
 
     useEffect(()=>{
         if(resetData){
             setResults([])
-            setBaseSearchQuery({pageNum: 0})
+            setBaseSearchQuery({...baseSearchQuery,pageNum: 0,})
             isResetData(false)
 
         }
@@ -110,35 +110,42 @@ const Review = () => {
 
                                     </thead>
 
-                                    <tbody>
+                                    <tbody className="position-relative">
+                                    {
+                                        isLoading ?
+                                            <div className={"w-100 position-absolute table_loader"}>
+                                                <CommonLoader/>
+                                            </div>
+                                            :
+                                            results?.map((post, index) => (
 
-                                    {results?.map((post, index) => (
+                                                <tr
+                                                    key={index}
+                                                    ref={index === results.length - 1 ? lastPostRef : null}
+                                                >
+                                                    <td>
+                                                        <img src={post?.attachments[0]?.imageURL || noImageAvailable}
+                                                             className="bg_img"/>
+                                                    </td>
+                                                    <td>
+                                                        <img className={"me-2"} src={computeImageURL(post?.socialMediaType)}/>
+                                                        <span>{post?.page?.name}</span>
+                                                    </td>
+                                                    <td>{post?.likes} Likes</td>
+                                                    <td>{post?.comments} Comments</td>
+                                                    <td>{post?.shares} Share</td>
+                                                    <td>
+                                                        <button
+                                                            className="view_post_btn cmn_bg_btn"
+                                                            onClick={(e) => {
+                                                                setPostData(post);
+                                                                setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
+                                                            }}>{jsondata.viewpost}</button>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                    }
 
-                                        <tr
-                                            key={index}
-                                            ref={index === results.length - 1 ? lastPostRef : null}
-                                        >
-                                            <td>
-                                                <img src={post?.attachments[0]?.imageURL || noImageAvailable}
-                                                     className="bg_img"/>
-                                            </td>
-                                            <td>
-                                                <img className={"me-2"} src={computeImageURL(post?.socialMediaType)}/>
-                                                <span>{post?.page?.name}</span>
-                                            </td>
-                                            <td>{post?.likes} Likes</td>
-                                            <td>{post?.comments} Comments</td>
-                                            <td>{post?.shares} Share</td>
-                                            <td>
-                                                <button
-                                                    className="view_post_btn cmn_bg_btn"
-                                                    onClick={(e) => {
-                                                        setPostData(post);
-                                                        setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
-                                                    }}>{jsondata.viewpost}</button>
-                                            </td>
-                                        </tr>
-                                    ))}
 
                                     </tbody>
 
@@ -146,9 +153,7 @@ const Review = () => {
 
                             </div>
 
-                            <div className={"m-auto mt-5"}>
-                                {isLoading && <CommonLoader/>}
-                            </div>
+
                         </div>
                     </div>
                 </div>

@@ -34,7 +34,7 @@ const CommonSlider = ({
             {viewSimilarToSocialMedia ?
                 <div>
                     <div className={"ms-2"}>
-                        <CommentText comment={`${caption} ${hashTag}`} className={"highlight cursor-pointer"}/>
+                        <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`} className={"highlight cursor-pointer"}/>
                     </div>
                     <Slider {...settings} >
 
