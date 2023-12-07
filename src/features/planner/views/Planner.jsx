@@ -93,6 +93,9 @@ const Planner = () => {
     }, [getAllPlannerPostsData]);
 
 
+    console.log("@@@ getAllPlannerPostsData ::: ",plannerPosts,getAllPostsForPlannerData)
+
+
     useEffect(() => {
 
         if (Object.keys(baseSearchQuery).length > 0) {
