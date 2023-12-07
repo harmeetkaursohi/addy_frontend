@@ -248,7 +248,11 @@ export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatc
         data.updatePostRequestDTO.attachments.forEach((attachment, index) => {
             if (attachment?.file !== null && attachment?.file !== "null") {
                 formData.append(`attachments[${index}].file`, attachment?.file);
-                formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE" : "VIDEO");
+                // formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE" : "VIDEO");
+
+            }
+            if( attachment?.mediaType !== "null" && attachment?.mediaType !== null){
+                formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
             }
             if (attachment?.id !== null) {
                 formData.append(`attachments[${index}].id`, attachment?.id);
