@@ -83,6 +83,7 @@ const CommonShowMorePlannerModal = ({
                                         getAllPlannerPostsDataLoading ? (
                                                 <CommonLoader/>) :
                                             sortByKey(plannerPosts,"feedPostDate")?.map((plannerPost, index) => {
+                                                console.log("@@@ plannerPost ::: ",plannerPost)
                                                 return (
                                                     <div className={ !isPlannerPostEditable(plannerPost?.feedPostDate) ? "more_plans_grid mb-3 disable_more_plans_grid":"more_plans_grid mb-3"} key={index}>
                                                         <div className="plan_grid_img">
@@ -91,8 +92,9 @@ const CommonShowMorePlannerModal = ({
                                                                               selectedFileType={null} caption={null}
                                                                               hashTag={null}
                                                                               showThumbnail={true}
-
-                                                                              viewSimilarToSocialMedia={false}/>
+                                                                              viewSimilarToSocialMedia={false}
+                                                                              enableShowPlannerModel={true}
+                                                                />
                                                             }
                                                         </div>
                                                         <div className="plan_grid_content">

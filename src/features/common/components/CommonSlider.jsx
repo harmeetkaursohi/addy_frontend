@@ -15,7 +15,8 @@ const CommonSlider = ({
                           showThumbnail = false,
                           viewSimilarToSocialMedia = true,
                           isPublished = false,
-                          height = "350px"
+                          height = "350px",
+                          enableShowPlannerModel=false
                       }) => {
 
     const settings = {
@@ -31,7 +32,8 @@ const CommonSlider = ({
 
     return (
         <>
-            {viewSimilarToSocialMedia ?
+
+            { viewSimilarToSocialMedia ?
                 <div>
                     <div className={"ms-2"}>
                         <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`} className={"highlight cursor-pointer"}/>
@@ -80,13 +82,24 @@ const CommonSlider = ({
                         }
 
                         {
-                            Array.isArray(files) && files.length > 0 && files?.map((file, index) => (
-                                <div key={index}>
+                            enableShowPlannerModel === true && Array.isArray(files) && files.length > 0 &&
+                            <img
+                                src={(files[0].postStatus && files[0].postStatus === "SCHEDULED") ? "data:image/jpeg; base64," + files[0]?.imageURL : files[0]?.imageURL} alt={`Image`} className='post_img'/>
+                        }
+
+                        {
+                            enableShowPlannerModel === false && Array.isArray(files) && files.length > 0 && files?.map((file, index) => {
+                                console.log("@@@@  file test",file)
+
+                                return (<div key={index}>
+
                                     {file?.mediaType === "IMAGE" || showThumbnail ?
+
                                         <img
                                             src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
                                             alt={`Image ${index}`} className='post_img'/>
                                         :
+
                                         <ReactPlayer
                                             height={height}
                                             width={"100%"}
@@ -96,10 +109,8 @@ const CommonSlider = ({
                                         />
 
                                     }
-
-
-                                </div>
-                            ))
+                                </div>)
+                            })
                         }
 
 
