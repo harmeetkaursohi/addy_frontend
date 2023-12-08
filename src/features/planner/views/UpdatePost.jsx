@@ -298,14 +298,14 @@ const UpdatePost = () => {
                 };
 
                 console.log("@@@ RequestBody for scheduke time gicen ", requestBody);
-                dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
-                    if (response.meta.requestStatus === "fulfilled") {
-                        showSuccessToast("Post has uploaded successfully");
-                        navigate("/planner");
-                    }
-                }).catch((error) => {
-                    showErrorToast(error.response.data.message);
-                });
+                // dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
+                //     if (response.meta.requestStatus === "fulfilled") {
+                //         showSuccessToast("Post has uploaded successfully");
+                //         navigate("/planner");
+                //     }
+                // }).catch((error) => {
+                //     showErrorToast(error.response.data.message);
+                // });
 
             }
         ;
