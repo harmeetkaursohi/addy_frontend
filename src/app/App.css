@@ -21,7 +21,10 @@ p {
     background: #E6E9EC;
     border-radius: 5px;
 }
-
+.dropdown-item{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 ul {
     list-style: none;
     padding-left: 0px !important;

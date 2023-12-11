@@ -16,7 +16,7 @@ const CommonSlider = ({
                           viewSimilarToSocialMedia = true,
                           isPublished = false,
                           height = "350px",
-                          enableShowPlannerModel=false
+                          enableShowPlannerModel = false
                       }) => {
 
     const settings = {
@@ -33,10 +33,11 @@ const CommonSlider = ({
     return (
         <>
 
-            { viewSimilarToSocialMedia ?
+            {viewSimilarToSocialMedia ?
                 <div>
                     <div className={"ms-2"}>
-                        <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`} className={"highlight cursor-pointer"}/>
+                        <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
+                                     className={"highlight cursor-pointer"}/>
                     </div>
                     <Slider {...settings} >
 
@@ -45,7 +46,8 @@ const CommonSlider = ({
 
                             files?.map((file, index) => {
                                 return (<div key={index}>
-                                    <img src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource} alt={`Image ${index}`} className='post_img'/>
+                                    <img src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
+                                         alt={`Image ${index}`} className='post_img'/>
                                 </div>)
                             })
                         }
@@ -83,13 +85,27 @@ const CommonSlider = ({
 
                         {
                             enableShowPlannerModel === true && Array.isArray(files) && files.length > 0 &&
-                            <img
-                                src={(files[0].postStatus && files[0].postStatus === "SCHEDULED") ? "data:image/jpeg; base64," + files[0]?.imageURL : files[0]?.imageURL} alt={`Image`} className='post_img'/>
+                            <>
+                                {
+                                    selectedFileType === "IMAGE" ?
+                                        <img
+                                            src={(files[0].postStatus && files[0].postStatus === "SCHEDULED") ? "data:image/jpeg; base64," + files[0]?.imageURL : files[0]?.imageURL}
+                                            alt={`Image`} className='post_img'/> :
+                                        <ReactPlayer
+                                            height={"100%"}
+                                            width={"100%"}
+                                            className=''
+                                            url={files[0]?.postStatus==="SCHEDULED" ? `${import.meta.env.VITE_APP_API_BASE_URL}`+"/attachments/"+files[0]?.id : files[0]?.sourceURL}
+                                            controls={false}
+                                        />
+                                }
+                            </>
+
                         }
 
                         {
                             enableShowPlannerModel === false && Array.isArray(files) && files.length > 0 && files?.map((file, index) => {
-                                console.log("@@@@  file test",file)
+                                console.log("@@@@  file test", file)
 
                                 return (<div key={index}>
 

@@ -12,7 +12,8 @@ import CommonLoader from "./CommonLoader";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {useState} from "react";
-import {deletePostByBatchIdAction, getAllPostsForPlannerAction, getPlannerPostCountAction
+import {
+    deletePostByBatchIdAction, getAllPostsForPlannerAction, getPlannerPostCountAction
 } from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "./Toast";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
@@ -44,8 +45,16 @@ const CommonShowMorePlannerModal = ({
                         showSuccessToast("Posts has been deleted successfully");
                         setDeleteBatchIdRef(null);
                         const decodeJwt = decodeJwtToken(token);
-                        dispatch(getAllPostsForPlannerAction({customerId: decodeJwt.customerId, token: token, query: baseSearchQuery}));
-                        dispatch(getPlannerPostCountAction({customerId: decodeJwt.customerId, token: token, query: baseSearchQuery}));
+                        dispatch(getAllPostsForPlannerAction({
+                            customerId: decodeJwt.customerId,
+                            token: token,
+                            query: baseSearchQuery
+                        }));
+                        dispatch(getPlannerPostCountAction({
+                            customerId: decodeJwt.customerId,
+                            token: token,
+                            query: baseSearchQuery
+                        }));
                         setCommonShowMorePlannerModal(false);
                     }
                 })
@@ -82,14 +91,16 @@ const CommonShowMorePlannerModal = ({
                                     {
                                         getAllPlannerPostsDataLoading ? (
                                                 <CommonLoader/>) :
-                                            sortByKey(plannerPosts,"feedPostDate")?.map((plannerPost, index) => {
-                                                console.log("@@@ plannerPost ::: ",plannerPost)
+                                            sortByKey(plannerPosts, "feedPostDate")?.map((plannerPost, index) => {
+                                                console.log("@@@ plannerPost ::: ", plannerPost)
                                                 return (
-                                                    <div className={ !isPlannerPostEditable(plannerPost?.feedPostDate) ? "more_plans_grid mb-3 disable_more_plans_grid":"more_plans_grid mb-3"} key={index}>
+                                                    <div
+                                                        className={!isPlannerPostEditable(plannerPost?.feedPostDate) ? "more_plans_grid mb-3 disable_more_plans_grid" : "more_plans_grid mb-3"}
+                                                        key={index}>
                                                         <div className="plan_grid_img">
                                                             {plannerPost?.attachments &&
                                                                 <CommonSlider files={plannerPost?.attachments}
-                                                                              selectedFileType={null} caption={null}
+                                                                              selectedFileType={plannerPost?.attachments[0]?.mediaType} caption={null}
                                                                               hashTag={null}
                                                                               showThumbnail={true}
                                                                               viewSimilarToSocialMedia={false}

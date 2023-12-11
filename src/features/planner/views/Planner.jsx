@@ -229,7 +229,7 @@ const Planner = () => {
 
         setBatchIds(batchIdList);
         dispatch(getAllPlannerPostAction({
-            token: token, query: {batchIds: batchIdList}
+            token: token, query: {postStatus: ["PUBLISHED"],batchIds: batchIdList}
         }));
 
         setShowMorePlannerModel(true);
