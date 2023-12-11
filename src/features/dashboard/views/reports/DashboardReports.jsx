@@ -160,7 +160,7 @@ export const DashboardReports = () => {
                                        </Dropdown.Toggle>
 
                                        <Dropdown.Menu>
-                                           {Object.keys(SocialAccountProvider).map(cur => (
+                                           { Object.keys(SocialAccountProvider).map(cur => (
 
                                                <Dropdown.Item
                                                    disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data,connectedPagesReducer?.facebookConnectedPages)}
@@ -179,7 +179,7 @@ export const DashboardReports = () => {
                                            }
                                        </Dropdown.Menu>
                                    </Dropdown>
-                                   <Dropdown className="dropdown_btn">
+                                   <Dropdown className="dropdown_btn facebook_pages">
 
                                        <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                         className="social_dropdowns"
@@ -193,7 +193,7 @@ export const DashboardReports = () => {
                                            {connectedPagesToSelectedSocialMediaAccount?.map(page => (
 
                                                <Dropdown.Item
-
+                                                    className="d-flex"
                                                    // disabled={notConnectedSocialMediaAccount(cur, getAllConnectedSocialAccountData?.data)}
                                                    onClick={() => {
                                                        setSelectedPage(page)
@@ -203,7 +203,7 @@ export const DashboardReports = () => {
 
                                                    }}><img width={24}
                                                            src={page?.imageUrl?page?.imageUrl:default_user_icon}
-                                                           className="me-3"/>  {page.name}
+                                                           className="me-3"/>  <span>{page.name}</span>
                                                </Dropdown.Item>
                                            ))
 

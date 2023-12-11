@@ -675,3 +675,9 @@ button.btn-with-fixed-width.report_section_selected_btn {
     border-color: #f07c3a;
     background-color: rgb(240 124 58 / 14%);
 }
+.facebook_pages a img {
+    flex: 0 0 24px;
+    height: 24px;
+    position: relative;
+    top: 2px;
+}
