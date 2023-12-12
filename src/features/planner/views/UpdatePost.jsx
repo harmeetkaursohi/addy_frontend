@@ -279,7 +279,7 @@ const UpdatePost = () => {
                     id: id,
                     updatePostRequestDTO: {
                         attachments: files?.map((file) => ({
-                            mediaType: selectedFileType,
+                            mediaType: file?.mediaType,
                             file: file?.file || null,
                             fileName: file.fileName,
                             id: file?.id || null,

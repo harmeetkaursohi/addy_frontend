@@ -19,8 +19,6 @@ const CommentFooter = ({postData, postPageData}) => {
     const [like, setLike] = useState(false);
     const likePostReducerData=useSelector(state => state.post.likePostReducer)
     const disLikePostReducerData=useSelector(state => state.post.dislikePostReducer)
-    console.log("likePostReducerData",likePostReducerData)
-    console.log("disLikePostReducerData",disLikePostReducerData)
     const [baseQueryForGetPostPageInfoAction, setBaseQueryForGetPostPageInfoAction] = useState(
         {
             postIds: null,

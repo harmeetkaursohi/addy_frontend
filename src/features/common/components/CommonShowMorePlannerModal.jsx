@@ -13,9 +13,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {useState} from "react";
 import {
-    deletePostByBatchIdAction,
-    getAllPostsForPlannerAction,
-    getPlannerPostCountAction
+    deletePostByBatchIdAction, getAllPostsForPlannerAction, getPlannerPostCountAction
 } from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "./Toast";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
@@ -102,7 +100,7 @@ const CommonShowMorePlannerModal = ({
                                                         <div className="plan_grid_img">
                                                             {plannerPost?.attachments &&
                                                                 <CommonSlider files={plannerPost?.attachments}
-                                                                              selectedFileType={null} caption={null}
+                                                                              selectedFileType={plannerPost?.attachments[0]?.mediaType} caption={null}
                                                                               hashTag={null}
                                                                               showThumbnail={true}
                                                                               viewSimilarToSocialMedia={false}
@@ -136,6 +134,7 @@ const CommonShowMorePlannerModal = ({
                                                                                                 className="plan_social_img"
                                                                                                 src={computeImageURL(curPage?.socialMediaType)}
                                                                                                 alt="fb"/>
+
                                                                                         </div>
                                                                                         <p className="mb-0">{curPage?.pageName}</p>
                                                                                     </div>
