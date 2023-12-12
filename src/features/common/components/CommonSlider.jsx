@@ -28,8 +28,6 @@ const CommonSlider = ({
         slidesToScroll: 1
     };
 
-    console.log("files=====>", files);
-
     return (
         <>
 
@@ -84,24 +82,23 @@ const CommonSlider = ({
                         }
 
                         {
-                            enableShowPlannerModel === true && Array.isArray(files) && files.length > 0 &&
-                            <>
-                                {
-                                    selectedFileType === "IMAGE" ?
-                                        <img
-                                            src={(files[0].postStatus && files[0].postStatus === "SCHEDULED") ? "data:image/jpeg; base64," + files[0]?.imageURL : files[0]?.imageURL}
-                                            alt={`Image`} className='post_img'/> :
-                                        <ReactPlayer
-                                            height={"100%"}
-                                            width={"100%"}
-                                            className=''
-                                            url={files[0]?.postStatus==="SCHEDULED" ? `${import.meta.env.VITE_APP_API_BASE_URL}`+"/attachments/"+files[0]?.id : files[0]?.sourceURL}
-                                            controls={false}
-                                        />
-                                }
-                            </>
-
+                            enableShowPlannerModel === true && Array.isArray(files) && files.length > 0 && files[0].mediaType === "IMAGE" &&
+                            <img
+                                src={(files[0].postStatus && files[0].postStatus === "SCHEDULED") ? "data:image/jpeg; base64," + files[0]?.imageURL : files[0]?.imageURL}
+                                alt={`Image`} className='post_img'/>
                         }
+
+                        {
+                            enableShowPlannerModel === true && Array.isArray(files) && files.length > 0 && files[0].mediaType === "VIDEO" &&
+                            <ReactPlayer
+                                height={"114px"}
+                                width={"100%"}
+                                className=''
+                                url={`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + files[0].sourceURL}
+                                controls={true}
+                            />
+                        }
+
 
                         {
                             enableShowPlannerModel === false && Array.isArray(files) && files.length > 0 && files?.map((file, index) => {

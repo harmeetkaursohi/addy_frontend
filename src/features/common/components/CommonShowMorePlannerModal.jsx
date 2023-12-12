@@ -1,12 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import './CommonShowMorePlannerModal.css'
-import {
-    computeImageURL,
-    handleSeparateCaptionHashtag,
-    isPlannerPostEditable,
-    redirectToURL,
-    sortByKey
-} from "../../../utils/commonUtils";
+import {computeImageURL, handleSeparateCaptionHashtag, isPlannerPostEditable, redirectToURL, sortByKey} from "../../../utils/commonUtils";
 import CommonSlider from "./CommonSlider";
 import CommonLoader from "./CommonLoader";
 import {useNavigate} from "react-router-dom";
@@ -92,7 +86,6 @@ const CommonShowMorePlannerModal = ({
                                         getAllPlannerPostsDataLoading ? (
                                                 <CommonLoader/>) :
                                             sortByKey(plannerPosts, "feedPostDate")?.map((plannerPost, index) => {
-                                                console.log("@@@ plannerPost ::: ", plannerPost)
                                                 return (
                                                     <div
                                                         className={!isPlannerPostEditable(plannerPost?.feedPostDate) ? "more_plans_grid mb-3 disable_more_plans_grid" : "more_plans_grid mb-3"}
@@ -100,7 +93,7 @@ const CommonShowMorePlannerModal = ({
                                                         <div className="plan_grid_img">
                                                             {plannerPost?.attachments &&
                                                                 <CommonSlider files={plannerPost?.attachments}
-                                                                              selectedFileType={plannerPost?.attachments[0]?.mediaType} caption={null}
+                                                                              selectedFileType={null} caption={null}
                                                                               hashTag={null}
                                                                               showThumbnail={true}
                                                                               viewSimilarToSocialMedia={false}
@@ -117,6 +110,7 @@ const CommonShowMorePlannerModal = ({
                                                                     <div className="d-flex page_tags">
                                                                         {plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
                                                                             plannerPost?.postPages.map((curPage, index) => {
+                                                                                console.log("@@@ curPage ::: ",curPage)
                                                                                 return (
                                                                                     <div
                                                                                         className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}
@@ -168,7 +162,7 @@ const CommonShowMorePlannerModal = ({
                                                                 </div>
                                                             </div>
                                                             <p className="mt-2 mb-1">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.caption || "" : ""}</p>
-                                                            <p className="hasTags">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.hashtag || "#Good Friday" : ""}</p>
+                                                            <p className="hasTags">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.hashtag || "" : ""}</p>
                                                         </div>
                                                     </div>
                                                 )
