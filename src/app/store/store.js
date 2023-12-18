@@ -3,6 +3,7 @@ import userSlice from "../slices/userSlice/userSlice.js";
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import facebookSlice from "../slices/facebookSlice/facebookSlice.js";
+import linkedinSlice from "../slices/linkedinSlice/linkedinSlice";
 import socialAccountSlice from "../slices/socialAccountSlice/socialAccountSlice.js";
 import postSlice from "../slices/postSlice/postSlice.js";
 import {resetReducers} from "../actions/commonActions/commonActions";
@@ -11,6 +12,7 @@ import {resetReducers} from "../actions/commonActions/commonActions";
 const rootReducers = combineReducers({
     user: userSlice,
     facebook: facebookSlice,
+    linkedin:linkedinSlice,
     socialAccount: socialAccountSlice,
     post: postSlice,
     reset: resetReducers

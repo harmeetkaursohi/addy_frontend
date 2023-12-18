@@ -574,8 +574,14 @@ img.connection-error-svg {
     margin-top: 15px;
 }
 
-.insta-icon {
+.insta-icon-color {
     color: purple !important;
+}
+.linkedin-icon-color {
+    color: #0077b5 !important;
+
+}
+.font-size-24{
     font-size: 24px ;
 }
 

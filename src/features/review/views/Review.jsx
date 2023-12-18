@@ -20,9 +20,6 @@ const Review = () => {
     const [resetData, isResetData] = useState(false);
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
-    console.log("postPageInfoData---->",postPageInfoData)
-    console.log("postData---->",postData)
-    console.log("results---->",results)
 
     useEffect(()=>{
         if(resetData){

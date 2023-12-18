@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import {SocialAccountProvider} from "./contantData.js";
+import {Linkedin_URN_Id_Types, SocialAccountProvider} from "./contantData.js";
 import {exchangeForLongLivedToken, getAllFacebookConnectedSocialMediaAccounts} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
 import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/facebookActions/facebookActions.js";
@@ -76,6 +76,23 @@ export const computeAndSocialAccountJSONForFacebook = async (jsonObj, tokenProvi
         }
     }
 }
+export const computeAndSocialAccountJSONForLinkedIn = async (jsonObj) => {
+    const imageArray = jsonObj?.data?.profilePicture?.["displayImage~"]?.elements
+    const token = localStorage.getItem("token");
+    const decodeJwt = decodeJwtToken(token);
+    return {
+        customerId: decodeJwt.customerId, token: token, socialAccountData: {
+            name: (jsonObj?.data?.localizedFirstName + " " + jsonObj?.data?.localizedLastName) || null,
+            email: null,
+            imageUrl: (imageArray === undefined || imageArray === null || imageArray?.length === 0) ? null : imageArray[imageArray?.length - 1]?.identifiers[0]?.identifier,
+            provider: getKeyFromValueOfObject(SocialAccountProvider, jsonObj.provider) || null,
+            providerId: jsonObj?.data?.id || null,
+            accessToken: jsonObj?.data?.access_token || null,
+            refreshToken: jsonObj?.data?.refresh_token,
+            pageAccessToken: []
+        }
+    }
+}
 
 
 export const getKeyFromValueOfObject = (object, value) => {
@@ -96,18 +113,51 @@ export const cleanAndValidateRequestURL = (baseUrl, path, fields, token) => {
 }
 
 
-export const facebookPageConnectAction = (dispatch, token, facebookData, socialMediaAccountInfo) => {
+export const pageConnectAction = (dispatch, token, data, socialMediaAccountInfo) => {
     const decodeJwt = decodeJwtToken(token);
-    if (facebookData) {
-        const requestBody = {
+    if (data) {
+        let requestBody = {
             customerId: decodeJwt?.customerId, pageAccessTokenDTO: {
-                pageId: facebookData?.id,
-                name: facebookData?.name,
-                imageUrl: socialMediaAccountInfo?.provider === "FACEBOOK" ? facebookData.picture?.data?.url : facebookData?.profile_picture_url,
-                about: facebookData?.about,
-                access_token: socialMediaAccountInfo?.provider === "FACEBOOK" ? facebookData?.access_token : socialMediaAccountInfo.accessToken,
+                pageId: data?.id,
+                name: data?.name,
+                about: data?.about,
                 socialMediaAccountId: socialMediaAccountInfo.id
             }, token: token
+        };
+        switch (socialMediaAccountInfo?.provider) {
+            case "FACEBOOK": {
+                requestBody = {
+                    ...requestBody, pageAccessTokenDTO: {
+                        ...requestBody.pageAccessTokenDTO,
+                        imageUrl: data.picture?.data?.url,
+                        access_token: data?.access_token,
+                    }
+                }
+                break;
+            }
+            case "INSTAGRAM": {
+                requestBody = {
+                    ...requestBody, pageAccessTokenDTO: {
+                        ...requestBody.pageAccessTokenDTO,
+                        imageUrl: data?.profile_picture_url,
+                        access_token: socialMediaAccountInfo.accessToken,
+                    }
+                }
+                break;
+            }
+            case "LINKEDIN": {
+                requestBody = {
+                    ...requestBody, pageAccessTokenDTO: {
+                        ...requestBody.pageAccessTokenDTO,
+                        imageUrl: data?.logo_url,
+                        access_token: socialMediaAccountInfo.accessToken,
+                    }
+                }
+                break;
+            }
+            default: {
+
+            }
         }
         dispatch(facebookPageConnect(requestBody)).then((response) => {
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
@@ -307,10 +357,10 @@ export const notConnectedSocialMediaAccount = (provider, connectedList) => {
 
     return !connectedList.some(curProv => curProv?.provider === provider);
 }
-export const socialMediaAccountHasConnectedPages = (provider, socialMediaAccountList=[],connectedPagesList=[]) => {
-    if(!isNullOrEmpty(provider) && !isNullOrEmpty(socialMediaAccountList) && !isNullOrEmpty(connectedPagesList)){
-        const connectedAccount=socialMediaAccountList?.find(socialMediaAccount=> socialMediaAccount.provider=== provider )
-        return connectedAccount && connectedPagesList?.some(connectedPage=> connectedPage?.socialMediaAccountId===connectedAccount?.id)
+export const socialMediaAccountHasConnectedPages = (provider, socialMediaAccountList = [], connectedPagesList = []) => {
+    if (!isNullOrEmpty(provider) && !isNullOrEmpty(socialMediaAccountList) && !isNullOrEmpty(connectedPagesList)) {
+        const connectedAccount = socialMediaAccountList?.find(socialMediaAccount => socialMediaAccount.provider === provider)
+        return connectedAccount && connectedPagesList?.some(connectedPage => connectedPage?.socialMediaAccountId === connectedAccount?.id)
     }
     return false;
 }
@@ -633,7 +683,7 @@ export const isNullOrEmpty = (value) => {
     return value === null || value === undefined || value?.trim() === ""
 }
 export const isReplyCommentEmpty = (replyComment) => {
-    if(replyComment===null || replyComment===undefined || replyComment===""){
+    if (replyComment === null || replyComment === undefined || replyComment === "") {
         return true
     }
     return replyComment?.message === null || replyComment?.message === undefined || replyComment?.message?.trim() === "" || replyComment?.message?.trim() === replyComment?.mentionedPageName
@@ -654,38 +704,38 @@ export const isErrorInInstagramMention = (socialMediaType, error) => {
 
 }
 export const getInitialLetterCap = (word) => {
-    if(isNullOrEmpty(word)){
+    if (isNullOrEmpty(word)) {
         return ""
     }
     return word.charAt(0).toUpperCase() + word.slice(1);
 
 }
-export const generateUnixTimestampFor=(daysAgo)=>{
+export const generateUnixTimestampFor = (daysAgo) => {
     const currentDate = new Date();
-    if(isNullOrEmpty(daysAgo.toString())){
+    if (isNullOrEmpty(daysAgo.toString())) {
         return "";
     }
-     if(daysAgo==="now"){
-         return Math.floor(currentDate.getTime() / 1000);
-    }else{
-         const daysAgoDate = new Date(currentDate);
-         daysAgoDate.setDate(currentDate.getDate() - daysAgo);
-         return Math.floor(daysAgoDate.getTime() / 1000);
-     }
+    if (daysAgo === "now") {
+        return Math.floor(currentDate.getTime() / 1000);
+    } else {
+        const daysAgoDate = new Date(currentDate);
+        daysAgoDate.setDate(currentDate.getDate() - daysAgo);
+        return Math.floor(daysAgoDate.getTime() / 1000);
+    }
 }
 
-export const getQueryForGraphData=(socialMediaType,selectedGraphDays)=>{
-    switch (socialMediaType){
-        case "FACEBOOK":{
-           return  {
+export const getQueryForGraphData = (socialMediaType, selectedGraphDays) => {
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            return {
                 createdFrom: getCustomDateEarlierUnixDateTime(selectedGraphDays),
-               createdTo: getCustomDateEarlierUnixDateTime(1)
+                createdTo: getCustomDateEarlierUnixDateTime(1)
             }
             break;
         }
-        case "INSTAGRAM":{
-            return  {
-                createdFrom: generateUnixTimestampFor(selectedGraphDays-1),
+        case "INSTAGRAM": {
+            return {
+                createdFrom: generateUnixTimestampFor(selectedGraphDays - 1),
                 createdTo: generateUnixTimestampFor("now")
             }
 
@@ -696,8 +746,8 @@ export const getQueryForGraphData=(socialMediaType,selectedGraphDays)=>{
     }
 
 }
-export const convertUnixTimestampToDateTime=(unixTimestamp)=> {
-    if(isNullOrEmpty(unixTimestamp.toString())){
+export const convertUnixTimestampToDateTime = (unixTimestamp) => {
+    if (isNullOrEmpty(unixTimestamp.toString())) {
         return null
     }
     // Convert Unix timestamp to milliseconds
@@ -719,5 +769,38 @@ export const convertUnixTimestampToDateTime=(unixTimestamp)=> {
     const formattedDate = `${year}-${month}-${day}`;
     const formattedTime = `${hours}:${minutes}`;
 
-    return { date: formattedDate, time: formattedTime };
+    return {date: formattedDate, time: formattedTime};
+}
+export const extractIdFromLinkedinUrnId = (urnId = null) => {
+    if (isNullOrEmpty(urnId)) {
+        return null;
+    }
+    const lastColonIndex = urnId.lastIndexOf(':');
+    if (lastColonIndex !== -1) {
+        return urnId.substring(lastColonIndex + 1);
+    } else {
+        return null;
+    }
+}
+export const getLinkedInUrnId = (id = null, type = null) => {
+    if (isNullOrEmpty(id)) {
+        return "";
+    }
+    return `urn:li:${type}:${id}`;
+
+}
+export const getFormattedLinkedinObject = (id, data) => {
+    if (data === null || data === undefined) {
+        return null;
+    }
+    let logo_url = "";
+    if (data.hasOwnProperty("logoV2")) {
+        const elements = data?.logoV2["original~"]?.elements;
+        logo_url = elements[elements.length - 1]?.identifiers[0]?.identifier;
+    }
+    return {
+        id: getLinkedInUrnId(id, Linkedin_URN_Id_Types.ORGANIZATION),
+        name: data?.localizedName,
+        logo_url: logo_url
+    }
 }

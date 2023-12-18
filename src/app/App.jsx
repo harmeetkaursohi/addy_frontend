@@ -20,7 +20,7 @@ import NotFound from '../features/common/components/NotFound'
 import React from 'react'
 import {Outlet, Navigate} from 'react-router-dom';
 import {getToken} from "../app/auth/auth.js";
-import FacebookModal from '../features/modals/views/facebookModal/FacebookModal'
+import ConnectPagesModal from '../features/modals/views/ConnectPagesModal/ConnectPagesModal'
 import Oauth2RedirectComponent from '../features/authentication/Oauth2RedirectComponent'
 import CreatePost from "../features/planner/views/CreatePost";
 import UpdatePost from "../features/planner/views/UpdatePost";
@@ -31,6 +31,7 @@ import PrivacyComponent from "../features/privacy/PrivacyComponent";
 import ContactUs from "../features/contactUs/ContactUs";
 import {ParentDraftComponent} from "../features/unPublishedPages/views/ParentDraftComponent";
 import Draft from "../features/unPublishedPages/Draft";
+import Insight from "../features/insights/insight/views/Insight";
 
 const App = () => {
     const PrivateRoute = () => {
@@ -58,7 +59,7 @@ const App = () => {
                         <Route path="/address" element={<AddressForm/>}/>
                         <Route path="/draft" element={<Draft/>}/>
                         {/*<Route path="/draft" element={<DraftComponent/>}/>*/}
-                        <Route path="/insights" element={<InsightsComponent/>}/>
+                        <Route path="/insights" element={<Insight/>}/>
                         <Route path="/faq" element={<FaqComponent/>}/>
                         <Route path="/privacy" element={<PrivacyComponent/>}/>
                         <Route path="/contact" element={<ContactUs/>}/>
@@ -67,7 +68,7 @@ const App = () => {
                     <Route path="/" element={<Signup/>}/>
                     <Route path="/reset-password" element={<CreatePassword/>}/>
                     <Route path="/forget-password" element={<ForgetPassword/>}/>
-                    <Route path="/fb" element={<FacebookModal/>}/>
+                    <Route path="/fb" element={<ConnectPagesModal/>}/>
                     <Route path="/auth-redirect" element={<Oauth2RedirectComponent/>}/>
                     <Route path="*" element={<NotFound/>}/>
                 </Routes>
