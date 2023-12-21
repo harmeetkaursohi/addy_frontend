@@ -25,12 +25,13 @@ import Oauth2RedirectComponent from '../features/authentication/Oauth2RedirectCo
 import CreatePost from "../features/planner/views/CreatePost";
 import UpdatePost from "../features/planner/views/UpdatePost";
 import DraftComponent from "../features/unPublishedPages/views/DraftComponent";
-import InsightsComponent from "../features/insights/InsightsComponent";
 import FaqComponent from "../features/faq/FaqComponent";
 import PrivacyComponent from "../features/privacy/PrivacyComponent";
 import ContactUs from "../features/contactUs/ContactUs";
 import {ParentDraftComponent} from "../features/unPublishedPages/views/ParentDraftComponent";
 import Draft from "../features/unPublishedPages/Draft";
+// import Insight from "../features/insights/insight/views/Insight";
+import Insight from "../features/insights/insight/views/Insight";
 
 const App = () => {
     const PrivateRoute = () => {
@@ -58,7 +59,7 @@ const App = () => {
                         <Route path="/address" element={<AddressForm/>}/>
                         <Route path="/draft" element={<Draft/>}/>
                         {/*<Route path="/draft" element={<DraftComponent/>}/>*/}
-                        <Route path="/insights" element={<InsightsComponent/>}/>
+                        <Route path="/insights" element={<Insight/>}/>
                         <Route path="/faq" element={<FaqComponent/>}/>
                         <Route path="/privacy" element={<PrivacyComponent/>}/>
                         <Route path="/contact" element={<ContactUs/>}/>

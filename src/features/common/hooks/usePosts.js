@@ -33,7 +33,6 @@ const usePosts = (pageNum = 0, filter = null) => {
             .then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     if (pageNum === 0) {
-                        console.log("filterfilterfilterfilterfilter",filter)
                         if (filter) {
                             setResults(response?.payload?.filter(data => data.socialMediaType === filter));
                         } else {

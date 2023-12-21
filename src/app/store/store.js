@@ -5,6 +5,7 @@ import logger from 'redux-logger';
 import facebookSlice from "../slices/facebookSlice/facebookSlice.js";
 import socialAccountSlice from "../slices/socialAccountSlice/socialAccountSlice.js";
 import postSlice from "../slices/postSlice/postSlice.js";
+import insightSlice from "../slices/insightSlice/insightSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
 
 
@@ -13,6 +14,7 @@ const rootReducers = combineReducers({
     facebook: facebookSlice,
     socialAccount: socialAccountSlice,
     post: postSlice,
+    insight: insightSlice,
     reset: resetReducers
 
 })

@@ -78,7 +78,7 @@ const CommonSlider = ({
                     <Slider {...settings}>
 
                         {
-                            files.length === 0 && <img src={noImageAvailable} alt={`Image`} className='post_img'/>
+                            files?.length === 0 && <img src={noImageAvailable} alt={`Image`} className='post_img '/>
                         }
 
                         {
@@ -102,7 +102,6 @@ const CommonSlider = ({
 
                         {
                             enableShowPlannerModel === false && Array.isArray(files) && files.length > 0 && files?.map((file, index) => {
-                                console.log("@@@@  file test", file)
 
                                 return (<div key={index}>
 

@@ -58,7 +58,17 @@ export const getFacebookConnectedPages = createAsyncThunk('facebook/getFacebookC
         return thunkAPI.rejectWithValue(error.response);
     });
 });
+export const getFacebookPostDataWithInsights = createAsyncThunk('facebook/getFacebookPostDataWithInsights', async (data, thunkAPI) => {
+    const postIds = data.postIds.map(id => id).join(',');
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions,post_engaged_users)`;
+    return await baseAxios.get(apiUrl).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
 
+});
 
 
 

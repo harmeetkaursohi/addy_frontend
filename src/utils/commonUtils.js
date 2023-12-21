@@ -229,13 +229,11 @@ export const computeAndBuildChildCard = (childCardProps, key) => {
             case 'FACEBOOK':
                 return "Facebook";
             case 'INSTAGRAM':
-                return "Intagram"
+                return "Instagram"
             case 'LINKEDIN':
                 return "Linkdin";
-                break;
             case 'TWITTER':
                 return "Twitter"
-                break;
             default: {
                 return "Pinterest"
             }
@@ -263,10 +261,8 @@ export function computeImageURL(providerType) {
             return instagram_img
         case 'LINKEDIN':
             return linkedin;
-            break;
         case 'TWITTER':
             return "Twitter"
-            break;
         default: {
             return "Pinterest"
         }
@@ -281,10 +277,8 @@ export function getEnumValue(providerType) {
             return "Instagram";
         case 'LINKEDIN':
             return "Linkedin";
-            break;
         case 'TWITTER':
             return "Twitter"
-            break;
         default: {
             return "Pinterest"
         }
@@ -307,10 +301,10 @@ export const notConnectedSocialMediaAccount = (provider, connectedList) => {
 
     return !connectedList.some(curProv => curProv?.provider === provider);
 }
-export const socialMediaAccountHasConnectedPages = (provider, socialMediaAccountList=[],connectedPagesList=[]) => {
-    if(!isNullOrEmpty(provider) && !isNullOrEmpty(socialMediaAccountList) && !isNullOrEmpty(connectedPagesList)){
-        const connectedAccount=socialMediaAccountList?.find(socialMediaAccount=> socialMediaAccount.provider=== provider )
-        return connectedAccount && connectedPagesList?.some(connectedPage=> connectedPage?.socialMediaAccountId===connectedAccount?.id)
+export const socialMediaAccountHasConnectedPages = (provider, socialMediaAccountList = [], connectedPagesList = []) => {
+    if (!isNullOrEmpty(provider) && !isNullOrEmpty(socialMediaAccountList) && !isNullOrEmpty(connectedPagesList)) {
+        const connectedAccount = socialMediaAccountList?.find(socialMediaAccount => socialMediaAccount.provider === provider)
+        return connectedAccount && connectedPagesList?.some(connectedPage => connectedPage?.socialMediaAccountId === connectedAccount?.id)
     }
     return false;
 }
@@ -346,7 +340,6 @@ export const calculatePercentageGrowth = async (data) => {
     for (let i = 1; i < data.length; i++) {
         const currentCount = data[i].count;
         const previousCount = data[i - 1].count;
-
         if (previousCount === 0) {
             data[i].percentageGrowth = currentCount * 100; // Show 300% instead of 0
         } else {
@@ -401,25 +394,6 @@ export const convertSentenceToHashtags = (sentence) => {
     const result = hashtags.join(' ');
     return result;
 }
-
-// export const handleEnterOnHashtag=(words=[])=>{
-//     let updatedHashtags=words;
-//     if(isNullOrEmpty(words)){
-//         return []
-//     }
-//      updatedHashtags = words.reduce((result, str) => {
-//         const parts = str.split('\n');
-//         result.push(parts[0]); // Add the part before newline
-//         if (parts.length > 1) {
-//             result.push(parts[1]); // Add the part after newline, if it exists
-//         }
-//         return result;
-//     }, []);
-//
-//     return updatedHashtags
-//
-// }
-
 export const getCommentCreationTime = (date) => {
     const currentDate = new Date();
     const createdDate = new Date(date);
@@ -586,8 +560,6 @@ export const baseAxios = axios.create();
 baseAxios?.interceptors?.request.use(
     response => {
         // List Of Urls that does not requires Token to Call API
-        return response
-
         const exemptedURLs = ["/auth/register", "/auth/login", "/auth/forgot-password", "/auth/reset-password"]
         const isExempted = exemptedURLs.some(url => {
             return response.url.includes(url)
@@ -633,7 +605,7 @@ export const isNullOrEmpty = (value) => {
     return value === null || value === undefined || value?.trim() === ""
 }
 export const isReplyCommentEmpty = (replyComment) => {
-    if(replyComment===null || replyComment===undefined || replyComment===""){
+    if (replyComment === null || replyComment === undefined || replyComment === "") {
         return true
     }
     return replyComment?.message === null || replyComment?.message === undefined || replyComment?.message?.trim() === "" || replyComment?.message?.trim() === replyComment?.mentionedPageName
@@ -654,50 +626,48 @@ export const isErrorInInstagramMention = (socialMediaType, error) => {
 
 }
 export const getInitialLetterCap = (word) => {
-    if(isNullOrEmpty(word)){
+    if (isNullOrEmpty(word)) {
         return ""
     }
     return word.charAt(0).toUpperCase() + word.slice(1);
 
 }
-export const generateUnixTimestampFor=(daysAgo)=>{
+export const generateUnixTimestampFor = (daysAgo) => {
     const currentDate = new Date();
-    if(isNullOrEmpty(daysAgo.toString())){
+    if (isNullOrEmpty(daysAgo.toString())) {
         return "";
     }
-     if(daysAgo==="now"){
-         return Math.floor(currentDate.getTime() / 1000);
-    }else{
-         const daysAgoDate = new Date(currentDate);
-         daysAgoDate.setDate(currentDate.getDate() - daysAgo);
-         return Math.floor(daysAgoDate.getTime() / 1000);
-     }
+    if (daysAgo === "now") {
+        return Math.floor(currentDate.getTime() / 1000);
+    } else {
+        const daysAgoDate = new Date(currentDate);
+        daysAgoDate.setDate(currentDate.getDate() - daysAgo);
+        return Math.floor(daysAgoDate.getTime() / 1000);
+    }
 }
 
-export const getQueryForGraphData=(socialMediaType,selectedGraphDays)=>{
-    switch (socialMediaType){
-        case "FACEBOOK":{
-           return  {
+export const getQueryForGraphData = (socialMediaType, selectedGraphDays) => {
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            return {
                 createdFrom: getCustomDateEarlierUnixDateTime(selectedGraphDays),
-               createdTo: getCustomDateEarlierUnixDateTime(1)
+                createdTo: getCustomDateEarlierUnixDateTime(1)
             }
-            break;
         }
-        case "INSTAGRAM":{
-            return  {
-                createdFrom: generateUnixTimestampFor(selectedGraphDays-1),
+        case "INSTAGRAM": {
+            return {
+                createdFrom: generateUnixTimestampFor(selectedGraphDays - 1),
                 createdTo: generateUnixTimestampFor("now")
             }
 
-            break;
         }
 
 
     }
 
 }
-export const convertUnixTimestampToDateTime=(unixTimestamp)=> {
-    if(isNullOrEmpty(unixTimestamp.toString())){
+export const convertUnixTimestampToDateTime = (unixTimestamp) => {
+    if (isNullOrEmpty(unixTimestamp.toString())) {
         return null
     }
     // Convert Unix timestamp to milliseconds
@@ -719,5 +689,375 @@ export const convertUnixTimestampToDateTime=(unixTimestamp)=> {
     const formattedDate = `${year}-${month}-${day}`;
     const formattedTime = `${hours}:${minutes}`;
 
-    return { date: formattedDate, time: formattedTime };
+    return {date: formattedDate, time: formattedTime};
+}
+export const getFormattedPostTime = (inputDate, format = "") => {
+    const inputDateObject = new Date(inputDate);
+    let options;
+    if (format === "") {
+        options = {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+        };
+    }
+    if (format === "DD-Mon") {
+        options = {
+            day: 'numeric',
+            month: 'short',
+        };
+    }
+
+    const outputDate = inputDateObject.toLocaleString('en-US', options);
+    return outputDate;
+};
+export const getFormattedAccountReachAndEngagementData = (data, socialMediaType) => {
+
+
+    let formattedData = {
+        engagement: {
+            presentData: null,
+            previousData: {
+                data: null,
+                dateRange: null
+            }
+        },
+        reach: {
+            presentData: null,
+            previousData: {
+                data: null,
+                dateRange: null
+            }
+        }
+    }
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            const engagement = data?.filter(data => data?.name === "page_post_engagements")[0]?.values
+            const reach = data?.filter(data => data?.name === "page_impressions")[0]?.values
+            const totalEngagementForPreviousDate = engagement.slice(0, (engagement?.length) / 2);
+            const totalEngagementForPresentDate = engagement.slice((engagement?.length) / 2)
+            const totalReachForPreviousDate = reach.slice(0, (reach?.length) / 2);
+            const totalReachForPresentDate = reach.slice((reach?.length) / 2)
+            formattedData = {
+                engagement: {
+                    presentData: totalEngagementForPresentDate.reduce((accumulator, currentValue) => {
+                        return accumulator + currentValue.value;
+                    }, 0),
+                    previousData: {
+                        data: totalEngagementForPreviousDate.reduce((accumulator, currentValue) => {
+                            return accumulator + currentValue.value;
+                        }, 0),
+                        dateRange: `${getFormattedPostTime(totalEngagementForPreviousDate[0]?.end_time, "DD-Mon") + "-" + getFormattedPostTime(totalEngagementForPreviousDate[totalEngagementForPreviousDate?.length - 1]?.end_time, "DD-Mon")}`
+                    }
+                },
+                reach: {
+                    presentData: totalReachForPresentDate.reduce((accumulator, currentValue) => {
+                        return accumulator + currentValue.value;
+                    }, 0),
+                    previousData: {
+                        data: totalReachForPreviousDate.reduce((accumulator, currentValue) => {
+                            return accumulator + currentValue.value;
+                        }, 0),
+                        dateRange: `${getFormattedPostTime(totalReachForPreviousDate[0]?.end_time, "DD-Mon") + "-" + getFormattedPostTime(totalReachForPreviousDate[totalEngagementForPreviousDate?.length - 1]?.end_time, "DD-Mon")}`
+                    }
+                }
+
+            }
+            return formattedData
+        }
+        case "INSTAGRAM": {
+            const presentReach = data?.presentData?.filter(data => data?.name === "reach")[0]?.total_value?.value
+            const presentEngagement = data?.presentData?.filter(data => data?.name === "accounts_engaged")[0]?.total_value?.value
+            const previousReach = data?.previousData?.data?.filter(data => data?.name === "reach")[0]?.total_value?.value
+            const previousEngagement = data?.previousData?.data?.filter(data => data?.name === "accounts_engaged")[0]?.total_value?.value
+            formattedData = {
+                engagement: {
+                    presentData: presentEngagement,
+                    previousData: {
+                        data: previousEngagement,
+                        dateRange: data?.previousData?.dateRange
+                    }
+                },
+                reach: {
+                    presentData: presentReach,
+                    previousData: {
+                        data: previousReach,
+                        dateRange: data?.previousData?.dateRange
+                    }
+                }
+            }
+            return formattedData
+        }
+        case "LINKEDIN": {
+            break;
+        }
+    }
+}
+export const calculatePercentageGrowthFor = (previousValue, currentValue, decimalPlaces = 2) => {
+    if ((currentValue === null || currentValue === undefined) && (previousValue === null || previousValue === undefined)) {
+        return ""
+    }
+    if (previousValue === 0) {
+        return (currentValue * 100).toFixed(decimalPlaces)
+    } else {
+        return (((currentValue - previousValue) / previousValue) * 100).toFixed(decimalPlaces);
+    }
+
+}
+export const getChartFormattedDataForInsights = (data, socialMediaType) => {
+    if (data === null || data === undefined) {
+        return []
+    }
+    const accountsReachedPercentage = data?.Accounts_Reached?.map(reach => parseFloat(reach?.percentageGrowth));
+    const followersPercentage = data?.Followers?.map(followers => parseFloat(followers?.percentageGrowth));
+
+    // Find the highest and lowest values
+    const highestValue = Math.max(...accountsReachedPercentage, ...followersPercentage);
+    const lowestValue = Math.min(...accountsReachedPercentage, ...followersPercentage);
+    let formattedDate = [];
+    for (let i = 0; i < data?.Accounts_Reached?.length; i++) {
+        formattedDate = [...formattedDate, {
+            x_axis: data?.Accounts_Reached[i]?.endDate,
+            account_reach: data?.Accounts_Reached[i]?.percentageGrowth.toFixed(2),
+            followers: data?.Followers[i]?.percentageGrowth.toFixed(2),
+            amt: i === 0 ? lowestValue : i === 1 ? highestValue : 0
+        }]
+    }
+    return formattedDate
+}
+export const extractParameterFromUrl = (url, parameterName) => {
+    const urlSearchParams = new URLSearchParams(new URL(url).search);
+    return urlSearchParams.get(parameterName);
+}
+export const getFormattedPostDataForSlider = (data, socialMediaType) => {
+    if (data === null || data === undefined) {
+        return []
+    }
+    let formattedData = {}
+    switch (socialMediaType) {
+        case SocialAccountProvider.INSTAGRAM.toUpperCase(): {
+            formattedData = {
+                total_like: data?.like_count,
+                total_comment: data?.comments_count,
+                total_share: data?.insights?.data?.filter(cur => cur.name === "shares")?.length === 0 ? "N/A" : data?.insights?.data?.filter(cur => cur.name === "shares")[0]?.values[0]?.value,
+                account_reach: data?.insights?.data?.filter(cur => cur.name === "reach")[0]?.values[0]?.value,
+                creation_time: data?.timestamp,
+                attachments: getAttachmentsData(data, socialMediaType),
+            }
+            return formattedData
+        }
+        case SocialAccountProvider.FACEBOOK.toUpperCase(): {
+            formattedData = {
+                total_like: data?.likes?.summary?.total_count,
+                total_comment: data?.comments?.summary?.total_count,
+                total_share: data?.shares?.count || 0,
+                account_reach: data?.insights?.data[0]?.values[0]?.value,
+                creation_time: data?.created_time,
+                attachments: getAttachmentsData(data, socialMediaType),
+            }
+            return formattedData
+        }
+        case SocialAccountProvider.LINKEDIN.toUpperCase(): {
+            break;
+        }
+    }
+
+}
+export const getAttachmentsData = (data, socialMediaType) => {
+    if (data === undefined || data === null) {
+        return []
+    }
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK.toUpperCase(): {
+            if (data?.attachments?.data[0]?.type === undefined) {
+                return []
+            } else if (data?.attachments?.data[0]?.type === "album") {
+                return data?.attachments?.data[0]?.subattachments?.data?.map(attachment => {
+                    return {
+                        mediaType: "IMAGE",
+                        imageURL: attachment?.media?.image?.src,
+                        pageId: data?.id,
+                    }
+                })
+            } else if (data?.attachments?.data[0]?.type === "photo") {
+                return [{
+                    mediaType: "IMAGE",
+                    imageURL: data?.attachments?.data[0]?.media?.image?.src,
+                    pageId: data?.id,
+
+                }]
+            } else {
+                return [{
+                    mediaType: "VIDEO",
+                    imageURL: data?.attachments?.data[0]?.media?.image?.src,
+                    sourceURL: data?.attachments?.data[0]?.media?.source,
+                    pageId: data?.id,
+                }]
+            }
+
+        }
+        case SocialAccountProvider.INSTAGRAM.toUpperCase(): {
+            if (data?.media_type === undefined) {
+                return []
+            } else if (data?.media_type === "IMAGE") {
+                return [{
+                    mediaType: "IMAGE",
+                    imageURL: data?.media_url,
+                    pageId: data?.id,
+                }]
+            } else if (data?.media_type === "CAROUSEL_ALBUM") {
+                return data?.children?.data?.map(attachment => {
+                    return {
+                        mediaType: "IMAGE",
+                        imageURL: attachment?.media_url,
+                        pageId: data?.id,
+                    }
+                })
+            } else {
+                return [{
+                    mediaType: "VIDEO",
+                    sourceURL: data?.media_url,
+                    pageId: data?.id,
+                }]
+            }
+        }
+        case SocialAccountProvider.LINKEDIN.toUpperCase(): {
+            break;
+        }
+    }
+
+}
+export const filterGenderAgeDataFromFacebookDemographicData = (data, key) => {
+
+    console.log("filterGenderAgeDataFromFacebookDemographicData", data, key)
+    if (data === null || data === undefined) {
+        return null
+    }
+    switch (key) {
+        case "AGE" : {
+            const age_range = [...new Set(Object.keys(data)?.map(key => {
+                return key.slice(2)
+            }))]
+            const sorted_age_range = age_range?.sort((a, b) => {
+                const [startA, endA] = a.split('-').map(age => parseInt(age));
+                const [startB, endB] = b.split('-').map(age => parseInt(age));
+                return startA - startB;
+            })
+            return sorted_age_range?.map(ageRange => {
+                return {
+                    age_range: ageRange,
+                    value: (data["M." + ageRange] || 0) + (data["F." + ageRange] || 0) + (data["U." + ageRange] || 0)
+                }
+            })
+        }
+        case "GENDER" : {
+            return [{
+                gender: "M",
+                value: Object.keys(data)?.filter(key => {
+                    return key.startsWith("M")
+                })?.reduce((sum, key) => sum + data[key], 0)
+            },
+                {
+                    gender: "F",
+                    value: Object.keys(data)?.filter(key => {
+                        return key.startsWith("F")
+                    })?.reduce((sum, key) => sum + data[key], 0)
+                },
+                {
+                    gender: "U",
+                    value: Object.keys(data)?.filter(key => {
+                        return key.startsWith("U")
+                    })?.reduce((sum, key) => sum + data[key], 0)
+                }
+            ]
+        }
+    }
+}
+export const getFormattedDemographicData = (data, key, socialMediaType) => {
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK.toUpperCase(): {
+            let formattedData;
+            if (data?.data?.data?.length > 0) {
+
+                let demographicData;
+                if (key === "CITY") {
+                    demographicData = data?.data?.data?.filter(data => data?.name === "page_fans_city")
+                }
+                if (key === "COUNTRY") {
+                    demographicData = data?.data?.data?.filter(data => data?.name === "page_fans_country")
+                }
+                if (key === "AGE" || key === "GENDER") {
+                    demographicData = data?.data?.data?.filter(data => data?.name === "page_fans_gender_age")
+                }
+                if (demographicData?.length > 0) {
+                    if (key === "CITY") {
+                        formattedData = Object.keys(demographicData[0]?.values[0]?.value)?.map(cur => {
+                            return {
+                                city_name: cur,
+                                value: demographicData[0]?.values[0]?.value[cur]
+                            }
+                        })
+                    }
+                    if (key === "COUNTRY") {
+                        formattedData = Object.keys(demographicData[0]?.values[0]?.value)?.map(cur => {
+                            return {
+                                country_code: cur,
+                                value: demographicData[0]?.values[0]?.value[cur]
+                            }
+                        })
+                    }
+                    if (key === "AGE" || key === "GENDER") {
+                        return filterGenderAgeDataFromFacebookDemographicData(demographicData[0]?.values[0]?.value, key)
+                    }
+                } else {
+                    formattedData = null
+                }
+
+            } else {
+                formattedData = null
+            }
+            return formattedData
+        }
+        case SocialAccountProvider.INSTAGRAM.toUpperCase(): {
+            let formattedData;
+            if (data?.data?.data[0]?.total_value?.breakdowns[0]?.results === undefined || data?.data?.data[0]?.total_value?.breakdowns[0]?.results === null || data?.data?.data[0]?.total_value?.breakdowns[0]?.results?.length === 0) {
+                formattedData = null
+            } else {
+                formattedData = data?.data?.data[0]?.total_value?.breakdowns[0]?.results?.map(data => {
+                    if (key === "CITY") {
+                        return {
+                            city_name: data?.dimension_values[0],
+                            value: data?.value
+                        }
+                    }
+                    if (key === "COUNTRY") {
+                        return {
+                            country_code: data?.dimension_values[0],
+                            value: data?.value
+                        }
+                    }
+                    if (key === "GENDER") {
+                        return {
+                            gender: data?.dimension_values[0],
+                            value: data?.value
+                        }
+                    }
+                    if (key === "AGE") {
+                        return {
+                            age_range: data?.dimension_values[0],
+                            value: data?.value
+                        }
+                    }
+
+                })
+            }
+            return formattedData
+        }
+        case SocialAccountProvider.LINKEDIN.toUpperCase(): {
+            break;
+        }
+    }
 }

@@ -1,6 +1,12 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="Annotator" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="DefaultFileTemplate" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="CHECK_FILE_HEADER" value="true" />
+      <option name="CHECK_TRY_CATCH_SECTION" value="true" />
+      <option name="CHECK_METHOD_BODY" value="true" />
+    </inspection_tool>
     <inspection_tool class="DuplicatedCode" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <Languages>
         <language minSize="1726" name="JavaScript" />
@@ -16,7 +22,16 @@
       </option>
       <option name="myCustomValuesEnabled" value="true" />
     </inspection_tool>
+    <inspection_tool class="InconsistentLineSeparators" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="InjectedReferences" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="JSUnresolvedVariable" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="JpaConfigDomFacetInspection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="JpaEntityListenerWarningsInspection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="LongLine" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="ProblematicWhitespace" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="RedundantSuppression" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ReplaceWithIgnoreCaseEquals" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="SyntaxError" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="TodoComment" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
   </profile>
 </component>
