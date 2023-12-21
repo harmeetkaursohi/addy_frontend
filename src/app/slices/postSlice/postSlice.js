@@ -14,8 +14,14 @@ import {
     getPostsPageAction,
     getAllSocialMediaPostsByCriteria,
     getPostPageInfoAction,
-    likePostAction,replyCommentOnPostAction,
-    dislikePostAction, addCommentOnPostAction, getCommentsOnPostAction,deleteCommentsOnPostAction,updateCommentsOnPostAction
+    likePostAction,
+    replyCommentOnPostAction,
+    dislikePostAction,
+    addCommentOnPostAction,
+    getCommentsOnPostAction,
+    deleteCommentsOnPostAction,
+    updateCommentsOnPostAction,
+    getPostByPageIdAndPostStatus
 } from "../../actions/postActions/postActions.js";
 
 
@@ -43,6 +49,7 @@ const postSlice = createSlice({
         deleteCommentsOnPostActionReducer: {loading: false},
         updateCommentsOnPostActionReducer:{loading: false},
         replyCommentOnPostActionReducer:{loading: false},
+        getPostByPageIdAndPostStatusReducer:{loading: false},
     },
 
     reducers: {
@@ -279,6 +286,16 @@ const postSlice = createSlice({
         },
         [replyCommentOnPostAction.rejected]: (state) => {
             state.replyCommentOnPostActionReducer = {loading: false}
+        },
+        [getPostByPageIdAndPostStatus.pending]: (state) => {
+            state.getPostByPageIdAndPostStatusReducer = {loading: true}
+        },
+        [getPostByPageIdAndPostStatus.fulfilled]: (state,action) => {
+            console.log("action.payload",action.payload)
+            state.getPostByPageIdAndPostStatusReducer = {loading: false,data: action.payload}
+        },
+        [getPostByPageIdAndPostStatus.rejected]: (state) => {
+            state.getPostByPageIdAndPostStatusReducer = {loading: false}
         },
 
 

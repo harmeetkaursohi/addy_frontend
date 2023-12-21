@@ -3,7 +3,7 @@ import {
     facebookPageConnect,
     getAllFacebookPages,
     getFacebookConnectedPages,
-    disconnectDisabledPages
+    disconnectDisabledPages, getFacebookPostDataWithInsights
 } from '../../actions/facebookActions/facebookActions.js';
 
 const facebookSlice = createSlice({
@@ -65,6 +65,7 @@ const facebookSlice = createSlice({
         [disconnectDisabledPages.rejected]: (state) => {
             state.disconnectDisabledPagesReducer = {loading: false}
         },
+
 
 
     }

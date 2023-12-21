@@ -31,6 +31,7 @@ import PrivacyComponent from "../features/privacy/PrivacyComponent";
 import ContactUs from "../features/contactUs/ContactUs";
 import {ParentDraftComponent} from "../features/unPublishedPages/views/ParentDraftComponent";
 import Draft from "../features/unPublishedPages/Draft";
+// import Insight from "../features/insights/insight/views/Insight";
 import Insight from "../features/insights/insight/views/Insight";
 
 const App = () => {

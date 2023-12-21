@@ -1,32 +1,73 @@
-.insight_wrapper{
+.insight_wrapper {
     background-color: #F4F8FE;
 }
-.insight_heading{
-    margin-top: 26px;
+
+.insight_heading {
+    padding-top: 26px;
     font-weight: 700;
     font-size: 30px;
 
 }
-.insight_inner_content{
+
+.insight_inner_content {
     border-radius: 22px;
-background: #FFF;
-padding: 20px;
-margin-top: 20px;
+    background: #FFF;
+    padding: 20px;
+    margin-top: 20px;
 
 }
-.Social_media_wrapper li{
+
+.reach-engagement-select {
+    position: absolute;
+    right: 40px;
+}
+
+.select-account-txt {
+    color: #000;
+    font-family: Nunito;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px; /* 90.909% */
+    letter-spacing: -0.022px;
+}
+
+.no-account-txt {
+    color: #000;
+    font-family: Nunito;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px; /* 142.857% */
+    letter-spacing: -0.014px;
+}
+
+.Social_media_wrapper li {
     display: flex;
     justify-content: space-between;
     padding: 8px 6px;
     cursor: pointer;
     border-bottom: 1px solid #DCDCDC;
 }
-.Social_media_platform{
+
+.select-page-outer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.arrow-up-image {
+    margin-bottom: 70px;
+}
+
+.Social_media_platform {
     display: flex;
     gap: 10px;
-   
+
 
 }
+
 select.days_option {
     border-radius: 12px;
     border: 1px solid #E8E8E8;
@@ -34,41 +75,49 @@ select.days_option {
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
     padding: 6px 9px;
     font-size: 17px;
- 
+
 }
+
 button.instagram_dropdown::after {
     margin-left: 15px !important;
 }
-button.instagram_dropdown{
+
+button.instagram_dropdown {
     font-size: 18px !important;
     padding: 10px 23px 10px 0px !important;
 }
-.Content_Container_box{
+
+.Content_Container_box {
     margin-top: 31px;
 }
-.Choose_platform_title{
+
+.Choose_platform_title {
     color: #000;
-   
+
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
     line-height: 20px;
 }
-.Social_media_wrapper li:last-child{
+
+.Social_media_wrapper li:last-child {
     border-bottom: unset;
 }
-.Social_media_platform h3{
-color: #000;
-font-size: 16px;
-font-style: normal;
-font-weight: 600;
-line-height: 20px;
+
+.Social_media_platform h3 {
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
 
 }
-.Social_media_platform img{
+
+.Social_media_platform img {
     height: 21px;
     width: 21px;
 }
+
 .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
     /* width: 100%; */
     width: 297px;
@@ -77,26 +126,31 @@ line-height: 20px;
     background: #FFF;
     box-shadow: 0px 2px 13px 0px rgba(0, 0, 0, 0.07);
 }
+
 ul.Social_media_wrapper {
     margin: 2px 14px;
 }
 
-input.Social_media_platform_checkbox{
-    accent-color: #F07C33;   
+input.Social_media_platform_checkbox {
+    accent-color: #F07C33;
 }
-.Social_media_wrapper li:hover{
+
+.Social_media_wrapper li:hover {
     background: #F4F8FE;
-  
+
 }
+
 .content_outer {
     border-bottom: 1px solid #CDCDCD;
     padding-bottom: 9px;
 }
+
 .social_media_dropdown {
     display: flex;
     gap: 15px;
     margin-top: 20px;
 }
+
 ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
 
     border-radius: 4px;
@@ -104,38 +158,59 @@ ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
     background: rgba(240, 124, 51, 0.13) !important;
     color: #F07C33 !important;
 }
+
 .overview_tabs li.nav-item {
     border-radius: 4px;
     background: #EEE;
     color: rgba(46, 54, 70, 0.80);
 }
-.overview_tabs.nav-tabs .nav-link {
-color: rgba(46, 54, 70, 0.80);
-font-family: "Nunito";
-font-size: 16px;
-font-style: normal;
-font-weight: 600;
-line-height: 26px;
-}
-.hightlighted_text{
-color: #F07C33;
-font-size: 16px;
-}
-.overview_text{
 
-font-size: 16px;
-font-style: normal;
-font-weight: 500;
-padding-top: 20px;
-color: #4E4E4E;
+.overview_tabs.nav-tabs .nav-link {
+    color: rgba(46, 54, 70, 0.80);
+    font-family: "Nunito";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 26px;
 }
+
+.hightlighted_text {
+    /*color: #F07C33;*/
+    font-size: 16px;
+}
+
+.color-decline {
+    color: red;
+}
+
+.color-growth {
+    color: green;
+}
+
+.overview_text {
+
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    padding-top: 20px;
+    color: #4E4E4E;
+}
+
+.scroll-y {
+    height: 200px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 ul.overview_tabs.nav.nav-tabs {
     gap: 15px;
     border-bottom: unset;
 }
-.overview_tabs_outer{
+
+.overview_tabs_outer {
     margin-top: 16px;
 }
+
 .account_reach_overview_outer {
     border-radius: 7px;
     border: 2px solid #F3F4F4;
@@ -143,40 +218,77 @@ ul.overview_tabs.nav.nav-tabs {
     padding: 10px 20px;
     width: 100%;
 }
-.account_reach_overview_outer h4{
-font-weight: 700;
-font-size: 30px;
-padding: 7px 0px 18px;
+
+.pie-percentage {
+    font-size: small;
+    margin-top: 4px;
+    text-align: right;
 }
-.account_reach_overview_outer h5{
+
+.legend-list-item {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    border-bottom: 1px solid #e8e5e5;
+    margin-top: 9px;
+}
+
+.hr-graph-tooltip {
+    border: 2px solid #eae7e7;
+    min-width: 190px;
+    padding: 5px;
+    background: white;
+}
+
+.insights-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mt-5{
+    margin-top: 5rem;
+}
+.account_reach_overview_outer h4 {
+    font-weight: 700;
+    font-size: 30px;
+    padding: 7px 0px 18px;
+}
+
+.account_reach_overview_outer h5 {
     font-size: 16px;
 }
+
 .account_reach_overview_wrapper {
     display: flex;
     gap: 15px;
     margin-top: 20px;
-    
+
 }
-.top_Arrow{
+
+.top_Arrow {
     font-size: 18px;
 }
 
 .account_reach_graph_outer {
     margin-top: 36px;
 }
-.Donuts_container h3{
+
+.Donuts_container h3 {
     font-size: 24px;
 
 }
-.cmn_insight_wrapper_style{
-border-radius: 7px;
-border: 2px solid #F3F4F4;
-background: #FFF;
-padding: 10px 15px;
+
+.cmn_insight_wrapper_style {
+    border-radius: 7px;
+    border: 2px solid #F3F4F4;
+    background: #FFF;
+    padding: 10px 15px;
 }
+
 .Donuts_container {
     margin-top: 22px;
 }
+
 ul.top_city_list li {
     display: flex;
     justify-content: space-between;
@@ -185,76 +297,97 @@ ul.top_city_list li {
     border-bottom: 1px solid #F3F4F4;
     padding: 10px 0px;
 }
+
 ul.top_city_list li h4 {
     font-size: 17px;
 }
-ul.top_city_list li:last-child{
+
+ul.top_city_list li:last-child {
     border-bottom: unset;
 }
+
 h2.Review_Heading {
     margin-top: 20px;
     font-size: 16px;
 }
-.cmn_height{
+
+.cmn_height {
     min-height: 464px;
 }
+
 ::-webkit-calendar-picker-indicator {
     filter: invert(10%) sepia(100%) saturate(150%) hue-rotate(190deg) brightness(90%) contrast(85%);
 }
-@media screen and (max-width:1024px){
+
+@media screen and (max-width: 1024px) {
     h2.Review_Heading {
         margin-top: 20px;
         font-size: 15px;
     }
 }
- @media screen and (max-width:991px){
+
+@media screen and (max-width: 991px) {
     .social_media_dropdown {
         flex-wrap: wrap;
     }
+
     .account_reach_overview_outer h5 {
         font-size: 12px;
     }
-    .account_reach_overview_outer{
+
+    .account_reach_overview_outer {
         padding: 10px;
     }
+
     .account_reach_overview_outer h4 {
-       
+
         font-size: 20px;
     }
+
     .top_Arrow {
         font-size: 15px;
     }
+
     .overview_text {
         font-size: 13px;
     }
+
     ul.top_city_list li h4 {
         font-size: 15px;
     }
+
     .Social_media_platform {
         margin-top: 22px;
     }
-    .Review_Heading{
+
+    .Review_Heading {
         padding-top: 13px;
     }
+
     .Donuts_container h3 {
         font-size: 20px;
     }
+
     .insight_heading {
         font-size: 25px;
     }
- }
-  @media screen and (max-width:767px){
-    .account_reach_overview_wrapper{
+}
+
+@media screen and (max-width: 767px) {
+    .account_reach_overview_wrapper {
         display: block;
     }
+
     .account_reach_overview_outer {
         margin-top: 10px;
     }
+
     div.card_body_content {
-    margin-top: 10px;
+        margin-top: 10px;
     }
+
     h2.Review_Heading {
         margin-top: 20px;
         font-size: 12px;
     }
-  }
+}

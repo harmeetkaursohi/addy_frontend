@@ -41,7 +41,6 @@ export const getAllInstagramBusinessAccounts = createAsyncThunk('socialAccount/g
 
 export const getSocialMediaReportByProviderTypeAction = createAsyncThunk('socialAccount/getSocialMediaReportByProviderTypeAction', async (data, thunkAPI) => {
 
-    console.log("reportSelectPages---->by myself",data);
 
     switch (data?.socialMediaType) {
 
