@@ -21,6 +21,101 @@ const Review = () => {
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
 
+
+    const getPostByIdsResponse={
+        results: {
+            "urn:li:ugcPost:7143509116827713537": {
+                isReshareDisabledByAuthor: false,
+                createdAt: 1703145293570,
+                lifecycleState: "PUBLISHED",
+                lastModifiedAt: 1703145293645,
+                visibility: "PUBLIC",
+                publishedAt: 1703145293570,
+                author: "urn:li:organization:100408588",
+                id: "urn:li:ugcPost:7143509116827713537",
+                distribution: {
+                    feedDistribution: "MAIN_FEED",
+                    thirdPartyDistributionChannels: []
+                },
+                content: {
+                    multiImage: {
+                        images: [
+                            {
+                                altText: "",
+                                id: "urn:li:image:D4D10AQHz52KoxrP3jg"
+                            },
+                            {
+                                altText: "",
+                                id: "urn:li:image:D4D10AQG1MSGDSox03A"
+                            }
+                        ]
+                    }
+                },
+                commentary: "Uploading multiple images\n",
+                lifecycleStateInfo: {
+                    isEditedByAuthor: false
+                }
+            },
+            "urn:li:share:7143508217761890305": {
+                isReshareDisabledByAuthor: false,
+                lifecycleState: "PUBLISHED",
+                createdAt: 1703145079180,
+                lastModifiedAt: 1703145079235,
+                visibility: "PUBLIC",
+                publishedAt: 1703145079180,
+                author: "urn:li:organization:100408588",
+                id: "urn:li:share:7143508217761890305",
+                distribution: {
+                    feedDistribution: "MAIN_FEED",
+                    thirdPartyDistributionChannels: []
+                },
+                commentary: "Only Posting Text\n",
+                lifecycleStateInfo: {
+                    isEditedByAuthor: false
+                }
+            }
+        },
+        statuses: {
+            "urn:li:ugcPost:7143509116827713537": 200,
+            "urn:li:share:7143508217761890305": 200
+        },
+        errors: {}
+    }
+    const getPostByIdResponse={
+        isReshareDisabledByAuthor: false,
+        createdAt: 1703145293570,
+        lifecycleState: 'PUBLISHED',
+        lastModifiedAt: 1703145293645,
+        visibility: 'PUBLIC',
+        publishedAt: 1703145293570,
+        author: 'urn:li:organization:100408588',
+        id: 'urn:li:ugcPost:7143509116827713537',
+        distribution: {
+            feedDistribution: 'MAIN_FEED',
+            thirdPartyDistributionChannels: []
+        },
+        content: {
+            multiImage: {
+                images: [
+                    {
+                        altText: '',
+                        id: 'urn:li:image:D4D10AQHz52KoxrP3jg'
+                    },
+                    {
+                        altText: '',
+                        id: 'urn:li:image:D4D10AQG1MSGDSox03A'
+                    }
+                ]
+            }
+        },
+        commentary: 'Uploading multiple images\n',
+        lifecycleStateInfo: {
+            isEditedByAuthor: false
+        }
+    }
+
+
+
     useEffect(()=>{
         if(resetData){
             setResults([])

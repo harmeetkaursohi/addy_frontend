@@ -135,8 +135,8 @@ const getInstagramDemographicData = async (data, thunkAPI) => {
         country: null,
         city: null
     }
-    // const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?metric=reached_audience_demographics&period=lifetime&timeframe=${data?.period}&metric_type=total_value&access_token=${data?.pageAccessToken}`;
-    const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?metric=follower_demographics&period=lifetime&timeframe=${data?.period}&metric_type=total_value&access_token=${data?.pageAccessToken}`;
+    const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?metric=reached_audience_demographics&period=lifetime&timeframe=${data?.period}&metric_type=total_value&access_token=${data?.pageAccessToken}`;
+    // const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?metric=follower_demographics&period=lifetime&timeframe=${data?.period}&metric_type=total_value&access_token=${data?.pageAccessToken}`;
     const cityDemographicDataApiUrl = baseUrl + "&breakdown=city";
     await baseAxios.get(cityDemographicDataApiUrl).then(cityDemographicData => {
         formattedApiResponse = {
@@ -196,8 +196,6 @@ const getFacebookDemographicData = async (data, thunkAPI) => {
             gender:getFormattedDemographicData(demographicData, "GENDER", "FACEBOOK"),
             age:getFormattedDemographicData(demographicData, "AGE", "FACEBOOK")
         }
-
-
     }).catch(error => {
         // showErrorToast(error.response.data.error.message);
         return thunkAPI.rejectWithValue(error.response);
