@@ -26,10 +26,6 @@ const Dashboard = () => {
     }, [token]);
 
 
-    useEffect(() => {
-
-    }, [token]);
-
 
     return (
         <>

@@ -36,6 +36,13 @@ import AccountAlreadyConnectedWarningModal from "./AccountAlreadyConnectedWarnin
 import {getAllLinkedinPages, getAllPagesIds} from "../../../app/actions/linkedinActions/linkedinAction";
 
 const SocialAccounts = () => {
+
+    const enabledSocialMedia = {
+        isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
+        isInstagramEnabled: `${import.meta.env.VITE_APP_ENABLE_INSTAGRAM}` === "true",
+        isLinkedinEnabled: `${import.meta.env.VITE_APP_ENABLE_LINKEDIN}` === "true",
+        isPinterestEnabled: `${import.meta.env.VITE_APP_ENABLE_PINTEREST}` === "true",
+    }
     const dispatch = useDispatch();
     const token = getToken();
     // const [checkForDisablePages, setCheckForDisablePages] = useState(true);
@@ -921,7 +928,6 @@ const SocialAccounts = () => {
 
 // Now you can use the 'profileData' object in your React application
 
-
     useEffect(() => {
         if (token) {
             const decodeJwt = decodeJwtToken(token);
@@ -1193,19 +1199,22 @@ const SocialAccounts = () => {
                 {/*facebook connect starts */}
 
                 {
-                    getAllConnectedSocialAccountData?.loading ?
-                        <SkeletonEffect count={1}></SkeletonEffect> :
-                        getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0 ?
+                    enabledSocialMedia.isFaceBookEnabled &&
+                    <>
+                        {
+                            getAllConnectedSocialAccountData?.loading ?
+                                <SkeletonEffect count={1}></SkeletonEffect> :
+                                getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0 ?
 
-                            <div className="social_media_outer">
-                                <div className="social_media_content">
-                                    <i className={`fa-brands fa-facebook`}
-                                       style={{color: "#0866ff", fontSize: "24px"}}/>
-                                    <div>
-                                        <h5 className="">Facebook account</h5>
-                                        <h6 className="cmn_headings">www.facebook.com</h6>
-                                    </div>
-                                </div>
+                                    <div className="social_media_outer">
+                                        <div className="social_media_content">
+                                            <i className={`fa-brands fa-facebook`}
+                                               style={{color: "#0866ff", fontSize: "24px"}}/>
+                                            <div>
+                                                <h5 className="">Facebook account</h5>
+                                                <h6 className="cmn_headings">www.facebook.com</h6>
+                                            </div>
+                                        </div>
 
                                 <LoginSocialFacebook
                                     isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
@@ -1220,16 +1229,16 @@ const SocialAccounts = () => {
                                     onReject={(error) => {
                                         console.log("error", error)
 
-                                    }}>
+                                            }}>
 
-                                    <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
-                                                         icon={() => null} preventActiveStyles={true}
-                                                         style={commonButtonStyle}/>
-                                </LoginSocialFacebook>
+                                            <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
+                                                                 icon={() => null} preventActiveStyles={true}
+                                                                 style={commonButtonStyle}/>
+                                        </LoginSocialFacebook>
 
-                            </div>
+                                    </div>
 
-                            :
+                                    :
 
                             <div className=" cmn_drop_down dropdown">
                                 <div className="dropdown_header">
@@ -1258,99 +1267,106 @@ const SocialAccounts = () => {
                                                           strokeLinecap="round"/>
                                                 </svg>
 
+                                                    </div>
+
+
+                                                </div>
                                             </div>
 
+                                            {
+                                                facebookDropDown === true &&
+
+                                                <ul className="menu_items">
+                                                    {
+                                                        getAllFacebookPagesData?.loading ?
+                                                            <SkeletonEffect count={3}/> :
+
+                                                            currentConnectedFacebookPages?.length === 0 ?
+                                                                <div className={"no-page-connected-outer text-center"}>
+                                                                    <div>No active connections at the moment.</div>
+                                                                    <div className={"cursor-pointer connect-page-btn"}
+                                                                         onClick={() => facebook()}
+                                                                    >Connect
+                                                                        now
+                                                                    </div>
+                                                                </div> :
+                                                                <>
+                                                                    {
+                                                                        currentConnectedFacebookPages?.map((data, index) => {
+                                                                            return (
+                                                                                <li key={index}>
+                                                                                    <div
+                                                                                        className="user_profileInfo_wrapper">
+                                                                                        <div className="user_Details">
+                                                                                            <img
+                                                                                                src={data?.picture?.data?.url || default_user_icon}
+                                                                                                height="30px"
+                                                                                                width="30px"/>
+                                                                                            <h4 className="cmn_text_style">{data.name}</h4>
+                                                                                        </div>
+                                                                                        <h4 className={"connect_text cmn_text_style"}>Connected</h4>
+                                                                                    </div>
+                                                                                </li>
+                                                                            )
+                                                                        })
+                                                                    }
+
+                                                                    <li>
+                                                                        {
+                                                                            (getAllFacebookPagesData?.facebookPageList && Array.isArray(getAllFacebookPagesData?.facebookPageList)) &&
+                                                                            <div
+                                                                                className="connectDisconnect_btn_outer">
+                                                                                <button
+                                                                                    className="DisConnectBtn cmn_connect_btn"
+                                                                                    onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}>
+                                                                                    Disconnect
+                                                                                </button>
+                                                                                <button
+                                                                                    className="ConnectBtn cmn_connect_btn"
+                                                                                    onClick={() => facebook()}
+                                                                                >
+                                                                                    Connect More
+                                                                                </button>
+                                                                            </div>
+
+                                                                        }
+                                                                    </li>
+
+
+                                                                </>
+
+
+                                                    }
+
+
+                                                </ul>}
 
                                         </div>
                                     </div>
 
-                                    {
-                                        facebookDropDown === true &&
-
-                                        <ul className="menu_items">
-                                            {
-                                                getAllFacebookPagesData?.loading ?
-                                                    <SkeletonEffect count={3}/> :
-
-                                                    currentConnectedFacebookPages?.length === 0 ?
-                                                        <div className={"no-page-connected-outer text-center"}>
-                                                            <div>No active connections at the moment.</div>
-                                                            <div className={"cursor-pointer connect-page-btn"}
-                                                                 onClick={() => facebook()}
-                                                            >Connect
-                                                                now
-                                                            </div>
-                                                        </div> :
-                                                        <>
-                                                            {
-                                                                currentConnectedFacebookPages?.map((data, index) => {
-                                                                    return (
-                                                                        <li key={index}>
-                                                                            <div
-                                                                                className="user_profileInfo_wrapper">
-                                                                                <div className="user_Details">
-                                                                                    <img
-                                                                                        src={data?.picture?.data?.url || default_user_icon}
-                                                                                        height="30px"
-                                                                                        width="30px"/>
-                                                                                    <h4 className="cmn_text_style">{data.name}</h4>
-                                                                                </div>
-                                                                                <h4 className={"connect_text cmn_text_style"}>Connected</h4>
-                                                                            </div>
-                                                                        </li>
-                                                                    )
-                                                                })
-                                                            }
-
-                                                            <li>
-                                                                {
-                                                                    (getAllFacebookPagesData?.facebookPageList && Array.isArray(getAllFacebookPagesData?.facebookPageList)) &&
-                                                                    <div className="connectDisconnect_btn_outer">
-                                                                        <button
-                                                                            className="DisConnectBtn cmn_connect_btn"
-                                                                            onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}>
-                                                                            Disconnect
-                                                                        </button>
-                                                                        <button className="ConnectBtn cmn_connect_btn"
-                                                                                onClick={() => facebook()}
-                                                                        >
-                                                                            Connect More
-                                                                        </button>
-                                                                    </div>
-
-                                                                }
-                                                            </li>
-
-
-                                                        </>
-
-
-                                            }
-
-
-                                        </ul>}
-
-                                </div>
-                            </div>
-
+                        }
+                    </>
                 }
+
 
                 {/*facebook connect ends */}
 
                 {/* start instagram connect */}
-
                 {
-                    getAllConnectedSocialAccountData?.loading ?
-                        <SkeletonEffect count={1}></SkeletonEffect> :
-                        getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM').length === 0 ?
-                            <div className="social_media_outer">
-                                <div className="social_media_content">
-                                    <i className="fa-brands fa-instagram  insta-icon-color font-size-24"/>
-                                    <div>
-                                        <h5 className=""> Instagram account</h5>
-                                        <h6 className="cmn_headings">www.instagram.com</h6>
-                                    </div>
-                                </div>
+                    enabledSocialMedia.isInstagramEnabled &&
+                    <>
+                        {
+                            getAllConnectedSocialAccountData?.loading ?
+                                <SkeletonEffect count={1}></SkeletonEffect> :
+                                getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM').length === 0 ?
+                                    <div className="social_media_outer">
+                                        <div className="social_media_content">
+                                            <i className="fa-brands fa-instagram  insta-icon-color font-size-24"/>
+                                            <div>
+                                                <h5 className=""> Instagram account</h5>
+                                                <h6 className="cmn_headings">www.instagram.com</h6>
+                                            </div>
+                                        </div>
 
 
                                 <LoginSocialFacebook
@@ -1358,7 +1374,6 @@ const SocialAccounts = () => {
                                     appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                     redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                     onResolve={(response) => {
-                                        console.log('response of instagram', response)
                                         setInstagramDropDown(true)
                                         setFacebookDropDown(false)
                                         setLinkedinDropDown(false)
@@ -1369,11 +1384,11 @@ const SocialAccounts = () => {
                                     onReject={(error) => {
                                     }}>
 
-                                    <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
-                                                         icon={() => null} preventActiveStyles={true}
-                                                         style={commonButtonStyle}/>
-                                </LoginSocialFacebook>
-                            </div> :
+                                            <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
+                                                                 icon={() => null} preventActiveStyles={true}
+                                                                 style={commonButtonStyle}/>
+                                        </LoginSocialFacebook>
+                                    </div> :
 
                             <div className=" cmn_drop_down dropdown">
                                 <div className="dropdown_header">
@@ -1402,82 +1417,85 @@ const SocialAccounts = () => {
                                                           strokeLinecap="round"/>
                                                 </svg>
 
+                                                    </div>
+
+                                                </div>
                                             </div>
+
+                                            {
+                                                instagramDropDown === true &&
+
+                                                <ul className="menu_items">
+
+                                                    {
+                                                        instagramBusinessAccountsData?.loading ?
+                                                            <SkeletonEffect count={3}/> :
+
+                                                            currentConnectedInstagramPages?.length === 0 ?
+                                                                <div className={"no-page-connected-outer text-center"}>
+                                                                    <div>No active connections at the moment.</div>
+                                                                    <div className={"cursor-pointer connect-page-btn"}
+                                                                         onClick={() => setShowInstagramModal(true)}
+                                                                    >Connect
+                                                                        now
+                                                                    </div>
+                                                                </div> :
+                                                                <>
+                                                                    {
+                                                                        currentConnectedInstagramPages?.map((data, index) => {
+                                                                            return (
+                                                                                <li key={index}>
+                                                                                    <div
+                                                                                        className="user_profileInfo_wrapper">
+                                                                                        <div className="user_Details">
+                                                                                            <img
+                                                                                                src={data.profile_picture_url || default_user_icon}
+                                                                                                height="30px"
+                                                                                                width="30px"/>
+                                                                                            <h4 className="cmn_text_style">{data.name}</h4>
+                                                                                        </div>
+                                                                                        <h4 className={"connect_text cmn_text_style"}>Connected</h4>
+                                                                                    </div>
+                                                                                </li>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                    <li>
+                                                                        {
+                                                                            (instagramBusinessAccountsData?.data && Array.isArray(instagramBusinessAccountsData?.data)) &&
+                                                                            <div className="connectDisconnect_btn_outer">
+                                                                                <button
+                                                                                    className="DisConnectBtn cmn_connect_btn"
+                                                                                    onClick={() =>
+                                                                                        disConnectSocialMediaAccountToCustomer("INSTAGRAM")}
+                                                                                >
+                                                                                    Disconnect
+                                                                                </button>
+                                                                                <button className="ConnectBtn cmn_connect_btn"
+                                                                                        onClick={() => setShowInstagramModal(true)}
+                                                                                >
+                                                                                    Connect More
+                                                                                </button>
+                                                                            </div>
+
+                                                                        }
+                                                                    </li>
+
+
+                                                                </>
+
+
+                                                    }
+                                                </ul>}
 
                                         </div>
                                     </div>
 
-                                    {
-                                        instagramDropDown === true &&
 
-                                        <ul className="menu_items">
-
-                                            {
-                                                instagramBusinessAccountsData?.loading ?
-                                                    <SkeletonEffect count={3}/> :
-
-                                                    currentConnectedInstagramPages?.length === 0 ?
-                                                        <div className={"no-page-connected-outer text-center"}>
-                                                            <div>No active connections at the moment.</div>
-                                                            <div className={"cursor-pointer connect-page-btn"}
-                                                                 onClick={() => setShowInstagramModal(true)}
-                                                            >Connect
-                                                                now
-                                                            </div>
-                                                        </div> :
-                                                        <>
-                                                            {
-                                                                currentConnectedInstagramPages?.map((data, index) => {
-                                                                    return (
-                                                                        <li key={index}>
-                                                                            <div
-                                                                                className="user_profileInfo_wrapper">
-                                                                                <div className="user_Details">
-                                                                                    <img
-                                                                                        src={data.profile_picture_url || default_user_icon}
-                                                                                        height="30px"
-                                                                                        width="30px"/>
-                                                                                    <h4 className="cmn_text_style">{data.name}</h4>
-                                                                                </div>
-                                                                                <h4 className={"connect_text cmn_text_style"}>Connected</h4>
-                                                                            </div>
-                                                                        </li>
-                                                                    )
-                                                                })
-                                                            }
-                                                            <li>
-                                                                {
-                                                                    (instagramBusinessAccountsData?.data && Array.isArray(instagramBusinessAccountsData?.data)) &&
-                                                                    <div className="connectDisconnect_btn_outer">
-                                                                        <button
-                                                                            className="DisConnectBtn cmn_connect_btn"
-                                                                            onClick={() =>
-                                                                                disConnectSocialMediaAccountToCustomer("INSTAGRAM")}
-                                                                        >
-                                                                            Disconnect
-                                                                        </button>
-                                                                        <button className="ConnectBtn cmn_connect_btn"
-                                                                                onClick={() => setShowInstagramModal(true)}
-                                                                        >
-                                                                            Connect More
-                                                                        </button>
-                                                                    </div>
-
-                                                                }
-                                                            </li>
-
-
-                                                        </>
-
-
-                                            }
-                                        </ul>}
-
-                                </div>
-                            </div>
-
-
+                        }
+                    </>
                 }
+
 
                 {/* end instagram connect */}
 
@@ -1630,21 +1648,21 @@ const SocialAccounts = () => {
 
 
             </div>
-            {showFacebookModal &&
+            {enabledSocialMedia.isFaceBookEnabled && showFacebookModal &&
                 <ConnectPagesModal showModal={showFacebookModal} setShowModal={setShowFacebookModal}
                                    allPagesList={getAllFacebookPagesData?.facebookPageList}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
                                    noPageFoundMessage={"No Page Found!"}
                                    socialMediaType={SocialAccountProvider.FACEBOOK}
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>}
-            {showInstagramModal &&
+            {enabledSocialMedia.isInstagramEnabled && showInstagramModal &&
                 <ConnectPagesModal showModal={showInstagramModal} setShowModal={setShowInstagramModal}
                                    allPagesList={instagramBusinessAccountsData?.data}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
                                    noPageFoundMessage={"No Page Found!"}
                                    socialMediaType={SocialAccountProvider.INSTAGRAM}
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
-            {showLinkedinModal &&
+            {enabledSocialMedia.isLinkedinEnabled && showLinkedinModal &&
                 <ConnectPagesModal showModal={showLinkedinModal} setShowModal={setShowLinkedinModal}
                                    allPagesList={Object.keys(getAllLinkedinPagesData?.data?.results)?.map(key=> {
                                        return getFormattedLinkedinObject(key,getAllLinkedinPagesData?.data?.results[key])

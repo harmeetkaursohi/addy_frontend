@@ -33,6 +33,12 @@ import default_user_icon from "../../../images/default_user_icon.svg";
 
 const UpdatePost = () => {
 
+        const enabledSocialMedia = {
+            isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
+            isInstagramEnabled: `${import.meta.env.VITE_APP_ENABLE_INSTAGRAM}` === "true",
+            isLinkedinEnabled: `${import.meta.env.VITE_APP_ENABLE_LINKEDIN}` === "true",
+            isPinterestEnabled: `${import.meta.env.VITE_APP_ENABLE_PINTEREST}` === "true",
+        }
         const dispatch = useDispatch();
         const navigate = useNavigate();
         const token = getToken();
@@ -104,7 +110,7 @@ const UpdatePost = () => {
 
         useEffect(() => {
             if (getPostsByIdData && Object.keys(getPostsByIdData).length > 0) {
-                if(getPostsByIdData.scheduledPostDate){
+                if (getPostsByIdData.scheduledPostDate) {
                     setScheduleDate(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.date)
                     setScheduleTime(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.time)
                 }
@@ -119,7 +125,21 @@ const UpdatePost = () => {
 
         useEffect(() => {
             if (socialAccounts) {
-                setSocialAccountData(socialAccounts);
+                const filteredSocialMediaData = socialAccounts.filter((account) => {
+                    switch (account.provider) {
+                        case "FACEBOOK":
+                            return enabledSocialMedia.isFaceBookEnabled;
+                        case "INSTAGRAM":
+                            return enabledSocialMedia.isInstagramEnabled;
+                        case "LINKEDIN":
+                            return enabledSocialMedia.isLinkedinEnabled;
+                        case "PINTEREST":
+                            return enabledSocialMedia.isPinterestEnabled;
+                        default:
+                            return true;
+                    }
+                });
+                setSocialAccountData(filteredSocialMediaData);
             }
         }, [socialAccounts]);
 
@@ -258,8 +278,8 @@ const UpdatePost = () => {
         const updatePost = (e, postStatus, scheduleDate, scheduleTime) => {
                 e.preventDefault();
                 const userInfo = decodeJwtToken(token);
-            const isScheduledTimeProvided= !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
-                if (postStatus === 'SCHEDULED' || isScheduledTimeProvided ) {
+                const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+                if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
 
                     if (!scheduleDate && !scheduleTime) {
                         showErrorToast("Please enter scheduleDate and scheduleTime!!");
@@ -285,27 +305,25 @@ const UpdatePost = () => {
                             id: file?.id || null,
                             gridFsId: file?.gridFsId || null
                         })),
-                        hashTag: isNullOrEmpty(hashTag)?"": hashTag.toString().trim(),
-                        caption: isNullOrEmpty(caption)?"": caption.toString().trim(),
+                        hashTag: isNullOrEmpty(hashTag) ? "" : hashTag.toString().trim(),
+                        caption: isNullOrEmpty(caption) ? "" : caption.toString().trim(),
                         postStatus: postStatus,
                         boostPost: boostPost,
                         postPageInfos: selectedOptions?.map((obj) => ({
                             pageId: obj,
                             id: getPostsByIdData?.postPageInfos.find(c => c.pageId === obj)?.id || null
                         })),
-                        scheduledPostDate: (postStatus === 'SCHEDULED' ||  isScheduledTimeProvided  ) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+                        scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
                 };
-
-                console.log("@@@ RequestBody for scheduke time gicen ", requestBody);
-                // dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
-                //     if (response.meta.requestStatus === "fulfilled") {
-                //         showSuccessToast("Post has uploaded successfully");
-                //         navigate("/planner");
-                //     }
-                // }).catch((error) => {
-                //     showErrorToast(error.response.data.message);
-                // });
+                dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
+                    if (response.meta.requestStatus === "fulfilled") {
+                        showSuccessToast("Post has uploaded successfully");
+                        navigate("/planner");
+                    }
+                }).catch((error) => {
+                    showErrorToast(error.response.data.message);
+                });
 
             }
         ;
@@ -315,7 +333,7 @@ const UpdatePost = () => {
         };
 
         const handleDraftPost = (e) => {
-            updatePost(e, 'DRAFT',scheduleDate, scheduleTime);
+            updatePost(e, 'DRAFT', scheduleDate, scheduleTime);
         };
 
         const handleSchedulePost = (e) => {
@@ -340,12 +358,12 @@ const UpdatePost = () => {
         }
 
 
-    const handleKeyDown = (event) => {
-        // Prevent the default behavior for both Enter and Space keys
-        if (event.key === 'Enter') {
-            event.preventDefault();
-        }
-    };
+        const handleKeyDown = (event) => {
+            // Prevent the default behavior for both Enter and Space keys
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        };
 
         return (
             <>
@@ -643,7 +661,7 @@ const UpdatePost = () => {
                                                               onKeyDown={handleKeyDown}
                                                               onChange={(e) => {
                                                                   e.preventDefault();
-                                                                  console.log("@@@ key",e.key)
+                                                                  console.log("@@@ key", e.key)
                                                                   const inputValue = e.target.value;
                                                                   const hashtags = convertSentenceToHashtags(inputValue);
                                                                   setHashTag(hashtags);

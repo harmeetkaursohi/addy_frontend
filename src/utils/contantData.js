@@ -1,9 +1,15 @@
+const enabledSocialMedia = {
+    isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
+    isInstagramEnabled: `${import.meta.env.VITE_APP_ENABLE_INSTAGRAM}` === "true",
+    isLinkedinEnabled: `${import.meta.env.VITE_APP_ENABLE_LINKEDIN}` === "true",
+    isPinterestEnabled: `${import.meta.env.VITE_APP_ENABLE_PINTEREST}` === "true",
+}
+
 export const SocialAccountProvider = Object.freeze({
-    FACEBOOK:"facebook",
-    INSTAGRAM: "instagram",
-    TWITTER: "twitter",
-    LINKEDIN: "linkedin",
-    PINTEREST:"pinterest"
+    ...(enabledSocialMedia.isFaceBookEnabled && { FACEBOOK:"facebook" }),
+    ...(enabledSocialMedia.isInstagramEnabled && { INSTAGRAM: "instagram" }),
+    ...(enabledSocialMedia.isLinkedinEnabled && { LINKEDIN: "linkedin" }),
+    ...(enabledSocialMedia.isPinterestEnabled && { PINTEREST:"pinterest" }),
 });
 export const Linkedin_URN_Id_Types = Object.freeze({
     ORGANIZATION:"organization",

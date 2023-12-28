@@ -29,10 +29,6 @@ const CommentReviewsSectionModal = ({
     const handleClose = () => setOpenCommentReviewsSectionModal(false);
 
 
-    console.log("@@@ postPageInfoData", postPageInfoData)
-    console.log("@@@ postData", postData)
-    console.log("@@@ postPageData", postPageData)
-
     useEffect(() => {
         if (postData && postPageInfoData) {
             setPostPageData(postData?.socialMediaType === "FACEBOOK" ? postPageInfoData[postData?.id] : postPageInfoData)
@@ -75,7 +71,7 @@ const CommentReviewsSectionModal = ({
                                 </div>
                             </Col>
                             <Col lg="5" className="p-0">
-                                <div className="">
+                                <div className="comment_section">
                                     <div className="comments_messages pb-0">
                                         <div className="main_user">
                                             <div className="user_card main_user">

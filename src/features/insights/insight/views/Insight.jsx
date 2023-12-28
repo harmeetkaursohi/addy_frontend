@@ -32,6 +32,12 @@ import {Country} from 'country-state-city';
 
 
 const Insight = () => {
+    const enabledSocialMedia = {
+        isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
+        isInstagramEnabled: `${import.meta.env.VITE_APP_ENABLE_INSTAGRAM}` === "true",
+        isLinkedinEnabled: `${import.meta.env.VITE_APP_ENABLE_LINKEDIN}` === "true",
+        isPinterestEnabled: `${import.meta.env.VITE_APP_ENABLE_PINTEREST}` === "true",
+    }
     const dispatch = useDispatch();
     const token = getToken();
     const getAllByCustomerIdData = useSelector(state => state.socialAccount.getAllByCustomerIdReducer);
@@ -149,9 +155,6 @@ const Insight = () => {
     }, [selectedPeriodForDemographics, selectedPage, selectedInsightSection])
 
 
-    console.log("Country.getCountryByCode(\"IN\")",Country.getCountryByCode("IN"))
-
-
     return (
         <section>
             <SideBar/>
@@ -164,111 +167,120 @@ const Insight = () => {
                         <div className="social_media_dropdown">
 
 
-                            <Dropdown className="chooseplatfrom_dropdown_btn">
-                                <Dropdown.Toggle
-                                    variant="success"
-                                    id="dropdown-basic"
-                                    className="instagram_dropdown"
-                                >
-                                    <i className={`fa-brands fa-facebook me-3 `}
-                                       style={{color: "#0866ff", fontSize: "20px"}}/>
+                            {
+                                enabledSocialMedia.isFaceBookEnabled &&
+                                <Dropdown className="chooseplatfrom_dropdown_btn">
+                                    <Dropdown.Toggle
+                                        variant="success"
+                                        id="dropdown-basic"
+                                        className="instagram_dropdown"
+                                    >
+                                        <i className={`fa-brands fa-facebook me-3 `}
+                                           style={{color: "#0866ff", fontSize: "20px"}}/>
 
-                                    Facebook
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
+                                        Facebook
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
 
 
-                                    <Dropdown.Item>
-                                        <ul className="Social_media_wrapper">
-                                            {
-                                                connectedFacebookPages?.map((page, index) => {
-                                                    return (
-                                                        <li key={index} onClick={() => {
-                                                            handleSelectPage("FACEBOOK", page)
-                                                        }}>
-                                                            <div className="Social_media_platform">
-                                                                <i className={`fa-brands fa-facebook me-3 `}
-                                                                   style={{color: "#0866ff", fontSize: "20px"}}/>
-                                                                <h3>{page.name}</h3>
-                                                            </div>
+                                        <Dropdown.Item>
+                                            <ul className="Social_media_wrapper">
+                                                {
+                                                    connectedFacebookPages?.map((page, index) => {
+                                                        return (
+                                                            <li key={index} onClick={() => {
+                                                                handleSelectPage("FACEBOOK", page)
+                                                            }}>
+                                                                <div className="Social_media_platform">
+                                                                    <i className={`fa-brands fa-facebook me-3 `}
+                                                                       style={{color: "#0866ff", fontSize: "20px"}}/>
+                                                                    <h3>{page.name}</h3>
+                                                                </div>
 
-                                                        </li>
-                                                    );
-                                                })
-                                            }
-                                        </ul>
-                                    </Dropdown.Item>
+                                                            </li>
+                                                        );
+                                                    })
+                                                }
+                                            </ul>
+                                        </Dropdown.Item>
 
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            <Dropdown className="chooseplatfrom_dropdown_btn">
-                                <Dropdown.Toggle
-                                    variant="success"
-                                    id="dropdown-basic"
-                                    className="instagram_dropdown"
-                                >
-                                    <img src={instagram_img} className="me-3  "
-                                         style={{height: "18px", width: "18px"}}/>
-                                    Instagram
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item>
-                                        <ul className="Social_media_wrapper">
-                                            {
-                                                connectedInstagramPages?.map((page, index) => {
-                                                    return (
-                                                        <li key={index} onClick={() => {
-                                                            handleSelectPage("INSTAGRAM", page)
-                                                        }}>
-                                                            <div className="Social_media_platform">
-                                                                <img src={instagram_img} className=""/>
-                                                                <h3>{page.name}</h3>
-                                                            </div>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            }
+                            {
+                                enabledSocialMedia.isInstagramEnabled &&
+                                <Dropdown className="chooseplatfrom_dropdown_btn">
+                                    <Dropdown.Toggle
+                                        variant="success"
+                                        id="dropdown-basic"
+                                        className="instagram_dropdown"
+                                    >
+                                        <img src={instagram_img} className="me-3  "
+                                             style={{height: "18px", width: "18px"}}/>
+                                        Instagram
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item>
+                                            <ul className="Social_media_wrapper">
+                                                {
+                                                    connectedInstagramPages?.map((page, index) => {
+                                                        return (
+                                                            <li key={index} onClick={() => {
+                                                                handleSelectPage("INSTAGRAM", page)
+                                                            }}>
+                                                                <div className="Social_media_platform">
+                                                                    <img src={instagram_img} className=""/>
+                                                                    <h3>{page.name}</h3>
+                                                                </div>
 
-                                                        </li>
-                                                    );
-                                                })
-                                            }
+                                                            </li>
+                                                        );
+                                                    })
+                                                }
 
-                                        </ul>
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
+                                            </ul>
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            }
 
                             {/*TODO: Linkedin dropdown */}
-                            {/*<Dropdown className="chooseplatfrom_dropdown_btn">*/}
-                            {/*    <Dropdown.Toggle*/}
-                            {/*        variant="success"*/}
-                            {/*        id="dropdown-basic"*/}
-                            {/*        className="instagram_dropdown"*/}
-                            {/*    >*/}
-                            {/*        <img src={linkedin_img} className="me-3  "/>*/}
-                            {/*        Linkedin*/}
-                            {/*    </Dropdown.Toggle>*/}
-                            {/*    <Dropdown.Menu>*/}
-                            {/*        <Dropdown.Item>*/}
+                            {
+                                enabledSocialMedia.isLinkedinEnabled &&
+                                <Dropdown className="chooseplatfrom_dropdown_btn">
+                                    <Dropdown.Toggle
+                                        variant="success"
+                                        id="dropdown-basic"
+                                        className="instagram_dropdown"
+                                    >
+                                        <img src={linkedin_img} className="me-3  "/>
+                                        Linkedin
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item>
 
 
-                            {/*            <ul className="Social_media_wrapper">*/}
-                            {/*                {*/}
-                            {/*                    connectedLinkedinPages?.map((page, index) => {*/}
-                            {/*                        return (*/}
-                            {/*                            <li key={index} onClick={() => {*/}
-                            {/*                                handleSelectPage("LINKEDIN", page)*/}
-                            {/*                            }}>*/}
-                            {/*                                <div className="Social_media_platform">*/}
-                            {/*                                    <img src={linkedin_img} className="me-3  "/>*/}
-                            {/*                                    <h3>{page.name}</h3>*/}
-                            {/*                                </div>*/}
+                                            <ul className="Social_media_wrapper">
+                                                {
+                                                    connectedLinkedinPages?.map((page, index) => {
+                                                        return (
+                                                            <li key={index} onClick={() => {
+                                                                handleSelectPage("LINKEDIN", page)
+                                                            }}>
+                                                                <div className="Social_media_platform">
+                                                                    <img src={linkedin_img} className="me-3  "/>
+                                                                    <h3>{page.name}</h3>
+                                                                </div>
 
-                            {/*                            </li>*/}
-                            {/*                        );*/}
-                            {/*                    })*/}
-                            {/*                }*/}
-                            {/*            </ul>*/}
-                            {/*        </Dropdown.Item>*/}
-                            {/*    </Dropdown.Menu>*/}
-                            {/*</Dropdown>*/}
+                                                            </li>
+                                                        );
+                                                    })
+                                                }
+                                            </ul>
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            }
                         </div>
                         {/* ============ */}
 
@@ -553,10 +565,10 @@ const Insight = () => {
                                                                         <ul className="top_city_list scroll-y">
                                                                             {
                                                                                 getDemographicsInsightData?.data?.country?.map(country => {
-                                                                                    const countryInfo=Country.getCountryByCode(country?.country_code);
+                                                                                    const countryInfo = Country.getCountryByCode(country?.country_code);
                                                                                     return (
                                                                                         <li>
-                                                                                            <h4>{countryInfo?.flag+" "+countryInfo?.name} </h4>
+                                                                                            <h4>{countryInfo?.flag + " " + countryInfo?.name} </h4>
                                                                                             <h4>{country?.value}</h4>
                                                                                         </li>
                                                                                     );
