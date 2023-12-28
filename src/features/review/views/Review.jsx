@@ -4,7 +4,7 @@ import jsondata from "../../../locales/data/initialdata.json"
 import {SocialAccountProvider} from "../../../utils/contantData";
 import {useCallback, useEffect, useRef, useState} from "react";
 import usePosts from "../../common/hooks/usePosts";
-import {computeImageURL} from "../../../utils/commonUtils";
+import {computeImageURL, getInitialLetterCap} from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png"
 import CommonLoader from "../../common/components/CommonLoader";
@@ -20,9 +20,6 @@ const Review = () => {
     const [resetData, isResetData] = useState(false);
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
-    console.log("postPageInfoData---->",postPageInfoData)
-    console.log("postData---->",postData)
-    console.log("results---->",results)
 
     useEffect(()=>{
         if(resetData){
@@ -88,7 +85,7 @@ const Review = () => {
                                 >
                                     <option value={"All"}>All</option>
                                     {Object.keys(SocialAccountProvider).map((cur) => {
-                                        return (<option value={cur}>{SocialAccountProvider[cur]}</option>)
+                                        return (<option value={cur}>{getInitialLetterCap(SocialAccountProvider[cur])}</option>)
                                     })}
                                 </select>
                             </div>

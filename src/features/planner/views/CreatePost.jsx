@@ -29,6 +29,13 @@ import default_user_icon from "../../../images/default_user_icon.svg";
 
 const CreatePost = () => {
 
+    const enabledSocialMedia = {
+        isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
+        isInstagramEnabled: `${import.meta.env.VITE_APP_ENABLE_INSTAGRAM}` === "true",
+        isLinkedinEnabled: `${import.meta.env.VITE_APP_ENABLE_LINKEDIN}` === "true",
+        isPinterestEnabled: `${import.meta.env.VITE_APP_ENABLE_PINTEREST}` === "true",
+    }
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const token = getToken();
@@ -40,8 +47,6 @@ const CreatePost = () => {
     const [caption, setCaption] = useState("");
     const [scheduleDate, setScheduleDate] = useState("");
     const [scheduleTime, setScheduleTime] = useState("");
-    console.log("scheduleDatescheduleDate",scheduleDate)
-    console.log("scheduleTimescheduleTime",scheduleTime)
     const [boostPost, setBoostPost] = useState(false);
     const [socialAccountData, setSocialAccountData] = useState([]);
     const [files, setFiles] = useState([]);
@@ -60,7 +65,6 @@ const CreatePost = () => {
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
 
-
     useEffect(() => {
         if (files && files.length <= 0) {
             setDisableVideo(false);
@@ -71,7 +75,21 @@ const CreatePost = () => {
 
     useEffect(() => {
         if (socialAccounts) {
-            setSocialAccountData(socialAccounts);
+            const filteredSocialMediaData = socialAccounts.filter((account) => {
+                switch (account.provider) {
+                    case "FACEBOOK":
+                        return enabledSocialMedia.isFaceBookEnabled;
+                    case "INSTAGRAM":
+                        return enabledSocialMedia.isInstagramEnabled;
+                    case "LINKEDIN":
+                        return enabledSocialMedia.isLinkedinEnabled;
+                    case "PINTEREST":
+                        return enabledSocialMedia.isPinterestEnabled;
+                    default:
+                        return true;
+                }
+            });
+            setSocialAccountData(filteredSocialMediaData);
         }
     }, [socialAccounts]);
 
@@ -84,6 +102,7 @@ const CreatePost = () => {
                     group: socialAccount?.provider, allOptions: socialAccount?.pageAccessToken
                 }
             });
+
             setAllOptions(optionList);
         }
     }, [socialAccountData]);
@@ -215,6 +234,7 @@ const CreatePost = () => {
     };
 
     const createPost = (e, postStatus, scheduleDate, scheduleTime) => {
+
         e.preventDefault();
         const userInfo = decodeJwtToken(token);
         const isScheduledTimeProvided= !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
@@ -250,7 +270,6 @@ const CreatePost = () => {
                 scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
             },
         };
-
         dispatch(createFacebookPostAction(requestBody)).then((response) => {
             if (response.meta.requestStatus === "fulfilled") {
                 showSuccessToast("Post has uploaded successfully");
@@ -286,9 +305,6 @@ const CreatePost = () => {
         setSelectedGroups([]);
         setSocialAccountData(socialAccountData);
     }
-
-
-    console.log("results ::: ", allOptions.flatMap((group) => group.allOptions).length > 0)
 
     return (
         <>

@@ -185,32 +185,33 @@ const CommentFooter = ({postData, postPageData}) => {
                 }
 
             </div>
+            <div className={"hr-line-2"}></div>
 
-            <ul className="d-flex">
-                {
-                    !like  &&
-                    <li className="w-100" onClick={(e) => {
-                        !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  setLike(true)
-                        !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  handleAddLikesOnPost(e);
-                    }}>
-                        <AiOutlineHeart className={"me-2 "}
-                                        style={{color: "red", fontSize: "24px"}}/>Like
-                    </li>
-                }
+            {/*<ul className="d-flex">*/}
+            {/*    {*/}
+            {/*        !like  &&*/}
+            {/*        <li className="w-100" onClick={(e) => {*/}
+            {/*            !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  setLike(true)*/}
+            {/*            !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  handleAddLikesOnPost(e);*/}
+            {/*        }}>*/}
+            {/*            <AiOutlineHeart className={"me-2 "}*/}
+            {/*                            style={{color: "red", fontSize: "24px"}}/>Like*/}
+            {/*        </li>*/}
+            {/*    }*/}
 
-                {
-                    like  &&
-                    <li className="w-100" onClick={(e) => {
-                        !likePostReducerData?.loading && !disLikePostReducerData?.loading && setLike(false)
-                        !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  handleAddDisLikesOnPost(e);
-                    }}>
-                        <AiFillHeart className={"me-2 animated-icon"}
-                                     style={{color: "red", fontSize: "24px"}}/>Dislike
-                    </li>
-                }
+            {/*    {*/}
+            {/*        like  &&*/}
+            {/*        <li className="w-100" onClick={(e) => {*/}
+            {/*            !likePostReducerData?.loading && !disLikePostReducerData?.loading && setLike(false)*/}
+            {/*            !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  handleAddDisLikesOnPost(e);*/}
+            {/*        }}>*/}
+            {/*            <AiFillHeart className={"me-2 animated-icon"}*/}
+            {/*                         style={{color: "red", fontSize: "24px"}}/>Dislike*/}
+            {/*        </li>*/}
+            {/*    }*/}
 
-                <li className="w-100"><i className="fa fa-comment me-2"/>Comment</li>
-            </ul>
+            {/*    <li className="w-100"><i className="fa fa-comment me-2"/>Comment</li>*/}
+            {/*</ul>*/}
             <p className="liked_by">
                 {
                     postPageData?.likes?.summary?.total_count === 1 && <>
