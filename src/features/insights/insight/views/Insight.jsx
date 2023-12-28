@@ -243,8 +243,6 @@ const Insight = () => {
                                     </Dropdown.Menu>
                                 </Dropdown>
                             }
-
-                            {/*TODO: Linkedin dropdown */}
                             {
                                 enabledSocialMedia.isLinkedinEnabled &&
                                 <Dropdown className="chooseplatfrom_dropdown_btn">

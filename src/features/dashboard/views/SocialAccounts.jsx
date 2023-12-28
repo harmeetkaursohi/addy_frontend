@@ -315,7 +315,8 @@ const SocialAccounts = () => {
             localizedFirstName: "Code",
         },
     };
-    const getAllLinkedinPagesData = {data:{
+    const getAllLinkedinPagesData = {
+        data: {
             results: {
                 // 100623091: {},
                 // 100412384: {},
@@ -923,8 +924,8 @@ const SocialAccounts = () => {
                     }
                 }
             }
-        }}
-    console.log("currentConnectedLinkedinPages====>", currentConnectedLinkedinPages)
+        }
+    }
 
 // Now you can use the 'profileData' object in your React application
 
@@ -938,7 +939,7 @@ const SocialAccounts = () => {
 
     useEffect(() => {
 
-        if ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
+        if (enabledSocialMedia.isFaceBookEnabled && (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
             let faceBookSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK');
             dispatch(getAllFacebookPages({
                 providerId: faceBookSocialAccount?.providerId,
@@ -952,7 +953,7 @@ const SocialAccounts = () => {
 
 
     useEffect(() => {
-        if (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM').length > 0) {
+        if (enabledSocialMedia.isInstagramEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM').length > 0) {
             let instagramSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'INSTAGRAM');
             dispatch(getAllInstagramBusinessAccounts({
                 accessToken: instagramSocialAccount?.accessToken
@@ -965,11 +966,12 @@ const SocialAccounts = () => {
     }, [getAllConnectedSocialAccountData]);
 
     useEffect(() => {
-        if (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length > 0) {
+        if (enabledSocialMedia.isLinkedinEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length > 0) {
             const decodeJwt = decodeJwtToken(token);
             let linkedinSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'LINKEDIN');
-            let x=false;
-            if(x){
+            // TODO: Remove if statement
+            let x = false;
+            if (x) {
                 dispatch(getAllPagesIds({
                     accessToken: linkedinSocialAccount?.accessToken
                 })).then((res) => {
@@ -977,8 +979,10 @@ const SocialAccounts = () => {
                         dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
                     } else {
                         const requestBody = {
-                            orgIds:res?.payload?.elements?.map(orgData=>{return extractIdFromLinkedinUrnId(orgData?.organization)}).join(","),
-                            accessToken:linkedinSocialAccount?.accessToken
+                            orgIds: res?.payload?.elements?.map(orgData => {
+                                return extractIdFromLinkedinUrnId(orgData?.organization)
+                            }).join(","),
+                            accessToken: linkedinSocialAccount?.accessToken
                         }
                         dispatch(getAllLinkedinPages(requestBody)).then(res => {
                             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
@@ -996,12 +1000,12 @@ const SocialAccounts = () => {
         if (connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
             const connectedLinkedInSocialAccount = getAllConnectedSocialAccountData?.data?.filter(socialAccount => socialAccount?.provider === "LINKEDIN")[0]
             const connectedLinkedInPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedLinkedInSocialAccount?.id)
-            const linkedinPages=(getAllLinkedinPagesData?.data?.results===null||getAllLinkedinPagesData?.data?.results===undefined)?{}:getAllLinkedinPagesData?.data?.results
+            const linkedinPages = (getAllLinkedinPagesData?.data?.results === null || getAllLinkedinPagesData?.data?.results === undefined) ? {} : getAllLinkedinPagesData?.data?.results
             const currentConnectedLinkedinPagesIds = Object.keys(linkedinPages)?.filter(LinkedinPageId =>
-                connectedLinkedInPages?.some(linkedinPage => linkedinPage?.pageId === getLinkedInUrnId(LinkedinPageId,Linkedin_URN_Id_Types.ORGANIZATION))
+                connectedLinkedInPages?.some(linkedinPage => linkedinPage?.pageId === getLinkedInUrnId(LinkedinPageId, Linkedin_URN_Id_Types.ORGANIZATION))
             )
-            const currentConnectedLinkedinPages=currentConnectedLinkedinPagesIds?.map(pageId=>{
-                return getFormattedLinkedinObject(pageId,linkedinPages[pageId]);
+            const currentConnectedLinkedinPages = currentConnectedLinkedinPagesIds?.map(pageId => {
+                return getFormattedLinkedinObject(pageId, linkedinPages[pageId]);
             })
             setCurrentConnectedLinkedinPages(currentConnectedLinkedinPages || null)
         }
@@ -1049,7 +1053,6 @@ const SocialAccounts = () => {
             // }
         }
     }, [connectedPagesData?.facebookConnectedPages]);
-
 
 
     const connectSocialMediaAccountToCustomer = (object) => {
@@ -1216,18 +1219,18 @@ const SocialAccounts = () => {
                                             </div>
                                         </div>
 
-                                <LoginSocialFacebook
-                                    isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
-                                    appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
-                                    redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
-                                    onResolve={(response) => {
-                                        setFacebookDropDown(true)
-                                        setInstagramDropDown(false)
-                                        setLinkedinDropDown(false)
-                                        connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response, SocialAccountProvider.FACEBOOK))
-                                    }}
-                                    onReject={(error) => {
-                                        console.log("error", error)
+                                        <LoginSocialFacebook
+                                            isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
+                                            appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
+                                            redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
+                                            onResolve={(response) => {
+                                                setFacebookDropDown(true)
+                                                setInstagramDropDown(false)
+                                                setLinkedinDropDown(false)
+                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response, SocialAccountProvider.FACEBOOK))
+                                            }}
+                                            onReject={(error) => {
+                                                console.log("error", error)
 
                                             }}>
 
@@ -1240,32 +1243,32 @@ const SocialAccounts = () => {
 
                                     :
 
-                            <div className=" cmn_drop_down dropdown">
-                                <div className="dropdown_header">
-                                    <div className="social_media_outer">
-                                        <div className="social_media_content"
-                                             onClick={() => setFacebookDropDown(!facebookDropDown)}
-                                        >
-                                            <img className="cmn_width" src={fb_img}/>
-                                            <div className="text-start flex-grow-1">
-                                                <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
-                                                <h4 className="connect_text cmn_text_style">Connected</h4>
-                                            </div>
-                                            {
-                                                (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedFacebookPages?.length === 0 &&
-                                                <button className="DisConnectBtn cmn_connect_btn w-auto"
-                                                        onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}>
-                                                    Disconnect
-                                                </button>
-                                            }
-                                            <div className={facebookDropDown ? "upside-down" : ""}>
-                                                <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path id="Icon"
-                                                          d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                                          stroke="#5F6D7E" strokeWidth="1.67"
-                                                          strokeLinecap="round"/>
-                                                </svg>
+                                    <div className=" cmn_drop_down dropdown">
+                                        <div className="dropdown_header">
+                                            <div className="social_media_outer">
+                                                <div className="social_media_content"
+                                                     onClick={() => setFacebookDropDown(!facebookDropDown)}
+                                                >
+                                                    <img className="cmn_width" src={fb_img}/>
+                                                    <div className="text-start flex-grow-1">
+                                                        <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
+                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                    </div>
+                                                    {
+                                                        (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedFacebookPages?.length === 0 &&
+                                                        <button className="DisConnectBtn cmn_connect_btn w-auto"
+                                                                onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}>
+                                                            Disconnect
+                                                        </button>
+                                                    }
+                                                    <div className={facebookDropDown ? "upside-down" : ""}>
+                                                        <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <path id="Icon"
+                                                                  d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                                  stroke="#5F6D7E" strokeWidth="1.67"
+                                                                  strokeLinecap="round"/>
+                                                        </svg>
 
                                                     </div>
 
@@ -1369,20 +1372,20 @@ const SocialAccounts = () => {
                                         </div>
 
 
-                                <LoginSocialFacebook
-                                    isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
-                                    appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
-                                    redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
-                                    onResolve={(response) => {
-                                        setInstagramDropDown(true)
-                                        setFacebookDropDown(false)
-                                        setLinkedinDropDown(false)
-                                        computeAndSocialAccountJSONForFacebook(response, SocialAccountProvider.INSTAGRAM).then((mediaAccount) => {
-                                            mediaAccount === null || mediaAccount === undefined ? showErrorToast(NoInstagramBusinessAccountFound) : connectInstagramAccountToCustomer(mediaAccount)
-                                        })
-                                    }}
-                                    onReject={(error) => {
-                                    }}>
+                                        <LoginSocialFacebook
+                                            isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
+                                            appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
+                                            redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
+                                            onResolve={(response) => {
+                                                setInstagramDropDown(true)
+                                                setFacebookDropDown(false)
+                                                setLinkedinDropDown(false)
+                                                computeAndSocialAccountJSONForFacebook(response, SocialAccountProvider.INSTAGRAM).then((mediaAccount) => {
+                                                    mediaAccount === null || mediaAccount === undefined ? showErrorToast(NoInstagramBusinessAccountFound) : connectInstagramAccountToCustomer(mediaAccount)
+                                                })
+                                            }}
+                                            onReject={(error) => {
+                                            }}>
 
                                             <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
                                                                  icon={() => null} preventActiveStyles={true}
@@ -1390,32 +1393,32 @@ const SocialAccounts = () => {
                                         </LoginSocialFacebook>
                                     </div> :
 
-                            <div className=" cmn_drop_down dropdown">
-                                <div className="dropdown_header">
-                                    <div className="social_media_outer">
-                                        <div className="social_media_content"
-                                             onClick={() => setInstagramDropDown(!instagramDropDown)}>
-                                            <i className="fa-brands fa-instagram insta-icon-color font-size-24"/>
-                                            <div className="text-start flex-grow-1">
-                                                <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'INSTAGRAM')?.name || "instagram"}</h5>
-                                                <h4 className="connect_text cmn_text_style">Connected</h4>
-                                            </div>
-                                            {
-                                                (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedInstagramPages?.length === 0 &&
-                                                <button className="DisConnectBtn cmn_connect_btn w-auto"
-                                                        onClick={() => disConnectSocialMediaAccountToCustomer("INSTAGRAM")}>
-                                                    Disconnect
-                                                </button>
-                                            }
-                                            <div className={instagramDropDown ? "upside-down" : ""}>
-                                                <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path id="Icon"
-                                                          d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                                          stroke="#5F6D7E" strokeWidth="1.67"
-                                                          strokeLinecap="round"/>
-                                                </svg>
+                                    <div className=" cmn_drop_down dropdown">
+                                        <div className="dropdown_header">
+                                            <div className="social_media_outer">
+                                                <div className="social_media_content"
+                                                     onClick={() => setInstagramDropDown(!instagramDropDown)}>
+                                                    <i className="fa-brands fa-instagram insta-icon-color font-size-24"/>
+                                                    <div className="text-start flex-grow-1">
+                                                        <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'INSTAGRAM')?.name || "instagram"}</h5>
+                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                    </div>
+                                                    {
+                                                        (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedInstagramPages?.length === 0 &&
+                                                        <button className="DisConnectBtn cmn_connect_btn w-auto"
+                                                                onClick={() => disConnectSocialMediaAccountToCustomer("INSTAGRAM")}>
+                                                            Disconnect
+                                                        </button>
+                                                    }
+                                                    <div className={instagramDropDown ? "upside-down" : ""}>
+                                                        <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path id="Icon"
+                                                                  d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                                  stroke="#5F6D7E" strokeWidth="1.67"
+                                                                  strokeLinecap="round"/>
+                                                        </svg>
 
                                                     </div>
 
@@ -1463,7 +1466,8 @@ const SocialAccounts = () => {
                                                                     <li>
                                                                         {
                                                                             (instagramBusinessAccountsData?.data && Array.isArray(instagramBusinessAccountsData?.data)) &&
-                                                                            <div className="connectDisconnect_btn_outer">
+                                                                            <div
+                                                                                className="connectDisconnect_btn_outer">
                                                                                 <button
                                                                                     className="DisConnectBtn cmn_connect_btn"
                                                                                     onClick={() =>
@@ -1471,8 +1475,9 @@ const SocialAccounts = () => {
                                                                                 >
                                                                                     Disconnect
                                                                                 </button>
-                                                                                <button className="ConnectBtn cmn_connect_btn"
-                                                                                        onClick={() => setShowInstagramModal(true)}
+                                                                                <button
+                                                                                    className="ConnectBtn cmn_connect_btn"
+                                                                                    onClick={() => setShowInstagramModal(true)}
                                                                                 >
                                                                                     Connect More
                                                                                 </button>
@@ -1502,147 +1507,154 @@ const SocialAccounts = () => {
                 {/* start linkedin connect */}
 
                 {
-                    getAllConnectedSocialAccountData?.loading ?
-                        <SkeletonEffect count={1}></SkeletonEffect> :
-                        getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length === 0 ?
-                            <div className="social_media_outer">
-                                <div className="social_media_content">
-                                    <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
-                                    <div>
-                                        <h5 className=""> Linkedin account</h5>
-                                        <h6 className="cmn_headings">in.linkedin.com</h6>
-                                    </div>
-                                </div>
-
-
-                                <LoginSocialLinkedin
-                                    isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
-                                    redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
-                                    client_id={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_ID}`}
-                                    client_secret={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_SECRET}`}
-                                    scope={`${import.meta.env.VITE_APP_LINKEDIN_SCOPE}`}
-                                    onResolve={(response) => {
-                                        setLinkedinDropDown(true)
-                                        setInstagramDropDown(false)
-                                        setFacebookDropDown(false)
-                                        connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForLinkedIn(response))
-                                    }}
-                                    onReject={(error) => {
-                                        showErrorToast(SomethingWentWrong)
-                                        console.log('error on reject of linkedin===>', error)
-                                    }}>
-
-                                    <LinkedInLoginButton text={"Connect"} className={"facebook_connect"}
-                                                         icon={() => null} preventActiveStyles={true}
-                                                         style={commonButtonStyle}/>
-                                </LoginSocialLinkedin>
-                            </div> :
-
-                            <div className=" cmn_drop_down dropdown">
-                                <div className="dropdown_header">
+                    enabledSocialMedia.isLinkedinEnabled &&
+                    <>
+                        {
+                            getAllConnectedSocialAccountData?.loading ?
+                                <SkeletonEffect count={1}></SkeletonEffect> :
+                                getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length === 0 ?
                                     <div className="social_media_outer">
-                                        <div className="social_media_content"
-                                             onClick={() => setLinkedinDropDown(!linkedinDropDown)}>
+                                        <div className="social_media_content">
                                             <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
-                                            <div className="text-start flex-grow-1">
-                                                <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'LINKEDIN')?.name || "linkedin"}</h5>
-                                                <h4 className="connect_text cmn_text_style">Connected</h4>
+                                            <div>
+                                                <h5 className=""> Linkedin account</h5>
+                                                <h6 className="cmn_headings">in.linkedin.com</h6>
+                                            </div>
+                                        </div>
+
+
+                                        <LoginSocialLinkedin
+                                            isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
+                                            redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
+                                            client_id={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_ID}`}
+                                            client_secret={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_SECRET}`}
+                                            scope={`${import.meta.env.VITE_APP_LINKEDIN_SCOPE}`}
+                                            onResolve={(response) => {
+                                                setLinkedinDropDown(true)
+                                                setInstagramDropDown(false)
+                                                setFacebookDropDown(false)
+                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForLinkedIn(response))
+                                            }}
+                                            onReject={(error) => {
+                                                showErrorToast(SomethingWentWrong)
+                                                console.log('error on reject of linkedin===>', error)
+                                            }}>
+
+                                            <LinkedInLoginButton text={"Connect"} className={"facebook_connect"}
+                                                                 icon={() => null} preventActiveStyles={true}
+                                                                 style={commonButtonStyle}/>
+                                        </LoginSocialLinkedin>
+                                    </div> :
+
+                                    <div className=" cmn_drop_down dropdown">
+                                        <div className="dropdown_header">
+                                            <div className="social_media_outer">
+                                                <div className="social_media_content"
+                                                     onClick={() => setLinkedinDropDown(!linkedinDropDown)}>
+                                                    <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
+                                                    <div className="text-start flex-grow-1">
+                                                        <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'LINKEDIN')?.name || "linkedin"}</h5>
+                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                    </div>
+
+                                                    {
+                                                        (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedLinkedinPages?.length === 0 &&
+                                                        <button
+                                                            className="DisConnectBtn cmn_connect_btn w-auto"
+                                                            onClick={() =>
+                                                                disConnectSocialMediaAccountToCustomer("LINKEDIN")}>
+                                                            Disconnect
+                                                        </button>
+                                                    }
+
+                                                    <div className={linkedinDropDown ? "upside-down" : ""}>
+                                                        <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path id="Icon"
+                                                                  d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                                  stroke="#5F6D7E" strokeWidth="1.67"
+                                                                  strokeLinecap="round"/>
+                                                        </svg>
+
+                                                    </div>
+
+                                                </div>
                                             </div>
 
                                             {
-                                                (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedLinkedinPages?.length === 0 &&
-                                                <button
-                                                    className="DisConnectBtn cmn_connect_btn w-auto"
-                                                    onClick={() =>
-                                                        disConnectSocialMediaAccountToCustomer("LINKEDIN")}>
-                                                    Disconnect
-                                                </button>
-                                            }
+                                                linkedinDropDown &&
 
-                                            <div className={linkedinDropDown ? "upside-down" : ""}>
-                                                <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
-                                                     xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path id="Icon"
-                                                          d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
-                                                          stroke="#5F6D7E" strokeWidth="1.67"
-                                                          strokeLinecap="round"/>
-                                                </svg>
+                                                <ul className="menu_items">
 
-                                            </div>
+                                                    {
+                                                        (getAllPagesIdsData?.loading || getAllLinkedinPagesData?.loading) ?
+                                                            <SkeletonEffect count={3}/> :
+
+                                                            currentConnectedLinkedinPages?.length === 0 ?
+                                                                <div className={"no-page-connected-outer text-center"}>
+                                                                    <div>No active connections at the moment.</div>
+                                                                    <div className={"cursor-pointer connect-page-btn"}
+                                                                         onClick={() => setShowLinkedinModal(true)}
+                                                                    >Connect
+                                                                        now
+                                                                    </div>
+                                                                </div> :
+                                                                <>
+                                                                    {
+                                                                        currentConnectedLinkedinPages?.map((data, index) => {
+                                                                            return (
+                                                                                <li key={index}>
+                                                                                    <div
+                                                                                        className="user_profileInfo_wrapper">
+                                                                                        <div className="user_Details">
+                                                                                            <img
+                                                                                                src={data?.logo_url || default_user_icon}
+                                                                                                height="30px"
+                                                                                                width="30px"/>
+                                                                                            <h4 className="cmn_text_style">{data?.name}</h4>
+                                                                                        </div>
+                                                                                        <h4 className={"connect_text cmn_text_style"}>Connected</h4>
+                                                                                    </div>
+                                                                                </li>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                    <li>
+                                                                        {
+                                                                            (getAllLinkedinPagesData?.data && getAllLinkedinPagesData?.data?.results && Object.keys(getAllLinkedinPagesData?.data?.results)?.length > 0) &&
+                                                                            <div
+                                                                                className="connectDisconnect_btn_outer">
+                                                                                <button
+                                                                                    className="DisConnectBtn cmn_connect_btn"
+                                                                                    onClick={() =>
+                                                                                        disConnectSocialMediaAccountToCustomer("LINKEDIN")}>
+                                                                                    Disconnect
+                                                                                </button>
+                                                                                <button
+                                                                                    className="ConnectBtn cmn_connect_btn"
+                                                                                    onClick={() => setShowLinkedinModal(true)}
+                                                                                >
+                                                                                    Connect More
+                                                                                </button>
+                                                                            </div>
+
+                                                                        }
+                                                                    </li>
+
+
+                                                                </>
+
+
+                                                    }
+                                                </ul>}
 
                                         </div>
                                     </div>
 
-                                    {
-                                        linkedinDropDown &&
 
-                                        <ul className="menu_items">
-
-                                            {
-                                                (getAllPagesIdsData?.loading || getAllLinkedinPagesData?.loading) ?
-                                                    <SkeletonEffect count={3}/> :
-
-                                                    currentConnectedLinkedinPages?.length === 0 ?
-                                                        <div className={"no-page-connected-outer text-center"}>
-                                                            <div>No active connections at the moment.</div>
-                                                            <div className={"cursor-pointer connect-page-btn"}
-                                                                 onClick={() => setShowLinkedinModal(true)}
-                                                            >Connect
-                                                                now
-                                                            </div>
-                                                        </div> :
-                                                        <>
-                                                            {
-                                                                currentConnectedLinkedinPages?.map((data, index) => {
-                                                                    return (
-                                                                        <li key={index}>
-                                                                            <div
-                                                                                className="user_profileInfo_wrapper">
-                                                                                <div className="user_Details">
-                                                                                    <img
-                                                                                        src={data?.logo_url || default_user_icon}
-                                                                                        height="30px"
-                                                                                        width="30px"/>
-                                                                                    <h4 className="cmn_text_style">{data?.name}</h4>
-                                                                                </div>
-                                                                                <h4 className={"connect_text cmn_text_style"}>Connected</h4>
-                                                                            </div>
-                                                                        </li>
-                                                                    )
-                                                                })
-                                                            }
-                                                            <li>
-                                                                {
-                                                                    (getAllLinkedinPagesData?.data && getAllLinkedinPagesData?.data?.results && Object.keys(getAllLinkedinPagesData?.data?.results)?.length>0 ) &&
-                                                                    <div className="connectDisconnect_btn_outer">
-                                                                        <button
-                                                                            className="DisConnectBtn cmn_connect_btn"
-                                                                            onClick={() =>
-                                                                                disConnectSocialMediaAccountToCustomer("LINKEDIN")}>
-                                                                            Disconnect
-                                                                        </button>
-                                                                        <button className="ConnectBtn cmn_connect_btn"
-                                                                                onClick={() => setShowLinkedinModal(true)}
-                                                                        >
-                                                                            Connect More
-                                                                        </button>
-                                                                    </div>
-
-                                                                }
-                                                            </li>
-
-
-                                                        </>
-
-
-                                            }
-                                        </ul>}
-
-                                </div>
-                            </div>
-
-
+                        }
+                    </>
                 }
                 {/* end linkedin connect */}
 
@@ -1664,9 +1676,9 @@ const SocialAccounts = () => {
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
             {enabledSocialMedia.isLinkedinEnabled && showLinkedinModal &&
                 <ConnectPagesModal showModal={showLinkedinModal} setShowModal={setShowLinkedinModal}
-                                   allPagesList={Object.keys(getAllLinkedinPagesData?.data?.results)?.map(key=> {
-                                       return getFormattedLinkedinObject(key,getAllLinkedinPagesData?.data?.results[key])
-                                   } )}
+                                   allPagesList={Object.keys(getAllLinkedinPagesData?.data?.results)?.map(key => {
+                                       return getFormattedLinkedinObject(key, getAllLinkedinPagesData?.data?.results[key])
+                                   })}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
                                    noPageFoundMessage={"No Page Found!"}
                                    socialMediaType={SocialAccountProvider.LINKEDIN}
