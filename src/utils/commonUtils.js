@@ -52,7 +52,7 @@ export const validationSchemas = {
 
 
 export const computeAndSocialAccountJSONForFacebook = async (jsonObj, tokenProvider) => {
-    const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.accessToken);
+    const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.accessToken,tokenProvider);
     if (tokenProvider === SocialAccountProvider.INSTAGRAM) {
         const facebookConnectedSocialMediaAccountsData = await getAllFacebookConnectedSocialMediaAccounts(longLivedToken);
         const instagramBusinessAccount = facebookConnectedSocialMediaAccountsData?.filter(accountData => {

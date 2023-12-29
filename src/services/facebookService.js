@@ -1,14 +1,16 @@
 import {
     baseAxios,
     calculatePercentageGrowth,
-    computeAndReturnSummedDateValues
+    computeAndReturnSummedDateValues,
+
 } from "../utils/commonUtils";
 import {showErrorToast} from "../features/common/components/Toast";
-import {SomethingWentWrong} from "../utils/contantData";
+import {SocialAccountProvider, SomethingWentWrong} from "../utils/contantData";
 
-export async function exchangeForLongLivedToken(shortLivedToken) {
+export async function exchangeForLongLivedToken(shortLivedToken,socialMediaType) {
     const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/oauth/access_token`;
     const client_Id = import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID;
+    // const client_secret =socialMediaType=== SocialAccountProvider.FACEBOOK ? import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET:import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET;
     const client_secret = import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET;
 
     const params = {
