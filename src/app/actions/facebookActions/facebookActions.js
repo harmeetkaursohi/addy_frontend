@@ -3,6 +3,7 @@ import {showErrorToast} from "../../../features/common/components/Toast";
 import {setAuthenticationHeader} from "../../auth/auth.js";
 import {baseAxios, cleanAndValidateRequestURL} from "../../../utils/commonUtils.js";
 import {exchangeForLongLivedToken} from "../../../services/facebookService.js";
+import {SocialAccountProvider} from "../../../utils/contantData";
 
 export const getAllFacebookPages = createAsyncThunk('facebook/getAllFacebookPages', async (data, thunkAPI) => {
         try {
@@ -12,7 +13,7 @@ export const getAllFacebookPages = createAsyncThunk('facebook/getAllFacebookPage
             const pageInfoList = [];
             for (let obj of response.data.data) {
                 const pageInfoResponse = await getPageFullInfoByPageAccessToken(obj.access_token);
-                const longLivedToken = await exchangeForLongLivedToken(pageInfoResponse?.data?.access_token,"FACEBOOK");
+                const longLivedToken = await exchangeForLongLivedToken(pageInfoResponse?.data?.access_token,SocialAccountProvider.FACEBOOK);
                 pageInfoResponse.data.access_token = longLivedToken;
                 pageInfoList.push(pageInfoResponse.data);
             }

@@ -445,7 +445,7 @@ const SocialAccounts = () => {
 
                                         <LoginSocialFacebook
                                             isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
-                                            appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
+                                            appId={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_ID}`}
                                             redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                             onResolve={(response) => {
                                                 setInstagramDropDown(true)
