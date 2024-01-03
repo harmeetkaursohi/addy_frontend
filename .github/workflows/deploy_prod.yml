@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies and build React app
         run: |
           npm install
-          npm run build:dev
+          npm run build:prod
 
       - name: Set up SSH key and permissions
         run: |
@@ -31,7 +31,7 @@ jobs:
 
       - name: Execute cleanup script on Prod Server
         run: |
-          sudo ssh -o StrictHostKeyChecking=no -i prod_private_key.pem ubuntu@ec2-13-234-179-94.ap-south-1.compute.amazonaws.com "/home/ubuntu/Addy_Prod/frontend_cleanup.sh"
+          sudo ssh -o StrictHostKeyChecking=no -i prod_private_key.pem ubuntu@ec2-13-234-179-94.ap-south-1.compute.amazonaws.com "/var/www/html/Addy_Prod/frontend_cleanup.sh"
 
       - name: Set up SSH key and permissions for frontend
         run: |
@@ -47,4 +47,4 @@ jobs:
       - name: Execute deployment script for frontend
         working-directory: /home/runner/work/addy_frontend/addy_frontend
         run: |
-          sudo scp -o StrictHostKeyChecking=no -i prod_private_key.pem -r dist ubuntu@ec2-13-234-179-94.ap-south-1.compute.amazonaws.com:/var/www/html
+          sudo scp -o StrictHostKeyChecking=no -i prod_private_key.pem -r dist ubuntu@ec2-13-234-179-94.ap-south-1.compute.amazonaws.com:/var/www/html/Addy_Prod/addy_frontend
