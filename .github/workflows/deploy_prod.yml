@@ -40,6 +40,8 @@ jobs:
       - name: Debugging - List current directory contents 2
         run: ls -al
 
+      - name: Debugging - List current directory contents
+        run: pwd
 
       - name: Execute deployment script for frontend
         working-directory: /home/runner/work/addy_frontend
