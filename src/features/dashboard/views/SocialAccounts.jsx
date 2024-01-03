@@ -1,5 +1,5 @@
 import jsondata from "../../../locales/data/initialdata.json";
-import {LoginSocialFacebook} from "reactjs-social-login";
+import {LoginSocialFacebook, LoginSocialPinterest} from "reactjs-social-login";
 import {computeAndSocialAccountJSONForFacebook, getInitialLetterCap, isNullOrEmpty} from "../../../utils/commonUtils";
 import {FacebookLoginButton} from "react-social-login-buttons";
 import fb_img from "../../../images/fb.svg";
@@ -38,11 +38,14 @@ const SocialAccounts = () => {
     // const [checkForDisablePages, setCheckForDisablePages] = useState(true);
     const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState(null);
     const [currentConnectedInstagramPages, setCurrentConnectedInstagramPages] = useState(null);
+    const [currentConnectedPinterestPages, setCurrentConnectedPinterestPages] = useState(null);
     const [showAccountAlreadyConnectedWarningModal, setShowAccountAlreadyConnectedWarningModal] = useState(false);
     const [facebookDropDown, setFacebookDropDown] = useState(false);
     const [instagramDropDown, setInstagramDropDown] = useState(false);
+    const [pinterestDropDown, setPinterestDropDown] = useState(false);
     const [showFacebookModal, setShowFacebookModal] = useState(false);
     const [showInstagramModal, setShowInstagramModal] = useState(false);
+    const [showPinterestModal, setShowPinterestModal] = useState(false);
 
 
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
@@ -203,6 +206,10 @@ const SocialAccounts = () => {
                     currentConnectedInstagramPages?.length === 0 ? setInstagramDropDown(true) : setInstagramDropDown(false)
                     setCurrentConnectedFacebookPages([])
                 }
+                if (socialMediaType === "PINTEREST") {
+                    currentConnectedPinterestPages?.length === 0 ? setPinterestDropDown(true) : setPinterestDropDown(false)
+                    setCurrentConnectedPinterestPages([])
+                }
                 const decodeJwt = decodeJwtToken(token);
                 dispatch(disconnectSocialAccountAction({
                     customerId: decodeJwt?.customerId,
@@ -297,6 +304,7 @@ const SocialAccounts = () => {
                                             onResolve={(response) => {
                                                 setFacebookDropDown(true)
                                                 setInstagramDropDown(false)
+                                                setPinterestDropDown(false)
                                                 connectSocialMediaAccountToCustomer(computeAndSocialAccountJSONForFacebook(response, SocialAccountProvider.FACEBOOK))
                                             }}
                                             onReject={(error) => {
@@ -450,6 +458,7 @@ const SocialAccounts = () => {
                                             onResolve={(response) => {
                                                 setInstagramDropDown(true)
                                                 setFacebookDropDown(false)
+                                                setPinterestDropDown(false)
                                                 computeAndSocialAccountJSONForFacebook(response, SocialAccountProvider.INSTAGRAM).then((mediaAccount) => {
                                                     mediaAccount === null || mediaAccount === undefined ? showErrorToast(NoInstagramBusinessAccountFound) : connectInstagramAccountToCustomer(mediaAccount)
                                                 })
@@ -572,6 +581,158 @@ const SocialAccounts = () => {
 
 
                 {/* end instagram connect */}
+
+                {/* start Pinterest connect */}
+                {
+                    enabledSocialMedia.isPinterestEnabled &&
+                    <>
+                        {
+                            getAllConnectedSocialAccountData?.loading ?
+                                <SkeletonEffect count={1}></SkeletonEffect> :
+                                getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'PINTEREST').length === 0 ?
+                                    <div className="social_media_outer">
+                                        <div className="social_media_content">
+                                            <i className="fa-brands fa-pinterest"
+                                               style={{color: "#e60023", fontSize: "24px"}}/>
+                                            <div>
+                                                <h5 className=""> Pinterest account</h5>
+                                                <h6 className="cmn_headings">www.pinterest.com</h6>
+                                            </div>
+                                        </div>
+
+                                        {/*TODO: LOGIN BUTTON FOR PINTEREST*/}
+
+                                        <LoginSocialPinterest
+                                            isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
+                                            appId={`${import.meta.env.VITE_APP_PINTEREST_CLIENT_ID}`}
+                                            redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
+                                            onResolve={(response) => {
+                                                setPinterestDropDown(true)
+                                                setInstagramDropDown(false)
+                                                setFacebookDropDown(false)
+                                                console.log("responseresponseresponse===>",response)
+                                                // computeAndSocialAccountJSONForFacebook(response, SocialAccountProvider.INSTAGRAM).then((mediaAccount) => {
+                                                //     mediaAccount === null || mediaAccount === undefined ? showErrorToast(NoInstagramBusinessAccountFound) : connectInstagramAccountToCustomer(mediaAccount)
+                                                // })
+                                            }}
+                                            onReject={(error) => {
+                                                console.log("error",error)
+                                            }}>
+
+                                            <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
+                                                                 icon={() => null} preventActiveStyles={true}
+                                                                 style={commonButtonStyle}/>
+                                        </LoginSocialPinterest>
+                                    </div> :
+
+                                    <div className=" cmn_drop_down dropdown">
+                                        <div className="dropdown_header">
+                                            <div className="social_media_outer">
+                                                <div className="social_media_content"
+                                                     onClick={() => setPinterestDropDown(!pinterestDropDown)}>
+                                                    <i className="fa-brands fa-pinterest pinterest-icon"/>
+                                                    <div className="text-start flex-grow-1">
+                                                        <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'PINTEREST')?.name || "pinterest"}</h5>
+                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                    </div>
+                                                    {
+                                                        (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedPinterestPages?.length === 0 &&
+                                                        <button className="DisConnectBtn cmn_connect_btn w-auto"
+                                                                onClick={() => disConnectSocialMediaAccountToCustomer("PINTEREST")}>
+                                                            Disconnect
+                                                        </button>
+                                                    }
+                                                    <div className={instagramDropDown ? "upside-down" : ""}>
+                                                        <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path id="Icon"
+                                                                  d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                                  stroke="#5F6D7E" strokeWidth="1.67"
+                                                                  strokeLinecap="round"/>
+                                                        </svg>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            {
+                                                pinterestDropDown === true &&
+
+                                                <ul className="menu_items">
+
+                                                    {/*TODO:UPDATE FOR PINTEREST*/}
+                                                    {
+                                                        instagramBusinessAccountsData?.loading ?
+                                                            <SkeletonEffect count={3}/> :
+
+                                                            currentConnectedPinterestPages?.length === 0 ?
+                                                                <div className={"no-page-connected-outer text-center"}>
+                                                                    <div>No active connections at the moment.</div>
+                                                                    <div className={"cursor-pointer connect-page-btn"}
+                                                                         onClick={() => setShowPinterestModal(true)}
+                                                                    >Connect
+                                                                        now
+                                                                    </div>
+                                                                </div> :
+                                                                <>
+                                                                    {
+                                                                        currentConnectedPinterestPages?.map((data, index) => {
+                                                                            return (
+                                                                                <li key={index}>
+                                                                                    <div
+                                                                                        className="user_profileInfo_wrapper">
+                                                                                        <div className="user_Details">
+                                                                                            <img
+                                                                                                src={data.profile_picture_url || default_user_icon}
+                                                                                                height="30px"
+                                                                                                width="30px"/>
+                                                                                            <h4 className="cmn_text_style">{data.name}</h4>
+                                                                                        </div>
+                                                                                        <h4 className={"connect_text cmn_text_style"}>Connected</h4>
+                                                                                    </div>
+                                                                                </li>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                    <li>
+                                                                        {
+                                                                            (instagramBusinessAccountsData?.data && Array.isArray(instagramBusinessAccountsData?.data)) &&
+                                                                            <div className="connectDisconnect_btn_outer">
+                                                                                <button
+                                                                                    className="DisConnectBtn cmn_connect_btn"
+                                                                                    onClick={() =>
+                                                                                        disConnectSocialMediaAccountToCustomer("PINTEREST")}
+                                                                                >
+                                                                                    Disconnect
+                                                                                </button>
+                                                                                <button className="ConnectBtn cmn_connect_btn"
+                                                                                        onClick={() => setShowInstagramModal(true)}
+                                                                                >
+                                                                                    Connect More
+                                                                                </button>
+                                                                            </div>
+
+                                                                        }
+                                                                    </li>
+
+
+                                                                </>
+
+
+                                                    }
+                                                </ul>}
+
+                                        </div>
+                                    </div>
+
+
+                        }
+                    </>
+                }
+                {/* end pinterest connect */}
+
             </div>
             { enabledSocialMedia.isFaceBookEnabled &&  showFacebookModal &&
                 <FacebookModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal}
@@ -587,6 +748,13 @@ const SocialAccounts = () => {
                                noPageFoundMessage={"No Page Found!"}
                                socialMediaType={SocialAccountProvider.INSTAGRAM}
                                socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
+            {enabledSocialMedia.isPinterestEnabled && showPinterestModal &&
+                <FacebookModal showFacebookModal={showPinterestModal} setShowFacebookModal={setShowPinterestModal}
+                               facebookPageList={instagramBusinessAccountsData?.data}
+                               connectedPagesList={connectedPagesData?.facebookConnectedPages}
+                               noPageFoundMessage={"No Page Found!"}
+                               socialMediaType={SocialAccountProvider.PINTEREST}
+                               socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "PINTEREST")[0]}/>}
             {
                 showAccountAlreadyConnectedWarningModal &&
                 <AccountAlreadyConnectedWarningModal showModal={showAccountAlreadyConnectedWarningModal}
