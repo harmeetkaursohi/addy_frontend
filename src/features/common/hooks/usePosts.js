@@ -25,7 +25,8 @@ const usePosts = (pageNum = 0, filter = null) => {
             options: {signal},
             postStatus: ["PUBLISHED"],
             token: token,
-            pageNumber: pageNum
+            pageNumber: pageNum,
+            socialMediaType:filter
         }
 
 

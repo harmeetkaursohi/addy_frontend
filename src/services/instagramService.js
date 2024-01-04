@@ -180,9 +180,9 @@ export const getDashBoardInstagramGraphReport = async (page, query) => {
 
 
         await baseAxios.get(graphDataApiUrl).then((response) => {
-            if (Array.isArray(response.data?.data) && Array.isArray(response.data?.data)) {
-                reachedReportCount?.push(...response.data?.data[0].values || [])
-                followersReportCount?.push(...response.data?.data[1].values || [])
+            if (Array.isArray(response.data?.data)) {
+                reachedReportCount?.push(...response.data?.data[0]?.values || [])
+                followersReportCount?.push(...response.data?.data[1]?.values || [])
             }
         }).catch((error) => {
             console.error('Error:', error);

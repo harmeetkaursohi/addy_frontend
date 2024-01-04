@@ -5,13 +5,13 @@ import {formatDate} from "@fullcalendar/core";
 import CommonSlider from "../../common/components/CommonSlider";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {publishedPostAction} from "../../../app/actions/postActions/postActions";
+import {getAllSocialMediaPostsByCriteria, publishedPostAction} from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {getToken} from "../../../app/auth/auth";
 import {useState} from "react";
 
 
-const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=""}) => {
+const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference="",resetData=null}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -27,9 +27,12 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                 if (response.meta.requestStatus === "fulfilled") {
                     setBatchToDelete(null);
                     showSuccessToast("Post has been published successfully");
-                    setDrafts!==null && setDrafts([]);
-                    reference==="PLANNER" && setDraftPost!==null && setDraftPost(false)
-
+                    if(reference==="PLANNER"){
+                        setDrafts!==null && setDrafts([]);
+                        setDraftPost!==null && setDraftPost(false)
+                    }else{
+                        resetData(new Date().getTime())
+                    }
                 }
             }).catch((error) => {
             setBatchToDelete(null);
@@ -38,7 +41,6 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
 
     }
 
-    console.log("batchIdData?.postPages--->",batchIdData?.postPages);
 
     return (<>
 

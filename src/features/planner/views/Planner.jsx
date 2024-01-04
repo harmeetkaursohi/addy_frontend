@@ -129,7 +129,7 @@ const Planner = () => {
 
 
         }
-    }, [baseSearchQuery]);
+    }, [baseSearchQuery,isDraftPost]);
 
 
     // render event content

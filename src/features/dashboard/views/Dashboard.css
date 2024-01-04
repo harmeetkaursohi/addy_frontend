@@ -578,7 +578,10 @@ img.connection-error-svg {
     color: purple !important;
     font-size: 24px ;
 }
-
+.pinterest-icon {
+    color: #e60023 !important;
+    font-size: 24px ;
+}
 .btn-with-fixed-width {
     /*min-width: 120px; !* Adjust this value to your desired maximum width *!*/
     /*overflow: hidden;*/
