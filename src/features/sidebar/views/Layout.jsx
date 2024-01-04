@@ -57,7 +57,7 @@ const Layout = () => {
                                 className='profile_img'/>
                             <div>
                                 <h3 className='profile_container'>{userData?.fullName || "name"}</h3>
-                                <h4 className="profile_container">{userData?.email || "abc@demo.com"}</h4>
+                                <h4 className="profile_container">{userData?.email }</h4>
                             </div>
                         </div>
                     </div>
