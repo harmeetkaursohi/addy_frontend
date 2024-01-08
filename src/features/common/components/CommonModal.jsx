@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import Modal from 'react-bootstrap/Modal';
 import "./CommonModal.css"
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getToken} from "../../../app/auth/auth.js";
 import ConfirmModal from "./ConfirmModal.jsx";
 import {SocialAccountProvider} from "../../../utils/contantData.js";
@@ -26,6 +26,7 @@ const CommonModal = ({
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [mediaPageData, setMediaPageData] = useState(null);
     const [currentConnectedPages, setCurrentConnectedPages] = useState([]);
+    const facebookPageConnectData = useSelector(state => state.facebook.facebookPageConnectReducer);
 
     useEffect(() => {
         if (connectedPagesList !== null && Array.isArray(connectedPagesList)) {
@@ -101,15 +102,16 @@ const CommonModal = ({
 
                                                 <div className='connect_btn_outer'>
                                                     <button
+                                                        disabled={facebookPageConnectData?.loading}
                                                         // className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : (currentConnectedPages.length > 0 ? 'disabled-button' : 'default-button')}`}
                                                         className={`cmn_connect_btn connect_btn connect_btn default-button ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : ''}`}
                                                         onClick={(e) => {
-                                                            setMediaPageData(data);
-                                                            setShowConfirmModal(true);
+                                                            !facebookPageConnectData?.loading && setMediaPageData(data);
+                                                            !facebookPageConnectData?.loading && setShowConfirmModal(true);
                                                         }}
 
                                                     >
-                                                        {currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"}
+                                                        {currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"}{(facebookPageConnectData?.loading && data?.id===mediaPageData?.id) ?"ing...":""}
                                                     </button>
                                                 </div>
 
