@@ -160,9 +160,9 @@ export const DashboardReports = () => {
                                        </Dropdown.Toggle>
 
                                        <Dropdown.Menu>
-                                           { Object.keys(SocialAccountProvider).map(cur => (
+                                           { Object.keys(SocialAccountProvider).map((cur,index) => (
 
-                                               <Dropdown.Item
+                                               <Dropdown.Item key={index}
                                                    disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data,connectedPagesReducer?.facebookConnectedPages)}
                                                    onClick={() => {
                                                        setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
@@ -190,9 +190,9 @@ export const DashboardReports = () => {
                                        </Dropdown.Toggle>
 
                                        <Dropdown.Menu>
-                                           {connectedPagesToSelectedSocialMediaAccount?.map(page => (
+                                           {connectedPagesToSelectedSocialMediaAccount?.map((page,index) => (
 
-                                               <Dropdown.Item
+                                               <Dropdown.Item key={index}
                                                     className="d-flex"
                                                    // disabled={notConnectedSocialMediaAccount(cur, getAllConnectedSocialAccountData?.data)}
                                                    onClick={() => {
@@ -254,9 +254,9 @@ export const DashboardReports = () => {
                                     <div className="followers_outer ">
 
                                         {reportSectionData?.data &&
-                                            Object.keys(reportSectionData?.data).map(curKey => (
+                                            Object.keys(reportSectionData?.data).map((curKey,index) => (
 
-                                                <div className="followers_wrapper ">
+                                                <div className="followers_wrapper " key={index}>
                                                     <h5>{curKey.replace(/_/g, ' ')  }
                                                         {
                                                             reportSelectedAccountType==="INSTAGRAM" && <span className={"90-day-txt"}> (90 days)</span>

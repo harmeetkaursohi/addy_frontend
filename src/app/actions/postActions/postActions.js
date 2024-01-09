@@ -238,6 +238,7 @@ export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatc
 
     data.updatePostRequestDTO.postPageInfos.forEach((pageInfo, index) => {
         formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
+        formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.socialMediaType);
         if (pageInfo?.id !== null) {
             formData.append(`postPageInfos[${index}].id`, pageInfo?.id);
         }
@@ -262,8 +263,6 @@ export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatc
             }
         });
     }
-
-    console.log("postbbupdate", data?.id);
 
 
     // Iterate through the FormData entries and log them to the console

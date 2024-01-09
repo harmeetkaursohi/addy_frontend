@@ -278,7 +278,7 @@ const UpdatePost = () => {
         const updatePost = (e, postStatus, scheduleDate, scheduleTime) => {
                 e.preventDefault();
                 const userInfo = decodeJwtToken(token);
-                const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+                    const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
                 if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
 
                     if (!scheduleDate && !scheduleTime) {
@@ -291,7 +291,6 @@ const UpdatePost = () => {
                         return;
                     }
                 }
-                console.log("file----->", files)
 
                 const requestBody = {
                     token: token,
@@ -311,7 +310,8 @@ const UpdatePost = () => {
                         boostPost: boostPost,
                         postPageInfos: selectedOptions?.map((obj) => ({
                             pageId: obj,
-                            id: getPostsByIdData?.postPageInfos.find(c => c.pageId === obj)?.id || null
+                            id: getPostsByIdData?.postPageInfos.find(c => c.pageId === obj)?.id || null,
+                            socialMediaType: getPostsByIdData?.postPageInfos.find(c => c.pageId === obj)?.socialMediaType || null
                         })),
                         scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
@@ -768,11 +768,11 @@ const UpdatePost = () => {
                                     <div className='post_preview_outer'>
 
                                         {
-                                            allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option) => {
+                                            allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option,index) => {
 
                                                 let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                return (<>
+                                                return (<span key={index}>
                                                         {
                                                             selectedPageData && <CommonFeedPreview
                                                                 socialMediaType={option.group}
@@ -786,7 +786,7 @@ const UpdatePost = () => {
                                                                 hashTag={hashTag}
                                                             />
                                                         }
-                                                    </>
+                                                    </span>
                                                 )
                                             })
                                         }

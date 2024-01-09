@@ -80,28 +80,6 @@ const ScheduledComponent = ({scheduledData}) => {
 
 
     }
-    // const handleDeletePost = (e) => {
-    //      e.preventDefault();
-    //     if (e?.target?.id !== null) {
-    //         setDeleteIdRef(e?.target?.id);
-    //         dispatch(deletePostByBatchIdAction({postId: e?.target?.id, token: token}))
-    //             .then((response) => {
-    //                 if (response.meta.requestStatus === "fulfilled") {
-    //                     setDeleteIdRef(null);
-    //                     showSuccessToast("Posts has been deleted successfully");
-    //                     dispatch(getAllSocialMediaPostsByCriteria({
-    //                         token: token,
-    //                         query: {limit: 5, postStatus: ["SCHEDULED"]}
-    //                     }));
-    //                 }
-    //             }).catch((error) => {
-    //             setDeleteIdRef(null);
-    //             showErrorToast(error.response.data.message);
-    //         });
-    //     }
-    //
-    //
-    // }
 
     return (
         <>
@@ -131,12 +109,12 @@ const ScheduledComponent = ({scheduledData}) => {
                             </div>
 
                             :
-                            scheduledPosts && Array.isArray(scheduledPosts) && sortByKey(scheduledPosts, "feedPostDate").map(curBatch => (
+                            scheduledPosts && Array.isArray(scheduledPosts) && sortByKey(scheduledPosts, "feedPostDate").map((curBatch, index)=> (
 
 
                                 // <div className={scheduledPosts.length===1 ? "col-lg-12" : scheduledPosts.length===2 ? "col-lg-6" :"col-lg-4"}>
 
-                                <div className={"col-lg-4"}>
+                                <div className={"col-lg-4"} key={index}>
                                     <div className="draft-outer mb-3">
 
                                         <div className={"draft-heading"}>
@@ -144,8 +122,8 @@ const ScheduledComponent = ({scheduledData}) => {
 
                                             <div className="page_tags">
                                                 {curBatch?.postPages && Array.isArray(curBatch?.postPages) &&
-                                                    curBatch?.postPages.map((curPage) => (
-                                                        <div className="selected-option">
+                                                    curBatch?.postPages.map((curPage,index) => (
+                                                        <div className="selected-option" key={index}>
                                                             <div>
                                                                 <img className={"me-1 social-media-icon"}
                                                                      src={computeImageURL(curPage?.socialMediaType)}

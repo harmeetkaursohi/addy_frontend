@@ -29,13 +29,13 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
     const formik = useFormik({
         initialValues: {
-            addressLine1: formData.address.addressLine1,
-            addressLine2: formData.address.addressLine2,
-            country: formData.address.country,
-            state: formData.address.state,
-            county: formData.address.county,
-            city: formData.address.city,
-            pinCode: formData.address.pinCode
+            addressLine1: formData?.address?.addressLine1,
+            addressLine2: formData?.address?.addressLine2,
+            country: formData?.address?.country,
+            state: formData?.address?.state,
+            county: formData?.address?.county,
+            city: formData?.address?.city,
+            pinCode: formData?.address?.pinCode
 
         },
         validationSchema: validationSchemas.address,
@@ -51,7 +51,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                 pinCode: values.pinCode
             }
 
-            dispatch(signUpUser({...formData, address: addressObj, navigate})).then((response) => {
+            dispatch(signUpUser({...formData,fullName:formData.firstName+" "+formData.lastName, address: addressObj, navigate})).then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     Swal.fire({
                         icon: 'success',
@@ -79,7 +79,8 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
     });
 
     const resetUserInfo = {
-        fullName: "",
+        firstName: "",
+        lastName: "",
         username: "",
         email: "",
         contactNo: "",
