@@ -29,13 +29,13 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
     const formik = useFormik({
         initialValues: {
-            addressLine1: formData.address.addressLine1,
-            addressLine2: formData.address.addressLine2,
-            country: formData.address.country,
-            state: formData.address.state,
-            county: formData.address.county,
-            city: formData.address.city,
-            pinCode: formData.address.pinCode
+            addressLine1: formData?.address?.addressLine1,
+            addressLine2: formData?.address?.addressLine2,
+            country: formData?.address?.country,
+            state: formData?.address?.state,
+            county: formData?.address?.county,
+            city: formData?.address?.city,
+            pinCode: formData?.address?.pinCode
 
         },
         validationSchema: validationSchemas.address,
@@ -51,7 +51,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                 pinCode: values.pinCode
             }
 
-            dispatch(signUpUser({...formData, address: addressObj, navigate})).then((response) => {
+            dispatch(signUpUser({...formData,fullName:formData.firstName+" "+formData.lastName, address: addressObj, navigate})).then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     Swal.fire({
                         icon: 'success',
@@ -79,7 +79,8 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
     });
 
     const resetUserInfo = {
-        fullName: "",
+        firstName: "",
+        lastName: "",
         username: "",
         email: "",
         contactNo: "",
@@ -125,8 +126,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                 <div className='login_outer bg_white_cream'>
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-5 text-dark'>Reach your users with new tools. Reach your users with new
-                                            tools. Reach your users with new tools.</h2>
+                                        <h2 className='mt-5 text-dark'>Reach your users with new tools.</h2>
                                         <p className={"text-dark mb-4"}>Efficiently unleash cross-media information without cross-media value.
                                             Quickly maximize.Efficiently unleash cross-media information without
                                             cross-media value. Quickly maximize.Efficiently unleash cross-media.</p>
@@ -300,7 +300,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                             </div>
                                         </form>
                                         <h3 className='cmn_heading'>{jsondata.alreadyAccount}
-                                            <Link to={signUpReducer?.loading ? "/" : "/login"} className="ms-2">
+                                            <Link to={signUpReducer?.loading ? "/signup" : "/"} className="ms-2">
                                                 <span className='sign_up'>{jsondata.login}</span>
                                             </Link>
                                         </h3>

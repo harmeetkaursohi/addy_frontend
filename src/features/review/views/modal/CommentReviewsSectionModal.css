@@ -16,23 +16,30 @@
 .cursor-pointer{
     cursor: pointer;
 }
-
+img.me-2.social-media-icon-cmnt {
+    height: 22px;
+    width: 22px;
+    border-radius: 6px;
+}
+.padding-x-20{
+    padding:0px 20px !important;
+}
 .comments_footer ul {border-bottom: 1px solid #DDE3EA;border-top: 1px solid #dde3ea;padding: 10px;padding-left: 10px !important;}
 .view_profile .modal-dialog .modal-content {
     border-radius: unset;
     padding: 0px;
 }
 p.liked_by {
-    padding: 0px 10px;
     color: #5F6D7E;
     font-family: Nunito;
     font-size: 12px;
     margin-bottom: 6px;
+    margin-top: 3px;
 }
 
 p.comment_date {
-    margin-bottom: 0px;
-    padding: 0px 10px 10px;
+    margin-bottom: 9px;
+    /*padding: 0px 10px 10px;*/
     color: #5F6D7E;
     font-family: Nunito;
     font-size: 10px;
@@ -40,7 +47,8 @@ p.comment_date {
 
 .footer_media p {
     margin: 0px;
-    padding: 9px 10px;
+    padding: 9px 10px 9px 0px;
+
 }
 
 p.liked_by strong {
@@ -53,26 +61,29 @@ p.liked_by {
     font-family: Nunito;
     font-size: 12px;
     margin-bottom: 6px;
+    margin-top: 9px;
+}
+.post_image_outerwrapper {
+    width: 100%;
+    height: 450px;
+    object-fit: contain;
+    text-align: center;
 }
 
-p.comment_date {
-    margin-bottom: 0px;
-    padding: 0px 10px 10px;
-    color: #5F6D7E;
-    font-family: Nunito;
-    font-size: 10px;
+.post_image_outerwrapper img {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
 }
-
-.footer_media p {
-    margin: 0px;
-    padding: 9px 10px;
+.comment_review_wrapper .post_image_outerwrapper img{
+   height: 100%;
+    object-fit: contain;
+    object-position: center;
 }
-
 p.liked_by strong {
     color: #000;
 }
 
-p.comment_date {}
 
 .comment_msg {
     display: flex;
@@ -114,10 +125,7 @@ div.main_user {
     font-size: 16px;
 }
 
-.comment_msg {
-    background: #fff;
-    gap: 5px;
-}
+
 .view_profile .modal-dialog .modal-body {
     padding: 0px;
 }
@@ -237,8 +245,10 @@ p.post_hashtags {
     overflow-y: scroll;
 }
 .comment_msg {
-    padding: 8px;
+    padding: 8px 20px;
     position: relative;
+    background: #fff;
+    gap: 5px;
 }
 .emoji-picker-icon{
     height: 28px;

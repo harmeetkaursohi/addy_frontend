@@ -8,6 +8,14 @@ import {SidebarMenuItems} from "../SidebarMenu.jsx";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {useDispatch, useSelector} from "react-redux";
+import Swal from "sweetalert2";
+import {getInitialLetterCap} from "../../../utils/commonUtils";
+import {SocialAccountProvider} from "../../../utils/contantData";
+import {
+    disconnectSocialAccountAction,
+    getAllConnectedSocialAccountAction
+} from "../../../app/actions/socialAccountActions/socialAccountActions";
+import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 
 const Layout = () => {
 
@@ -37,8 +45,22 @@ const Layout = () => {
     }, [token, userData, dispatch])
 
     const LogOut = () => {
-        localStorage.removeItem("token");
-        navigate("/login");
+        Swal.fire({
+            icon: 'warning',
+            title: `Logout`,
+            text: `Are you sure you want to logout?`,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: "#F07C33",
+            cancelButtonColor: "#E6E9EC",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem("token");
+                navigate("/login");
+            }
+        });
+
     }
 
     return (
@@ -57,7 +79,7 @@ const Layout = () => {
                                 className='profile_img'/>
                             <div>
                                 <h3 className='profile_container'>{userData?.fullName || "name"}</h3>
-                                <h4 className="profile_container">{userData?.email || "abc@demo.com"}</h4>
+                                <h4 className="profile_container">{userData?.email }</h4>
                             </div>
                         </div>
                     </div>

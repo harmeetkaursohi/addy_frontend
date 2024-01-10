@@ -18,7 +18,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     isPostDatesOnSameDayOrInFuture,
     computeAndReturnPlannerEvent,
-    dateFormat
+    dateFormat, computeStartEndDate
 } from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
@@ -72,7 +72,6 @@ const Planner = () => {
                 }
             }
 
-            console.log("@@@ requestBody ::: ", requestBody);
             dispatch(getAllPostsForPlannerAction(requestBody));
             dispatch(getPlannerPostCountAction(requestBody));
         }
@@ -93,7 +92,6 @@ const Planner = () => {
     }, [getAllPlannerPostsData]);
 
 
-    console.log("@@@ getAllPlannerPostsData ::: ",plannerPosts,getAllPostsForPlannerData)
 
 
     useEffect(() => {
@@ -101,7 +99,10 @@ const Planner = () => {
         if (Object.keys(baseSearchQuery).length > 0) {
 
             if (isDraftPost) {
-                dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {postStatus: ["DRAFT"] ,plannerCardDate:baseSearchQuery?.plannerCardDate,limit:1000}}));
+                dispatch(getAllSocialMediaPostsByCriteria({
+                    token: token,
+                    query: {postStatus: ["DRAFT"], plannerCardDate: baseSearchQuery?.plannerCardDate, limit: 1000}
+                }));
             } else {
 
                 const decodeJwt = decodeJwtToken(token);
@@ -129,7 +130,7 @@ const Planner = () => {
 
 
         }
-    }, [baseSearchQuery]);
+    }, [baseSearchQuery, isDraftPost]);
 
 
     // render event content
@@ -144,7 +145,6 @@ const Planner = () => {
                         return (
                             <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}
                                  onClick={(e) => {
-                                     console.log("handle singlr click if needed----->")
                                  }}>
                                 <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>
                                 <h3>{c.title}</h3>
@@ -152,13 +152,18 @@ const Planner = () => {
                         )
                     })}
                 </div>
-                {event?._def?.extendedProps?.showMoreContent > 0 &&
-                    <button className="createPost_btn crate_btn cmn_btn_color w-100 ms-0 mt-2 mb-3"
-                            onClick={(e) => handleShowMorePostModal(event)}
-                    >
-                        {"View " + event?._def?.extendedProps?.showMoreContent + " more"}
-                    </button>
-                }
+                {/*{event?._def?.extendedProps?.showMoreContent > 0 &&*/}
+                <button className="createPost_btn crate_btn cmn_btn_color w-100 ms-0 mt-2 mb-3"
+                        onClick={(e) => handleShowMorePostModal(event)}
+                >
+                    {
+                        event?._def?.extendedProps?.showMoreContent > 0 ?
+                            "View " + event?._def?.extendedProps?.showMoreContent + " more" :
+                            "View more"
+                    }
+
+                </button>
+                {/*}*/}
             </div>)
     }
 
@@ -195,7 +200,6 @@ const Planner = () => {
             plannerCardDate: inst
         })
     };
-    console.log('setBaseSearchQuery',baseSearchQuery.plannerCardDate)
 
     const handleDraft = (e) => {
         setIsLoading(true);
@@ -228,13 +232,13 @@ const Planner = () => {
         })
 
         setBatchIds(batchIdList);
+
         dispatch(getAllPlannerPostAction({
-            token: token, query: {postStatus: ["PUBLISHED"],batchIds: batchIdList}
+            token: token, query: JSON.parse(JSON.stringify({postStatus: ["PUBLISHED","SCHEDULED"], batchIds: batchIdList,creationDateRange:{startDate:computeStartEndDate(startDate,'T00:01:00.000Z'),endDate:computeStartEndDate(startDate,'T23:59:59.000Z')}}))
         }));
 
         setShowMorePlannerModel(true);
     };
-
 
     return (
         <>
@@ -308,8 +312,9 @@ const Planner = () => {
                                                 });
                                             }}>
                                         <option value={"All"}>All</option>
-                                        {Object.keys(SocialAccountProvider).map((cur) => {
-                                            return (<option value={cur}>{SocialAccountProvider[cur]}</option>)
+                                        {Object.keys(SocialAccountProvider).map((cur, index) => {
+                                            return (
+                                                <option key={index} value={cur}>{SocialAccountProvider[cur]}</option>)
                                         })}
                                     </select>
 
@@ -361,7 +366,7 @@ const Planner = () => {
 
                         {
                             isDraftPost === true &&
-                            <ParentDraftComponent setDraftPost={setDraftPost}  reference={"PLANNER"} />
+                            <ParentDraftComponent setDraftPost={setDraftPost} reference={"PLANNER"}/>
                         }
 
 

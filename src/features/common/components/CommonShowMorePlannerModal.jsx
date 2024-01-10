@@ -110,7 +110,6 @@ const CommonShowMorePlannerModal = ({
                                                                     <div className="d-flex page_tags">
                                                                         {plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
                                                                             plannerPost?.postPages.map((curPage, index) => {
-                                                                                console.log("@@@ curPage ::: ",curPage)
                                                                                 return (
                                                                                     <div
                                                                                         className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}

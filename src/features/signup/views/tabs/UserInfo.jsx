@@ -7,6 +7,7 @@ import {useFormik} from "formik";
 import Button from "../../../common/components/Button";
 import React, {useEffect} from 'react'
 import {useSelector} from "react-redux";
+import {Industries} from "../../../../utils/contantData";
 
 
 const UserInfo = ({formData, setFormData, setShowTab}) => {
@@ -17,13 +18,15 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
             email: "",
             industry: "",
             contactNo: "",
-            fullName: ""
+            firstName: "",
+            lastName: ""
         },
         validationSchema: validationSchemas.register,
         onSubmit: (values) => {
             setFormData({
                 ...formData,
-                fullName: values.fullName,
+                firstName: values.firstName,
+                lastName: values.lastName,
                 username: values.username,
                 email: values.email,
                 industry: values.industry,
@@ -40,7 +43,8 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
             formik.setFieldValue("email", formData.email);
             formik.setFieldValue("industry", formData.industry);
             formik.setFieldValue("contactNo", formData.contactNo);
-            formik.setFieldValue("fullName", formData.fullName);
+            formik.setFieldValue("firstName", formData.firstName);
+            formik.setFieldValue("lastName", formData.lastName);
         }
     }, [formData]);
 
@@ -59,8 +63,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
 
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-5 text-dark'>Reach your users with new tools. Reach your users with new
-                                            tools. Reach your users with new tools.</h2>
+                                        <h2 className='mt-5 text-dark'>Reach your users with new tools.</h2>
                                         <p className={"text-dark mb-4"}>Efficiently unleash cross-media information without cross-media value.
                                             Quickly maximize.Efficiently unleash cross-media information without
                                             cross-media value. Quickly maximize.Efficiently unleash cross-media.</p>
@@ -83,20 +86,38 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                         <form onSubmit={formik.handleSubmit}>
 
                                             <div className='form-group'>
-                                                <label>Full Name <span>*</span> </label>
+                                                <label>First Name <span>*</span> </label>
 
                                                 <input
-                                                    name="fullName"
+                                                    name="firstName"
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='Full Name'
+                                                    placeholder='First Name'
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
-                                                    value={formik.values.fullName}
+                                                    value={formik.values.firstName}
                                                 />
 
-                                                {formik.touched.fullName && formik.errors.fullName ? (
-                                                    <p className="error_message">{formik.errors.fullName}</p>
+                                                {formik.touched.firstName && formik.errors.firstName ? (
+                                                    <p className="error_message">{formik.errors.firstName}</p>
+                                                ) : null}
+
+                                            </div>
+                                            <div className='form-group'>
+                                                <label>Last Name <span>*</span> </label>
+
+                                                <input
+                                                    name="lastName"
+                                                    className="form-control mt-1"
+                                                    type='text'
+                                                    placeholder='Last Name'
+                                                    onChange={formik.handleChange}
+                                                    onBlur={formik.handleBlur}
+                                                    value={formik.values.lastName}
+                                                />
+
+                                                {formik.touched.lastName && formik.errors.lastName ? (
+                                                    <p className="error_message">{formik.errors.lastName}</p>
                                                 ) : null}
 
                                             </div>
@@ -144,17 +165,24 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                             <div className='rememberPass_outer mt-2'>
 
                                                 <div className='form-group'>
-                                                    <label>{jsondata.industry}</label>
-                                                    <input
+                                                    <label htmlFor="country">{jsondata.industry}</label>
+                                                    <select
                                                         name="industry"
                                                         className="form-control mt-1"
-                                                        type='text'
-                                                        placeholder='Industry'
-                                                        onChange={formik.handleChange}
+                                                        onChange={formik.handleChange} // Use the custom onChange handler
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.industry}
-                                                    />
+
+                                                    >
+                                                        <option value="">Select Industry</option>
+                                                        {Object.keys(Industries)?.map((key,index) => (
+                                                            <option key={index} value={Industries[key]}>
+                                                                {Industries[key]}
+                                                            </option>
+                                                        ))}
+                                                    </select>
                                                 </div>
+
 
                                                 <div className='form-group'>
                                                     <label>{jsondata.contactNo}</label>
@@ -173,7 +201,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                 <Button type={"Submit"} text={jsondata.next}/>
                                             </div>
                                         </form>
-                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/" : "/login"}><span
+                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/signup" : "/"}><span
                                             className='sign_up'>{jsondata.login}</span></Link></h3>
                                     </div>
                                 </div>

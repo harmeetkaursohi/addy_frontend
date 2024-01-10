@@ -708,11 +708,11 @@ const CreatePost = () => {
                                 <div className='post_preview_outer'>
 
                                     {
-                                        allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option) => {
+                                        allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option,index) => {
 
                                             let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                            return (<>
+                                            return (<span key={index}>
                                                     {selectedPageData &&
                                                         <CommonFeedPreview
                                                             socialMediaType={option.group}
@@ -728,7 +728,7 @@ const CreatePost = () => {
                                                         />
                                                     }
 
-                                                </>
+                                                </span>
                                             )
                                         })
                                     }

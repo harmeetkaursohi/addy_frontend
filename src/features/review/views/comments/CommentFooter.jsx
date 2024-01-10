@@ -100,8 +100,6 @@ const CommentFooter = ({postData, postPageData}) => {
     }, [postPageData])
 
 
-    console.log("postPageData---->", postPageData)
-    console.log("postData---->", postData)
     const handleAddLikesOnPost = (e) => {
         e.preventDefault();
         const requestBody = {
@@ -172,16 +170,16 @@ const CommentFooter = ({postData, postPageData}) => {
     return (
         <div className="comments_footer">
 
-            <div className="footer_media d-flex gap-3 mt-2">
+            <div className="padding-x-20 footer_media d-flex gap-3 ">
                 <p>
-                    <i className={"far fa-thumbs-up me-2"}/>{commonFooterDataObject.total_likes}
+                    <i className={"far fa-thumbs-up me-1 like-icon"}/>{commonFooterDataObject.total_likes}
                 </p>
                 <p><i
-                    className={"far fa-comment me-2"}/>{commonFooterDataObject.total_comments}
+                    className={"far fa-comment me-1"}/>{commonFooterDataObject.total_comments}
                 </p>
                 {
                     postData?.socialMediaType === "FACEBOOK" &&
-                    <p><TbShare3 className={"me-2"}/> {commonFooterDataObject.total_shares} </p>
+                    <p><TbShare3 className={""}/> {commonFooterDataObject.total_shares} </p>
                 }
 
             </div>
@@ -212,7 +210,7 @@ const CommentFooter = ({postData, postPageData}) => {
 
             {/*    <li className="w-100"><i className="fa fa-comment me-2"/>Comment</li>*/}
             {/*</ul>*/}
-            <p className="liked_by">
+            <p className="liked_by padding-x-20 ">
                 {
                     postPageData?.likes?.summary?.total_count === 1 && <>
                         Liked
@@ -228,8 +226,8 @@ const CommentFooter = ({postData, postPageData}) => {
 
 
             </p>
-            <p className="comment_date">{getFormattedDate(postData?.feedPostDate)}</p>
-            <div className="comment_msg">
+            <p className="comment_date padding-x-20">{getFormattedDate(postData?.feedPostDate)}</p>
+            <div className="comment_msg ">
                 {
                     addCommentOnPostActionData?.loading && comment &&
                     <div className={"post-comment-loader z-index-1 mt-1"}><RotatingLines strokeColor="#F07C33"

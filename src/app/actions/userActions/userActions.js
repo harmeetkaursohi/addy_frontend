@@ -35,7 +35,7 @@ export const createPassword = createAsyncThunk('user/createPassword', async (dat
 
 export const forgetPassword = createAsyncThunk('user/forgetPassword', async (data, thunkAPI) => {
     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/auth/forgot-password?email=${data.values.email}`, null).then(res => {
-        showSuccessToast('Forget password successfully');
+        showSuccessToast(`Email has been sent to ${data.values.email}`);
         data.navigate("/login");
         return res.data;
     }).catch(error => {

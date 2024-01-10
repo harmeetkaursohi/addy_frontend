@@ -18,7 +18,8 @@ export const validationSchemas = {
     }),
 
     register: yup.object().shape({
-        fullName: yup.string().required('Full Name is required'),
+        firstName: yup.string().required('First Name is required'),
+        lastName: yup.string().required('Last Name is required'),
         username: yup.string().required('Username is required'),
         email: yup.string().required('Email is required').email('Invalid email format'),
     }),
@@ -285,7 +286,7 @@ export function getEnumValue(providerType) {
     }
 }
 
-export const dateFormat = (date) => {
+export const dateFormat = (date,appendURL) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -932,7 +933,6 @@ export const getAttachmentsData = (data, socialMediaType) => {
 }
 export const filterGenderAgeDataFromFacebookDemographicData = (data, key) => {
 
-    console.log("filterGenderAgeDataFromFacebookDemographicData", data, key)
     if (data === null || data === undefined) {
         return null
     }
@@ -1060,4 +1060,12 @@ export const getFormattedDemographicData = (data, key, socialMediaType) => {
             break;
         }
     }
+}
+
+export const computeStartEndDate = (date,appendPart) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const isoDateString = `${year}-${month}-${day}${appendPart}`;
+    return isoDateString;
 }

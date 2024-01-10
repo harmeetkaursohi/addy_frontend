@@ -43,7 +43,7 @@ const CommonSlider = ({
                             (selectedFileType === "IMAGE" || files.every(file => file.mediaType === "IMAGE")) &&
 
                             files?.map((file, index) => {
-                                return (<div key={index}>
+                                return (<div key={index} >
                                     <img src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
                                          alt={`Image ${index}`} className='post_img'/>
                                 </div>)
@@ -83,6 +83,7 @@ const CommonSlider = ({
 
                         {
                             enableShowPlannerModel === true && Array.isArray(files) && files.length > 0 && files[0].mediaType === "IMAGE" &&
+
                             <img
                                 src={(files[0].postStatus && files[0].postStatus === "SCHEDULED") ? "data:image/jpeg; base64," + files[0]?.imageURL : files[0]?.imageURL}
                                 alt={`Image`} className='post_img'/>
@@ -106,10 +107,10 @@ const CommonSlider = ({
                                 return (<div key={index}>
 
                                     {file?.mediaType === "IMAGE" || showThumbnail ?
-
+                                        <div className="post_image_outerwrapper">
                                         <img
                                             src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
-                                            alt={`Image ${index}`} className='post_img'/>
+                                            alt={`Image ${index}`} className='post_img'/></div>
                                         :
 
                                         <ReactPlayer

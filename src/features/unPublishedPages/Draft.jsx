@@ -19,9 +19,10 @@ const Draft=()=>{
     const dispatch=useDispatch();
     const token = getToken();
     const [baseSearchQuery, setBaseSearchQuery] = useState({postStatus: ["DRAFT"],limit:1000,plannerCardDate:new Date()});
+    const [resetData,setResetData]=useState(true)
     useEffect(()=>{
-        dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {...baseSearchQuery}}));
-    },[baseSearchQuery])
+            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {...baseSearchQuery}}));
+    },[baseSearchQuery,resetData])
     const calendarRef = useRef(null);
     const customHeaderClick = (eventType) => {
         if (eventType === "Prev") {
@@ -78,7 +79,7 @@ const Draft=()=>{
 
                         </div>
 
-                            <ParentDraftComponent reference={"DRAFT"}/>
+                            <ParentDraftComponent resetData={setResetData} reference={"DRAFT"}/>
 
                     </div>
                 </div>

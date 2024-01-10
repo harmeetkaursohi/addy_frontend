@@ -8,18 +8,14 @@ import CommonLoader from "../../common/components/CommonLoader";
 import noDraftPosts from "../../../images/no_draft_posts.png";
 import {useLocation} from "react-router-dom";
 
-export const ParentDraftComponent = ({setDraftPost,reference=""}) => {
+export const ParentDraftComponent = ({setDraftPost,reference="",resetData=null}) => {
 
     const dispatch = useDispatch();
     const token = getToken();
-
     const [drafts, setDrafts] = useState([]);
-
     const getAllDraftPostsByCustomerAndPeriodData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
 
-    useEffect(() => {
-        dispatch(getAllSocialMediaPostsByCriteria({token: token, query:{postStatus:["DRAFT"]}}));
-    }, [])
+
 
 
     useEffect(() => {
@@ -41,7 +37,7 @@ export const ParentDraftComponent = ({setDraftPost,reference=""}) => {
             {!getAllDraftPostsByCustomerAndPeriodData.loading && drafts && Array.isArray(drafts) && sortByKey(drafts,"createdAt").map(curDraftObject => (
                 <div className={"col-lg-4"}>
                     {
-                        <DraftComponent batchIdData={curDraftObject} setDraftPost={setDraftPost} setDrafts={setDrafts} reference={reference}/>
+                        <DraftComponent resetData={resetData} batchIdData={curDraftObject} setDraftPost={setDraftPost} setDrafts={setDrafts} reference={reference}/>
                     }
 
 
