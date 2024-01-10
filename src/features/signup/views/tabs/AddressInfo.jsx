@@ -300,7 +300,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                             </div>
                                         </form>
                                         <h3 className='cmn_heading'>{jsondata.alreadyAccount}
-                                            <Link to={signUpReducer?.loading ? "/" : "/login"} className="ms-2">
+                                            <Link to={signUpReducer?.loading ? "/signup" : "/"} className="ms-2">
                                                 <span className='sign_up'>{jsondata.login}</span>
                                             </Link>
                                         </h3>

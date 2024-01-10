@@ -164,7 +164,7 @@ const Login = () => {
                                         </form>
 
                                         <h3 className='cmn_heading'>{jsondata.account}
-                                            <Link className="ms-2" to="/">
+                                            <Link className="ms-2" to="/signup">
                                                 <span className='sign_up'>{jsondata.signup}</span>
                                             </Link>
                                         </h3>

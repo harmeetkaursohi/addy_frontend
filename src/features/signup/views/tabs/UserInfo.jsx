@@ -201,7 +201,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                 <Button type={"Submit"} text={jsondata.next}/>
                                             </div>
                                         </form>
-                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/" : "/login"}><span
+                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/signup" : "/"}><span
                                             className='sign_up'>{jsondata.login}</span></Link></h3>
                                     </div>
                                 </div>

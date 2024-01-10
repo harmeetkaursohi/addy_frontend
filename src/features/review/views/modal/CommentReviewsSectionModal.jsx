@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import img from '../../../../images/draft.png'
 import {Link} from "react-router-dom";
 import {
+    computeImageURL,
     getCommentCreationTime,
     handleSeparateCaptionHashtag,
 } from "../../../../utils/commonUtils";
@@ -49,15 +50,17 @@ const CommentReviewsSectionModal = ({
 
                     <Modal.Body>
                         <Row className="m-0">
-                            <Col lg="7" className="p-0">
+                            <Col lg="6" className="p-0">
                                 <div className='comment_review_wrapper'>
-                                    <div className="comment_header d-flex">
-                                        <Link to={""} className="flex-grow-1">
+                                    <div className="comment_header d-flex gap-2">
+                                        <Link to={""} className="flex-grow-1 d-flex align-item-center">
                                             <span onClick={() => {
                                                 setOpenCommentReviewsSectionModal(false)
-                                            }}><i className="fa fa-chevron-left me-2"></i> Back</span>
+                                            }}><i className="fa fa-chevron-left me-2 "></i> Back</span>
 
-                                            <i className="fa-brands fa-facebook ms-2"></i>
+                                            <img className={"me-2 ms-2 social-media-icon-cmnt"}
+                                                 src={computeImageURL(postData?.socialMediaType)}/>
+                                            {/*<i className="fa-brands fa-facebook ms-2"></i>*/}
                                         </Link>
 
                                     </div>
@@ -70,7 +73,7 @@ const CommentReviewsSectionModal = ({
                                                   viewSimilarToSocialMedia={false}/>
                                 </div>
                             </Col>
-                            <Col lg="5" className="p-0">
+                            <Col lg="6" className="p-0">
                                 <div className="comment_section">
                                     <div className="comments_messages pb-0">
                                         <div className="main_user">

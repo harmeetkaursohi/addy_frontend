@@ -65,7 +65,8 @@ const App = () => {
                         <Route path="/contact" element={<ContactUs/>}/>
                     </Route>
                     <Route path="/login" element={<Login/>}/>
-                    <Route path="/" element={<Signup/>}/>
+                    <Route path="/" element={<Login/>}/>
+                    <Route path="/signup" element={<Signup/>}/>
                     <Route path="/reset-password" element={<CreatePassword/>}/>
                     <Route path="/forget-password" element={<ForgetPassword/>}/>
                     <Route path="/fb" element={<FacebookModal/>}/>

@@ -8,34 +8,42 @@ import {computeImageURL, getInitialLetterCap} from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png"
 import CommonLoader from "../../common/components/CommonLoader";
+import {FaArrowCircleRight} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
 import {getPostPageInfoAction} from "../../../app/actions/postActions/postActions";
 
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: 0});
-    const {isLoading=true, isError, error, results ,setResults, hasNextPage} = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
+    const {
+        isLoading = true,
+        isError,
+        error,
+        results,
+        setResults,
+        hasNextPage
+    } = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
     const [resetData, isResetData] = useState(false);
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
 
-    useEffect(()=>{
-        if(resetData){
+    useEffect(() => {
+        if (resetData) {
             setResults([])
-            setBaseSearchQuery({...baseSearchQuery,pageNum: 0,})
+            setBaseSearchQuery({...baseSearchQuery, pageNum: 0,})
             isResetData(false)
 
         }
-    },[resetData]);
+    }, [resetData]);
 
     useEffect(() => {
         if (postData && postData !== undefined) {
             const requestBody = {
                 postIds: [postData?.id],
                 pageAccessToken: postData?.page?.access_token,
-                socialMediaType:postData?.socialMediaType
+                socialMediaType: postData?.socialMediaType
             }
             dispatch(getPostPageInfoAction(requestBody));
         }
@@ -84,8 +92,9 @@ const Review = () => {
                                         }}
                                 >
                                     <option value={"All"}>All</option>
-                                    {Object.keys(SocialAccountProvider).map((cur) => {
-                                        return (<option value={cur}>{getInitialLetterCap(SocialAccountProvider[cur])}</option>)
+                                    {Object.keys(SocialAccountProvider).map((cur, index) => {
+                                        return (<option key={index}
+                                                        value={cur}>{getInitialLetterCap(SocialAccountProvider[cur])}</option>)
                                     })}
                                 </select>
                             </div>
@@ -125,19 +134,37 @@ const Review = () => {
                                                              className="bg_img"/>
                                                     </td>
                                                     <td>
-                                                        <img className={"me-2"} src={computeImageURL(post?.socialMediaType)}/>
-                                                        <span>{post?.page?.name}</span>
+                                                        <div className={"d-flex align-items-center"}>
+                                                            <img className={"me-2"}
+                                                                 src={computeImageURL(post?.socialMediaType)}/>
+                                                            <span>{post?.page?.name}</span>
+                                                        </div>
+
+
                                                     </td>
                                                     <td>{post?.likes} Likes</td>
                                                     <td>{post?.comments} Comments</td>
                                                     <td>{post?.shares} Share</td>
                                                     <td>
-                                                        <button
-                                                            className="view_post_btn cmn_bg_btn"
-                                                            onClick={(e) => {
-                                                                setPostData(post);
-                                                                setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
-                                                            }}>{jsondata.viewpost}</button>
+
+                                                        <div className={"view-post-txt cursor-pointer"}
+                                                             onClick={(e) => {
+                                                                 setPostData(post);
+                                                                 setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
+                                                             }}
+                                                        >
+                                                            <span>View</span> <FaArrowCircleRight
+                                                            style={{color: "#F07C33"}}/>
+
+                                                        </div>
+
+
+                                                        {/*<button*/}
+                                                        {/*    className="view_post_btn cmn_bg_btn"*/}
+                                                        {/*    onClick={(e) => {*/}
+                                                        {/*        setPostData(post);*/}
+                                                        {/*        setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)*/}
+                                                        {/*    }}>{jsondata.viewpost}</button>*/}
                                                     </td>
                                                 </tr>
                                             ))
@@ -159,7 +186,8 @@ const Review = () => {
                     isOpenCommentReviewsSectionModal &&
                     <CommentReviewsSectionModal isOpenCommentReviewsSectionModal={isOpenCommentReviewsSectionModal}
                                                 setOpenCommentReviewsSectionModal={setOpenCommentReviewsSectionModal}
-                                                postData={postData} postPageInfoData={postPageInfoData} isResetData={isResetData}  />
+                                                postData={postData} postPageInfoData={postPageInfoData}
+                                                isResetData={isResetData}/>
                 }
             </section>
         </>

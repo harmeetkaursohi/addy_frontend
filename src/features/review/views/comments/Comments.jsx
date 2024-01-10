@@ -149,11 +149,10 @@ const Comments = ({postData}) => {
         //     <CommonLoader/>
         //
         //     :
-        getCommentsOnPostActionData?.data?.length === 0
-            ? <div> No Comments</div> :
+        getCommentsOnPostActionData?.data?.data?.length === 0
+            ? <div className={"no-cmnt-txt"}>No comments yet!</div> :
 
             getCommentsOnPostActionData?.data?.data?.map((comment, index) => {
-                console.log("commentcommentcomment", comment)
                 return (
                     <div key={index} className="comment_wrap">
                         {
@@ -227,28 +226,28 @@ const Comments = ({postData}) => {
 
                                                     }
                                                     <div
-                                                        className="user_impressions d-flex gap-3 mt-2 mb-2">
+                                                        className="user_impressions d-flex mt-2 mb-2">
                                                         <p>{getCommentCreationTime(comment?.created_time)}</p>
                                                         {
                                                             comment?.can_like ?
-                                                                <p className={comment?.user_likes ? "cursor_pointer color-blue" : "cursor_pointer "}
+                                                                <p className={comment?.user_likes ? "cursor_pointer ms-3 color-blue" : "ms-3 cursor_pointer "}
                                                                    onClick={() => {
                                                                        comment?.user_likes ? handleDisLikeComment(comment?.id) : handleLikeComment(comment?.id)
                                                                    }}
 
                                                                 >Like</p>
-                                                                : <p className={" disable-reply-comment"}>Like</p>
+                                                                : <p className={"ms-3 disable-reply-comment"}>Like</p>
 
                                                         }
 
                                                         {comment?.like_count > 0 &&
                                                             <>
-                                                                <LiaThumbsUpSolid fill={"blue"}/>
-                                                                <p>{comment?.like_count}</p>
+                                                                <LiaThumbsUpSolid className={"ms-1 me-1"} fill={"blue"}/>
+                                                                <p className={"me-3"}>{comment?.like_count}</p>
                                                             </>
 
                                                         }
-                                                        <p className={comment?.can_comment ? "cursor-pointer" : "disable-reply-comment"}
+                                                        <p className={comment?.can_comment ? "cursor-pointer ms-3" : "disable-reply-comment ms-3"}
                                                            onClick={() => {
                                                                if (comment?.can_comment) {
                                                                    setReplyToCommentId(comment.id)
@@ -396,10 +395,11 @@ const Comments = ({postData}) => {
                                                                                             </div>
 
                                                                                             <p>
-                                                                                                <CommentText socialMediaType={"FACEBOOK"}
-                                                                                                             comment={childComment?.message}
-                                                                                                             className={"font-weight-bold cursor-pointer "}
-                                                                                                             usernames={childComment?.message_tags?.filter(tags => tags?.type === "user")?.map(userTag => userTag?.name)}>
+                                                                                                <CommentText
+                                                                                                    socialMediaType={"FACEBOOK"}
+                                                                                                    comment={childComment?.message}
+                                                                                                    className={"font-weight-bold cursor-pointer "}
+                                                                                                    usernames={childComment?.message_tags?.filter(tags => tags?.type === "user")?.map(userTag => userTag?.name)}>
                                                                                                 </CommentText>
                                                                                             </p>
                                                                                             {
