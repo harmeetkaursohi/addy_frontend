@@ -30,7 +30,7 @@
 }
 
 img.post_img {
-    height: 350px;
+    height: 250px;
     object-fit: cover;
     object-position: center;
 }

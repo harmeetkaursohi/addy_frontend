@@ -135,7 +135,7 @@ const Review = () => {
                                                     </td>
                                                     <td>
                                                         <div className={"d-flex align-items-center"}>
-                                                            <img className={"me-2"}
+                                                            <img className={"me-2 review-post-icon"}
                                                                  src={computeImageURL(post?.socialMediaType)}/>
                                                             <span>{post?.page?.name}</span>
                                                         </div>

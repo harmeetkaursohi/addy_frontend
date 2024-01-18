@@ -47,6 +47,10 @@ span.highlight {
     min-width: 150px;
     transform: translate(10px,6rem);
 }
+.review-post-icon{
+    height:27px;
+    width: 27px;
+}
 .no-cmnt-outer {
     display: flex;
     align-items: center;

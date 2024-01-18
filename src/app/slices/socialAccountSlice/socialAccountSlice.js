@@ -6,7 +6,7 @@ import {
     socialAccountConnectActions,
     getAllByCustomerIdAction,
     getSocialMediaReportByProviderTypeAction,
-    getSocialMediaGraphByProviderTypeAction,getAllInstagramBusinessAccounts
+    getSocialMediaGraphByProviderTypeAction, getAllInstagramBusinessAccounts, getAllPinterestBoards
 } from "../../actions/socialAccountActions/socialAccountActions.js";
 
 
@@ -21,6 +21,7 @@ const socialAccountSlice = createSlice({
         getSocialMediaReportByProviderTypeReducer: {loading: false},
         getSocialMediaGraphByProviderTypeReducer: {loading: false},
         getAllInstagramBusinessAccountsReducer: {loading: false},
+        getAllPinterestBoardsReducer: {loading: false},
 
     },
     reducers: {
@@ -108,6 +109,7 @@ const socialAccountSlice = createSlice({
         [getAllByCustomerIdAction.rejected]: (state) => {
             state.getAllByCustomerIdReducer = {loading: false}
         },
+        // Get All Instagram Business Accounts
         [getAllInstagramBusinessAccounts.pending]: (state) => {
             state.getAllInstagramBusinessAccountsReducer = {loading: true}
         },
@@ -116,6 +118,16 @@ const socialAccountSlice = createSlice({
         },
         [getAllInstagramBusinessAccounts.rejected]: (state) => {
             state.getAllInstagramBusinessAccountsReducer = {loading: false}
+        },
+        // Get All Pinterest Boards
+        [getAllPinterestBoards.pending]: (state) => {
+            state.getAllPinterestBoardsReducer = {loading: true}
+        },
+        [getAllPinterestBoards.fulfilled]: (state, action) => {
+            state.getAllPinterestBoardsReducer = {loading: false, data: action.payload}
+        },
+        [getAllPinterestBoards.rejected]: (state) => {
+            state.getAllPinterestBoardsReducer = {loading: false}
         },
 
     }

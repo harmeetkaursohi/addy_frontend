@@ -10,11 +10,123 @@
     padding: 26px 28px;
 
 }
-.instagramPages .checkbox-button_outer img{
+.img_container {
+    width: 300px;
+    /*height: 400px;*/
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+}
+.img_container img{
+    height: 100%;
+    object-fit: cover;
+}
+button.save_button {
+    background: red;
+    color: white;
+    padding: 6px 20px;
+    border-radius: 20px;
+    position: absolute;
+    left: auto;
+    right: 10px;
+    margin-top: 10px;
+    border:none
+}
+.img_footer_wrapper{
+    display: flex;
+    gap: 10px;
+}
+.pin-title {
+    color: white;
+    margin-top: 7px;
+    font-size: 14px;
+    margin-left: 13px;
+    width:290px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+white-space: nowrap;
+
+}
+.img_footer{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    bottom: 18px;
+    gap: 10px;
+    left: auto;
+    right: 0px;
+    width: 100%;
+    justify-content: space-around;
+}
+.z-index-2{
+    z-index:2;
+}
+.select_options_container {
+
+    position: absolute;
+    top: 10px;
+    left: 12px;
+}
+.select_options_container select{
+    border: none;
+    background: transparent;
+}
+.select_options_container select:focus-visible {
+    outline-offset: 0px;
+    border: none;
+}
+.cmn_download_outer{
+    height: 30px;
+    width: 30px;
+    background: white;
+    border-radius: 30px;
+    text-align: center;
+}
+.FiArrowUpRight{
+    margin-bottom: 0px;
+    background: white;
+    border-radius: 20px;
+    font-size: 14px;
+    padding: 8px 17px;
+    text-align: center;
+   align-items: center;
+    display: flex;
+}
+.preview_img_container{
+    display: flex;
+    justify-content: center;
+}
+.user_caption_heading{
+    width: 154px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+.user_caption_wrapper{
+    display:flex;
+    gap:10px;
+    margin-top: 10px;
+    margin-left: 13px;
+    align-items: center;
+
+}
+.user_caption_wrapper img{
+    border-radius: 20px;
+}
+.user_caption_wrapper h6{
+    color: white;
+}
+.pinterest-icon {
+    color: #e60023;
+    fontSize: 24px;
+}
+
+.instagramPages .checkbox-button_outer img {
     height: 34px;
     width: 34px;
     border-radius: 5px;
 }
+
 .facebook_outer {
     background: rgba(0, 130, 203, 0.10);
 }
@@ -26,9 +138,10 @@
 .social_media_list.dropdown-menu.show {
     padding: 0px;
 }
-.cmn_social_pages_outer{
+
+.cmn_social_pages_outer {
     height: 200px;
-overflow-y:scroll;
+    overflow-y: scroll;
     overflow-x: hidden;
 }
 
@@ -43,13 +156,15 @@ overflow-y:scroll;
     /*box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.19) inset;*/
     margin-top: 14px;
 }
-.createPost_outer .dropdown-menu{
+
+.createPost_outer .dropdown-menu {
     inset: unset !important;
     transform: unset !important;
     position: relative !important;
     overflow-y: scroll;
     max-height: 360px;
 }
+
 .createPost_outer button.tabs_grid {
     display: flex;
     flex-wrap: wrap;
@@ -80,11 +195,13 @@ overflow-y:scroll;
     background: #FFF;
     padding: 7px;
 }
-.selectedPages{
+
+.selectedPages {
     border: 1px solid #048709;
     background: #DFFEE0;
 }
-.unselectedpages{
+
+.unselectedpages {
     border: 1px solid #E0E0E0;
     background: #FFF;
     cursor: pointer;
@@ -462,14 +579,17 @@ createPost_outer select {
     gap: 10px;
     padding: 19px 12px 8px 12px;
 }
-.user_profile_info img{
+
+.user_profile_info img {
     border-radius: 20px;
 }
-.caption_text{
+
+.caption_text {
     padding: 0px 14px;
     font-size: 14px;
     margin-bottom: 10px;
 }
+
 .like_comment_outer {
     display: flex;
     justify-content: space-between;
@@ -524,14 +644,17 @@ createPost_outer select {
 .add_btn {
     font-size: 9px;
 }
-@media(max-width:1440px){
+
+@media (max-width: 1440px) {
     .fb_likes h3 {
         font-size: 16px;
     }
+
     .fb_likes svg {
         height: 18px;
         width: 18px;
     }
+
     .fb_likes {
         display: flex;
         align-items: center;
@@ -539,21 +662,28 @@ createPost_outer select {
     }
 
 }
-@media(max-width:1299px){
+
+@media (max-width: 1299px) {
     .create_post_content {
         padding: 30px 20px;
     }
+
     .fb_likes svg {
         height: 16px;
         width: 16px;
-    }.fb_likes h3 {
-         font-size: 14px;
-     }.post_preview_outer {
-          padding: 2em;
-      }
+    }
+
+    .fb_likes h3 {
+        font-size: 14px;
+    }
+
+    .post_preview_outer {
+        padding: 2em;
+    }
 
 
 }
+
 @media screen and (max-width: 1024px) {
     .get_messages_outer {
         display: block;
@@ -742,26 +872,31 @@ input {
 button.instagram_dropdown.dropdown-toggle.show::after {
     transform: rotate(-180deg);
 }
-.disable_color{
+
+.disable_color {
     background-color: gray;
     border: 1px solid gray;
     border-radius: 6px;
 
 }
-.disable_color label{
+
+.disable_color label {
     color: white;
 }
+
 button.disabledButton {
-    background-color: gray ; /* Change the background color to gray or any color you prefer */
+    background-color: gray; /* Change the background color to gray or any color you prefer */
     color: white; /* Change the text color to white or any color you prefer */
     cursor: not-allowed; /* Change the cursor to indicate that the button is disabled */
 }
+
 button.delete_upload {
     padding: 5px 10px;
     border-radius: 4px;
     background: white;
     border: 1px solid #dde1e4;
 }
+
 .upload_image {
     border-radius: 10px;
     width: 50px;
@@ -769,9 +904,11 @@ button.delete_upload {
     object-fit: cover;
     object-position: top;
 }
+
 .darg_navs.file_outer .add_media_outer {
     padding: 10px;
 }
+
 .file_outer.dragable_files {
     justify-content: space-between;
     align-items: center;
@@ -781,16 +918,20 @@ button.delete_upload {
     border-radius: 6px;
 
 }
-.dragable_files:hover{
+
+.dragable_files:hover {
     background-color: #eee;
 }
-.file_outer.dragable_files>div {
+
+.file_outer.dragable_files > div {
     width: 100%;
 }
+
 .file_dimention_text {
-    color: rgba(28,43,51,1);
+    color: rgba(28, 43, 51, 1);
     font-size: 14px;
 }
+
 .drag_scroll {
     max-height: 344px;
     overflow: auto;
@@ -800,6 +941,7 @@ button.delete_upload {
 .drag_scroll .dragable_files:first-child {
     margin-top: 0;
 }
+
 button.loading {
     display: flex;
     align-items: center;

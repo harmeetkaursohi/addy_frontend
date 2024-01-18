@@ -29,6 +29,7 @@ import {
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {resetReducers} from "../../../app/actions/commonActions/commonActions";
 import default_user_icon from "../../../images/default_user_icon.svg";
+import {SocialAccountProvider} from "../../../utils/contantData";
 
 
 const UpdatePost = () => {
@@ -50,6 +51,8 @@ const UpdatePost = () => {
 
         const [hashTag, setHashTag] = useState("");
         const [caption, setCaption] = useState("");
+        const [pinTitle, setPinTitle] = useState("");
+        const [pinDestinationUrl, setPinDestinationUrl] = useState("");
         const [scheduleDate, setScheduleDate] = useState("");
         const [scheduleTime, setScheduleTime] = useState("");
 
@@ -72,6 +75,7 @@ const UpdatePost = () => {
         const userData = useSelector(state => state.user.userInfoReducer.data);
         const getPostsByIdData = useSelector(state => state.post.getPostsByIdReducer?.data);
         const loadingUpdatePost = useSelector(state => state.post.updatePostOnSocialMediaReducer.loading);
+
 
 
         useEffect(() => {
@@ -116,6 +120,8 @@ const UpdatePost = () => {
                 }
                 setSelectedOptions(getPostsByIdData?.postPageInfos?.map(c => c.pageId) || []);
                 setCaption(getPostsByIdData?.caption || "");
+                setPinTitle(getPostsByIdData?.pinTitle || "");
+                setPinDestinationUrl(getPostsByIdData?.pinDestinationUrl || "");
                 setHashTag(getPostsByIdData?.hashTag || "");
                 setPostStatus(getPostsByIdData?.postStatus)
                 setFiles(getPostsByIdData?.attachments || []);
@@ -205,6 +211,7 @@ const UpdatePost = () => {
         const handleCheckboxChange = (option) => {
             const {group, selectOption} = option;
 
+
             const updatedSelectedOptions = [...selectedOptions];
             const updatedSelectedGroups = [...selectedGroups];
 
@@ -278,7 +285,7 @@ const UpdatePost = () => {
         const updatePost = (e, postStatus, scheduleDate, scheduleTime) => {
                 e.preventDefault();
                 const userInfo = decodeJwtToken(token);
-                    const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+                const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
                 if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
 
                     if (!scheduleDate && !scheduleTime) {
@@ -306,12 +313,14 @@ const UpdatePost = () => {
                         })),
                         hashTag: isNullOrEmpty(hashTag) ? "" : hashTag.toString().trim(),
                         caption: isNullOrEmpty(caption) ? "" : caption.toString().trim(),
+                        pinTitle: isNullOrEmpty(pinTitle) ? "" : pinTitle.toString().trim(),
+                        destinationUrl: isNullOrEmpty(pinDestinationUrl) ? "" : pinDestinationUrl.toString().trim(),
                         postStatus: postStatus,
                         boostPost: boostPost,
                         postPageInfos: selectedOptions?.map((obj) => ({
                             pageId: obj,
-                            id: getPostsByIdData?.postPageInfos.find(c => c.pageId === obj)?.id || null,
-                            socialMediaType: getPostsByIdData?.postPageInfos.find(c => c.pageId === obj)?.socialMediaType || null
+                            id: selectedAllDropdownData?.find(c=>c?.selectOption?.pageId===obj)?.selectOption?.id || null,
+                            socialMediaType: selectedAllDropdownData?.find(c=>c?.selectOption?.pageId===obj)?.group || null
                         })),
                         scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
@@ -467,7 +476,7 @@ const UpdatePost = () => {
                                                                                             onClick={(e) =>
                                                                                                 handleCheckboxChange({
                                                                                                     group: socialAccount?.provider,
-                                                                                                    selectOption: page
+                                                                                                    selectOption: {...page ,socialMediaType:socialAccount?.provider}
                                                                                                 })}
                                                                                         >
                                                                                             <div
@@ -613,6 +622,36 @@ const UpdatePost = () => {
                                                     </>
                                                 }
                                             </div>
+                                            {/* Pinterest Options*/}
+
+                                            {
+                                                selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&
+                                                <div className='post_caption_outer media_outer'>
+                                                    <div className='caption_header'>
+                                                        <h5 className='post_heading create_post_text'>Pinterest Only *</h5>
+
+
+                                                    </div>
+                                                    <div className='textarea_outer'>
+                                                        <h6 className='create_post_text'>Pin Title*</h6>
+                                                        <input type={"text"} className='textarea mt-2'
+                                                               value={pinTitle}
+                                                               onChange={(e) => {
+                                                                   e.preventDefault()
+                                                                   setPinTitle(e.target.value);
+                                                               }}/>
+                                                    </div>
+                                                    <div className='textarea_outer mt-2'>
+                                                        <h6 className='create_post_text'>Destination Url*</h6>
+                                                        <input type={"text"} className='textarea mt-2'
+                                                               value={pinDestinationUrl}
+                                                               onChange={(e) => {
+                                                                   e.preventDefault();
+                                                                   setPinDestinationUrl(e.target.value);
+                                                               }}/>
+                                                    </div>
+                                                </div>
+                                            }
 
                                             {/* post caption */}
 
@@ -768,7 +807,7 @@ const UpdatePost = () => {
                                     <div className='post_preview_outer'>
 
                                         {
-                                            allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option,index) => {
+                                            allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
 
                                                 let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 

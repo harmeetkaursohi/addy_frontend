@@ -8,9 +8,11 @@ import {
     getFormattedDemographicData,
     getFormattedPostTime
 } from "../../../utils/commonUtils.js";
+import {setAuthenticationHeader} from "../../auth/auth";
 
 
 export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWithInsights', async (data, thunkAPI) => {
+    console.log("data===>",data)
     switch (data?.socialMediaType) {
         case "INSTAGRAM": {
             const postIds = data.postIds.map(id => id).join(',');
@@ -31,6 +33,17 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
                 showErrorToast(error.response.data.error.message);
                 return thunkAPI.rejectWithValue(error.response);
             });
+        }
+        case "PINTEREST": {
+            const postIds = data.postIds.map(id => id).join(',');
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${postIds}`;
+            return await baseAxios.get(apiUrl,setAuthenticationHeader(data.token)).then(res => {
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+            break;
         }
         case "LINKEDIN": {
             break;

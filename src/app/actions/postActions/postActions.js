@@ -3,7 +3,7 @@ import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 import {getFacebookConnectedPageIdsReport} from "../../../services/facebookService";
 import {baseAxios, isErrorInInstagramMention} from "../../../utils/commonUtils";
-import {CouldNotPostComment, UpdateCommentFailedMsg} from "../../../utils/contantData";
+import {CouldNotPostComment, SocialAccountProvider, UpdateCommentFailedMsg} from "../../../utils/contantData";
 
 export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
@@ -14,7 +14,7 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
             return baseAxios.post(apiUrl, data?.data).then((response) => {
                 return response.data;
             }).catch((error) => {
-                showErrorToast(isErrorInInstagramMention(data?.socialMediaType,error)?CouldNotPostComment  : error.response.data.error.message);
+                showErrorToast(isErrorInInstagramMention(data?.socialMediaType, error) ? CouldNotPostComment : error.response.data.error.message);
                 return thunkAPI.rejectWithValue(error.message);
             });
 
@@ -29,12 +29,12 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
     }
 
 });
-export  const replyCommentOnPostAction=createAsyncThunk('post/replyCommentOnPostAction', async (data, thunkAPI) => {
+export const replyCommentOnPostAction = createAsyncThunk('post/replyCommentOnPostAction', async (data, thunkAPI) => {
     const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/replies?access_token=${data?.pageAccessToken}`;
     return baseAxios.post(apiUrl, data?.data).then((response) => {
         return response.data.data;
     }).catch((error) => {
-        showErrorToast(isErrorInInstagramMention(data?.socialMediaType,error)?CouldNotPostComment  : error.response.data.error.message);
+        showErrorToast(isErrorInInstagramMention(data?.socialMediaType, error) ? CouldNotPostComment : error.response.data.error.message);
         return thunkAPI.rejectWithValue(error.message);
     });
 
@@ -215,17 +215,17 @@ export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatc
 });
 
 
-    export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOnSocialMediaAction', async (data, thunkAPI) => {
+export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOnSocialMediaAction', async (data, thunkAPI) => {
 
     const formData = new FormData();
 
-    console.log("updatePostRequestDTO---->",data);
+    console.log("updatePostRequestDTO---->", data);
 
     // Create a FormData object to hold the data.
-    if (data.updatePostRequestDTO.caption !== null && data.updatePostRequestDTO.caption!=="null") {
+    if (data.updatePostRequestDTO.caption !== null && data.updatePostRequestDTO.caption !== "null") {
         formData.append('caption', data.updatePostRequestDTO.caption);
     }
-    if (data.updatePostRequestDTO.hashTag !== null && data.updatePostRequestDTO.hashTag!=="null") {
+    if (data.updatePostRequestDTO.hashTag !== null && data.updatePostRequestDTO.hashTag !== "null") {
         formData.append('hashTag', data.updatePostRequestDTO.hashTag);
     }
 
@@ -234,6 +234,10 @@ export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatc
 
     if (data.updatePostRequestDTO.scheduledPostDate !== null) {
         formData.append('scheduledPostDate', data.updatePostRequestDTO.scheduledPostDate);
+    }
+    if (data.updatePostRequestDTO.postPageInfos?.some(pageInfo => pageInfo?.socialMediaType === SocialAccountProvider.PINTEREST.toUpperCase())) {
+        formData.append('pinTitle', data.updatePostRequestDTO.pinTitle);
+        formData.append('pinDestinationUrl', data.updatePostRequestDTO.destinationUrl);
     }
 
     data.updatePostRequestDTO.postPageInfos.forEach((pageInfo, index) => {
@@ -252,7 +256,7 @@ export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatc
                 // formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE" : "VIDEO");
 
             }
-            if( attachment?.mediaType !== "null" && attachment?.mediaType !== null){
+            if (attachment?.mediaType !== "null" && attachment?.mediaType !== null) {
                 formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
             }
             if (attachment?.id !== null) {
@@ -329,6 +333,10 @@ export const createFacebookPostAction = createAsyncThunk('post/createFacebookPos
     }
     if (data.postRequestDto.hashTag !== null && data.postRequestDto.hashTag !== "null") {
         formData.append('hashTag', data.postRequestDto.hashTag);
+    }
+    if (data.postRequestDto.postPageInfos?.some(pageInfo => pageInfo?.provider === SocialAccountProvider.PINTEREST.toUpperCase())) {
+        formData.append('pinTitle', data.postRequestDto.pinTitle);
+        formData.append('pinDestinationUrl', data.postRequestDto.destinationUrl);
     }
 
     formData.append('boostPost', data.postRequestDto?.boostPost);

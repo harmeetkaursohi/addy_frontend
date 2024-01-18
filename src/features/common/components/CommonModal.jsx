@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getToken} from "../../../app/auth/auth.js";
 import ConfirmModal from "./ConfirmModal.jsx";
 import {SocialAccountProvider} from "../../../utils/contantData.js";
-import {facebookPageConnectAction} from "../../../utils/commonUtils.js";
+import { pageConnectAction} from "../../../utils/commonUtils.js";
 import default_user_icon from "../../../images/default_user_icon.svg"
 
 
@@ -19,7 +19,7 @@ const CommonModal = ({
                          noPageFoundMessage,
                      }) => {
 
-
+    console.log("socialMediaType,socialMediaType",socialMediaType)
     const handleClose = () => setShowModal(false);
     const dispatch = useDispatch();
     const token = getToken();
@@ -44,19 +44,8 @@ const CommonModal = ({
 
 
     const handleSubmit = () => {
-        switch (socialMediaType) {
-            case SocialAccountProvider.FACEBOOK: {
-                facebookPageConnectAction(dispatch, token, mediaPageData, socialMediaAccountInfo)
-                break;
-            }
-            //handle other case as well...
-            case SocialAccountProvider.INSTAGRAM: {
-                facebookPageConnectAction(dispatch, token, mediaPageData, socialMediaAccountInfo)
-                break;
-            }
-            default: {
-            }
-        }
+        pageConnectAction(dispatch, token, mediaPageData, socialMediaAccountInfo)
+
     }
 
 
@@ -67,7 +56,7 @@ const CommonModal = ({
                     <Modal.Header closeButton>
                         <Modal.Title className="commonmodal_header">
                             <div className='facebook_title'>
-                                <h2 className='cmn_text_style'>Please choose your page to connect with Addy</h2>
+                                <h2 className='cmn_text_style'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
                                 <p className='user_contents'>You have Personal Plan, you can add only one page.</p>
                                 <button className='cmn_blue_bg cmn_white_text upgrade_paln_btn'>Upgrade Plan</button>
                             </div>
@@ -91,6 +80,10 @@ const CommonModal = ({
                                                         {
                                                             socialMediaType === SocialAccountProvider.INSTAGRAM &&
                                                             <img src={data.profile_picture_url || default_user_icon}/>
+                                                        }
+                                                        {
+                                                            socialMediaType === SocialAccountProvider.PINTEREST &&
+                                                            <img src={data.media?.image_cover_url || default_user_icon}/>
                                                         }
 
                                                     </div>

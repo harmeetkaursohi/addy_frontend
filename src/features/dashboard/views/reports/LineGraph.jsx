@@ -26,19 +26,8 @@ export const LineGraph = ({reportData}) => {
 
     const [labels, setLabels] = useState(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
 
-    const [dataSet, setDataSet] = useState([
-        {
-            label: 'Account Reached', data: [0, 0, 0, 0, 0, 0],
-            borderColor: 'rgb(53, 162, 235)',
-            backgroundColor: 'rgba(53, 162, 235, 0.5)'
-        },
-        {
-            label: 'Followers',
-            data: [0, 0, 0, 0, 0, 0],
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        },
-    ],)
+    const [dataSet, setDataSet] = useState([],)
+
 
     const [data, setData] = useState({labels, datasets: dataSet});
 
@@ -69,14 +58,31 @@ export const LineGraph = ({reportData}) => {
 
 
     useEffect(() => {
-        if (reportData?.data && Array.isArray(reportData.data?.Followers)) {
-            setLabels(computeLabels(reportData?.data.Followers));
+        if (reportData?.data && Array.isArray(reportData.data?.Accounts_Reached)) {
+            setLabels(computeLabels(reportData?.data.Accounts_Reached));
+            let dataSets = []
+
 
             // Extract the percentage growth values and update dataSet
-            dataSet[0].data = reportData?.data.Accounts_Reached.map((entry) => entry.percentageGrowth);
-            dataSet[1].data = reportData?.data.Followers.map((entry) => entry.percentageGrowth);
+            if (reportData?.data.Accounts_Reached !== undefined) {
+                dataSets.push({
+                    label: 'Account Reached',
+                    data: reportData?.data.Accounts_Reached.map((entry) => entry.percentageGrowth),
+                    borderColor: 'rgb(53, 162, 235)',
+                    backgroundColor: 'rgba(53, 162, 235, 0.5)'
+                })
+            }
+            if (reportData?.data.Followers !== undefined) {
+                dataSets.push({
+                        label: 'Followers',
+                        data: reportData?.data.Followers.map((entry) => entry.percentageGrowth),
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                    }
+                )
+            }
 
-            setDataSet([...dataSet]);
+            setDataSet([...dataSets]);
 
         }
     }, [reportData]);

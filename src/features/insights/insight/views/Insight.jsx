@@ -49,6 +49,7 @@ const Insight = () => {
     const [connectedFacebookPages, setConnectedFacebookPages] = useState(null);
     const [connectedInstagramPages, setConnectedInstagramPages] = useState(null);
     const [connectedLinkedinPages, setConnectedLinkedinPages] = useState(null);
+    const [connectedPinterestBoards, setConnectedPinterestBoards] = useState(null);
     const [selectedPage, setSelectedPage] = useState(null);
     const [selectedPeriodForReachAndEngagement, setSelectedPeriodForReachAndEngagement] = useState(7);
     const [selectedPeriodForDemographics, setSelectedPeriodForDemographics] = useState("last_14_days");
@@ -80,6 +81,7 @@ const Insight = () => {
             socialAccountData["FACEBOOK"]?.length > 0 ? setConnectedFacebookPages(socialAccountData["FACEBOOK"][0]?.pageAccessToken) : setConnectedFacebookPages([])
             socialAccountData["INSTAGRAM"]?.length > 0 ? setConnectedInstagramPages(socialAccountData["INSTAGRAM"][0]?.pageAccessToken) : setConnectedInstagramPages([])
             socialAccountData["LINKEDIN"]?.length > 0 ? setConnectedLinkedinPages(socialAccountData["LINKEDIN"][0]?.pageAccessToken) : setConnectedLinkedinPages([])
+            socialAccountData["PINTEREST"]?.length > 0 ? setConnectedPinterestBoards(socialAccountData["PINTEREST"][0]?.pageAccessToken) : setConnectedPinterestBoards([])
         }
 
     }, [getAllByCustomerIdData])
@@ -104,6 +106,7 @@ const Insight = () => {
             dispatch(getPostDataWithInsights({
                 socialMediaType: selectedPage?.socialMediaType,
                 pageAccessToken: selectedPage?.access_token,
+                token: token,
                 postIds: getPostByPageIdAndPostStatusData?.data[selectedPage?.pageId]?.map(post => post.postPageInfos[0]?.socialMediaPostId)
             }))
         }
@@ -240,6 +243,46 @@ const Insight = () => {
 
                                             </ul>
                                         </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            }
+                            {
+                                enabledSocialMedia.isPinterestEnabled &&
+                                <Dropdown className="chooseplatfrom_dropdown_btn">
+                                    <Dropdown.Toggle
+                                        variant="success"
+                                        id="dropdown-basic"
+                                        className="instagram_dropdown"
+                                    >
+                                        <i className={`fa-brands fa-pinterest me-3 `}
+                                           style={{color: "#e60023", fontSize: "20px"}}/>
+
+                                        Pinterest
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+
+
+                                        <Dropdown.Item>
+                                            <ul className="Social_media_wrapper">
+                                                {
+                                                    connectedPinterestBoards?.map((board, index) => {
+                                                        return (
+                                                            <li key={index} onClick={() => {
+                                                                handleSelectPage("PINTEREST", board)
+                                                            }}>
+                                                                <div className="Social_media_platform">
+                                                                    <i className={`fa-brands fa-pinterest me-3 `}
+                                                                       style={{color: "#e60023", fontSize: "20px"}}/>
+                                                                    <h3>{board.name}</h3>
+                                                                </div>
+
+                                                            </li>
+                                                        );
+                                                    })
+                                                }
+                                            </ul>
+                                        </Dropdown.Item>
+
                                     </Dropdown.Menu>
                                 </Dropdown>
                             }
@@ -461,7 +504,7 @@ const Insight = () => {
                                                             {
                                                                 getTotalFollowersData?.loading ?
                                                                     <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : getTotalFollowersData?.data?.followers_count || "N/A"
+                                                                    </span> : (getTotalFollowersData?.data?.followers_count===null || getTotalFollowersData?.data?.followers_count===undefined)?  "N/A":getTotalFollowersData?.data?.followers_count
                                                             }
                                                         </h4>
                                                     </div>
