@@ -26,6 +26,7 @@ import {
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import default_user_icon from "../../../images/default_user_icon.svg";
+import {SocialAccountProvider} from "../../../utils/contantData";
 
 const CreatePost = () => {
 
@@ -45,6 +46,8 @@ const CreatePost = () => {
     const [aiGenerateHashTagModal, setAIGenerateHashTagModal] = useState(false);
     const [hashTag, setHashTag] = useState("");
     const [caption, setCaption] = useState("");
+    const [pinTitle, setPinTitle] = useState("");
+    const [pinDestinationUrl, setPinDestinationUrl] = useState("");
     const [scheduleDate, setScheduleDate] = useState("");
     const [scheduleTime, setScheduleTime] = useState("");
     const [boostPost, setBoostPost] = useState(false);
@@ -64,6 +67,7 @@ const CreatePost = () => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
+
 
     useEffect(() => {
         if (files && files.length <= 0) {
@@ -237,7 +241,7 @@ const CreatePost = () => {
 
         e.preventDefault();
         const userInfo = decodeJwtToken(token);
-        const isScheduledTimeProvided= !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+        const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
         if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
 
             if (!scheduleDate && !scheduleTime) {
@@ -256,9 +260,11 @@ const CreatePost = () => {
             customerId: userInfo?.customerId,
             postRequestDto: {
                 attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file})),
-                hashTag: hashTag?hashTag:"",
-                caption: caption?caption:"",
+                hashTag: hashTag ? hashTag : "",
+                caption: caption ?  caption : "",
+                pinTitle: pinTitle ? pinTitle  : "",
                 postStatus: postStatus,
+                destinationUrl: pinDestinationUrl ? pinDestinationUrl : "",
                 boostPost: boostPost,
                 postPageInfos: allOptions?.flatMap(obj => {
                     const provider = obj.group;
@@ -554,8 +560,39 @@ const CreatePost = () => {
                                             }
                                         </div>
 
-                                        {/* post caption */
+                                        {/* Pinterest Options*/}
+
+                                        {
+                                            selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&
+                                            <div className='post_caption_outer media_outer'>
+                                                <div className='caption_header'>
+                                                    <h5 className='post_heading create_post_text'>Pinterest Only *</h5>
+
+
+                                                </div>
+                                                <div className='textarea_outer'>
+                                                    <h6 className='create_post_text'>Pin Title*</h6>
+                                                    <input type={"text"} className='textarea mt-2'
+                                                           value={pinTitle}
+                                                           onChange={(e) => {
+                                                               e.preventDefault()
+                                                               setPinTitle(e.target.value);
+                                                           }}/>
+                                                </div>
+                                                <div className='textarea_outer mt-2'>
+                                                    <h6 className='create_post_text'>Destination Url*</h6>
+                                                    <input type={"text"} className='textarea mt-2'
+                                                           value={pinDestinationUrl}
+                                                           onChange={(e) => {
+                                                               e.preventDefault();
+                                                               setPinDestinationUrl(e.target.value);
+                                                           }}/>
+                                                </div>
+                                            </div>
                                         }
+
+                                        {/* post caption */}
+
                                         <div className='post_caption_outer media_outer'>
                                             <div className='caption_header'>
                                                 <h5 className='post_heading create_post_text'>Add Caption *</h5>
@@ -708,7 +745,7 @@ const CreatePost = () => {
                                 <div className='post_preview_outer'>
 
                                     {
-                                        allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option,index) => {
+                                        allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
 
                                             let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
@@ -724,7 +761,8 @@ const CreatePost = () => {
                                                             selectedFileType={selectedFileType}
                                                             caption={caption}
                                                             hashTag={hashTag}
-
+                                                            destinationUrl={pinDestinationUrl}
+                                                            pinTitle={pinTitle}
                                                         />
                                                     }
 

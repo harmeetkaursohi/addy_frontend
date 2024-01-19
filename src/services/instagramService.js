@@ -4,7 +4,8 @@ import {
     computeAndReturnSummedDateValues,
     generateUnixTimestampFor
 } from "../utils/commonUtils";
-import {computeInsightURL} from "./facebookService";
+import {useSelector} from "react-redux";
+import {SocialAccountProvider} from "../utils/contantData";
 
 export const getInstagramConnectedPageIdsReport = async (page) => {
     let initialObject = {
@@ -188,8 +189,8 @@ export const getDashBoardInstagramGraphReport = async (page, query) => {
             console.error('Error:', error);
         });
     }
-    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount));
-    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount));
+    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount,SocialAccountProvider.INSTAGRAM?.toUpperCase()));
+    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount,SocialAccountProvider.INSTAGRAM?.toUpperCase()));
 
     return initialObject;
 };

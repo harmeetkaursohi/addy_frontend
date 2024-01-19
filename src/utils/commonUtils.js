@@ -6,6 +6,7 @@ import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/fac
 import fb from "../images/fb.svg";
 import instagram_img from "../images/instagram.png";
 import linkedin from "../images/linkedin.svg";
+import Pinterest from "../images/pinterest_icon.svg";
 import {getAllSocialMediaPostsByCriteria} from "../app/actions/postActions/postActions";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
@@ -52,30 +53,63 @@ export const validationSchemas = {
 };
 
 
-export const computeAndSocialAccountJSONForFacebook = async (jsonObj, tokenProvider) => {
-    const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.accessToken,tokenProvider);
-    if (tokenProvider === SocialAccountProvider.INSTAGRAM) {
-        const facebookConnectedSocialMediaAccountsData = await getAllFacebookConnectedSocialMediaAccounts(longLivedToken);
-        const instagramBusinessAccount = facebookConnectedSocialMediaAccountsData?.filter(accountData => {
-            return accountData.hasOwnProperty("instagram_business_account")
-        })
-        if (isNullOrEmpty(instagramBusinessAccount)) {
-            return null;
-        }
-    }
+export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
     const token = localStorage.getItem("token");
     const decodeJwt = decodeJwtToken(token);
-    return {
+    const response = {
         customerId: decodeJwt.customerId, token: token, socialAccountData: {
-            name: jsonObj?.data?.name || null,
-            email: jsonObj?.data?.email || null,
-            imageUrl: jsonObj?.data?.picture?.data?.url || null,
-            provider: getKeyFromValueOfObject(SocialAccountProvider, tokenProvider) || null,
-            providerId: jsonObj?.data?.userID || null,
-            accessToken: longLivedToken || null,
             pageAccessToken: []
         }
     }
+    switch (tokenProvider) {
+        case SocialAccountProvider.INSTAGRAM:
+        case SocialAccountProvider.FACEBOOK: {
+            const longLivedToken = await exchangeForLongLivedToken(jsonObj?.data?.accessToken, tokenProvider);
+            if (tokenProvider === SocialAccountProvider.INSTAGRAM) {
+                const facebookConnectedSocialMediaAccountsData = await getAllFacebookConnectedSocialMediaAccounts(longLivedToken);
+                const instagramBusinessAccount = facebookConnectedSocialMediaAccountsData?.filter(accountData => {
+                    return accountData.hasOwnProperty("instagram_business_account")
+                })
+                if (isNullOrEmpty(instagramBusinessAccount)) {
+                    return null;
+                }
+            }
+
+            return {
+                ...response, socialAccountData: {
+                    ...response.socialAccountData,
+                    name: jsonObj?.data?.name || null,
+                    email: jsonObj?.data?.email || null,
+                    imageUrl: jsonObj?.data?.picture?.data?.url || null,
+                    provider: getKeyFromValueOfObject(SocialAccountProvider, tokenProvider) || null,
+                    providerId: jsonObj?.data?.userID || null,
+                    accessToken: longLivedToken || null,
+                }
+            }
+            break;
+        }
+        case SocialAccountProvider.PINTEREST : {
+            if (jsonObj.data.account_type !== "BUSINESS") {
+                return null;
+            }
+            return {
+                ...response, socialAccountData: {
+                    ...response.socialAccountData,
+                    name: jsonObj?.data?.business_name || null,
+                    email: jsonObj?.data?.email || null,
+                    imageUrl: jsonObj?.data?.profile_image || null,
+                    provider: getKeyFromValueOfObject(SocialAccountProvider, tokenProvider) || null,
+                    providerId: jsonObj?.data?.id || null,
+                    accessToken: jsonObj?.data?.access_token || null,
+                    refreshToken: jsonObj?.data?.refresh_token || null,
+                }
+            }
+        }
+
+
+    }
+
+
 }
 
 
@@ -97,19 +131,53 @@ export const cleanAndValidateRequestURL = (baseUrl, path, fields, token) => {
 }
 
 
-export const facebookPageConnectAction = (dispatch, token, facebookData, socialMediaAccountInfo) => {
+export const pageConnectAction = (dispatch, token, data, socialMediaAccountInfo) => {
     const decodeJwt = decodeJwtToken(token);
-    if (facebookData) {
-        const requestBody = {
-            customerId: decodeJwt?.customerId, pageAccessTokenDTO: {
-                pageId: facebookData?.id,
-                name: facebookData?.name,
-                imageUrl: socialMediaAccountInfo?.provider === "FACEBOOK" ? facebookData.picture?.data?.url : facebookData?.profile_picture_url,
-                about: facebookData?.about,
-                access_token: socialMediaAccountInfo?.provider === "FACEBOOK" ? facebookData?.access_token : socialMediaAccountInfo.accessToken,
-                socialMediaAccountId: socialMediaAccountInfo.id
-            }, token: token
+    let requestBody = {
+        customerId: decodeJwt?.customerId, pageAccessTokenDTO: {
+            pageId: data?.id,
+            name: data?.name,
+            socialMediaAccountId: socialMediaAccountInfo?.id
+        }, token: token
+    }
+    switch (socialMediaAccountInfo?.provider) {
+        case SocialAccountProvider.FACEBOOK.toUpperCase(): {
+            requestBody = {
+                ...requestBody, pageAccessTokenDTO: {
+                    ...requestBody.pageAccessTokenDTO,
+                    imageUrl: data.picture?.data?.url,
+                    about: data?.about,
+                    access_token: data?.access_token,
+                }
+            }
+            break;
         }
+        case SocialAccountProvider.INSTAGRAM.toUpperCase(): {
+            requestBody = {
+                ...requestBody, pageAccessTokenDTO: {
+                    ...requestBody.pageAccessTokenDTO,
+                    imageUrl: data?.profile_picture_url,
+                    about: data?.about,
+                    access_token: socialMediaAccountInfo.accessToken,
+                }
+            }
+            break;
+        }
+        case SocialAccountProvider.PINTEREST.toUpperCase(): {
+            requestBody = {
+                ...requestBody, pageAccessTokenDTO: {
+                    ...requestBody.pageAccessTokenDTO,
+                    imageUrl: data?.media?.image_cover_url,
+                    about: data?.description,
+                    access_token: socialMediaAccountInfo.accessToken,
+                }
+            }
+            break;
+        }
+        default: {
+        }
+    }
+    if (data) {
         dispatch(facebookPageConnect(requestBody)).then((response) => {
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: ["SCHEDULED"]}}));
@@ -265,7 +333,7 @@ export function computeImageURL(providerType) {
         case 'TWITTER':
             return "Twitter"
         default: {
-            return "Pinterest"
+            return Pinterest
         }
     }
 }
@@ -286,7 +354,7 @@ export function getEnumValue(providerType) {
     }
 }
 
-export const dateFormat = (date,appendURL) => {
+export const dateFormat = (date, appendURL) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -319,21 +387,35 @@ export const isPageConnected = (connectedPaged, currentPage) => {
     return c;
 }
 
-export const computeAndReturnSummedDateValues = (data) => {
+export const computeAndReturnSummedDateValues = (data, socialMediaType) => {
 
-    const result = data.reduce((accumulator, current) => {
-        const date = current.end_time.split('T')[0]; // Extract the date part
+    switch (socialMediaType) {
+        case "FACEBOOK":
+        case "INSTAGRAM": {
+            const result = data.reduce((accumulator, current) => {
+                const date = current.end_time.split('T')[0]; // Extract the date part
 
-        if (accumulator[date]) {
-            accumulator[date].value += current.value;
-        } else {
-            accumulator[date] = {"count": current.value, "endDate": date};
+                if (accumulator[date]) {
+                    accumulator[date].value += current.value;
+                } else {
+                    accumulator[date] = {"count": current.value, "endDate": date};
+                }
+
+                return accumulator;
+            }, {})
+
+            return Object.values(result);
         }
-
-        return accumulator;
-    }, {})
-
-    return Object.values(result);
+        case "PINTEREST": {
+            const result = data?.map(dailyMetricsData => {
+                return {
+                    endDate: dailyMetricsData?.date,
+                    count: dailyMetricsData?.metrics?.IMPRESSION
+                }
+            })
+            return result
+        }
+    }
 }
 
 
@@ -662,6 +744,14 @@ export const getQueryForGraphData = (socialMediaType, selectedGraphDays) => {
             }
 
         }
+        case "PINTEREST": {
+            //For Pinterest last 2 days data is not available and want to fetch one more day data for percentage check
+            return {
+                startDate: getDatesForPinterest(selectedGraphDays),
+                endDate: getDatesForPinterest("now")
+            }
+
+        }
 
 
     }
@@ -767,7 +857,7 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
                 }
 
             }
-            return formattedData
+            return formattedData;
         }
         case "INSTAGRAM": {
             const presentReach = data?.presentData?.filter(data => data?.name === "reach")[0]?.total_value?.value
@@ -790,7 +880,33 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
                     }
                 }
             }
-            return formattedData
+            return formattedData;
+        }
+        case "PINTEREST": {
+            const readyData=data?.all?.daily_metrics?.filter(insightsData=>insightsData?.data_status==="READY");
+            const totalDays=Math.floor(readyData?.length);
+            const previousData=readyData?.slice(0,totalDays/2);
+            const presentData=readyData?.slice((totalDays/2)*-1);
+            const dateRange=getFormattedPostTime(new Date(previousData[0]?.date),"DD-Mon")+"-"+getFormattedPostTime(new Date(previousData[(totalDays/2)-1]?.date),"DD-Mon")
+            const summedPreviousData = filterAndSumPinterestUserAnalyticsDataFor(previousData, previousData?.length, ["IMPRESSION", "ENGAGEMENT"]);
+            const summedPresentData = filterAndSumPinterestUserAnalyticsDataFor(presentData, presentData?.length, ["IMPRESSION", "ENGAGEMENT"]);
+            formattedData = {
+                engagement: {
+                    presentData: summedPresentData?.ENGAGEMENT,
+                    previousData: {
+                        data: summedPreviousData?.ENGAGEMENT,
+                        dateRange: dateRange
+                    }
+                },
+                reach: {
+                    presentData: summedPresentData?.IMPRESSION,
+                    previousData: {
+                        data: summedPreviousData?.IMPRESSION,
+                        dateRange: dateRange
+                    }
+                }
+            }
+            return formattedData;
         }
         case "LINKEDIN": {
             break;
@@ -812,22 +928,46 @@ export const getChartFormattedDataForInsights = (data, socialMediaType) => {
     if (data === null || data === undefined) {
         return []
     }
-    const accountsReachedPercentage = data?.Accounts_Reached?.map(reach => parseFloat(reach?.percentageGrowth));
-    const followersPercentage = data?.Followers?.map(followers => parseFloat(followers?.percentageGrowth));
+    switch(socialMediaType){
+        case "INSTAGRAM":
+        case "FACEBOOK":{
+            if(data?.Accounts_Reached!==undefined && data?.Followers!==undefined){
+                const accountsReachedPercentage = data?.Accounts_Reached?.map(reach => parseFloat(reach?.percentageGrowth));
+                const followersPercentage = data?.Followers?.map(followers => parseFloat(followers?.percentageGrowth)) ;
 
-    // Find the highest and lowest values
-    const highestValue = Math.max(...accountsReachedPercentage, ...followersPercentage);
-    const lowestValue = Math.min(...accountsReachedPercentage, ...followersPercentage);
-    let formattedDate = [];
-    for (let i = 0; i < data?.Accounts_Reached?.length; i++) {
-        formattedDate = [...formattedDate, {
-            x_axis: data?.Accounts_Reached[i]?.endDate,
-            account_reach: data?.Accounts_Reached[i]?.percentageGrowth.toFixed(2),
-            followers: data?.Followers[i]?.percentageGrowth.toFixed(2),
-            amt: i === 0 ? lowestValue : i === 1 ? highestValue : 0
-        }]
+                // Find the highest and lowest values
+                const highestValue = Math.max(...accountsReachedPercentage, ...followersPercentage);
+                const lowestValue = Math.min(...accountsReachedPercentage, ...followersPercentage);
+                let formattedDate = [];
+                for (let i = 0; i < data?.Accounts_Reached?.length; i++) {
+                    formattedDate = [...formattedDate, {
+                        x_axis: data?.Accounts_Reached[i]?.endDate,
+                        account_reach: data?.Accounts_Reached[i]?.percentageGrowth.toFixed(2),
+                        followers: data?.Followers[i]?.percentageGrowth.toFixed(2),
+                        amt: i === 0 ? lowestValue : i === 1 ? highestValue : 0
+                    }]
+                }
+                return formattedDate;
+            }
+        }
+        case "PINTEREST":{
+            const accountsReachedPercentage = data?.Accounts_Reached?.map(reach => parseFloat(reach?.percentageGrowth));
+            // Find the highest and lowest values
+            const highestValue = Math.max(...accountsReachedPercentage);
+            const lowestValue = Math.min(...accountsReachedPercentage);
+            let formattedDate = [];
+            for (let i = 0; i < data?.Accounts_Reached?.length; i++) {
+                formattedDate = [...formattedDate, {
+                    x_axis: data?.Accounts_Reached[i]?.endDate,
+                    account_reach: data?.Accounts_Reached[i]?.percentageGrowth.toFixed(2),
+                    amt: i === 0 ? lowestValue : i === 1 ? highestValue : 0
+                }]
+            }
+            return formattedDate;
+        }
     }
-    return formattedDate
+
+
 }
 export const extractParameterFromUrl = (url, parameterName) => {
     const urlSearchParams = new URLSearchParams(new URL(url).search);
@@ -837,9 +977,10 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
     if (data === null || data === undefined) {
         return []
     }
+
     let formattedData = {}
     switch (socialMediaType) {
-        case SocialAccountProvider.INSTAGRAM.toUpperCase(): {
+        case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
             formattedData = {
                 total_like: data?.like_count,
                 total_comment: data?.comments_count,
@@ -850,7 +991,7 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
             }
             return formattedData
         }
-        case SocialAccountProvider.FACEBOOK.toUpperCase(): {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
             formattedData = {
                 total_like: data?.likes?.summary?.total_count,
                 total_comment: data?.comments?.summary?.total_count,
@@ -861,7 +1002,18 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
             }
             return formattedData
         }
-        case SocialAccountProvider.LINKEDIN.toUpperCase(): {
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            formattedData = {
+                total_like: data?.pin_metrics?.all_time?.reaction,
+                total_comment: data?.pin_metrics?.all_time?.comment,
+                total_save: data?.pin_metrics?.all_time?.save,
+                account_reach: data?.pin_metrics?.all_time?.impression,
+                creation_time: data?.created_at,
+                attachments: getAttachmentsData(data, socialMediaType),
+            }
+            return formattedData;
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
             break;
         }
     }
@@ -872,7 +1024,7 @@ export const getAttachmentsData = (data, socialMediaType) => {
         return []
     }
     switch (socialMediaType) {
-        case SocialAccountProvider.FACEBOOK.toUpperCase(): {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
             if (data?.attachments?.data[0]?.type === undefined) {
                 return []
             } else if (data?.attachments?.data[0]?.type === "album") {
@@ -900,7 +1052,7 @@ export const getAttachmentsData = (data, socialMediaType) => {
             }
 
         }
-        case SocialAccountProvider.INSTAGRAM.toUpperCase(): {
+        case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
             if (data?.media_type === undefined) {
                 return []
             } else if (data?.media_type === "IMAGE") {
@@ -925,7 +1077,25 @@ export const getAttachmentsData = (data, socialMediaType) => {
                 }]
             }
         }
-        case SocialAccountProvider.LINKEDIN.toUpperCase(): {
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            if (data?.media === undefined || data?.media === null) {
+                return []
+            }
+            if (data?.media?.media_type === "image") {
+                return [{
+                    mediaType: "IMAGE",
+                    imageURL: data?.media?.images?.["1200x"]?.url,
+                    pageId: data?.id,
+                }]
+            } else {
+                return [{
+                    mediaType: "VIDEO",
+                    sourceURL: data?.media?.video_url !== null ? data?.media?.video_url : data?.media?.images?.["1200x"]?.url,
+                    pageId: data?.id,
+                }]
+            }
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
             break;
         }
     }
@@ -1062,10 +1232,93 @@ export const getFormattedDemographicData = (data, key, socialMediaType) => {
     }
 }
 
-export const computeStartEndDate = (date,appendPart) => {
+export const computeStartEndDate = (date, appendPart) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     const isoDateString = `${year}-${month}-${day}${appendPart}`;
     return isoDateString;
+}
+export const formatMessage = (message = null, dynamicValue) => {
+    if (isNullOrEmpty(message)) {
+        return ""
+    }
+    return message.replace("{0}", dynamicValue)
+}
+export const getDatesForPinterest = (daysAgo) => {
+    if (isNullOrEmpty(daysAgo.toString())) {
+        return "";
+    }
+    const date = daysAgo === "now" ? new Date() : new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+
+}
+export const filterAndSumPinterestUserAnalyticsDataFor = (data = null, days = null, fieldsToFilter = []) => {
+    let response = {
+        PIN_CLICK_RATE: "N/A",
+        VIDEO_START: "N/A",
+        SAVE_RATE: "N/A",
+        QUARTILE_95_PERCENT_VIEW: "N/A",
+        SAVE: "N/A",
+        OUTBOUND_CLICK_RATE: "N/A",
+        VIDEO_V50_WATCH_TIME: "N/A",
+        ENGAGEMENT_RATE: "N/A",
+        OUTBOUND_CLICK: "N/A",
+        PIN_CLICK: "N/A",
+        VIDEO_10S_VIEW: "N/A",
+        IMPRESSION: "N/A",
+        ENGAGEMENT: "N/A",
+        VIDEO_MRC_VIEW: "N/A",
+        VIDEO_AVG_WATCH_TIME: "N/A"
+    }
+    console.log("data",data)
+    console.log("days",days)
+    console.log("fieldsToFilter",fieldsToFilter)
+    if (data === null || fieldsToFilter === null || fieldsToFilter?.length===0) {
+        return response;
+    }
+    response = {}
+    const totalDays = data?.length;
+    for (let i = 1; i <= days; i++) {
+        const singleDayData = data[totalDays - i];
+        if (singleDayData?.data_status === "READY") {
+            for (let j = 0; j < fieldsToFilter?.length; j++) {
+                const key = fieldsToFilter[j];
+                response = {
+                    ...response,
+                    [key]: (response[key] === null || response[key] === undefined) ? singleDayData?.metrics[key] : singleDayData?.metrics[key] + response[key]
+                }
+            }
+        }
+
+    }
+    console.log("response,res",response)
+    return response;
+}
+export const getFormattedTotalFollowersCountData = (data, socialMediaType) => {
+    let response;
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase():
+        case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
+            response = {
+                id: data?.id,
+                name: data?.name,
+                followers_count: data?.followers_count
+            }
+            break;
+        }
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            response = {
+                id: data?.id,
+                name: data?.business_name,
+                followers_count: data?.follower_count
+            }
+            break;
+        }
+    }
+    return response;
 }

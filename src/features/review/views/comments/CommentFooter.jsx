@@ -1,4 +1,5 @@
 import {TbShare3} from "react-icons/tb";
+import {FaRegSave} from "react-icons/fa";
 import {AiFillHeart, AiOutlineHeart} from "react-icons/ai";
 import {getFormattedDate, isNullOrEmpty} from "../../../../utils/commonUtils";
 import EmojiPicker, {EmojiStyle} from "emoji-picker-react";
@@ -59,7 +60,13 @@ const CommentFooter = ({postData, postPageData}) => {
                     break;
                 }
                 case "PINTEREST": {
-
+                    const data=postPageData[postData?.id];
+                    setCommonFooterDataObject({
+                        total_likes: data?.pin_metrics?.all_time?.reaction || 0,
+                        total_comments: data?.pin_metrics?.all_time?.comment || 0,
+                        total_saves:data?.pin_metrics?.all_time?.save || 0,
+                        can_comment: false
+                    })
                 }
                 case "LINKEDIN": {
 
@@ -171,15 +178,19 @@ const CommentFooter = ({postData, postPageData}) => {
         <div className="comments_footer">
 
             <div className="padding-x-20 footer_media d-flex gap-3 ">
-                <p>
+                <p title={"Likes"}>
                     <i className={"far fa-thumbs-up me-1 like-icon"}/>{commonFooterDataObject.total_likes}
                 </p>
-                <p><i
+                <p title={"Comments"}><i
                     className={"far fa-comment me-1"}/>{commonFooterDataObject.total_comments}
                 </p>
                 {
                     postData?.socialMediaType === "FACEBOOK" &&
-                    <p><TbShare3 className={""}/> {commonFooterDataObject.total_shares} </p>
+                    <p title={"Shares"}><TbShare3 className={""}/> {commonFooterDataObject.total_shares} </p>
+                }
+                {
+                    postData?.socialMediaType === "PINTEREST" &&
+                    <p title={"Saves"}><FaRegSave className={"save-icon"}/> {commonFooterDataObject.total_saves} </p>
                 }
 
             </div>

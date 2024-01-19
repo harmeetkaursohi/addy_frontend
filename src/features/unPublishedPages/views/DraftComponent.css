@@ -248,7 +248,7 @@ button.outline_btn.schedule_btn {
 @media screen and (max-width:767px) {
     button.outline_btn.schedule_btn{
         margin-top: 10px;
-        
+
     }
     div.draft_button_outer{
         display: block !important;

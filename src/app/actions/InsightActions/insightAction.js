@@ -3,14 +3,16 @@ import {showErrorToast} from "../../../features/common/components/Toast";
 import {
     baseAxios,
     extractParameterFromUrl,
-    generateUnixTimestampFor,
+    generateUnixTimestampFor, getDatesForPinterest,
     getFormattedAccountReachAndEngagementData,
     getFormattedDemographicData,
-    getFormattedPostTime
+    getFormattedPostTime, getFormattedTotalFollowersCountData
 } from "../../../utils/commonUtils.js";
+import {setAuthenticationHeader} from "../../auth/auth";
 
 
 export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWithInsights', async (data, thunkAPI) => {
+    console.log("data===>", data)
     switch (data?.socialMediaType) {
         case "INSTAGRAM": {
             const postIds = data.postIds.map(id => id).join(',');
@@ -32,6 +34,17 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
                 return thunkAPI.rejectWithValue(error.response);
             });
         }
+        case "PINTEREST": {
+            const postIds = data.postIds.map(id => id).join(',');
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${postIds}`;
+            return await baseAxios.get(apiUrl, setAuthenticationHeader(data.token)).then(res => {
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+            break;
+        }
         case "LINKEDIN": {
             break;
         }
@@ -43,9 +56,18 @@ export const getTotalFollowers = createAsyncThunk('insight/getTotalFollowers', a
         case "FACEBOOK": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}?fields=name,followers_count&access_token=${data?.pageAccessToken}`;
             return await baseAxios.get(apiUrl).then(res => {
-                return res.data;
+                return getFormattedTotalFollowersCountData(res.data, "FACEBOOK");
             }).catch(error => {
                 showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+        }
+        case "PINTEREST": {
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/user_account`;
+            return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then(res => {
+                return getFormattedTotalFollowersCountData(res.data, "PINTEREST");
+            }).catch(error => {
+                showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
             });
         }
@@ -57,6 +79,7 @@ export const getTotalFollowers = createAsyncThunk('insight/getTotalFollowers', a
 
 });
 export const getAccountReachedAndAccountEngaged = createAsyncThunk('insight/getAccountReachedAndAccountEngaged', async (data, thunkAPI) => {
+
     switch (data?.socialMediaType) {
         case "INSTAGRAM": {
             return await getAccountReachedAndAccountEngagedForInstagram(data, thunkAPI).then((res) => {
@@ -71,6 +94,16 @@ export const getAccountReachedAndAccountEngaged = createAsyncThunk('insight/getA
                 showErrorToast(error.response.data.error.message);
                 return thunkAPI.rejectWithValue(error.response);
             });
+        }
+        case "PINTEREST": {
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/user_account/analytics?start_date=${getDatesForPinterest((data?.period * 2) + 1)}&end_date=${getDatesForPinterest("now")}`;
+            return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then(res => {
+                return getFormattedAccountReachAndEngagementData(res?.data, data?.socialMediaType);
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+            break;
         }
         case "LINKEDIN": {
             break;
@@ -191,10 +224,10 @@ const getFacebookDemographicData = async (data, thunkAPI) => {
     await baseAxios.get(apiUrl).then(demographicData => {
         formattedApiResponse = {
             ...formattedApiResponse,
-            city:  getFormattedDemographicData(demographicData, "CITY", "FACEBOOK"),
-            country:getFormattedDemographicData(demographicData, "COUNTRY", "FACEBOOK"),
-            gender:getFormattedDemographicData(demographicData, "GENDER", "FACEBOOK"),
-            age:getFormattedDemographicData(demographicData, "AGE", "FACEBOOK")
+            city: getFormattedDemographicData(demographicData, "CITY", "FACEBOOK"),
+            country: getFormattedDemographicData(demographicData, "COUNTRY", "FACEBOOK"),
+            gender: getFormattedDemographicData(demographicData, "GENDER", "FACEBOOK"),
+            age: getFormattedDemographicData(demographicData, "AGE", "FACEBOOK")
         }
 
 

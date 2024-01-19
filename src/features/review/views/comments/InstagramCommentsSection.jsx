@@ -144,12 +144,12 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                 <div
                                                     className="user_impressions d-flex gap-3 mt-2 mb-2">
                                                     <p>{getCommentCreationTime(comment?.timestamp)}</p>
-                                                    <p className={comment?.user_likes ? "cursor_pointer color-blue" : "cursor_pointer "}
-                                                       onClick={() => {
-                                                           // comment?.user_likes ? handleDisLikeComment(comment?.id) : handleLikeComment(comment?.id)
-                                                       }}
+                                                    {/*<p className={comment?.user_likes ? "cursor_pointer color-blue" : "cursor_pointer "}*/}
+                                                    {/*   onClick={() => {*/}
+                                                    {/*       // comment?.user_likes ? handleDisLikeComment(comment?.id) : handleLikeComment(comment?.id)*/}
+                                                    {/*   }}*/}
 
-                                                    >Like</p>
+                                                    {/*>Like</p>*/}
 
 
                                                     {comment?.like_count > 0 &&
@@ -228,10 +228,10 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                                                         <div
                                                                                             className="user_impressions d-flex gap-3 mt-2 mb-2">
                                                                                             <p>{getCommentCreationTime(childComment?.timestamp)}</p>
-                                                                                            <p className={"cursor_pointer "}
-                                                                                               onClick={() => {
-                                                                                               }}
-                                                                                            >Like</p>
+                                                                                            {/*<p className={"cursor_pointer "}*/}
+                                                                                            {/*   onClick={() => {*/}
+                                                                                            {/*   }}*/}
+                                                                                            {/*>Like</p>*/}
 
 
                                                                                             {childComment?.like_count > 0 &&

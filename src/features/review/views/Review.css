@@ -38,6 +38,10 @@
 .z-index-1{
     z-index: 1;
 }
+.save-icon{
+    height: 18px;
+    width: 18px;
+}
 span.highlight {
 
     color: #0064e0;
@@ -46,6 +50,17 @@ span.highlight {
     text-align: center;
     min-width: 150px;
     transform: translate(10px,6rem);
+}
+.pinterest-comments-section{
+    font-size: 14px;
+    opacity: .8;
+    height: 60%;
+    display: grid;
+    place-content: center;
+}
+.review-post-icon{
+    height:27px;
+    width: 27px;
 }
 .no-cmnt-outer {
     display: flex;

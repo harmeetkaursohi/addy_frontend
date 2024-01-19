@@ -17,8 +17,6 @@ function Carousel({selectedPage}) {
     const getPostByPageIdAndPostStatusData = useSelector(state => state.post.getPostByPageIdAndPostStatusReducer);
     const [hasPosts, setHasPosts] = useState(null);
 
-    console.log("getPostDataWithInsightsDatagetPostDataWithInsightsData", getPostDataWithInsightsData?.data)
-    console.log("getPostByPageIdAndPostStatusDatagetPostByPageIdAndPostStatusData", getPostByPageIdAndPostStatusData?.data)
     var settings = {
         dots: false,
         infinite: true,
@@ -46,10 +44,11 @@ function Carousel({selectedPage}) {
                         <div className={"text-center select-account-txt"}>No posts to display</div> :
                         <Slider {...settings}>
                             {
-                                Object.keys(getPostDataWithInsightsData?.data || {})?.length > 0 && Object.keys(getPostDataWithInsightsData?.data)?.map(key => {
+                                Object.keys(getPostDataWithInsightsData?.data || {})?.length > 0 && Object.keys(getPostDataWithInsightsData?.data)?.map((key, index) => {
                                     const formattedData = getFormattedPostDataForSlider(getPostDataWithInsightsData?.data[key], selectedPage?.socialMediaType)
+                                    console.log("formattedData==>", formattedData,selectedPage?.socialMediaType)
                                     return (
-                                        <div className="caresoul_wrapper_box">
+                                        <div className="caresoul_wrapper_box" key={index}>
                                             <div className="">
                                                 <div className="">
                                                     <div className="slider_innnerContent">
@@ -90,10 +89,18 @@ function Carousel({selectedPage}) {
                                                                             Comments</h4>
                                                                         <h3>{formattedData?.total_comment}</h3>
                                                                     </li>
-                                                                    <li>
-                                                                        <h4 className="cmn_small_heading">Total Share</h4>
-                                                                        <h3>{formattedData?.total_share}</h3>
-                                                                    </li>
+                                                                    {
+                                                                        selectedPage?.socialMediaType === "PINTEREST" ? <li>
+                                                                                <h4 className="cmn_small_heading">Total
+                                                                                    Save</h4>
+                                                                                <h3>{formattedData?.total_save}</h3>
+                                                                            </li> :
+                                                                            <li>
+                                                                                <h4 className="cmn_small_heading">Total
+                                                                                    Share</h4>
+                                                                                <h3>{formattedData?.total_share}</h3>
+                                                                            </li>
+                                                                    }
                                                                 </ul>
                                                             </Card.Body>
                                                         </Card>

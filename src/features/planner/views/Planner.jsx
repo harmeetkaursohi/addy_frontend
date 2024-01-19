@@ -3,6 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import './Planner.css'
 import SideBar from '../../sidebar/views/Layout'
 import instagram_img from '../../../images/instagram.png'
+import pinterest_icon from '../../../images/pinterest_icon.svg'
 import linkedin from '../../../images/linkedin.svg'
 import jsondata from '../../../locales/data/initialdata.json'
 import {Link} from "react-router-dom";
@@ -92,8 +93,6 @@ const Planner = () => {
     }, [getAllPlannerPostsData]);
 
 
-
-
     useEffect(() => {
 
         if (Object.keys(baseSearchQuery).length > 0) {
@@ -143,12 +142,13 @@ const Planner = () => {
 
                     {event?._def?.extendedProps?.childCardContent?.map((c, index) => {
                         return (
-                            <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}
-                                 onClick={(e) => {
-                                 }}>
-                                <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>
-                                <h3>{c.title}</h3>
-                            </div>
+
+                                <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}
+                                     onClick={(e) => {
+                                     }}>
+                                    <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>
+                                    <h3>{c.title}</h3>
+                                </div>
                         )
                     })}
                 </div>
@@ -234,7 +234,15 @@ const Planner = () => {
         setBatchIds(batchIdList);
 
         dispatch(getAllPlannerPostAction({
-            token: token, query: JSON.parse(JSON.stringify({postStatus: ["PUBLISHED","SCHEDULED"], batchIds: batchIdList,creationDateRange:{startDate:computeStartEndDate(startDate,'T00:01:00.000Z'),endDate:computeStartEndDate(startDate,'T23:59:59.000Z')}}))
+            token: token,
+            query: JSON.parse(JSON.stringify({
+                postStatus: ["PUBLISHED", "SCHEDULED"],
+                batchIds: batchIdList,
+                creationDateRange: {
+                    startDate: computeStartEndDate(startDate, 'T00:01:00.000Z'),
+                    endDate: computeStartEndDate(startDate, 'T23:59:59.000Z')
+                }
+            }))
         }));
 
         setShowMorePlannerModel(true);

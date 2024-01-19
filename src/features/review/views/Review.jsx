@@ -11,6 +11,7 @@ import CommonLoader from "../../common/components/CommonLoader";
 import {FaArrowCircleRight} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
 import {getPostPageInfoAction} from "../../../app/actions/postActions/postActions";
+import {getToken} from "../../../app/auth/auth";
 
 const Review = () => {
 
@@ -23,11 +24,14 @@ const Review = () => {
         setResults,
         hasNextPage
     } = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
+    const token=getToken();
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
     const [resetData, isResetData] = useState(false);
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
+
+    console.log("postPageInfoData------->",postPageInfoData)
 
     useEffect(() => {
         if (resetData) {
@@ -41,6 +45,7 @@ const Review = () => {
     useEffect(() => {
         if (postData && postData !== undefined) {
             const requestBody = {
+                token: token,
                 postIds: [postData?.id],
                 pageAccessToken: postData?.page?.access_token,
                 socialMediaType: postData?.socialMediaType
@@ -110,7 +115,7 @@ const Review = () => {
                                         <th>{jsondata.socialmedia}</th>
                                         <th>{jsondata.likes}</th>
                                         <th>{jsondata.comments}</th>
-                                        <th>{jsondata.share}</th>
+                                        <th>{jsondata.share}/{jsondata.save}</th>
                                         <th>{jsondata.action}</th>
                                     </tr>
 
@@ -135,7 +140,7 @@ const Review = () => {
                                                     </td>
                                                     <td>
                                                         <div className={"d-flex align-items-center"}>
-                                                            <img className={"me-2"}
+                                                            <img className={"me-2 review-post-icon"}
                                                                  src={computeImageURL(post?.socialMediaType)}/>
                                                             <span>{post?.page?.name}</span>
                                                         </div>
@@ -144,7 +149,7 @@ const Review = () => {
                                                     </td>
                                                     <td>{post?.likes} Likes</td>
                                                     <td>{post?.comments} Comments</td>
-                                                    <td>{post?.shares} Share</td>
+                                                    <td>{post?.shares}  {post?.socialMediaType==="PINTEREST" ?"Save":"Share"} </td>
                                                     <td>
 
                                                         <div className={"view-post-txt cursor-pointer"}

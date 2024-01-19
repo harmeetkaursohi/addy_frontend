@@ -81,7 +81,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
             //total lifeTime followers
             await baseAxios.get(fullPathTotalFollowers)
-                .then((response) => {
+                .then((response) => {x
                     const pageData = response.data;
                     if (pageData) {
                         initialObject.Followers.lifeTime += pageData?.followers_count || 0;
@@ -190,9 +190,8 @@ export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
     }
 
 
-    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount));
-    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount));
-    console.log("initialObject--->1",initialObject);
+    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount,SocialAccountProvider.FACEBOOK?.toUpperCase()));
+    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount,SocialAccountProvider.FACEBOOK?.toUpperCase()));
     return initialObject;
 };
 

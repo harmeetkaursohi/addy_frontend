@@ -5,6 +5,7 @@ const SocialMediaProviderBadge = ({provider}) => {
     const providers = {
         FACEBOOK: {className: "fa-brands fa-facebook", text: 'Facebook'},
         INSTAGRAM: {className: "fa-brands fa-instagram insta-icon", text: 'Instagram'},
+        PINTEREST: {className: "fa-brands fa-pinterest pinterest-icon", text: 'Pinterest'},
         LINKEDIN: {className: "fa-brands fa-linkedin", text: 'LinkedIn'},
         TWITTER: {className: "fa-brands fa-twitter", text: 'Twitter'},
     };
