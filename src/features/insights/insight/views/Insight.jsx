@@ -107,9 +107,11 @@ const Insight = () => {
         switch (socialMediaType) {
             case "FACEBOOK": {
                 selectedPage = connectedFacebookPages?.find(page => page?.id === pageId)
+                break;
             }
             case "INSTAGRAM": {
                 selectedPage = connectedInstagramPages?.find(page => page?.id === pageId)
+                break;
             }
         }
         setSelectedPageForGraph({...selectedPage, socialMediaType: socialMediaType})

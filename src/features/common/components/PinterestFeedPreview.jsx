@@ -17,15 +17,7 @@ const PinterestFeedPreview = ({
                                   hashTag,
                                   destinationUrl = null
                               }) => {
-    console.log("previewTitle", previewTitle)
-    console.log("pageName", pageName)
-    console.log("userData", userData)
-    console.log("files", files)
-    console.log("selectedFileType", selectedFileType)
-    console.log("pageImage", pageImage)
-    console.log("caption", caption)
-    console.log("previewTitle", previewTitle)
-    console.log("destinationUrl", destinationUrl)
+
     return (
         <>
             <h2 className={"cmn_white_text feed_preview facebookFeedpreview_text"}>{previewTitle}</h2>
