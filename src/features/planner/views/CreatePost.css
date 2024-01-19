@@ -79,6 +79,7 @@ overflow-y:scroll;
     border: 1px solid #DCDCDC;
     background: #FFF;
     padding: 7px;
+    margin-left: 10px;
 }
 .selectedPages{
     border: 1px solid #048709;

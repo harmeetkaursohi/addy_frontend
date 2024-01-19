@@ -41,16 +41,19 @@ const Draft=()=>{
                 <SideBar/>
                 <div className='cmn_container'>
                     <div className='planner_outer'>
+
                         <div className='planner_header_outer'>
                             <div className='planner_header'>
                                 <h2>{jsondata.sidebarContent.draft }</h2>
                                 <h6>Here you find all the upcoming Posts you scheduled.</h6>
                             </div>
-                            <div>
+
+                            <div className="draft_createPost_outer">
 
                                 <Link className='cmn_btn_color create_post_btn cmn_white_text'
                                       to="/planner/post">{jsondata.createpost}</Link>
                             </div>
+
                         </div>
 
 
@@ -73,7 +76,7 @@ const Draft=()=>{
                                 />
 
 
-                            < /div>
+                            </div>
 
                             <div className={"hr-line"}></div>
 

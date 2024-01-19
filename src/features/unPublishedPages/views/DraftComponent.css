@@ -55,7 +55,7 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 30px 20px;
+    padding: 20px;
     /*flex-wrap: wrap;*/
     /*position: relative;*/
 }
@@ -137,7 +137,7 @@ posted-on-txt {
 }
 
 .card-body.post_card {
-    padding: 20px;
+    padding: 0px 20px;
     padding-bottom: 24px;
 }
 
@@ -153,7 +153,7 @@ span.post_caption {
 h3.caption {
     color: #5F6D7E;
     font-family: Nunito;
-    font-size: 18px;
+    font-size: 15px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -203,4 +203,58 @@ button.outline_btn.schedule_btn {
     background: #FFF;
     padding: 10px 15px;
     font-size: 10px;
+}
+
+/* new css */
+.post_card_inner_content{
+    height: 100px;
+    overflow-y: scroll;
+}
+.post_card_inner_content::-webkit-scrollbar-thumb {
+    background-color: transparent ;
+}
+
+.post_card_inner_content::-webkit-scrollbar-track {
+    background-color: transparent ;
+}
+.hash_tags_outer_container{
+    height: 67px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.hash_tags_outer_container::-webkit-scrollbar-thumb {
+    background-color: transparent ;
+}
+
+.hash_tags_outer_container::-webkit-scrollbar-track {
+    background-color: transparent ;
+}
+@media screen and (max-width:1024px) {
+    button.outline_btn.schedule_btn{
+        margin-top: 10px;
+    }
+    div.draft_button_outer{
+        display: block !important;
+    }
+}
+@media screen and (max-width:991px) {
+    button.outline_btn.schedule_btn{
+        margin-top: 0px;
+    }
+    div.draft_button_outer{
+        display: flex !important;
+    }
+}
+@media screen and (max-width:767px) {
+    button.outline_btn.schedule_btn{
+        margin-top: 10px;
+        
+    }
+    div.draft_button_outer{
+        display: block !important;
+        margin-left: 0px !important;
+    }
+    .draft-heading{
+        display: block;
+    }
 }

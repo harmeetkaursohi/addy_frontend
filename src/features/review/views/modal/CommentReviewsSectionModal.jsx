@@ -46,7 +46,10 @@ const CommentReviewsSectionModal = ({
     return (
         <>
             <div className='comment_review_container'>
-                <Modal   show={isOpenCommentReviewsSectionModal} onHide={handleClose} className={"modal-xl view_profile"}>
+                <Modal
+                
+                   show={isOpenCommentReviewsSectionModal} onHide={handleClose}
+                    className={"modal-xl view_profile"}>
 
                     <Modal.Body>
                         <Row className="m-0">
@@ -76,7 +79,7 @@ const CommentReviewsSectionModal = ({
                             <Col lg="6" className="p-0">
                                 <div className="comment_section">
                                     <div className="comments_messages pb-0">
-                                        <div className="main_user">
+                                        <div className="">
                                             <div className="user_card main_user">
                                                 <div className="user_image">
                                                     <img src={postData?.page?.imageUrl} alt=""/>

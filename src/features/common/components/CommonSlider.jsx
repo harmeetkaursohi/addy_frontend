@@ -1,7 +1,7 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import React from "react";
+import React, { useState } from "react";
 import noImageAvailable from "../../../images/no_img_posted.png"
 import ReactPlayer from "react-player";
 import CommentText from "../../review/views/comments/CommentText";
@@ -28,14 +28,17 @@ const CommonSlider = ({
         slidesToScroll: 1
     };
 
+
+    const[showText,setShowText]=useState(false)
+
     return (
         <>
 
             {viewSimilarToSocialMedia ?
                 <div>
-                    <div className={"ms-2"}>
+                    <div className={`ms-2  ${showText ?"feed_preview_Caption_outer":"Caption_outer" }`}>
                         <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
-                                     className={"highlight cursor-pointer"}/>
+                                     className={"highlight cursor-pointer"} setShowText={setShowText} showText={showText} />
                     </div>
                     <Slider {...settings} >
 

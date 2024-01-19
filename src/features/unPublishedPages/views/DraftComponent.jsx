@@ -78,14 +78,14 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
             <div className="card-body post_card">
 
 
-                <div className={""}>
+                <div className={"post_card_inner_content"}>
                     <span className={"post_caption"}>Post Caption:</span>
                     <h3 className={"caption"}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
                 </div>
 
                 <div className={""}>
                     <h5>Hashtags: </h5>
-                    <div className={'mb-2'}>
+                    <div className={'hash_tags_outer_container mb-2'}>
                         <span
                             className={"hash_tags"}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
                     </div>
@@ -99,7 +99,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                     </div>
                 </div>
 
-                <div className="mt-4 ms-3 d-flex gap-2 justify-content-center align-items-center">
+                <div className="mt-4 ms-3 d-flex gap-2 justify-content-center align-items-center draft_button_outer">
                     <GenericButtonWithLoader className={"post_now cmn_bg_btn loading"} label={"Post Now"}
                                              isLoading={batchIdData?.id===batchToDelete && publishedPostData?.loading}
                                              onClick={handlePublishedPost}

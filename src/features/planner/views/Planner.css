@@ -351,7 +351,9 @@ button.fc--button.fc-button.fc-button-primary {
     .create_post_btn {
         margin-top: 12px
     }
-
+    .draft_createPost_outer{
+        margin-top: 10px;
+    }
     .event_group h5 {
         font-size: 13px;
     }
@@ -365,7 +367,7 @@ button.fc--button.fc-button.fc-button-primary {
     .planner_header h6 {
         font-size: 14px;
     }
-
+    
     .events_wrapper {
         display: block;
 

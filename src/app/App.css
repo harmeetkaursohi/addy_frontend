@@ -231,3 +231,20 @@ h2.openEye {
     }
 
 }
+
+/* new css======= */
+.feed_preview_Caption_outer{
+    overflow-y: scroll;
+    height: 170px;
+    overflow-x: hidden;
+}
+.Caption_outer{
+    text-overflow: ellipsis;
+    /* width: 394px; */
+    cursor: pointer;
+    overflow-x: hidden;
+    text-wrap: nowrap;
+}
+
+
+

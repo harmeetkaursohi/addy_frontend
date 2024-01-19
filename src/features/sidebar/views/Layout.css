@@ -24,6 +24,7 @@
 }
 
 ::-webkit-scrollbar-track {
+  
     background-color: #f1ecec;
 }
 
@@ -202,6 +203,7 @@ border-radius: 20px;
 @media screen and (max-width: 767px) {
     div.sidebar_item_outers {
         padding: 11px 16px;
+        gap: 20px;
     }
 
     .sidebar_content {
