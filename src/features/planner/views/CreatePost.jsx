@@ -68,7 +68,6 @@ const CreatePost = () => {
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
 
-
     useEffect(() => {
         if (files && files.length <= 0) {
             setDisableVideo(false);

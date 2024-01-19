@@ -242,8 +242,12 @@ h2.openEye {
     text-overflow: ellipsis;
     /* width: 394px; */
     cursor: pointer;
-    overflow-x: hidden;
-    text-wrap: nowrap;
+    overflow: hidden;
+    /* text-wrap: nowrap;  */
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: 3
+
 }
 
 
