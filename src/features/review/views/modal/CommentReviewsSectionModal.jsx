@@ -29,7 +29,6 @@ const CommentReviewsSectionModal = ({
     const dispatch = useDispatch();
     const handleClose = () => setOpenCommentReviewsSectionModal(false);
 
-
     useEffect(() => {
         if (postData && postPageInfoData) {
             setPostPageData(postData?.socialMediaType === "FACEBOOK" ? postPageInfoData[postData?.id] : postPageInfoData)
@@ -46,7 +45,7 @@ const CommentReviewsSectionModal = ({
     return (
         <>
             <div className='comment_review_container'>
-                <Modal   show={isOpenCommentReviewsSectionModal} onHide={handleClose} className={"modal-xl view_profile"}>
+                <Modal show={isOpenCommentReviewsSectionModal} onHide={handleClose} className={"modal-xl view_profile"}>
 
                     <Modal.Body>
                         <Row className="m-0">
@@ -106,6 +105,20 @@ const CommentReviewsSectionModal = ({
                                         {
                                             postData?.socialMediaType === "INSTAGRAM" &&
                                             <InstagramCommentsSection postData={postData} postPageData={postPageData}/>
+                                        }
+                                        {
+                                            postData?.socialMediaType === "PINTEREST" &&
+                                            <div className={"text-center pinterest-comments-section "}>
+                                                <div className={"mb-3"}>
+                                                    Regrettably, comments for Pinterest are not accessible here. Kindly
+                                                    click the link below to explore and engage with comments on
+                                                    Pinterest. We appreciate your understanding.
+                                                </div>
+                                                <a title={"View on Pinterest"} href={`https://in.pinterest.com/pin/${postData?.id}/`} target={"_blank"}>
+                                                    View on Pinterest
+                                                </a>
+
+                                            </div>
                                         }
 
                                     </div>

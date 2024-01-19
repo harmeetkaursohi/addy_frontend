@@ -98,16 +98,11 @@ export const getSocialMediaReportByProviderTypeAction = createAsyncThunk('social
 
 export const getSocialMediaGraphByProviderTypeAction = createAsyncThunk('socialAccount/getSocialMediaGraphByProviderTypeAction', async (data, thunkAPI) => {
 
-    console.log("reportSelectPages---->",data);
-
     switch (data?.socialMediaType) {
-
         case "FACEBOOK": {
             return await  getDashBoardFacebookGraphReport(data?.pages || [],data?.query || {}).then((res)=>{
                 return res;
             }).catch(error=>{
-                console.log("error---->",res);
-
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
             })
@@ -119,7 +114,6 @@ export const getSocialMediaGraphByProviderTypeAction = createAsyncThunk('socialA
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
             })
-
         }
         case  "PINTEREST": {
             return await  getDashBoardPinterestGraphReport(data?.pages[0] ,data?.query || {},data?.token).then((res)=>{

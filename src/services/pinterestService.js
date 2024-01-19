@@ -44,7 +44,7 @@ export const getPinterestAccountReport = async (page, token) => {
                 if (pinterestAccountData) {
                     initialObject.Accounts_Reached.lifeTime = pinterestAccountData?.all?.summary_metrics?.IMPRESSION;
                     initialObject.Post_Activity.lifeTime = pinterestAccountData?.all?.summary_metrics?.ENGAGEMENT;
-                    const filteredDataFor30Days = filterAndSumPinterestUserAnalyticsDataFor(pinterestAccountData, 30, ["IMPRESSION", "ENGAGEMENT"]);
+                    const filteredDataFor30Days = filterAndSumPinterestUserAnalyticsDataFor(pinterestAccountData?.all?.daily_metrics, 30, ["IMPRESSION", "ENGAGEMENT"]);
                     initialObject.Accounts_Reached.month = filteredDataFor30Days?.IMPRESSION;
                     initialObject.Post_Activity.month = filteredDataFor30Days?.ENGAGEMENT;
                 }

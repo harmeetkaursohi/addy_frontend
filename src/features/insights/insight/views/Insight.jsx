@@ -54,7 +54,9 @@ const Insight = () => {
     const [selectedPeriodForReachAndEngagement, setSelectedPeriodForReachAndEngagement] = useState(7);
     const [selectedPeriodForDemographics, setSelectedPeriodForDemographics] = useState("last_14_days");
     const [selectedPeriodForGraph, setSelectedPeriodForGraph] = useState(7);
+    const [selectedPageForGraph, setSelectedPageForGraph] = useState(null);
     const [selectedInsightSection, setSelectedInsightSection] = useState("Overview");
+
 
     const handleSelectedPeriodForReachAndEngagement = (e) => {
         e.preventDefault();
@@ -88,8 +90,30 @@ const Insight = () => {
 
     const handleSelectPage = (socialMediaType, page) => {
         setSelectedPage({...page, socialMediaType: socialMediaType})
+        if (selectedPageForGraph === null || selectedPageForGraph?.socialMediaType !== socialMediaType) {
+            setSelectedPageForGraph({...page, socialMediaType: socialMediaType})
+        }
+        if (socialMediaType === "PINTEREST") {
+            const button = document.getElementById('uncontrolled-tab-example-tab-Overview');
+            if(button){
+                button.click();
+            }
+            setSelectedInsightSection("Overview")
+        }
     }
 
+    const handleGraphPageChange = (pageId, socialMediaType) => {
+        let selectedPage;
+        switch (socialMediaType) {
+            case "FACEBOOK": {
+                selectedPage = connectedFacebookPages?.find(page => page?.id === pageId)
+            }
+            case "INSTAGRAM": {
+                selectedPage = connectedInstagramPages?.find(page => page?.id === pageId)
+            }
+        }
+        setSelectedPageForGraph({...selectedPage, socialMediaType: socialMediaType})
+    }
     useEffect(() => {
         if (selectedPage !== null && selectedPage !== undefined) {
             dispatch(getPostByPageIdAndPostStatus({
@@ -115,6 +139,7 @@ const Insight = () => {
     useEffect(() => {
         if (selectedPage !== null && selectedPage !== undefined && selectedInsightSection === "Overview") {
             dispatch(getTotalFollowers({
+                token: token,
                 socialMediaType: selectedPage?.socialMediaType,
                 pageAccessToken: selectedPage?.access_token,
                 pageId: selectedPage?.pageId
@@ -127,6 +152,7 @@ const Insight = () => {
     useEffect(() => {
         if (selectedPeriodForReachAndEngagement && selectedPage && selectedInsightSection === "Overview") {
             dispatch(getAccountReachedAndAccountEngaged({
+                token: token,
                 socialMediaType: selectedPage?.socialMediaType,
                 pageAccessToken: selectedPage?.access_token,
                 pageId: selectedPage?.pageId,
@@ -139,12 +165,13 @@ const Insight = () => {
     useEffect(() => {
         if (selectedPeriodForGraph && selectedPage && selectedInsightSection === "Overview") {
             dispatch(getSocialMediaGraphByProviderTypeAction({
-                pages: [selectedPage],
-                socialMediaType: selectedPage?.socialMediaType,
+                token: token,
+                pages: [selectedPageForGraph],
+                socialMediaType: selectedPageForGraph?.socialMediaType,
                 query: getQueryForGraphData(selectedPage?.socialMediaType, selectedPeriodForGraph + 2)
             }))
         }
-    }, [selectedPeriodForGraph, selectedPage, selectedInsightSection])
+    }, [selectedPeriodForGraph, selectedPageForGraph, selectedInsightSection])
 
     useEffect(() => {
         if (selectedPeriodForDemographics && selectedPage && selectedInsightSection === "Demographics") {
@@ -504,7 +531,7 @@ const Insight = () => {
                                                             {
                                                                 getTotalFollowersData?.loading ?
                                                                     <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : (getTotalFollowersData?.data?.followers_count===null || getTotalFollowersData?.data?.followers_count===undefined)?  "N/A":getTotalFollowersData?.data?.followers_count
+                                                                    </span> : (getTotalFollowersData?.data?.followers_count === null || getTotalFollowersData?.data?.followers_count === undefined) ? "N/A" : getTotalFollowersData?.data?.followers_count
                                                             }
                                                         </h4>
                                                     </div>
@@ -516,13 +543,53 @@ const Insight = () => {
                                                     <div className="page_title_header">
                                                         <div className="page_title_container">
                                                             <div className="page_title_dropdown">
-                                                                <select className="page_title_options cmn_headings">
-                                                                    <option>Page title</option>
-                                                                    <option>22</option>
-                                                                    <option>22</option>
-                                                                </select>
+                                                                {
+                                                                    selectedPage?.socialMediaType === "PINTEREST" &&
+                                                                    <div>
+                                                                        {
+                                                                            getAllByCustomerIdData?.data?.find(socialMediaAccount => socialMediaAccount?.provider === "PINTEREST")?.name
+                                                                        }
+                                                                    </div>
+
+                                                                }
+                                                                {
+                                                                    selectedPage?.socialMediaType === "FACEBOOK" &&
+                                                                    <select
+                                                                        className="page_title_options cmn_headings"
+                                                                        value={selectedPageForGraph?.id}
+                                                                        onChange={(e) => {
+                                                                            handleGraphPageChange(e.target.value, "FACEBOOK")
+                                                                        }}>
+                                                                        {
+                                                                            connectedFacebookPages?.map((page, index) => {
+                                                                                return <option key={index}
+                                                                                               value={page?.id}>{page.name}</option>
+                                                                            })
+                                                                        }
+                                                                    </select>
+
+                                                                }
+                                                                {
+                                                                    selectedPage?.socialMediaType === "INSTAGRAM" &&
+                                                                    <select
+                                                                        className="page_title_options cmn_headings"
+                                                                        value={selectedPageForGraph?.id}
+                                                                        onChange={(e) => {
+                                                                            handleGraphPageChange(e.target.value, "INSTAGRAM")
+                                                                        }}>
+                                                                        {
+                                                                            connectedInstagramPages?.map((page, index) => {
+                                                                                return <option key={index}
+                                                                                               value={page?.id}>{page.name}</option>
+                                                                            })
+                                                                        }
+                                                                    </select>
+
+                                                                }
+
+
                                                                 <h3 className="cmn_white_text instagram_overview_heading">
-                                                                    Instagram Overview
+                                                                    {selectedPage?.socialMediaType} Overview
                                                                 </h3>
                                                             </div>
                                                             <div className="days_outer">
@@ -540,100 +607,47 @@ const Insight = () => {
                                                             isLoading={reportGraphSectionData?.loading}
                                                             graphData={reportGraphSectionData?.data}/>
                                                         <div className="account_info mt-2">
-                                                            <div className="account_group">
-                                                                <div className="account_reached cmn_chart_btn"></div>
-                                                                <h4 className="cmn_headings">Accounts Reached</h4>
-                                                            </div>
-                                                            <div className="account_group">
-                                                                <div className="total_follower cmn_chart_btn"></div>
-                                                                <h4 className="cmn_headings">Total Followers</h4>
-                                                            </div>
+                                                            {
+                                                                reportGraphSectionData?.data?.Accounts_Reached !== undefined &&
+                                                                <div className="account_group">
+                                                                    <div
+                                                                        className="account_reached cmn_chart_btn"></div>
+                                                                    <h4 className="cmn_headings">Accounts Reached</h4>
+                                                                </div>
+                                                            }
+                                                            {
+                                                                reportGraphSectionData?.data?.Followers !== undefined &&
+                                                                <div className="account_group">
+                                                                    <div className="total_follower cmn_chart_btn"></div>
+                                                                    <h4 className="cmn_headings">Total Followers</h4>
+                                                                </div>
+                                                            }
+
+
                                                         </div>
                                                     </div>
                                                 </div>
                                             </Tab>
                                             {/* Demographics tabs */}
-                                            <Tab eventKey="Demographics" title="Demographics">
-                                                <h2 className="cmn_headings Review_Heading">Review your audience
-                                                    demographics as
-                                                    of
-                                                    the last day of the reporting period.</h2>
-                                                <div className="row">
-                                                    {/* audience by age */}
-                                                    <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">
+                                            {
+                                                selectedPage?.socialMediaType !== "PINTEREST" &&
+                                                <Tab eventKey="Demographics" title="Demographics">
+                                                    <h2 className="cmn_headings Review_Heading">Review your audience
+                                                        demographics as
+                                                        of
+                                                        the last day of the reporting period.</h2>
+                                                    <div className="row">
+                                                        {/* audience by age */}
+                                                        <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">
 
-                                                        <div
-                                                            className={"Donuts_container cmn_insight_wrapper_style " + (getDemographicsInsightData?.data?.age !== null ? "cmn_height" : "")}>
-                                                            <h3 className="cmn_text_style">Audience by Age</h3>
+                                                            <div
+                                                                className={"Donuts_container cmn_insight_wrapper_style " + (getDemographicsInsightData?.data?.age !== null ? "cmn_height" : "")}>
+                                                                <h3 className="cmn_text_style">Audience by Age</h3>
 
-                                                            {
-                                                                getDemographicsInsightData?.loading ?
-                                                                    <div
-                                                                        className="text-center insights-loader cmn_height">
-                                                                        <RotatingLines
-                                                                            strokeColor="#F07C33"
-                                                                            strokeWidth="5"
-                                                                            animationDuration="0.75"
-                                                                            width="96"
-                                                                            visible={true}
-                                                                        />
-                                                                    </div> :
-                                                                    getDemographicsInsightData?.data?.age ?
-                                                                        <HorizontalBarChart
-                                                                            graphData={getDemographicsInsightData?.data?.age}/> :
-                                                                        <DemographicDatNotAvailable
-                                                                            message={"Demographic data isn't available for age"}/>
-                                                            }
-
-                                                        </div>
-
-
-                                                        {/* audience top countries */}
-                                                        <div className="Donuts_container cmn_insight_wrapper_style ">
-                                                            <h3 className="cmn_text_style">Audience Top Countries</h3>
-
-                                                            {
-                                                                getDemographicsInsightData?.loading ?
-                                                                    <div
-                                                                        className="text-center insights-loader mt-5">
-                                                                        <RotatingLines
-                                                                            strokeColor="#F07C33"
-                                                                            strokeWidth="5"
-                                                                            animationDuration="0.75"
-                                                                            width="96"
-                                                                            visible={true}
-                                                                        />
-                                                                    </div> :
-                                                                    getDemographicsInsightData?.data?.country ?
-                                                                        <ul className="top_city_list scroll-y">
-                                                                            {
-                                                                                getDemographicsInsightData?.data?.country?.map(country => {
-                                                                                    const countryInfo = Country.getCountryByCode(country?.country_code);
-                                                                                    return (
-                                                                                        <li>
-                                                                                            <h4>{countryInfo?.flag + " " + countryInfo?.name} </h4>
-                                                                                            <h4>{country?.value}</h4>
-                                                                                        </li>
-                                                                                    );
-                                                                                })
-                                                                            } </ul> :
-                                                                        <DemographicDatNotAvailable
-                                                                            message={"Demographic data isn't available for country"}/>
-                                                            }
-
-
-                                                        </div>
-                                                    </div>
-
-                                                    {/* audience by gender */}
-                                                    <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">
-                                                        <div>
-                                                            <div className="Donuts_container cmn_insight_wrapper_style">
-                                                                <h3 className="cmn_text_style">Audience by Gender</h3>
                                                                 {
                                                                     getDemographicsInsightData?.loading ?
                                                                         <div
-                                                                            className="text-center insights-loader cmn_height ">
+                                                                            className="text-center insights-loader cmn_height">
                                                                             <RotatingLines
                                                                                 strokeColor="#F07C33"
                                                                                 strokeWidth="5"
@@ -642,55 +656,125 @@ const Insight = () => {
                                                                                 visible={true}
                                                                             />
                                                                         </div> :
-                                                                        getDemographicsInsightData?.data?.gender ?
-                                                                            <DonutChart
-                                                                                graphData={getDemographicsInsightData?.data?.gender}/> :
+                                                                        getDemographicsInsightData?.data?.age ?
+                                                                            <HorizontalBarChart
+                                                                                graphData={getDemographicsInsightData?.data?.age}/> :
                                                                             <DemographicDatNotAvailable
-                                                                                message={"Demographic data isn't available for gender"}/>
+                                                                                message={"Demographic data isn't available for age"}/>
                                                                 }
 
                                                             </div>
 
+
+                                                            {/* audience top countries */}
+                                                            <div
+                                                                className="Donuts_container cmn_insight_wrapper_style ">
+                                                                <h3 className="cmn_text_style">Audience Top
+                                                                    Countries</h3>
+
+                                                                {
+                                                                    getDemographicsInsightData?.loading ?
+                                                                        <div
+                                                                            className="text-center insights-loader mt-5">
+                                                                            <RotatingLines
+                                                                                strokeColor="#F07C33"
+                                                                                strokeWidth="5"
+                                                                                animationDuration="0.75"
+                                                                                width="96"
+                                                                                visible={true}
+                                                                            />
+                                                                        </div> :
+                                                                        getDemographicsInsightData?.data?.country ?
+                                                                            <ul className="top_city_list scroll-y">
+                                                                                {
+                                                                                    getDemographicsInsightData?.data?.country?.map(country => {
+                                                                                        const countryInfo = Country.getCountryByCode(country?.country_code);
+                                                                                        return (
+                                                                                            <li>
+                                                                                                <h4>{countryInfo?.flag + " " + countryInfo?.name} </h4>
+                                                                                                <h4>{country?.value}</h4>
+                                                                                            </li>
+                                                                                        );
+                                                                                    })
+                                                                                } </ul> :
+                                                                            <DemographicDatNotAvailable
+                                                                                message={"Demographic data isn't available for country"}/>
+                                                                }
+
+
+                                                            </div>
                                                         </div>
 
-                                                        {/* audience top cities */}
-                                                        <div className="Donuts_container cmn_insight_wrapper_style ">
-                                                            <h3 className="cmn_text_style">Audience Top Cities</h3>
+                                                        {/* audience by gender */}
+                                                        <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">
+                                                            <div>
+                                                                <div
+                                                                    className="Donuts_container cmn_insight_wrapper_style">
+                                                                    <h3 className="cmn_text_style">Audience by
+                                                                        Gender</h3>
+                                                                    {
+                                                                        getDemographicsInsightData?.loading ?
+                                                                            <div
+                                                                                className="text-center insights-loader cmn_height ">
+                                                                                <RotatingLines
+                                                                                    strokeColor="#F07C33"
+                                                                                    strokeWidth="5"
+                                                                                    animationDuration="0.75"
+                                                                                    width="96"
+                                                                                    visible={true}
+                                                                                />
+                                                                            </div> :
+                                                                            getDemographicsInsightData?.data?.gender ?
+                                                                                <DonutChart
+                                                                                    graphData={getDemographicsInsightData?.data?.gender}/> :
+                                                                                <DemographicDatNotAvailable
+                                                                                    message={"Demographic data isn't available for gender"}/>
+                                                                    }
 
-                                                            {
-                                                                getDemographicsInsightData?.loading ?
-                                                                    <div
-                                                                        className="text-center insights-loader mt-5">
-                                                                        <RotatingLines
-                                                                            strokeColor="#F07C33"
-                                                                            strokeWidth="5"
-                                                                            animationDuration="0.75"
-                                                                            width="96"
-                                                                            visible={true}
-                                                                        />
-                                                                    </div> :
-                                                                    getDemographicsInsightData?.data?.city ?
+                                                                </div>
 
-                                                                        <ul className="top_city_list scroll-y">
-                                                                            {
-                                                                                getDemographicsInsightData?.data?.city?.map(city => {
-                                                                                    return (
-                                                                                        <li>
-                                                                                            <h4>{city?.city_name}</h4>
-                                                                                            <h4>{city?.value}</h4>
-                                                                                        </li>
-                                                                                    );
-                                                                                })
-                                                                            }
-                                                                        </ul> :
-                                                                        <DemographicDatNotAvailable
-                                                                            message={"Demographic data isn't available for city"}/>
-                                                            }
+                                                            </div>
+
+                                                            {/* audience top cities */}
+                                                            <div
+                                                                className="Donuts_container cmn_insight_wrapper_style ">
+                                                                <h3 className="cmn_text_style">Audience Top Cities</h3>
+
+                                                                {
+                                                                    getDemographicsInsightData?.loading ?
+                                                                        <div
+                                                                            className="text-center insights-loader mt-5">
+                                                                            <RotatingLines
+                                                                                strokeColor="#F07C33"
+                                                                                strokeWidth="5"
+                                                                                animationDuration="0.75"
+                                                                                width="96"
+                                                                                visible={true}
+                                                                            />
+                                                                        </div> :
+                                                                        getDemographicsInsightData?.data?.city ?
+
+                                                                            <ul className="top_city_list scroll-y">
+                                                                                {
+                                                                                    getDemographicsInsightData?.data?.city?.map(city => {
+                                                                                        return (
+                                                                                            <li>
+                                                                                                <h4>{city?.city_name}</h4>
+                                                                                                <h4>{city?.value}</h4>
+                                                                                            </li>
+                                                                                        );
+                                                                                    })
+                                                                                }
+                                                                            </ul> :
+                                                                            <DemographicDatNotAvailable
+                                                                                message={"Demographic data isn't available for city"}/>
+                                                                }
+                                                            </div>
                                                         </div>
+
                                                     </div>
-
-                                                </div>
-                                            </Tab>
+                                                </Tab>
+                                            }
                                         </Tabs>
                                     </div>
                                 </>

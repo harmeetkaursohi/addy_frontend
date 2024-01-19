@@ -410,7 +410,7 @@ export const computeAndReturnSummedDateValues = (data, socialMediaType) => {
             const result = data?.map(dailyMetricsData => {
                 return {
                     endDate: dailyMetricsData?.date,
-                    count:dailyMetricsData?.metrics?.IMPRESSION
+                    count: dailyMetricsData?.metrics?.IMPRESSION
                 }
             })
             return result
@@ -857,7 +857,7 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
                 }
 
             }
-            return formattedData
+            return formattedData;
         }
         case "INSTAGRAM": {
             const presentReach = data?.presentData?.filter(data => data?.name === "reach")[0]?.total_value?.value
@@ -880,7 +880,33 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
                     }
                 }
             }
-            return formattedData
+            return formattedData;
+        }
+        case "PINTEREST": {
+            const readyData=data?.all?.daily_metrics?.filter(insightsData=>insightsData?.data_status==="READY");
+            const totalDays=Math.floor(readyData?.length);
+            const previousData=readyData?.slice(0,totalDays/2);
+            const presentData=readyData?.slice((totalDays/2)*-1);
+            const dateRange=getFormattedPostTime(new Date(previousData[0]?.date),"DD-Mon")+"-"+getFormattedPostTime(new Date(previousData[(totalDays/2)-1]?.date),"DD-Mon")
+            const summedPreviousData = filterAndSumPinterestUserAnalyticsDataFor(previousData, previousData?.length, ["IMPRESSION", "ENGAGEMENT"]);
+            const summedPresentData = filterAndSumPinterestUserAnalyticsDataFor(presentData, presentData?.length, ["IMPRESSION", "ENGAGEMENT"]);
+            formattedData = {
+                engagement: {
+                    presentData: summedPresentData?.ENGAGEMENT,
+                    previousData: {
+                        data: summedPreviousData?.ENGAGEMENT,
+                        dateRange: dateRange
+                    }
+                },
+                reach: {
+                    presentData: summedPresentData?.IMPRESSION,
+                    previousData: {
+                        data: summedPreviousData?.IMPRESSION,
+                        dateRange: dateRange
+                    }
+                }
+            }
+            return formattedData;
         }
         case "LINKEDIN": {
             break;
@@ -902,22 +928,46 @@ export const getChartFormattedDataForInsights = (data, socialMediaType) => {
     if (data === null || data === undefined) {
         return []
     }
-    const accountsReachedPercentage = data?.Accounts_Reached?.map(reach => parseFloat(reach?.percentageGrowth));
-    const followersPercentage = data?.Followers?.map(followers => parseFloat(followers?.percentageGrowth));
+    switch(socialMediaType){
+        case "INSTAGRAM":
+        case "FACEBOOK":{
+            if(data?.Accounts_Reached!==undefined && data?.Followers!==undefined){
+                const accountsReachedPercentage = data?.Accounts_Reached?.map(reach => parseFloat(reach?.percentageGrowth));
+                const followersPercentage = data?.Followers?.map(followers => parseFloat(followers?.percentageGrowth)) ;
 
-    // Find the highest and lowest values
-    const highestValue = Math.max(...accountsReachedPercentage, ...followersPercentage);
-    const lowestValue = Math.min(...accountsReachedPercentage, ...followersPercentage);
-    let formattedDate = [];
-    for (let i = 0; i < data?.Accounts_Reached?.length; i++) {
-        formattedDate = [...formattedDate, {
-            x_axis: data?.Accounts_Reached[i]?.endDate,
-            account_reach: data?.Accounts_Reached[i]?.percentageGrowth.toFixed(2),
-            followers: data?.Followers[i]?.percentageGrowth.toFixed(2),
-            amt: i === 0 ? lowestValue : i === 1 ? highestValue : 0
-        }]
+                // Find the highest and lowest values
+                const highestValue = Math.max(...accountsReachedPercentage, ...followersPercentage);
+                const lowestValue = Math.min(...accountsReachedPercentage, ...followersPercentage);
+                let formattedDate = [];
+                for (let i = 0; i < data?.Accounts_Reached?.length; i++) {
+                    formattedDate = [...formattedDate, {
+                        x_axis: data?.Accounts_Reached[i]?.endDate,
+                        account_reach: data?.Accounts_Reached[i]?.percentageGrowth.toFixed(2),
+                        followers: data?.Followers[i]?.percentageGrowth.toFixed(2),
+                        amt: i === 0 ? lowestValue : i === 1 ? highestValue : 0
+                    }]
+                }
+                return formattedDate;
+            }
+        }
+        case "PINTEREST":{
+            const accountsReachedPercentage = data?.Accounts_Reached?.map(reach => parseFloat(reach?.percentageGrowth));
+            // Find the highest and lowest values
+            const highestValue = Math.max(...accountsReachedPercentage);
+            const lowestValue = Math.min(...accountsReachedPercentage);
+            let formattedDate = [];
+            for (let i = 0; i < data?.Accounts_Reached?.length; i++) {
+                formattedDate = [...formattedDate, {
+                    x_axis: data?.Accounts_Reached[i]?.endDate,
+                    account_reach: data?.Accounts_Reached[i]?.percentageGrowth.toFixed(2),
+                    amt: i === 0 ? lowestValue : i === 1 ? highestValue : 0
+                }]
+            }
+            return formattedDate;
+        }
     }
-    return formattedDate
+
+
 }
 export const extractParameterFromUrl = (url, parameterName) => {
     const urlSearchParams = new URLSearchParams(new URL(url).search);
@@ -1225,13 +1275,16 @@ export const filterAndSumPinterestUserAnalyticsDataFor = (data = null, days = nu
         VIDEO_MRC_VIEW: "N/A",
         VIDEO_AVG_WATCH_TIME: "N/A"
     }
-    if (data === null || fieldsToFilter === null) {
+    console.log("data",data)
+    console.log("days",days)
+    console.log("fieldsToFilter",fieldsToFilter)
+    if (data === null || fieldsToFilter === null || fieldsToFilter?.length===0) {
         return response;
     }
     response = {}
-    const totalDays = data?.all?.daily_metrics?.length;
+    const totalDays = data?.length;
     for (let i = 1; i <= days; i++) {
-        const singleDayData = data?.all?.daily_metrics[totalDays - i];
+        const singleDayData = data[totalDays - i];
         if (singleDayData?.data_status === "READY") {
             for (let j = 0; j < fieldsToFilter?.length; j++) {
                 const key = fieldsToFilter[j];
@@ -1242,6 +1295,30 @@ export const filterAndSumPinterestUserAnalyticsDataFor = (data = null, days = nu
             }
         }
 
+    }
+    console.log("response,res",response)
+    return response;
+}
+export const getFormattedTotalFollowersCountData = (data, socialMediaType) => {
+    let response;
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase():
+        case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
+            response = {
+                id: data?.id,
+                name: data?.name,
+                followers_count: data?.followers_count
+            }
+            break;
+        }
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            response = {
+                id: data?.id,
+                name: data?.business_name,
+                followers_count: data?.follower_count
+            }
+            break;
+        }
     }
     return response;
 }

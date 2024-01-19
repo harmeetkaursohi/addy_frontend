@@ -141,6 +141,7 @@ export const likePostAction = createAsyncThunk('post/likePostAction', async (dat
 
 
 export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoAction', async (data, thunkAPI) => {
+
     switch (data?.socialMediaType) {
 
         case "FACEBOOK": {
@@ -157,6 +158,16 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
         case  "INSTAGRAM": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.postIds[0]}?access_token=${data?.pageAccessToken}&fields=id,caption,is_comment_enabled,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url},comments{id,text,timestamp,like_count,from,user{profile_picture_url},replies{id,text,from,timestamp,like_count,parent_id}}`;
             return await baseAxios.get(apiUrl).then(res => {
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+            break;
+        }
+        case  "PINTEREST": {
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${data?.postIds[0]}`;
+            return await baseAxios.get(apiUrl,setAuthenticationHeader(data?.token)).then(res => {
                 return res.data;
             }).catch(error => {
                 showErrorToast(error.response.data.message);
