@@ -1,26 +1,27 @@
 import jsondata from "../../../locales/data/initialdata.json";
-import {LoginSocialFacebook, LoginSocialPinterest} from "reactjs-social-login";
+import {LoginSocialFacebook, LoginSocialLinkedin, LoginSocialPinterest} from "reactjs-social-login";
 import {
     computeAndSocialAccountJSON,
-    formatMessage,
-    getInitialLetterCap,
+    formatMessage, getFormattedLinkedinObject,
+    getInitialLetterCap, getLinkedInUrnId,
     isNullOrEmpty
 } from "../../../utils/commonUtils";
-import {FacebookLoginButton} from "react-social-login-buttons";
+import {Linkedin_URN_Id_Types} from "../../../utils/contantData";
+import {FacebookLoginButton, LinkedInLoginButton} from "react-social-login-buttons";
 import fb_img from "../../../images/fb.svg";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {
     disconnectSocialAccountAction,
-    getAllConnectedSocialAccountAction, getAllInstagramBusinessAccounts, getAllPinterestBoards,
+    getAllConnectedSocialAccountAction, getAllInstagramBusinessAccounts, getAllLinkedinPages, getAllPinterestBoards,
     socialAccountConnectActions
 } from "../../../app/actions/socialAccountActions/socialAccountActions";
 import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import {showErrorToast} from "../../common/components/Toast";
 import Swal from "sweetalert2";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
-import FacebookModal from "../../modals/views/facebookModal/FacebookModal";
+import ConnectPagesModal from "../../modals/views/facebookModal/ConnectPagesModal";
 import {
     disconnectDisabledPages,
     getAllFacebookPages,
@@ -32,6 +33,7 @@ import {
     SocialAccountProvider
 } from "../../../utils/contantData";
 import AccountAlreadyConnectedWarningModal from "./AccountAlreadyConnectedWarningModal";
+import {SomethingWentWrong} from "../../../utils/contantData";
 
 const SocialAccounts = () => {
 
@@ -47,13 +49,16 @@ const SocialAccounts = () => {
     const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState(null);
     const [currentConnectedInstagramPages, setCurrentConnectedInstagramPages] = useState(null);
     const [currentConnectedPinterestPages, setCurrentConnectedPinterestPages] = useState(null);
+    const [currentConnectedLinkedinPages, setCurrentConnectedLinkedinPages] = useState(null);
     const [showAccountAlreadyConnectedWarningModal, setShowAccountAlreadyConnectedWarningModal] = useState(false);
     const [facebookDropDown, setFacebookDropDown] = useState(false);
     const [instagramDropDown, setInstagramDropDown] = useState(false);
     const [pinterestDropDown, setPinterestDropDown] = useState(false);
+    const [linkedinDropDown, setLinkedinDropDown] = useState(false);
     const [showFacebookModal, setShowFacebookModal] = useState(false);
     const [showInstagramModal, setShowInstagramModal] = useState(false);
     const [showPinterestModal, setShowPinterestModal] = useState(false);
+    const [showLinkedinModal, setShowLinkedinModal] = useState(false);
 
 
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
@@ -62,8 +67,9 @@ const SocialAccounts = () => {
     const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
+    const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
 
-
+    console.log("getAllLinkedinPagesData==>", getAllLinkedinPagesData)
 
     useEffect(() => {
         if (token) {
@@ -75,7 +81,7 @@ const SocialAccounts = () => {
 
     useEffect(() => {
 
-        if ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
+        if (enabledSocialMedia.isFaceBookEnabled && (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
             let faceBookSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK');
             dispatch(getAllFacebookPages({
                 providerId: faceBookSocialAccount?.providerId,
@@ -88,7 +94,7 @@ const SocialAccounts = () => {
 
     }, [getAllConnectedSocialAccountData]);
     useEffect(() => {
-        if (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM').length > 0) {
+        if (enabledSocialMedia.isInstagramEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM').length > 0) {
             let instagramSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'INSTAGRAM');
             dispatch(getAllInstagramBusinessAccounts({
                 accessToken: instagramSocialAccount?.accessToken
@@ -102,22 +108,50 @@ const SocialAccounts = () => {
 
 
     useEffect(() => {
-        if (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'PINTEREST').length > 0) {
+        if (enabledSocialMedia.isPinterestEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'PINTEREST').length > 0) {
             let pinterestSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'PINTEREST');
             dispatch(getAllPinterestBoards({
                 token: token,
-                 socialMediaAccountId:pinterestSocialAccount?.id
+                socialMediaAccountId: pinterestSocialAccount?.id
             })).then((res) => {
-            const decodeJwt = decodeJwtToken(token);
-            dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+                const decodeJwt = decodeJwtToken(token);
+                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             })
-
         }
-
     }, [getAllConnectedSocialAccountData]);
 
     useEffect(() => {
-        if (connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+        if (enabledSocialMedia.isLinkedinEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length > 0) {
+            dispatch(getAllLinkedinPages({
+                token: token,
+                q: "roleAssignee",
+                role: "ADMINISTRATOR",
+                state: "APPROVED"
+            })).then((res) => {
+                const decodeJwt = decodeJwtToken(token);
+                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+            })
+        }
+    }, [getAllConnectedSocialAccountData]);
+
+    useEffect(() => {
+        if (enabledSocialMedia.isLinkedinEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+            const connectedLinkedinSocialAccount = getAllConnectedSocialAccountData?.data?.filter(socialAccount => socialAccount?.provider === "LINKEDIN")[0]
+            const connectedLinkedinPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedLinkedinSocialAccount?.id)
+            const linkedinPages = (getAllLinkedinPagesData?.data?.results === null || getAllLinkedinPagesData?.data?.results === undefined) ? {} : getAllLinkedinPagesData?.data?.results
+            const currentConnectedLinkedinPagesIds = Object.keys(linkedinPages)?.filter(LinkedinPageId =>
+                connectedLinkedinPages?.some(linkedinPage => linkedinPage?.pageId === getLinkedInUrnId(LinkedinPageId, Linkedin_URN_Id_Types.ORGANIZATION))
+            )
+            const currentConnectedLinkedinPages = currentConnectedLinkedinPagesIds?.map(pageId => {
+                return getFormattedLinkedinObject(pageId, linkedinPages[pageId]);
+            })
+            console.log("currentConnectedLinkedinPages==>", currentConnectedLinkedinPages)
+            setCurrentConnectedLinkedinPages(currentConnectedLinkedinPages || null)
+        }
+    }, [connectedPagesData?.facebookConnectedPages]);
+
+    useEffect(() => {
+        if (enabledSocialMedia.isPinterestEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
             const connectedPinterestSocialAccount = getAllConnectedSocialAccountData?.data?.filter(socialAccount => socialAccount?.provider === "PINTEREST")[0]
             const connectedPinterestBoards = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedPinterestSocialAccount?.id)
             const currentConnectedPinterestBoards = pinterestBoardsData?.data?.items?.filter(board =>
@@ -129,7 +163,7 @@ const SocialAccounts = () => {
 
 
     useEffect(() => {
-        if (connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+        if (enabledSocialMedia.isInstagramEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
             const connectedInstagramSocialAccount = getAllConnectedSocialAccountData?.data?.filter(socialAccount => socialAccount?.provider === "INSTAGRAM")[0]
             const connectedInstagramPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedInstagramSocialAccount?.id)
             const currentConnectedInstagramPages = instagramBusinessAccountsData?.data?.filter(page =>
@@ -151,7 +185,7 @@ const SocialAccounts = () => {
 
     useEffect(() => {
 
-        if (connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+        if (enabledSocialMedia.isFaceBookEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
             const connectedFacebookSocialAccount = getAllConnectedSocialAccountData?.data?.filter(socialAccount => socialAccount?.provider === "FACEBOOK")[0]
             const connectedFacebookPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedFacebookSocialAccount?.id)
             const currentConnectedFaceBookPages = getAllFacebookPagesData?.facebookPageList?.filter(page =>
@@ -236,6 +270,10 @@ const SocialAccounts = () => {
                 if (socialMediaType === "PINTEREST") {
                     currentConnectedPinterestPages?.length === 0 ? setPinterestDropDown(true) : setPinterestDropDown(false)
                     setCurrentConnectedPinterestPages([])
+                }
+                if (socialMediaType === "LINKEDIN") {
+                    currentConnectedLinkedinPages?.length === 0 ? setLinkedinDropDown(true) : setLinkedinDropDown(false)
+                    setCurrentConnectedLinkedinPages([])
                 }
                 const decodeJwt = decodeJwtToken(token);
                 dispatch(disconnectSocialAccountAction({
@@ -332,6 +370,7 @@ const SocialAccounts = () => {
                                                 setFacebookDropDown(true)
                                                 setInstagramDropDown(false)
                                                 setPinterestDropDown(false)
+                                                setLinkedinDropDown(false)
                                                 connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.FACEBOOK), SocialAccountProvider.FACEBOOK)
                                             }}
                                             onReject={(error) => {
@@ -486,6 +525,7 @@ const SocialAccounts = () => {
                                                 setInstagramDropDown(true)
                                                 setFacebookDropDown(false)
                                                 setPinterestDropDown(false)
+                                                setLinkedinDropDown(false)
                                                 connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.INSTAGRAM), SocialAccountProvider.INSTAGRAM)
                                             }}
                                             onReject={(error) => {
@@ -609,6 +649,383 @@ const SocialAccounts = () => {
 
                 {/* end instagram connect */}
 
+                {/* start linkedin connect */}
+
+                {
+                    enabledSocialMedia.isLinkedinEnabled &&
+                    <>
+                        {
+                            getAllConnectedSocialAccountData?.loading ?
+                                <SkeletonEffect count={1}></SkeletonEffect> :
+                                getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length === 0 ?
+                                    <div className="social_media_outer">
+                                        <div className="social_media_content">
+                                            <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
+                                            <div>
+                                                <h5 className=""> Linkedin account</h5>
+                                                <h6 className="cmn_headings">in.linkedin.com</h6>
+                                            </div>
+                                        </div>
+
+
+                                        <LoginSocialLinkedin
+                                            isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
+                                            redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
+                                            client_id={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_ID}`}
+                                            client_secret={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_SECRET}`}
+                                            scope={`${import.meta.env.VITE_APP_LINKEDIN_SCOPE}`}
+                                            onResolve={(response) => {
+                                                setLinkedinDropDown(true)
+                                                setInstagramDropDown(false)
+                                                setPinterestDropDown(false)
+                                                setFacebookDropDown(false)
+                                                // const res={
+                                                //     "provider": "linkedin",
+                                                //     "data": {
+                                                //         "access_token": "AQWuOnM0jLpIMSAUPREYhIdM6x2GzFQimnysIyCx2lJ2bzb0bjRuXITcQ-6kRNCx1votAt2wuXCsKdFaMg8qQuul3aAy1FXu4YkNGv_Y0BEkdQCVpva8fKUuDt0E1w1BvzDleg3fM_8dXEVssVXPkQimlUpVNc3YNMleukiNckKKmo5x9dIMOErFlWF7e6S7S0kdqwjdv0MAEMEUcpQILs3IoUsSj2PEz17zG7vK_4Oho4BlWWThItplYKE28BCp3yP_xLzMdwKUXnLz0oPkJ4-fqW9KIwCZflIPDAgUwkkMmx_5FgVN9JF4T2pJ8E132OEfdUcaP7QjSeG61ftAmxsSZgd80A",
+                                                //         "expires_in": 5183999,
+                                                //         "refresh_token": "AQV41p1swbUOeG28VRZzO-t9qjulG2cBbtEzaWbvgWeWgAp59eYS1G8VDqSmcjXbJfjvBjaU-c1ktnDYZqVutbQ6mrnSAvogZOAam8CMdMvC98q2HgFP1W3Rb0DTGTCDZbMf1VO-ve9-Qz8F6UP4sVmylavyBw3JTh_WBESu4H6jJtU9m12cDSl8mKSl1cIdiHYfmVUftHCA_4ZmRbyY-lcknKoyQve05mkqw-OOTpRPvMWJweSylNS25ym7OWEtbC0y9x8THkKK4okSYNAuAoznds-U_5q0vRCivAf9aOlXKOu798qNP3-zNKUlbycwzFb7yoN15cuhuuSH4lvWDWyoW6KkIw",
+                                                //         "refresh_token_expires_in": 31536059,
+                                                //         "scope": "r_1st_connections_size,r_basicprofile,r_organization_followers,r_organization_social,r_organization_social_feed,rw_organization_admin,w_member_social,w_member_social_feed,w_organization_social,w_organization_social_feed",
+                                                //         "localizedLastName": "Deep",
+                                                //         "lastName": {
+                                                //             "localized": {
+                                                //                 "en_US": "Deep"
+                                                //             },
+                                                //             "preferredLocale": {
+                                                //                 "country": "US",
+                                                //                 "language": "en"
+                                                //             }
+                                                //         },
+                                                //         "profilePicture": {
+                                                //             "displayImage": "urn:li:digitalmediaAsset:D4E03AQEX-5Jn-XFuow",
+                                                //             "displayImage~": {
+                                                //                 "paging": {
+                                                //                     "count": 10,
+                                                //                     "start": 0,
+                                                //                     "links": []
+                                                //                 },
+                                                //                 "elements": [
+                                                //                     {
+                                                //                         "artifact": "urn:li:digitalmediaMediaArtifact:(urn:li:digitalmediaAsset:D4E03AQEX-5Jn-XFuow,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_100_100)",
+                                                //                         "authorizationMethod": "PUBLIC",
+                                                //                         "data": {
+                                                //                             "com.linkedin.digitalmedia.mediaartifact.StillImage": {
+                                                //                                 "orientation": "TopLeft",
+                                                //                                 "storageAspectRatio": {
+                                                //                                     "widthAspect": 1,
+                                                //                                     "heightAspect": 1,
+                                                //                                     "formatted": "1.00:1.00"
+                                                //                                 },
+                                                //                                 "storageSize": {
+                                                //                                     "width": 100,
+                                                //                                     "height": 100
+                                                //                                 },
+                                                //                                 "rawMetadataTags": [],
+                                                //                                 "scale": "DOWN",
+                                                //                                 "mediaType": "image/jpeg",
+                                                //                                 "rawCodecSpec": {
+                                                //                                     "name": "jpeg",
+                                                //                                     "type": "image"
+                                                //                                 },
+                                                //                                 "displaySize": {
+                                                //                                     "width": 100,
+                                                //                                     "uom": "PX",
+                                                //                                     "height": 100
+                                                //                                 },
+                                                //                                 "displayAspectRatio": {
+                                                //                                     "widthAspect": 1,
+                                                //                                     "heightAspect": 1,
+                                                //                                     "formatted": "1.00:1.00"
+                                                //                                 }
+                                                //                             }
+                                                //                         },
+                                                //                         "identifiers": [
+                                                //                             {
+                                                //                                 "identifier": "https://media.licdn.com/dms/image/D4E03AQEX-5Jn-XFuow/profile-displayphoto-shrink_100_100/0/1705907805219?e=1711584000&v=beta&t=mnqwm9LYgqPY7OVxJOILD9zV-o41p29it7j8ijUnAIc",
+                                                //                                 "index": 0,
+                                                //                                 "mediaType": "image/jpeg",
+                                                //                                 "file": "urn:li:digitalmediaFile:(urn:li:digitalmediaAsset:D4E03AQEX-5Jn-XFuow,urn:li:digitalmediaArtifactClass:profile-displayphoto-shrink_100_100,0)",
+                                                //                                 "identifierType": "EXTERNAL_URL",
+                                                //                                 "identifierExpiresInSeconds": 1711584000
+                                                //                             }
+                                                //                         ]
+                                                //                     },
+                                                //                     {
+                                                //                         "artifact": "urn:li:digitalmediaMediaArtifact:(urn:li:digitalmediaAsset:D4E03AQEX-5Jn-XFuow,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_200_200)",
+                                                //                         "authorizationMethod": "PUBLIC",
+                                                //                         "data": {
+                                                //                             "com.linkedin.digitalmedia.mediaartifact.StillImage": {
+                                                //                                 "orientation": "TopLeft",
+                                                //                                 "storageAspectRatio": {
+                                                //                                     "widthAspect": 1,
+                                                //                                     "heightAspect": 1,
+                                                //                                     "formatted": "1.00:1.00"
+                                                //                                 },
+                                                //                                 "storageSize": {
+                                                //                                     "width": 200,
+                                                //                                     "height": 200
+                                                //                                 },
+                                                //                                 "rawMetadataTags": [],
+                                                //                                 "scale": "DOWN",
+                                                //                                 "mediaType": "image/jpeg",
+                                                //                                 "rawCodecSpec": {
+                                                //                                     "name": "jpeg",
+                                                //                                     "type": "image"
+                                                //                                 },
+                                                //                                 "displaySize": {
+                                                //                                     "width": 200,
+                                                //                                     "uom": "PX",
+                                                //                                     "height": 200
+                                                //                                 },
+                                                //                                 "displayAspectRatio": {
+                                                //                                     "widthAspect": 1,
+                                                //                                     "heightAspect": 1,
+                                                //                                     "formatted": "1.00:1.00"
+                                                //                                 }
+                                                //                             }
+                                                //                         },
+                                                //                         "identifiers": [
+                                                //                             {
+                                                //                                 "identifier": "https://media.licdn.com/dms/image/D4E03AQEX-5Jn-XFuow/profile-displayphoto-shrink_200_200/0/1705907805220?e=1711584000&v=beta&t=tOJ6m86ERvDXLViNgdhu51vOsI9QUivy1yc-xr4Soug",
+                                                //                                 "index": 0,
+                                                //                                 "mediaType": "image/jpeg",
+                                                //                                 "file": "urn:li:digitalmediaFile:(urn:li:digitalmediaAsset:D4E03AQEX-5Jn-XFuow,urn:li:digitalmediaArtifactClass:profile-displayphoto-shrink_200_200,0)",
+                                                //                                 "identifierType": "EXTERNAL_URL",
+                                                //                                 "identifierExpiresInSeconds": 1711584000
+                                                //                             }
+                                                //                         ]
+                                                //                     },
+                                                //                     {
+                                                //                         "artifact": "urn:li:digitalmediaMediaArtifact:(urn:li:digitalmediaAsset:D4E03AQEX-5Jn-XFuow,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_400_400)",
+                                                //                         "authorizationMethod": "PUBLIC",
+                                                //                         "data": {
+                                                //                             "com.linkedin.digitalmedia.mediaartifact.StillImage": {
+                                                //                                 "orientation": "TopLeft",
+                                                //                                 "storageAspectRatio": {
+                                                //                                     "widthAspect": 1,
+                                                //                                     "heightAspect": 1,
+                                                //                                     "formatted": "1.00:1.00"
+                                                //                                 },
+                                                //                                 "storageSize": {
+                                                //                                     "width": 389,
+                                                //                                     "height": 389
+                                                //                                 },
+                                                //                                 "rawMetadataTags": [],
+                                                //                                 "scale": "UNCHANGED",
+                                                //                                 "mediaType": "image/jpeg",
+                                                //                                 "rawCodecSpec": {
+                                                //                                     "name": "jpeg",
+                                                //                                     "type": "image"
+                                                //                                 },
+                                                //                                 "displaySize": {
+                                                //                                     "width": 389,
+                                                //                                     "uom": "PX",
+                                                //                                     "height": 389
+                                                //                                 },
+                                                //                                 "displayAspectRatio": {
+                                                //                                     "widthAspect": 1,
+                                                //                                     "heightAspect": 1,
+                                                //                                     "formatted": "1.00:1.00"
+                                                //                                 }
+                                                //                             }
+                                                //                         },
+                                                //                         "identifiers": [
+                                                //                             {
+                                                //                                 "identifier": "https://media.licdn.com/dms/image/D4E03AQEX-5Jn-XFuow/profile-displayphoto-shrink_400_400/0/1705907805220?e=1711584000&v=beta&t=2CxIU0wZhFGkrbLm-4KJwlPydLm2hdOqs-VxdHZ6slc",
+                                                //                                 "index": 0,
+                                                //                                 "mediaType": "image/jpeg",
+                                                //                                 "file": "urn:li:digitalmediaFile:(urn:li:digitalmediaAsset:D4E03AQEX-5Jn-XFuow,urn:li:digitalmediaArtifactClass:profile-displayphoto-shrink_400_400,0)",
+                                                //                                 "identifierType": "EXTERNAL_URL",
+                                                //                                 "identifierExpiresInSeconds": 1711584000
+                                                //                             }
+                                                //                         ]
+                                                //                     },
+                                                //                     {
+                                                //                         "artifact": "urn:li:digitalmediaMediaArtifact:(urn:li:digitalmediaAsset:D4E03AQEX-5Jn-XFuow,urn:li:digitalmediaMediaArtifactClass:profile-displayphoto-shrink_800_800)",
+                                                //                         "authorizationMethod": "PUBLIC",
+                                                //                         "data": {
+                                                //                             "com.linkedin.digitalmedia.mediaartifact.StillImage": {
+                                                //                                 "orientation": "TopLeft",
+                                                //                                 "storageAspectRatio": {
+                                                //                                     "widthAspect": 1,
+                                                //                                     "heightAspect": 1,
+                                                //                                     "formatted": "1.00:1.00"
+                                                //                                 },
+                                                //                                 "storageSize": {
+                                                //                                     "width": 389,
+                                                //                                     "height": 389
+                                                //                                 },
+                                                //                                 "rawMetadataTags": [],
+                                                //                                 "scale": "UNCHANGED",
+                                                //                                 "mediaType": "image/jpeg",
+                                                //                                 "rawCodecSpec": {
+                                                //                                     "name": "jpeg",
+                                                //                                     "type": "image"
+                                                //                                 },
+                                                //                                 "displaySize": {
+                                                //                                     "width": 389,
+                                                //                                     "uom": "PX",
+                                                //                                     "height": 389
+                                                //                                 },
+                                                //                                 "displayAspectRatio": {
+                                                //                                     "widthAspect": 1,
+                                                //                                     "heightAspect": 1,
+                                                //                                     "formatted": "1.00:1.00"
+                                                //                                 }
+                                                //                             }
+                                                //                         },
+                                                //                         "identifiers": [
+                                                //                             {
+                                                //                                 "identifier": "https://media.licdn.com/dms/image/D4E03AQEX-5Jn-XFuow/profile-displayphoto-shrink_800_800/0/1705907805220?e=1711584000&v=beta&t=Tf2OUA7o2V_yC10ESXEPHgihLrydLax930ChNTvxxRE",
+                                                //                                 "index": 0,
+                                                //                                 "mediaType": "image/jpeg",
+                                                //                                 "file": "urn:li:digitalmediaFile:(urn:li:digitalmediaAsset:D4E03AQEX-5Jn-XFuow,urn:li:digitalmediaArtifactClass:profile-displayphoto-shrink_800_800,0)",
+                                                //                                 "identifierType": "EXTERNAL_URL",
+                                                //                                 "identifierExpiresInSeconds": 1711584000
+                                                //                             }
+                                                //                         ]
+                                                //                     }
+                                                //                 ]
+                                                //             }
+                                                //         },
+                                                //         "firstName": {
+                                                //             "localized": {
+                                                //                 "en_US": "Karan"
+                                                //             },
+                                                //             "preferredLocale": {
+                                                //                 "country": "US",
+                                                //                 "language": "en"
+                                                //             }
+                                                //         },
+                                                //         "id": "M8SETpW0Op",
+                                                //         "localizedFirstName": "Karan"
+                                                //     }
+                                                // }
+                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.LINKEDIN), SocialAccountProvider.LINKEDIN)
+                                            }}
+                                            onReject={(error) => {
+                                                showErrorToast(SomethingWentWrong)
+                                            }}>
+
+                                            <LinkedInLoginButton text={"Connect"} className={"facebook_connect"}
+                                                                 icon={() => null} preventActiveStyles={true}
+                                                                 style={commonButtonStyle}/>
+                                        </LoginSocialLinkedin>
+                                    </div> :
+
+                                    <div className=" cmn_drop_down dropdown">
+                                        <div className="dropdown_header">
+                                            <div className="social_media_outer">
+                                                <div className="social_media_content"
+                                                     onClick={() => setLinkedinDropDown(!linkedinDropDown)}>
+                                                    <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
+                                                    <div className="text-start flex-grow-1">
+                                                        <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'LINKEDIN')?.name || "linkedin"}</h5>
+                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                    </div>
+
+                                                    {
+                                                        (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedLinkedinPages?.length === 0 &&
+                                                        <button
+                                                            className="DisConnectBtn cmn_connect_btn w-auto"
+                                                            onClick={() =>
+                                                                disConnectSocialMediaAccountToCustomer("LINKEDIN")}>
+                                                            Disconnect
+                                                        </button>
+                                                    }
+
+                                                    <div className={linkedinDropDown ? "upside-down" : ""}>
+                                                        <svg width="14" height="8" viewBox="0 0 14 8" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg"
+                                                        >
+                                                            <path id="Icon"
+                                                                  d="M13 1L7.70711 6.29289C7.31658 6.68342 6.68342 6.68342 6.29289 6.29289L1 1"
+                                                                  stroke="#5F6D7E" strokeWidth="1.67"
+                                                                  strokeLinecap="round"/>
+                                                        </svg>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            {
+                                                linkedinDropDown &&
+
+                                                <ul className="menu_items">
+
+                                                    {
+                                                        getAllLinkedinPagesData?.loading ?
+                                                            <SkeletonEffect count={3}/> :
+
+                                                            currentConnectedLinkedinPages?.length === 0 ?
+                                                                <div className={"no-page-connected-outer text-center"}>
+                                                                    <div>No active connections at the moment.</div>
+                                                                    <div className={"cursor-pointer connect-page-btn"}
+                                                                         onClick={() => setShowLinkedinModal(true)}
+                                                                    >Connect
+                                                                        now
+                                                                    </div>
+                                                                </div> :
+                                                                <>
+                                                                    {
+                                                                        currentConnectedLinkedinPages?.map((data, index) => {
+                                                                            return (
+                                                                                <li key={index}>
+                                                                                    <div
+                                                                                        className="user_profileInfo_wrapper">
+                                                                                        <div className="user_Details">
+                                                                                            <img
+                                                                                                src={data?.logo_url || default_user_icon}
+                                                                                                height="30px"
+                                                                                                width="30px"/>
+                                                                                            <h4 className="cmn_text_style">{data?.name}</h4>
+                                                                                        </div>
+                                                                                        <h4 className={"connect_text cmn_text_style"}>Connected</h4>
+                                                                                    </div>
+                                                                                </li>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                    <li>
+                                                                        {
+                                                                            (getAllLinkedinPagesData?.data && getAllLinkedinPagesData?.data?.results && Object.keys(getAllLinkedinPagesData?.data?.results)?.length > 0) &&
+                                                                            <div
+                                                                                className="connectDisconnect_btn_outer">
+                                                                                <button
+                                                                                    className="DisConnectBtn cmn_connect_btn"
+                                                                                    onClick={() =>
+                                                                                        disConnectSocialMediaAccountToCustomer("LINKEDIN")}>
+                                                                                    Disconnect
+                                                                                </button>
+                                                                                <button
+                                                                                    className="ConnectBtn cmn_connect_btn"
+                                                                                    onClick={() => setShowLinkedinModal(true)}
+                                                                                >
+                                                                                    Connect More
+                                                                                </button>
+                                                                            </div>
+
+                                                                        }
+                                                                    </li>
+
+
+                                                                </>
+
+
+                                                    }
+                                                </ul>}
+
+                                        </div>
+                                    </div>
+
+
+                        }
+                    </>
+                }
+                {/* end linkedin connect */}
+
                 {/* start Pinterest connect */}
                 {
                     enabledSocialMedia.isPinterestEnabled &&
@@ -640,7 +1057,6 @@ const SocialAccounts = () => {
                                                 connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.PINTEREST), SocialAccountProvider.PINTEREST)
                                             }}
                                             onReject={(error) => {
-                                                console.log("error", error)
                                             }}>
 
                                             <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
@@ -760,26 +1176,36 @@ const SocialAccounts = () => {
 
             </div>
             {enabledSocialMedia.isFaceBookEnabled && showFacebookModal &&
-                <FacebookModal showFacebookModal={showFacebookModal} setShowFacebookModal={setShowFacebookModal}
-                               facebookPageList={getAllFacebookPagesData?.facebookPageList}
-                               connectedPagesList={connectedPagesData?.facebookConnectedPages}
-                               noPageFoundMessage={"No Page Found!"}
-                               socialMediaType={SocialAccountProvider.FACEBOOK}
-                               socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>}
+                <ConnectPagesModal showModal={showFacebookModal} setShowModal={setShowFacebookModal}
+                                   allPagesList={getAllFacebookPagesData?.facebookPageList}
+                                   connectedPagesList={connectedPagesData?.facebookConnectedPages}
+                                   noPageFoundMessage={"No Page Found!"}
+                                   socialMediaType={SocialAccountProvider.FACEBOOK}
+                                   socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>}
             {enabledSocialMedia.isInstagramEnabled && showInstagramModal &&
-                <FacebookModal showFacebookModal={showInstagramModal} setShowFacebookModal={setShowInstagramModal}
-                               facebookPageList={instagramBusinessAccountsData?.data}
-                               connectedPagesList={connectedPagesData?.facebookConnectedPages}
-                               noPageFoundMessage={"No Page Found!"}
-                               socialMediaType={SocialAccountProvider.INSTAGRAM}
-                               socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
+                <ConnectPagesModal showModal={showInstagramModal} setShowModal={setShowInstagramModal}
+                                   allPagesList={instagramBusinessAccountsData?.data}
+                                   connectedPagesList={connectedPagesData?.facebookConnectedPages}
+                                   noPageFoundMessage={"No Page Found!"}
+                                   socialMediaType={SocialAccountProvider.INSTAGRAM}
+                                   socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
             {enabledSocialMedia.isPinterestEnabled && showPinterestModal &&
-                <FacebookModal showFacebookModal={showPinterestModal} setShowFacebookModal={setShowPinterestModal}
-                               facebookPageList={pinterestBoardsData?.data?.items}
-                               connectedPagesList={connectedPagesData?.facebookConnectedPages}
-                               noPageFoundMessage={"No Board Found!"}
-                               socialMediaType={SocialAccountProvider.PINTEREST}
-                               socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "PINTEREST")[0]}/>}
+                <ConnectPagesModal showModal={showPinterestModal} setShowModal={setShowPinterestModal}
+                                   allPagesList={pinterestBoardsData?.data?.items}
+                                   connectedPagesList={connectedPagesData?.facebookConnectedPages}
+                                   noPageFoundMessage={"No Board Found!"}
+                                   socialMediaType={SocialAccountProvider.PINTEREST}
+                                   socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "PINTEREST")[0]}/>}
+            {enabledSocialMedia.isLinkedinEnabled && showLinkedinModal &&
+                <ConnectPagesModal showModal={showLinkedinModal} setShowModal={setShowLinkedinModal}
+                                   allPagesList={Object.keys(getAllLinkedinPagesData?.data?.results)?.map(key => {
+                                       return getFormattedLinkedinObject(key, getAllLinkedinPagesData?.data?.results[key])
+                                   })}
+                                   connectedPagesList={connectedPagesData?.facebookConnectedPages}
+                                   noPageFoundMessage={"No Page Found!"}
+                                   socialMediaType={SocialAccountProvider.LINKEDIN}
+                                   socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "LINKEDIN")[0]}/>}
+
             {
                 showAccountAlreadyConnectedWarningModal &&
                 <AccountAlreadyConnectedWarningModal showModal={showAccountAlreadyConnectedWarningModal}

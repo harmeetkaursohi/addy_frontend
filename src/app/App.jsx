@@ -20,7 +20,7 @@ import NotFound from '../features/common/components/NotFound'
 import React from 'react'
 import {Outlet, Navigate} from 'react-router-dom';
 import {getToken} from "../app/auth/auth.js";
-import FacebookModal from '../features/modals/views/facebookModal/FacebookModal'
+import ConnectPagesModal from '../features/modals/views/facebookModal/ConnectPagesModal'
 import Oauth2RedirectComponent from '../features/authentication/Oauth2RedirectComponent'
 import CreatePost from "../features/planner/views/CreatePost";
 import UpdatePost from "../features/planner/views/UpdatePost";
@@ -69,7 +69,7 @@ const App = () => {
                     <Route path="/signup" element={<Signup/>}/>
                     <Route path="/reset-password" element={<CreatePassword/>}/>
                     <Route path="/forget-password" element={<ForgetPassword/>}/>
-                    <Route path="/fb" element={<FacebookModal/>}/>
+                    <Route path="/fb" element={<ConnectPagesModal/>}/>
                     <Route path="/auth-redirect" element={<Oauth2RedirectComponent/>}/>
                     <Route path="*" element={<NotFound/>}/>
                 </Routes>

@@ -10,7 +10,9 @@
 .user_Details img {
     border-radius: 5px;
 }
-
+.linkedin-icon-color{
+color:#0a66c2;
+}
 .connectDisconnect_btn_outer {
     display: flex;
     gap: 23px;

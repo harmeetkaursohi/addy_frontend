@@ -19,7 +19,6 @@ const CommonModal = ({
                          noPageFoundMessage,
                      }) => {
 
-    console.log("socialMediaType,socialMediaType",socialMediaType)
     const handleClose = () => setShowModal(false);
     const dispatch = useDispatch();
     const token = getToken();
@@ -84,6 +83,10 @@ const CommonModal = ({
                                                         {
                                                             socialMediaType === SocialAccountProvider.PINTEREST &&
                                                             <img src={data.media?.image_cover_url || default_user_icon}/>
+                                                        }
+                                                        {
+                                                            socialMediaType === SocialAccountProvider.LINKEDIN &&
+                                                            <img src={data?.logo_url || default_user_icon}/>
                                                         }
 
                                                     </div>
