@@ -4,7 +4,6 @@ import {
     computeAndSocialAccountJSON,
     formatMessage,
     getInitialLetterCap,
-    isNullOrEmpty
 } from "../../../utils/commonUtils";
 import {FacebookLoginButton} from "react-social-login-buttons";
 import fb_img from "../../../images/fb.svg";
@@ -33,7 +32,8 @@ import {
 } from "../../../utils/contantData";
 import AccountAlreadyConnectedWarningModal from "./AccountAlreadyConnectedWarningModal";
 
-const SocialAccounts = () => {
+const SocialAccounts = ({}) => {
+
 
     const enabledSocialMedia = {
         isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
@@ -47,7 +47,10 @@ const SocialAccounts = () => {
     const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState(null);
     const [currentConnectedInstagramPages, setCurrentConnectedInstagramPages] = useState(null);
     const [currentConnectedPinterestPages, setCurrentConnectedPinterestPages] = useState(null);
-    const [showAccountAlreadyConnectedWarningModal, setShowAccountAlreadyConnectedWarningModal] = useState(false);
+    const [accountAlreadyConnectedWarningModal, setAccountAlreadyConnectedWarningModal] = useState({
+        showModal: false,
+        socialMediaType: null
+    });
     const [facebookDropDown, setFacebookDropDown] = useState(false);
     const [instagramDropDown, setInstagramDropDown] = useState(false);
     const [pinterestDropDown, setPinterestDropDown] = useState(false);
@@ -62,8 +65,6 @@ const SocialAccounts = () => {
     const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
-
-
 
     useEffect(() => {
         if (token) {
@@ -106,10 +107,10 @@ const SocialAccounts = () => {
             let pinterestSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'PINTEREST');
             dispatch(getAllPinterestBoards({
                 token: token,
-                 socialMediaAccountId:pinterestSocialAccount?.id
+                socialMediaAccountId: pinterestSocialAccount?.id
             })).then((res) => {
-            const decodeJwt = decodeJwtToken(token);
-            dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+                const decodeJwt = decodeJwtToken(token);
+                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             })
 
         }
@@ -178,7 +179,10 @@ const SocialAccounts = () => {
             }
             dispatch(socialAccountConnectActions(res)).then((response) => {
                 if (response.meta.requestStatus === "rejected" && response.payload.status === 409) {
-                    setShowAccountAlreadyConnectedWarningModal(true)
+                    setAccountAlreadyConnectedWarningModal({
+                        showModal: true,
+                        socialMediaType: socialMediaType
+                    })
                 }
 
                 dispatch(getAllConnectedSocialAccountAction(res))
@@ -300,7 +304,8 @@ const SocialAccounts = () => {
         <div className="col-lg-5 col-xl-4 col-sm-12">
 
             {/* social media */}
-            <div className="cmn_background social_media_wrapper">
+            <div
+                className={"cmn_background social_media_wrapper" }>
                 <div className="social_media_account">
                     <h3>{jsondata.socialAccount}</h3>
                 </div>
@@ -781,9 +786,10 @@ const SocialAccounts = () => {
                                socialMediaType={SocialAccountProvider.PINTEREST}
                                socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "PINTEREST")[0]}/>}
             {
-                showAccountAlreadyConnectedWarningModal &&
-                <AccountAlreadyConnectedWarningModal showModal={showAccountAlreadyConnectedWarningModal}
-                                                     setShowModal={setShowAccountAlreadyConnectedWarningModal}></AccountAlreadyConnectedWarningModal>
+                accountAlreadyConnectedWarningModal?.showModal &&
+                <AccountAlreadyConnectedWarningModal
+                    accountAlreadyConnectedWarningModal={accountAlreadyConnectedWarningModal}
+                    setAccountAlreadyConnectedWarningModal={setAccountAlreadyConnectedWarningModal}></AccountAlreadyConnectedWarningModal>
             }
 
         </div>

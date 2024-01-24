@@ -27,6 +27,7 @@ import SocialMediaProviderBadge from "../../common/components/SocialMediaProvide
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import default_user_icon from "../../../images/default_user_icon.svg";
 import {SocialAccountProvider} from "../../../utils/contantData";
+import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
 
 const CreatePost = () => {
 
@@ -57,7 +58,10 @@ const CreatePost = () => {
     const [reference, setReference] = useState("");
     const [disableImage, setDisableImage] = useState(false);
     const [disableVideo, setDisableVideo] = useState(false);
+    const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
 
+    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
@@ -67,6 +71,17 @@ const CreatePost = () => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
+
+
+    useEffect(() => {
+        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
+        const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
+        if (isAnyPageConnected && isAnyAccountConnected) {
+            setShowConnectAccountModal(false)
+        } else {
+            setShowConnectAccountModal(true)
+        }
+    }, [connectedPagesData, getAllConnectedSocialAccountData])
 
     useEffect(() => {
         if (files && files.length <= 0) {
@@ -260,8 +275,8 @@ const CreatePost = () => {
             postRequestDto: {
                 attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file})),
                 hashTag: hashTag ? hashTag : "",
-                caption: caption ?  caption : "",
-                pinTitle: pinTitle ? pinTitle  : "",
+                caption: caption ? caption : "",
+                pinTitle: pinTitle ? pinTitle : "",
                 postStatus: postStatus,
                 destinationUrl: pinDestinationUrl ? pinDestinationUrl : "",
                 boostPost: boostPost,
@@ -797,6 +812,10 @@ const CreatePost = () => {
                     parentHashTag={hashTag}
                     setParentHashTag={setHashTag}
                     setAIGenerateHashTagModal={setAIGenerateHashTagModal}/>
+            }
+            {
+                showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal}
+                                                                      setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
             }
         </>)
 }

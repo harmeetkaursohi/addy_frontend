@@ -1,11 +1,23 @@
 import search_icon from "../../../images/search_icon.svg"
 import jsondata from "../../../locales/data/initialdata.json"
 import './Header.css'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
 
-const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList}) => {
+const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList, setShowConnectAccountModal}) => {
 
+    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+    const navigate = useNavigate();
+    const handleCreatePost = () => {
+        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length>0
+        const isAnyAccountConnected=getAllConnectedSocialAccountData?.data?.length>0
+        if (isAnyPageConnected && isAnyAccountConnected) {
+            navigate("/planner/post")
+        } else {
+            setShowConnectAccountModal(true)
+        }
+    }
     return (
         <>
             <header>
@@ -32,11 +44,19 @@ const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList}) 
                                         {/*<button className="Create_Ad_btn crate_btn">*/}
                                         {/*    {jsondata.createad}*/}
                                         {/*</button>*/}
+                                        {/*{*/}
+                                        {/*    ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && facebookPageList?.length > 0) &&*/}
+                                        {/*        <Link to="/planner/post" className="createPost_btn crate_btn cmn_btn_color">*/}
+                                        {/*            {jsondata.createpost}*/}
+                                        {/*        </Link>*/}
+
+                                        {/*}*/}
                                         {
-                                            ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && facebookPageList?.length > 0) &&
-                                                <Link to="/planner/post" className="createPost_btn crate_btn cmn_btn_color">
-                                                    {jsondata.createpost}
-                                                </Link>
+                                            !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data &&
+                                            <div onClick={handleCreatePost}
+                                                 className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
+                                                {jsondata.createpost}
+                                            </div>
 
                                         }
 

@@ -16,7 +16,9 @@
     letter-spacing: 0.024px;
     padding-top: 12px;
 }
-
+.no-draft-img{
+    height: 300px !important;
+}
 
 
 .selected-option p{

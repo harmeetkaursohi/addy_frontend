@@ -6,7 +6,7 @@ import instagram_img from '../../../images/instagram.png'
 import pinterest_icon from '../../../images/pinterest_icon.svg'
 import linkedin from '../../../images/linkedin.svg'
 import jsondata from '../../../locales/data/initialdata.json'
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {
@@ -25,10 +25,12 @@ import {SocialAccountProvider} from "../../../utils/contantData";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {ParentDraftComponent} from "../../unPublishedPages/views/ParentDraftComponent";
 import CommonShowMorePlannerModel from "../../common/components/CommonShowMorePlannerModal";
+import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
 
 const Planner = () => {
     const dispatch = useDispatch();
     const token = getToken();
+    const navigate=useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
     const calendarRef = useRef(null);
@@ -38,15 +40,18 @@ const Planner = () => {
     const [plannerPosts, setPlannerPosts] = useState([]);
     const [eventDate, setEventDate] = useState(null);
     const [batchIds, setBatchIds] = useState([]);
+    const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
 
     const [events, setEvents] = useState([
         {title: 'Instagram post', start: new Date().getTime(), imageUrl: instagram_img},
         {title: "Twitter", start: new Date().getTime(), imageUrl: linkedin}
     ]);
-
+    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer);
     const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
     const getAllPlannerPostsData = useSelector(state => state.post.getAllPlannerPostReducer);
+
 
     useEffect(() => {
         document.title = isDraftPost ? 'Draft' : 'Planner';
@@ -91,6 +96,16 @@ const Planner = () => {
             setPlannerPosts(Object.values(getAllPlannerPostsData?.data))
         }
     }, [getAllPlannerPostsData]);
+
+    const handleCreatePost = () => {
+        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length>0
+        const isAnyAccountConnected=getAllConnectedSocialAccountData?.data?.length>0
+        if (isAnyPageConnected && isAnyAccountConnected ) {
+            navigate("/planner/post")
+        } else {
+            setShowConnectAccountModal(true)
+        }
+    }
 
 
     useEffect(() => {
@@ -143,12 +158,12 @@ const Planner = () => {
                     {event?._def?.extendedProps?.childCardContent?.map((c, index) => {
                         return (
 
-                                <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}
-                                     onClick={(e) => {
-                                     }}>
-                                    <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>
-                                    <h3>{c.title}</h3>
-                                </div>
+                            <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}
+                                 onClick={(e) => {
+                                 }}>
+                                <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>
+                                <h3>{c.title}</h3>
+                            </div>
                         )
                     })}
                 </div>
@@ -267,9 +282,8 @@ const Planner = () => {
                                     onClick={handleDraft}
                                     isDisabled={false}
                                 />
-
-                                <Link className='cmn_btn_color create_post_btn cmn_white_text'
-                                      to="/planner/post">{jsondata.createpost}</Link>
+                                <span onClick={handleCreatePost} className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
+                                >{jsondata.createpost}</span>
                             </div>
                         </div>
                         {
@@ -393,6 +407,10 @@ const Planner = () => {
                     </div>
                 </div>
             </section>
+            {
+                showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal}
+                                                                      setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
+            }
 
         </>
     )

@@ -19,7 +19,6 @@ const CommonModal = ({
                          noPageFoundMessage,
                      }) => {
 
-    console.log("socialMediaType,socialMediaType",socialMediaType)
     const handleClose = () => setShowModal(false);
     const dispatch = useDispatch();
     const token = getToken();
@@ -45,7 +44,6 @@ const CommonModal = ({
 
     const handleSubmit = () => {
         pageConnectAction(dispatch, token, mediaPageData, socialMediaAccountInfo)
-
     }
 
 

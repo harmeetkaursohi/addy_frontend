@@ -13,3 +13,6 @@
 .privacy_wrapper p {
     line-height: 28px;
 }
+.elementor.elementor-96 {
+    display: none !important;
+}

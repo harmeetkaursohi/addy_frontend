@@ -1,8 +1,25 @@
 import SideBar from "../sidebar/views/Layout";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import './privacy.css'
+import {baseAxios} from "../../utils/commonUtils";
 
 const PrivacyComponent = () => {
+    // const [content, setContent] = useState(null);
+    //
+    // useEffect(() => {
+    //     const element = document.getElementById('fetched-webpage');
+    //
+    //     if (element) {
+    //         const htmlContent = element.innerHTML;
+    //         const parser = new DOMParser();
+    //         const doc = parser.parseFromString(htmlContent, 'text/html');
+    //         const bodyContent = doc.body.innerHTML;
+    //
+    //         console.log("bodyContent",bodyContent)
+    //         console.log("doc",doc)
+    //         setContent(bodyContent);
+    //     }
+    // }, []);
    return (
        <>
            <SideBar/>
@@ -12,7 +29,15 @@ const PrivacyComponent = () => {
                        <h2 className="cmn_title">
                             Privacy Policy
                        </h2>
+                       {/*<div id={"fetched-webpage"} style={{display:"none"}}>*/}
+                       {/*    <iframe   src={"https://web.addyads.com/privacy-policy/"} width={"100%"} height={"100vh"}/>*/}
+                       {/*</div>*/}
+
+                       {/*<div id="privacy-policies">*/}
+                       {/*    <div id=""  dangerouslySetInnerHTML={{ __html: content }} ></div>*/}
+                       {/*</div>*/}
                        <div className="privacy_wrapper">
+
                            <p>Addy LLC Privacy Policy <br/>
                                Effective Date: Jan 4, 2022 <br/>
                                Our terms of service and privacy were updated on Jan 4, 2022, and are applicable to all our existing customers.

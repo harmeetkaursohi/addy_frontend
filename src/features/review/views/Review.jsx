@@ -28,10 +28,12 @@ const Review = () => {
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
     const [resetData, isResetData] = useState(false);
+    const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
+    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
 
-    console.log("postPageInfoData------->",postPageInfoData)
 
     useEffect(() => {
         if (resetData) {
