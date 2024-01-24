@@ -31,7 +31,7 @@ export const ParentDraftComponent = ({setDraftPost,reference="",resetData=null})
             {getAllDraftPostsByCustomerAndPeriodData.loading && (<CommonLoader />) }
 
             {!getAllDraftPostsByCustomerAndPeriodData.loading   && drafts && Array.isArray(drafts) && drafts.length===0 &&
-                <div className="cmn_background p-5 text-center mt-3"><img src={noDraftPosts} alt={"No Drafts"} className="img-fluid"/></div>
+                <div className="cmn_background p-5 text-center mt-3"><img src={noDraftPosts} alt={"No Drafts"} className="img-fluid no-draft-img"/></div>
             }
 
             {!getAllDraftPostsByCustomerAndPeriodData.loading && drafts && Array.isArray(drafts) && sortByKey(drafts,"createdAt").map(curDraftObject => (

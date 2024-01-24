@@ -1,7 +1,7 @@
 import SideBar from "../sidebar/views/Layout";
 import jsondata from "../../locales/data/initialdata.json";
 import GenericButtonWithLoader from "../common/components/GenericButtonWithLoader";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {SocialAccountProvider} from "../../utils/contantData";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -12,18 +12,30 @@ import {isPostDatesOnSameDayOrInFuture} from "../../utils/commonUtils";
 import instagram_img from "../../images/instagram.png";
 import linkedin from "../../images/linkedin.svg";
 import {getAllSocialMediaPostsByCriteria} from "../../app/actions/postActions/postActions";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getToken} from "../../app/auth/auth";
+import ConnectSocialAccountModal from "../common/components/ConnectSocialAccountModal";
 
-const Draft=()=>{
-    const dispatch=useDispatch();
+const Draft = () => {
+    const dispatch = useDispatch();
     const token = getToken();
-    const [baseSearchQuery, setBaseSearchQuery] = useState({postStatus: ["DRAFT"],limit:1000,plannerCardDate:new Date()});
-    const [resetData,setResetData]=useState(true)
-    useEffect(()=>{
-            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {...baseSearchQuery}}));
-    },[baseSearchQuery,resetData])
+    const navigate = useNavigate();
+    const [baseSearchQuery, setBaseSearchQuery] = useState({
+        postStatus: ["DRAFT"],
+        limit: 1000,
+        plannerCardDate: new Date()
+    });
+    const [resetData, setResetData] = useState(true)
+    const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
+    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+
+    useEffect(() => {
+        dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {...baseSearchQuery}}));
+    }, [baseSearchQuery, resetData])
+
     const calendarRef = useRef(null);
+
     const customHeaderClick = (eventType) => {
         if (eventType === "Prev") {
             calendarRef?.current?.getApi().prev();
@@ -35,6 +47,16 @@ const Draft=()=>{
         setBaseSearchQuery({...baseSearchQuery, plannerCardDate: inst})
 
     };
+    const handleCreatePost = () => {
+        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length>0
+        const isAnyAccountConnected=getAllConnectedSocialAccountData?.data?.length>0
+        if (isAnyPageConnected && isAnyAccountConnected ) {
+            navigate("/planner/post")
+        } else {
+            setShowConnectAccountModal(true)
+        }
+    }
+
     return (
         <>
             <section>
@@ -44,14 +66,15 @@ const Draft=()=>{
 
                         <div className='planner_header_outer'>
                             <div className='planner_header'>
-                                <h2>{jsondata.sidebarContent.draft }</h2>
+                                <h2>{jsondata.sidebarContent.draft}</h2>
                                 <h6>Here you find all the upcoming Posts you scheduled.</h6>
                             </div>
 
                             <div className="draft_createPost_outer">
 
-                                <Link className='cmn_btn_color create_post_btn cmn_white_text'
-                                      to="/planner/post">{jsondata.createpost}</Link>
+                                <span onClick={handleCreatePost}
+                                      className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
+                                >{jsondata.createpost}</span>
                             </div>
 
                         </div>
@@ -82,12 +105,16 @@ const Draft=()=>{
 
                         </div>
 
-                            <ParentDraftComponent resetData={setResetData} reference={"DRAFT"}/>
+                        <ParentDraftComponent resetData={setResetData} reference={"DRAFT"}/>
 
                     </div>
                 </div>
             </section>
 
+            {
+                showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal}
+                                                                      setShowModal={setShowConnectAccountModal}/>
+            }
         </>
     );
 }

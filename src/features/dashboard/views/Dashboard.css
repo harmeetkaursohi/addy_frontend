@@ -413,6 +413,9 @@ select.page_title_options {
     width: 100%;
     padding: 0px;
 }
+img.acc-not-connected-error-svg.mt-1 {
+    height: 270px;
+}
 
 img.connection-error-svg {
     height: 200px;

@@ -35,7 +35,8 @@ import {
 import AccountAlreadyConnectedWarningModal from "./AccountAlreadyConnectedWarningModal";
 import {SomethingWentWrong} from "../../../utils/contantData";
 
-const SocialAccounts = () => {
+const SocialAccounts = ({}) => {
+
 
     const enabledSocialMedia = {
         isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
@@ -49,8 +50,11 @@ const SocialAccounts = () => {
     const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState(null);
     const [currentConnectedInstagramPages, setCurrentConnectedInstagramPages] = useState(null);
     const [currentConnectedPinterestPages, setCurrentConnectedPinterestPages] = useState(null);
+    const [accountAlreadyConnectedWarningModal, setAccountAlreadyConnectedWarningModal] = useState({
+        showModal: false,
+        socialMediaType: null
+    });
     const [currentConnectedLinkedinPages, setCurrentConnectedLinkedinPages] = useState(null);
-    const [showAccountAlreadyConnectedWarningModal, setShowAccountAlreadyConnectedWarningModal] = useState(false);
     const [facebookDropDown, setFacebookDropDown] = useState(false);
     const [instagramDropDown, setInstagramDropDown] = useState(false);
     const [pinterestDropDown, setPinterestDropDown] = useState(false);
@@ -112,10 +116,10 @@ const SocialAccounts = () => {
             let pinterestSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'PINTEREST');
             dispatch(getAllPinterestBoards({
                 token: token,
-                socialMediaAccountId: pinterestSocialAccount?.id
+                 socialMediaAccountId:pinterestSocialAccount?.id
             })).then((res) => {
-                const decodeJwt = decodeJwtToken(token);
-                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+            const decodeJwt = decodeJwtToken(token);
+            dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             })
         }
     }, [getAllConnectedSocialAccountData]);
@@ -149,6 +153,7 @@ const SocialAccounts = () => {
             setCurrentConnectedLinkedinPages(currentConnectedLinkedinPages || null)
         }
     }, [connectedPagesData?.facebookConnectedPages]);
+
 
     useEffect(() => {
         if (enabledSocialMedia.isPinterestEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
@@ -212,7 +217,10 @@ const SocialAccounts = () => {
             }
             dispatch(socialAccountConnectActions(res)).then((response) => {
                 if (response.meta.requestStatus === "rejected" && response.payload.status === 409) {
-                    setShowAccountAlreadyConnectedWarningModal(true)
+                    setAccountAlreadyConnectedWarningModal({
+                        showModal: true,
+                        socialMediaType: socialMediaType
+                    })
                 }
 
                 dispatch(getAllConnectedSocialAccountAction(res))
@@ -1207,9 +1215,10 @@ const SocialAccounts = () => {
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "LINKEDIN")[0]}/>}
 
             {
-                showAccountAlreadyConnectedWarningModal &&
-                <AccountAlreadyConnectedWarningModal showModal={showAccountAlreadyConnectedWarningModal}
-                                                     setShowModal={setShowAccountAlreadyConnectedWarningModal}></AccountAlreadyConnectedWarningModal>
+                accountAlreadyConnectedWarningModal?.showModal &&
+                <AccountAlreadyConnectedWarningModal
+                    accountAlreadyConnectedWarningModal={accountAlreadyConnectedWarningModal}
+                    setAccountAlreadyConnectedWarningModal={setAccountAlreadyConnectedWarningModal}></AccountAlreadyConnectedWarningModal>
             }
 
         </div>

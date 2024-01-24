@@ -16,6 +16,7 @@ import {
     getAllConnectedSocialAccountAction
 } from "../../../app/actions/socialAccountActions/socialAccountActions";
 import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
+import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
 
 const Layout = () => {
 
@@ -27,6 +28,8 @@ const Layout = () => {
     const token = getToken();
     const dispatch = useDispatch();
     const userData = useSelector(state => state.user.userInfoReducer.data);
+    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
 
     const show_sidebar = () => {
         setSidebar(!sidebar)
@@ -43,6 +46,15 @@ const Layout = () => {
             dispatch(getUserInfo(requestBody));
         }
     }, [token, userData, dispatch])
+
+    useEffect(()=>{
+        const decodeJwt = decodeJwtToken(token);
+        if(getAllConnectedSocialAccountData?.data===undefined ||connectedPagesData?.facebookConnectedPages===undefined ){
+            dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
+            dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+        }
+
+    },[])
 
     const LogOut = () => {
         Swal.fire({

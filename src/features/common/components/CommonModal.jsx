@@ -44,7 +44,6 @@ const CommonModal = ({
 
     const handleSubmit = () => {
         pageConnectAction(dispatch, token, mediaPageData, socialMediaAccountInfo)
-
     }
 
 
