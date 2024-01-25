@@ -157,10 +157,15 @@ input::-webkit-inner-spin-button {
     letter-spacing: -0.2px;
 }
 .connection-warning-text{
-    font-size: 25px;
-    color:red;
-}
+    font-size: 23px;
+    color: #2E3646;
+    text-align: left;
 
+}
+.NotConncted_text {
+    font-size: 14px;
+    line-height: 24px;
+}
 
 .skeleton {
     position: relative;

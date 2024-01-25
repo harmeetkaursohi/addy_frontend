@@ -28,7 +28,8 @@ const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList, s
                                 <div className="header_outer_container">
                                     <div className="header_container">
                                         <h2 className="">{`${jsondata.heythere} ${userData?.fullName}!`}</h2>
-                                        <h6>Welcome back to your all in Dashboard and more text here!</h6>
+                                        <h6>Curious to explore? Welcome  to your all-in Dashboard and discover more!</h6>
+
                                     </div>
                                 </div>
                             </div>

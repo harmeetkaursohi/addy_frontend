@@ -105,7 +105,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                 <h4 className="text-center mb-3">
                                     No Upcoming Posts
                                 </h4>
-                                <img src={noPostScheduled} alt=""/>
+                                <img src={noPostScheduled} alt="" className='noPostScheduled_img'/>
                             </div>
 
                             :

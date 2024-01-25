@@ -371,6 +371,11 @@ h2.Review_Heading {
     .insight_heading {
         font-size: 25px;
     }
+    .select-account-txt {
+      
+        font-size: 15px;
+    }
+
 }
 
 @media screen and (max-width: 767px) {
@@ -389,5 +394,19 @@ h2.Review_Heading {
     h2.Review_Heading {
         margin-top: 20px;
         font-size: 12px;
+    }
+    .arrow-up-image{
+        margin-top: 23px;
+         margin-bottom: 0px;
+    }
+    .select-page-outer{
+        display: block;
+    }
+    .select-account-txt {
+       
+        font-size: 14px;
+    }
+    .select-page-text-outer.ms-2 {
+        margin-top: 11px;
     }
 }

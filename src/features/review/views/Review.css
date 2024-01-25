@@ -210,6 +210,19 @@ p.disable-reply-comment {
 .comment_section .comments_messages {
     flex-grow: 1;
 }
+
+.acc_not_connected_outer{
+    text-align: center;
+}
+.acc_not_connected_outer img{
+    width: 300px;
+    margin-top: 30px;
+}
+.acc_not_connected_heading  {
+    color: #2E3646;
+    margin-top: 20px;
+    font-size: 25px;
+}
 /**/
 @media screen and (max-width: 1024px) {
     .post_review_wrapper table th {
