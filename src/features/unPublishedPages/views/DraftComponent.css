@@ -239,6 +239,9 @@ button.outline_btn.schedule_btn {
     div.draft_button_outer{
         display: block !important;
     }
+    h2.acc_not_connected_heading {
+        font-size: 19px;
+    }
 }
 @media screen and (max-width:991px) {
     button.outline_btn.schedule_btn{
@@ -246,6 +249,9 @@ button.outline_btn.schedule_btn {
     }
     div.draft_button_outer{
         display: flex !important;
+    }
+    h2.acc_not_connected_heading {
+        font-size: 16px;
     }
 }
 @media screen and (max-width:767px) {
@@ -259,6 +265,12 @@ button.outline_btn.schedule_btn {
     }
     .draft-heading{
         display: block;
+    }
+    .no-draft-img{
+        height: auto !important;
+    }
+    h2.acc_not_connected_heading{
+        font-size: 12px;
     }
     
 }

@@ -465,7 +465,9 @@ img.connection-error-svg {
     .social_media_outer {
       gap: 5px;
     }
-
+    .social_media_content h5 {
+        font-size: 13px;
+    }
     .createPost_btn {
         margin-left: 9px;
     }
@@ -524,8 +526,12 @@ img.connection-error-svg {
     .monthly_growth {
         display: block;
     }
+    .social_media_content{
+        flex-wrap: wrap;
+    }
     .connection-warning-text {
         font-size: 18px;
+    
     }
     .noPostScheduled_img{
         width: 100%;
@@ -581,6 +587,16 @@ img.connection-error-svg {
     button.ConnectBtn {
         width: 115px !important;
         height: 35px !important;
+    }
+    div.noDraftPosts_outer {
+        padding: 20px !important;
+    }
+    div.cmn_background {
+        min-height: 100%;
+        padding: 20px !important;
+    }
+    .No_Upcoming_Posts_heading{
+        font-size: 14px;
     }
 
 }

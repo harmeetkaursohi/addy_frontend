@@ -223,6 +223,18 @@ p.disable-reply-comment {
     margin-top: 20px;
     font-size: 25px;
 }
+
+.post_review_wrapper.table-responsive::-webkit-scrollbar {
+    height: 3px; 
+}
+
+.post_review_wrapper.table-responsive::-webkit-scrollbar-thumb {
+    background-color:transparent;
+}
+
+.post_review_wrapper.table-responsive::-webkit-scrollbar-track {
+    background-color: transparent; 
+}
 /**/
 @media screen and (max-width: 1024px) {
     .post_review_wrapper table th {
@@ -234,7 +246,11 @@ p.disable-reply-comment {
         height: 37px;
     }
 }
-
+@media screen and (max-width:991px) {
+    .post_review_wrapper table th {
+        font-size: 14px;
+    }
+}
 @media screen and (max-width: 767px) {
     .review_header {
         display: block;
@@ -251,4 +267,8 @@ p.disable-reply-comment {
     .filter_select_btn {
         margin-top: 14px;
     }
+    .acc_not_connected_outer img {
+        width: 100%;
+    }
+    
 }

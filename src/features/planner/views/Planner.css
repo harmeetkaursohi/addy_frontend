@@ -363,6 +363,9 @@ button.fc--button.fc-button.fc-button-primary {
     .event_group {
         border-right: unset;
     }
+    .fc-scrollgrid-sync-inner a {
+        font-size: 11px;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -371,13 +374,16 @@ button.fc--button.fc-button.fc-button-primary {
     }
     .draft_btn{
         margin-right: 7px;
-    
+        padding: 8px;
+    font-size: 12px;
        }
     .events_wrapper {
         display: block;
 
     }
-
+    .planner_outer {
+        padding: 18px;
+    }
     .custom-header {
         margin-top: 13px;
     }

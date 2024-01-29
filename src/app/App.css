@@ -160,6 +160,7 @@ input::-webkit-inner-spin-button {
     font-size: 23px;
     color: #2E3646;
     text-align: left;
+    margin-bottom: 0px;
 
 }
 .NotConncted_text {
@@ -236,7 +237,11 @@ h2.openEye {
     }
 
 }
-
+@media screen  and (max-width:767px) {
+    .comment_container {
+        padding-left: 62px;
+    }
+}
 /* new css======= */
 .feed_preview_Caption_outer{
     overflow-y: scroll;

@@ -74,7 +74,7 @@ const Review = () => {
 
 
     if (isError) return <p className='center'>Error: {error.message}</p>
-
+   
     return (
         <>
             <section>
@@ -105,12 +105,13 @@ const Review = () => {
                                     })}
                                 </select>
                             </div>
-
-                            <div className="post_review_wrapper ">
-
+                            
+                             {isLoading ?
+                            <CommonLoader/> :
+                            <div className= "post_review_wrapper  table-responsive" >
                                 <table className={"review_data"}>
 
-                                    <thead className="table-responsive position-sticky" style={{top: "0"}}>
+                                    <thead className="position-sticky" style={{top: "0"}}>
 
                                     <tr>
                                         <th>{jsondata.post}</th>
@@ -125,12 +126,6 @@ const Review = () => {
 
                                     <tbody className="position-relative">
                                     {
-                                        isLoading ?
-                                            <div className={"w-100 position-absolute table_loader"}>
-                                                <CommonLoader/>
-                                            </div>
-                                            :
-                                            
                                             results?.map((post, index) => (
 
                                                 <tr
@@ -183,16 +178,17 @@ const Review = () => {
 
                                 </table>
                                 
-                                {/*  */}
+                               
 
                             </div>
+                           }
                                 {isLoading===false && results.length===0?
                                 <div className="acc_not_connected_outer">
                                     <img src={notConnected_img} alt="notConnected_img"/>
                                     <h2 className="acc_not_connected_heading">No Account is connected Yet!  Please connect an account.</h2>
                                 </div>
                                 
-                                :""}
+                            :""}
 
                            
                         </div>
