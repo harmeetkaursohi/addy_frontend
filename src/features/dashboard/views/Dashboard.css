@@ -485,7 +485,9 @@ img.connection-error-svg {
     .followers_outer {
         display: block;
     }
-
+    button#dropdown-basic {
+        min-width: 180px;
+    }
     .followers_wrapper {
         margin-top: 15px;
     }
@@ -525,6 +527,9 @@ img.connection-error-svg {
 @media screen and (max-width: 767px) {
     .monthly_growth {
         display: block;
+    }
+    .dropdown_btn_Outer_container{
+        flex-wrap: wrap;
     }
     .social_media_content{
         flex-wrap: wrap;

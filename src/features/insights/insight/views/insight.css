@@ -382,9 +382,15 @@ h2.Review_Heading {
     .account_reach_overview_wrapper {
         display: block;
     }
-
+    .reach-engagement-select{
+        position: unset;
+    }
     .account_reach_overview_outer {
         margin-top: 10px;
+    }
+    ul.overview_tabs.nav.nav-tabs {
+        margin-top: 17px;
+
     }
 
     div.card_body_content {
@@ -403,8 +409,19 @@ h2.Review_Heading {
         display: block;
     }
     .select-account-txt {
-       
         font-size: 14px;
+    }
+    .overview_tabs button#uncontrolled-tab-example-tab-Overview {
+        padding: 3px 16px;
+    }
+    select.days_option {
+        font-size: 12px;
+    }
+    .page_title_header{
+        margin: 0px;
+    }
+    .days_outer {
+        margin-top: 11px;
     }
     .select-page-text-outer.ms-2 {
         margin-top: 11px;

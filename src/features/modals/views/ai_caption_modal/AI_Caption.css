@@ -72,5 +72,8 @@ li.selectedCaption{
             width: 108px;
             height: 39px;
         }
+        .ai_caption{
+            font-size: 16px;
+        }
 
     }

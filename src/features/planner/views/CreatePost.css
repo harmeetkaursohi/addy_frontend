@@ -747,15 +747,42 @@ createPost_outer select {
     .post_preview_outer {
         display: block;
     }
+    button.save_button {
+        right: 40px;
+    }
+    button.delete_upload{
+        margin-top: 12px;
+    }
+    .schedule_btn {
+        min-width: 97px;
+    }
+    .create_post_text {
+        font-size: 12px;
+    
+    }
+    
+    
 
     .create_post_content {
         padding: 30px 19px;
+    }
+    .img_footer {
+        gap: 8px;
+        left: 24px;
+        right: 0;
+       
+        justify-content: unset;
     }
 
     .caption_header {
         display: block;
     }
-
+    .cancel_btn{
+        min-width: 81px;
+    }
+.feed_preview {
+    font-size: 19px;
+}
     .ai_btn {
         margin-top: 10px;
     }
@@ -800,6 +827,9 @@ createPost_outer select {
     .like_img {
         margin-right: 23px;
 
+    }
+    .cancel_publish_btn_outer{
+        display: block !important;
     }
 }
 
