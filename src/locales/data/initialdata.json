@@ -13,8 +13,8 @@
   "createPassword": {
     "createPassword": "Create Password"
   },
-  "forgetPassword": {
-    "forgetPassword": "Forget Password"
+  "forgotPassword": {
+    "forgotPassword": "Forgot Password"
   },
   "post": "Post",
   "action": "Action",

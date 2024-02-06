@@ -3,7 +3,7 @@ import {
     loginUser,
     createPassword,
     signUpUser,
-    forgetPassword,
+    forgotPassword,
     getUserInfo
 } from "../../actions/userActions/userActions.js";
 
@@ -13,7 +13,7 @@ const userSlice = createSlice({
             loginUserReducer: {loading: false},
             signUpReducer: {loading: false},
             createPasswordReducer: {loading: false},
-            forgetPasswordReducer: {loading: false},
+            forgotPasswordReducer: {loading: false},
             token: localStorage.getItem('token') || null,
             userInfoReducer: {loading: false},
         },
@@ -54,15 +54,15 @@ const userSlice = createSlice({
             [createPassword.rejected]: (state) => {
                 state.createPasswordReducer = {loading: false}
             },
-            // forget password
-            [forgetPassword.pending]: (state) => {
-                state.forgetPasswordReducer = {loading: true};
+            // forgot password
+            [forgotPassword.pending]: (state) => {
+                state.forgotPasswordReducer = {loading: true};
             },
-            [forgetPassword.fulfilled]: (state) => {
-                state.forgetPasswordReducer = {loading: false}
+            [forgotPassword.fulfilled]: (state) => {
+                state.forgotPasswordReducer = {loading: false}
             },
-            [forgetPassword.rejected]: (state) => {
-                state.forgetPasswordReducer = {loading: false}
+            [forgotPassword.rejected]: (state) => {
+                state.forgotPasswordReducer = {loading: false}
             },
             //user info
             [getUserInfo.pending]: (state) => {

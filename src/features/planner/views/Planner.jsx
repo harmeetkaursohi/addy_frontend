@@ -380,7 +380,7 @@ const Planner = () => {
                                 />
 
 
-                            < /div>
+                            </div>
 
                             <div className={"hr-line"}></div>
 

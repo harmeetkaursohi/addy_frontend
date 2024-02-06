@@ -135,7 +135,7 @@ const Login = () => {
                                                     <div></div>
                                                     <Link to="/forgot-password">
                                                         <label
-                                                            className='forgetPass_heading cursor_pointer'>{jsondata.forgotpassword}?</label>
+                                                            className='forgotPass_heading cursor_pointer'>{jsondata.forgotpassword}?</label>
                                                     </Link>
 
                                                 </div>
