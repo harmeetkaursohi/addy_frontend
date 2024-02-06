@@ -80,8 +80,7 @@ function ForgotPassword() {
                                                 />
                                                 {formik.touched.email && formik.errors.email ? (
                                                     <p className="error_message">{formik.errors.email}</p>
-                                                ) : null}
-
+                                                ) : null}                                                
                                                 <button type="submit"
                                                         disabled={forgotPasswordData?.loading}
                                                         className={' login_btn '+(forgotPasswordData?.loading?"opacity-50":"")}>{jsondata.forgotPassword.forgotPassword}

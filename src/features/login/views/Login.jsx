@@ -11,13 +11,14 @@ import {validationSchemas} from "../../../utils/commonUtils.js";
 import React, {useEffect, useState} from "react";
 import {showErrorToast} from "../../common/components/Toast";
 import Frame from "../../../images/Frame.svg";
-
+import {RotatingLines} from "react-loader-spinner";
 
 const Login = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         document.title = 'Login';
@@ -31,11 +32,14 @@ const Login = () => {
         },
         validationSchema: validationSchemas.login,
         onSubmit: (values) => {
+            setIsLoading(true)
             dispatch(loginUser({values})).then((response) => {
+                setIsLoading(false)
                 if (response.meta.requestStatus === "fulfilled") {
                     navigate("/dashboard")
                 }
             }).catch((error) => {
+                setIsLoading(false)
                 showErrorToast(error.response.data.message);
             });
         },
@@ -138,9 +142,8 @@ const Login = () => {
                                                             className='forgotPass_heading cursor_pointer'>{jsondata.forgotpassword}?</label>
                                                     </Link>
 
-                                                </div>
-
-                                                <button type={"submit"} className='login_btn'>{jsondata.login}</button>
+                                                </div>                                                
+                                                <button type={"submit"} className='login_btn' disabled={isLoading}>{jsondata.login} {isLoading ? (<span className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines width={30} strokeColor={"white"}></RotatingLines></span>): ""}</button>
                                                 <h2 className='cmn_heading'>OR</h2>
 
                                                 {/*======= login with  google =======*/}

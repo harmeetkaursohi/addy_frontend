@@ -14,7 +14,7 @@ const socialAccountSlice = createSlice({
     name: 'socialAccount',
     initialState: {
         connectSocialAccountReducer: {loading: false},
-        getAllConnectedSocialAccountReducer: {loading: false},
+        getAllConnectedSocialAccountReducer: {loading: true},
         disconnectSocialAccountReducer: {loading: false},
         findSocialAccountByProviderAndCustomerIdReducer: {loading: false},
         getAllByCustomerIdReducer: {loading: false},
