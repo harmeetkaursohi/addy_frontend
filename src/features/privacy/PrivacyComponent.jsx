@@ -4,7 +4,7 @@ import "./privacy.css";
 
 const PrivacyComponent = () => {
   const [iframeContent, setIframeContent] = useState("");
-  const url = process.env.VITE_APP_PRIVACY_POLICY_PAGE_URL;
+  const url = import.meta.env.VITE_APP_PRIVACY_POLICY_PAGE_URL;
   const divId = "privacy-policy-content";
   useEffect(() => {
     fetch(url)
