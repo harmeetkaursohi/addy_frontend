@@ -133,7 +133,7 @@ const Login = () => {
 
                                                 <div className='check_box_outer'>
                                                     <div></div>
-                                                    <Link to="/forget-password">
+                                                    <Link to="/forgot-password">
                                                         <label
                                                             className='forgetPass_heading cursor_pointer'>{jsondata.forgotpassword}?</label>
                                                     </Link>

@@ -14,7 +14,7 @@ import AddressForm from '../features/signup/views/tabs/AddressInfo.jsx'
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreatePassword from '../features/resetPassword/views/CreatePassword'
-import ForgetPassword from '../features/forgetPassword/ForgetPassword'
+import ForgotPassword from '../features/forgotPassword/ForgotPassword'
 import Signup from '../features/signup/views/Signup'
 import NotFound from '../features/common/components/NotFound'
 import React from 'react'
@@ -68,7 +68,7 @@ const App = () => {
                     <Route path="/" element={<Login/>}/>
                     <Route path="/signup" element={<Signup/>}/>
                     <Route path="/reset-password" element={<CreatePassword/>}/>
-                    <Route path="/forget-password" element={<ForgetPassword/>}/>
+                    <Route path="/forgot-password" element={<ForgotPassword/>}/>
                     <Route path="/fb" element={<ConnectPagesModal/>}/>
                     <Route path="/auth-redirect" element={<Oauth2RedirectComponent/>}/>
                     <Route path="*" element={<NotFound/>}/>

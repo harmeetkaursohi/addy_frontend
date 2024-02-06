@@ -11,7 +11,7 @@ import {
 } from "../../../services/instagramService";
 import {baseAxios, getInstagramBusinessAccounts} from "../../../utils/commonUtils";
 import {getDashBoardPinterestGraphReport, getPinterestAccountReport} from "../../../services/pinterestService";
-import {getLinkedinAccountReport} from "../../../services/linkedinService";
+import {getDashBoardLinkedinGraphReport, getLinkedinAccountReport} from "../../../services/linkedinService";
 
 
 export const socialAccountConnectActions = createAsyncThunk('socialAccount/socialAccountConnectActions', async (data, thunkAPI) => {
@@ -138,6 +138,12 @@ export const getSocialMediaGraphByProviderTypeAction = createAsyncThunk('socialA
             })
         }
         case  "LINKEDIN": {
+            return await  getDashBoardLinkedinGraphReport(data?.pages[0] ,data?.query || {},data?.token).then((res)=>{
+                return res;
+            }).catch(error=>{
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            })
 
         }
         default : {

@@ -2,7 +2,7 @@ import CommonLoader from "../../../common/components/CommonLoader";
 import noAccountData from "../../../../images/no_social_account.png";
 import Dropdown from "react-bootstrap/Dropdown";
 import {
-    computeImageURL,
+    computeImageURL, generateUnixTimestampFor,
     getCustomDateEarlierUnixDateTime, getDatesForPinterest, getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
     isPageConnected,
     notConnectedSocialMediaAccount, socialMediaAccountHasConnectedPages

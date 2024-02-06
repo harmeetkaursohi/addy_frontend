@@ -48,7 +48,7 @@ export const validationSchemas = {
         state: yup.string().required('State is required'),
     }),
 
-    forgetPassword: yup.object().shape({
+    forgotPassword: yup.object().shape({
         email: yup.string().required('Email is required').email('Invalid email format'),
     }),
 };
@@ -447,6 +447,15 @@ export const computeAndReturnSummedDateValues = (data, socialMediaType) => {
             })
             return result
         }
+        case "LINKEDIN": {
+            const result = data?.map(element => {
+                return {
+                    endDate: convertUnixTimestampToDateTime(element?.timeRange?.end/1000)?.date ,
+                    count: element?.followerGains?.organicFollowerGain+element?.followerGains?.paidFollowerGain
+                }
+            })
+            return result
+        }
     }
 }
 
@@ -781,6 +790,13 @@ export const getQueryForGraphData = (socialMediaType, selectedGraphDays) => {
             return {
                 startDate: getDatesForPinterest(selectedGraphDays),
                 endDate: getDatesForPinterest("now")
+            }
+
+        }
+        case "LINKEDIN": {
+            return {
+                createdFrom: generateUnixTimestampFor(selectedGraphDays )*1000,
+                createdTo: generateUnixTimestampFor("now")*1000
             }
 
         }
@@ -1307,9 +1323,6 @@ export const filterAndSumPinterestUserAnalyticsDataFor = (data = null, days = nu
         VIDEO_MRC_VIEW: "N/A",
         VIDEO_AVG_WATCH_TIME: "N/A"
     }
-    console.log("data", data)
-    console.log("days", days)
-    console.log("fieldsToFilter", fieldsToFilter)
     if (data === null || fieldsToFilter === null || fieldsToFilter?.length === 0) {
         return response;
     }
@@ -1328,7 +1341,6 @@ export const filterAndSumPinterestUserAnalyticsDataFor = (data = null, days = nu
         }
 
     }
-    console.log("response,res", response)
     return response;
 }
 export const getFormattedTotalFollowersCountData = (data, socialMediaType) => {

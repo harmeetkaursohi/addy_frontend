@@ -10,7 +10,7 @@ import Frame from "../../images/Frame.svg";
 import {RotatingLines} from "react-loader-spinner";
 
 
-function ForgetPassword() {
+function ForgotPassword() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -113,4 +113,4 @@ function ForgetPassword() {
     )
 }
 
-export default ForgetPassword
+export default ForgotPassword
