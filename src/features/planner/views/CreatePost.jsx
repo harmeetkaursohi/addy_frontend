@@ -390,8 +390,9 @@ const CreatePost = () => {
                                                                        checked={areAllOptionsSelected}
                                                                        onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
                                                                 />
-                                                                <h3 className="cmn_headings">Select all
-                                                                    Platform</h3>
+                                                                 <h3 className="cmn_headings" onClick={function(){
+                                                                    document.getElementById("choice1-2").click()
+                                                                }}>Select all Platform</h3>
                                                             </div>
 
                                                             {
@@ -482,7 +483,7 @@ const CreatePost = () => {
                                                             key={index}
                                                         >
                                                             <div className="flex-grow-1 d-flex align-items-center">
-                                                                <i className="fas fa-grip-vertical me-2"></i>
+                                                                {/* <i className="fas fa-grip-vertical me-2"></i> */}
                                                                 {
                                                                     file.file.type.startsWith('image/') &&
                                                                     <img className={"upload_image me-3"}
@@ -514,7 +515,7 @@ const CreatePost = () => {
                                             <div className="darg_navs file_outer">
                                                 {
                                                     disableImage === false && <div
-                                                        className={"cmn_blue_border add_media_outer"}>
+                                                        className={"cmn_blue_border add_media_outer"}   onClick={function(){ document.getElementById('image').click(); }} >
                                                         <input type="file" id='image'
                                                                className='file'
                                                                multiple
@@ -536,7 +537,7 @@ const CreatePost = () => {
 
                                                 {
                                                     disableVideo === false &&
-                                                    <div className="cmn_blue_border add_media_outer">
+                                                    <div className="cmn_blue_border add_media_outer"  onClick={function(){ document.getElementById('video').click(); }} >
                                                         <input
                                                             type="file"
                                                             id='video'

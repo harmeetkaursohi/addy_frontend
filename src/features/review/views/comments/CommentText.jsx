@@ -1,20 +1,16 @@
 const CommentText = ({comment, className = "", socialMediaType, usernames = [],setShowText,showText}) => {
 
 
-const showTextHandler=()=>{
-
-    setShowText(!showText)
-}
+    const showTextHandler=()=>{        
+        if(comment.length > 200){
+            setShowText(!showText)
+        }
+    }   
     if (socialMediaType === "INSTAGRAM") {
         const words = comment.split(' ');
-        return words.map((word, index) => {
-            
+        return words.map((word, index) => {            
             if (word.startsWith('@') || word.startsWith('#')) {
-                return (
-                    <span key={index} className={className} onClick={showTextHandler}>
-            {word}{' '}
-          </span>
-                );
+                return (<span key={index} className={className} onClick={showTextHandler}>{word}{' '}</span>);
             }
             return <span onClick={showTextHandler} key={index}>{word} </span>;
         });
