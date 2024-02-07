@@ -230,6 +230,9 @@ p.disable-reply-comment {
     .cmn_small_heading {
         font-size: 14px;
     }
+    .post_review_wrapper table td{
+        font-size: 12px;
+    }
 
     .cmn_text_heading {
         font-size: 22px;
