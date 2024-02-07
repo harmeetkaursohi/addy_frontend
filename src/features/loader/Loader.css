@@ -16,3 +16,7 @@ span.spinner-border.spinner-border-sm.loader {
     height: 25px;
     width: 25px;
 }
+span.spinner-border.spinner-border-sm.loader.create-post-loader {
+    height: 15px;
+    width: 15px;
+}
