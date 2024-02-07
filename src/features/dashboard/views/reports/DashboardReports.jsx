@@ -128,7 +128,7 @@ export const DashboardReports = () => {
 
         <>
 
-            <div className="col-lg-7 col-xl-8 col-sm-12">
+            <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer">
 
                 {getAllConnectedSocialAccountData?.loading || connectedPagesReducer?.loading || facebookPageListReducer?.loading ?
                     <div className="cmn_background p-5 text-center ">

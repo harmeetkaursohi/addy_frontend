@@ -14,6 +14,7 @@ div.card_body_content{
     border-radius: 7px;
     border: 2px solid #F3F4F4;
     background: #FFF;
+    width: 33.3%;
 }
 .caresoul_inner_content_outer {
     position: relative;
@@ -94,5 +95,24 @@ div.card_body_content{
     }
     .acountReach_content_container li h3{
         font-size: 15px;
+    }
+}
+
+
+@media screen and (max-width:991px) {
+    div.card_body_content{
+        width: 100%;
+    }
+}
+@media screen and (max-width:767px) {
+    .insights-post-date-outer {
+        width: 100%;
+        padding: 10px;
+    }
+    .post_date{
+        font-size: 10px;
+    }
+    .insights-post-date-outer img{
+        margin-left: 0px !important;
     }
 }
