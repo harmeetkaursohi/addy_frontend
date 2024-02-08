@@ -159,6 +159,30 @@ button, .modal_inner_content.disconnect_wrapper
     }
 }
 
+
+@media screen and (max-width: 767px) {
+    .facebook_title {
+        width: 100%;
+    }
+    
+    .modal_inner_content {
+        flex-wrap: wrap;
+        padding-bottom: 15px;
+    }
+
+    .user_info_container {
+        flex-grow: 1;
+        width: 100%;
+    }
+    .facebook_title h2 {
+        font-size: 15px;
+        line-height: 21px;
+    }
+    .user_contents{
+        font-size: 14px;
+    }
+}
+
 @media (max-width: 567px) {
     .modal_inner_content {
         display: flex;
@@ -168,21 +192,5 @@ button, .modal_inner_content.disconnect_wrapper
 
     .facebook_content_outer {
         padding: 0px;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .facebook_title {
-        width: 100%;
-    }
-
-    .modal_inner_content {
-        flex-wrap: wrap;
-        padding-bottom: 15px;
-    }
-
-    .user_info_container {
-        flex-grow: 1;
-        width: 100%;
     }
 }

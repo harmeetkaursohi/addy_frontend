@@ -65,7 +65,14 @@ h2.cmn_title {
     font-style: normal;
     font-weight: 600;
 }
-@media(max-width: 1299px){
+
+@media screen and (min-width:2560px){
+div.Contact_us_Outer {
+        width: 33%;
+        margin: auto;
+    }
+}
+@media screen and (max-width: 1299px){
     h2.cmn_title{
         font-size: 30px;
     }
