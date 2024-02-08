@@ -199,15 +199,14 @@ const Insight = () => {
                         <div className="social_media_dropdown">
 
 
-                            {
-                                enabledSocialMedia.isFaceBookEnabled &&
+                            {(enabledSocialMedia.isFaceBookEnabled && connectedFacebookPages?.length) ? 
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
                                         id="dropdown-basic"
                                         className="instagram_dropdown"
                                     >
-                                        <i className={`fa-brands fa-facebook me-3 `}
+                                        <i className={`fa-brands fa-facebook me-3 facebook_ICON `}
                                            style={{color: "#0866ff", fontSize: "20px"}}/>
 
                                         Facebook
@@ -237,10 +236,9 @@ const Insight = () => {
                                         </Dropdown.Item>
 
                                     </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown> : (<></>)
                             }
-                            {
-                                enabledSocialMedia.isInstagramEnabled &&
+                            {(enabledSocialMedia.isInstagramEnabled && connectedInstagramPages?.length) ?                                
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -273,10 +271,9 @@ const Insight = () => {
                                             </ul>
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown> : (<></>)
                             }
-                            {
-                                enabledSocialMedia.isPinterestEnabled &&
+                            {(enabledSocialMedia.isPinterestEnabled && connectedPinterestBoards?.length) ?
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -313,12 +310,11 @@ const Insight = () => {
                                         </Dropdown.Item>
 
                                     </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown> : (<></>)
                             }
 
                             {/*TODO: Linkedin dropdown */}
-                            {
-                                enabledSocialMedia.isLinkedinEnabled &&
+                            {(connectedLinkedinPages?.length && enabledSocialMedia.isLinkedinEnabled)  ?
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -351,7 +347,7 @@ const Insight = () => {
                                             </ul>
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown> : (<></>)
                             }
                         </div>
                         {/* ============ */}
@@ -792,6 +788,6 @@ export default Insight;
 
 const DemographicDatNotAvailable = ({className = "", message = ""}) => {
     return (
-        <div className={"" + className}>{message}</div>
+        <div className={"demographic_data " + className}>{message}</div>
     );
 }

@@ -691,8 +691,8 @@ baseAxios?.interceptors?.request.use(
         if (isTokenValid() || isExempted) {
             return response
         } else {
-            window.location.href = '/login';
-            localStorage.clear();
+            window.location.href = '/dashboard';
+            /* localStorage.clear(); */
         }
     },
     error => Promise.reject(error)
@@ -704,10 +704,10 @@ baseAxios.interceptors.response.use(
         const isExempted = exemptedURLs.some(url => {
             return error?.request?.responseURL?.includes(url);
         })
-        if (error?.response?.status === 403 && !isExempted) {
+        /* if (error?.response?.status === 403 && !isExempted) {
             window.location.href = '/login';
             localStorage.clear();
-        }
+        } */
         return Promise.reject(error)
     }
 )
@@ -956,7 +956,28 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
             }
             return formattedData;
         }
-        case "LINKEDIN": {
+        case "LINKEDIN": {            
+            const readyData = data
+            const totalDays = Math.floor(readyData?.requestData?.monthly?.elements.length);
+            const previousData = readyData?.requestData?.monthly?.elements?.slice(0, totalDays / 2);
+            const dateRange = getFormattedPostTime(new Date(previousData[0]?.timeRange?.start), "DD-Mon") + "-" + getFormattedPostTime(new Date(previousData[Math.floor((totalDays / 2) - 1)]?.timeRange?.end), "DD-Mon")
+            formattedData = {
+                engagement: {
+                    presentData: data.Post_Activity.lifeTime,
+                    previousData: {
+                        data: data.Post_Activity.month,
+                        dateRange: dateRange
+                    }
+                },
+                reach: {
+                    presentData: data.Accounts_Reached.lifeTime,
+                    previousData: {
+                        data: data.Accounts_Reached.month,
+                        dateRange: dateRange
+                    }                    
+                }
+            }
+            return formattedData;
             break;
         }
     }
@@ -1305,6 +1326,18 @@ export const getDatesForPinterest = (daysAgo) => {
     return `${year}-${month}-${day}`;
 
 }
+export const getDatesForLinkedIn = (daysAgo) => {
+    if (isNullOrEmpty(daysAgo.toString())) {
+        return "";
+    }
+    const date = daysAgo === "now" ? new Date() : new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+
+}
 export const filterAndSumPinterestUserAnalyticsDataFor = (data = null, days = null, fieldsToFilter = []) => {
     let response = {
         PIN_CLICK_RATE: "N/A",
@@ -1360,6 +1393,14 @@ export const getFormattedTotalFollowersCountData = (data, socialMediaType) => {
                 id: data?.id,
                 name: data?.business_name,
                 followers_count: data?.follower_count
+            }
+            break;
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            response = {
+                id: data?.id,
+                name: data?.business_name,
+                followers_count: data?.all_time?.firstDegreeSize
             }
             break;
         }

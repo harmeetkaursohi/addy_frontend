@@ -46,6 +46,15 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
             break;
         }
         case "LINKEDIN": {
+            console.log("data--->",data)
+            /* const postIds = data.postIds.map(id => id).join(',');
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${postIds}`;
+            return await baseAxios.get(apiUrl, setAuthenticationHeader(data.token)).then(res => {
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            }); */
             break;
         }
     }
@@ -71,8 +80,14 @@ export const getTotalFollowers = createAsyncThunk('insight/getTotalFollowers', a
                 return thunkAPI.rejectWithValue(error.response);
             });
         }
-        case "LINKEDIN": {
-            break;
+        case "LINKEDIN": {            
+            const apiUrl = `${import.meta.env.VITE_APP_LINKEDIN_BASE_URL}/networkSizes?pageId=${data.pageId}&edgeType=COMPANY_FOLLOWED_BY_MEMBER`;
+            return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then(res => {
+                return getFormattedTotalFollowersCountData(res.data, "LINKEDIN");
+            }).catch(error => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });            
         }
     }
 
@@ -106,6 +121,21 @@ export const getAccountReachedAndAccountEngaged = createAsyncThunk('insight/getA
             break;
         }
         case "LINKEDIN": {
+            const apiUrl = `${import.meta.env.VITE_APP_LINKEDIN_BASE_URL}/linkedin/organizationalEntityShareStatistics?q=organizationalEntity&organizationalEntity=${data?.pageId}&timeGranularityType=DAY&startDate=${generateUnixTimestampFor((data?.period * 2) + 1)}&endDate=${generateUnixTimestampFor("now")*1000}`;            
+            return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then(res => {
+                    const linkedinOrgStatistics = res.data;
+                    let dt = {Accounts_Reached:{},Post_Activity:{},requestData:res.data}                    
+                    dt.Accounts_Reached.lifeTime = linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.impressionCount;
+                    dt.Post_Activity.lifeTime = linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.impressionCount*linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.engagement;
+                    dt.Accounts_Reached.month=linkedinOrgStatistics?.monthly?.elements.reduce((sum, element) => sum + element.totalShareStatistics.impressionCount, 0);
+                    dt.Post_Activity.month=linkedinOrgStatistics?.monthly?.elements.reduce((sum, element) => sum + (element.totalShareStatistics.impressionCount* element.totalShareStatistics.engagement), 0);                                       
+                    return getFormattedAccountReachAndEngagementData(dt, data?.socialMediaType);
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+
+            console.log("data2--->",data)
             break;
         }
     }
@@ -124,6 +154,7 @@ export const getDemographicsInsight = createAsyncThunk('insight/getDemographicsI
 
         }
         case "LINKEDIN": {
+            console.log("data3--->",data)
             break;
         }
     }
