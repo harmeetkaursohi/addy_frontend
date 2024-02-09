@@ -280,6 +280,7 @@ function Carousel({ selectedPage }) {
                   getPostDataWithInsightsData?.data[key],
                   selectedPage?.socialMediaType
                 );
+                console.log("formattedData",formattedData)
                 return (
                   <Col lg="4" md="6" sm="12" xs="12" key={key + "slide"}>
                     <Card className="card_body_content">

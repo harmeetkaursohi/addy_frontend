@@ -1059,10 +1059,10 @@ export const extractParameterFromUrl = (url, parameterName) => {
 export const getFormattedPostDataForSlider = (data, socialMediaType) => {
     if (data === null || data === undefined) {
         return []
-    }
-
+    }    
     let formattedData = {}
     switch (socialMediaType) {
+        case SocialAccountProvider.LINKEDIN?.toUpperCase():
         case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
             formattedData = {
                 total_like: data?.like_count,
@@ -1096,9 +1096,9 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
             }
             return formattedData;
         }
-        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+        /* case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
             break;
-        }
+        } */
     }
 
 }
@@ -1135,6 +1135,7 @@ export const getAttachmentsData = (data, socialMediaType) => {
             }
 
         }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase():
         case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
             if (data?.media_type === undefined) {
                 return []
