@@ -263,13 +263,10 @@ h2.openEye {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
 }
-.calender_outer_wrapper table.fc-col-header thead tr {
-  overflow: scroll;
-  display: flex;
-  scrollbar-width: thin;
-}
+
 @media screen and (max-width: 2560px) {
   div.cmn_loader_outer {
     min-height: calc(100vh - 166px) !important;
   }
 }
+

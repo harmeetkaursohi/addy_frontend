@@ -25,7 +25,7 @@
     border-radius: 6px;
     border: 1px solid #D1D9E2;
     background: #FFF;
-    padding: 8px 16px;
+    padding: 8px ;
     min-width: 97px;
     color: black;
     margin-right: 15px;
@@ -343,56 +343,6 @@ button.fc--button.fc-button.fc-button-primary {
 }
 
 
-@media screen and (max-width: 991px) {
-    .planner_header_outer {
-        display: block;
-    }
-
-    .create_post_btn {
-        margin-top: 12px
-    }
-    .draft_createPost_outer{
-        margin-top: 10px;
-    }
-    .event_group h5 {
-        font-size: 13px;
-    }
-
-    .event_group {
-        border-right: unset;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .planner_header h6 {
-        font-size: 14px;
-    }
-    
-    .events_wrapper {
-        display: block;
-
-    }
-
-    .custom-header {
-        margin-top: 13px;
-    }
-
-    .event_group {
-        border-right: unset;
-    }
-
-
-    .fc .fc-toolbar-title {
-        font-size: 11px;
-
-    }
-
-    .filter_options {
-        position: unset;
-        font-size: 14px;
-    }
-
-}
 
 .hr-line {
     display: inline-block;
@@ -429,4 +379,83 @@ a.fc-daygrid-dot-event:hover {
 
 .fc-daygrid-day-top {
     height: 34px;
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+@media screen and (max-width: 991px) {
+    .planner_header_outer {
+        display: block;
+    }
+
+    .create_post_btn {
+        margin-top: 12px
+    }
+    .draft_createPost_outer{
+        margin-top: 10px;
+    }
+    .event_group h5 {
+        font-size: 13px;
+    }
+
+    .event_group {
+        border-right: unset;
+    }
+    .fc .fc-col-header-cell-cushion {
+        font-size: 11px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .planner_header h6 {
+        font-size: 14px;
+    }
+    .planner_outer {
+        padding: 15px;
+    }
+    .events_wrapper {
+        display: block;
+
+    }
+    .create_post_btn{
+        padding: 8px;
+        width: 100%;
+        text-align: center;
+    }
+    .create_post_btn_Wrapper{
+        display: flex;
+        gap: 10px;
+    }
+    .calender_outer_wrapper table.fc-col-header thead tr {
+        overflow: scroll;
+        display: flex;
+        scrollbar-width: thin;
+      }
+    .custom-header {
+        margin-top: 13px;
+    }
+
+    .event_group {
+        border-right: unset;
+    }
+
+
+    .fc .fc-toolbar-title {
+        font-size: 11px;
+
+    }
+
+    .filter_options {
+        position: unset;
+        font-size: 14px;
+    }
+    .draft_btn{
+
+        font-size: 12px;
+        width: 100%;
+        margin-right: 0px;
+    }
+
 }

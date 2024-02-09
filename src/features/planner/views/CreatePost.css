@@ -573,7 +573,7 @@ createPost_outer select {
 }
 
 .post_img {
-    /*width: 441px;*/
+ 
     width: 100%;
 
 }
@@ -649,201 +649,7 @@ createPost_outer select {
     font-size: 9px;
 }
 
-@media (max-width: 1440px) {
-    .fb_likes h3 {
-        font-size: 16px;
-    }
 
-    .fb_likes svg {
-        height: 18px;
-        width: 18px;
-    }
-
-    .fb_likes {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-}
-
-@media (max-width: 1299px) {
-    .create_post_content {
-        padding: 30px 20px;
-    }
-
-    .fb_likes svg {
-        height: 16px;
-        width: 16px;
-    }
-
-    .fb_likes h3 {
-        font-size: 14px;
-    }
-
-    .post_preview_outer {
-        padding: 2em;
-    }
-
-
-}
-
-@media screen and (max-width: 1024px) {
-    .get_messages_outer {
-        display: block;
-    }
-
-    .post_img {
-        width: 100%
-    }
-
-    .add_media_outer {
-        padding: 9px 21px;
-    }
-
-    .feed_preview {
-        text-align: center;
-    }
-
-    .create_post_content {
-        padding: 30px 10px
-    }
-
-    .schedule_btn_outer {
-        display: block;
-    }
-
-    .add_btn {
-        margin-top: 10px;
-    }
-
-    .schedule_date_outer {
-        display: block;
-    }
-
-    .publish_post_outer {
-        display: block;
-    }
-
-    .cancel_publish_btn_outer {
-        margin-top: 13px;
-    }
-
-    .date_time_outer select {
-        width: 100%;
-    }
-
-    .date_time_outer {
-        margin-top: 20px;
-    }
-
-}
-
-@media screen and (max-width: 991px) {
-    .feed_preview {
-        text-align: center;
-        padding-top: 10px;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .post_preview_outer {
-        display: block;
-    }
-    button.save_button {
-        right: 40px;
-    }
-    .schedule_btn_wrapper{
-        justify-content: space-between;
-    }
-    .checkbox-button_outer h2 {
-        font-size: 12px;
-    }
-    .schedule_btn {
-        min-width: 97px;
-    }
-    .create_post_text {
-        font-size: 12px;
-    
-    }
-    .media_outer{
-        padding: 10px;
-    }
-    .fb_likes h3 {
-        font-size: 12px;
-    }
-
-    .create_post_content {
-        padding: 30px 19px;
-    }
-    .img_footer {
-        gap: 8px;
-        left: 24px;
-        right: 0;
-       
-        justify-content: unset;
-    }
-
-    .caption_header {
-        display: block;
-    }
-    .cancel_btn{
-        min-width: 81px;
-    }
-.feed_preview {
-    font-size: 19px;
-}
-    .ai_btn {
-        margin-top: 10px;
-    }
-
-    .textarea_outer {
-        margin-top: 13px;
-    }
-
-    .get_messages_outer {
-        display: block;
-    }
-
-    .add_btn {
-        margin-top: 10px;
-    }
-
-    .schedule_btn_outer {
-        display: block;
-    }
-
-    
-
-    .add_media_outer {
-        margin-top: 20px;
-    }
-
-    .cmn_bg_btn {
-        padding: 10px;
-    }
-
-    .like_comment_outer img {
-        height: 20px;
-        width: 20px;
-    }
-
-    
-
-    .like_img {
-        margin-right: 23px;
-
-    }
-    .cancel_publish_btn_outer{
-        justify-content: space-between;
-    }
-    .fb_likes {
-        gap: 5px;
-    }
-    .like_comment_outer{
-        padding: 9px 5px
-    }
-}
 
 /**/
 html {
@@ -994,3 +800,211 @@ button.loading {
 }
 
 
+
+
+
+@media (max-width: 1440px) {
+    .fb_likes h3 {
+        font-size: 16px;
+    }
+
+    .fb_likes svg {
+        height: 18px;
+        width: 18px;
+    }
+
+    .fb_likes {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+}
+
+@media (max-width: 1299px) {
+    .create_post_content {
+        padding: 30px 20px;
+    }
+
+    .fb_likes svg {
+        height: 16px;
+        width: 16px;
+    }
+
+    .fb_likes h3 {
+        font-size: 14px;
+    }
+
+    .post_preview_outer {
+        padding: 2em;
+    }
+
+
+}
+
+@media screen and (max-width: 1024px) {
+    .get_messages_outer {
+        display: block;
+    }
+
+   
+    .add_media_outer {
+        padding: 9px 21px;
+    }
+
+    .feed_preview {
+        text-align: center;
+    }
+
+    .create_post_content {
+        padding: 30px 10px
+    }
+
+    .schedule_btn_outer {
+        display: block;
+    }
+
+    .add_btn {
+        margin-top: 10px;
+    }
+
+    .schedule_date_outer {
+        display: block;
+    }
+
+    .publish_post_outer {
+        display: block;
+    }
+
+    .cancel_publish_btn_outer {
+        margin-top: 13px;
+    }
+
+    .date_time_outer select {
+        width: 100%;
+    }
+
+    .date_time_outer {
+        margin-top: 20px;
+    }
+
+}
+
+@media screen and (max-width: 991px) {
+    .feed_preview {
+        text-align: center;
+        padding-top: 10px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .post_preview_outer {
+        display: block;
+    }
+    .file_outer {
+        gap: 10px;
+    }
+    .add_media_outer label{
+        display: block;
+        font-size: 12px;
+    }
+    .darg_navs.file_outer .add_media_outer {
+        padding: 6px;
+    }
+    .add_media_outer label i {
+        margin-right: 7px;
+    }
+    button.save_button {
+        right: 40px;
+    }
+    .schedule_btn_wrapper{
+        justify-content: space-between;
+    }
+    .checkbox-button_outer h2 {
+        font-size: 12px;
+    }
+    .schedule_btn {
+        min-width: 97px;
+    }
+    .create_post_text {
+        font-size: 12px;
+    
+    }
+    .media_outer{
+        padding: 10px;
+    }
+    .fb_likes h3 {
+        font-size: 12px;
+    }
+
+    .create_post_content {
+        padding: 30px 19px;
+    }
+    .img_footer {
+        gap: 8px;
+        left: 24px;
+        right: 0;
+       
+        justify-content: unset;
+    }
+
+    .caption_header {
+        display: block;
+    }
+    .cancel_btn{
+        min-width: 81px;
+    }
+.feed_preview {
+    font-size: 18px;
+}
+    .ai_btn {
+        margin-top: 10px;
+    }
+
+    .textarea_outer {
+        margin-top: 13px;
+    }
+
+    .get_messages_outer {
+        display: block;
+    }
+
+    .add_btn {
+        margin-top: 10px;
+    }
+
+    .schedule_btn_outer {
+        display: block;
+    }
+
+    
+
+    .add_media_outer {
+        margin-top: 20px;
+    }
+
+    .cmn_bg_btn {
+        padding: 10px;
+    }
+
+    .like_comment_outer img {
+        height: 20px;
+        width: 20px;
+    }
+
+    
+
+    .like_img {
+        margin-right: 23px;
+
+    }
+    .cancel_publish_btn_outer{
+        justify-content: space-between;
+    }
+    .fb_likes {
+        gap: 5px;
+    }
+    .like_comment_outer{
+        padding: 9px 5px
+    }
+}

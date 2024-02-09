@@ -276,7 +276,7 @@ const Planner = () => {
                                 <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
                                 <h6>Here you find all the upcoming Posts you scheduled.</h6>
                             </div>
-                            <div>
+                            <div className='create_post_btn_Wrapper'>
                                 
                                 <GenericButtonWithLoader
                                     label={isDraftPost ? jsondata.backToPlanner : jsondata.draftPost}
