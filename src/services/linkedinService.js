@@ -10,7 +10,6 @@ export const fetchUserProfile = async (accessToken) => {
         const response = await axios.get('https://api.linkedin.com/v2/me', {
             headers: {Authorization: `Bearer ${accessToken}`}
         });
-
         return response.data;
     } catch (error) {
         console.error('Error fetching LinkedIn user information:', error);
@@ -47,15 +46,15 @@ export const getLinkedinAccountReport = async (page, token) => {
 
 
         //Linkedin Analytics
-        const fullPathAnalytics = `${baseUrl}/linkedin/organizationalEntityShareStatistics?q=organizationalEntity&organizationalEntity=${page?.pageId}&timeGranularityType=MONTH&startDate=${generateUnixTimestampFor(30)*1000}&endDate=${generateUnixTimestampFor("now")*1000}`;
+        const fullPathAnalytics = `${baseUrl}/linkedin/organizationalEntityShareStatistics?q=organizationalEntity&organizationalEntity=${page?.pageId}&timeGranularityType=MONTH&startDate=${generateUnixTimestampFor(30)*1000}&endDate=${generateUnixTimestampFor("now")*1000}&timePeriod=timeBound,all_time`;
         await baseAxios.get(fullPathAnalytics, setAuthenticationHeader(token))
             .then((response) => {
                 const linkedinOrgStatistics = response.data;
                 if (linkedinOrgStatistics) {
                     initialObject.Accounts_Reached.lifeTime = linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.impressionCount;
                     initialObject.Post_Activity.lifeTime = linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.impressionCount*linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.engagement;
-                    const impressionCountMonthly=linkedinOrgStatistics?.monthly?.elements.reduce((sum, element) => sum + element.totalShareStatistics.impressionCount, 0);
-                    const engagementMonthly=linkedinOrgStatistics?.monthly?.elements.reduce((sum, element) => sum + (element.totalShareStatistics.impressionCount* element.totalShareStatistics.engagement), 0);
+                    const impressionCountMonthly=linkedinOrgStatistics?.timeBound?.elements.reduce((sum, element) => sum + element.totalShareStatistics.impressionCount, 0);
+                    const engagementMonthly=linkedinOrgStatistics?.timeBound?.elements.reduce((sum, element) => sum + (element.totalShareStatistics.impressionCount* element.totalShareStatistics.engagement), 0);
                     initialObject.Accounts_Reached.month = impressionCountMonthly;
                     initialObject.Post_Activity.month = engagementMonthly;
                 }
@@ -74,12 +73,10 @@ export const getLinkedinAccountReport = async (page, token) => {
 };
 
 export const getDashBoardLinkedinGraphReport = async (page, query, token) => {
-
     let initialObject = {
         Followers: [],
         Accounts_Reached: [],
     };
-
     let followersReportCount = [];
     let reachedReportCount = [];
 
@@ -88,37 +85,15 @@ export const getDashBoardLinkedinGraphReport = async (page, query, token) => {
         await baseAxios.get(graphDataApiUrl, setAuthenticationHeader(token)).then((response) => {
             const linkedinGraphData = response.data;
             if (linkedinGraphData) {
-                // reachedReportCount?.push(...response.data?.data[0]?.values || [])
                 followersReportCount?.push(...linkedinGraphData?.followers_data?.elements || [])
-                // reachedReportCount = (pinterestAccountData?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY") || [])
+                linkedinGraphData?.org_statistics_data?.elements?.pop()
+                reachedReportCount?.push(...linkedinGraphData?.org_statistics_data?.elements || [])
             }
         }).catch((error) => {
             console.error('Error:', error);
         });
     }
     initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount,SocialAccountProvider.LINKEDIN?.toUpperCase()));
-    // initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount,SocialAccountProvider.LINKEDIN?.toUpperCase()));
-
-    console.log("initialObject===>",initialObject)
-    return initialObject;
-
-
-
-
-
-
-
-
-
-
-
-
-
-    if (page) {
-        console.log("page===>",page)
-        console.log("query===>",query)
-
-    }
-    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount, SocialAccountProvider.PINTEREST?.toUpperCase()));
+    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount,SocialAccountProvider.LINKEDIN?.toUpperCase()));
     return initialObject;
 };

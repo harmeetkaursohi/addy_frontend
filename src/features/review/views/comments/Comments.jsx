@@ -635,7 +635,6 @@ const Comments = ({postData}) => {
             })
 
 
-    )
-        ;
+    );
 }
 export default Comments

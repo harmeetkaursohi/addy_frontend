@@ -113,6 +113,10 @@ const Insight = () => {
                 selectedPage = connectedInstagramPages?.find(page => page?.id === pageId)
                 break;
             }
+            case "LINKEDIN": {
+                selectedPage = connectedLinkedinPages?.find(page => page?.id === pageId)
+                break;
+            }
         }
         setSelectedPageForGraph({...selectedPage, socialMediaType: socialMediaType})
     }
@@ -122,18 +126,20 @@ const Insight = () => {
                 token: token,
                 requestBody: {
                     postStatuses: ["PUBLISHED"],
-                    pageIds: [selectedPage?.pageId]
+                    pageIds: [selectedPage?.pageId],
+                    pageSize:99999999,
+                    pageNumber:0
                 }
             }))
         }
     }, [selectedPage])
     useEffect(() => {
-        if (getPostByPageIdAndPostStatusData?.data !== null && getPostByPageIdAndPostStatusData?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data)?.length > 0) {
+        if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
             dispatch(getPostDataWithInsights({
                 socialMediaType: selectedPage?.socialMediaType,
                 pageAccessToken: selectedPage?.access_token,
                 token: token,
-                postIds: getPostByPageIdAndPostStatusData?.data[selectedPage?.pageId]?.map(post => post.postPageInfos[0]?.socialMediaPostId)
+                postIds: getPostByPageIdAndPostStatusData?.data?.data[selectedPage?.pageId]?.map(post => post.postPageInfos[0]?.socialMediaPostId)
             }))
         }
     }, [getPostByPageIdAndPostStatusData])
@@ -581,6 +587,23 @@ const Insight = () => {
                                                                         }}>
                                                                         {
                                                                             connectedInstagramPages?.map((page, index) => {
+                                                                                return <option key={index}
+                                                                                               value={page?.id}>{page.name}</option>
+                                                                            })
+                                                                        }
+                                                                    </select>
+
+                                                                }
+                                                                {
+                                                                    selectedPage?.socialMediaType === "LINKEDIN" &&
+                                                                    <select
+                                                                        className="page_title_options cmn_headings"
+                                                                        value={selectedPageForGraph?.id}
+                                                                        onChange={(e) => {
+                                                                            handleGraphPageChange(e.target.value, "LINKEDIN")
+                                                                        }}>
+                                                                        {
+                                                                            connectedLinkedinPages?.map((page, index) => {
                                                                                 return <option key={index}
                                                                                                value={page?.id}>{page.name}</option>
                                                                             })

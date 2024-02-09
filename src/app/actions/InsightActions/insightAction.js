@@ -72,6 +72,13 @@ export const getTotalFollowers = createAsyncThunk('insight/getTotalFollowers', a
             });
         }
         case "LINKEDIN": {
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/networkSizes/${data?.pageId}?edgeType=COMPANY_FOLLOWED_BY_MEMBER`;
+            return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then(res => {
+                return getFormattedTotalFollowersCountData(res.data, "LINKEDIN");
+            }).catch(error => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
             break;
         }
     }
@@ -106,6 +113,15 @@ export const getAccountReachedAndAccountEngaged = createAsyncThunk('insight/getA
             break;
         }
         case "LINKEDIN": {
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationalEntityShareStatistics?q=organizationalEntity&organizationalEntity=${data?.pageId}&timeGranularityType=DAY&startDate=${generateUnixTimestampFor(data?.period*2)*1000}&endDate=${generateUnixTimestampFor("now")*1000}&timePeriod=timeBound`;
+            return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token))
+                .then((response) => {
+                    return getFormattedAccountReachAndEngagementData(response?.data, data?.socialMediaType);
+                })
+                .catch((error) => {
+                    showErrorToast(error.response.data.message);
+                    return thunkAPI.rejectWithValue(error.response);
+                });
             break;
         }
     }

@@ -33,31 +33,10 @@ export const DashboardReports = () => {
 
     const [connectedPagesToSelectedSocialMediaAccount, setConnectedPagesToSelectedSocialMediaAccount] = useState([])
     const [selectedPage, setSelectedPage] = useState(null);
-
     const dispatch = useDispatch();
     const [reportSelectedAccountType, setReportSelectedAccountType] = useState("");
     const [reportSelectedAccountData, setReportSelectedAccountData] = useState(null);
     const [graphDaysSelected, setGraphDaysSelected] = useState(9);
-    // const [reportSelectPages, setReportSelectedPages] = useState(null);
-    // const [allAvailablePages, setAllAvailablePages] = useState([]);
-    // const [allSelected, isAllSelected] = useState(true);
-
-
-    // useEffect(() => {
-    //
-    //     if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages) && Array.isArray(facebookPageListReducer?.facebookPageList)) {
-    //
-    //         if (reportSelectedAccountType) {
-    // setAllAvailablePages(facebookPageListReducer?.facebookPageList?.map(c => {
-    //     return {...c, isConnected: isPageConnected(connectedPagesReducer?.facebookConnectedPages, c)}
-    // }))
-    // isAllSelected(true)
-    // setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === reportSelectedAccountType))
-    // setReportSelectedPages(connectedPagesReducer?.facebookConnectedPages);
-    //         }
-    //     }
-    //
-    // }, [connectedPagesReducer, facebookPageListReducer, getAllConnectedSocialAccountData]);
 
 
     useEffect(() => {
@@ -119,10 +98,6 @@ export const DashboardReports = () => {
         }))
     }
 
-    // const handleClick = (type, pageParams) => {
-    //     isAllSelected(type === "All");
-    //     setReportSelectedPages(pageParams);
-    // }
 
     return (
 

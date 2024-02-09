@@ -11,6 +11,7 @@ import {getAllSocialMediaPostsByCriteria} from "../app/actions/postActions/postA
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import {Linkedin_URN_Id_Types} from "./contantData.js";
+import default_user_icon from "../images/default_user_icon.svg"
 
 export const validationSchemas = {
 
@@ -448,13 +449,21 @@ export const computeAndReturnSummedDateValues = (data, socialMediaType) => {
             return result
         }
         case "LINKEDIN": {
-            const result = data?.map(element => {
-                return {
-                    endDate: convertUnixTimestampToDateTime(element?.timeRange?.end/1000)?.date ,
-                    count: element?.followerGains?.organicFollowerGain+element?.followerGains?.paidFollowerGain
-                }
-            })
-            return result
+            if (data[0]?.hasOwnProperty("followerGains")) {
+                return data?.map(element => {
+                    return {
+                        endDate: convertUnixTimestampToDateTime(element?.timeRange?.end / 1000)?.date,
+                        count: element?.followerGains?.organicFollowerGain + element?.followerGains?.paidFollowerGain
+                    }
+                })
+            } else {
+                return data?.map(element => {
+                    return {
+                        endDate: convertUnixTimestampToDateTime(element?.timeRange?.end / 1000)?.date,
+                        count: element?.totalShareStatistics?.impressionCount
+                    }
+                })
+            }
         }
     }
 }
@@ -795,8 +804,8 @@ export const getQueryForGraphData = (socialMediaType, selectedGraphDays) => {
         }
         case "LINKEDIN": {
             return {
-                createdFrom: generateUnixTimestampFor(selectedGraphDays )*1000,
-                createdTo: generateUnixTimestampFor("now")*1000
+                createdFrom: generateUnixTimestampFor(selectedGraphDays) * 1000,
+                createdTo: generateUnixTimestampFor("now") * 1000
             }
 
         }
@@ -957,6 +966,31 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
             return formattedData;
         }
         case "LINKEDIN": {
+            const statisticsData = data?.timeBound?.elements;
+            const totalDays = Math.floor(statisticsData?.length);
+            const previousData = statisticsData?.slice(0, totalDays / 2);
+            const presentData = statisticsData?.slice((totalDays / 2) * -1);
+            const dateRange = getFormattedPostTime(previousData[0]?.timeRange?.start, "DD-Mon") + "-" + getFormattedPostTime(previousData[previousData?.length - 1]?.timeRange?.start, "DD-Mon")
+            const summedPreviousData = filterAndSumLinkedinOrgStatisticsDataFor(previousData, previousData?.length, ["impressionCount", "engagement"]);
+            const summedPresentData = filterAndSumLinkedinOrgStatisticsDataFor(presentData, presentData?.length, ["impressionCount", "engagement"]);
+            formattedData = {
+                engagement: {
+                    presentData: summedPresentData?.engagement,
+                    previousData: {
+                        data: summedPreviousData?.engagement,
+                        dateRange: dateRange
+                    }
+                },
+                reach: {
+                    presentData: summedPresentData?.impressionCount,
+                    previousData: {
+                        data: summedPreviousData?.impressionCount,
+                        dateRange: dateRange
+                    }
+                }
+            }
+            console.log('formattedData==>',formattedData)
+            return formattedData;
             break;
         }
     }
@@ -978,6 +1012,7 @@ export const getChartFormattedDataForInsights = (data, socialMediaType) => {
     }
     switch (socialMediaType) {
         case "INSTAGRAM":
+        case "LINKEDIN":
         case "FACEBOOK": {
             if (data?.Accounts_Reached !== undefined && data?.Followers !== undefined) {
                 const accountsReachedPercentage = data?.Accounts_Reached?.map(reach => parseFloat(reach?.percentageGrowth));
@@ -1343,6 +1378,39 @@ export const filterAndSumPinterestUserAnalyticsDataFor = (data = null, days = nu
     }
     return response;
 }
+export const filterAndSumLinkedinOrgStatisticsDataFor = (data = null, days = null, fieldsToFilter = []) => {
+    let response = {
+        uniqueImpressionsCount: "N/A",
+        shareCount: "N/A",
+        engagement: "N/A",
+        clickCount: "N/A",
+        likeCount: "N/A",
+        impressionCount: "N/A",
+        commentCount: "N/A"
+    }
+    if (data === null || fieldsToFilter === null || fieldsToFilter?.length === 0) {
+        return response;
+    }
+    response = {}
+    for (let i = 0; i < days; i++) {
+        const singleDayData = data[i];
+        for (let j = 0; j < fieldsToFilter?.length; j++) {
+            const key = fieldsToFilter[j];
+            if (key === "engagement") {
+                response = {
+                    ...response,
+                    [key]: (response[key] === null || response[key] === undefined) ? singleDayData?.totalShareStatistics[key] * singleDayData?.totalShareStatistics["impressionCount"] : (singleDayData?.totalShareStatistics[key] * singleDayData?.totalShareStatistics["impressionCount"]) + response[key]
+                }
+            } else {
+                response = {
+                    ...response,
+                    [key]: (response[key] === null || response[key] === undefined) ? singleDayData?.totalShareStatistics[key] : singleDayData?.totalShareStatistics[key] + response[key]
+                }
+            }
+        }
+    }
+    return response;
+}
 export const getFormattedTotalFollowersCountData = (data, socialMediaType) => {
     let response;
     switch (socialMediaType) {
@@ -1360,6 +1428,12 @@ export const getFormattedTotalFollowersCountData = (data, socialMediaType) => {
                 id: data?.id,
                 name: data?.business_name,
                 followers_count: data?.follower_count
+            }
+            break;
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            response = {
+                followers_count: data?.all_time?.firstDegreeSize
             }
             break;
         }
@@ -1387,4 +1461,44 @@ export const getFormattedLinkedinObject = (id, data) => {
         name: data?.localizedName,
         logo_url: logo_url
     }
+}
+export const extractMentionedUsernamesFromLinkedinComments = (comment = null) => {
+    let usernames = []
+    if (comment === null || comment?.attributes?.length === 0) {
+        return usernames;
+    }
+    comment?.attributes.forEach(attribute => {
+        const {start, length} = attribute;
+        const name = comment?.text.substr(start, length);
+        usernames.push(name.trim());
+    });
+    return usernames;
+}
+
+export const extractCommentersProfileDataForLinkedin = (comment = null) => {
+    let commentersProfileData = {
+        name: "",
+        profilePicUrl: ""
+    }
+    if (comment === null) {
+        return commentersProfileData;
+    }
+    if (comment["actor~"]?.hasOwnProperty("logoV2")) {
+        commentersProfileData = {
+            profilePicUrl: comment["actor~"]?.logoV2["original~"]?.elements[comment["actor~"]?.logoV2["original~"]?.elements?.length - 1]?.identifiers[0]?.identifier,
+            name: comment["actor~"]?.localizedName
+        }
+    } else if (comment["actor~"]?.hasOwnProperty("profilePicture")) {
+        commentersProfileData = {
+            profilePicUrl: comment["actor~"]?.profilePicture["displayImage~"]?.elements[comment["actor~"]?.profilePicture["displayImage~"]?.elements?.length - 1]?.identifiers[0]?.identifier,
+            name: comment["actor~"]?.localizedFirstName + " " + comment["actor~"]?.localizedLastName
+        }
+    } else {
+        commentersProfileData = {
+            profilePicUrl: default_user_icon,
+            name: "Username"
+        }
+    }
+    return commentersProfileData;
+
 }

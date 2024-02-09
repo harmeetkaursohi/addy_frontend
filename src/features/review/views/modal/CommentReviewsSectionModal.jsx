@@ -16,6 +16,7 @@ import Comments from "../comments/Comments";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommentFooter from "../comments/CommentFooter";
 import InstagramCommentsSection from "../comments/InstagramCommentsSection";
+import LinkedinCommentsSection from "../comments/LinkedinCommentsSection";
 
 
 const CommentReviewsSectionModal = ({
@@ -39,6 +40,7 @@ const CommentReviewsSectionModal = ({
     useEffect(() => {
         return () => {
             dispatch(resetReducers({sliceNames: ["getPostPageInfoReducer"]}))
+            dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
             isResetData(true);
         }
     }, [])
@@ -105,6 +107,10 @@ const CommentReviewsSectionModal = ({
                                         {
                                             postData?.socialMediaType === "INSTAGRAM" &&
                                             <InstagramCommentsSection postData={postData} postPageData={postPageData}/>
+                                        }
+                                        {
+                                            postData?.socialMediaType === "LINKEDIN" &&
+                                            <LinkedinCommentsSection postData={postData}/>
                                         }
                                         {
                                             postData?.socialMediaType === "PINTEREST" &&

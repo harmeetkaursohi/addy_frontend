@@ -13,15 +13,19 @@ import {showErrorToast} from "../../../common/components/Toast";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {RotatingLines} from "react-loader-spinner";
+import {getToken} from "../../../../app/auth/auth";
+import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 
 const CommentFooter = ({postData, postPageData}) => {
+    const token = getToken();
     const [comment, setComment] = useState("");
     const dispatch = useDispatch();
     const [like, setLike] = useState(false);
-    const likePostReducerData=useSelector(state => state.post.likePostReducer)
-    const disLikePostReducerData=useSelector(state => state.post.dislikePostReducer)
+    const likePostReducerData = useSelector(state => state.post.likePostReducer)
+    const disLikePostReducerData = useSelector(state => state.post.dislikePostReducer)
     const [baseQueryForGetPostPageInfoAction, setBaseQueryForGetPostPageInfoAction] = useState(
         {
+            token:token,
             postIds: null,
             pageAccessToken: null,
             socialMediaType: null
@@ -60,16 +64,21 @@ const CommentFooter = ({postData, postPageData}) => {
                     break;
                 }
                 case "PINTEREST": {
-                    const data=postPageData[postData?.id];
+                    const data = postPageData[postData?.id];
                     setCommonFooterDataObject({
                         total_likes: data?.pin_metrics?.all_time?.reaction || 0,
                         total_comments: data?.pin_metrics?.all_time?.comment || 0,
-                        total_saves:data?.pin_metrics?.all_time?.save || 0,
+                        total_saves: data?.pin_metrics?.all_time?.save || 0,
                         can_comment: false
                     })
                 }
                 case "LINKEDIN": {
-
+                    setCommonFooterDataObject({
+                        total_likes: postPageData?.likesSummary?.totalLikes || 0,
+                        total_comments: postPageData?.commentsSummary?.totalFirstLevelComments || 0,
+                        total_shares: postData?.shares,
+                        can_comment: postPageData?.commentsSummary?.commentsState === "OPEN"
+                    })
                 }
                 default: {
 
@@ -89,6 +98,7 @@ const CommentFooter = ({postData, postPageData}) => {
     useEffect(() => {
         if (postData && postPageData) {
             setBaseQueryForGetPostPageInfoAction({
+                ...baseQueryForGetPostPageInfoAction,
                 postIds: [postData?.id],
                 pageAccessToken: postData?.page?.access_token,
                 socialMediaType: postData?.socialMediaType
@@ -162,13 +172,17 @@ const CommentFooter = ({postData, postPageData}) => {
             data: {
                 message: comment
             },
+            token: token,
+            pageId: postData?.page?.pageId,
             pageAccessToken: postData?.page?.access_token,
         }
 
         dispatch(addCommentOnPostAction(requestBody)).then(response => {
             if (response.meta.requestStatus === "fulfilled") {
                 setComment("")
-                dispatch(getCommentsOnPostAction(requestBody))
+                if(postData?.socialMediaType==="FACEBOOK"){
+                    dispatch(getCommentsOnPostAction(requestBody))
+                }
                 dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction))
 
             }
@@ -185,7 +199,7 @@ const CommentFooter = ({postData, postPageData}) => {
                     className={"far fa-comment me-1"}/>{commonFooterDataObject.total_comments}
                 </p>
                 {
-                    postData?.socialMediaType === "FACEBOOK" &&
+                    postData?.socialMediaType === "FACEBOOK" || postData?.socialMediaType === "LINKEDIN" &&
                     <p title={"Shares"}><TbShare3 className={""}/> {commonFooterDataObject.total_shares} </p>
                 }
                 {
@@ -221,20 +235,40 @@ const CommentFooter = ({postData, postPageData}) => {
 
             {/*    <li className="w-100"><i className="fa fa-comment me-2"/>Comment</li>*/}
             {/*</ul>*/}
+
             <p className="liked_by padding-x-20 ">
                 {
-                    postPageData?.likes?.summary?.total_count === 1 && <>
-                        Liked
-                        by <strong> {postPageData?.likes?.summary?.has_liked ? postData?.page?.name : postPageData?.likes?.data[0]?.name}</strong>
+                    postData?.socialMediaType === "FACEBOOK" && <>
+                        {
+                            commonFooterDataObject.total_likes === 1 && <>
+                                Liked
+                                by <strong> {postPageData?.likes?.summary?.has_liked ? postData?.page?.name : postPageData?.likes?.data[0]?.name}</strong>
+                            </>
+                        }
+                        {
+                            commonFooterDataObject.total_likes > 1 && <>
+                                Liked
+                                by <strong>{postPageData?.likes?.data[0]?.name}</strong> and <strong> {JSON.stringify(postPageData?.likes?.summary?.total_count - 1)} Others</strong>
+                            </>
+                        }
                     </>
                 }
                 {
-                    postPageData?.likes?.summary?.total_count > 1 && <>
-                        Liked
-                        by <strong>{postPageData?.likes?.data[0]?.name}</strong> and <strong> {JSON.stringify(postPageData?.likes?.summary?.total_count - 1)} Others</strong>
+                    postData?.socialMediaType === "LINKEDIN" && <>
+                        {
+                            commonFooterDataObject.total_likes === 1 && <>
+                                Liked
+                                by <strong> {postPageData?.likesSummary?.likedByCurrentUser ? postData?.page?.name : commonFooterDataObject.total_likes + " Other"}</strong>
+                            </>
+                        }
+                        {
+                            commonFooterDataObject.total_likes > 1 && <>
+                                Liked
+                                by {postPageData?.likesSummary?.likedByCurrentUser ? postData?.page?.name + "and " + (commonFooterDataObject.total_likes - 1) + (commonFooterDataObject?.total_likes - 1 === 1 ? " other" : " others") : commonFooterDataObject.total_likes + " others"}
+                            </>
+                        }
                     </>
                 }
-
 
             </p>
             <p className="comment_date padding-x-20">{getFormattedDate(postData?.feedPostDate)}</p>
