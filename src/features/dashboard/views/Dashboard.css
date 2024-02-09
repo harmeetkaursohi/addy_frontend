@@ -139,6 +139,7 @@ button#dropdown-basic::after {
     overflow: hidden;
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.10);
     flex-grow: 1;
+    width: 100%;
 }
 
 .cmn_background {
@@ -465,6 +466,9 @@ img.connection-error-svg {
     .followers_outer {
         gap: 40px;
     }
+    .No_Upcoming_Outer img{
+        width: 37%;
+    }
 }
 @media screen and (max-width: 1280px) {
     .social_media_outer {
@@ -541,6 +545,12 @@ img.connection-error-svg {
     button#dropdown-basic{
         font-size: 13px;
 
+    }
+    .No_Upcoming_Outer h4{
+        font-size: 16px;
+    }
+    .No_Upcoming_Outer img{
+        width: 100%;
     }
     .page_title_header {
         margin: 10px;

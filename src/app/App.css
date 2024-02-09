@@ -237,15 +237,6 @@ h2.openEye {
   }
 }
 
-@media (min-width: 1499px) {
-  div.addy_outer,
-  div.login_outer {
-    padding: 0;
-    width: 100%;
-    max-width: 450px;
-    margin: auto;
-  }
-}
 
 /* new css======= */
 .feed_preview_Caption_outer {
@@ -270,3 +261,18 @@ h2.openEye {
   }
 }
 
+@media (min-width: 1499px) {
+  div.addy_outer,
+  div.login_outer {
+    padding: 0;
+    width: 100%;
+    max-width: 450px;
+    margin: auto;
+  }
+}
+
+@media screen  and (max-width:767px) {
+  .comment_container {
+      padding-left: 62px;
+  }
+}

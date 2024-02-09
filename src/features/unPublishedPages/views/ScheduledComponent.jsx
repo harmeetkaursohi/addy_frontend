@@ -101,7 +101,7 @@ const ScheduledComponent = ({scheduledData}) => {
 
                         {scheduledData?.data && Object.keys(scheduledData?.data).length === 0 ?
 
-                            <div className="cmn_background p-5 text-center mt-3">
+                            <div className="cmn_background p-5 text-center mt-3 No_Upcoming_Outer">
                                 <h4 className="text-center mb-3">
                                     No Upcoming Posts
                                 </h4>
