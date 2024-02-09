@@ -11,7 +11,7 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
         case "FACEBOOK":
         case  "INSTAGRAM": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?&access_token=${data?.pageAccessToken}`;
-            return baseAxios.post(apiUrl, data?.data).then((response) => {
+            return baseAxios.post(apiUrl, data?.data).then((response) => {                
                 return response.data;
             }).catch((error) => {
                 showErrorToast(isErrorInInstagramMention(data?.socialMediaType, error) ? CouldNotPostComment : error.response.data.error.message);
@@ -462,7 +462,7 @@ export const generateAICaptionAndHashTagService = async (requestBody) => {
 }
 export const getPostByPageIdAndPostStatus = createAsyncThunk('post/getPostByPageIdAndPostStatus', async (data, thunkAPI) => {
     if(typeof data.insightPostsCache === "undefined"){
-        return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/byPageAndStatus`, data?.requestBody, setAuthenticationHeader(data.token)).then(res => {
+        return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/byPageAndStatus`, data?.requestBody, setAuthenticationHeader(data.token)).then(res => {                        
             return res.data;
         }).catch(error => {
             showErrorToast(error.response.data.message);

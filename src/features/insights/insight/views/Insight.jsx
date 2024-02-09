@@ -127,7 +127,7 @@ const Insight = () => {
                 requestBody: {
                     postStatuses: ["PUBLISHED"],
                     pageIds: [selectedPage?.pageId],
-                    pageSize:1,
+                    pageSize:3,
                     pageNumber:0
                 }
             }))
