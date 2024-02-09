@@ -989,7 +989,7 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
                     }
                 }
             }
-            console.log('formattedData==>',formattedData)
+            console.log('formattedData==>', formattedData)
             return formattedData;
             break;
         }
@@ -1494,11 +1494,27 @@ export const extractCommentersProfileDataForLinkedin = (comment = null) => {
             name: comment["actor~"]?.localizedFirstName + " " + comment["actor~"]?.localizedLastName
         }
     } else {
+
         commentersProfileData = {
             profilePicUrl: default_user_icon,
-            name: "Username"
+            name: comment["actor~"]?.localizedName !== undefined ? comment["actor~"]?.localizedName : comment["actor~"]?.localizedFirstName !== undefined ? comment["actor~"]?.localizedFirstName + " " + comment["actor~"]?.localizedLastName : "Username"
         }
     }
     return commentersProfileData;
 
+}
+
+export const removeDuplicatesObjectsFromArray=(array=[],fieldToCompare)=>{
+    if(array?.length===0){
+        return []
+    }
+    const seen = new Set();
+    return array.filter(item => {
+        const value = item[fieldToCompare];
+        if (!seen.has(value)) {
+            seen.add(value);
+            return true;
+        }
+        return false;
+    });
 }

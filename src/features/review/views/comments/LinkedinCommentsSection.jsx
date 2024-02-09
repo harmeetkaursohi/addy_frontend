@@ -11,7 +11,7 @@ import {
     getCommentCreationTime,
     handleShowCommentReplies,
     handleShowCommentReplyBox,
-    isNullOrEmpty, isReplyCommentEmpty
+    isNullOrEmpty, isReplyCommentEmpty, removeDuplicatesObjectsFromArray
 } from "../../../../utils/commonUtils";
 import {LiaThumbsUpSolid} from "react-icons/lia";
 import {RotatingLines} from "react-loader-spinner";
@@ -22,16 +22,17 @@ import {useEffect, useState} from "react";
 import {
     deleteCommentsOnPostAction,
     getCommentsOnPostAction,
-    getPostPageInfoAction
+    getPostPageInfoAction, getRepliesOnComment
 } from "../../../../app/actions/postActions/postActions";
 import {getToken} from "../../../../app/auth/auth";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommonLoader from "../../../common/components/CommonLoader";
 
-const LinkedinCommentsSection = ({postData}) => {
+const LinkedinCommentsSection = ({postData, postPageData}) => {
     const token = getToken();
     const dispatch = useDispatch();
     const getCommentsOnPostActionData = useSelector(state => state.post.getCommentsOnPostActionReducer)
+    const getRepliesOnCommentData = useSelector(state => state.post.getRepliesOnCommentReducer)
     const addCommentOnPostData = useSelector(state => state.post.addCommentOnPostActionReducer)
     const [linkedinComments, setLinkedinComments] = useState(null);
     const [startFrom, setStartFrom] = useState(0);
@@ -40,8 +41,11 @@ const LinkedinCommentsSection = ({postData}) => {
         token: token
     })
     const [commentToDelete, setCommentToDelete] = useState(null);
+    const [replyToComment, setReplyToComment] = useState(null);
     const [getLinkedinComments, setGetLinkedinComments] = useState(null);
+    const [getReplies, setGetReplies] = useState(null);
     const [deletedComments, setDeletedComments] = useState([]);
+    const [getReplyForComment, setGetReplyForComment] = useState({})
     const [updateComment, setUpdateComment] = useState({})
     const [showReplyComments, setShowReplyComments] = useState([])
 
@@ -71,15 +75,7 @@ const LinkedinCommentsSection = ({postData}) => {
                 setLinkedinComments(getCommentsOnPostActionData?.data)
             } else {
                 const updatedComments = [...linkedinComments?.elements, ...getCommentsOnPostActionData?.data?.elements]
-                const seen = new Set();
-                const commentsWithoutDuplicates = updatedComments.filter(item => {
-                    const value = item["id"];
-                    if (!seen.has(value)) {
-                        seen.add(value);
-                        return true;
-                    }
-                    return false;
-                });
+                const commentsWithoutDuplicates = removeDuplicatesObjectsFromArray(updatedComments, "id")
                 setLinkedinComments({
                     paging: getCommentsOnPostActionData?.data?.paging,
                     elements: commentsWithoutDuplicates
@@ -137,6 +133,39 @@ const LinkedinCommentsSection = ({postData}) => {
             dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
         }
     }, [addCommentOnPostData])
+
+    useEffect(() => {
+        if (getReplies !== null && ((getReplyForComment?.reference === "SHOW_MORE_BUTTON" && !getReplyForComment?.comment?.hasOwnProperty("reply")) || getReplyForComment?.reference === "LOAD_PREVIOUS_BUTTON")) {
+            dispatch(getRepliesOnComment({
+                ...baseQuery,
+                id: getReplyForComment?.comment["$URN"],
+                pageSize: 3,
+                start: getReplyForComment?.comment?.hasOwnProperty("reply") ? parseInt(extractParameterFromUrl(`${import.meta.env.VITE_APP_LINKEDIN_BASE_URL}` + getReplyForComment?.comment?.reply?.paging?.links?.filter(link => link.rel === "next")[0]?.href, "start")) : 0
+            }))
+        }
+    }, [getReplies])
+
+    useEffect(() => {
+        if (getRepliesOnCommentData?.data !== undefined && !getRepliesOnCommentData?.loading && getReplyForComment !== null && Object.keys(getReplyForComment)?.length > 0) {
+            let updatedElements = [...getRepliesOnCommentData?.data?.elements];
+            if (getReplyForComment?.comment?.hasOwnProperty("reply")) {
+                updatedElements = removeDuplicatesObjectsFromArray([...updatedElements, ...getReplyForComment?.comment?.reply?.elements], "id")
+            }
+            const updatedComment = {
+                ...getReplyForComment?.comment,
+                reply: {
+                    ...getReplyForComment?.comment?.reply,
+                    paging: {...getRepliesOnCommentData?.data?.paging},
+                    elements: updatedElements
+                }
+            }
+            let updatedLinkedinComments = [...linkedinComments?.elements]
+            updatedLinkedinComments[getReplyForComment?.index] = updatedComment
+            setLinkedinComments({...linkedinComments, elements: [...updatedLinkedinComments]})
+            setGetReplyForComment({})
+            dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
+        }
+    }, [getRepliesOnCommentData])
 
     return (
         linkedinComments === null ?
@@ -247,9 +276,9 @@ const LinkedinCommentsSection = ({postData}) => {
                                                                 {/*    </>*/}
 
                                                                 {/*}*/}
-                                                                <p className={comment?.can_comment ? "cursor-pointer ms-3" : "disable-reply-comment ms-3"}
+                                                                <p className={postPageData?.commentsSummary?.commentsState === "OPEN" ? "cursor-pointer ms-3" : "disable-reply-comment ms-3"}
                                                                    onClick={() => {
-                                                                       if (comment?.can_comment) {
+                                                                       if (postPageData?.commentsSummary?.commentsState === "OPEN") {
                                                                            // setReplyToCommentId(comment.id)
                                                                            // setShowReplyBox(handleShowCommentReplyBox(showReplyBox, index))
                                                                            // setReplyComment({
@@ -337,215 +366,237 @@ const LinkedinCommentsSection = ({postData}) => {
                                                     {
                                                         comment?.commentsSummary && comment?.commentsSummary?.aggregatedTotalComments > 0 &&
                                                         <p className="reply_toggle" onClick={() => {
-                                                            setShowReplyComments(handleShowCommentReplies(showReplyComments,index))
-                                                        }}>{!showReplyComments[index] ? "Show" : "Hide"} {comment?.commentsSummary?.aggregatedTotalComments} {comment?.commentsSummary?.aggregatedTotalComments > 1 ? "replies" : "reply"}</p>
+                                                            setGetReplyForComment({
+                                                                reference: "SHOW_MORE_BUTTON",
+                                                                index: index,
+                                                                comment: comment
+                                                            });
+                                                            setGetReplies(new Date().getMilliseconds());
+                                                            setShowReplyComments(handleShowCommentReplies(showReplyComments, index))
+                                                        }}>{!showReplyComments[index] ? "Show" : "Hide"} {!showReplyComments[index] && comment?.commentsSummary?.aggregatedTotalComments} {comment?.commentsSummary?.aggregatedTotalComments > 1 ? "replies" : "reply"}</p>
                                                     }
-                                                    {/*{*/}
-                                                    {/*    showReplyComments[index] && <p className="reply_toggle">Load previous replies</p>*/}
-                                                    {/*}*/}
+                                                    {
+                                                        showReplyComments[index] && comment?.reply?.paging?.links?.some(link => link?.rel === "next") &&
+                                                        <p className="cursor-pointer" onClick={() => {
+                                                            setGetReplyForComment({
+                                                                reference: "LOAD_PREVIOUS_BUTTON",
+                                                                index: index,
+                                                                comment: comment
+                                                            })
+                                                            setGetReplies(new Date().getMilliseconds())
+                                                        }}>Load previous replies</p>
+                                                    }
+                                                    {
+                                                        getRepliesOnCommentData?.loading && showReplyComments[index] &&
+                                                        <div className={" text-center z-index-1 mt-1"}><RotatingLines
+                                                            strokeColor="#F07C33"
+                                                            strokeWidth="5"
+                                                            animationDuration="0.75"
+                                                            width="30"
+                                                            visible={true}></RotatingLines>
+                                                        </div>
+                                                    }
                                                     {
                                                         showReplyComments[index] && <>
                                                             {
-                                                                comment?.comments?.data?.map((childComment, i) => {
+                                                                comment?.reply?.elements?.map((childComment, i) => {
+                                                                    console.log("childComment==>", childComment)
+                                                                    const childCommentorsProfile = extractCommentersProfileDataForLinkedin(childComment)
                                                                     return (
+                                                                        !deletedComments.includes(childComment?.id) &&
                                                                         <div key={i} className="comment_wrap">
                                                                             {
-                                                                                commentToDeleteId === childComment?.id ?
+                                                                                commentToDelete?.id === childComment?.id ?
                                                                                     <div className={"mb-3"}>
-                                                                                        <Skeleton className={"mb-2"}></Skeleton>
+                                                                                        <Skeleton
+                                                                                            className={"mb-2"}></Skeleton>
                                                                                     </div> :
                                                                                     <div className="user_card">
                                                                                         <div className="user_image">
                                                                                             <img
-                                                                                                src={childComment?.from?.picture?.data?.url}
+                                                                                                src={childCommentorsProfile?.profilePicUrl}
                                                                                                 alt=""/>
                                                                                         </div>
                                                                                         <div className="user">
                                                                                             {
-                                                                                                updateComment?.id !== childComment?.id ?
-                                                                                                    <>
-                                                                                                        <div
-                                                                                                            className={"user_name_edit_btn_outer"}>
-                                                                                                            <p className="user_name">
-                                                                                                                {childComment?.from?.name}
-                                                                                                            </p>
-                                                                                                            <Dropdown>
-                                                                                                                <Dropdown.Toggle
-                                                                                                                    className={"comment-edit-del-button"}
-                                                                                                                    variant="success"
-                                                                                                                    id="dropdown-basic">
-                                                                                                                    <PiDotsThreeVerticalBold
-                                                                                                                        className={"comment-edit-del-icon"}/>
-                                                                                                                </Dropdown.Toggle>
-                                                                                                                <Dropdown.Menu>
-                                                                                                                    {
-                                                                                                                        childComment?.from?.id === postData?.page?.pageId &&
-                                                                                                                        <Dropdown.Item
-                                                                                                                            onClick={() => {
-                                                                                                                                !updateCommentsOnPostActionData?.loading && setUpdateComment(childComment)
-                                                                                                                            }
-                                                                                                                            }>Edit</Dropdown.Item>
-                                                                                                                    }
-                                                                                                                    {
-                                                                                                                        childComment?.can_remove &&
-                                                                                                                        <Dropdown.Item
-                                                                                                                            href="#/action-2"
-                                                                                                                            onClick={() => {
-                                                                                                                                setCommentToDeleteId(childComment?.id)
-                                                                                                                            }}>Delete</Dropdown.Item>
-                                                                                                                    }
-                                                                                                                </Dropdown.Menu>
-                                                                                                            </Dropdown>
-                                                                                                        </div>
-
-                                                                                                        <p>
-                                                                                                            <CommentText
-                                                                                                                socialMediaType={"FACEBOOK"}
-                                                                                                                comment={childComment?.message}
-                                                                                                                className={"font-weight-bold cursor-pointer "}
-                                                                                                                usernames={childComment?.message_tags?.filter(tags => tags?.type === "user")?.map(userTag => userTag?.name)}>
-                                                                                                            </CommentText>
+                                                                                                // updateComment?.id !== childComment?.id ?
+                                                                                                <>
+                                                                                                    <div
+                                                                                                        className={"user_name_edit_btn_outer"}>
+                                                                                                        <p className="user_name">
+                                                                                                            {childCommentorsProfile?.name}
                                                                                                         </p>
-                                                                                                        {
-                                                                                                            childComment?.attachment &&
-                                                                                                            <CommonSlider
-                                                                                                                files={[childComment?.attachment?.media?.source ? {
-                                                                                                                    sourceURL: childComment?.attachment?.media?.source
+                                                                                                        <Dropdown>
+                                                                                                            <Dropdown.Toggle
+                                                                                                                className={"comment-edit-del-button"}
+                                                                                                                variant="success"
+                                                                                                                id="dropdown-basic">
+                                                                                                                <PiDotsThreeVerticalBold
+                                                                                                                    className={"comment-edit-del-icon"}/>
+                                                                                                            </Dropdown.Toggle>
+                                                                                                            <Dropdown.Menu>
+                                                                                                                {/*{*/}
+                                                                                                                {/*    childComment?.from?.id === postData?.page?.pageId &&*/}
+                                                                                                                {/*    <Dropdown.Item*/}
+                                                                                                                {/*        onClick={() => {*/}
+                                                                                                                {/*            !updateCommentsOnPostActionData?.loading && setUpdateComment(childComment)*/}
+                                                                                                                {/*        }*/}
+                                                                                                                {/*        }>Edit</Dropdown.Item>*/}
+                                                                                                                {/*}*/}
+                                                                                                                <Dropdown.Item
+                                                                                                                    href="#/action-2"
+                                                                                                                    onClick={() => {
+                                                                                                                        setCommentToDelete(childComment)
+                                                                                                                    }}>Delete</Dropdown.Item>
+                                                                                                            </Dropdown.Menu>
+                                                                                                        </Dropdown>
+                                                                                                    </div>
 
-                                                                                                                } : {
-                                                                                                                    mediaType: "IMAGE",
-                                                                                                                    imageURL: childComment?.attachment?.media?.image?.src
-                                                                                                                }]}
-                                                                                                                selectedFileType={null}
-                                                                                                                caption={null}
-                                                                                                                hashTag={null}
-                                                                                                                isPublished={true}
-                                                                                                                viewSimilarToSocialMedia={false}/>
+                                                                                                    <p>
+                                                                                                        <CommentText
+                                                                                                            socialMediaType={"LINKEDIN"}
+                                                                                                            comment={childComment?.message?.text}
+                                                                                                            className={"font-weight-bold cursor-pointer "}
+                                                                                                            usernames={extractMentionedUsernamesFromLinkedinComments(childComment?.message)}>
+                                                                                                        </CommentText>
+                                                                                                    </p>
 
-                                                                                                        }
+                                                                                                    {
+                                                                                                        childComment?.hasOwnProperty("content") &&
+                                                                                                        <CommonSlider
+                                                                                                            files={[{
+                                                                                                                mediaType: childComment?.content[0]?.type,
+                                                                                                                imageURL: childComment?.content[0]?.url,
+                                                                                                            }]}
+                                                                                                            selectedFileType={null}
+                                                                                                            caption={null}
+                                                                                                            hashTag={null}
+                                                                                                            isPublished={true}
+                                                                                                            viewSimilarToSocialMedia={false}/>
+                                                                                                    }
 
-                                                                                                        <div
-                                                                                                            className="user_impressions d-flex gap-3 mt-2 mb-2">
-                                                                                                            <p>{getCommentCreationTime(childComment?.created_time)}</p>
-                                                                                                            {
-                                                                                                                childComment?.can_like ?
-                                                                                                                    <p className={childComment?.user_likes ? "cursor_pointer color-blue" : "cursor_pointer "}
-                                                                                                                       onClick={() => {
-                                                                                                                           childComment?.user_likes ? handleDisLikeComment(childComment?.id) : handleLikeComment(childComment?.id)
-                                                                                                                       }}
-                                                                                                                    >Like</p>
-                                                                                                                    :
-                                                                                                                    <p className={" disable-reply-comment"}>Like</p>
+                                                                                                    <div
+                                                                                                        className="user_impressions d-flex gap-3 mt-2 mb-2">
+                                                                                                        <p>{getCommentCreationTime(childComment?.created?.time)}</p>
+                                                                                                        {/*{*/}
+                                                                                                        {/*    childComment?.can_like ?*/}
+                                                                                                        {/*        <p className={childComment?.user_likes ? "cursor_pointer color-blue" : "cursor_pointer "}*/}
+                                                                                                        {/*           onClick={() => {*/}
+                                                                                                        {/*               childComment?.user_likes ? handleDisLikeComment(childComment?.id) : handleLikeComment(childComment?.id)*/}
+                                                                                                        {/*           }}*/}
+                                                                                                        {/*        >Like</p>*/}
+                                                                                                        {/*        :*/}
+                                                                                                        {/*        <p className={" disable-reply-comment"}>Like</p>*/}
 
-                                                                                                            }
+                                                                                                        {/*}*/}
 
-                                                                                                            {childComment?.like_count > 0 &&
-                                                                                                                <>
-                                                                                                                    <LiaThumbsUpSolid
-                                                                                                                        fill={"blue"}/>
-                                                                                                                    <p>{childComment?.like_count}</p>
-                                                                                                                </>
+                                                                                                        {/*{childComment?.like_count > 0 &&*/}
+                                                                                                        {/*    <>*/}
+                                                                                                        {/*        <LiaThumbsUpSolid*/}
+                                                                                                        {/*            fill={"blue"}/>*/}
+                                                                                                        {/*        <p>{childComment?.like_count}</p>*/}
+                                                                                                        {/*    </>*/}
 
-                                                                                                            }
-                                                                                                            <p className={childComment?.can_comment ? "cursor-pointer" : "disable-reply-comment"}
-                                                                                                               onClick={() => {
-                                                                                                                   if (comment?.can_comment) {
-                                                                                                                       setReplyToCommentId(comment.id)
-                                                                                                                       setShowReplyBox(handleShowCommentReplyBox(showReplyBox, index))
-                                                                                                                       setReplyComment({
-                                                                                                                           ...replyComment,
-                                                                                                                           mentionedPageId: childComment?.from?.id,
-                                                                                                                           mentionedPageName: childComment?.from?.name,
-                                                                                                                           message: childComment?.from?.name + " "
-                                                                                                                       })
-                                                                                                                   }
+                                                                                                        {/*}*/}
+                                                                                                        <p className={postPageData?.commentsSummary?.commentsState === "OPEN" ? "cursor-pointer" : "disable-reply-comment"}
+                                                                                                           onClick={() => {
+                                                                                                               if (postPageData?.commentsSummary?.commentsState === "OPEN") {
+                                                                                                                   // setReplyToCommentId(comment.id)
+                                                                                                                   // setShowReplyBox(handleShowCommentReplyBox(showReplyBox, index))
+                                                                                                                   // setReplyComment({
+                                                                                                                   //     ...replyComment,
+                                                                                                                   //     mentionedPageId: childComment?.from?.id,
+                                                                                                                   //     mentionedPageName: childComment?.from?.name,
+                                                                                                                   //     message: childComment?.from?.name + " "
+                                                                                                                   // })
+                                                                                                               }
 
-                                                                                                               }}>Reply</p>
-
-
-                                                                                                        </div>
-                                                                                                    </>
+                                                                                                           }}>Reply</p>
 
 
-                                                                                                    :
+                                                                                                    </div>
+                                                                                                </>
 
 
-                                                                                                    <>
-                                                                                                        <div className="reply_wrap">
-                                                                                                            <svg
-                                                                                                                className="emoji-picker-icon cursor_pointer"
-                                                                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                                                                width="22"
-                                                                                                                height="22"
-                                                                                                                viewBox="0 0 22 22"
-                                                                                                                fill="none"
-                                                                                                                onClick={() => {
-                                                                                                                    setShowEmojiPicker(!showEmojiPicker)
-                                                                                                                }}>
-                                                                                                                <path
-                                                                                                                    d="M14.8496 9.89961C15.7609 9.89961 16.4996 9.16088 16.4996 8.24961C16.4996 7.33834 15.7609 6.59961 14.8496 6.59961C13.9383 6.59961 13.1996 7.33834 13.1996 8.24961C13.1996 9.16088 13.9383 9.89961 14.8496 9.89961Z"
-                                                                                                                    fill="#323232"/>
-                                                                                                                <path
-                                                                                                                    d="M7.15 9.89961C8.06127 9.89961 8.8 9.16088 8.8 8.24961C8.8 7.33834 8.06127 6.59961 7.15 6.59961C6.23873 6.59961 5.5 7.33834 5.5 8.24961C5.5 9.16088 6.23873 9.89961 7.15 9.89961Z"
-                                                                                                                    fill="#323232"/>
-                                                                                                                <path
-                                                                                                                    d="M11 15.4C9.372 15.4 7.975 14.509 7.205 13.2H5.368C6.248 15.455 8.437 17.05 11 17.05C13.563 17.05 15.752 15.455 16.632 13.2H14.795C14.025 14.509 12.628 15.4 11 15.4ZM10.989 0C4.917 0 0 4.928 0 11C0 17.072 4.917 22 10.989 22C17.072 22 22 17.072 22 11C22 4.928 17.072 0 10.989 0ZM11 19.8C6.138 19.8 2.2 15.862 2.2 11C2.2 6.138 6.138 2.2 11 2.2C15.862 2.2 19.8 6.138 19.8 11C19.8 15.862 15.862 19.8 11 19.8Z"
-                                                                                                                    fill="#323232"/>
-                                                                                                            </svg>
-                                                                                                            <input type="text"
-                                                                                                                   placeholder="reply"
-                                                                                                                   value={updateComment?.message}
-                                                                                                                   onClick={() => {
-                                                                                                                       setShowEmojiPicker(false)
-                                                                                                                   }}
-                                                                                                                   className="form-control "
-                                                                                                                   onChange={(e) => {
-                                                                                                                       setShowEmojiPicker(false)
-                                                                                                                       e.preventDefault();
-                                                                                                                       setUpdateComment({
-                                                                                                                           ...updateComment,
-                                                                                                                           message: e.target.value
-                                                                                                                       })
-                                                                                                                   }}
-                                                                                                            />
-                                                                                                            <button
-                                                                                                                disabled={updateCommentsOnPostActionData?.loading || isNullOrEmpty(updateComment?.message)}
-                                                                                                                onClick={(e) => {
-                                                                                                                    !isNullOrEmpty(updateComment?.message) && handleUpdateComment()
-                                                                                                                    setShowEmojiPicker(false)
-                                                                                                                }}
-                                                                                                                className={isNullOrEmpty(updateComment?.message) || updateCommentsOnPostActionData?.loading ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
-                                                                                                                {
-                                                                                                                    updateCommentsOnPostActionData?.loading ?
-                                                                                                                        <RotatingLines
-                                                                                                                            strokeColor="white"
-                                                                                                                            strokeWidth="5"
-                                                                                                                            animationDuration="0.75"
-                                                                                                                            width="20"
-                                                                                                                            visible={true}></RotatingLines>
-                                                                                                                        : <BiSolidSend
-                                                                                                                            className={"cursor-pointer update_comment_icon"}/>
-                                                                                                                }
-                                                                                                            </button>
+                                                                                                // :
 
-                                                                                                            <div>
-                                                                                                                <div
-                                                                                                                    className={"reply-emoji-picker-outer"}>
-                                                                                                                    {
-                                                                                                                        showEmojiPicker &&
-                                                                                                                        <EmojiPicker
-                                                                                                                            onEmojiClick={(value) => {
-                                                                                                                                handleOnEmojiClick(value)
-                                                                                                                            }}
-                                                                                                                            autoFocusSearch={false}
-                                                                                                                            emojiStyle={EmojiStyle.NATIVE}
-                                                                                                                            width={'100%'}
-                                                                                                                        />
-                                                                                                                    }
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                    </>
+
+                                                                                                // <>
+                                                                                                //     <div className="reply_wrap">
+                                                                                                //         <svg
+                                                                                                //             className="emoji-picker-icon cursor_pointer"
+                                                                                                //             xmlns="http://www.w3.org/2000/svg"
+                                                                                                //             width="22"
+                                                                                                //             height="22"
+                                                                                                //             viewBox="0 0 22 22"
+                                                                                                //             fill="none"
+                                                                                                //             onClick={() => {
+                                                                                                //                 setShowEmojiPicker(!showEmojiPicker)
+                                                                                                //             }}>
+                                                                                                //             <path
+                                                                                                //                 d="M14.8496 9.89961C15.7609 9.89961 16.4996 9.16088 16.4996 8.24961C16.4996 7.33834 15.7609 6.59961 14.8496 6.59961C13.9383 6.59961 13.1996 7.33834 13.1996 8.24961C13.1996 9.16088 13.9383 9.89961 14.8496 9.89961Z"
+                                                                                                //                 fill="#323232"/>
+                                                                                                //             <path
+                                                                                                //                 d="M7.15 9.89961C8.06127 9.89961 8.8 9.16088 8.8 8.24961C8.8 7.33834 8.06127 6.59961 7.15 6.59961C6.23873 6.59961 5.5 7.33834 5.5 8.24961C5.5 9.16088 6.23873 9.89961 7.15 9.89961Z"
+                                                                                                //                 fill="#323232"/>
+                                                                                                //             <path
+                                                                                                //                 d="M11 15.4C9.372 15.4 7.975 14.509 7.205 13.2H5.368C6.248 15.455 8.437 17.05 11 17.05C13.563 17.05 15.752 15.455 16.632 13.2H14.795C14.025 14.509 12.628 15.4 11 15.4ZM10.989 0C4.917 0 0 4.928 0 11C0 17.072 4.917 22 10.989 22C17.072 22 22 17.072 22 11C22 4.928 17.072 0 10.989 0ZM11 19.8C6.138 19.8 2.2 15.862 2.2 11C2.2 6.138 6.138 2.2 11 2.2C15.862 2.2 19.8 6.138 19.8 11C19.8 15.862 15.862 19.8 11 19.8Z"
+                                                                                                //                 fill="#323232"/>
+                                                                                                //         </svg>
+                                                                                                //         <input type="text"
+                                                                                                //                placeholder="reply"
+                                                                                                //                value={updateComment?.message}
+                                                                                                //                onClick={() => {
+                                                                                                //                    setShowEmojiPicker(false)
+                                                                                                //                }}
+                                                                                                //                className="form-control "
+                                                                                                //                onChange={(e) => {
+                                                                                                //                    setShowEmojiPicker(false)
+                                                                                                //                    e.preventDefault();
+                                                                                                //                    setUpdateComment({
+                                                                                                //                        ...updateComment,
+                                                                                                //                        message: e.target.value
+                                                                                                //                    })
+                                                                                                //                }}
+                                                                                                //         />
+                                                                                                //         <button
+                                                                                                //             disabled={updateCommentsOnPostActionData?.loading || isNullOrEmpty(updateComment?.message)}
+                                                                                                //             onClick={(e) => {
+                                                                                                //                 !isNullOrEmpty(updateComment?.message) && handleUpdateComment()
+                                                                                                //                 setShowEmojiPicker(false)
+                                                                                                //             }}
+                                                                                                //             className={isNullOrEmpty(updateComment?.message) || updateCommentsOnPostActionData?.loading ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
+                                                                                                //             {
+                                                                                                //                 updateCommentsOnPostActionData?.loading ?
+                                                                                                //                     <RotatingLines
+                                                                                                //                         strokeColor="white"
+                                                                                                //                         strokeWidth="5"
+                                                                                                //                         animationDuration="0.75"
+                                                                                                //                         width="20"
+                                                                                                //                         visible={true}></RotatingLines>
+                                                                                                //                     : <BiSolidSend
+                                                                                                //                         className={"cursor-pointer update_comment_icon"}/>
+                                                                                                //             }
+                                                                                                //         </button>
+                                                                                                //
+                                                                                                //         <div>
+                                                                                                //             <div
+                                                                                                //                 className={"reply-emoji-picker-outer"}>
+                                                                                                //                 {
+                                                                                                //                     showEmojiPicker &&
+                                                                                                //                     <EmojiPicker
+                                                                                                //                         onEmojiClick={(value) => {
+                                                                                                //                             handleOnEmojiClick(value)
+                                                                                                //                         }}
+                                                                                                //                         autoFocusSearch={false}
+                                                                                                //                         emojiStyle={EmojiStyle.NATIVE}
+                                                                                                //                         width={'100%'}
+                                                                                                //                     />
+                                                                                                //                 }
+                                                                                                //             </div>
+                                                                                                //         </div>
+                                                                                                //     </div>
+                                                                                                // </>
                                                                                             }
 
 
@@ -641,14 +692,14 @@ const LinkedinCommentsSection = ({postData}) => {
                     {
                         (getCommentsOnPostActionData?.loading && linkedinComments) ?
                             <div className={" text-center z-index-1 mt-1"}><RotatingLines strokeColor="#F07C33"
-                                                                                                 strokeWidth="5"
-                                                                                                 animationDuration="0.75"
-                                                                                                 width="30"
-                                                                                                 visible={true}></RotatingLines>
+                                                                                          strokeWidth="5"
+                                                                                          animationDuration="0.75"
+                                                                                          width="30"
+                                                                                          visible={true}></RotatingLines>
                             </div> :
                             <>
                                 {
-                                    linkedinComments?.paging?.links?.filter(link=>link.rel==="next")?.length>0 &&
+                                    linkedinComments?.paging?.links?.filter(link => link.rel === "next")?.length > 0 &&
                                     <div className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"} onClick={() => {
                                         setGetLinkedinComments(new Date().getMilliseconds())
                                     }}>Load more comments

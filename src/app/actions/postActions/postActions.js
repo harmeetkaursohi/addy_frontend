@@ -52,6 +52,7 @@ export const replyCommentOnPostAction = createAsyncThunk('post/replyCommentOnPos
 
 
 export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostAction', async (data, thunkAPI) => {
+    console.log("data---->",data);
     switch (data?.socialMediaType) {
         case "FACEBOOK": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&order=reverse_chronological&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags,comments{id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags}`;
@@ -66,7 +67,7 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
             break;
         }
         case  "LINKEDIN": {
-            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/post-comments/${data?.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comments/${data?.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
             return baseAxios.get(apiUrl,  setAuthenticationHeader(data?.token)).then((response) => {
                 return response?.data
             }).catch((error) => {
@@ -82,7 +83,7 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
 export const getRepliesOnComment = createAsyncThunk('post/getRepliesOnComment', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
         case  "LINKEDIN": {
-            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/post-comments/${data?.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comments/${data?.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
             return baseAxios.get(apiUrl,  setAuthenticationHeader(data?.token)).then((response) => {
                 return response?.data
             }).catch((error) => {
@@ -175,6 +176,7 @@ export const likePostAction = createAsyncThunk('post/likePostAction', async (dat
 
 export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoAction', async (data, thunkAPI) => {
 
+    console.log("data--->",data);
     switch (data?.socialMediaType) {
 
         case "FACEBOOK": {

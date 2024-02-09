@@ -41,6 +41,7 @@ const CommentReviewsSectionModal = ({
         return () => {
             dispatch(resetReducers({sliceNames: ["getPostPageInfoReducer"]}))
             dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
+            dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
             isResetData(true);
         }
     }, [])
@@ -110,7 +111,7 @@ const CommentReviewsSectionModal = ({
                                         }
                                         {
                                             postData?.socialMediaType === "LINKEDIN" &&
-                                            <LinkedinCommentsSection postData={postData}/>
+                                            <LinkedinCommentsSection postData={postData} postPageData={postPageData}/>
                                         }
                                         {
                                             postData?.socialMediaType === "PINTEREST" &&
