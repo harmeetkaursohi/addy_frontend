@@ -56,8 +56,8 @@ const Insight = () => {
     const [selectedPeriodForGraph, setSelectedPeriodForGraph] = useState(7);
     const [selectedPageForGraph, setSelectedPageForGraph] = useState(null);
     const [selectedInsightSection, setSelectedInsightSection] = useState("Overview");
-
-
+    const [insightsCache, setInsightsCache] = useState({});
+    const getPostDataWithInsightsData = useSelector((state) => state.insight.getPostDataWithInsightsReducer);
     const handleSelectedPeriodForReachAndEngagement = (e) => {
         e.preventDefault();
         setSelectedPeriodForReachAndEngagement(parseInt(e.target.value))
@@ -127,22 +127,35 @@ const Insight = () => {
                 requestBody: {
                     postStatuses: ["PUBLISHED"],
                     pageIds: [selectedPage?.pageId],
-                    pageSize:99999999,
+                    pageSize:1,
                     pageNumber:0
                 }
             }))
         }
     }, [selectedPage])
-    useEffect(() => {
+    useEffect(() => {                
         if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
             dispatch(getPostDataWithInsights({
                 socialMediaType: selectedPage?.socialMediaType,
-                pageAccessToken: selectedPage?.access_token,
+                pageAccessToken: selectedPage?.access_token,                            
                 token: token,
+                insightsCache:insightsCache,
                 postIds: getPostByPageIdAndPostStatusData?.data?.data[selectedPage?.pageId]?.map(post => post.postPageInfos[0]?.socialMediaPostId)
             }))
         }
     }, [getPostByPageIdAndPostStatusData])
+
+    useEffect(() => {        
+        if(typeof getPostDataWithInsightsData?.data === "object"){
+            Object.keys(getPostDataWithInsightsData?.data).map(function(v){
+                setInsightsCache((prevCache) => ({
+                    ...prevCache,
+                    [v]:
+                    getPostDataWithInsightsData?.data[v],
+                }));
+            })            
+        }
+    }, [getPostDataWithInsightsData]);      
 
     useEffect(() => {
         if (selectedPage !== null && selectedPage !== undefined && selectedInsightSection === "Overview") {

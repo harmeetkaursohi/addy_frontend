@@ -14,7 +14,7 @@ div.card_body_content{
     border-radius: 7px;
     border: 2px solid #F3F4F4;
     background: #FFF;
-    width: 33.3%;
+    /* width: 33.3%; */
 }
 button.slider_btn {
     border-radius: 12px;
