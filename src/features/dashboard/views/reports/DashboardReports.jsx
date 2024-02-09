@@ -131,7 +131,7 @@ export const DashboardReports = () => {
 
                             <div className="post_activity_outer cmn_background">
 
-                                <div className="d-flex gap-2 ps-3 postActivity_InnerWrapper">
+                                <div className="d-flex gap-2 ps-3 postActivity_InnerWrapper dropdown_btn_Outer_container">
                                     <Dropdown className="dropdown_btn">
 
                                         <Dropdown.Toggle variant="success" id="dropdown-basic"

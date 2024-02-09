@@ -178,4 +178,7 @@ p.hasTags {
         right: 5px;
         bottom: 8px;
     }
+    .more_plans h2 {
+        font-size: 20px;
+    }
 }

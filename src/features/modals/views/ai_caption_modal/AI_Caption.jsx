@@ -55,7 +55,7 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
             <div className='generate_ai_img_container'>
                 <Modal show={aiGenerateCaptionModal} onHide={handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Generate Caption with AI </Modal.Title>
+                        <Modal.Title className='ai_caption'>Generate Caption with AI </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <div className='generate_image_wrapper_box'>
