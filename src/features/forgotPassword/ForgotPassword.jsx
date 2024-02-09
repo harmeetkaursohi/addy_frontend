@@ -3,21 +3,21 @@ import React, {useEffect} from 'react'
 import {validationSchemas} from "../../utils/commonUtils"
 import jsondata from "../../locales/data/initialdata.json"
 import {useDispatch, useSelector} from "react-redux"
-import {forgetPassword} from '../../app/actions/userActions/userActions';
+import {forgotPassword} from '../../app/actions/userActions/userActions';
 import {Link, useNavigate} from 'react-router-dom';
 import addyads_img from "../../images/addylogo.png";
 import Frame from "../../images/Frame.svg";
 import {RotatingLines} from "react-loader-spinner";
 
 
-function ForgetPassword() {
+function ForgotPassword() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const forgotPasswordData=useSelector(state => state.user.forgetPasswordReducer)
+    const forgotPasswordData=useSelector(state => state.user.forgotPasswordReducer)
 
     useEffect(() => {
-        document.title = "Forget Password"
+        document.title = "Forgot Password"
     }, []);
 
 
@@ -25,9 +25,9 @@ function ForgetPassword() {
         initialValues: {
             email: "",
         },
-        validationSchema: validationSchemas.forgetPassword,
+        validationSchema: validationSchemas.forgotPassword,
         onSubmit: (values) => {
-            dispatch(forgetPassword({values, navigate}))
+            dispatch(forgotPassword({values, navigate}))
         },
     });
 
@@ -60,7 +60,7 @@ function ForgetPassword() {
                                 <div className="addy_img">
                                     <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                     </div>
-                                    <h2 className='cmn_fontFamily'>{jsondata.forgetPassword.forgetPassword}</h2>
+                                    <h2 className='cmn_fontFamily'>{jsondata.forgotPassword.forgotPassword}</h2>
 
                                 </div>
                                 <div className='login_form'>
@@ -80,11 +80,10 @@ function ForgetPassword() {
                                                 />
                                                 {formik.touched.email && formik.errors.email ? (
                                                     <p className="error_message">{formik.errors.email}</p>
-                                                ) : null}
-
+                                                ) : null}                                                
                                                 <button type="submit"
                                                         disabled={forgotPasswordData?.loading}
-                                                        className={' login_btn '+(forgotPasswordData?.loading?"opacity-50":"")}>{jsondata.forgetPassword.forgetPassword}
+                                                        className={' login_btn '+(forgotPasswordData?.loading?"opacity-50":"")}>{jsondata.forgotPassword.forgotPassword}
                                                     {
                                                         forgotPasswordData?.loading && <span className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines width={30} strokeColor={"white"}></RotatingLines></span>
                                                     }
@@ -113,4 +112,4 @@ function ForgetPassword() {
     )
 }
 
-export default ForgetPassword
+export default ForgotPassword

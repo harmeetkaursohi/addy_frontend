@@ -38,7 +38,7 @@ const ContactUs = () => {
                     <div className="dashboard_outer">
                         <h2 className="cmn_title">Contact Us</h2>
                         <div className="row m-0">
-                            <div className="col-md-12 col-lg-6">
+                            <div className="col-md-12 col-lg-6 Contact_us_Outer">
                                 <div className="contact_content">
                                     <h3>Let's talk with us</h3>
                                     <p>Questions, comments, or suggestions? Simply fill in the form and we’ll be in
@@ -60,7 +60,7 @@ const ContactUs = () => {
                                 </div>
                             </div>
 
-                            <div className="col-md-12 col-lg-6">
+                            <div className="col-md-12 col-lg-6 Contact_us_Outer">
                                 <div className="row m-0 contact_form">
 
                                     <div className="col-lg-6">

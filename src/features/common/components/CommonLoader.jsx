@@ -2,7 +2,7 @@ import {RotatingLines} from "react-loader-spinner";
 
 const CommonLoader = () => {
     return (
-        <div className="container d-flex justify-content-center align-items-center min-vh-100">
+        <div className="container d-flex justify-content-center align-items-center min-vh-100 cmn_loader_outer">
             <div className="text-center">
                 <RotatingLines
                     strokeColor="#F07C33"

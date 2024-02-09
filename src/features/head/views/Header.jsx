@@ -4,6 +4,7 @@ import './Header.css'
 import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
+import Loader from "../../loader/Loader";
 
 const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList, setShowConnectAccountModal}) => {
 
@@ -52,11 +53,15 @@ const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList, s
 
                                         {/*}*/}
                                         {
-                                            !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data &&
+                                            (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data) ?
                                             <div onClick={handleCreatePost}
                                                  className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
                                                 {jsondata.createpost}
-                                            </div>
+                                            </div> : (
+                                                <div className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
+                                                    <Loader/>
+                                                </div>
+                                            )
 
                                         }
 

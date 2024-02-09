@@ -2,7 +2,7 @@ import CommonLoader from "../../../common/components/CommonLoader";
 import noAccountData from "../../../../images/no_social_account.png";
 import Dropdown from "react-bootstrap/Dropdown";
 import {
-    computeImageURL,
+    computeImageURL, generateUnixTimestampFor,
     getCustomDateEarlierUnixDateTime, getDatesForPinterest, getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
     isPageConnected,
     notConnectedSocialMediaAccount, socialMediaAccountHasConnectedPages
@@ -33,31 +33,10 @@ export const DashboardReports = () => {
 
     const [connectedPagesToSelectedSocialMediaAccount, setConnectedPagesToSelectedSocialMediaAccount] = useState([])
     const [selectedPage, setSelectedPage] = useState(null);
-
     const dispatch = useDispatch();
     const [reportSelectedAccountType, setReportSelectedAccountType] = useState("");
     const [reportSelectedAccountData, setReportSelectedAccountData] = useState(null);
     const [graphDaysSelected, setGraphDaysSelected] = useState(9);
-    // const [reportSelectPages, setReportSelectedPages] = useState(null);
-    // const [allAvailablePages, setAllAvailablePages] = useState([]);
-    // const [allSelected, isAllSelected] = useState(true);
-
-
-    // useEffect(() => {
-    //
-    //     if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages) && Array.isArray(facebookPageListReducer?.facebookPageList)) {
-    //
-    //         if (reportSelectedAccountType) {
-    // setAllAvailablePages(facebookPageListReducer?.facebookPageList?.map(c => {
-    //     return {...c, isConnected: isPageConnected(connectedPagesReducer?.facebookConnectedPages, c)}
-    // }))
-    // isAllSelected(true)
-    // setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === reportSelectedAccountType))
-    // setReportSelectedPages(connectedPagesReducer?.facebookConnectedPages);
-    //         }
-    //     }
-    //
-    // }, [connectedPagesReducer, facebookPageListReducer, getAllConnectedSocialAccountData]);
 
 
     useEffect(() => {
@@ -119,16 +98,12 @@ export const DashboardReports = () => {
         }))
     }
 
-    // const handleClick = (type, pageParams) => {
-    //     isAllSelected(type === "All");
-    //     setReportSelectedPages(pageParams);
-    // }
 
     return (
 
         <>
 
-            <div className="col-lg-7 col-xl-8 col-sm-12">
+            <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer">
 
                 {getAllConnectedSocialAccountData?.loading || connectedPagesReducer?.loading || facebookPageListReducer?.loading ?
                     <div className="cmn_background p-5 text-center ">
@@ -156,7 +131,7 @@ export const DashboardReports = () => {
 
                             <div className="post_activity_outer cmn_background">
 
-                                <div className="d-flex gap-2 ps-3">
+                                <div className="d-flex gap-2 ps-3 postActivity_InnerWrapper">
                                     <Dropdown className="dropdown_btn">
 
                                         <Dropdown.Toggle variant="success" id="dropdown-basic"

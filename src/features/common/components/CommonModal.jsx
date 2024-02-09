@@ -83,6 +83,10 @@ const CommonModal = ({
                                                             socialMediaType === SocialAccountProvider.PINTEREST &&
                                                             <img src={data.media?.image_cover_url || default_user_icon}/>
                                                         }
+                                                        {
+                                                            socialMediaType === SocialAccountProvider.LINKEDIN &&
+                                                            <img src={data?.logo_url || default_user_icon}/>
+                                                        }
 
                                                     </div>
                                                     <div className='users_name'>

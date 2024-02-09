@@ -139,7 +139,7 @@
     line-height: 20px;
 }
 
-.forgetPass_heading {
+.forgotPass_heading {
     color: #00A3FF !important;
 }
 
@@ -153,7 +153,7 @@
     line-height: 24px;
     border: none;
     width: 100%;
-    padding: 16px 0px;
+    padding: 10px 0px;
     border-radius: 10px;
     margin-top: 25px;
     height: 48px;

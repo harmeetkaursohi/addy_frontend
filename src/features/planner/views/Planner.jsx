@@ -26,6 +26,8 @@ import GenericButtonWithLoader from "../../common/components/GenericButtonWithLo
 import {ParentDraftComponent} from "../../unPublishedPages/views/ParentDraftComponent";
 import CommonShowMorePlannerModel from "../../common/components/CommonShowMorePlannerModal";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
+import Loader from '../../loader/Loader'
+import SkeletonEffect from '../../loader/skeletonEffect/SkletonEffect'
 
 const Planner = () => {
     const dispatch = useDispatch();
@@ -274,7 +276,8 @@ const Planner = () => {
                                 <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
                                 <h6>Here you find all the upcoming Posts you scheduled.</h6>
                             </div>
-                            <div>
+                            <div className='create_post_btn_Wrapper'>
+                                
                                 <GenericButtonWithLoader
                                     label={isDraftPost ? jsondata.backToPlanner : jsondata.draftPost}
                                     className={"draft_btn create_post_btn cmn_white_text"}
@@ -282,16 +285,31 @@ const Planner = () => {
                                     onClick={handleDraft}
                                     isDisabled={false}
                                 />
-                                <span onClick={handleCreatePost} className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
-                                >{jsondata.createpost}</span>
+                                {(!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data) ? <span onClick={handleCreatePost} className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
+                                >{jsondata.createpost}</span>: <span className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
+                                ><Loader className='create-post-loader'/></span>}
                             </div>
                         </div>
                         {
                             isDraftPost === false && <div className='events_wrapper'>
                                 <div className='row'>
-
+                                    {/* Loader */}
+                                    {(getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data)) ? (<></>): (<>
+                                        <div className='col-lg-4 col-md-6 col-sm-12'><div className='event_group'>
+                                            <h2 className='cmn_text_heading'><Loader/></h2>
+                                            <h5 className='cmn_small_heading'><SkeletonEffect count={1}></SkeletonEffect></h5>
+                                        </div></div>
+                                        <div className='col-lg-4 col-md-6 col-sm-12'><div className='event_group' style={{borderRight: "unset"}}>
+                                            <h2 className='cmn_text_heading'><Loader/></h2>
+                                            <h5 className='cmn_small_heading'><SkeletonEffect count={1}></SkeletonEffect></h5>    
+                                        </div></div>
+                                        <div className='col-lg-4 col-md-6 col-sm-12'><div className='event_group'>
+                                            <h2 className='cmn_text_heading'><Loader/></h2>
+                                            <h5 className='cmn_small_heading'><SkeletonEffect count={1}></SkeletonEffect></h5>    
+                                        </div></div>
+                                    </>)}                                    
+                                    {/* Loader end */}                                    
                                     {getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data).map((key, index) => {
-
                                         return (
                                             <div className='col-lg-4 col-md-6 col-sm-12' key={index}>
 
@@ -336,7 +354,7 @@ const Planner = () => {
                                         <option value={"All"}>All</option>
                                         {Object.keys(SocialAccountProvider).map((cur, index) => {
                                             return (
-                                                <option key={index} value={cur}>{SocialAccountProvider[cur]}</option>)
+                                                <option key={index} value={cur} disabled={getAllConnectedSocialAccountData?.data?.filter(c => c.provider === cur).length === 0}>{ SocialAccountProvider[cur].charAt(0).toUpperCase() + SocialAccountProvider[cur].slice(1)}</option>)
                                         })}
                                     </select>
 
@@ -380,7 +398,7 @@ const Planner = () => {
                                 />
 
 
-                            < /div>
+                            </div>
 
                             <div className={"hr-line"}></div>
 

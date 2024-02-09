@@ -113,6 +113,10 @@ const Insight = () => {
                 selectedPage = connectedInstagramPages?.find(page => page?.id === pageId)
                 break;
             }
+            case "LINKEDIN": {
+                selectedPage = connectedLinkedinPages?.find(page => page?.id === pageId)
+                break;
+            }
         }
         setSelectedPageForGraph({...selectedPage, socialMediaType: socialMediaType})
     }
@@ -122,18 +126,20 @@ const Insight = () => {
                 token: token,
                 requestBody: {
                     postStatuses: ["PUBLISHED"],
-                    pageIds: [selectedPage?.pageId]
+                    pageIds: [selectedPage?.pageId],
+                    pageSize:99999999,
+                    pageNumber:0
                 }
             }))
         }
     }, [selectedPage])
     useEffect(() => {
-        if (getPostByPageIdAndPostStatusData?.data !== null && getPostByPageIdAndPostStatusData?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data)?.length > 0) {
+        if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
             dispatch(getPostDataWithInsights({
                 socialMediaType: selectedPage?.socialMediaType,
                 pageAccessToken: selectedPage?.access_token,
                 token: token,
-                postIds: getPostByPageIdAndPostStatusData?.data[selectedPage?.pageId]?.map(post => post.postPageInfos[0]?.socialMediaPostId)
+                postIds: getPostByPageIdAndPostStatusData?.data?.data[selectedPage?.pageId]?.map(post => post.postPageInfos[0]?.socialMediaPostId)
             }))
         }
     }, [getPostByPageIdAndPostStatusData])
@@ -199,8 +205,7 @@ const Insight = () => {
                         <div className="social_media_dropdown">
 
 
-                            {
-                                enabledSocialMedia.isFaceBookEnabled &&
+                            {(enabledSocialMedia.isFaceBookEnabled && connectedFacebookPages?.length) ? 
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -237,10 +242,9 @@ const Insight = () => {
                                         </Dropdown.Item>
 
                                     </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown> : (<></>) 
                             }
-                            {
-                                enabledSocialMedia.isInstagramEnabled &&
+                            {(enabledSocialMedia.isInstagramEnabled && connectedInstagramPages?.length) ?     
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -273,10 +277,9 @@ const Insight = () => {
                                             </ul>
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown>  : (<></>)
                             }
-                            {
-                                enabledSocialMedia.isPinterestEnabled &&
+                            {(enabledSocialMedia.isPinterestEnabled && connectedPinterestBoards?.length) ?                                
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -313,12 +316,11 @@ const Insight = () => {
                                         </Dropdown.Item>
 
                                     </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown> : (<></>)
                             }
 
                             {/*TODO: Linkedin dropdown */}
-                            {
-                                enabledSocialMedia.isLinkedinEnabled &&
+                            {(connectedLinkedinPages?.length && enabledSocialMedia.isLinkedinEnabled)  ?
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -351,7 +353,7 @@ const Insight = () => {
                                             </ul>
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown> : (<></>)
                             }
                         </div>
                         {/* ============ */}
@@ -588,6 +590,23 @@ const Insight = () => {
                                                                     </select>
 
                                                                 }
+                                                                {
+                                                                    selectedPage?.socialMediaType === "LINKEDIN" &&
+                                                                    <select
+                                                                        className="page_title_options cmn_headings"
+                                                                        value={selectedPageForGraph?.id}
+                                                                        onChange={(e) => {
+                                                                            handleGraphPageChange(e.target.value, "LINKEDIN")
+                                                                        }}>
+                                                                        {
+                                                                            connectedLinkedinPages?.map((page, index) => {
+                                                                                return <option key={index}
+                                                                                               value={page?.id}>{page.name}</option>
+                                                                            })
+                                                                        }
+                                                                    </select>
+
+                                                                }
 
 
                                                                 <h3 className="cmn_white_text instagram_overview_heading">
@@ -792,6 +811,6 @@ export default Insight;
 
 const DemographicDatNotAvailable = ({className = "", message = ""}) => {
     return (
-        <div className={"" + className}>{message}</div>
+        <div className={"demographic_data " + className}>{message}</div>
     );
 }

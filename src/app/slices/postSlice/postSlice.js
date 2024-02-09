@@ -21,7 +21,8 @@ import {
     getCommentsOnPostAction,
     deleteCommentsOnPostAction,
     updateCommentsOnPostAction,
-    getPostByPageIdAndPostStatus
+    getPostByPageIdAndPostStatus,
+    getRepliesOnComment
 } from "../../actions/postActions/postActions.js";
 
 
@@ -50,6 +51,7 @@ const postSlice = createSlice({
         updateCommentsOnPostActionReducer:{loading: false},
         replyCommentOnPostActionReducer:{loading: false},
         getPostByPageIdAndPostStatusReducer:{loading: false},
+        getRepliesOnCommentReducer:{loading: false},
     },
 
     reducers: {
@@ -79,6 +81,17 @@ const postSlice = createSlice({
         },
         [getCommentsOnPostAction.rejected]: (state) => {
             state.getCommentsOnPostActionReducer = {loading: false}
+        },
+
+        // Get Comments On Post Action Reducer
+        [getRepliesOnComment.pending]: (state) => {
+            state.getRepliesOnCommentReducer = {loading: true}
+        },
+        [getRepliesOnComment.fulfilled]: (state, action) => {
+            state.getRepliesOnCommentReducer = {loading: false, data: action.payload}
+        },
+        [getRepliesOnComment.rejected]: (state) => {
+            state.getRepliesOnCommentReducer = {loading: false}
         },
 
         // Delete Comments On Post Action Reducer

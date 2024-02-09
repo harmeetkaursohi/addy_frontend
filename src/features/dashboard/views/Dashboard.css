@@ -330,7 +330,8 @@ button.facebook_connect > div > div:last-child {
 button.facebook_connect {
     min-width: 98px;
     text-align: center;
-    height: 39px !important;
+    height: 35px !important;
+    margin: 0px !important;
 }
 
 .account_info {
@@ -412,7 +413,8 @@ select.page_title_options {
     padding: 0px;
 }
 img.acc-not-connected-error-svg.mt-1 {
-    height: 270px;
+    height: 238px;
+    width: 100%;
 }
 
 img.connection-error-svg {
@@ -459,12 +461,18 @@ img.connection-error-svg {
     color: #04a3ff;
     text-decoration: underline;
 }
-
+@media screen and (min-width:2560px){
+    .followers_outer {
+        gap: 40px;
+    }
+}
 @media screen and (max-width: 1280px) {
     .social_media_outer {
-        display: block;
+      gap: 5px;
     }
-
+    .social_media_content h5 {
+        font-size: 13px;
+    }
     .createPost_btn {
         margin-left: 9px;
     }
@@ -472,9 +480,15 @@ img.connection-error-svg {
     .connect_btn {
         margin-top: 10px;
     }
-
+    .postActivity_InnerWrapper{
+        flex-wrap: wrap;
+    }
     .disconnect_btn {
         margin-top: 10px;
+    }
+    button.facebook_connect {
+        min-width: 90px !important;
+        height: 33px !important;
     }
 }
 
@@ -482,7 +496,9 @@ img.connection-error-svg {
     .followers_outer {
         display: block;
     }
-
+    button#dropdown-basic {
+        min-width: 180px;
+    }
     .followers_wrapper {
         margin-top: 15px;
     }
@@ -499,7 +515,9 @@ img.connection-error-svg {
     .followers_wrapper h2 {
         font-size: 20px;
     }
-
+    .dropdown_btn_Outer_container{
+        flex-wrap: wrap;
+    }
 }
 
 @media screen and (max-width: 991px) {
@@ -520,7 +538,44 @@ img.connection-error-svg {
     .monthly_growth {
         display: block;
     }
+    button#dropdown-basic{
+        font-size: 13px;
 
+    }
+    .page_title_header {
+        margin: 10px;
+    }
+    img.dropdown-page-logo {
+        margin-right: 4px !important;
+        font-size: 12px;
+    }
+    
+    div.dropdown_btn_Outer_container{
+       padding-left: 0px !important;
+    }
+    .social_media_content{
+        flex-wrap: wrap;
+    }
+    .connection-warning-text {
+        font-size: 18px;
+    
+    }
+    .noPostScheduled_img{
+        width: 100%;
+    }
+    .NotConncted_text {
+        font-size: 13px;
+        line-height: 21px;
+    }
+    img.acc-not-connected-error-svg.mt-1 {
+        height: 209px;
+    }
+    .social_media_outer{
+        display: block;
+    }
+    button.facebook_connect{
+        margin-top: 10px !important;
+    }
     .monthly_growth h6 {
         padding-top: 10px;
     }
@@ -536,6 +591,7 @@ img.connection-error-svg {
     /*  */
     .page_title_container {
         display: block;
+        padding: 10px;
     }
 
     .account_info {
@@ -560,7 +616,19 @@ img.connection-error-svg {
         width: 115px !important;
         height: 35px !important;
     }
-
+    div.noDraftPosts_outer {
+        padding: 20px !important;
+    }
+    div.cmn_background {
+        min-height: 100%;
+        padding: 14px !important;
+    }
+    .No_Upcoming_Posts_heading{
+        font-size: 14px;
+    }
+   .dashboardReport_outer{
+    padding: 0px !important;
+   }
 }
 
 /*.sidebar_item_outers {*/

@@ -54,7 +54,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height:calc(100vh - 200px)
+    /* height: 100vh; */
 }
 
 .arrow-up-image {
@@ -75,7 +76,7 @@ select.days_option {
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
     padding: 6px 9px;
     font-size: 17px;
-
+    font-weight: 600;
 }
 
 button.instagram_dropdown::after {
@@ -319,6 +320,7 @@ h2.Review_Heading {
     filter: invert(10%) sepia(100%) saturate(150%) hue-rotate(190deg) brightness(90%) contrast(85%);
 }
 
+
 @media screen and (max-width: 1024px) {
     h2.Review_Heading {
         margin-top: 20px;
@@ -377,9 +379,38 @@ h2.Review_Heading {
     .account_reach_overview_wrapper {
         display: block;
     }
-
+    .reach-engagement-select {
+        margin-bottom: 20px;
+        position: unset;
+    }
+    .Donuts_container h3{
+        font-size: 15px;
+        line-height: 20px;
+    }
+    .Choose_platform_title {
+        font-size: 18px;
+    }
+    .select-page-outer{
+        display: block;
+    }
+    .select-account-txt{
+        font-size: 13px;
+    }
+    .arrow-up-image {
+        margin-bottom: 20px;
+        margin-top: 13px;
+    }
+    ul.Social_media_wrapper{
+        margin: 0px;
+    }
+    select.days_option{
+        font-size: 12px;
+    }
     .account_reach_overview_outer {
         margin-top: 10px;
+    }
+    i.facebook_ICON{
+        margin-right: 3px !important;
     }
 
     div.card_body_content {
@@ -389,5 +420,14 @@ h2.Review_Heading {
     h2.Review_Heading {
         margin-top: 20px;
         font-size: 12px;
+    }
+    .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show{
+        width: 100%;
+    }
+    .demographic_data {
+        font-size: 12px;
+        font-family:  'Nunito', sans-serif;
+        font-style: normal;
+        padding-top: 10px;
     }
 }

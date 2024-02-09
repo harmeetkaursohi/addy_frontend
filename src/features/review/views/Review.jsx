@@ -24,7 +24,7 @@ const Review = () => {
         setResults,
         hasNextPage
     } = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
-    const token=getToken();
+    const token = getToken();
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
     const [resetData, isResetData] = useState(false);
@@ -55,7 +55,6 @@ const Review = () => {
             dispatch(getPostPageInfoAction(requestBody));
         }
     }, [postData])
-
 
     const intObserver = useRef();
     const lastPostRef = useCallback(post => {
@@ -99,9 +98,11 @@ const Review = () => {
                                         }}
                                 >
                                     <option value={"All"}>All</option>
-                                    {Object.keys(SocialAccountProvider).map((cur, index) => {
-                                        return (<option key={index}
-                                                        value={cur}>{getInitialLetterCap(SocialAccountProvider[cur])}</option>)
+                                    {
+                                        Object.keys(SocialAccountProvider).map((cur, index) => {
+                                        return (
+                                            <option key={index} value={cur}
+                                                    disabled={getAllConnectedSocialAccountData?.data?.filter(c => c.provider === cur).length === 0}>{SocialAccountProvider[cur].charAt(0).toUpperCase() + SocialAccountProvider[cur].slice(1)}</option>)
                                     })}
                                 </select>
                             </div>
@@ -151,7 +152,7 @@ const Review = () => {
                                                     </td>
                                                     <td>{post?.likes} Likes</td>
                                                     <td>{post?.comments} Comments</td>
-                                                    <td>{post?.shares}  {post?.socialMediaType==="PINTEREST" ?"Save":"Share"} </td>
+                                                    <td>{post?.shares} {post?.socialMediaType === "PINTEREST" ? "Save" : "Share"} </td>
                                                     <td>
 
                                                         <div className={"view-post-txt cursor-pointer"}

@@ -16,6 +16,7 @@ import Comments from "../comments/Comments";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommentFooter from "../comments/CommentFooter";
 import InstagramCommentsSection from "../comments/InstagramCommentsSection";
+import LinkedinCommentsSection from "../comments/LinkedinCommentsSection";
 
 
 const CommentReviewsSectionModal = ({
@@ -39,6 +40,7 @@ const CommentReviewsSectionModal = ({
     useEffect(() => {
         return () => {
             dispatch(resetReducers({sliceNames: ["getPostPageInfoReducer"]}))
+            dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
             isResetData(true);
         }
     }, [])
@@ -49,7 +51,7 @@ const CommentReviewsSectionModal = ({
 
                     <Modal.Body>
                         <Row className="m-0">
-                            <Col lg="6" className="p-0">
+                            <Col lg="6"  md="6" sm="12" className="p-0">
                                 <div className='comment_review_wrapper'>
                                     <div className="comment_header d-flex gap-2">
                                         <Link to={""} className="flex-grow-1 d-flex align-item-center">
@@ -72,7 +74,7 @@ const CommentReviewsSectionModal = ({
                                                   viewSimilarToSocialMedia={false}/>
                                 </div>
                             </Col>
-                            <Col lg="6" className="p-0">
+                            <Col lg="6"  md="6" sm="12" className="p-0">
                                 <div className="comment_section">
                                     <div className="comments_messages pb-0">
                                         <div className="">
@@ -105,6 +107,10 @@ const CommentReviewsSectionModal = ({
                                         {
                                             postData?.socialMediaType === "INSTAGRAM" &&
                                             <InstagramCommentsSection postData={postData} postPageData={postPageData}/>
+                                        }
+                                        {
+                                            postData?.socialMediaType === "LINKEDIN" &&
+                                            <LinkedinCommentsSection postData={postData}/>
                                         }
                                         {
                                             postData?.socialMediaType === "PINTEREST" &&
