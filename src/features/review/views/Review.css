@@ -219,7 +219,7 @@ p.disable-reply-comment {
 /**/
 @media screen and (max-width: 1024px) {
     .post_review_wrapper table th {
-        padding: 14px 11px;
+        padding: 14px 0px 10px 14px
     }
 
     .view_post_btn {
@@ -228,16 +228,25 @@ p.disable-reply-comment {
     }
 }
 
+@media screen and (max-width:991px){
+    .post_review_wrapper  {
+        scrollbar-color: gray;
+        scrollbar-width: thin;
+    }
+}
+
 @media screen and (max-width: 767px) {
     .review_header {
         display: block;
     }
+   
 
     .cmn_small_heading {
         font-size: 14px;
     }
     .post_review_wrapper table td{
         font-size: 12px;
+        padding: 14px 0px 10px 14px;
     }
 
     .cmn_text_heading {

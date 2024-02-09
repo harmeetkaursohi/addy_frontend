@@ -373,6 +373,9 @@ h2.Review_Heading {
     .insight_heading {
         font-size: 25px;
     }
+    .select-account-txt{
+        font-size: 13px;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -393,9 +396,7 @@ h2.Review_Heading {
     .select-page-outer{
         display: block;
     }
-    .select-account-txt{
-        font-size: 13px;
-    }
+    
     .arrow-up-image {
         margin-bottom: 20px;
         margin-top: 13px;

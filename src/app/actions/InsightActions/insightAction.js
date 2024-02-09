@@ -11,44 +11,65 @@ import {
 import {setAuthenticationHeader} from "../../auth/auth";
 
 
-export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWithInsights', async (data, thunkAPI) => {
-    console.log("data===>", data)
-    switch (data?.socialMediaType) {
-        case "INSTAGRAM": {
-            const postIds = data.postIds.map(id => id).join(',');
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,insights.metric(reach,shares),caption,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
-            return await baseAxios.get(apiUrl).then(res => {
-                return res.data;
-            }).catch(error => {
-                showErrorToast(error.response.data.error.message);
-                return thunkAPI.rejectWithValue(error.response);
-            });
-        }
-        case "FACEBOOK": {
-            const postIds = data.postIds.map(id => id).join(',');
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
-            return await baseAxios.get(apiUrl).then(res => {
-                return res.data;
-            }).catch(error => {
-                showErrorToast(error.response.data.error.message);
-                return thunkAPI.rejectWithValue(error.response);
-            });
-        }
-        case "PINTEREST": {
-            const postIds = data.postIds.map(id => id).join(',');
-            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${postIds}`;
-            return await baseAxios.get(apiUrl, setAuthenticationHeader(data.token)).then(res => {
-                return res.data;
-            }).catch(error => {
-                showErrorToast(error.response.data.error.message);
-                return thunkAPI.rejectWithValue(error.response);
-            });
-            break;
-        }
-        case "LINKEDIN": {
-            break;
-        }
-    }
+export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWithInsights', async (data, thunkAPI) => {    
+        switch (data?.socialMediaType) {
+            case "INSTAGRAM": {
+                const insightsCache = typeof data.insightsCache === "object" ? data.insightsCache:{}
+                const existingKeys = data.postIds.filter(key => insightsCache.hasOwnProperty(key));
+                if(Object.keys(data.postIds).length === existingKeys.length){
+                    const valuesArray = await Promise.all(existingKeys.map(key => data.insightsCache[key]));                    
+                    return valuesArray
+                }else{
+                    const postIds = data.postIds.map(id => id).join(',');
+                    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,insights.metric(reach,shares),caption,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
+                    return await baseAxios.get(apiUrl).then(res => {
+                        return res.data;
+                    }).catch(error => {
+                        showErrorToast(error.response.data.error.message);
+                        return thunkAPI.rejectWithValue(error.response);
+                    });
+                }                
+            }
+            case "FACEBOOK": {
+                const insightsCache = typeof data.insightsCache === "object" ? data.insightsCache:{}
+                const existingKeys = data.postIds.filter(key => insightsCache.hasOwnProperty(key));
+                if(Object.keys(data.postIds).length === existingKeys.length){
+                    const valuesArray = await Promise.all(existingKeys.map(key => data.insightsCache[key]));                    
+                    return valuesArray
+                }else{
+                    const postIds = data.postIds.map(id => id).join(',');
+                    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
+                    return await baseAxios.get(apiUrl).then(res => {
+                        return res.data;
+                    }).catch(error => {
+                        showErrorToast(error.response.data.error.message);
+                        return thunkAPI.rejectWithValue(error.response);
+                    });
+                }
+            }
+            case "PINTEREST": {
+                const insightsCache = typeof data.insightsCache === "object" ? data.insightsCache:{}
+                const existingKeys = data.postIds.filter(key => insightsCache.hasOwnProperty(key));
+                if(Object.keys(data.postIds).length === existingKeys.length){
+                    const valuesArray = await Promise.all(existingKeys.map(key => data.insightsCache[key]));                    
+                    return valuesArray
+                }else{
+                    const postIds = data.postIds.map(id => id).join(',');
+                    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${postIds}`;
+                    return await baseAxios.get(apiUrl, setAuthenticationHeader(data.token)).then(res => {
+                        return res.data;
+                    }).catch(error => {
+                        showErrorToast(error.response.data.error.message);
+                        return thunkAPI.rejectWithValue(error.response);
+                    });
+                }                
+                break;
+            }
+            case "LINKEDIN": {                
+                break;
+            }
+        }    
+    
 });
 export const getTotalFollowers = createAsyncThunk('insight/getTotalFollowers', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {

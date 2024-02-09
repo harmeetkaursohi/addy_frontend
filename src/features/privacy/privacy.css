@@ -16,3 +16,19 @@
 .elementor.elementor-96 {
     display: none !important;
 }
+
+@media screen and (max-width:991px) {
+    .privacy_wrapper p {
+       
+        font-size: 14px;
+    }
+ }
+ @media screen and (max-width:767px) {
+    .privacy_wrapper p {
+        line-height: 25px;
+   
+    }
+    .privacy_wrapper {
+        padding: 20px;
+    }
+ }

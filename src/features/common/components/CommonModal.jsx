@@ -25,6 +25,7 @@ const CommonModal = ({
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [mediaPageData, setMediaPageData] = useState(null);
     const [currentConnectedPages, setCurrentConnectedPages] = useState([]);
+    const [state, setState] = useState(false);
     const facebookPageConnectData = useSelector(state => state.facebook.facebookPageConnectReducer);
 
     useEffect(() => {
@@ -33,19 +34,18 @@ const CommonModal = ({
             const idsToRemove = currentConnectedPages.filter(id => !newIds.includes(id));
             const idsToAdd = newIds.filter(id => !currentConnectedPages.includes(id));
             const updatedIds = currentConnectedPages.filter(id => !idsToRemove.includes(id));
-
+            setState(false);
             //adding new ids
             updatedIds.push(...idsToAdd);
-
             setCurrentConnectedPages(updatedIds);
         }
+       
     }, [connectedPagesList]);
-
 
     const handleSubmit = () => {
         pageConnectAction(dispatch, token, mediaPageData, socialMediaAccountInfo)
+        setState(true);
     }
-
 
     return (
         <>
@@ -94,7 +94,7 @@ const CommonModal = ({
                                                         {data.about && <p className="cmn_text_style mb-0">{data.about}</p>}
                                                     </div>
                                                 </div>
-
+                                                
                                                 <div className='connect_btn_outer'>
                                                     <button
                                                         disabled={facebookPageConnectData?.loading}
@@ -106,7 +106,10 @@ const CommonModal = ({
                                                         }}
 
                                                     >
-                                                        {currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"}{(facebookPageConnectData?.loading && data?.id===mediaPageData?.id) ?"ing...":""}
+                                                      {console.log(currentConnectedPages.includes(data?.id),"id90",state,"state")}
+                                                        {currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"}
+                                                        {/* {(facebookPageConnectData && data?.id===mediaPageData?.id ) ?"ing...":""} */}
+                                                        {(state && data?.id===mediaPageData?.id ) ?"ing...":""} 
                                                     </button>
                                                 </div>
 
