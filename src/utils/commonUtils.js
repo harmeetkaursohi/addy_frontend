@@ -692,7 +692,7 @@ baseAxios?.interceptors?.request.use(
             return response
         } else {
             window.location.href = '/dashboard';
-            /* localStorage.clear(); */
+            localStorage.clear();
         }
     },
     error => Promise.reject(error)
@@ -704,10 +704,10 @@ baseAxios.interceptors.response.use(
         const isExempted = exemptedURLs.some(url => {
             return error?.request?.responseURL?.includes(url);
         })
-        /* if (error?.response?.status === 403 && !isExempted) {
+        if (error?.response?.status === 403 && !isExempted) {
             window.location.href = '/login';
             localStorage.clear();
-        } */
+        }
         return Promise.reject(error)
     }
 )
