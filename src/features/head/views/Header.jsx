@@ -5,6 +5,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import Loader from "../../loader/Loader";
+import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 
 const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList, setShowConnectAccountModal}) => {
 
@@ -29,9 +30,8 @@ const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList, s
                             <div className="col-lg-5 col-md-12 col-sm-12">
                                 <div className="header_outer_container">
                                     <div className="header_container">
-                                        <h2 className="">{`${jsondata.heythere} ${userData?.fullName}!`}</h2>
-                                        <h6>Curious to explore? Welcome  to your all-in Dashboard and discover more!</h6>
-
+                                        <h2 className="">{typeof userData?.fullName !== "undefined" ? `${jsondata.heythere} ${userData?.fullName}!` : <SkeletonEffect count={1}></SkeletonEffect>}</h2>
+                                        <h6>{typeof userData?.fullName !== "undefined" ? `Curious to explore? Welcome  to your all-in Dashboard and discover more!` : <SkeletonEffect count={1}></SkeletonEffect>}</h6>
                                     </div>
                                 </div>
                             </div>
