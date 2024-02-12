@@ -72,7 +72,6 @@ const CreatePost = () => {
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
 
-
     useEffect(() => {
         const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
         const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
@@ -140,38 +139,44 @@ const CreatePost = () => {
 
     //handle single selector
     const handleCheckboxChange = (option) => {
+        
         const {group, selectOption} = option;
-
         const updatedSelectedOptions = [...selectedOptions];
         const updatedSelectedGroups = [...selectedGroups];
 
-        const groupOptionIds = allOptions.find((cur) => cur.group === group).allOptions.map((opt) => opt.pageId);
+        updatedSelectedOptions.push(group);
+        updatedSelectedGroups.push(selectOption);
 
+    
+        const groupOptionIds = allOptions.find((cur) => cur.group === group).allOptions.map((opt) => opt.pageId);
+     
         if (selectedOptions.includes(selectOption.pageId)) {
             updatedSelectedOptions.splice(updatedSelectedOptions.indexOf(selectOption.pageId), 1);
-
         } else {
             updatedSelectedOptions.push(selectOption.pageId);
-
         }
 
         const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
+    
 
-        if (isGroupFullySelected) {
+
+        if (isGroupFullySelected ) {
             if (!updatedSelectedGroups.includes(group)) {
                 updatedSelectedGroups.push(group);
             }
-        } else {
+        } else   {
             updatedSelectedGroups.splice(updatedSelectedGroups.indexOf(group), 1);
         }
 
         setSelectedOptions(updatedSelectedOptions);
         setSelectedGroups(updatedSelectedGroups);
+      
     };
 
 
     // handle Group selector
     const handleGroupCheckboxChange = (group) => {
+
         const updatedSelectedGroups = new Set(selectedGroups);
         const updatedSelectedOptions = new Set(selectedOptions);
 
@@ -413,7 +418,6 @@ const CreatePost = () => {
                                                                                                checked={selectedGroups.includes(socialAccount?.provider)}
                                                                                                onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
                                                                                         />
-
                                                                                         <SocialMediaProviderBadge
                                                                                             provider={socialAccount.provider}/>
                                                                                     </>
