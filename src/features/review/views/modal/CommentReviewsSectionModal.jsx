@@ -35,7 +35,7 @@ const CommentReviewsSectionModal = ({
             setPostPageData(postData?.socialMediaType === "FACEBOOK" ? postPageInfoData[postData?.id] : postPageInfoData)
         }
     }, [postData, postPageInfoData])
-
+ 
 
     useEffect(() => {
         return () => {
