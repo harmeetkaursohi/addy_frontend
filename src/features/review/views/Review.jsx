@@ -44,7 +44,7 @@ const Review = () => {
 
         }
     }, [resetData]);
-console.log(resetData,"resetData")
+console.log(isLoading,"isLoading",results,"results",resetData,"resetData")
     useEffect(() => {
         if (postData && postData !== undefined) {
             const requestBody = {
@@ -60,8 +60,9 @@ console.log(resetData,"resetData")
 
     const intObserver = useRef();
     const lastPostRef = useCallback(post => {
-        console.log("post====>")
+        console.log("post====>",hasNextPage)
         if (isLoading) return
+
 
         if (intObserver.current) intObserver.current.disconnect()
 
@@ -144,7 +145,7 @@ console.log(resetData,"resetData")
                                                         <div className={"d-flex align-items-center"}>
                                                             <img className={"me-2 review-post-icon"}
                                                                  src={computeImageURL(post?.socialMediaType)}/>
-                                                            <span>{post?.page?.name}</span>
+                                                            <span>{post?.page?.name}{index+1}</span>
                                                         </div>
 
 

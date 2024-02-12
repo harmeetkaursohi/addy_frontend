@@ -515,7 +515,7 @@ const CreatePost = () => {
                                             <div className="darg_navs file_outer">
                                                 {
                                                     disableImage === false && <div
-                                                        className={"cmn_blue_border add_media_outer"}   onClick={function(){ document.getElementById('image').click(); }} >
+                                                        className={" add_media_outer"}    >
                                                         <input type="file" id='image'
                                                                className='file'
                                                                multiple
@@ -528,7 +528,7 @@ const CreatePost = () => {
                                                                    handleSelectedFile(e);
                                                                }}
                                                         />
-                                                        <label htmlFor='image' className='cmn_headings'>
+                                                        <label htmlFor='image' className='cmn_headings cmn_blue_border'>
                                                             <i className="fa fa-image"
                                                                style={{marginTop: "2px"}}/>{"Add Photo"}
                                                         </label>
@@ -537,7 +537,7 @@ const CreatePost = () => {
 
                                                 {
                                                     disableVideo === false &&
-                                                    <div className="cmn_blue_border add_media_outer"  onClick={function(){ document.getElementById('video').click(); }} >
+                                                    <div className=" add_media_outer"  >
                                                         <input
                                                             type="file"
                                                             id='video'
@@ -548,7 +548,7 @@ const CreatePost = () => {
                                                                 setSelectedFileType("VIDEO");
                                                                 handleSelectedVideoFile(e);
                                                             }}/>
-                                                        <label htmlFor='video' className='cmn_headings'>
+                                                        <label htmlFor='video' className='cmn_headings cmn_blue_border'>
                                                             <i className="fa fa-video-camera"
                                                                style={{marginTop: "2px"}}/>Add
                                                             Video
