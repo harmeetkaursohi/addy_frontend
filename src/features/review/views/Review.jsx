@@ -12,7 +12,7 @@ import {FaArrowCircleRight} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
 import {getPostPageInfoAction} from "../../../app/actions/postActions/postActions";
 import {getToken} from "../../../app/auth/auth";
-
+import notConnected_img from "../../../images/not_connected_img.svg"
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: 0});
@@ -56,6 +56,7 @@ console.log(resetData,"resetData")
             dispatch(getPostPageInfoAction(requestBody));
         }
     }, [postData])
+
 
     const intObserver = useRef();
     const lastPostRef = useCallback(post => {
@@ -180,8 +181,6 @@ console.log(resetData,"resetData")
                                     </tbody>
 
                                 </table>
-                                
-                               
 
                             </div>
                            }
@@ -190,7 +189,7 @@ console.log(resetData,"resetData")
                                     {/* <img src={notConnected_img} alt="notConnected_img"/> */}
                                     <h2 className="acc_not_connected_heading">No Account is connected Yet!  Please connect an account.</h2>
                                 </div>
-                                
+
                             :""}
 
 

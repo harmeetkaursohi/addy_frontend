@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import not_connected from "../../../images/not_connected.svg"
+import not_connected from "../../../images/not_connected_img.svg"
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
@@ -17,7 +17,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="lg" show={showModal} onHide={handleClose}>
+                <Modal size="md" show={showModal} onHide={handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title className="commonmodal_header">
                             <div className='facebook_title'>
@@ -44,14 +44,14 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                                 <img className={"acc-not-connected-error-svg mb-4 mt-1"} src={not_connected}></img>
                                 {
                                     (getAllConnectedSocialAccountData?.data === undefined || getAllConnectedSocialAccountData?.data?.length === 0) ?
-                                        <h6 className={"text-center mb-4"}>Currently, there are no active connections at
+                                        <h6 className={"text-center mb-4 NotConncted_text"}>Currently, there are no active connections at
                                             the
                                             moment. Please connect
                                             an account before attempting to create a post..</h6> :
                                         <>
                                             {
                                                 connectedPagesData?.facebookConnectedPages !== undefined && connectedPagesData?.facebookConnectedPages?.length === 0 ?
-                                                    <h6 className={"text-center mb-4"}>Currently, there are no active connections at the
+                                                    <h6 className={"text-center mb-4 "}>Currently, there are no active connections at the
                                                         moment. Please connect
                                                         a page before attempting to create a post..</h6> : <></>
                                             }

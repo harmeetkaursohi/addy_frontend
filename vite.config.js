@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 // Load environment variables from the appropriate .env.local file
 dotenv.config({
-    path: `.env.${process.env.NODE_ENV || 'development'}`,
+    path: `.env.${process.env.NODE_ENV || 'development'}`, 
 });
 
 const PORT = process.env.PORT;

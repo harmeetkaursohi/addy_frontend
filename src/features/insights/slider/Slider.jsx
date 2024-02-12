@@ -178,7 +178,7 @@ import Container from "react-bootstrap/Container";
     );
 } */
 
-function Carousel({ selectedPage }) {
+const Carousel = function({ selectedPage }) {
   const dispatch = useDispatch();
   const token = getToken();
   const getPostDataWithInsightsData = useSelector(
@@ -201,15 +201,9 @@ function Carousel({ selectedPage }) {
       ) {
         setHasPosts(false);
       }
-      if (
-        Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0
-      ) {
+      if(Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
         setHasPosts(true);
-        setInsightsCache((prevCache) => ({
-            ...prevCache,
-            [getPostByPageIdAndPostStatusData?.data?.paging?.pageNumber]:
-              getPostByPageIdAndPostStatusData.data,
-        }));
+        setInsightsCache((prevCache) => ({...prevCache,[getPostByPageIdAndPostStatusData?.data?.paging?.pageNumber]:getPostByPageIdAndPostStatusData.data}));
       }
     }
   }, [getPostByPageIdAndPostStatusData]);  
@@ -227,7 +221,7 @@ function Carousel({ selectedPage }) {
         requestBody: {
             postStatuses: ["PUBLISHED"],
             pageIds: [selectedPage?.pageId],
-            pageSize: 1,
+            pageSize: 3,
             pageNumber:nextPageNumber,
         },
         })
@@ -242,7 +236,7 @@ function Carousel({ selectedPage }) {
         requestBody: {
           postStatuses: ["PUBLISHED"],
           pageIds: [selectedPage?.pageId],
-          pageSize: 1,
+          pageSize: 3,
           pageNumber:prevPageNumber
         },
       })
@@ -309,7 +303,7 @@ function Carousel({ selectedPage }) {
                         <ul className="top_city_list acountReach_content_container">
                           <li>
                             <h4 className="cmn_small_heading">
-                              {index + 1}. Account Reach
+                              Account Reach
                             </h4>
                             <h3>{formattedData?.account_reach}</h3>
                           </li>
