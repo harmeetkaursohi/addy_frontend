@@ -462,6 +462,10 @@ img.connection-error-svg {
     color: #04a3ff;
     text-decoration: underline;
 }
+.linkedin-icon-color{
+    color: rgb(8, 102, 255);
+    font-size: 24px;
+}
 @media screen and (min-width:2560px){
     .followers_outer {
         gap: 40px;

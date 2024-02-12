@@ -16,6 +16,7 @@ import notConnected_img from "../../../images/not_connected_img.svg"
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: 0});
+    const [resetData, isResetData] = useState(true);
     const {
         isLoading = true,
         isError,
@@ -23,27 +24,27 @@ const Review = () => {
         results,
         setResults,
         hasNextPage
-    } = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType);
+    } = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType,isResetData,resetData);
     const token = getToken();
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
-    const [resetData, isResetData] = useState(false);
+  
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
     const dispatch = useDispatch();
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
 
-
     useEffect(() => {
         if (resetData) {
+
             setResults([])
             setBaseSearchQuery({...baseSearchQuery, pageNum: 0,})
             isResetData(false)
 
         }
     }, [resetData]);
-
+console.log(isLoading,"isLoading",results,"results",resetData,"resetData")
     useEffect(() => {
         if (postData && postData !== undefined) {
             const requestBody = {
@@ -59,7 +60,9 @@ const Review = () => {
 
     const intObserver = useRef();
     const lastPostRef = useCallback(post => {
+        console.log("post====>",hasNextPage)
         if (isLoading) return
+
 
         if (intObserver.current) intObserver.current.disconnect()
 
@@ -142,7 +145,7 @@ const Review = () => {
                                                         <div className={"d-flex align-items-center"}>
                                                             <img className={"me-2 review-post-icon"}
                                                                  src={computeImageURL(post?.socialMediaType)}/>
-                                                            <span>{post?.page?.name}</span>
+                                                            <span>{post?.page?.name}{index+1}</span>
                                                         </div>
 
 

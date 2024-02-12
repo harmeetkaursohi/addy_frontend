@@ -191,10 +191,14 @@ const Carousel = function({ selectedPage }) {
   const [insightsCache, setInsightsCache] = useState({});
 
 
-  useEffect(() => {    
-    console.log("getPostByPageIdAndPostStatusData?.data?.data",getPostByPageIdAndPostStatusData?.data?.data);
-    if (getPostByPageIdAndPostStatusData?.data !== null && getPostByPageIdAndPostStatusData?.data !== undefined && typeof getPostByPageIdAndPostStatusData?.data?.data === "object") {
-      if(Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length === 0) {
+  useEffect(() => {
+    if (
+      getPostByPageIdAndPostStatusData?.data?.data !== null &&
+      getPostByPageIdAndPostStatusData?.data?.data  !== undefined
+    ) {
+      if (
+        Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length === 0
+      ) {
         setHasPosts(false);
       }
       if(Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {

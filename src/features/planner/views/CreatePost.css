@@ -512,7 +512,7 @@ createPost_outer select {
 
 .file_outer {
     display: flex;
-    gap: 20px;
+    /* gap: 20px; */
     justify-content: center;
     margin-top: 21px;
 }

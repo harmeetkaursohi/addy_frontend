@@ -73,7 +73,6 @@ const SocialAccounts = ({}) => {
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
     const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
 
-    console.log("getAllLinkedinPagesData==>", getAllLinkedinPagesData)
 
     useEffect(() => {
         if (token) {
@@ -149,10 +148,14 @@ const SocialAccounts = ({}) => {
             const currentConnectedLinkedinPages = currentConnectedLinkedinPagesIds?.map(pageId => {
                 return getFormattedLinkedinObject(pageId, linkedinPages[pageId]);
             })
-            console.log("currentConnectedLinkedinPages==>", currentConnectedLinkedinPages)
-            setCurrentConnectedLinkedinPages(currentConnectedLinkedinPages || null)
+          if(currentConnectedLinkedinPages.length===0){
+            setCurrentConnectedLinkedinPages(null)
+          }else{
+              setCurrentConnectedLinkedinPages(currentConnectedLinkedinPages)
+          }
         }
     }, [connectedPagesData?.facebookConnectedPages]);
+
 
 
     useEffect(() => {
@@ -407,10 +410,12 @@ const SocialAccounts = ({}) => {
                                                         <h4 className="connect_text cmn_text_style">Connected</h4>
                                                     </div>
                                                     {
+                                                       
                                                         (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedFacebookPages?.length === 0 &&
                                                         <button className="DisConnectBtn cmn_connect_btn w-auto"
                                                                 onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}>
                                                             Disconnect
+
                                                         </button>
                                                     }
                                                     <div className={facebookDropDown ? "upside-down" : ""}>
@@ -668,7 +673,7 @@ const SocialAccounts = ({}) => {
                                 getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length === 0 ?
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
-                                            <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
+                                            <i className="fa-brands fa-linkedin linkedin-icon-color"/>
                                             <div>
                                                 <h5 className=""> Linkedin account</h5>
                                                 <h6 className="cmn_headings">in.linkedin.com</h6>
@@ -927,7 +932,7 @@ const SocialAccounts = ({}) => {
                                             <div className="social_media_outer">
                                                 <div className="social_media_content"
                                                      onClick={() => setLinkedinDropDown(!linkedinDropDown)}>
-                                                    <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
+                                                    <i className="fa-brands fa-linkedin linkedin-icon-color "/>
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'LINKEDIN')?.name || "linkedin"}</h5>
                                                         <h4 className="connect_text cmn_text_style">Connected</h4>
@@ -935,11 +940,13 @@ const SocialAccounts = ({}) => {
 
                                                     {
                                                         (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedLinkedinPages?.length === 0 &&
+                                                      
                                                         <button
                                                             className="DisConnectBtn cmn_connect_btn w-auto"
                                                             onClick={() =>
                                                                 disConnectSocialMediaAccountToCustomer("LINKEDIN")}>
-                                                            Disconnect
+                                                            Disconnect1234
+                                                           
                                                         </button>
                                                     }
 
