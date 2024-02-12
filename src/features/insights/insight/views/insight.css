@@ -406,6 +406,7 @@ h2.Review_Heading {
     }
     select.days_option{
         font-size: 12px;
+        margin-top: 10px;
     }
     .account_reach_overview_outer {
         margin-top: 10px;

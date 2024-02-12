@@ -45,6 +45,7 @@ const CommentReviewsSectionModal = ({
             isResetData(true);
         }
     }, [])
+
     return (
         <>
             <div className='comment_review_container'>

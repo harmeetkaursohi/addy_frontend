@@ -5,7 +5,7 @@
 
 .create_post_btn {
     border: none;
-    padding: 8px 16px;
+    padding: 8px 21px;
     border-radius: 6px;
 }
 
@@ -25,8 +25,8 @@
     border-radius: 6px;
     border: 1px solid #D1D9E2;
     background: #FFF;
-    padding: 8px ;
-    min-width: 97px;
+    padding: 7px ;
+    min-width: 117px;
     color: black;
     margin-right: 15px;
 
@@ -423,6 +423,7 @@ a.fc-daygrid-dot-event:hover {
         padding: 8px;
         width: 100%;
         text-align: center;
+        font-size: 12px;
     }
     .create_post_btn_Wrapper{
         display: flex;
@@ -452,10 +453,8 @@ a.fc-daygrid-dot-event:hover {
         font-size: 14px;
     }
     .draft_btn{
-
-        font-size: 12px;
-        width: 100%;
         margin-right: 0px;
+        font-size: 12px;
     }
 
 }

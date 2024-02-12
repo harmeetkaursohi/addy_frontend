@@ -193,8 +193,8 @@ function Carousel({ selectedPage }) {
 
   useEffect(() => {
     if (
-      getPostByPageIdAndPostStatusData?.data !== null &&
-      getPostByPageIdAndPostStatusData?.data !== undefined
+      getPostByPageIdAndPostStatusData?.data?.data !== null &&
+      getPostByPageIdAndPostStatusData?.data?.data  !== undefined
     ) {
       if (
         Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length === 0
