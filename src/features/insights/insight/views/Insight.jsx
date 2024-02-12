@@ -216,9 +216,6 @@ const Insight = () => {
                         <h5 className="Choose_platform_title">Choose PlatForm</h5>
 
                         <div className="social_media_dropdown">
-
-
-                            {(enabledSocialMedia.isFaceBookEnabled && connectedFacebookPages?.length) ? 
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -231,10 +228,9 @@ const Insight = () => {
                                         Facebook
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-
-
                                         <Dropdown.Item>
                                             <ul className="Social_media_wrapper">
+                                                {!connectedFacebookPages?.length && <li><div className="Social_media_platform"><h3>No Page is Connected yet</h3></div></li>}
                                                 {
                                                     connectedFacebookPages?.map((page, index) => {
                                                         return (
@@ -255,9 +251,7 @@ const Insight = () => {
                                         </Dropdown.Item>
 
                                     </Dropdown.Menu>
-                                </Dropdown> : (<></>) 
-                            }
-                            {(enabledSocialMedia.isInstagramEnabled && connectedInstagramPages?.length) ?     
+                                </Dropdown>
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -271,6 +265,7 @@ const Insight = () => {
                                     <Dropdown.Menu>
                                         <Dropdown.Item>
                                             <ul className="Social_media_wrapper">
+                                                {!connectedInstagramPages?.length && <li><div className="Social_media_platform"><h3>No Page is Connected yet</h3></div></li>}
                                                 {
                                                     connectedInstagramPages?.map((page, index) => {
                                                         return (
@@ -290,9 +285,7 @@ const Insight = () => {
                                             </ul>
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
-                                </Dropdown>  : (<></>)
-                            }
-                            {(enabledSocialMedia.isPinterestEnabled && connectedPinterestBoards?.length) ?                                
+                                </Dropdown>                           
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -309,6 +302,7 @@ const Insight = () => {
 
                                         <Dropdown.Item>
                                             <ul className="Social_media_wrapper">
+                                                {!connectedPinterestBoards?.length && <li><div className="Social_media_platform"><h3>No Page is Connected yet</h3></div></li>}
                                                 {
                                                     connectedPinterestBoards?.map((board, index) => {
                                                         return (
@@ -329,11 +323,7 @@ const Insight = () => {
                                         </Dropdown.Item>
 
                                     </Dropdown.Menu>
-                                </Dropdown> : (<></>)
-                            }
-
-                            {/*TODO: Linkedin dropdown */}
-                            {(connectedLinkedinPages?.length && enabledSocialMedia.isLinkedinEnabled)  ?
+                                </Dropdown>                                                        
                                 <Dropdown className="chooseplatfrom_dropdown_btn">
                                     <Dropdown.Toggle
                                         variant="success"
@@ -345,9 +335,8 @@ const Insight = () => {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item>
-
-
                                             <ul className="Social_media_wrapper">
+                                                {!connectedLinkedinPages?.length && <li><div className="Social_media_platform"><h3>No Page is Connected yet</h3></div></li>}
                                                 {
                                                     connectedLinkedinPages?.map((page, index) => {
                                                         return (
@@ -366,8 +355,7 @@ const Insight = () => {
                                             </ul>
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
-                                </Dropdown> : (<></>)
-                            }
+                                </Dropdown>
                         </div>
                         {/* ============ */}
 
