@@ -16,7 +16,7 @@ import {RotatingLines} from "react-loader-spinner";
 import {getToken} from "../../../../app/auth/auth";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 
-const CommentFooter = ({postData, postPageData}) => {
+const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,setIsdirty}) => {
     const token = getToken();
     const [comment, setComment] = useState("");
     const dispatch = useDispatch();
@@ -40,7 +40,6 @@ const CommentFooter = ({postData, postPageData}) => {
         can_comment: null,
 
     })
-
     useEffect(() => {
         if (postData && postPageData) {
             // In case of facebook set data object
@@ -149,7 +148,7 @@ const CommentFooter = ({postData, postPageData}) => {
 
         dispatch(dislikePostAction(requestBody)).then((response) => {
             if (response.meta.requestStatus === "fulfilled") {
-
+            
                 dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction)).then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         setLike(false);
@@ -165,6 +164,8 @@ const CommentFooter = ({postData, postPageData}) => {
         })
     }
     const handleAddCommentOnPost = (e) => {
+        setIsdirty(true)
+
         e.preventDefault();
         const requestBody = {
             socialMediaType: postData?.socialMediaType,
@@ -178,16 +179,35 @@ const CommentFooter = ({postData, postPageData}) => {
         }
 
         dispatch(addCommentOnPostAction(requestBody)).then(response => {
+            
             if (response.meta.requestStatus === "fulfilled") {
                 setComment("")
+               
                 if(postData?.socialMediaType==="FACEBOOK"){
                     dispatch(getCommentsOnPostAction(requestBody))
                 }
                 dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction))
-
+               
             }
         });
     }
+    useEffect(() => {
+       
+        if(isDirty){
+            const updatedResult = [...result];
+            const updatedItem = { ...updatedResult[index], comments: updatedResult[index].comments + 1 };
+            updatedResult[index] = updatedItem;
+            setResult(updatedResult);
+            setIsdirty(false)
+        }
+    
+          
+      
+      
+  }, [index,isDirty]);
+    
+    
+
     return (
         <div className="comments_footer">
 

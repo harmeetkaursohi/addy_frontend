@@ -320,19 +320,22 @@ h2.Review_Heading {
     filter: invert(10%) sepia(100%) saturate(150%) hue-rotate(190deg) brightness(90%) contrast(85%);
 }
 
-
+@media screen and (max-width:1280px){
+    .social_media_dropdown {
+        flex-wrap: wrap;
+    }
+}
 @media screen and (max-width: 1024px) {
     h2.Review_Heading {
         margin-top: 20px;
         font-size: 15px;
     }
+   
+
 }
 
 @media screen and (max-width: 991px) {
-    .social_media_dropdown {
-        flex-wrap: wrap;
-    }
-
+   
     .account_reach_overview_outer h5 {
         font-size: 12px;
     }

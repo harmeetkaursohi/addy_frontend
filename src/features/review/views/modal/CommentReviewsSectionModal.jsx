@@ -24,7 +24,13 @@ const CommentReviewsSectionModal = ({
                                         setOpenCommentReviewsSectionModal,
                                         postData,
                                         isResetData,
-                                        postPageInfoData
+                                        postPageInfoData,
+                                        setInd,
+                                        index,
+                                        result,
+                                        isDirty,
+                                        setIsdirty,
+                                        setResult
                                     }) => {
     const [postPageData, setPostPageData] = useState(null);
     const dispatch = useDispatch();
@@ -35,14 +41,15 @@ const CommentReviewsSectionModal = ({
             setPostPageData(postData?.socialMediaType === "FACEBOOK" ? postPageInfoData[postData?.id] : postPageInfoData)
         }
     }, [postData, postPageInfoData])
- 
+
+   
 
     useEffect(() => {
         return () => {
             dispatch(resetReducers({sliceNames: ["getPostPageInfoReducer"]}))
             dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
             dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
-            isResetData(true);
+            // isResetData(true);
         }
     }, [])
 
@@ -132,7 +139,7 @@ const CommentReviewsSectionModal = ({
                                     </div>
 
                                     {/*</div>*/}
-                                    <CommentFooter postData={postData} postPageData={postPageData}/>
+                                    <CommentFooter setResult={setResult} result={result} isDirty={isDirty} setIsdirty={setIsdirty} postData={postData} postPageData={postPageData} setInd={setInd} index={index} />
 
                                 </div>
 

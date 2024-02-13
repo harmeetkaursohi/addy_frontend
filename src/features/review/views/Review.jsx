@@ -16,14 +16,18 @@ import notConnected_img from "../../../images/not_connected_img.svg"
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: 0});
-    const [resetData, isResetData] = useState(true);
+    const [resetData, isResetData] = useState(false);
+    const [Ind, setInd] = useState(null);
+    const[isDirty,setIsdirty]=useState(false)
+
     const {
         isLoading = true,
         isError,
         error,
         results,
         setResults,
-        hasNextPage
+        hasNextPage,
+     
     } = usePosts(baseSearchQuery?.pageNum, baseSearchQuery?.socialMediaType,isResetData,resetData);
     const token = getToken();
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
@@ -44,7 +48,6 @@ const Review = () => {
 
         }
     }, [resetData]);
-console.log(isLoading,"isLoading",results,"results",resetData,"resetData")
     useEffect(() => {
         if (postData && postData !== undefined) {
             const requestBody = {
@@ -60,9 +63,9 @@ console.log(isLoading,"isLoading",results,"results",resetData,"resetData")
 
     const intObserver = useRef();
     const lastPostRef = useCallback(post => {
-        console.log("post====>",hasNextPage)
-        if (isLoading) return
 
+        if (isLoading ) return
+          
 
         if (intObserver.current) intObserver.current.disconnect()
 
@@ -130,7 +133,9 @@ console.log(isLoading,"isLoading",results,"results",resetData,"resetData")
                                     </thead>
 
                                     <tbody className="position-relative">
+                                        
                                     {
+                                       
                                             results?.map((post, index) => (
 
                                                 <tr
@@ -145,7 +150,7 @@ console.log(isLoading,"isLoading",results,"results",resetData,"resetData")
                                                         <div className={"d-flex align-items-center"}>
                                                             <img className={"me-2 review-post-icon"}
                                                                  src={computeImageURL(post?.socialMediaType)}/>
-                                                            <span>{post?.page?.name}{index+1}</span>
+                                                            <span>{post?.page?.name}</span>
                                                         </div>
 
 
@@ -158,6 +163,7 @@ console.log(isLoading,"isLoading",results,"results",resetData,"resetData")
                                                         <div className={"view-post-txt cursor-pointer"}
                                                              onClick={(e) => {
                                                                  setPostData(post);
+                                                                 setInd(index)
                                                                  setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
                                                              }}
                                                         >
@@ -184,6 +190,7 @@ console.log(isLoading,"isLoading",results,"results",resetData,"resetData")
                                 </table>
 
                             </div>
+
                            }
                                 {isLoading===false && results.length===0?
                                 <div className="acc_not_connected_outer">
@@ -203,7 +210,14 @@ console.log(isLoading,"isLoading",results,"results",resetData,"resetData")
                     <CommentReviewsSectionModal isOpenCommentReviewsSectionModal={isOpenCommentReviewsSectionModal}
                                                 setOpenCommentReviewsSectionModal={setOpenCommentReviewsSectionModal}
                                                 postData={postData} postPageInfoData={postPageInfoData}
-                                                isResetData={isResetData}/>
+                                                isResetData={isResetData}
+                                                setInd={setInd}
+                                                index={Ind}
+                                                setIsdirty={setIsdirty}
+                                                isDirty={isDirty}
+                                                result={results}
+                                                setResult={setResults}
+                                                />
                 }
             </section>
         </>
