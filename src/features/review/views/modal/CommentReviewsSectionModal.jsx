@@ -42,13 +42,15 @@ const CommentReviewsSectionModal = ({
         }
     }, [postData, postPageInfoData])
 
-   
+
 
     useEffect(() => {
         return () => {
             dispatch(resetReducers({sliceNames: ["getPostPageInfoReducer"]}))
             dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
             dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
+            dispatch(resetReducers({sliceNames: ["replyCommentOnPostActionReducer"]}))
+            dispatch(resetReducers({sliceNames: ["updateCommentsOnPostActionReducer"]}))
             // isResetData(true);
         }
     }, [])
@@ -72,8 +74,8 @@ const CommentReviewsSectionModal = ({
                                                  src={computeImageURL(postData?.socialMediaType)}/>
                                             {/*<i className="fa-brands fa-facebook ms-2"></i>*/}
                                         </Link>
-
                                     </div>
+
                                     <CommonSlider files={postData?.attachments}
                                                   selectedFileType={null}
                                                   caption={null}

@@ -565,23 +565,115 @@ export const handleShowCommentReplies = (showCommentReply, index) => {
     return updatedShowCommentReply
 
 }
-export const getTagCommentsFormat = (replyComment) => {
-    return !replyComment?.message.includes(replyComment?.mentionedPageName) ? replyComment?.message : replyComment?.message.replace(replyComment?.mentionedPageName, `@[${replyComment?.mentionedPageId}]`)
+export const getMentionedUserCommentFormat = (replyComment, socialMediaType) => {
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            return !replyComment?.message.includes(replyComment?.mentionedPageName) ? replyComment?.message : replyComment?.message.replace(replyComment?.mentionedPageName, `@[${replyComment?.mentionedPageId}]`)
+        }
+        case "LINKEDIN": {
+            if (replyComment?.mentionedUser?.length > 0) {
+                const mentionedUsers = replyComment?.mentionedUser?.filter(mentionedUser => replyComment?.message?.includes(mentionedUser?.name))
+                if (mentionedUsers?.length > 0) {
+                    return {
+                        actor: replyComment?.actor,
+                        object: replyComment?.object,
+                        attributes: mentionedUsers?.map(mentionedUser => {
+                            const idType = getLinkedinIdTypeFromUrn(mentionedUser?.id);
+                            return {
+                                length: mentionedUser?.name?.length,
+                                start: replyComment?.message?.indexOf(mentionedUser?.name),
+                                value: {
+                                    [idType]: {
+                                        [idType]: mentionedUser?.id
+                                    }
+                                }
+                            }
+                        }),
+                        message: replyComment?.message,
+                        parentComment: replyComment?.parentComment
+                    }
+                }
+            }
+            return {
+                actor: replyComment?.actor,
+                object: replyComment?.object,
+                message: replyComment?.message,
+                parentComment: replyComment?.parentComment,
+            };
+            break;
+
+        }
+        default: {
+
+        }
+    }
 }
-export const getUpdateCommentMessage = (commentToUpdate) => {
-    let updatedMessage = commentToUpdate?.message
-    if (commentToUpdate?.message_tags?.length === 0) {
-        return commentToUpdate?.message
+
+export const getLinkedinIdTypeFromUrn = (urn = null) => {
+    if (urn === null) {
+        return null;
     }
-    const mentionedAccounts = commentToUpdate?.message_tags?.filter(tags => tags?.type === "user")
-    if (mentionedAccounts?.length === 0) {
-        return commentToUpdate?.message
+    const parts = urn.split(':');
+    if (parts.length >= 3) {
+        return parts[2];
     } else {
-        mentionedAccounts?.map(accounts => {
-            updatedMessage = updatedMessage?.replace(accounts?.name, `@[${accounts?.id}]`)
-        })
+        return null;
     }
-    return updatedMessage
+}
+
+export const getUpdateCommentMessage = (commentToUpdate, socialMediaType) => {
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            let updatedMessage = commentToUpdate?.message
+            if (commentToUpdate?.message_tags?.length === 0) {
+                return commentToUpdate?.message
+            }
+            const mentionedAccounts = commentToUpdate?.message_tags?.filter(tags => tags?.type === "user")
+            if (mentionedAccounts?.length === 0) {
+                return commentToUpdate?.message
+            } else {
+                mentionedAccounts?.map(accounts => {
+                    updatedMessage = updatedMessage?.replace(accounts?.name, `@[${accounts?.id}]`)
+                })
+            }
+            return updatedMessage
+            break;
+        }
+        case "LINKEDIN": {
+            let updatedMessage = {
+                text: commentToUpdate?.updatedMessage,
+                actor: commentToUpdate?.comment?.actor,
+                commentId: commentToUpdate?.comment?.id,
+                parentObjectUrn: commentToUpdate?.comment?.hasOwnProperty("parentComment") ? commentToUpdate?.comment?.parentComment : commentToUpdate?.comment?.object,
+            }
+            if(commentToUpdate?.mentionedUsers?.length>0){
+                const currentMentionedUsers = commentToUpdate?.mentionedUsers?.filter(mentionedUser => commentToUpdate?.updatedMessage?.includes(mentionedUser?.name))
+                if (currentMentionedUsers?.length > 0) {
+                    updatedMessage={
+                        ...updatedMessage,
+                        attributes: currentMentionedUsers?.map(mentionedUser => {
+                            const idType = getLinkedinIdTypeFromUrn(mentionedUser?.id);
+                            return {
+                                length: mentionedUser?.name?.length,
+                                start: commentToUpdate?.updatedMessage?.indexOf(mentionedUser?.name),
+                                value: {
+                                    [idType]: {
+                                        [idType]: mentionedUser?.id
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+            return updatedMessage
+            break;
+        }
+        default: {
+
+        }
+    }
+
 }
 
 export const getFormattedDate = (inputDate) => {
@@ -1059,7 +1151,7 @@ export const extractParameterFromUrl = (url, parameterName) => {
 export const getFormattedPostDataForSlider = (data, socialMediaType) => {
     if (data === null || data === undefined) {
         return []
-    }    
+    }
     let formattedData = {}
     switch (socialMediaType) {
         case SocialAccountProvider.LINKEDIN?.toUpperCase():
@@ -1505,8 +1597,8 @@ export const extractCommentersProfileDataForLinkedin = (comment = null) => {
 
 }
 
-export const removeDuplicatesObjectsFromArray=(array=[],fieldToCompare)=>{
-    if(array?.length===0){
+export const removeDuplicatesObjectsFromArray = (array = [], fieldToCompare) => {
+    if (array?.length === 0) {
         return []
     }
     const seen = new Set();
@@ -1518,4 +1610,46 @@ export const removeDuplicatesObjectsFromArray=(array=[],fieldToCompare)=>{
         }
         return false;
     });
+}
+export const getLoggedInLinkedinActorObject = (type = null, name = "", profilePicUrl = "") => {
+    if (type === null) {
+        return null;
+    }
+    let actor;
+    switch (type) {
+        case "ORGANIZATION": {
+            actor = {
+                localizedName: name,
+                logoV2: {
+                    "original~": {
+                        elements: [
+                            {
+                                identifiers: [
+                                    {
+                                        identifier: profilePicUrl
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+            break;
+        }
+        default: {
+
+        }
+    }
+    return actor
+}
+
+export const extractIdFromLinkedinMessageAtrributes=(attribute=null)=>{
+    if(attribute===null){
+        return null
+    }
+    const firstLevelKey=Object.keys(attribute?.value)[0]
+    const secondLevelKey=Object.keys(attribute?.value[firstLevelKey])[0]
+    return attribute?.value[firstLevelKey][secondLevelKey]
+
+
 }

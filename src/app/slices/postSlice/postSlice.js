@@ -304,7 +304,6 @@ const postSlice = createSlice({
             state.getPostByPageIdAndPostStatusReducer = {loading: true}
         },
         [getPostByPageIdAndPostStatus.fulfilled]: (state,action) => {
-            console.log("action.payload",action.payload)
             state.getPostByPageIdAndPostStatusReducer = {loading: false,data: action.payload}
         },
         [getPostByPageIdAndPostStatus.rejected]: (state) => {

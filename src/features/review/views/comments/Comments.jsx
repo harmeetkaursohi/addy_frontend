@@ -1,7 +1,7 @@
 import img from "../../../../images/draft.png";
 import {
     getCommentCreationTime,
-    getTagCommentsFormat, getUpdateCommentMessage,
+    getUpdateCommentMessage,getMentionedUserCommentFormat,
     handleShowCommentReplies,
     handleShowCommentReplyBox, isNullOrEmpty, isReplyCommentEmpty
 } from "../../../../utils/commonUtils";
@@ -65,7 +65,7 @@ const Comments = ({postData}) => {
             ...baseQuery,
             id: replyToCommentId,
             data: {
-                message: getTagCommentsFormat(replyComment)
+                message: getMentionedUserCommentFormat(replyComment,postData?.socialMediaType)
             },
         }
         dispatch(addCommentOnPostAction(requestBody)).then(response => {
@@ -132,7 +132,7 @@ const Comments = ({postData}) => {
             ...baseQuery,
             id: updateComment?.id,
             data: {
-                message: getUpdateCommentMessage(updateComment)
+                message: getUpdateCommentMessage(updateComment,postData?.socialMediaType)
             }
         }
         dispatch(updateCommentsOnPostAction(requestBody)).then(response => {
