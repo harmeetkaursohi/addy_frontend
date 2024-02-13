@@ -264,7 +264,7 @@ const CommentFooter = ({postData, postPageData}) => {
                         {
                             commonFooterDataObject.total_likes > 1 && <>
                                 Liked
-                                by {postPageData?.likesSummary?.likedByCurrentUser ? postData?.page?.name + "and " + (commonFooterDataObject.total_likes - 1) + (commonFooterDataObject?.total_likes - 1 === 1 ? " other" : " others") : commonFooterDataObject.total_likes + " others"}
+                                by {postPageData?.likesSummary?.likedByCurrentUser ? postData?.page?.name + " and " + (commonFooterDataObject.total_likes - 1) + (commonFooterDataObject?.total_likes - 1 === 1 ? " other" : " others") : commonFooterDataObject.total_likes + " others"}
                             </>
                         }
                     </>

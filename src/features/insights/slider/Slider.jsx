@@ -309,7 +309,8 @@ function Carousel({ selectedPage }) {
                         <ul className="top_city_list acountReach_content_container">
                           <li>
                             <h4 className="cmn_small_heading">
-                              {index + 1}. Account Reach
+                              {/*{index + 1}. */}
+                                Account Reach
                             </h4>
                             <h3>{formattedData?.account_reach}</h3>
                           </li>
