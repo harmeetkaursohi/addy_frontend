@@ -14,7 +14,9 @@ const usePosts = (pageNum = 0, filter = null,isResetData,resetData) => {
     const token = getToken();
 
     useEffect(() => {
+    
         setIsLoading(true)
+        
         setIsError(false)
         setError({})
 
@@ -25,46 +27,50 @@ const usePosts = (pageNum = 0, filter = null,isResetData,resetData) => {
             options: {signal},
             postStatus: ["PUBLISHED"],
             token: token,
-            pageNumber: pageNum,
+            pageNumber:pageNum,
             socialMediaType:filter
         }
 
-       if(resetData){
-console.log(resetData,"resetData======>")
-           dispatch(getPostsPageAction(requestBody))
-               .then((response) => {
-                   if (response.meta.requestStatus === "fulfilled") {
-                       if (pageNum === 0) {
-                           if (filter) {
-                               setResults(response?.payload?.filter(data => data.socialMediaType === filter));
-                           } else {
-                               setResults(response?.payload);
-                           }
-                       } else if (pageNum > 1) {
-                           if (filter) {
-                               setResults((prev) => [...prev, ...response?.payload?.filter(data => data.socialMediaType === filter)]);
-                           } else {
-                               setResults((prev) => [...prev, ...response?.payload]);
-                           }
-                       }
-                       setHasNextPage(Boolean(response?.payload.length));
-                       setIsLoading(false);
-                   }
-               })
-               .catch((e) => {
-                   setIsLoading(false);
-                   if (signal.aborted) return;
-                   setIsError(true);
-                   setError({message: e.message});
-               });
-               isResetData(false)
-               return () => controller.abort()
-       }
+
+dispatch(getPostsPageAction(requestBody))
+    .then((response) => {
+        if (response.meta.requestStatus === "fulfilled") {
+            if (pageNum === 0) {
+                if (filter) {
+                    setResults(response?.payload?.filter(data => data.socialMediaType === filter));
+                } else {
+                    setResults(response?.payload);
+                }
+            } else if (pageNum > 1) {
+                if (filter) {
+                    setResults((prev) => [...prev, ...response?.payload?.filter(data => data.socialMediaType === filter)]);
+                } else {
+                    setResults((prev) => [...prev, ...response?.payload]);
+                }
+            }
+
+            setHasNextPage(Boolean(response?.payload.length));
+            
+        }
+        setIsLoading(false);
+   
+       
+    })
+    .catch((e) => {
+        setIsLoading(false);
+     
+        if (signal.aborted) return;
+        setIsError(true);
+        setError({message: e.message});
+    });
+    isResetData(false)
+    return () => controller.abort()
      
 
-    }, [pageNum, filter,resetData])
+    }, [pageNum, filter])
 
-    return {isLoading, isError, error, results, setResults, hasNextPage,resetData}
+    return {isLoading, isError, error, results, setResults, hasNextPage }
 }
 
 export default usePosts;
+
