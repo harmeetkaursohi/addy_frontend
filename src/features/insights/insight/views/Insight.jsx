@@ -93,7 +93,7 @@ const Insight = () => {
         if (selectedPageForGraph === null || selectedPageForGraph?.socialMediaType !== socialMediaType) {
             setSelectedPageForGraph({...page, socialMediaType: socialMediaType})
         }
-        if (socialMediaType === "PINTEREST") {
+        if (socialMediaType === "PINTEREST" || socialMediaType === "LINKEDIN") {
             const button = document.getElementById('uncontrolled-tab-example-tab-Overview');
             if(button){
                 button.click();
@@ -133,11 +133,11 @@ const Insight = () => {
             }))
         }
     }, [selectedPage])
-    useEffect(() => {                
+    useEffect(() => {
         if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
             dispatch(getPostDataWithInsights({
                 socialMediaType: selectedPage?.socialMediaType,
-                pageAccessToken: selectedPage?.access_token,                            
+                pageAccessToken: selectedPage?.access_token,
                 token: token,
                 insightsCache:insightsCache,
                 postIds: getPostByPageIdAndPostStatusData?.data?.data[selectedPage?.pageId]?.map(post => post.postPageInfos[0]?.socialMediaPostId)
@@ -204,6 +204,7 @@ const Insight = () => {
             }))
         }
     }, [selectedPeriodForDemographics, selectedPage, selectedInsightSection])
+
 
 
     return (
@@ -652,7 +653,7 @@ const Insight = () => {
                                             </Tab>
                                             {/* Demographics tabs */}
                                             {
-                                                selectedPage?.socialMediaType !== "PINTEREST" &&
+                                                selectedPage?.socialMediaType !== "PINTEREST" && selectedPage?.socialMediaType !==  "LINKEDIN" &&
                                                 <Tab eventKey="Demographics" title="Demographics">
                                                     <h2 className="cmn_headings Review_Heading">Review your audience
                                                         demographics as

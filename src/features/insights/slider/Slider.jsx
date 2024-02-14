@@ -192,13 +192,8 @@ const Carousel = function({ selectedPage }) {
 
 
   useEffect(() => {
-    if (
-      getPostByPageIdAndPostStatusData?.data?.data !== null &&
-      getPostByPageIdAndPostStatusData?.data?.data  !== undefined
-    ) {
-      if (
-        Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length === 0
-      ) {
+    if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data  !== undefined) {
+      if (Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length === 0) {
         setHasPosts(false);
       }
       if(Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
