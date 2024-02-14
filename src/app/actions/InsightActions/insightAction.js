@@ -8,7 +8,7 @@ import {
     getFormattedDemographicData,
     getFormattedPostTime, getFormattedTotalFollowersCountData
 } from "../../../utils/commonUtils.js";
-import {setAuthenticationHeader} from "../../auth/auth";
+import {getToken, setAuthenticationHeader} from "../../auth/auth";
 
 
 export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWithInsights', async (data, thunkAPI) => {    
@@ -289,9 +289,9 @@ const getLinkedInDemographicData = async (data, thunkAPI) => {
         geo: null,
         industry: null,
     }    
-    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/organizationalEntityFollowerStatistics?pageID=${data?.pageId}&pageAccessToken=${data?.pageAccessToken}`;
-    await baseAxios.get(apiUrl).then(demographicData => {
-        console.log("demographicData",demographicData)
+    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationalEntityFollowerStatistics/${data?.pageId}?pageAccessToken=${data?.pageAccessToken}`;    
+    await baseAxios.get(apiUrl, setAuthenticationHeader(getToken())).then(demographicData => {             
+        demographicData = demographicData.data
         formattedApiResponse = {
             ...formattedApiResponse,
             staffCountRange: getFormattedDemographicData(demographicData, "staffCountRange", "LINKEDIN"),
