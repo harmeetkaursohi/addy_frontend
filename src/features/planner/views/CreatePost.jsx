@@ -657,7 +657,7 @@ const CreatePost = () => {
                                                           onChange={(e) => {
                                                               e.preventDefault();
                                                               const inputValue = e.target.value;
-                                                              const hashtags = convertSentenceToHashtags(inputValue);
+                                                              const hashtags = convertSentenceToHashtags(inputValue,e.key);
                                                               setHashTag(hashtags);
                                                           }}></textarea>
                                             </div>
