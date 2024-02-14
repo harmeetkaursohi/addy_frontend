@@ -1311,7 +1311,13 @@ export const getFormattedDemographicData = (data, key, socialMediaType) => {
             return formattedData
         }
         case SocialAccountProvider.LINKEDIN.toUpperCase(): {
-            break;
+            let formattedData = data?.data[key]
+            if(key === "industry" || key === "seniority" || key=== "function"){
+                Object.keys(formattedData).map(function(v){
+                    formattedData[v] = {name:formattedData[v].label,value:formattedData[v].organicFollowerCounts}
+                })
+            }
+            return formattedData
         }
     }
 }

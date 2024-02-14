@@ -66,7 +66,7 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
                 break;
             }
             case "LINKEDIN": {                
-                return JSON.parse('{"17989448420378553":{"id":"17989448420378553","insights":{"data":[{"name":"reach","period":"lifetime","values":[{"value":0}],"title":"Accounts reached","description":"The number of unique accounts that have seen this post at least once. Reach is different from impressions, which may include multiple views of your post by the same accounts. This metric is estimated.","id":"17989448420378553/insights/reach/lifetime"},{"name":"shares","period":"lifetime","values":[{"value":0}],"title":"Shares","description":"The number of shares of your post.","id":"17989448420378553/insights/shares/lifetime"}]},"caption":"11","comments_count":0,"like_count":0,"media_type":"IMAGE","media_url":"https://app-dev.addyads.com/assets/Frame-9efd0bbb.svg","timestamp":"2024-02-08T19:46:15+0000","username":"pritam55000"},"17872401227997059":{"id":"17872401227997059","insights":{"data":[{"name":"reach","period":"lifetime","values":[{"value":0}],"title":"Accounts reached","description":"The number of unique accounts that have seen this post at least once. Reach is different from impressions, which may include multiple views of your post by the same accounts. This metric is estimated.","id":"17872401227997059/insights/reach/lifetime"},{"name":"shares","period":"lifetime","values":[{"value":0}],"title":"Shares","description":"The number of shares of your post.","id":"17872401227997059/insights/shares/lifetime"}]},"caption":"Image for both linkedin and instagram","comments_count":0,"like_count":0,"media_type":"IMAGE","media_url":"https://scontent.cdninstagram.com/v/t51.2885-15/425499657_377133808287182_1097057270926551508_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=18de74&_nc_ohc=MXIscnPgn1MAX-CYB4o&_nc_ht=scontent.cdninstagram.com&edm=AEQ6tj4EAAAA&oh=00_AfDScXPIroZGaFmszCB1WCTAUGIFddKKbBDfeOB9ReeGow&oe=65CABE16","timestamp":"2024-02-08T18:47:58+0000","username":"pritam55000"},"17900013416862420":{"id":"17900013416862420","insights":{"data":[{"name":"reach","period":"lifetime","values":[{"value":0}],"title":"Accounts reached","description":"The number of unique accounts that have seen this post at least once. Reach is different from impressions, which may include multiple views of your post by the same accounts. This metric is estimated.","id":"17900013416862420/insights/reach/lifetime"},{"name":"shares","period":"lifetime","values":[{"value":0}],"title":"Shares","description":"The number of shares of your post.","id":"17900013416862420/insights/shares/lifetime"}]},"caption":"image on insta","comments_count":2,"like_count":2,"media_type":"IMAGE","media_url":"https://scontent.cdninstagram.com/v/t51.2885-15/425499657_377133808287182_1097057270926551508_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=18de74&_nc_ohc=MXIscnPgn1MAX-CYB4o&_nc_ht=scontent.cdninstagram.com&edm=AEQ6tj4EAAAA&oh=00_AfDScXPIroZGaFmszCB1WCTAUGIFddKKbBDfeOB9ReeGow&oe=65CABE16","timestamp":"2024-01-25T11:14:28+0000","username":"pritam55000"}}')
+                return JSON.parse('{"17989448420378553":{"id":"17989448420378553","insights":{"data":[{"name":"reach","period":"lifetime","values":[{"value":0}],"title":"Accounts reached","description":"The number of unique accounts that have seen this post at least once. Reach is different from impressions, which may include multiple views of your post by the same accounts. This metric is estimated.","id":"17989448420378553/insights/reach/lifetime"},{"name":"shares","period":"lifetime","values":[{"value":0}],"title":"Shares","description":"The number of shares of your post.","id":"17989448420378553/insights/shares/lifetime"}]},"caption":"11","comments_count":0,"like_count":0,"media_type":"IMAGE","media_url":"https://app-dev.addyads.com/assets/Frame-9efd0bbb.svg","timestamp":"2024-02-08T19:46:15+0000","username":"pritam55000"},"17872401227997059":{"id":"17872401227997059","insights":{"data":[{"name":"reach","period":"lifetime","values":[{"value":0}],"title":"Accounts reached","description":"The number of unique accounts that have seen this post at least once. Reach is different from impressions, which may include multiple views of your post by the same accounts. This metric is estimated.","id":"17872401227997059/insights/reach/lifetime"},{"name":"shares","period":"lifetime","values":[{"value":0}],"title":"Shares","description":"The number of shares of your post.","id":"17872401227997059/insights/shares/lifetime"}]},"caption":"Image for both linkedin and instagram","comments_count":0,"like_count":0,"media_type":"IMAGE","media_url":"https://app-dev.addyads.com/assets/Frame-9efd0bbb.svg","timestamp":"2024-02-08T18:47:58+0000","username":"pritam55000"},"17900013416862420":{"id":"17900013416862420","insights":{"data":[{"name":"reach","period":"lifetime","values":[{"value":0}],"title":"Accounts reached","description":"The number of unique accounts that have seen this post at least once. Reach is different from impressions, which may include multiple views of your post by the same accounts. This metric is estimated.","id":"17900013416862420/insights/reach/lifetime"},{"name":"shares","period":"lifetime","values":[{"value":0}],"title":"Shares","description":"The number of shares of your post.","id":"17900013416862420/insights/shares/lifetime"}]},"caption":"image on insta","comments_count":2,"like_count":2,"media_type":"IMAGE","media_url":"https://app-dev.addyads.com/assets/Frame-9efd0bbb.svg","timestamp":"2024-01-25T11:14:28+0000","username":"pritam55000"}}')
                 break;
             }
         }    
@@ -162,7 +162,9 @@ export const getDemographicsInsight = createAsyncThunk('insight/getDemographicsI
 
         }
         case "LINKEDIN": {
-            break;
+            return await getLinkedInDemographicData(data, thunkAPI).then((res) => {
+                return res;
+            })            
         }
     }
 });
@@ -269,6 +271,37 @@ const getFacebookDemographicData = async (data, thunkAPI) => {
         }
 
 
+    }).catch(error => {
+        // showErrorToast(error.response.data.error.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+
+
+    return formattedApiResponse;
+}
+const getLinkedInDemographicData = async (data, thunkAPI) => {
+    let formattedApiResponse = {
+        staffCountRange: null,
+        function: null,
+        associationType: null,
+        seniority: null,
+        geoCountry: null,
+        geo: null,
+        industry: null,
+    }    
+    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/organizationalEntityFollowerStatistics?pageID=${data?.pageId}&pageAccessToken=${data?.pageAccessToken}`;
+    await baseAxios.get(apiUrl).then(demographicData => {
+        console.log("demographicData",demographicData)
+        formattedApiResponse = {
+            ...formattedApiResponse,
+            staffCountRange: getFormattedDemographicData(demographicData, "staffCountRange", "LINKEDIN"),
+            function: getFormattedDemographicData(demographicData, "function", "LINKEDIN"),
+            associationType: getFormattedDemographicData(demographicData, "associationType", "LINKEDIN"),
+            seniority: getFormattedDemographicData(demographicData, "seniority", "LINKEDIN"),
+            geoCountry: getFormattedDemographicData(demographicData, "geoCountry", "LINKEDIN"),
+            geo: getFormattedDemographicData(demographicData, "geo", "LINKEDIN"),
+            industry: getFormattedDemographicData(demographicData, "industry", "LINKEDIN"),
+        }
     }).catch(error => {
         // showErrorToast(error.response.data.error.message);
         return thunkAPI.rejectWithValue(error.response);
