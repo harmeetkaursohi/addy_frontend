@@ -516,8 +516,6 @@ const eliminateDuplicateHashTags = (hashtags) => {
 
 export const convertSentenceToHashtags = (sentence) => {
     let words = sentence.split(' ');
-    // words=handleEnterOnHashtag(words);
-
     // Eliminate Duplicate Tags
     if (words[words.length - 1] === "") {
         words = eliminateDuplicateHashTags(words)
@@ -646,10 +644,10 @@ export const getUpdateCommentMessage = (commentToUpdate, socialMediaType) => {
                 commentId: commentToUpdate?.comment?.id,
                 parentObjectUrn: commentToUpdate?.comment?.hasOwnProperty("parentComment") ? commentToUpdate?.comment?.parentComment : commentToUpdate?.comment?.object,
             }
-            if(commentToUpdate?.mentionedUsers?.length>0){
+            if (commentToUpdate?.mentionedUsers?.length > 0) {
                 const currentMentionedUsers = commentToUpdate?.mentionedUsers?.filter(mentionedUser => commentToUpdate?.updatedMessage?.includes(mentionedUser?.name))
                 if (currentMentionedUsers?.length > 0) {
-                    updatedMessage={
+                    updatedMessage = {
                         ...updatedMessage,
                         attributes: currentMentionedUsers?.map(mentionedUser => {
                             const idType = getLinkedinIdTypeFromUrn(mentionedUser?.id);
@@ -1154,7 +1152,6 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
     }
     let formattedData = {}
     switch (socialMediaType) {
-        case SocialAccountProvider.LINKEDIN?.toUpperCase():
         case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
             formattedData = {
                 total_like: data?.like_count,
@@ -1188,9 +1185,18 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
             }
             return formattedData;
         }
-        /* case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
-            break;
-        } */
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            console.log("data====>", data)
+            formattedData = {
+                total_like: data?.shareStatistics?.totalShareStatistics?.likeCount,
+                total_comment: data?.shareStatistics?.totalShareStatistics?.commentCount,
+                total_share: data?.shareStatistics?.totalShareStatistics?.shareCount,
+                account_reach: data?.shareStatistics?.totalShareStatistics?.impressionCount,
+                creation_time: data?.postInfo?.createdAt,
+                attachments: getAttachmentsData(data, socialMediaType),
+            }
+            return formattedData;
+        }
     }
 
 }
@@ -1227,7 +1233,31 @@ export const getAttachmentsData = (data, socialMediaType) => {
             }
 
         }
-        case SocialAccountProvider.LINKEDIN?.toUpperCase():
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            if (data?.attachments?.length === 0) {
+                return []
+            } else {
+                return data?.attachments?.map(attachment => {
+                    if(attachment?.id?.startsWith("urn:li:image")){
+                        return{
+                            mediaType: "IMAGE",
+                            imageURL: attachment?.downloadUrl,
+                            pageId: data?.postInfo?.id,
+                        }
+                    }
+                    if(attachment?.id?.startsWith("urn:li:video")){
+                        return{
+                            mediaType: "VIDEO",
+                            sourceURL: attachment?.downloadUrl,
+                            pageId: data?.postInfo?.id,
+                            imageURL: attachment?.thumbnail,
+                        }
+                    }
+
+                })
+            }
+            break;
+        }
         case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
             if (data?.media_type === undefined) {
                 return []
@@ -1270,9 +1300,6 @@ export const getAttachmentsData = (data, socialMediaType) => {
                     pageId: data?.id,
                 }]
             }
-        }
-        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
-            break;
         }
     }
 
@@ -1643,12 +1670,12 @@ export const getLoggedInLinkedinActorObject = (type = null, name = "", profilePi
     return actor
 }
 
-export const extractIdFromLinkedinMessageAtrributes=(attribute=null)=>{
-    if(attribute===null){
+export const extractIdFromLinkedinMessageAtrributes = (attribute = null) => {
+    if (attribute === null) {
         return null
     }
-    const firstLevelKey=Object.keys(attribute?.value)[0]
-    const secondLevelKey=Object.keys(attribute?.value[firstLevelKey])[0]
+    const firstLevelKey = Object.keys(attribute?.value)[0]
+    const secondLevelKey = Object.keys(attribute?.value[firstLevelKey])[0]
     return attribute?.value[firstLevelKey][secondLevelKey]
 
 

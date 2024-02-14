@@ -65,8 +65,22 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
                 }                
                 break;
             }
-            case "LINKEDIN": {                
-                return JSON.parse('{"17989448420378553":{"id":"17989448420378553","insights":{"data":[{"name":"reach","period":"lifetime","values":[{"value":0}],"title":"Accounts reached","description":"The number of unique accounts that have seen this post at least once. Reach is different from impressions, which may include multiple views of your post by the same accounts. This metric is estimated.","id":"17989448420378553/insights/reach/lifetime"},{"name":"shares","period":"lifetime","values":[{"value":0}],"title":"Shares","description":"The number of shares of your post.","id":"17989448420378553/insights/shares/lifetime"}]},"caption":"11","comments_count":0,"like_count":0,"media_type":"IMAGE","media_url":"https://app-dev.addyads.com/assets/Frame-9efd0bbb.svg","timestamp":"2024-02-08T19:46:15+0000","username":"pritam55000"},"17872401227997059":{"id":"17872401227997059","insights":{"data":[{"name":"reach","period":"lifetime","values":[{"value":0}],"title":"Accounts reached","description":"The number of unique accounts that have seen this post at least once. Reach is different from impressions, which may include multiple views of your post by the same accounts. This metric is estimated.","id":"17872401227997059/insights/reach/lifetime"},{"name":"shares","period":"lifetime","values":[{"value":0}],"title":"Shares","description":"The number of shares of your post.","id":"17872401227997059/insights/shares/lifetime"}]},"caption":"Image for both linkedin and instagram","comments_count":0,"like_count":0,"media_type":"IMAGE","media_url":"https://scontent.cdninstagram.com/v/t51.2885-15/425499657_377133808287182_1097057270926551508_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=18de74&_nc_ohc=MXIscnPgn1MAX-CYB4o&_nc_ht=scontent.cdninstagram.com&edm=AEQ6tj4EAAAA&oh=00_AfDScXPIroZGaFmszCB1WCTAUGIFddKKbBDfeOB9ReeGow&oe=65CABE16","timestamp":"2024-02-08T18:47:58+0000","username":"pritam55000"},"17900013416862420":{"id":"17900013416862420","insights":{"data":[{"name":"reach","period":"lifetime","values":[{"value":0}],"title":"Accounts reached","description":"The number of unique accounts that have seen this post at least once. Reach is different from impressions, which may include multiple views of your post by the same accounts. This metric is estimated.","id":"17900013416862420/insights/reach/lifetime"},{"name":"shares","period":"lifetime","values":[{"value":0}],"title":"Shares","description":"The number of shares of your post.","id":"17900013416862420/insights/shares/lifetime"}]},"caption":"image on insta","comments_count":2,"like_count":2,"media_type":"IMAGE","media_url":"https://scontent.cdninstagram.com/v/t51.2885-15/425499657_377133808287182_1097057270926551508_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=18de74&_nc_ohc=MXIscnPgn1MAX-CYB4o&_nc_ht=scontent.cdninstagram.com&edm=AEQ6tj4EAAAA&oh=00_AfDScXPIroZGaFmszCB1WCTAUGIFddKKbBDfeOB9ReeGow&oe=65CABE16","timestamp":"2024-01-25T11:14:28+0000","username":"pritam55000"}}')
+            case "LINKEDIN": {
+                const insightsCache = typeof data.insightsCache === "object" ? data.insightsCache:{}
+                const existingKeys = data.postIds.filter(key => insightsCache.hasOwnProperty(key));
+                if(Object.keys(data.postIds).length === existingKeys.length){
+                    const valuesArray = await Promise.all(existingKeys.map(key => data.insightsCache[key]));
+                    return valuesArray
+                }else{
+                    const postIds = data.postIds.map(id => id).join(',');
+                    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/post/insights?ids=${postIds}&orgId=${data?.pageId}`;
+                    return await baseAxios.get(apiUrl,setAuthenticationHeader(data.token)).then(res => {
+                        return res.data;
+                    }).catch(error => {
+                        showErrorToast(error.response.data.error.message);
+                        return thunkAPI.rejectWithValue(error.response);
+                    });
+                }
                 break;
             }
         }    

@@ -136,6 +136,7 @@ const Insight = () => {
     useEffect(() => {                
         if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
             dispatch(getPostDataWithInsights({
+                pageId:selectedPage?.pageId,
                 socialMediaType: selectedPage?.socialMediaType,
                 pageAccessToken: selectedPage?.access_token,                            
                 token: token,
