@@ -30,6 +30,7 @@ import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {resetReducers} from "../../../app/actions/commonActions/commonActions";
 import default_user_icon from "../../../images/default_user_icon.svg";
 import {SocialAccountProvider} from "../../../utils/contantData";
+import Loader from '../../loader/Loader.jsx';
 
 
 const UpdatePost = () => {
@@ -75,8 +76,9 @@ const UpdatePost = () => {
         const userData = useSelector(state => state.user.userInfoReducer.data);
         const getPostsByIdData = useSelector(state => state.post.getPostsByIdReducer?.data);
         const loadingUpdatePost = useSelector(state => state.post.updatePostOnSocialMediaReducer.loading);
-
-
+        
+        const loader=useSelector(state => state.post.getPostsByIdReducer?.loading)
+   
 
         useEffect(() => {
             return () => {
@@ -113,12 +115,14 @@ const UpdatePost = () => {
 
 
         useEffect(() => {
+         
             if (getPostsByIdData && Object.keys(getPostsByIdData).length > 0) {
                 if (getPostsByIdData.scheduledPostDate) {
                     setScheduleDate(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.date)
                     setScheduleTime(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.time)
                 }
                 setSelectedOptions(getPostsByIdData?.postPageInfos?.map(c => c.pageId) || []);
+               
                 setCaption(getPostsByIdData?.caption || "");
                 setPinTitle(getPostsByIdData?.pinTitle || "");
                 setPinDestinationUrl(getPostsByIdData?.pinDestinationUrl || "");
@@ -167,7 +171,13 @@ const UpdatePost = () => {
         // Create all Options
         useEffect(() => {
             if (socialAccountData) {
+                
                 const optionList = socialAccountData.map((socialAccount) => {
+                    socialAccount?.pageAccessToken.map(function(page){
+                        if(selectedOptions.includes(page.pageId)){             
+                            setSelectedGroups(prevArray => [...prevArray, socialAccount.provider]);
+                        }
+                    })
                     return {
                         group: socialAccount?.provider, allOptions: socialAccount?.pageAccessToken
                     }
@@ -190,9 +200,9 @@ const UpdatePost = () => {
 
         // handle Group selector
         const handleGroupCheckboxChange = (group) => {
+          
             const updatedSelectedGroups = new Set(selectedGroups);
             const updatedSelectedOptions = new Set(selectedOptions);
-
             if (selectedGroups.includes(group)) {
                 updatedSelectedGroups.delete(group);
                 allOptions.find((groupItem) => groupItem.group === group).allOptions.forEach((opt) => updatedSelectedOptions.delete(opt.pageId));
@@ -210,11 +220,13 @@ const UpdatePost = () => {
         //handle single selector
         const handleCheckboxChange = (option) => {
             const {group, selectOption} = option;
-
-
+         
+  
             const updatedSelectedOptions = [...selectedOptions];
             const updatedSelectedGroups = [...selectedGroups];
-
+     
+            updatedSelectedOptions.push(group);
+            updatedSelectedGroups.push(selectOption);
             const groupOptionIds = allOptions.find((cur) => cur.group === group).allOptions.map((opt) => opt.pageId);
 
             if (selectedOptions.includes(selectOption.pageId)) {
@@ -352,6 +364,7 @@ const UpdatePost = () => {
         const handleRemoveSelectFile = (attachmentReferenceNameToRemove) => {
             const updatedFiles = files.filter((file) => file.fileName !== attachmentReferenceNameToRemove);
             setFiles(updatedFiles);
+           
         };
 
         const resetForm = (e) => {
@@ -523,6 +536,7 @@ const UpdatePost = () => {
                                             <div className="media_outer">
                                                 <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                                 <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+                                                    {loader && <div className='text-center'><Loader/></div>}
                                                 <div className="drag_scroll">
                                                     {files?.map((file, index) => {
                                                         return (
@@ -548,13 +562,13 @@ const UpdatePost = () => {
                                                                         />
                                                                     }
                                                                 </div>
-                                                                <button className="delete_upload">
-                                                                    <RiDeleteBin5Fill
-                                                                        style={{fontSize: '24px'}}
-                                                                        onClick={(e) => {
+                                                                <button className="delete_upload"  onClick={(e) => {
                                                                             e.preventDefault();
                                                                             handleRemoveSelectFile(file?.fileName);
-                                                                        }}/>
+                                                                        }}>
+                                                                    <RiDeleteBin5Fill
+                                                                        style={{fontSize: '24px'}}
+                                                                       />
                                                                 </button>
                                                             </div>
                                                         )

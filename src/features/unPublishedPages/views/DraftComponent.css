@@ -273,5 +273,7 @@ button.outline_btn.schedule_btn {
     h2.acc_not_connected_heading{
         font-size: 12px;
     }
-    
+    .card-body.post_card {
+        padding: 0px 14px;
+    }
 }

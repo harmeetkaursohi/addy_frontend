@@ -16,7 +16,8 @@ import {RotatingLines} from "react-loader-spinner";
 import {getToken} from "../../../../app/auth/auth";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 
-const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,setIsdirty}) => {
+const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,setIsdirty,}) => {
+ 
     const token = getToken();
     const [comment, setComment] = useState("");
     const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,se
         can_comment: null,
 
     })
+
     useEffect(() => {
         if (postData && postPageData) {
             // In case of facebook set data object
@@ -200,7 +202,8 @@ const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,se
             setResult(updatedResult);
             setIsdirty(false)
         }
-    
+       
+       
           
       
       

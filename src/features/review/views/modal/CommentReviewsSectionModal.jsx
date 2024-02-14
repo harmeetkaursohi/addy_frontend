@@ -33,6 +33,9 @@ const CommentReviewsSectionModal = ({
                                         setResult
                                     }) => {
     const [postPageData, setPostPageData] = useState(null);
+    const[deleteCmt,setDeleteCmt]=useState(false)
+    const[delCmtId,setDelCmtID]=useState(null)
+    
     const dispatch = useDispatch();
     const handleClose = () => setOpenCommentReviewsSectionModal(false);
 
@@ -112,7 +115,7 @@ const CommentReviewsSectionModal = ({
 
 
                                         {
-                                            postData?.socialMediaType === "FACEBOOK" && <Comments postData={postData}/>
+                                            postData?.socialMediaType === "FACEBOOK" && <Comments postData={postData} setDelCmtID={setDelCmtID}/>
                                         }
 
                                         {
@@ -141,7 +144,7 @@ const CommentReviewsSectionModal = ({
                                     </div>
 
                                     {/*</div>*/}
-                                    <CommentFooter setResult={setResult} result={result} isDirty={isDirty} setIsdirty={setIsdirty} postData={postData} postPageData={postPageData} setInd={setInd} index={index} />
+                                    <CommentFooter setDeleteCmt={setDeleteCmt} deleteCmt={deleteCmt} setResult={setResult} result={result} isDirty={isDirty} setIsdirty={setIsdirty} postData={postData} postPageData={postPageData} setInd={setInd} index={index} />
 
                                 </div>
 

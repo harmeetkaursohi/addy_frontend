@@ -172,8 +172,8 @@ a.active {
 
 .user_profile_wrapper {
     display: flex;
-    justify-content: space-evenly;
-    padding-top: 12px;
+    padding: 12px 22px;
+    gap: 14px;
     align-items: center;
     border-top: 1px solid #D1D9E2;
 }

@@ -17,7 +17,7 @@ const SocialMediaProviderBadge = ({provider}) => {
     }
 
     return (
-        <div style={{display: "flex", alignItems: "center"}}>
+        <div style={{display: "flex", alignItems: "center" ,cursor:"pointer"}}>
             <i className={`${providerInfo.className}`} style={{color: "#0866ff", fontSize: "24px"}}/>
             <h3 className="cmn_headings ms-1">{getInitialLetterCap(providerInfo.text.toLowerCase())}</h3>
         </div>

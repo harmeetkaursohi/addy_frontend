@@ -38,7 +38,7 @@ export const DashboardReports = () => {
     const [reportSelectedAccountData, setReportSelectedAccountData] = useState(null);
     const [graphDaysSelected, setGraphDaysSelected] = useState(9);
 
-
+  
     useEffect(() => {
         if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages) && (Array.isArray(facebookPageListReducer?.facebookPageList) || Array.isArray(instagramBusinessAccountsData?.data))) {
             let selectedSocialMediaAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === reportSelectedAccountType.toUpperCase() && connectedPagesReducer?.facebookConnectedPages?.some(connectedPage => connectedPage?.socialMediaAccountId === c?.id))
@@ -69,12 +69,14 @@ export const DashboardReports = () => {
     useEffect(() => {
         if (selectedPage) {
             handleFetchSocialMediaReport(null, null, false)
+         
         }
-
+     
     }, [selectedPage]);
 
     useEffect(() => {
         if (graphDaysSelected) {
+          
             handleFetchSocialMediaReport(null, null, true);
         }
     }, [graphDaysSelected]);
@@ -105,6 +107,7 @@ export const DashboardReports = () => {
 
             <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer">
 
+               
                 {getAllConnectedSocialAccountData?.loading || connectedPagesReducer?.loading || facebookPageListReducer?.loading ?
                     <div className="cmn_background p-5 text-center ">
                         <CommonLoader/>
@@ -249,8 +252,9 @@ export const DashboardReports = () => {
                                 {/*</div>*/}
 
 
-                                {reportSectionData?.loading ?
-
+                                {
+                                 reportSectionData?.loading ?
+                                  
                                     //loader component
                                     <DashBoardReportLoader/>
                                     :
@@ -258,7 +262,7 @@ export const DashboardReports = () => {
 
                                         {reportSectionData?.data &&
                                             Object.keys(reportSectionData?.data).map((curKey, index) => (
-
+                                            
                                                 <div className="followers_wrapper " key={index}>
                                                     <h5>{curKey.replace(/_/g, ' ')}
                                                         {
@@ -268,7 +272,8 @@ export const DashboardReports = () => {
 
                                                     </h5>
                                                     <div className="followers_inner_content">
-                                                        <h2> {reportSectionData?.data[curKey]?.lifeTime || 0}</h2>
+                                                        <h2> {reportSectionData?.data[curKey]?.lifeTime || 0
+                                                        }</h2>
                                                         <div className="monthly_growth">
                                                             <button className="cmn_followers_btn">
                                                                 <img src={polygon_img} className="polygon_img"/>

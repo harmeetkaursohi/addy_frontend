@@ -49,6 +49,7 @@ ul.slick-dots li button:before {
 }
 @media screen and (min-width:2560px) {
     img.post_img {
-        height: 100%;
+        height: 500px;
+        min-height: 100%;
     }
 }

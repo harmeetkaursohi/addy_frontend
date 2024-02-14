@@ -229,8 +229,8 @@ const Insight = () => {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item>
+                                                {!connectedFacebookPages?.length && <h3 className="noPageHeading">No Page is Connected yet</h3>}
                                             <ul className="Social_media_wrapper">
-                                                {!connectedFacebookPages?.length && <li><div className="Social_media_platform"><h3>No Page is Connected yet</h3></div></li>}
                                                 {
                                                     connectedFacebookPages?.map((page, index) => {
                                                         return (
@@ -264,8 +264,8 @@ const Insight = () => {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item>
+                                                {!connectedInstagramPages?.length && <h3 className="noPageHeading">No Page is Connected yet</h3>}
                                             <ul className="Social_media_wrapper">
-                                                {!connectedInstagramPages?.length && <li><div className="Social_media_platform"><h3>No Page is Connected yet</h3></div></li>}
                                                 {
                                                     connectedInstagramPages?.map((page, index) => {
                                                         return (
@@ -301,8 +301,8 @@ const Insight = () => {
 
 
                                         <Dropdown.Item>
+                                                {!connectedPinterestBoards?.length && <h3 className="noPageHeading">No Page is Connected yet</h3>}
                                             <ul className="Social_media_wrapper">
-                                                {!connectedPinterestBoards?.length && <li><div className="Social_media_platform"><h3>No Page is Connected yet</h3></div></li>}
                                                 {
                                                     connectedPinterestBoards?.map((board, index) => {
                                                         return (
@@ -335,8 +335,8 @@ const Insight = () => {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item>
+                                                {!connectedLinkedinPages?.length && <h3 className="noPageHeading">No Page is Connected yet</h3>}
                                             <ul className="Social_media_wrapper">
-                                                {!connectedLinkedinPages?.length && <li><div className="Social_media_platform"><h3>No Page is Connected yet</h3></div></li>}
                                                 {
                                                     connectedLinkedinPages?.map((page, index) => {
                                                         return (
@@ -344,7 +344,7 @@ const Insight = () => {
                                                                 handleSelectPage("LINKEDIN", page)
                                                             }}>
                                                                 <div className="Social_media_platform">
-                                                                    <img src={linkedin_img} className="me-3  "/>
+                                                                    <img src={linkedin_img} className=" "/>
                                                                     <h3>{page.name}</h3>
                                                                 </div>
 

@@ -1,0 +1,47 @@
+.linkedin_post_likes{
+    padding: 9px 13px;
+    display: flex;
+    justify-content: space-between;
+}
+.linkedin_dropdown {
+    background: #f4f1f1;
+    padding: 10px;
+    border-radius: 5px;
+}
+.linkedin_likes{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.linkedin_likes h3{
+    font-size: 16px;
+}
+.linkedin_likes svg{
+    font-size: 20px;
+}
+@media screen and (max-width:1280px) {
+    .linkedin_likes h3{
+        font-size: 14px;
+    }
+}
+@media screen and (max-width:1024px) {
+    .linkedin_likes{
+        gap: 6px;
+       
+    }
+    .linkedin_likes h3 {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .linkedin_post_likes{
+        display: block;
+    }
+    .linkedin_dropdown{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    
+}

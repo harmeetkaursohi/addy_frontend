@@ -503,12 +503,12 @@ const CreatePost = () => {
                                                                 }
 
                                                             </div>
-                                                            <button className="delete_upload">
-                                                                <RiDeleteBin5Fill style={{fontSize: '24px'}}
-                                                                                  onClick={(e) => {
+                                                            <button className="delete_upload" onClick={(e) => {
                                                                                       e.preventDefault();
                                                                                       handleRemoveSelectFile(file);
-                                                                                  }}/>
+                                                                                  }}>
+                                                                <RiDeleteBin5Fill style={{fontSize: '24px'}}
+                                                                                  />
                                                             </button>
                                                         </div>
                                                     )
@@ -765,9 +765,8 @@ const CreatePost = () => {
 
                                     {
                                         allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
-
                                             let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
-
+                       
                                             return (<span key={index}>
                                                     {selectedPageData &&
                                                         <CommonFeedPreview

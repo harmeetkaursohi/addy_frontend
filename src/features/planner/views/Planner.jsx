@@ -362,7 +362,7 @@ const Planner = () => {
                                 </div>
                             }
 
-                            <div className={`${isDraftPost ? 'calendar-container hidden' : ''}`}>
+                            <div className={`${isDraftPost ? 'calendar-container hidden' : 'CalenderOuter_Wrapper'}`}>
 
                                 <FullCalendar
                                     ref={calendarRef}

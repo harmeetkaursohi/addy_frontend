@@ -129,7 +129,7 @@ button.instagram_dropdown {
 }
 
 ul.Social_media_wrapper {
-    margin: 2px 14px;
+    margin: 0px;
 }
 
 input.Social_media_platform_checkbox {
@@ -319,10 +319,31 @@ h2.Review_Heading {
 ::-webkit-calendar-picker-indicator {
     filter: invert(10%) sepia(100%) saturate(150%) hue-rotate(190deg) brightness(90%) contrast(85%);
 }
-
+.noPageHeading{
+    padding: 8px 0px;
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+}
+div.card_body_content {
+    margin-top: 20px;
+}
+@media screen and (min-width:2560px) {
+    .account_reach_overview_outer{
+        padding: 40px;
+    }
+    .account_reach_overview_wrapper {
+        gap: 30px;
+    }
+}
 @media screen and (max-width:1280px){
     .social_media_dropdown {
         flex-wrap: wrap;
+    }
+    .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
+        width: 215px;
     }
 }
 @media screen and (max-width: 1024px) {
@@ -331,11 +352,18 @@ h2.Review_Heading {
         font-size: 15px;
     }
    
-
+    
+   
 }
 
 @media screen and (max-width: 991px) {
-   
+    .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
+        width: 208px;
+    }
+    .noPageHeading{
+        font-size: 14px;
+       
+    }
     .account_reach_overview_outer h5 {
         font-size: 12px;
     }
@@ -379,15 +407,24 @@ h2.Review_Heading {
     .select-account-txt{
         font-size: 13px;
     }
+    
+   
+
 }
 
 @media screen and (max-width: 767px) {
     .account_reach_overview_wrapper {
         display: block;
     }
+    .insight_inner_content{
+        padding: 17px;
+    }
     .reach-engagement-select {
         margin-bottom: 20px;
         position: unset;
+    }
+    .noPageHeading {
+        font-size: 12px;
     }
     .Donuts_container h3{
         font-size: 15px;

@@ -266,7 +266,7 @@ const Carousel = function({ selectedPage }) {
         >
           <FaGreaterThan />
         </button>
-        <Row className="justify-content-center">
+        <Row className="">
           {Object.keys(getPostDataWithInsightsData?.data || {})?.length > 0 &&
             Object.keys(getPostDataWithInsightsData?.data)?.map(
               (key, index) => {

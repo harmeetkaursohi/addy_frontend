@@ -37,6 +37,7 @@ const Comments = ({postData}) => {
         message: ""
     })
     const [updateComment, setUpdateComment] = useState({})
+   
     const [baseQuery, setBaseQuery] = useState({
         socialMediaType: postData?.socialMediaType,
         pageAccessToken: postData?.page?.access_token,
@@ -50,9 +51,14 @@ const Comments = ({postData}) => {
             ...baseQuery,
             id: objectId,
         }
+  
+        
         dispatch(getCommentsOnPostAction(requestBody))
+        
+          
             .then(response => {
                 if (response.meta.requestStatus === "fulfilled") {
+              
                     setShowReplyBox([])
                     // !isGetChildComments && setShowReplyComments(new Array(response.payload.length).fill(false))
                     // showReplyBox.length === 0 && setShowReplyComments(new Array(response.payload.length).fill(false))
@@ -109,11 +115,15 @@ const Comments = ({postData}) => {
 
     useEffect(() => {
         if (commentToDeleteId) {
+            
             const requestBody = {
                 ...baseQuery,
                 id: commentToDeleteId,
             }
+            
+            
             dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
+                
                 setCommentToDeleteId(null)
                 if (response.meta.requestStatus === "fulfilled") {
                     handleGetComments(postData?.id)
@@ -191,6 +201,7 @@ const Comments = ({postData}) => {
                                                                     <Dropdown.Item href="#/action-2"
                                                                                    onClick={() => {
                                                                                        setCommentToDeleteId(comment?.id)
+                                                                                       
                                                                                    }}>Delete</Dropdown.Item>
                                                                 }
                                                             </Dropdown.Menu>

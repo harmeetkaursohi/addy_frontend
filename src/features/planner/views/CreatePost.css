@@ -651,162 +651,7 @@ createPost_outer select {
     font-size: 9px;
 }
 
-@media (max-width: 1440px) {
-    .fb_likes h3 {
-        font-size: 16px;
-    }
 
-    .fb_likes svg {
-        height: 18px;
-        width: 18px;
-    }
-
-    .fb_likes {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-}
-
-@media (max-width: 1299px) {
-    .create_post_content {
-        padding: 30px 20px;
-    }
-
-    .fb_likes svg {
-        height: 16px;
-        width: 16px;
-    }
-
-    .fb_likes h3 {
-        font-size: 14px;
-    }
-
-    .post_preview_outer {
-        padding: 2em;
-    }
-
-
-}
-
-@media screen and (max-width: 1024px) {
-    .get_messages_outer {
-        display: block;
-    }
-
-    .post_img {
-        width: 100%
-    }
-
-    .add_media_outer {
-        padding: 9px 21px;
-    }
-
-    .feed_preview {
-        text-align: center;
-    }
-
-    .create_post_content {
-        padding: 30px 10px
-    }
-
-    .schedule_btn_outer {
-        display: block;
-    }
-
-    .add_btn {
-        margin-top: 10px;
-    }
-
-    .schedule_date_outer {
-        display: block;
-    }
-
-    .publish_post_outer {
-        display: block;
-    }
-
-    .cancel_publish_btn_outer {
-        margin-top: 13px;
-    }
-
-    .date_time_outer select {
-        width: 100%;
-    }
-
-    .date_time_outer {
-        margin-top: 20px;
-    }
-
-}
-
-@media screen and (max-width: 991px) {
-    .feed_preview {
-        text-align: center;
-        padding-top: 10px;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .post_preview_outer {
-        display: block;
-    }
-
-    .create_post_content {
-        padding: 30px 19px;
-    }
-
-    .caption_header {
-        display: block;
-    }
-
-    .ai_btn {
-        margin-top: 10px;
-    }
-
-    .textarea_outer {
-        margin-top: 13px;
-    }
-
-    .get_messages_outer {
-        display: block;
-    }
-
-    .add_btn {
-        margin-top: 10px;
-    }
-
-    .schedule_btn_outer {
-        display: block;
-    }
-
-    .file_outer {
-        display: block;
-    }
-
-    .add_media_outer {
-        margin-top: 20px;
-    }
-
-    .cmn_bg_btn {
-        padding: 10px;
-    }
-
-    .like_comment_outer img {
-        height: 20px;
-        width: 20px;
-    }
-
-    .publish_btn {
-        margin-top: 10px;
-    }
-
-    .like_img {
-        margin-right: 23px;
-
-    }
-}
 
 /**/
 html {
@@ -923,6 +768,7 @@ button.delete_upload {
     transition: ease all .3s;
     background: #fff;
     border-radius: 6px;
+    display: flex;
 
 }
 
@@ -971,8 +817,6 @@ button.loading {
     }
 
     .fb_likes {
-        display: flex;
-        align-items: center;
         gap: 10px;
     }
 
@@ -1017,9 +861,7 @@ button.loading {
         padding: 30px 10px
     }
 
-    .schedule_btn_outer {
-        display: block;
-    }
+    
 
     .add_btn {
         margin-top: 10px;
@@ -1044,6 +886,9 @@ button.loading {
     .date_time_outer {
         margin-top: 20px;
     }
+    .schedule_btn_outer {
+        display: block;
+    }
 
 }
 
@@ -1058,15 +903,22 @@ button.loading {
     .post_preview_outer {
         display: block;
     }
+    .select_platform_outer {
+        padding: 20px;
+    }
     .file_outer {
         gap: 10px;
+    }
+    .instagram_outer{
+    padding: 15px 20px;
     }
     .add_media_outer label{
         display: block;
         font-size: 12px;
+        padding: 7px;
     }
     .darg_navs.file_outer .add_media_outer {
-        padding: 6px;
+        padding: 0px;
     }
     .add_media_outer label i {
         margin-right: 7px;
@@ -1130,9 +982,7 @@ button.loading {
         margin-top: 10px;
     }
 
-    .schedule_btn_outer {
-        display: block;
-    }
+   
 
 
 

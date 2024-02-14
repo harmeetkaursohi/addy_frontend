@@ -306,3 +306,14 @@ svg.comment-edit-del-icon {
     /*width: 25px;*/
     margin: auto;
 }
+@media screen and (min-width:2560px){
+    .post_image_outerwrapper{
+        height: 500px;
+    }
+}
+@media screen and (max-width:1024px){
+    .comments_messages h4 {
+        font-size: 15px;
+        line-height: 20px;
+}
+}
