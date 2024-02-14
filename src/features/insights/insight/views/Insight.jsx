@@ -93,7 +93,7 @@ const Insight = () => {
         if (selectedPageForGraph === null || selectedPageForGraph?.socialMediaType !== socialMediaType) {
             setSelectedPageForGraph({...page, socialMediaType: socialMediaType})
         }
-        if (socialMediaType === "PINTEREST") {
+        if (socialMediaType === "PINTEREST" || socialMediaType === "LINKEDIN") {
             const button = document.getElementById('uncontrolled-tab-example-tab-Overview');
             if(button){
                 button.click();
@@ -205,26 +205,7 @@ const Insight = () => {
         }
     }, [selectedPeriodForDemographics, selectedPage, selectedInsightSection])
 
-            {getDemographicsInsightData?.loading ? (
-              <div className="text-center insights-loader cmn_height">
-                <RotatingLines
-                  strokeColor="#F07C33"
-                  strokeWidth="5"
-                  animationDuration="0.75"
-                  width="96"
-                  visible={true}
-                />
-              </div>
-            ) : getDemographicsInsightData?.data?.age ? (
-              <HorizontalBarChart
-                graphData={getDemographicsInsightData?.data?.age}
-              />
-            ) : (
-              <DemographicDatNotAvailable
-                message={"Demographic data isn't available for age"}
-              />
-            )}
-          </div>
+
 
     return (
         <section>
@@ -672,7 +653,7 @@ const Insight = () => {
                                             </Tab>
                                             {/* Demographics tabs */}
                                             {
-                                                selectedPage?.socialMediaType !== "PINTEREST" &&
+                                                selectedPage?.socialMediaType !== "PINTEREST" && selectedPage?.socialMediaType !==  "LINKEDIN" &&
                                                 <Tab eventKey="Demographics" title="Demographics">
                                                     <h2 className="cmn_headings Review_Heading">Review your audience
                                                         demographics as
