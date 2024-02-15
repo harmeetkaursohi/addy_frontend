@@ -1,10 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {addContactUsActions} from "../../actions/contactUsActions/contactUsActions";
+import {addContactUsActions, contactUsFormActions} from "../../actions/contactUsActions/contactUsActions";
 
 const contactUsSlice = createSlice({
     name: 'contactUs',
     initialState: {
         addContactUsReducer: {loading: false},
+        contactUsFormReducer: {loading: false},
     },
     extraReducers: {
         [addContactUsActions.pending]: (state) => {
@@ -15,6 +16,15 @@ const contactUsSlice = createSlice({
         },
         [addContactUsActions.rejected]: (state) => {
             state.addContactUsReducer = {loading: false}
+        },
+        [contactUsFormActions.pending]: (state) => {
+            state.contactUsFormReducer = {loading: true}
+        },
+        [contactUsFormActions.fulfilled]: (state, action) => {
+            state.contactUsFormReducer = {loading: false, data: action.payload}
+        },
+        [contactUsFormActions.rejected]: (state) => {
+            state.contactUsFormReducer = {loading: false}
         },
     }
 });

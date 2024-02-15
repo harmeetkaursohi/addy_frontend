@@ -52,6 +52,15 @@ export const validationSchemas = {
     forgotPassword: yup.object().shape({
         email: yup.string().required('Email is required').email('Invalid email format'),
     }),
+    
+    contactForm: yup.object().shape({
+        first_name: yup.string().required('First Name is required'),
+        last_name: yup.string().required('Last Name is required'),
+        email_address: yup.string().required('Email address is required').email('Invalid email address format'),
+        phone_number: yup.string().required('Phone Number is required'),
+        message: yup.string().required('Message is required'),
+    }),
+
 };
 
 
