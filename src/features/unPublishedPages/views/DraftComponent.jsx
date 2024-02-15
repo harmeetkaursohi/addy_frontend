@@ -99,7 +99,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                     </div>
                 </div>
 
-                <div className="mt-4 ms-3 d-flex gap-2 justify-content-center align-items-center draft_button_outer">
+                <div className="mt-4 d-flex gap-2 justify-content-center align-items-center draft_button_outer">
                     <GenericButtonWithLoader className={"post_now cmn_bg_btn loading"} label={"Post Now"}
                                              isLoading={batchIdData?.id===batchToDelete && publishedPostData?.loading}
                                              onClick={handlePublishedPost}

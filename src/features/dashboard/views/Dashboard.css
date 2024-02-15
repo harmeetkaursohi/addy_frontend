@@ -275,7 +275,13 @@ element.style {
 .social_media_content svg {
     margin-left: auto;
 }
+.upcomingPostBtn_Outer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   gap: 10px;
 
+}
 .cmn_drop_down.dropdown svg {
     transform: rotate(-0deg);
 }
@@ -466,6 +472,9 @@ img.connection-error-svg {
     color: rgb(8, 102, 255);
     font-size: 24px;
 }
+.upcomingPostBtn_Outer button{
+    flex-grow: 1;
+}
 @media screen and (min-width:2560px){
     .followers_outer {
         gap: 40px;
@@ -498,6 +507,7 @@ img.connection-error-svg {
         min-width: 90px !important;
         height: 33px !important;
     }
+    
 }
 
 @media screen and (max-width: 1024px) {
@@ -511,15 +521,7 @@ img.connection-error-svg {
         margin-top: 15px;
     }
 
-    /* .social_media_outer{
-        display: block;
-    } */
-    /* .disconnect_btn{
-        margin-top: 10px;
-    }
-    .connect_btn {
-        margin-top: 10px;
-    } */
+   
     .followers_wrapper h2 {
         font-size: 20px;
     }
@@ -540,6 +542,12 @@ img.connection-error-svg {
     .social_media_wrapper {
         margin-top: 10px;
     }
+    .page_title_header{
+        margin: 0px;
+    }
+    .upcomingPostBtn_Outer{
+        margin-bottom: 20px;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -550,15 +558,25 @@ img.connection-error-svg {
         font-size: 13px;
 
     }
+    select.page_title_options {
+        font-size: 14px;
+    }
+    .instagram_overview_heading {
+        font-size: 12px;
+    }
+    .upcomingPostBtn_Outer{
+        display: block;
+    }
+    .upcomingPostBtn_Outer .post_now{
+        margin-top: 10px;
+    }
     .No_Upcoming_Outer h4{
         font-size: 16px;
     }
     .No_Upcoming_Outer img{
         width: 100%;
     }
-    .page_title_header {
-        margin: 10px;
-    }
+    
     img.dropdown-page-logo {
         margin-right: 4px !important;
         font-size: 12px;
@@ -610,7 +628,9 @@ img.connection-error-svg {
 
     .account_info {
         display: block;
-        padding: 16px 20px;
+        padding: 13px 5px;
+        height: auto;
+        width: 71vw ;
     }
 
     .user_profileInfo_wrapper {

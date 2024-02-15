@@ -172,7 +172,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                             </div>
 
                                             <div
-                                                className="mt-4 ms-3 d-flex gap-2 justify-content-center align-items-center">
+                                                className="mt-4 upcomingPostBtn_Outer ">
 
                                                 <GenericButtonWithLoader className={"outline_btn schedule_btn loading"}
                                                                          label={"Delete Post"}
