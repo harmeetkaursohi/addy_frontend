@@ -394,7 +394,7 @@ const UpdatePost = () => {
                     <div className="Container">
                         <div className="create_post_wrapper">
                             <div className="row">
-                                <div className="col-lg-6 col-md-12 col-sm-12">
+                                <div className="col-lg-6 col-md-12 col-sm-12 pe-0">
 
                                     <div className="create_post_content">
 
@@ -536,7 +536,7 @@ const UpdatePost = () => {
                                             <div className="media_outer">
                                                 <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                                 <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
-                                                    {loader && <div className='text-center'><Loader/></div>}
+                                                    {loader && <div className='text-center mt-4'><Loader/></div>}
                                                 <div className="drag_scroll">
                                                     {files?.map((file, index) => {
                                                         return (
@@ -817,7 +817,7 @@ const UpdatePost = () => {
                                         </form>
                                     </div>
                                 </div>
-                                <div className="col-lg-6 col-md-12 col-sm-12">
+                                <div className="col-lg-6 col-md-12 col-sm-12 ps-0">
 
                                     <div className='post_preview_outer'>
 

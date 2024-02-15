@@ -273,20 +273,15 @@ div#swal2-html-container {
     min-height: calc(100vh - 166px) !important;
   }
 }
-@media screen and (min-width:2560px){
+@media screen and (min-width:1600px){
   .cmn_wrapper_outer {
-    padding: 0px 10rem 10px;
+  width: 100%;
+  max-width: 80%;
+  margin: auto;
 }
-.planner_outer {
-  padding: 20px 10rem 10px;
-}
-.reach-engagement-select {
-  right: 12rem !important;
 
-}
-.create_post_content {
-  padding: 30px 10rem;
-}
+
+
 }
 
 @media (min-width: 1499px) {

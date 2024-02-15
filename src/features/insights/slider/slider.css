@@ -113,10 +113,14 @@ button.slider_btn {
     div.card_body_content{
         width: 100%;
     }
+    .insights-post-date-outer {
+        width: 100%;
+        padding: 0px 12px;
+    }
 }
 @media screen and (max-width:767px) {
     .insights-post-date-outer {
-        width: 100%;
+
         padding: 10px;
     }
     .post_date{

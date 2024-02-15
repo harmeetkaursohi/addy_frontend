@@ -804,7 +804,22 @@ button.loading {
 
 
 
-
+@media screen and (min-width:2000px){
+    .post_preview_outer{
+        padding: 3rem 15rem;
+    }
+    .create_post_content {
+        padding: 30px 15rem;
+      }
+}
+@media screen and (min-width:1600px ) and (max-width:2559px){
+    .post_preview_outer{
+        padding: 3rem 7rem;
+    }
+    .create_post_content {
+        padding: 30px 7rem;
+      }
+}
 
 @media (max-width: 1440px) {
     .fb_likes h3 {
