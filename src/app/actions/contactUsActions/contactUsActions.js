@@ -12,3 +12,11 @@ export const addContactUsActions = createAsyncThunk('facebook/addContactUsAction
     });
 
 });
+export const contactUsFormActions = createAsyncThunk('contactUs/formActions', async (data, thunkAPI) => {
+    return await baseAxios.post(`${import.meta.env.VITE_APP_CMS_API_BASE_URL}save_contact_query`, data).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});

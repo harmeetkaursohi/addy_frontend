@@ -1,107 +1,171 @@
+import React, { useState } from "react";
 import SideBar from "../sidebar/views/Layout";
-import React, {useState} from "react";
-import './Contact.css'
-import {CiLocationOn} from "react-icons/ci";
-import {FaPhoneVolume} from "react-icons/fa6";
-import {FaRegEnvelope} from "react-icons/fa";
+import { useFormik } from "formik";
+import "./Contact.css";
+import { CiLocationOn } from "react-icons/ci";
+import { FaPhoneVolume } from "react-icons/fa6";
+import { FaRegEnvelope } from "react-icons/fa";
 import GenericButtonWithLoader from "../common/components/GenericButtonWithLoader";
-
-
+import { validationSchemas } from "../../utils/commonUtils";
+import { contactUsFormActions } from "../../app/actions/contactUsActions/contactUsActions";
+import { useDispatch } from "react-redux";
 const ContactUs = () => {
+    const dispatch = useDispatch();
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email_address: "",
+    phone_number: "",
+    message: "",
+    "g-recaptcha-response": "",
+  });
 
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        contactNo: '',
-        message: '',
+  const handleOnChange = (e) => {
+    setFormData((prevState) => {
+      return {
+        ...prevState,
+        [e.target.name]: e.target.value,
+      };
     });
+  };  
+  const formik = useFormik({
+    initialValues: {
+        first_name: "",
+        last_name: "",
+        email_address: "",
+        phone_number: "",
+        message: "",
+        "g-recaptcha-response": "",
+    },
+    validationSchema: validationSchemas.contactForm,
+    handleChange:handleOnChange,
+    onSubmit: (values) => {
+      dispatch(contactUsFormActions(values));
+    },
+  });
 
-    const handleOnChange = (e) => {
-        setFormData((prevState) => {
-            return {
-                ...prevState,
-                [e.target.name]: e.target.value
-            }
-        })
-    }
-
-    const handleSubmit = (e) => {
-        console.log("@@@ formData ", formData);
-    }
-
-    return (
-        <>
-            <SideBar/>
-            <div className="cmn_container faq_section pt-5">
-                <div className="cmn_wrapper_outer">
-                    <div className="dashboard_outer">
-                        <h2 className="cmn_title">Contact Us</h2>
-                        <div className="row m-0">
-                            <div className="col-md-12 col-lg-6 Contact_us_Outer">
-                                <div className="contact_content">
-                                    <h3>Let's talk with us</h3>
-                                    <p>Questions, comments, or suggestions? Simply fill in the form and we’ll be in
-                                        touch shortly.</p>
-                                    <ul>
-                                        <li>
-                                            <CiLocationOn size={22}/><span>1055 Arthur ave Elk Groot, 67. <br/>
-                                            New Palmas South Carolina. </span>
-                                        </li>
-                                        <li>
-                                            <FaPhoneVolume/>
-                                            <a href="tel:+1 234 678 9108 99">+1 234 678 9108 99</a>
-                                        </li>
-                                        <li>
-                                            <FaRegEnvelope/>
-                                            <a href="mailto:Contact@addy.com">Contact@addy.com</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="col-md-12 col-lg-6 Contact_us_Outer">
-                                <div className="row m-0 contact_form">
-
-                                    <div className="col-lg-6">
-                                        <input className="form-control" name="firstName" onChange={handleOnChange}
-                                               placeholder="First Name"/>
-                                    </div>
-
-                                    <div className="col-lg-6">
-                                        <input className="form-control" name="lastName" onChange={handleOnChange}
-                                               placeholder="Last Name"/>
-                                    </div>
-
-                                    <div className="col-lg-12">
-                                        <input type="email" className="form-control" name="email"
-                                               onChange={handleOnChange} placeholder="Email"/>
-                                    </div>
-
-                                    <div className="col-lg-12">
-                                        <input type="number" className="form-control" name="contactNo"
-                                               onChange={handleOnChange} placeholder="Phone Number"/>
-                                    </div>
-
-                                    <div className="col-lg-12">
-                                        <textarea rows="5" name="message" className="form-control"
-                                                  onChange={handleOnChange}></textarea>
-                                    </div>
-
-                                    <div className="col-12 mt-3">
-                                        <GenericButtonWithLoader onClick={handleSubmit} className="w-100 cmn_bg_btn schedule_btn loading" label="Send Message"/>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
+  return (
+    <>
+      <SideBar />
+      <div className="cmn_container faq_section pt-5">
+        <div className="cmn_wrapper_outer">
+          <div className="dashboard_outer">
+            <h2 className="cmn_title">Contact Us</h2>
+            <div className="row m-0">
+              <div className="col-md-12 col-lg-6 Contact_us_Outer">
+                <div className="contact_content">
+                  <h3>Let's talk with us</h3>
+                  <p>
+                    Questions, comments, or suggestions? Simply fill in the form
+                    and we’ll be in touch shortly.
+                  </p>
+                  <ul>
+                    <li>
+                      <CiLocationOn size={22} />
+                      <span>
+                        1055 Arthur ave Elk Groot, 67. <br />
+                        New Palmas South Carolina.
+                      </span>
+                    </li>
+                    <li>
+                      <FaPhoneVolume />
+                      <a href="tel:+1 234 678 9108 99">+1 234 678 9108 99</a>
+                    </li>
+                    <li>
+                      <FaRegEnvelope />
+                      <a href="mailto:Contact@addy.com">Contact@addy.com</a>
+                    </li>
+                  </ul>
                 </div>
-            </div>
+              </div>
 
-        </>
-    );
+              <div className="col-md-12 col-lg-6 Contact_us_Outer">
+                <form onSubmit={formik.handleSubmit}>
+                  <div className="row m-0 contact_form">
+                    <div className="col-lg-6">
+                      <input
+                        className="form-control"
+                        name="first_name"                        
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.first_name}
+                        placeholder="First Name"
+                      />
+                        {formik.touched.first_name && formik.errors.first_name ? (
+                            <p className="error_message">{formik.errors.first_name}</p>
+                        ) : null}
+                    </div>
+
+                    <div className="col-lg-6">
+                      <input
+                        className="form-control"
+                        name="last_name"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.last_name}                        
+                        placeholder="Last Name"
+                      />
+                      {formik.touched.last_name && formik.errors.last_name ? (
+                            <p className="error_message">{formik.errors.last_name}</p>
+                        ) : null}
+                    </div>
+
+                    <div className="col-lg-12">
+                      <input
+                        type="email"
+                        className="form-control"
+                        name="email_address"                        
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.email_address}
+                        placeholder="Email Address"
+                      />
+                      {formik.touched.email_address && formik.errors.email_address ? (
+                            <p className="error_message">{formik.errors.email_address}</p>
+                        ) : null}
+                    </div>
+
+                    <div className="col-lg-12">
+                      <input
+                        type="tel"
+                        className="form-control"
+                        name="phone_number"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.phone_number}                        
+                        placeholder="Phone Number"
+                      />
+                      {formik.touched.phone_number && formik.errors.phone_number ? (
+                            <p className="error_message">{formik.errors.phone_number}</p>
+                        ) : null}
+                    </div>
+
+                    <div className="col-lg-12">
+                      <textarea
+                        rows="5"
+                        name="message"
+                        className="form-control"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.message}                        
+                      ></textarea>
+                      {formik.touched.message && formik.errors.message ? (
+                            <p className="error_message">{formik.errors.message}</p>
+                        ) : null}
+                    </div>
+
+                    <div className="col-12 mt-3">
+                        <button type="submit" className={"cmn_btn_color sendMessageBtn"} >Send Message</button>                         
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default ContactUs;
