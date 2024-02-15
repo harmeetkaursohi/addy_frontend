@@ -53,8 +53,8 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                     {  batchIdData?.postPages && Array.isArray(batchIdData?.postPages) &&
                         Array.from(new Set(batchIdData.postPages.map((item) => item.pageId)))
                             .map((id) => batchIdData.postPages.find((page) => page.pageId === id))
-                            .map((curPage) => (
-                            <div className="selected-option">
+                            .map((curPage,key) => (
+                            <div className="selected-option" key={"curPage"+key}>
                                 <div>
                                     <img className={"me-1 social-media-icon"}
                                          src={computeImageURL(curPage?.socialMediaType)}

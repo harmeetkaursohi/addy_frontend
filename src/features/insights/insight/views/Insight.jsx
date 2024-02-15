@@ -29,6 +29,7 @@ import {
 } from "../../../../utils/commonUtils";
 import {RotatingLines} from "react-loader-spinner";
 import {Country} from 'country-state-city';
+import {LinkedInIndustryAudienceChart, LinkedInStaffCountRangeChart} from "../../LinkedInCharts";
 
 
 const Insight = () => {
@@ -205,7 +206,232 @@ const Insight = () => {
         }
     }, [selectedPeriodForDemographics, selectedPage, selectedInsightSection])
 
-
+    const LinkedInDemoGraphics = () => {
+        useEffect(
+          function () {
+            console.log("getDemographicsInsightData", getDemographicsInsightData);
+          },
+          [getDemographicsInsightData]
+        );
+        return (
+          <>
+            {/* Audience by Staff Count Range */}
+            <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">
+              <div
+                className={
+                  "Donuts_container cmn_insight_wrapper_style " +
+                  (getDemographicsInsightData?.data?.staffCountRange !== null
+                    ? "cmn_height"
+                    : "")
+                }
+              >
+                <h3 className="cmn_text_style">Audience by Staff Count Range</h3>
+                {getDemographicsInsightData?.loading ? (
+                  <div className="text-center insights-loader cmn_height">
+                    <RotatingLines
+                      strokeColor="#F07C33"
+                      strokeWidth="5"
+                      animationDuration="0.75"
+                      width="96"
+                      visible={true}
+                    />
+                  </div>
+                ) : getDemographicsInsightData?.data?.staffCountRange ? (
+                  <LinkedInStaffCountRangeChart
+                    graphData={getDemographicsInsightData?.data?.staffCountRange}
+                  />
+                ) : (
+                  <DemographicDatNotAvailable
+                    message={
+                      "Demographic data isn't available for staff count range"
+                    }
+                  />
+                )}
+              </div>
+              {/* Audience by Staff Count Range end */}
+            </div>
+            {/* audience by associationType */}
+            <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">
+              <div className="Donuts_container cmn_insight_wrapper_style ">
+                <h3 className="cmn_text_style">Audience By Association Type</h3>
+    
+                {getDemographicsInsightData?.loading ? (
+                  <div className="text-center insights-loader mt-5">
+                    <RotatingLines
+                      strokeColor="#F07C33"
+                      strokeWidth="5"
+                      animationDuration="0.75"
+                      width="96"
+                      visible={true}
+                    />
+                  </div>
+                ) : getDemographicsInsightData?.data?.associationType ? <LinkedInStaffCountRangeChart
+                    graphData={getDemographicsInsightData?.data?.associationType}
+                  /> : (
+                  <DemographicDatNotAvailable
+                    message={
+                      "Demographic data isn't available for Association Type"
+                    }
+                  />
+                )}
+              </div>
+            </div>
+            {/* audience by seniority */}
+            <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">
+              <div>
+                <div className="Donuts_container cmn_insight_wrapper_style">
+                  <h3 className="cmn_text_style">Audience by Seniority</h3>
+                  {getDemographicsInsightData?.loading ? (
+                    <div className="text-center insights-loader cmn_height ">
+                      <RotatingLines
+                        strokeColor="#F07C33"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        width="96"
+                        visible={true}
+                      />
+                    </div>
+                  ) : getDemographicsInsightData?.data?.seniority ? (
+                    <LinkedInIndustryAudienceChart
+                      graphData={getDemographicsInsightData?.data?.seniority}
+                    />
+                  ) : (
+                    <DemographicDatNotAvailable
+                      message={"Demographic data isn't available for seniority"}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+            {/* audience by function */}
+            <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">          
+              <div>
+                <div className="Donuts_container cmn_insight_wrapper_style">
+                  <h3 className="cmn_text_style">Audience by function</h3>
+                  {getDemographicsInsightData?.loading ? (
+                    <div className="text-center insights-loader cmn_height ">
+                      <RotatingLines
+                        strokeColor="#F07C33"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        width="96"
+                        visible={true}
+                      />
+                    </div>
+                  ) : getDemographicsInsightData?.data?.function ? (
+                    <LinkedInIndustryAudienceChart
+                      graphData={getDemographicsInsightData?.data?.function}
+                    />
+                  ) : (
+                    <DemographicDatNotAvailable
+                      message={"Demographic data isn't available for function"}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            {/* audience Top countries */}
+            <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">
+              <div className="Donuts_container cmn_insight_wrapper_style ">
+                <h3 className="cmn_text_style">Audience Top Countries</h3>
+                {getDemographicsInsightData?.loading ? (
+                  <div className="text-center insights-loader mt-5">
+                    <RotatingLines
+                      strokeColor="#F07C33"
+                      strokeWidth="5"
+                      animationDuration="0.75"
+                      width="96"
+                      visible={true}
+                    />
+                  </div>
+                ) : getDemographicsInsightData?.data?.geoCountry ? (
+                  <ul className="top_city_list scroll-y">
+                    {getDemographicsInsightData?.data?.geoCountry?.map(
+                      (country, k) => {
+                        return (
+                          <li key={"cntry" + k}>
+                            <h4>
+                              {k + 1}. {country?.label}
+                            </h4>
+                            <h4>{country?.organicFollowerCounts}</h4>
+                          </li>
+                        );
+                      }
+                    )}{" "}
+                  </ul>
+                ) : (
+                  <DemographicDatNotAvailable
+                    message={"Demographic data isn't available for country"}
+                  />
+                )}
+              </div>
+              {/* audience Top countries end */}
+            </div>
+            {/* audience Top cities */}
+            <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">
+              <div className="Donuts_container cmn_insight_wrapper_style ">
+                <h3 className="cmn_text_style">Audience Top Cities</h3>
+                {getDemographicsInsightData?.loading ? (
+                  <div className="text-center insights-loader mt-5">
+                    <RotatingLines
+                      strokeColor="#F07C33"
+                      strokeWidth="5"
+                      animationDuration="0.75"
+                      width="96"
+                      visible={true}
+                    />
+                  </div>
+                ) : getDemographicsInsightData?.data?.geo ? (
+                  <ul className="top_city_list scroll-y">
+                    {getDemographicsInsightData?.data?.geo?.map((geo, k) => {
+                      return (
+                        <li key={"geo" + k}>
+                          <h4>
+                            {k + 1}. {geo?.label}
+                          </h4>
+                          <h4>{geo?.organicFollowerCounts}</h4>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <DemographicDatNotAvailable
+                    message={"Demographic data isn't available for city"}
+                  />
+                )}
+              </div>
+            </div>
+            {/* audience by industry */}
+            <div className="col-xl-12 col-lg-12 xol-md-12 col-sm-12">
+              <div>
+                <div className="Donuts_container cmn_insight_wrapper_style">
+                  <h3 className="cmn_text_style">Audience by Industry</h3>
+                  {getDemographicsInsightData?.loading ? (
+                    <div className="text-center insights-loader cmn_height ">
+                      <RotatingLines
+                        strokeColor="#F07C33"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        width="96"
+                        visible={true}
+                      />
+                    </div>
+                  ) : getDemographicsInsightData?.data?.industry ? (
+                    <LinkedInIndustryAudienceChart
+                      graphData={getDemographicsInsightData?.data?.industry}
+                    />
+                  ) : (
+                    <DemographicDatNotAvailable
+                      message={"Demographic data isn't available for industry"}
+                    />
+                  )}
+                </div>
+              </div>          
+            </div>
+          </>
+        );
+      };
 
     return (
         <section>
@@ -652,9 +878,7 @@ const Insight = () => {
                                                 </div>
                                             </Tab>
                                             {/* Demographics tabs */}
-                                            {
-                                                selectedPage?.socialMediaType !== "PINTEREST" && selectedPage?.socialMediaType !==  "LINKEDIN" &&
-                                                <Tab eventKey="Demographics" title="Demographics">
+                                            {(selectedPage?.socialMediaType !== "PINTEREST" && selectedPage?.socialMediaType !== "LINKEDIN") ? (<Tab eventKey="Demographics" title="Demographics">
                                                     <h2 className="cmn_headings Review_Heading">Review your audience
                                                         demographics as
                                                         of
@@ -709,8 +933,7 @@ const Insight = () => {
                                                                         </div> :
                                                                         getDemographicsInsightData?.data?.country ?
                                                                             <ul className="top_city_list scroll-y">
-                                                                                {
-                                                                                    getDemographicsInsightData?.data?.country?.map(country => {
+                                                                                {getDemographicsInsightData?.data?.country?.map((country) => {
                                                                                         const countryInfo = Country.getCountryByCode(country?.country_code);
                                                                                         return (
                                                                                             <li>
@@ -796,8 +1019,7 @@ const Insight = () => {
                                                         </div>
 
                                                     </div>
-                                                </Tab>
-                                            }
+                                                </Tab>) : (<></>)}
                                         </Tabs>
                                     </div>
                                 </>

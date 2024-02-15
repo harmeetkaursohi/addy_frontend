@@ -67,7 +67,7 @@ const Draft = () => {
                         <div className='planner_header_outer'>
                             <div className='planner_header'>
                                 <h2>{jsondata.sidebarContent.draft}</h2>
-                                <h6>Here you find all the upcoming Posts you scheduled.</h6>
+                                <h6>All of your saved draft posts are located here.</h6>
                             </div>
 
                             <div className="draft_createPost_outer">
