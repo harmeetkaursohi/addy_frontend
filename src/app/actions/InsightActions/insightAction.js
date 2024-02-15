@@ -8,7 +8,7 @@ import {
     getFormattedDemographicData,
     getFormattedPostTime, getFormattedTotalFollowersCountData
 } from "../../../utils/commonUtils.js";
-import {setAuthenticationHeader} from "../../auth/auth";import {getToken, setAuthenticationHeader} from "../../auth/auth";
+import {getToken, setAuthenticationHeader} from "../../auth/auth";
 
 
 export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWithInsights', async (data, thunkAPI) => {    
