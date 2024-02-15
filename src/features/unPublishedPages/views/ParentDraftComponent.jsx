@@ -37,8 +37,8 @@ export const ParentDraftComponent = ({setDraftPost,reference="",resetData=null})
                 </div>
             }
 
-            {!getAllDraftPostsByCustomerAndPeriodData.loading && drafts && Array.isArray(drafts) && sortByKey(drafts,"createdAt").map(curDraftObject => (
-                <div className={"col-lg-4"}>
+{!getAllDraftPostsByCustomerAndPeriodData.loading && drafts && Array.isArray(drafts) && sortByKey(drafts,"createdAt").map((curDraftObject, key) => (
+                <div className={"col-lg-4"} key={key+"curDraftObject"}>
                     {
                         <DraftComponent resetData={resetData} batchIdData={curDraftObject} setDraftPost={setDraftPost} setDrafts={setDrafts} reference={reference}/>
                     }
