@@ -331,6 +331,10 @@ div.card_body_content {
     display: flex;
     justify-content: end;
 }
+span.spinner-border.spinner-border-sm.loader.social-account-loader {
+    height: 15px;
+    width: 15px;
+}   
 @media screen and (min-width:2560px) {
     .account_reach_overview_outer{
         padding: 40px;

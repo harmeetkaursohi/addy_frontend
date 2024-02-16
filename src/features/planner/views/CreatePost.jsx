@@ -73,13 +73,17 @@ const CreatePost = () => {
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
 
     useEffect(() => {
-        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
-        const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
-        if (isAnyPageConnected && isAnyAccountConnected) {
+        if(connectedPagesData.loading){
             setShowConnectAccountModal(false)
-        } else {
-            setShowConnectAccountModal(true)
-        }
+        }else{
+            const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
+            const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
+            if (isAnyPageConnected && isAnyAccountConnected) {
+                setShowConnectAccountModal(false)
+            } else {
+                setShowConnectAccountModal(true)
+            }
+        }        
     }, [connectedPagesData, getAllConnectedSocialAccountData])
 
     useEffect(() => {
@@ -818,8 +822,7 @@ const CreatePost = () => {
                     setAIGenerateHashTagModal={setAIGenerateHashTagModal}/>
             }
             {
-                showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal}
-                                                                      setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
+                showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal} setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
             }
         </>)
 }

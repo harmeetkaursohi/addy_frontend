@@ -1,25 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideBar from "../sidebar/views/Layout";
 import { useFormik } from "formik";
 import "./Contact.css";
 import { CiLocationOn } from "react-icons/ci";
 import { FaPhoneVolume } from "react-icons/fa6";
 import { FaRegEnvelope } from "react-icons/fa";
-import GenericButtonWithLoader from "../common/components/GenericButtonWithLoader";
 import { validationSchemas } from "../../utils/commonUtils";
 import { contactUsFormActions } from "../../app/actions/contactUsActions/contactUsActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import ReCAPTCHA from "react-google-recaptcha";
+import { showErrorToast, showSuccessToast } from "../common/components/Toast";
+import { useNavigate } from 'react-router'
+import Loader from "../loader/Loader";
+
 const ContactUs = () => {
-    const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch();
+  const contactUsFormReducer = useSelector((state) => state.contactUs.contactUsFormReducer);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email_address: "",
     phone_number: "",
     message: "",
-    "g-recaptcha-response": "",
+    recaptcha: "",
   });
-
   const handleOnChange = (e) => {
     setFormData((prevState) => {
       return {
@@ -27,22 +33,45 @@ const ContactUs = () => {
         [e.target.name]: e.target.value,
       };
     });
-  };  
+  };
   const formik = useFormik({
     initialValues: {
-        first_name: "",
-        last_name: "",
-        email_address: "",
-        phone_number: "",
-        message: "",
-        "g-recaptcha-response": "",
+      first_name: "",
+      last_name: "",
+      email_address: "",
+      phone_number: "",
+      message: "",
+      "g-recaptcha-response": "",
     },
     validationSchema: validationSchemas.contactForm,
-    handleChange:handleOnChange,
-    onSubmit: (values) => {
-      dispatch(contactUsFormActions(values));
+    handleChange: handleOnChange,
+    onSubmit: (values, { resetForm }) => {
+      dispatch(contactUsFormActions(values)).then((res)=>{
+        console.log("res",res);
+        res = res?.payload
+        if(res?.status){     
+          resetForm()
+          showSuccessToast(res?.message);
+          setTimeout(() => {
+            navigate(0)        
+          }, 3000);
+        }else if(res?.status === false){
+          if(res?.errors && Object.keys(res?.errors).length){
+            const key = Object.keys(res?.errors)[0]
+            showErrorToast(res?.errors[key]);
+          }else{
+            resetForm()
+            showErrorToast(res?.message);
+            setTimeout(() => {
+              navigate(0)        
+            }, 3000);
+          }      
+        }
+      });
+     
     },
   });
+
 
   return (
     <>
@@ -80,20 +109,22 @@ const ContactUs = () => {
               </div>
 
               <div className="col-md-12 col-lg-6 Contact_us_Outer">
-                <form onSubmit={formik.handleSubmit}>
+                <form onSubmit={formik.handleSubmit} id="contactForm">
                   <div className="row m-0 contact_form">
                     <div className="col-lg-6">
                       <input
                         className="form-control"
-                        name="first_name"                        
+                        name="first_name"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.first_name}
                         placeholder="First Name"
                       />
-                        {formik.touched.first_name && formik.errors.first_name ? (
-                            <p className="error_message">{formik.errors.first_name}</p>
-                        ) : null}
+                      {formik.touched.first_name && formik.errors.first_name ? (
+                        <p className="error_message">
+                          {formik.errors.first_name}
+                        </p>
+                      ) : null}
                     </div>
 
                     <div className="col-lg-6">
@@ -102,27 +133,32 @@ const ContactUs = () => {
                         name="last_name"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.last_name}                        
+                        value={formik.values.last_name}
                         placeholder="Last Name"
                       />
                       {formik.touched.last_name && formik.errors.last_name ? (
-                            <p className="error_message">{formik.errors.last_name}</p>
-                        ) : null}
+                        <p className="error_message">
+                          {formik.errors.last_name}
+                        </p>
+                      ) : null}
                     </div>
 
                     <div className="col-lg-12">
                       <input
                         type="email"
                         className="form-control"
-                        name="email_address"                        
+                        name="email_address"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.email_address}
                         placeholder="Email Address"
                       />
-                      {formik.touched.email_address && formik.errors.email_address ? (
-                            <p className="error_message">{formik.errors.email_address}</p>
-                        ) : null}
+                      {formik.touched.email_address &&
+                      formik.errors.email_address ? (
+                        <p className="error_message">
+                          {formik.errors.email_address}
+                        </p>
+                      ) : null}
                     </div>
 
                     <div className="col-lg-12">
@@ -132,12 +168,15 @@ const ContactUs = () => {
                         name="phone_number"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.phone_number}                        
+                        value={formik.values.phone_number}
                         placeholder="Phone Number"
                       />
-                      {formik.touched.phone_number && formik.errors.phone_number ? (
-                            <p className="error_message">{formik.errors.phone_number}</p>
-                        ) : null}
+                      {formik.touched.phone_number &&
+                      formik.errors.phone_number ? (
+                        <p className="error_message">
+                          {formik.errors.phone_number}
+                        </p>
+                      ) : null}
                     </div>
 
                     <div className="col-lg-12">
@@ -147,15 +186,32 @@ const ContactUs = () => {
                         className="form-control"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                        value={formik.values.message}                        
+                        value={formik.values.message}
                       ></textarea>
                       {formik.touched.message && formik.errors.message ? (
-                            <p className="error_message">{formik.errors.message}</p>
-                        ) : null}
+                        <p className="error_message">{formik.errors.message}</p>
+                      ) : null}
                     </div>
-
+                    <div className="col-lg-12">
+                      <ReCAPTCHA
+                        sitekey={
+                          import.meta.env.VITE_APP_ASTR_RECAPTCHA_SITE_KEY
+                        }
+                        onChange={(value) => {
+                          formik.setFieldValue("g-recaptcha-response", value);
+                        }}
+                      />
+                      {formik.touched["g-recaptcha-response"] &&
+                      formik.errors["g-recaptcha-response"] ? (
+                        <p className="error_message">
+                          {formik.errors["g-recaptcha-response"]}
+                        </p>
+                      ) : null}
+                    </div>
                     <div className="col-12 mt-3">
-                        <button type="submit" className={"cmn_btn_color sendMessageBtn"} >Send Message</button>                         
+                      <button type="submit" className={"cmn_btn_color sendMessageBtn"} disabled={contactUsFormReducer.loading} >
+                        {contactUsFormReducer.loading ? <Loader/> : "Send Message"}
+                      </button>
                     </div>
                   </div>
                 </form>
