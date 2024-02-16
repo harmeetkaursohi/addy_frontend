@@ -47,6 +47,7 @@ div.faq_section{
     margin: auto;
     max-width: 796px;
     width: 100%;
+    padding: 20px;
 }
 .faq_wrapper h2.accordion-header {
     margin-bottom: 0px !important;
@@ -99,6 +100,7 @@ background-color: #fff;
     width: 100%;
     margin: auto;
     margin-bottom: 40px;
+    align-items: center;
 }
 
 .faq_searchbar input {
@@ -137,6 +139,14 @@ background-color: #fff;
     .accordian_wrapper {
         padding: 30px 30px 10px;
     }
+    .faq_wrapper h2 {
+        font-size: 18px;
+    }
+    .faq_searchbar .cmn_btn_color {
+        width: 120px;
+        height: 40px;
+        padding: 8px;
+    }
     .accordian_wrapper .accordion-button {
         font-size: 15px;
         padding: 10px;
@@ -151,6 +161,13 @@ background-color: #fff;
   @media screen and (max-width:767px) {
     .faq_wrapper h2 {
         font-size: 14px;
+    }
+    .submit_Button_Wrapper{
+        display: flex;
+        justify-content: center;
+    }
+    .sendMessageBtn{
+        padding: 6px 10px;
     }
     .faq_wrapper p {
         font-size: 12px;
@@ -187,14 +204,12 @@ background-color: #fff;
   
     }
     .faq_searchbar .cmn_btn_color {
-        border: transparent;
-        
         width: 111px;
         height: 38px;
         margin-top: 25px;
         padding: 10px;
         font-size: 14px;
-        transform: translate(35px, 0px);
+
     }
     .faq_searchbar input {
         width: 100%;
