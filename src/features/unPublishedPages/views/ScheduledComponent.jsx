@@ -18,7 +18,7 @@ import {
 } from "../../../app/actions/postActions/postActions";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
-import noPostScheduled from "../../../images/no_post_scheduled.png";
+import noPostScheduled from "../../../images/no_post_scheduled.svg";
 import CommonLoader from "../../common/components/CommonLoader";
 import Swal from "sweetalert2";
 import {SocialAccountProvider} from "../../../utils/contantData";
@@ -105,7 +105,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                 <h4 className="text-center mb-3">
                                     No Upcoming Posts
                                 </h4>
-                                <img src={noPostScheduled} alt=""/>
+                                <img src={noPostScheduled} alt="" className=''/>
                             </div>
 
                             :

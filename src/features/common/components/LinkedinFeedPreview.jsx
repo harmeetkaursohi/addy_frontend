@@ -55,7 +55,7 @@ console.log(pageName,"pageName")
                         <h3 className="cmn_text_style">Comment</h3>
                     </div>
                     <div className="linkedin_likes">
-                    <BiRepost />
+                    <BiRepost className="repost__icon"/>
                         <h3 className="cmn_text_style">Share</h3>
                     </div>
                 </div>
