@@ -1,7 +1,7 @@
 import img from "../../../../images/draft.png";
 import {
     getCommentCreationTime,
-    getUpdateCommentMessage,getMentionedUserCommentFormat,
+    getUpdateCommentMessage, getMentionedUserCommentFormat,
     handleShowCommentReplies,
     handleShowCommentReplyBox, isNullOrEmpty, isReplyCommentEmpty
 } from "../../../../utils/commonUtils";
@@ -22,7 +22,7 @@ import Skeleton from "../../../loader/skeletonEffect/Skeleton";
 import {RotatingLines} from "react-loader-spinner";
 import CommentText from "./CommentText";
 
-const Comments = ({postData}) => {
+const Comments = ({postData, isDirty, setDirty}) => {
     const dispatch = useDispatch();
     const getCommentsOnPostActionData = useSelector(state => state.post.getCommentsOnPostActionReducer)
     const addCommentOnPostActionData = useSelector(state => state.post.addCommentOnPostActionReducer)
@@ -37,7 +37,7 @@ const Comments = ({postData}) => {
         message: ""
     })
     const [updateComment, setUpdateComment] = useState({})
-   
+
     const [baseQuery, setBaseQuery] = useState({
         socialMediaType: postData?.socialMediaType,
         pageAccessToken: postData?.page?.access_token,
@@ -51,14 +51,14 @@ const Comments = ({postData}) => {
             ...baseQuery,
             id: objectId,
         }
-  
-        
+
+
         dispatch(getCommentsOnPostAction(requestBody))
-        
-          
+
+
             .then(response => {
                 if (response.meta.requestStatus === "fulfilled") {
-              
+
                     setShowReplyBox([])
                     // !isGetChildComments && setShowReplyComments(new Array(response.payload.length).fill(false))
                     // showReplyBox.length === 0 && setShowReplyComments(new Array(response.payload.length).fill(false))
@@ -71,7 +71,7 @@ const Comments = ({postData}) => {
             ...baseQuery,
             id: replyToCommentId,
             data: {
-                message: getMentionedUserCommentFormat(replyComment,postData?.socialMediaType)
+                message: getMentionedUserCommentFormat(replyComment, postData?.socialMediaType)
             },
         }
         dispatch(addCommentOnPostAction(requestBody)).then(response => {
@@ -115,23 +115,30 @@ const Comments = ({postData}) => {
 
     useEffect(() => {
         if (commentToDeleteId) {
-            
+
             const requestBody = {
                 ...baseQuery,
                 id: commentToDeleteId,
             }
-            
-            
+
+
             dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
-                
                 setCommentToDeleteId(null)
                 if (response.meta.requestStatus === "fulfilled") {
+                    setDirty({
+                        ...isDirty,
+                        isDirty: true,
+                        action: {
+                            ...isDirty?.action,
+                            type: "DELETE",
+                            on: "COMMENT",
+                        }
+                    })
                     handleGetComments(postData?.id)
-                    // const requestBody = {
-                    //     postIds: [postData?.id],
-                    //     pageAccessToken: postData?.page?.access_token,
-                    //     socialMediaType: postData?.socialMediaType
-                    // }
+                    const requestBody = {
+                        ...baseQuery,
+                        postIds: [postData?.id]
+                    }
                     dispatch(getPostPageInfoAction(requestBody))
                 }
             })
@@ -142,7 +149,7 @@ const Comments = ({postData}) => {
             ...baseQuery,
             id: updateComment?.id,
             data: {
-                message: getUpdateCommentMessage(updateComment,postData?.socialMediaType)
+                message: getUpdateCommentMessage(updateComment, postData?.socialMediaType)
             }
         }
         dispatch(updateCommentsOnPostAction(requestBody)).then(response => {
@@ -201,7 +208,13 @@ const Comments = ({postData}) => {
                                                                     <Dropdown.Item href="#/action-2"
                                                                                    onClick={() => {
                                                                                        setCommentToDeleteId(comment?.id)
-                                                                                       
+                                                                                       setDirty({
+                                                                                           ...isDirty,
+                                                                                           action: {
+                                                                                               ...isDirty?.action,
+                                                                                               reduceCommentCount: 1,
+                                                                                           }
+                                                                                       })
                                                                                    }}>Delete</Dropdown.Item>
                                                                 }
                                                             </Dropdown.Menu>
@@ -253,7 +266,8 @@ const Comments = ({postData}) => {
 
                                                         {comment?.like_count > 0 &&
                                                             <>
-                                                                <LiaThumbsUpSolid className={"ms-1 me-1"} fill={"blue"}/>
+                                                                <LiaThumbsUpSolid className={"ms-1 me-1"}
+                                                                                  fill={"blue"}/>
                                                                 <p className={"me-3"}>{comment?.like_count}</p>
                                                             </>
 

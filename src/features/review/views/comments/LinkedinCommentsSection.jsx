@@ -27,7 +27,7 @@ import {getToken} from "../../../../app/auth/auth";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommonLoader from "../../../common/components/CommonLoader";
 
-const LinkedinCommentsSection = ({postData, postPageData}) => {
+const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) => {
     const token = getToken();
     const dispatch = useDispatch();
     const getCommentsOnPostActionData = useSelector(state => state.post.getCommentsOnPostActionReducer)
@@ -100,6 +100,15 @@ const LinkedinCommentsSection = ({postData, postPageData}) => {
             }
             dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
                 if (response.meta.requestStatus === "fulfilled") {
+                    setDirty({
+                        ...isDirty,
+                        isDirty: true,
+                        action: {
+                            ...isDirty?.action,
+                            type: "DELETE",
+                            on: "COMMENT",
+                        }
+                    })
                     setDeletedComments([...deletedComments, commentToDelete?.id])
                     dispatch(getPostPageInfoAction({
                         ...baseQuery,
@@ -345,6 +354,13 @@ const LinkedinCommentsSection = ({postData, postPageData}) => {
                                                                             <Dropdown.Item href="#/action-2"
                                                                                            onClick={() => {
                                                                                                setCommentToDelete(comment)
+                                                                                               setDirty({
+                                                                                                   ...isDirty,
+                                                                                                   action: {
+                                                                                                       ...isDirty?.action,
+                                                                                                       reduceCommentCount: 1,
+                                                                                                   }
+                                                                                               })
                                                                                            }}>Delete</Dropdown.Item>
 
                                                                         </Dropdown.Menu>
@@ -532,7 +548,6 @@ const LinkedinCommentsSection = ({postData, postPageData}) => {
                                                         showReplyComments[index] && <>
                                                             {
                                                                 comment?.reply?.elements?.map((childComment, i) => {
-                                                                    console.log("childComment==>", childComment)
                                                                     const childCommentorsProfile = extractCommentersProfileDataForLinkedin(childComment)
                                                                     return (
                                                                         !deletedComments.includes(childComment?.id) &&

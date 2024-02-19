@@ -209,8 +209,6 @@ export const likePostAction = createAsyncThunk('post/likePostAction', async (dat
 
 
 export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoAction', async (data, thunkAPI) => {
-
-    console.log("data--->", data);
     switch (data?.socialMediaType) {
 
         case "FACEBOOK": {

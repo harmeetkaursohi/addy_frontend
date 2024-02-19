@@ -16,8 +16,8 @@ import {RotatingLines} from "react-loader-spinner";
 import {getToken} from "../../../../app/auth/auth";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 
-const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,setIsdirty,}) => {
- 
+const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
+
     const token = getToken();
     const [comment, setComment] = useState("");
     const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,se
     const disLikePostReducerData = useSelector(state => state.post.dislikePostReducer)
     const [baseQueryForGetPostPageInfoAction, setBaseQueryForGetPostPageInfoAction] = useState(
         {
-            token:token,
+            token: token,
             postIds: null,
             pageAccessToken: null,
             socialMediaType: null
@@ -150,7 +150,7 @@ const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,se
 
         dispatch(dislikePostAction(requestBody)).then((response) => {
             if (response.meta.requestStatus === "fulfilled") {
-            
+
                 dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction)).then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         setLike(false);
@@ -166,7 +166,6 @@ const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,se
         })
     }
     const handleAddCommentOnPost = (e) => {
-        setIsdirty(true)
 
         e.preventDefault();
         const requestBody = {
@@ -181,35 +180,29 @@ const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,se
         }
 
         dispatch(addCommentOnPostAction(requestBody)).then(response => {
-            
+
             if (response.meta.requestStatus === "fulfilled") {
+                setDirty({
+                    ...isDirty,
+                    isDirty:true,
+                    action:{
+                        type:"POST",
+                        on:"COMMENT",
+                        commentLevel:"FIRST",
+                    }
+                })
                 setComment("")
-               
-                if(postData?.socialMediaType==="FACEBOOK"){
+
+                if (postData?.socialMediaType === "FACEBOOK") {
                     dispatch(getCommentsOnPostAction(requestBody))
                 }
                 dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction))
-               
+
             }
         });
     }
-    useEffect(() => {
-       
-        if(isDirty){
-            const updatedResult = [...result];
-            const updatedItem = { ...updatedResult[index], comments: updatedResult[index].comments + 1 };
-            updatedResult[index] = updatedItem;
-            setResult(updatedResult);
-            setIsdirty(false)
-        }
-       
-       
-          
-      
-      
-  }, [index,isDirty]);
-    
-    
+
+
 
     return (
         <div className="comments_footer">
@@ -338,7 +331,6 @@ const CommentFooter = ({postData, postPageData,result,setResult,index,isDirty,se
                                     disabled={addCommentOnPostActionData?.loading || isNullOrEmpty(comment)}
                                     onClick={(e) => {
                                         setShowEmojiPicker(false)
-
                                         !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
                                     }}>Post
                             </button>

@@ -23,19 +23,11 @@ const CommentReviewsSectionModal = ({
                                         isOpenCommentReviewsSectionModal,
                                         setOpenCommentReviewsSectionModal,
                                         postData,
-                                        isResetData,
                                         postPageInfoData,
-                                        setInd,
-                                        index,
-                                        result,
                                         isDirty,
-                                        setIsdirty,
-                                        setResult
+                                        setDirty,
                                     }) => {
     const [postPageData, setPostPageData] = useState(null);
-    const[deleteCmt,setDeleteCmt]=useState(false)
-    const[delCmtId,setDelCmtID]=useState(null)
-    
     const dispatch = useDispatch();
     const handleClose = () => setOpenCommentReviewsSectionModal(false);
 
@@ -115,16 +107,16 @@ const CommentReviewsSectionModal = ({
 
 
                                         {
-                                            postData?.socialMediaType === "FACEBOOK" && <Comments postData={postData} setDelCmtID={setDelCmtID}/>
+                                            postData?.socialMediaType === "FACEBOOK" && <Comments  isDirty={isDirty} setDirty={setDirty} postData={postData} />
                                         }
 
                                         {
                                             postData?.socialMediaType === "INSTAGRAM" &&
-                                            <InstagramCommentsSection postData={postData} postPageData={postPageData}/>
+                                            <InstagramCommentsSection  isDirty={isDirty} setDirty={setDirty} postData={postData} postPageData={postPageData}/>
                                         }
                                         {
                                             postData?.socialMediaType === "LINKEDIN" &&
-                                            <LinkedinCommentsSection postData={postData} postPageData={postPageData}/>
+                                            <LinkedinCommentsSection  isDirty={isDirty} setDirty={setDirty} postData={postData} postPageData={postPageData}/>
                                         }
                                         {
                                             postData?.socialMediaType === "PINTEREST" &&
@@ -144,7 +136,9 @@ const CommentReviewsSectionModal = ({
                                     </div>
 
                                     {/*</div>*/}
-                                    <CommentFooter setDeleteCmt={setDeleteCmt} deleteCmt={deleteCmt} setResult={setResult} result={result} isDirty={isDirty} setIsdirty={setIsdirty} postData={postData} postPageData={postPageData} setInd={setInd} index={index} />
+                                    <CommentFooter
+                                        isDirty={isDirty} setDirty={setDirty}
+                                        postData={postData} postPageData={postPageData}  />
 
                                 </div>
 

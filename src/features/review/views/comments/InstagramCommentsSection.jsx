@@ -21,7 +21,7 @@ import Skeleton from "../../../loader/skeletonEffect/Skeleton";
 import {RotatingLines} from "react-loader-spinner";
 import CommentText from "./CommentText";
 
-const InstagramCommentsSection = ({postData, postPageData}) => {
+const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) => {
     const dispatch = useDispatch();
     const [showReplies, setShowReplies] = useState([]);
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -50,6 +50,18 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
             dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
                 setCommentToDelete(null)
                 if (response.meta.requestStatus === "fulfilled") {
+
+                    setDirty({
+                        ...isDirty,
+                        isDirty: true,
+                        action: {
+                            ...isDirty?.action,
+                            type: "DELETE",
+                            on: "COMMENT"
+                        }
+                    })
+
+
                     const getPostPageRequestBody = {
                         ...baseQuery,
                         postIds: [postData?.id]
@@ -80,6 +92,15 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
         }
         dispatch(replyCommentOnPostAction(requestBody)).then(res => {
             if (res.meta.requestStatus === "fulfilled") {
+                setDirty({
+                    ...isDirty,
+                    isDirty: true,
+                    action: {
+                        type: "POST",
+                        on: "COMMENT",
+                        commentLevel: "SECOND",
+                    }
+                })
                 setReply({
                     parentId: null,
                     message: ""
@@ -101,6 +122,7 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
 
 
             postPageData?.comments?.data?.map((comment, index) => {
+                console.log("comment===>", comment)
                 return (
                     <>
                         <div key={index} className="comment_wrap">
@@ -131,6 +153,13 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                         <Dropdown.Menu>
                                                             <Dropdown.Item href="#/action-2" onClick={() => {
                                                                 setCommentToDelete(comment?.id)
+                                                                setDirty({
+                                                                    ...isDirty,
+                                                                    action: {
+                                                                        ...isDirty?.action,
+                                                                        reduceCommentCount: 1 + (comment?.hasOwnProperty("replies") ? comment?.replies?.data?.length : 0),
+                                                                    }
+                                                                })
                                                             }}>Delete</Dropdown.Item>
                                                         </Dropdown.Menu>
                                                     </Dropdown>
@@ -213,6 +242,13 @@ const InstagramCommentsSection = ({postData, postPageData}) => {
                                                                                                         href="#/action-2"
                                                                                                         onClick={() => {
                                                                                                             setCommentToDelete(childComment?.id)
+                                                                                                            setDirty({
+                                                                                                                ...isDirty,
+                                                                                                                action: {
+                                                                                                                    ...isDirty?.action,
+                                                                                                                    reduceCommentCount: 1,
+                                                                                                                }
+                                                                                                            })
                                                                                                         }}>Delete</Dropdown.Item>
                                                                                                 </Dropdown.Menu>
                                                                                             </Dropdown>

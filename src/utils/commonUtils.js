@@ -52,7 +52,7 @@ export const validationSchemas = {
     forgotPassword: yup.object().shape({
         email: yup.string().required('Email is required').email('Invalid email format'),
     }),
-    
+
     contactForm: yup.object().shape({
         first_name: yup.string().required('First Name is required'),
         last_name: yup.string().required('Last Name is required'),
@@ -1247,15 +1247,15 @@ export const getAttachmentsData = (data, socialMediaType) => {
                 return []
             } else {
                 return data?.attachments?.map(attachment => {
-                    if(attachment?.id?.startsWith("urn:li:image")){
-                        return{
+                    if (attachment?.id?.startsWith("urn:li:image")) {
+                        return {
                             mediaType: "IMAGE",
                             imageURL: attachment?.downloadUrl,
                             pageId: data?.postInfo?.id,
                         }
                     }
-                    if(attachment?.id?.startsWith("urn:li:video")){
-                        return{
+                    if (attachment?.id?.startsWith("urn:li:video")) {
+                        return {
                             mediaType: "VIDEO",
                             sourceURL: attachment?.downloadUrl,
                             pageId: data?.postInfo?.id,
@@ -1440,9 +1440,9 @@ export const getFormattedDemographicData = (data, key, socialMediaType) => {
         }
         case SocialAccountProvider.LINKEDIN.toUpperCase(): {
             let formattedData = data?.data[key]
-            if(key === "industry" || key === "seniority" || key=== "function"){
-                Object.keys(formattedData).map(function(v){
-                    formattedData[v] = {name:formattedData[v].label,value:formattedData[v].organicFollowerCounts}
+            if (key === "industry" || key === "seniority" || key === "function") {
+                Object.keys(formattedData).map(function (v) {
+                    formattedData[v] = {name: formattedData[v].label, value: formattedData[v].organicFollowerCounts}
                 })
             }
             return formattedData
@@ -1692,6 +1692,31 @@ export const extractIdFromLinkedinMessageAtrributes = (attribute = null) => {
     const firstLevelKey = Object.keys(attribute?.value)[0]
     const secondLevelKey = Object.keys(attribute?.value[firstLevelKey])[0]
     return attribute?.value[firstLevelKey][secondLevelKey]
+}
 
+export const createOptionListForSelectTag = (data=null, label, value, additionalOption = null) => {
+    let list=[];
+    if(data===null){
+        return list;
+    }
+    if (Array.isArray(data)) {
+        list = data?.map(cur => {
+            return {
+                value: cur[value],
+                label: cur[label],
+            }
+        })
+    } else if (typeof data === 'object') {
+         list = Object.keys(SocialAccountProvider)?.map(cur => {
+            return {
+                value: SocialAccountProvider[cur],
+                label: getInitialLetterCap(SocialAccountProvider[cur]),
+            }
+        })
+    }
+    if(additionalOption !== null){
+        list=[additionalOption,...list]
+    }
+    return list
 
 }
