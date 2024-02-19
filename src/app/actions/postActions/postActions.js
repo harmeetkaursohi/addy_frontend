@@ -408,8 +408,6 @@ export const getPlannerPostCountAction = createAsyncThunk('get/getPlannerPostCou
 
 export const createFacebookPostAction = createAsyncThunk('post/createFacebookPostAction', async (data, thunkAPI) => {
 
-    console.log("@@@@ RequestBody ::: ", data)
-
     const formData = new FormData();
 
     // Create a FormData object to hold the data.

@@ -12,6 +12,12 @@ export const SocialAccountProvider = Object.freeze({
     ...(enabledSocialMedia.isPinterestEnabled && { PINTEREST:"pinterest" }),
 });
 
+export const SignupSource = Object.freeze({
+    FACEBOOK:"FACEBOOK",
+    GOOGLE:"GOOGLE",
+    ADDY:"ADDY",
+});
+
 export const Linkedin_URN_Id_Types = Object.freeze({
     ORGANIZATION:"organization",
     DIGITAL_MEDIA_ASSET: "digitalmediaAsset",
@@ -21,6 +27,7 @@ export const Linkedin_URN_Id_Types = Object.freeze({
     IMAGE: "image",
     VIDEO: "video",
 });
+
 export const UpdateCommentFailedMsg="Update Fail: User can only edit comments made from Addy."
 export const SomethingWentWrong="Something went wrong!"
 export const NoBusinessAccountFound="No business account found for {0} to connect!"

@@ -10,7 +10,15 @@
     width: 140px;
     border-radius: 50%;
 }
-
+.update-pic-loading{
+    position: absolute;
+    left: auto;
+    right: 19rem;
+    top: 50px;
+}
+.user_pic_container{
+    position: relative;
+}
 .edit_content{
     flex-grow: 1;
 }
