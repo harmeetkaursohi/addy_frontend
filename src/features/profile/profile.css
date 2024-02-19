@@ -60,6 +60,7 @@ isolation: unset !important;
 .ImSpinner_icon{
     font-size: 20px;
 }
+
 @media screen and (min-width:1600px) {
     .editprofile_outer{
         width: 35%;
