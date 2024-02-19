@@ -62,6 +62,19 @@ export const validationSchemas = {
         "g-recaptcha-response": yup.string().required("Please check on the reCAPTCHA box."),
     }),
 
+    editProfileInfo:yup.object().shape({
+        firstName: yup.string().required('First Name is required'),
+        lastName: yup.string().required('Last Name is required'),
+        username: yup.string().required('Last Name is required'),
+        contactNo: yup.string().required('Contact Number is required'),
+        addressLine1: yup.string().required('addressLine1 is required'),
+        country: yup.string().required('country is required'),
+        state:yup.string().required('stateis required'),
+        county: yup.string().required('county is required'),
+    
+     
+    }),
+
 };
 
 

@@ -10,7 +10,15 @@
     width: 140px;
     border-radius: 50%;
 }
-
+.update-pic-loading{
+    position: absolute;
+    left: 47%;
+    right: 47%;
+    top: 50px;
+}
+.user_pic_container{
+    position: relative;
+}
 .edit_content{
     flex-grow: 1;
 }
@@ -60,6 +68,18 @@ isolation: unset !important;
 .ImSpinner_icon{
     font-size: 20px;
 }
+.tooltip-inner {
+    background-color: #ee7817 !important; 
+    color: #fff; 
+    border: 1px solid #ee7817; 
+  }
+  
+  /* Style for tooltip arrow */
+  .tooltip-arrow {
+   
+    border-color: #ee7817 !important; /* Change arrow color */
+    
+  }
 
 @media screen and (min-width:1600px) {
     .editprofile_outer{
@@ -77,3 +97,15 @@ isolation: unset !important;
         width: 100%;
     }
 }
+ @media screen and (max-width:767px){
+    .update-pic-loading{
+       top:35px;
+        left: 40%;
+        right: 40%;
+   
+    }
+    .user_pic {
+        height: 100px;
+        width: 100px;
+    }
+ }

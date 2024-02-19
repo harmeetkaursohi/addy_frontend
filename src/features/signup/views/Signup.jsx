@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import AddressInfo from './tabs/AddressInfo';
 import UserInfo from './tabs/UserInfo';
+import {SignupSource} from "../../../utils/contantData";
 
 const Signup = () => {
 
@@ -19,6 +20,7 @@ const Signup = () => {
         industry: "",
         isAccountNonLocked: false,
         isEnabled: false,
+        signupSource: SignupSource.ADDY,
         address: {
             addressLine1: "",
             addressLine2: "",
@@ -43,4 +45,4 @@ const Signup = () => {
     )
 }
 
-export default Signup;    
+export default Signup;

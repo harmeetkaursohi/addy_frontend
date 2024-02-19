@@ -52,3 +52,16 @@ export const getUserInfo = createAsyncThunk('user/getUserInfo', async (data, thu
         return thunkAPI.rejectWithValue(error.response);
     });
 });
+
+export const updateProfilePic = createAsyncThunk('user/updateProfilePic', async (data, thunkAPI) => {
+    const formData = new FormData();
+    formData.append('mediaType', data.formData?.mediaType);
+    formData.append('file', data.formData?.file);
+
+    return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/profile-pic`, formData,setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});

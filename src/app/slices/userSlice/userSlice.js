@@ -4,13 +4,14 @@ import {
     createPassword,
     signUpUser,
     forgotPassword,
-    getUserInfo
+    getUserInfo,updateProfilePic
 } from "../../actions/userActions/userActions.js";
 
 const userSlice = createSlice({
         name: 'user',
         initialState: {
             loginUserReducer: {loading: false},
+            updateProfilePicReducer: {loading: false},
             signUpReducer: {loading: false},
             createPasswordReducer: {loading: false},
             forgotPasswordReducer: {loading: false},
@@ -73,7 +74,18 @@ const userSlice = createSlice({
             },
             [getUserInfo.rejected]: (state) => {
                 state.userInfoReducer = {loading: false}
-            }
+            },
+
+            //Update Profile Pic
+            [updateProfilePic.pending]: (state) => {
+                state.updateProfilePicReducer = {loading: true};
+            },
+            [updateProfilePic.fulfilled]: (state, action) => {
+                state.updateProfilePicReducer = {loading: false}
+            },
+            [updateProfilePic.rejected]: (state) => {
+                state.updateProfilePicReducer = {loading: false}
+            },
         }
     });
 
