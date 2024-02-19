@@ -2,12 +2,12 @@ import SideBar from "../sidebar/views/Layout";
 import React, { useState, useEffect } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import './faq.css'
-import { list  } from "../../app/actions/faqActions/faqActions";
+import { list  } from "../../app/actions/webActions/webActions";
 import { useDispatch, useSelector } from "react-redux";
 import { resetReducers } from "../../app/actions/commonActions/commonActions";
 const FaqComponent = () => {
     const dispatch = useDispatch();
-    const faqList = useSelector(state => state.faq.listReducer);        
+    const faqList = useSelector(state => state.web.listReducer);        
     const [items, setItems] = useState([]);
     const [page, setPage] = useState(1);    
     const [search, setSearch] = useState("");    

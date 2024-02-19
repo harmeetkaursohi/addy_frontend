@@ -6,7 +6,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { FaPhoneVolume } from "react-icons/fa6";
 import { FaRegEnvelope } from "react-icons/fa";
 import { validationSchemas } from "../../utils/commonUtils";
-import { contactUsFormActions } from "../../app/actions/contactUsActions/contactUsActions";
+import { contactUsFormActions } from "../../app/actions/webActions/webActions";
 import { useDispatch, useSelector } from "react-redux";
 import ReCAPTCHA from "react-google-recaptcha";
 import { showErrorToast, showSuccessToast } from "../common/components/Toast";
@@ -17,7 +17,7 @@ const ContactUs = () => {
   const navigate = useNavigate()
 
   const dispatch = useDispatch();
-  const contactUsFormReducer = useSelector((state) => state.contactUs.contactUsFormReducer);
+  const contactUsFormReducer = useSelector((state) => state.web.contactUsFormReducer);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
