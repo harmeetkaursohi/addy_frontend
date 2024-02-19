@@ -9,6 +9,7 @@ import insightSlice from "../slices/insightSlice/insightSlice";
 import contactUsSlice from "../slices/contactUsSlice/contactUsSlice";
 import faqSlice from "../slices/faqSlice/faqSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
+import profileSlice from "../slices/profileSlice/profileSlice.js";
 
 
 const rootReducers = combineReducers({
@@ -19,6 +20,7 @@ const rootReducers = combineReducers({
     insight: insightSlice,
     faq: faqSlice,
     contactUs: contactUsSlice,
+    userProfile:profileSlice,
     reset: resetReducers
 })
 

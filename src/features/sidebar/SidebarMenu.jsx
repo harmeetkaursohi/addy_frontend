@@ -2,7 +2,7 @@ import React from 'react';
 import { BsTelephone } from "react-icons/bs";
 import { BsHouseLock } from "react-icons/bs";
 import { BsExclamationSquare } from "react-icons/bs";
-import { FaRegCommentDots } from "react-icons/fa";
+import { FaRegCommentDots, FaUserEdit } from "react-icons/fa";
 import { BiCalendar } from "react-icons/bi";
 import { TbSmartHome } from "react-icons/tb";
 import { AiOutlinePicture } from "react-icons/ai";
@@ -51,6 +51,11 @@ export const SidebarMenuItems = [
         "name": "Contact Us",
         "path": "/contact",
         "icon": <BsTelephone />
+    },
+    {
+        "name": "Edit Profile",
+        "path": "/editProfile",
+        "icon": <FaUserEdit /> 
     },
     
       
