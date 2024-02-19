@@ -8,7 +8,6 @@ import postSlice from "../slices/postSlice/postSlice.js";
 import insightSlice from "../slices/insightSlice/insightSlice";
 import webSlice from "../slices/webSlice/webSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
-import profileSlice from "../slices/profileSlice/profileSlice.js";
 
 
 const rootReducers = combineReducers({
@@ -18,7 +17,6 @@ const rootReducers = combineReducers({
     post: postSlice,
     insight: insightSlice,    
     web: webSlice,
-    userProfile:profileSlice,
     reset: resetReducers
 })
 

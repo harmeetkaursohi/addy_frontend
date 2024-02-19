@@ -93,7 +93,7 @@ function ForgotPassword() {
                                         </div>
                                     </form>
                                     <h3 className='cmn_heading'>
-                                        {jsondata.backToLogin}
+                                        Back to
                                         <span className='gap'>&nbsp;</span>
                                         <Link to="/login">
                                             <span className='sign_up'>{jsondata.login}</span>
