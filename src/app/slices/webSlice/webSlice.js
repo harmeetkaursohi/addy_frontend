@@ -1,13 +1,23 @@
 import {createSlice} from '@reduxjs/toolkit'
-import {addContactUsActions, contactUsFormActions} from "../../actions/contactUsActions/contactUsActions";
+import {addContactUsActions, contactUsFormActions, list} from "../../actions/webActions/webActions";
 
-const contactUsSlice = createSlice({
-    name: 'contactUs',
+const webSlice = createSlice({
+    name: 'webSlice',
     initialState: {
+        listReducer: {loading: false},
         addContactUsReducer: {loading: false},
         contactUsFormReducer: {loading: false},
     },
     extraReducers: {
+        [list.pending]: (state) => {
+            state.listReducer = {loading: true}
+        },
+        [list.fulfilled]: (state, action) => {            
+            state.listReducer = {loading: false, hasNextPage: action.payload.hasNextPage, data: action.payload.dataList}
+        },
+        [list.rejected]: (state) => {
+            state.listReducer = {loading: false}
+        },
         [addContactUsActions.pending]: (state) => {
             state.addContactUsReducer = {loading: true}
         },
@@ -29,5 +39,5 @@ const contactUsSlice = createSlice({
     }
 });
 
-export const {} = contactUsSlice.actions;
-export default contactUsSlice.reducer;
+export const {} = webSlice.actions;
+export default webSlice.reducer;

@@ -6,8 +6,7 @@ import facebookSlice from "../slices/facebookSlice/facebookSlice.js";
 import socialAccountSlice from "../slices/socialAccountSlice/socialAccountSlice.js";
 import postSlice from "../slices/postSlice/postSlice.js";
 import insightSlice from "../slices/insightSlice/insightSlice";
-import contactUsSlice from "../slices/contactUsSlice/contactUsSlice";
-import faqSlice from "../slices/faqSlice/faqSlice";
+import webSlice from "../slices/webSlice/webSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
 import profileSlice from "../slices/profileSlice/profileSlice.js";
 
@@ -17,9 +16,8 @@ const rootReducers = combineReducers({
     facebook: facebookSlice,
     socialAccount: socialAccountSlice,
     post: postSlice,
-    insight: insightSlice,
-    faq: faqSlice,
-    contactUs: contactUsSlice,
+    insight: insightSlice,    
+    web: webSlice,
     userProfile:profileSlice,
     reset: resetReducers
 })
