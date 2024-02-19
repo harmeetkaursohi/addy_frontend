@@ -223,7 +223,7 @@ const EditProfile = () => {
 
                                             <OverlayTrigger
                                                 placement="right"
-                                                overlay={<Tooltip id="button-tooltip" style={{color: "red"}}>
+                                                overlay={<Tooltip id="button-tooltip">
                                                     Currently email field is not editable.
                                                 </Tooltip>}
                                             >
@@ -429,7 +429,7 @@ const EditProfile = () => {
 
                 {/* chanage password */}
 
-                <ChangePassword/>
+                {/* <ChangePassword/> */}
             </section>
         </>
     );
