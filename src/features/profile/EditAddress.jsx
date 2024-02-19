@@ -54,9 +54,6 @@ const handleCountryChange = (event) => {
   });
   return (
     <div className="change_address_outer editprofile_outer">
-      <div className="addy_img">
-        <p className="pt-2">{jsondata.address}</p>
-      </div>
       <div className="login_form">
         <form>
           <div className="form-group">
