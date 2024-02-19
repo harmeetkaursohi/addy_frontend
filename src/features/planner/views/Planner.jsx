@@ -274,7 +274,7 @@ const Planner = () => {
                         <div className='planner_header_outer'>
                             <div className='planner_header'>
                                 <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
-                                <h6>Here you find all the upcoming Posts you scheduled.</h6>
+                                <h6>{isDraftPost ? "All of your saved draft posts are located here." : "Here you find all the upcoming Posts you scheduled."}</h6>
                             </div>
                             <div className='create_post_btn_Wrapper'>
                                 

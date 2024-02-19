@@ -17,7 +17,10 @@ const SocialMediaProviderBadge = ({provider}) => {
     }
 
     return (
-        <div style={{display: "flex", alignItems: "center" ,cursor:"pointer"}}>
+        <div style={{display: "flex", alignItems: "center" ,cursor:"pointer"}} onClick={function(){
+            var checkbox = document.getElementById(provider+"-checkbox")
+            if(checkbox){ checkbox.click() }
+        }}>            
             <i className={`${providerInfo.className}`} style={{color: "#0866ff", fontSize: "24px"}}/>
             <h3 className="cmn_headings ms-1">{getInitialLetterCap(providerInfo.text.toLowerCase())}</h3>
         </div>

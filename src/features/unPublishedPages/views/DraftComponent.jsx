@@ -5,10 +5,11 @@ import {formatDate} from "@fullcalendar/core";
 import CommonSlider from "../../common/components/CommonSlider";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {getAllSocialMediaPostsByCriteria, publishedPostAction} from "../../../app/actions/postActions/postActions";
+import {deletePostByBatchIdAction, getAllSocialMediaPostsByCriteria, publishedPostAction} from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {getToken} from "../../../app/auth/auth";
 import {useState} from "react";
+import Swal from 'sweetalert2';
 
 
 const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference="",resetData=null}) => {
@@ -41,6 +42,41 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
 
     }
 
+    const handleDeletePost = (e) => {
+        e.preventDefault();
+        Swal.fire({
+            icon: 'warning',
+            title: `Delete Post`,
+            text: `Are you sure you want to delete this draft post?`,
+            showCancelButton: true,
+            confirmButtonText: 'Delete',
+            cancelButtonText: 'Cancel',
+            confirmButtonColor: "#F07C33",
+            cancelButtonColor: "#E6E9EC",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (e?.target?.id !== null) {
+                    setBatchToDelete(e?.target?.id);
+                    dispatch(deletePostByBatchIdAction({postId: e?.target?.id, token: token}))
+                        .then((response) => {
+                            if (response.meta.requestStatus === "fulfilled") {
+                                setBatchToDelete(null);
+                                showSuccessToast("Post has been deleted successfully");
+                                dispatch(getAllSocialMediaPostsByCriteria({
+                                    token: token,
+                                    query: {limit: 5, postStatus: ["SCHEDULED"]}
+                                }));
+                            }
+                        }).catch((error) => {
+                        setBatchToDelete(null);
+                        showErrorToast(error.response.data.message);
+                    });
+                }
+            }
+        });
+
+
+    }
 
     return (<>
 
@@ -107,6 +143,15 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                     />
                     <GenericButtonWithLoader className={"outline_btn schedule_btn loading"} label={"Schedule Post"}
                                              onClick={() => navigate("/post/" + batchIdData?.id)} isDisabled={false}/>
+
+                    <GenericButtonWithLoader className={"outline_btn schedule_btn loading"}
+                            label={"Delete Post"}
+                            isLoading={batchIdData?.id===batchToDelete && publishedPostData?.loading}
+                            onClick={handleDeletePost}
+                            id={batchIdData?.id}
+                            contentText={"Deleting..."}
+                            isDisabled={false}
+                    />
                 </div>
 
             </div>

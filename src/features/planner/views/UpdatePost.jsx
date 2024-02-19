@@ -467,7 +467,7 @@ const UpdatePost = () => {
                                                                                         <>
                                                                                             <input type="checkbox"
                                                                                                    className=""
-                                                                                                   id="choice1-1"
+                                                                                                   id={socialAccount.provider+"-checkbox"}
                                                                                                    name="choice1"
                                                                                                    checked={selectedGroups.includes(socialAccount?.provider)}
                                                                                                    onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}

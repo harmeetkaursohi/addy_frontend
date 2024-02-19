@@ -4,7 +4,7 @@ import default_user_icon from "../../../images/default_user_icon.svg"
 import CommonSlider from "./CommonSlider";
 import { FaRegCommentDots  } from "react-icons/fa";
 import { BiRepost } from "react-icons/bi";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { IoIosSend, IoMdArrowDropdown } from "react-icons/io";
 import nature from "../../../images/nature.png"
 import "./common.css"
 const LinkedinFeedpreview = ({
@@ -43,7 +43,7 @@ console.log(pageName,"pageName")
                         {/*<img src={noImageAvailable} width="100%"/>*/}
                         <div className=' linkedin_post_likes'>
                         <div className="linkedin_dropdown">
-                            <img src={nature} height="30px" width="30px"/>
+                            <img src={userData?.profilePic?userData?.profilePic:default_user_icon} height="30px" width="30px"/>
                         <IoMdArrowDropdown />
                     </div>
                     <div className="linkedin_likes">
@@ -55,8 +55,12 @@ console.log(pageName,"pageName")
                         <h3 className="cmn_text_style">Comment</h3>
                     </div>
                     <div className="linkedin_likes">
-                    <BiRepost className="repost__icon"/>
-                        <h3 className="cmn_text_style">Share</h3>
+                        <BiRepost className="repost__icon"/>
+                        <h3 className="cmn_text_style">Repost</h3>
+                    </div>
+                    <div className="linkedin_likes">                        
+                        <IoIosSend size={20}/>
+                        <h3 className="cmn_text_style">Send</h3>
                     </div>
                 </div>
 

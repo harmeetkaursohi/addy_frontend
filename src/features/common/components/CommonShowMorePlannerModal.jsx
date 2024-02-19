@@ -64,7 +64,13 @@ const CommonShowMorePlannerModal = ({
         e.preventDefault();
         setCommonShowMorePlannerModal(false);
     }
-
+    function extractNumbers(inputString) {
+        // Use a regular expression to find all sequences of digits
+        const numbers = inputString.match(/\d+/g);
+    
+        // Convert the matched substrings to numbers
+        return numbers ? numbers.map(Number) : [];
+    }
     return (
         <>
             <div className='generate_ai_img_container '>
@@ -110,12 +116,10 @@ const CommonShowMorePlannerModal = ({
                                                                     <div className="d-flex page_tags">
                                                                         {plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
                                                                             plannerPost?.postPages.map((curPage, index) => {
+                                                                                console.log("curPage",curPage)
                                                                                 return (
                                                                                     <div
-                                                                                        className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}
-                                                                                        onClick={() => {
-                                                                                            redirectToURL(`https://www.facebook.com/${curPage?.id}`)
-                                                                                        }}
+                                                                                        className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}                                                                                        
                                                                                         key={index}
                                                                                     >
                                                                                         <div
