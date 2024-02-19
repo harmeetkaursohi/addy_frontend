@@ -1,0 +1,78 @@
+.editprofile_outer {
+    padding: 20px;
+    width: 60%;
+    margin: auto;
+    height: 100%;
+
+}
+.user_pic{
+    height: 140px;
+    width: 140px;
+    border-radius: 50%;
+}
+
+.edit_content{
+    flex-grow: 1;
+}
+ul.mb-3.edit_tabs.nav.nav-tabs {
+     border-bottom: unset;
+    margin-left: 20px;
+ 
+}
+.edit_profile_heading{
+   font-weight: 600;
+    border-bottom: 1px solid #dddbdb;
+    padding: 20px
+}
+.edit_tabs.nav-link:focus, .nav-link:hover {
+    color: #e97011 !important;
+ 
+ 
+}
+.astrick{
+    color: red;
+}
+.edit_tabs.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+border-color: unset !important;
+isolation: unset !important;
+}
+.edit_tabs .nav-link{
+    color:#e97011 !important;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: unset !important;
+}
+.btn_style{
+    border: none;
+    color: white;
+    padding: 8px 28px;
+    margin-top: 20px;
+}
+.change_profile{
+    display: none;
+}
+.changeProfile_label{
+    cursor: pointer;
+}
+.change_profile_outer {
+    text-align: center;
+}
+.ImSpinner_icon{
+    font-size: 20px;
+}
+@media screen and (min-width:1600px) {
+    .editprofile_outer{
+        width: 35%;
+    }
+}
+@media screen and (max-width:1024px) {
+    .editprofile_outer{
+        width: 70%;
+    }
+}
+
+@media screen and (max-width:991px) {
+    .editprofile_outer{
+        width: 100%;
+    }
+}

@@ -11,12 +11,15 @@
     "contact": "Contact Us"
   },
   "createPassword": {
-    "createPassword": "Create Password"
+    "createPassword": "Create Password",
+    "confirmnewpass":"Confirm New Password",
+    "newpass":" New Password"
   },
   "forgotPassword": {
     "forgotPassword": "Forgot Password"
   },
   "post": "Post",
+  "currentpassword":"Current Password",
   "action": "Action",
   "socialmedia": "Social Media",
   "likes": "Likes",
@@ -27,6 +30,7 @@
   "addbutton": "Add button",
   "cancel": "Cancel",
   "reset": "Reset",
+  "changepassword": "Change Password",
   "loginwithfb": "Login with Facebook",
   "loginwithgoogle": "Login with Google",
   "publishnow": "Publish Now",
