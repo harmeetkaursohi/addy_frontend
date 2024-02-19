@@ -5,8 +5,6 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import jsondata from "../../locales/data/initialdata.json";
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
-import EditAddress from "./editAddress";
-import ChangePassword from "./ChangePassword";
 import {useDispatch, useSelector} from "react-redux";
 import {decodeJwtToken, getToken} from "../../app/auth/auth";
 import {useFormik} from "formik";
