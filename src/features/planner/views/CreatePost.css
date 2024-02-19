@@ -1,7 +1,7 @@
 .select_platform_outer {
     display: flex;
     gap: 10px;
-    padding: 20px 28px 8px;
+    padding: 15px 28px;
     align-items: center;
 }
 

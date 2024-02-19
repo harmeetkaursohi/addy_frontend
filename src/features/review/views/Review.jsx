@@ -6,7 +6,7 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import usePosts from "../../common/hooks/usePosts";
 import {computeImageURL, createOptionListForSelectTag, getInitialLetterCap} from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
-import noImageAvailable from "../../../images/no_img_posted.png"
+import noImageAvailable from "../../../images/no_img_posted.png";
 import CommonLoader from "../../common/components/CommonLoader";
 import {FaArrowCircleRight} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
@@ -16,7 +16,6 @@ import notConnected_img from "../../../images/not_connected_img.svg"
 import {RotatingLines} from "react-loader-spinner";
 import {useNavigate} from "react-router-dom";
 import Select from "react-select";
-
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: -1, socialMediaType: null});

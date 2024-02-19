@@ -99,7 +99,7 @@ const CommonModal = ({
                                                     <button
                                                         disabled={facebookPageConnectData?.loading}
                                                         // className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : (currentConnectedPages.length > 0 ? 'disabled-button' : 'default-button')}`}
-                                                        className={`cmn_connect_btn connect_btn connect_btn default-button ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : ''}`}
+                                                        className={`cmn_connect_btn connect_btn connect_btn cmn_btn_color ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : ''}`}
                                                         onClick={(e) => {
                                                             !facebookPageConnectData?.loading && setMediaPageData(data);
                                                             !facebookPageConnectData?.loading && setShowConfirmModal(true);

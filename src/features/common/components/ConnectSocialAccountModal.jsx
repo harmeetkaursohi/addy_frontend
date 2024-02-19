@@ -3,7 +3,7 @@ import not_connected from "../../../images/not_connected_img.svg"
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-
+import './common.css'
 const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
     const navigate = useNavigate();
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
@@ -21,14 +21,15 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                     <Modal.Header closeButton>
                         <Modal.Title className="commonmodal_header">
                             <div className='facebook_title'>
+                         
                                 {
                                     (getAllConnectedSocialAccountData?.data === undefined || getAllConnectedSocialAccountData?.data?.length === 0) ?
-                                        <h1 className='cmn_text_style connection-warning-text'>Account Not
+                                        <h1 className='cmn_text_style not_connect_heading'>Account Not
                                             Connected</h1> :
                                         <>
                                             {
                                                 connectedPagesData?.facebookConnectedPages !== undefined && connectedPagesData?.facebookConnectedPages?.length === 0 ?
-                                                    <h1 className='cmn_text_style connection-warning-text'>Page Not
+                                                    <h1 className='cmn_text_style not_connect_heading'>Page Not
                                                         Connected</h1> : <></>
                                             }
                                         </>

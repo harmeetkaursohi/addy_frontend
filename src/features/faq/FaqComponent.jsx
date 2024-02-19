@@ -31,19 +31,22 @@ const FaqComponent = () => {
         <>
             <SideBar/>
             <div className="cmn_container faq_section pt-5">
-                <div className="cmn_wrapper_outer">
+           
                     <div className="dashboard_outer">
                         <div className="faq_wrapper">
                             <h2>Frequently Asked Questions Hello, how can we help you ?</h2>
-                            <p>Check out some of these frequently asked questions about the AddyAds.</p>
+                            <p className="pt-2">Check out some of these frequently asked questions about the AddyAds.</p>
                             <form method="post" onSubmit={function(e){ e.preventDefault();
                                 setPage(1); setSearch(document.getElementById("searchText").value);
                                 return false; }}>
                                 <div className="faq_searchbar">
                                     <input type="text" placeholder="Search..." id="searchText" className="search-faqs-input" />
+                                    <div className="submit_Button_Wrapper">
                                     <button type="submit" className={"cmn_btn_color"}  disabled={faqList.loading || searchLoading}  style={{opacity:(faqList.loading || searchLoading) ?  "0.6" :"1.0"}}>
                                         {(faqList.loading || searchLoading) ? (<span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"/>) : 'Submit' }
                                     </button>                                
+
+                                    </div>
                                 </div>
                             </form>
                             <div className="accordian_wrapper">
@@ -64,7 +67,7 @@ const FaqComponent = () => {
                             </div>                            
                         </div>
                     </div>
-                </div>
+                
             </div>
         </>
     )

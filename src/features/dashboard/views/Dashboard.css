@@ -109,7 +109,7 @@ button#dropdown-basic {
     color: #5F6D7E;
     color: #5F6D7E;
     font-family: Nunito;
-    font-size: 20px;
+    font-size: 17px;
     font-style: normal;
     font-weight: 700;
     line-height: 20px;
@@ -475,6 +475,9 @@ img.connection-error-svg {
 .upcomingPostBtn_Outer button{
     flex-grow: 1;
 }
+.No_Upcoming_Outer img{
+    width: 400px;
+}
 @media screen and (min-width:2560px){
     .followers_outer {
         gap: 40px;
@@ -553,6 +556,9 @@ img.connection-error-svg {
 @media screen and (max-width: 767px) {
     .monthly_growth {
         display: block;
+    }
+    .followers_wrapper  h5{
+        font-size: 14px;
     }
     button#dropdown-basic{
         font-size: 13px;

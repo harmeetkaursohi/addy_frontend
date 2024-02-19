@@ -32,7 +32,7 @@ export const ParentDraftComponent = ({setDraftPost,reference="",resetData=null})
 
             {!getAllDraftPostsByCustomerAndPeriodData.loading   && drafts && Array.isArray(drafts) && drafts.length===0 &&
                 <div className="noDraftPosts_outer p-5 text-center mt-3">
-                    <img src={noDraftPosts} alt={"No Drafts"} className="img-fluid no-draft-img"/>
+                    <img src={noDraftPosts} alt={"No Drafts"} className=" no-draft-img"/>
                     <h2 className="acc_not_connected_heading">No Account is connected Yet! Click  Create Post to connect an account.</h2>
                 </div>
             }

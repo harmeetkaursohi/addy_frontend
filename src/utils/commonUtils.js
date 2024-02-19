@@ -59,6 +59,7 @@ export const validationSchemas = {
         email_address: yup.string().required('Email address is required').email('Invalid email address format'),
         phone_number: yup.string().required('Phone Number is required'),
         message: yup.string().required('Message is required'),
+        "g-recaptcha-response": yup.string().required("Please check on the reCAPTCHA box."),
     }),
 
 };

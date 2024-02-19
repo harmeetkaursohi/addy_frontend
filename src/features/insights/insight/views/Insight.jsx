@@ -30,6 +30,7 @@ import {
 import {RotatingLines} from "react-loader-spinner";
 import {Country} from 'country-state-city';
 import {LinkedInIndustryAudienceChart, LinkedInStaffCountRangeChart} from "../../LinkedInCharts";
+import Loader from "../../../loader/Loader";
 
 
 const Insight = () => {
@@ -452,11 +453,11 @@ const Insight = () => {
                                         <i className={`fa-brands fa-facebook me-3 `}
                                            style={{color: "#0866ff", fontSize: "20px"}}/>
 
-                                        Facebook
+                                        Facebook {(!connectedFacebookPages?.length && getAllByCustomerIdData?.loading) ? <Loader className="social-account-loader"/> : (<></>)}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item>
-                                                {!connectedFacebookPages?.length && <h3 className="noPageHeading">No Page is Connected yet</h3>}
+                                            {(!connectedFacebookPages?.length && !getAllByCustomerIdData?.loading) ? <h3 className="noPageHeading">No Page is Connected yet</h3> : (<></>)}
                                             <ul className="Social_media_wrapper">
                                                 {
                                                     connectedFacebookPages?.map((page, index) => {
@@ -487,11 +488,12 @@ const Insight = () => {
                                     >
                                         <img src={instagram_img} className="me-3  "
                                              style={{height: "18px", width: "18px"}}/>
-                                        Instagram
+                                        Instagram {(!connectedInstagramPages?.length && getAllByCustomerIdData?.loading) ? <Loader className="social-account-loader"/> : (<></>)}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item>
-                                                {!connectedInstagramPages?.length && <h3 className="noPageHeading">No Page is Connected yet</h3>}
+                                                
+                                                {(!connectedInstagramPages?.length && !getAllByCustomerIdData?.loading) ? <h3 className="noPageHeading">No Page is Connected yet</h3> : (<></>)}
                                             <ul className="Social_media_wrapper">
                                                 {
                                                     connectedInstagramPages?.map((page, index) => {
@@ -522,13 +524,13 @@ const Insight = () => {
                                         <i className={`fa-brands fa-pinterest me-3 `}
                                            style={{color: "#e60023", fontSize: "20px"}}/>
 
-                                        Pinterest
+                                        Pinterest {(!connectedPinterestBoards?.length && getAllByCustomerIdData?.loading) ? <Loader className="social-account-loader"/> : (<></>)}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
 
 
                                         <Dropdown.Item>
-                                                {!connectedPinterestBoards?.length && <h3 className="noPageHeading">No Page is Connected yet</h3>}
+                                                {(!connectedPinterestBoards?.length && !getAllByCustomerIdData?.loading) ? <h3 className="noPageHeading">No Page is Connected yet</h3> : (<></>)}
                                             <ul className="Social_media_wrapper">
                                                 {
                                                     connectedPinterestBoards?.map((board, index) => {
@@ -558,11 +560,11 @@ const Insight = () => {
                                         className="instagram_dropdown"
                                     >
                                         <img src={linkedin_img} className="me-3  "/>
-                                        Linkedin
+                                        Linkedin {(!connectedLinkedinPages?.length && getAllByCustomerIdData?.loading) ? <Loader className="social-account-loader"/> : (<></>)}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-                                        <Dropdown.Item>
-                                                {!connectedLinkedinPages?.length && <h3 className="noPageHeading">No Page is Connected yet</h3>}
+                                        <Dropdown.Item>                                                
+                                                {(!connectedLinkedinPages?.length && !getAllByCustomerIdData?.loading) ? <h3 className="noPageHeading">No Page is Connected yet</h3> : (<></>)}                                                
                                             <ul className="Social_media_wrapper">
                                                 {
                                                     connectedLinkedinPages?.map((page, index) => {
