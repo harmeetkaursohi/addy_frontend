@@ -4,18 +4,28 @@
     justify-content: space-between;
 }
 .linkedin_dropdown {
-    background: #f4f1f1;
-    padding: 10px;
-    border-radius: 5px;
+    /* background: #f4f1f1; */
+    padding: 10px 0px;
+    /* border-radius: 5px; */
+}
+.FaLinkedin_icon{
+    color: #0866ff;
+     
+   }
+   .linkedin_dropdown svg{
+    color: gray;
+}
+.linkedin_likes h3{
+    font-size: 16px;
+    color: #939090;
 }
 .linkedin_likes{
     display: flex;
     gap: 10px;
     align-items: center;
+    color: #939090;
 }
-.linkedin_likes h3{
-    font-size: 16px;
-}
+
 .update-password-btn {
     margin-right: 5px;
 }
