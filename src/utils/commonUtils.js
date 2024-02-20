@@ -27,6 +27,22 @@ export const validationSchemas = {
         email: yup.string().required('Email is required').email('Invalid email format'),
     }),
 
+    updatePassword: yup.object().shape({
+        oldPassword: yup.string().required('Old password is required'),
+        newPassword: yup.string()
+            .required('Password is required')
+            .matches(/^(?=.*[0-9])/, 'Password must contain at least one digit (0-9)')
+            .matches(/^(?=.*[a-z])/, 'Password must contain at least one lowercase letter (a-z)')
+            .matches(/^(?=.*[A-Z])/, 'Password must contain at least one uppercase letter (A-Z)')
+            .matches(/^(?=.*[@#$%^&+=])/, 'Password must contain at least one special character (@#$%^&+=)')
+            .matches(/^(?=\S+$)/, 'Password cannot contain whitespace')
+            .matches(/.{8,}$/, 'Password must be at least 8 characters long'),
+        confirmPassword: yup.string()
+            .oneOf([yup.ref('newPassword'), null], 'Passwords must match')
+            .required('Confirm Password is required'),
+
+    }),
+
     createPassword: yup.object().shape({
         password: yup.string()
             .required('Password is required')
@@ -65,14 +81,16 @@ export const validationSchemas = {
     editProfileInfo:yup.object().shape({
         firstName: yup.string().required('First Name is required'),
         lastName: yup.string().required('Last Name is required'),
-        username: yup.string().required('Last Name is required'),
-        contactNo: yup.string().required('Contact Number is required'),
-        addressLine1: yup.string().required('addressLine1 is required'),
-        country: yup.string().required('country is required'),
-        state:yup.string().required('stateis required'),
-        county: yup.string().required('county is required'),
-    
-     
+    }),
+
+    editProfileInfoWithAddressRequired:yup.object().shape({
+        firstName: yup.string().required('First Name is required'),
+        lastName: yup.string().required('Last Name is required'),
+        username: yup.string().required('Username is required'),
+        addressLine1: yup.string().required('Address is required'),
+        country: yup.string().required('Country is required'),
+        state:yup.string().required('State is  required'),
+        county: yup.string().required('County is required'),
     }),
 
 };

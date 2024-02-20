@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 import {addContactUsActions, contactUsFormActions, list} from "../../actions/webActions/webActions";
 
 const webSlice = createSlice({
-    name: 'webSlice',
+    name: 'web',
     initialState: {
         listReducer: {loading: false},
         addContactUsReducer: {loading: false},
