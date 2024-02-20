@@ -3,14 +3,16 @@ import {
     loginUser,
     createPassword,
     signUpUser,
-    forgotPassword,
-    getUserInfo,updateProfilePic
+    forgotPassword,updateCustomer,
+    getUserInfo,updateProfilePic,updatePassword
 } from "../../actions/userActions/userActions.js";
 
 const userSlice = createSlice({
         name: 'user',
         initialState: {
             loginUserReducer: {loading: false},
+            updateCustomerReducer: {loading: false},
+            updatePasswordReducer: {loading: false},
             updateProfilePicReducer: {loading: false},
             signUpReducer: {loading: false},
             createPasswordReducer: {loading: false},
@@ -85,6 +87,28 @@ const userSlice = createSlice({
             },
             [updateProfilePic.rejected]: (state) => {
                 state.updateProfilePicReducer = {loading: false}
+            },
+
+            // Update Password
+            [updatePassword.pending]: (state) => {
+                state.updatePasswordReducer = {loading: true};
+            },
+            [updatePassword.fulfilled]: (state, action) => {
+                state.updatePasswordReducer = {loading: false}
+            },
+            [updatePassword.rejected]: (state) => {
+                state.updatePasswordReducer = {loading: false}
+            },
+
+            // Update Customer
+            [updateCustomer.pending]: (state) => {
+                state.updateCustomerReducer = {loading: true};
+            },
+            [updateCustomer.fulfilled]: (state, action) => {
+                state.updateCustomerReducer = {loading: false, data: action.payload}
+            },
+            [updateCustomer.rejected]: (state) => {
+                state.updateCustomerReducer = {loading: false}
             },
         }
     });

@@ -46,7 +46,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                 addressLine2: values.addressLine2,
                 country: values.country,
                 state: values.state,
-                county: values.country,
+                county: values.county,
                 city: values.city,
                 pinCode: values.pinCode
             }
@@ -92,9 +92,6 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
     // handle previous tab
     const handlePreviousTab = (e) => {
         e.preventDefault();
-        // setFormData((prevState) => {
-        //     return {...prevState, formData}
-        // });
         setFormData({...formData,address:formik.values})
         setShowTab((prev) => prev - 1);
     }
@@ -102,7 +99,9 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
     const handleCountryChange = (event) => {
         const selectedCountry = event.target.value;
         formik.setFieldValue('country', selectedCountry);
+        formik.setFieldValue('city', "");
         const country = Country.getAllCountries().find(state => state.name === selectedCountry);
+        setCities([]);
         setStates(State.getStatesOfCountry(country.isoCode));
     };
 
@@ -110,6 +109,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
     const handleStateChange = (event) => {
         const selectedState = event.target.value;
         formik.setFieldValue('state', selectedState);
+        formik.setFieldValue('city', "");
         const state = State.getAllStates().find(state => state.name === selectedState);
         const cities = City.getCitiesOfState(state.countryCode, state.isoCode);
         setCities(cities);
@@ -177,7 +177,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                 <select
                                                     id="country"
                                                     name="country"
-                                                    onChange={handleCountryChange} // Use the custom onChange handler
+                                                    onChange={handleCountryChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.country}
                                                     className="form-control mt-1"
@@ -230,22 +230,16 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                 {/** Start City Fields */}
                                                 <div className='col-lg-6'>
                                                     <div className='form-group'>
-                                                        <label htmlFor="city">City</label>
-                                                        <select
-                                                            id="city"
-                                                            name="city"
-                                                            onChange={formik.handleChange}
-                                                            onBlur={formik.handleBlur}
-                                                            value={formik.values.city}
-                                                            className="form-control mt-1"
-                                                        >
-                                                            <option value="">Select City</option>
-                                                            {cities?.map((city, index) => (
-                                                                <option key={index} value={city.isoCode}>
-                                                                    {city.name}
-                                                                </option>
-                                                            ))}
-                                                        </select>
+                                                        <label>City  </label>
+                                                        <input onChange={formik.handleChange}
+                                                               onBlur={formik.handleBlur}
+                                                               value={formik.values.city} name="city" id="city"
+                                                               className="form-control mt-1" type='text'
+                                                               placeholder={"City"}/>
+                                                        {formik.touched.city && formik.errors.city ? (
+                                                            <p className="error_message">{formik.errors.city}</p>
+                                                        ) : null}
+
                                                     </div>
                                                 </div>
                                                 {/** End City Fields */}

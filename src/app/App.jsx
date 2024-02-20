@@ -32,7 +32,7 @@ import {ParentDraftComponent} from "../features/unPublishedPages/views/ParentDra
 import Draft from "../features/unPublishedPages/Draft";
 // import Insight from "../features/insights/insight/views/Insight";
 import Insight from "../features/insights/insight/views/Insight";
-import EditProfile from '../features/profile/EditProfile.jsx'
+import Profile from '../features/profile/Profile.jsx'
 
 const App = () => {
     const PrivateRoute = () => {
@@ -64,7 +64,7 @@ const App = () => {
                         <Route path="/faq" element={<FaqComponent/>}/>
                         <Route path="/privacy" element={<PrivacyComponent/>}/>
                         <Route path="/contact" element={<ContactUs/>}/>
-                        <Route path="/editProfile" element={<EditProfile/>}/>
+                        <Route path="/profile" element={<Profile/>}/>
                     </Route>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/" element={<Login/>}/>

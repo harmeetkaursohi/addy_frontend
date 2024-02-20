@@ -6,6 +6,7 @@ import { FaRegCommentDots  } from "react-icons/fa";
 import { BiRepost } from "react-icons/bi";
 import { IoIosSend, IoMdArrowDropdown } from "react-icons/io";
 import nature from "../../../images/nature.png"
+import {FaLinkedin} from "react-icons/fa"
 import "./common.css"
 const LinkedinFeedpreview = ({
                                   previewTitle,
@@ -19,7 +20,7 @@ const LinkedinFeedpreview = ({
                                   hashTag,
                                   destinationUrl = null
                               }) => {
-console.log(pageName,"pageName")
+
     return (
         <>
             <h2 className={"cmn_white_text feed_preview facebookFeedpreview_text"}>{previewTitle}</h2>
@@ -28,7 +29,7 @@ console.log(pageName,"pageName")
                 <div className='user_profile_info'>
                 <img style={{background:"white"}} src={userData?.profilePic?userData?.profilePic:default_user_icon} height="30px" width="30px"/>
                     <div>
-                        <h3 className='create_post_text user_name boost_post_text'>{pageName}</h3>
+                        <h3 className='create_post_text user_name boost_post_text'>{pageName} <FaLinkedin className="FaLinkedin_icon"/></h3>
                         <h6 className='status create_post_text'>just now
                             <img src={ellipse_img}/>
                         </h6>
@@ -48,7 +49,7 @@ console.log(pageName,"pageName")
                     </div>
                     <div className="linkedin_likes">
                         <FiThumbsUp/>
-                        <h3 className="cmn_text_style">Likes</h3>
+                        <h3 className="cmn_text_style">Like</h3>
                     </div>
                     <div className="linkedin_likes">
                     <FaRegCommentDots />

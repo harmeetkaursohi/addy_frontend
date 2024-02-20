@@ -65,3 +65,21 @@ export const updateProfilePic = createAsyncThunk('user/updateProfilePic', async 
         return thunkAPI.rejectWithValue(error.response);
     });
 });
+
+export const updatePassword = createAsyncThunk('user/updatePassword', async (data, thunkAPI) => {
+    return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/auth/password`, data?.data,setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});
+
+export const updateCustomer = createAsyncThunk('user/updateCustomer', async (data, thunkAPI) => {
+    return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/customers`, data?.data,setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});
