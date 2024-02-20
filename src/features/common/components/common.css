@@ -16,6 +16,12 @@
 .linkedin_likes h3{
     font-size: 16px;
 }
+.update-password-btn {
+    margin-right: 5px;
+}
+.close-update-password-btn {
+    margin-left: 5px ;
+}
 .repost__icon{
     font-size: 22px;
 }
@@ -30,6 +36,13 @@
     padding: 0px 10px;
     justify-content: space-between;
     
+}
+.toggle-pswd-visibility-hide {
+    top: 42px !important;
+}
+.toggle-pswd-visibility-show {
+    right: 13px !important;
+    top: 42px !important;
 }
 .multiselect_dropdown {
     min-width: 185px;
@@ -62,4 +75,17 @@
     align-items: center;
     }
     
+}
+@media screen and (max-width:300px) {
+    .update-password-btn-outer {
+        display: flex;
+        flex-direction: column;
+    }
+    .update-password-btn {
+        margin-bottom: 10px;
+    }
+    .close-update-password-btn {
+        margin-left: 0px ;
+    }
+
 }

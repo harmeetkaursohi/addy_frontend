@@ -74,12 +74,12 @@ const SocialAccounts = ({}) => {
     const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
 
 
-    useEffect(() => {
-        if (token) {
-            const decodeJwt = decodeJwtToken(token);
-            dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
-        }
-    }, [token])
+    // useEffect(() => {
+    //     if (token) {
+    //         const decodeJwt = decodeJwtToken(token);
+    //         dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
+    //     }
+    // }, [token])
 
 
     useEffect(() => {
@@ -91,7 +91,7 @@ const SocialAccounts = ({}) => {
                 accessToken: faceBookSocialAccount?.accessToken
             })).then((res) => {
                 const decodeJwt = decodeJwtToken(token);
-                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+                // dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             })
         }
 
@@ -103,7 +103,7 @@ const SocialAccounts = ({}) => {
                 accessToken: instagramSocialAccount?.accessToken
             })).then((res) => {
                 const decodeJwt = decodeJwtToken(token);
-                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+                // dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             })
         }
 
@@ -118,7 +118,7 @@ const SocialAccounts = ({}) => {
                  socialMediaAccountId:pinterestSocialAccount?.id
             })).then((res) => {
             const decodeJwt = decodeJwtToken(token);
-            dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+            // dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             })
         }
     }, [getAllConnectedSocialAccountData]);
@@ -132,7 +132,7 @@ const SocialAccounts = ({}) => {
                 state: "APPROVED"
             })).then((res) => {
                 const decodeJwt = decodeJwtToken(token);
-                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
+                // dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             })
         }
     }, [getAllConnectedSocialAccountData]);

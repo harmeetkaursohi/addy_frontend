@@ -53,8 +53,8 @@ export const SidebarMenuItems = [
         "icon": <BsTelephone />
     },
     {
-        "name": "Edit Profile",
-        "path": "/editProfile",
+        "name": "Profile",
+        "path": "/profile",
         "icon": <FaUserEdit /> 
     },
     

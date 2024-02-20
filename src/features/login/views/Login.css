@@ -237,7 +237,11 @@
         height: 300px;
     }
 }
-
+@media screen and (max-width:991px){
+    .addy_container {
+        margin: 0px 0px 30px;
+    }
+}
 @media screen and (max-width: 767px) {
     .addy_img h2 {
         font-size: 25px;

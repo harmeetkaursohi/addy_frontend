@@ -16,6 +16,9 @@
     right: 47%;
     top: 50px;
 }
+.change_password_btn{
+    flex-direction: row-reverse;
+}
 .user_pic_container{
     position: relative;
 }
@@ -30,12 +33,21 @@ ul.mb-3.edit_tabs.nav.nav-tabs {
 .edit_profile_heading{
    font-weight: 600;
     border-bottom: 1px solid #dddbdb;
-    padding: 20px
+    padding: 20px;
+    color: #2e3646;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 38px;
+    letter-spacing: -0.28px;
+}
+label.changeProfile_label.updateAccount_label {
+    background: #f07c33;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 7px;
 }
 .edit_tabs.nav-link:focus, .nav-link:hover {
     color: #e97011 !important;
- 
- 
 }
 .astrick{
     color: red;

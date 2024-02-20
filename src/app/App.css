@@ -291,7 +291,11 @@ div#swal2-html-container {
     width: 100%;
     max-width: 450px;
     margin: auto;
+   
   }
+  .login_outer.bg_white_cream {
+    padding: 20px;
+}
 }
 @media screen and (max-width:991px) {
   h2.acc_not_connected_heading {

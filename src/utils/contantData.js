@@ -32,6 +32,7 @@ export const UpdateCommentFailedMsg="Update Fail: User can only edit comments ma
 export const SomethingWentWrong="Something went wrong!"
 export const NoBusinessAccountFound="No business account found for {0} to connect!"
 export const CouldNotPostComment="Could not post comment!"
+export const UpdatedSuccessfully="{0} updated successfully"
 
 export const Industries = Object.freeze({
     ACCOUNTING: 'Accounting',

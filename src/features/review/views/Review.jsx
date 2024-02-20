@@ -109,7 +109,7 @@ const Review = () => {
         if (post) intObserver.current.observe(post)
     }, [isLoading, hasNextPage]);
 
-
+    
     return (
         <>
             <section>
@@ -120,7 +120,7 @@ const Review = () => {
                             <div className="review_header align-items-center gap-3">
                                 <div className="review_heading flex-grow-1">
                                     <h2 className="cmn_text_heading">{jsondata.likecomment}</h2>
-                                    <h6 className="cmn_small_heading white-space-nowrap">Here you find all the Posts you
+                                    <h6 className="cmn_small_heading ">Here you find all the Posts you
                                         have
                                         posted.</h6>
                                 </div>
@@ -162,6 +162,7 @@ const Review = () => {
                                 />
                             </div>
                             {
+                           
                                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
                                     <CommonLoader></CommonLoader> :
                                     getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0 &&
@@ -200,7 +201,7 @@ const Review = () => {
 
                                                         </tr> :
                                                         results?.map((post, index) => (
-
+                                                         
                                                             <tr
                                                                 key={index}
                                                                 ref={index === results?.length - 1 ? lastPostRef : null}
@@ -254,6 +255,7 @@ const Review = () => {
                                         {
                                             isLoading &&
                                             <div className="d-flex justify-content-center mt-4">
+                                             
                                                 <RotatingLines
                                                     strokeColor="#F07C33"
                                                     strokeWidth="5"
