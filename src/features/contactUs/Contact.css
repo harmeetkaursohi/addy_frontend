@@ -28,7 +28,7 @@ h2.cmn_title {
     padding: 0px 3em;
 }
 
-.contact_content h3 {}
+
 
 .contact_content h3 {
     font-size: 26px;
@@ -68,7 +68,7 @@ h2.cmn_title {
 
 @media screen and (min-width:2560px){
 div.Contact_us_Outer {
-        width: 33%;
+        width: 38%;
         margin: auto;
     }
 }
@@ -107,4 +107,7 @@ div.Contact_us_Outer {
         font-size: 15px;
         padding: 8px;
     }
+
+
 }
+

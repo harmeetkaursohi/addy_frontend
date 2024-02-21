@@ -25,6 +25,9 @@ div.faq_section{
     font-weight: 500;
 
 }
+.accordian_wrapper .accordion-item:last-child {
+    margin-bottom: 0px;
+}
 .accordian_wrapper .accordion-button:focus{
     border: unset;
     box-shadow: unset;
@@ -86,7 +89,7 @@ background-color: #fff;
     border-radius: 10px;
     font-size: 16px;
     font-weight: 500;
-    margin-top: 12px;
+    margin-top: 40px;
 }
 .faq_searchbar {
     border-radius: 60px;
@@ -137,10 +140,13 @@ background-color: #fff;
 
  @media screen and (max-width:991px) {
     .accordian_wrapper {
-        padding: 30px 30px 10px;
+        padding: 30px;
     }
     .faq_wrapper h2 {
         font-size: 18px;
+    }
+    .load-more-faqs-btn{
+        margin-top: 20px;
     }
     .faq_searchbar .cmn_btn_color {
         width: 120px;
@@ -156,6 +162,9 @@ background-color: #fff;
     }
     .faq_searchbar {
         margin-bottom: 28px;
+    }
+    .accordian_wrapper .accordion-item:last-child {
+        margin-bottom: unset;
     }
  }
   @media screen and (max-width:767px) {
@@ -173,12 +182,13 @@ background-color: #fff;
         font-size: 12px;
         line-height: 20px;
     }
+    
     .accordian_wrapper .accordion-button {
         font-size: 12px;
        
     }
     .accordian_wrapper {
-        padding: 17px 17px 1px;
+        padding: 17px;
     }
     .accordian_wrapper .accordion-button::after {
         width: 24.43px;

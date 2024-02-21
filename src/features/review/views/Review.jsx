@@ -254,7 +254,7 @@ const Review = () => {
                                         </div>
                                         {
                                             isLoading &&
-                                            <div className="d-flex justify-content-center mt-4">
+                                            <div className="d-flex justify-content-center RotatingLines-loader mt-4">
                                              
                                                 <RotatingLines
                                                     strokeColor="#F07C33"

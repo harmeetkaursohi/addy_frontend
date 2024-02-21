@@ -14,8 +14,8 @@ import { useNavigate } from 'react-router'
 import Loader from "../loader/Loader";
 
 const ContactUs = () => {
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const navigate = useNavigate()
-
   const dispatch = useDispatch();
   const contactUsFormReducer = useSelector((state) => state.web.contactUsFormReducer);
   const [formData, setFormData] = useState({
@@ -72,6 +72,18 @@ const ContactUs = () => {
     },
   });
 
+
+
+
+    useEffect(() => {
+        function handleResize() {
+            setIsSmallScreen(window.innerWidth <= 767);
+        }
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
   return (
     <>
@@ -200,6 +212,12 @@ const ContactUs = () => {
                         onChange={(value) => {
                           formik.setFieldValue("g-recaptcha-response", value);
                         }}
+                        
+                        style={{
+                          transform: isSmallScreen?'scale(0.6)':"",
+                          transformOrigin: isSmallScreen?'0 0':"",
+                          width:isSmallScreen?"200px":""
+                      }}
                       />
                       {formik.touched["g-recaptcha-response"] &&
                       formik.errors["g-recaptcha-response"] ? (

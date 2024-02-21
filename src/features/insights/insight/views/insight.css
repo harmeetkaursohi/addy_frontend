@@ -79,9 +79,11 @@ select.days_option {
 button.instagram_dropdown::after {
     margin-left: 15px !important;
 }
-
+.account_reach_graph_outer .page_title_header {
+    margin: 0px;
+}
 button.instagram_dropdown {
-    font-size: 18px !important;
+    font-size: 17px !important;
     padding: 10px 23px 10px 0px !important;
 }
 
