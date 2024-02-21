@@ -5,7 +5,7 @@ import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 import {useDispatch, useSelector} from "react-redux";
 import {decodeJwtToken, getToken} from "../../app/auth/auth";
 import {useFormik} from "formik";
-import {formatMessage, validationSchemas} from "../../utils/commonUtils";
+import {formatMessage, getValueOrDefault, validationSchemas} from "../../utils/commonUtils";
 import {Country, State, City} from "country-state-city";
 import {getUserInfo, updateCustomer, updateProfilePic} from "../../app/actions/userActions/userActions";
 import default_user_icon from "../../images/default_user_icon.svg";
@@ -85,13 +85,13 @@ const Profile = () => {
                     fullName: values.firstName + " " + values.lastName,
                     industry: values.industry,
                     address: {
-                        addressLine1: values.addressLine1,
-                        addressLine2: values.addressLine2,
-                        country: values.country,
-                        city: values.city,
-                        county: values.county,
-                        state: values.state,
-                        pinCode: values.pinCode,
+                        addressLine1: getValueOrDefault(values.addressLine1, null),
+                        addressLine2: getValueOrDefault(values.addressLine2, null),
+                        country: getValueOrDefault(values.country, null),
+                        city: getValueOrDefault(values.city, null),
+                        county: getValueOrDefault(values.county, null),
+                        state: getValueOrDefault(values.state, null),
+                        pinCode: getValueOrDefault(values.pinCode, null),
                     }
                 }
             })).then(res => {
@@ -138,23 +138,25 @@ const Profile = () => {
         const selectedState = event.target.value;
         formik.setFieldValue("state", selectedState);
         formik.setFieldValue('city', "");
+        formik.setFieldValue('county', "");
         const state = State.getAllStates().find(
             (state) => state.name === selectedState
         );
-
-        const cities = City.getCitiesOfState(state.countryCode, state.isoCode);
+        const cities = City.getCitiesOfState(state?.countryCode, state?.isoCode);
         setCities(cities);
     };
 
     const handleCountryChange = (event) => {
         const selectedCountry = event.target.value;
         formik.setFieldValue("country", selectedCountry);
+        formik.setFieldValue("state", "");
         formik.setFieldValue('city', "");
+        formik.setFieldValue('county', "");
         const country = Country.getAllCountries().find(
             (state) => state.name === selectedCountry
         );
         setCities([]);
-        setStates(State.getStatesOfCountry(country.isoCode));
+        setStates(State.getStatesOfCountry(country?.isoCode));
     };
 
 
@@ -170,7 +172,7 @@ const Profile = () => {
                     userData === null ? <CommonLoader></CommonLoader> :
                         <>
                             {
-                                userInfo?.data?.signupSource===SignupSource.ADDY && <div
+                                userInfo?.data?.signupSource === SignupSource.ADDY && <div
                                     className="change_password_btn text-center d-flex">
                                     <button onClick={() => {
                                         setShowUpdatePasswordModal(true)
@@ -235,7 +237,7 @@ const Profile = () => {
                                                         <input
                                                             value={formik.values.firstName}
                                                             type="text"
-                                                            onChange={editMode && formik.handleChange}
+                                                            onChange={editMode ? formik.handleChange : undefined}
                                                             onBlur={formik.handleBlur}
                                                             name="firstName"
                                                             className="form-control mt-2"
@@ -258,7 +260,7 @@ const Profile = () => {
                                                         <input
                                                             value={formik.values.lastName}
                                                             type="text"
-                                                            onChange={editMode && formik.handleChange}
+                                                            onChange={editMode ? formik.handleChange : undefined}
                                                             onBlur={formik.handleBlur}
                                                             name="lastName"
                                                             className="form-control mt-2"
@@ -348,7 +350,7 @@ const Profile = () => {
                                                 <select
                                                     name="industry"
                                                     className="form-control mt-1"
-                                                    onChange={editMode && formik.handleChange}
+                                                    onChange={editMode ? formik.handleChange : undefined}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.industry}
                                                     disabled={!editMode}
@@ -368,7 +370,7 @@ const Profile = () => {
                                                     placeholder="Contact No"
                                                     value={formik.values.contactNo}
                                                     type="text"
-                                                    onChange={editMode && formik.handleChange}
+                                                    onChange={editMode ? formik.handleChange : undefined}
                                                     onBlur={formik.handleBlur}
                                                     name="contactNo"
                                                     className="form-control mt-2"
@@ -380,10 +382,11 @@ const Profile = () => {
                                             <div className="login_form">
                                                 <div className="form-group">
                                                     <label>
-                                                        {jsondata.addressLine1} {isAddressRequired &&  <span className="astrick">*</span>}
+                                                        {jsondata.addressLine1} {isAddressRequired &&
+                                                        <span className="astrick">*</span>}
                                                     </label>
                                                     <input
-                                                        onChange={editMode && formik.handleChange}
+                                                        onChange={editMode ? formik.handleChange : undefined}
                                                         placeholder={jsondata.addressLine1}
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.addressLine1}
@@ -403,7 +406,7 @@ const Profile = () => {
                                                 <div className="form-group">
                                                     <label>{jsondata.addressLine2}</label>
                                                     <input
-                                                        onChange={editMode && formik.handleChange}
+                                                        onChange={editMode ? formik.handleChange : undefined}
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.addressLine2}
                                                         disabled={!editMode}
@@ -416,12 +419,12 @@ const Profile = () => {
 
                                                 <div className="form-group">
                                                     <label htmlFor="country">
-                                                        Country{isAddressRequired &&  <span className="astrick">*</span>}
+                                                        Country{isAddressRequired && <span className="astrick">*</span>}
                                                     </label>
                                                     <select
                                                         id="country"
                                                         name="country"
-                                                        onChange={editMode && handleCountryChange} // Use the custom onChange handler
+                                                        onChange={editMode ? handleCountryChange : undefined}
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.country}
                                                         disabled={!editMode}
@@ -445,12 +448,13 @@ const Profile = () => {
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
                                                             <label htmlFor="state">
-                                                                State{isAddressRequired &&  <span className="astrick">*</span>}
+                                                                State{isAddressRequired &&
+                                                                <span className="astrick">*</span>}
                                                             </label>
                                                             <select
                                                                 id="state"
                                                                 name="state"
-                                                                onChange={editMode && handleStateChange}
+                                                                onChange={editMode ? handleStateChange : undefined}
                                                                 onBlur={formik.handleBlur}
                                                                 value={formik.values.state}
                                                                 disabled={!editMode}
@@ -477,7 +481,7 @@ const Profile = () => {
                                                         <div className="form-group">
                                                             <label>City</label>
                                                             <input
-                                                                onChange={editMode && formik.handleChange}
+                                                                onChange={editMode ? formik.handleChange : undefined}
                                                                 onBlur={formik.handleBlur}
                                                                 value={formik.values.city}
                                                                 name="city"
@@ -493,12 +497,13 @@ const Profile = () => {
                                                     <div className="col-lg-6">
                                                         <div className="form-group">
                                                             <label htmlFor="city">
-                                                                County{isAddressRequired &&  <span className="astrick">*</span>}
+                                                                County{isAddressRequired &&
+                                                                <span className="astrick">*</span>}
                                                             </label>
                                                             <select
                                                                 id="county"
                                                                 name="county"
-                                                                onChange={editMode && formik.handleChange}
+                                                                onChange={editMode ? formik.handleChange : undefined}
                                                                 onBlur={formik.handleBlur}
                                                                 value={formik.values.county}
                                                                 className="form-control mt-1"
@@ -523,7 +528,7 @@ const Profile = () => {
                                                         <div className="form-group">
                                                             <label>{jsondata.pinCode}</label>
                                                             <input
-                                                                onChange={editMode && formik.handleChange}
+                                                                onChange={editMode ? formik.handleChange : undefined}
                                                                 onBlur={formik.handleBlur}
                                                                 value={formik.values.pinCode}
                                                                 name="pinCode"
