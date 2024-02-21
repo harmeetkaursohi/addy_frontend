@@ -35,7 +35,7 @@ const PrivacyComponent = () => {
                 title="Embedded Content"
                 srcDoc={iframeContent}
                 width="100%"
-                height="500px"
+                height="2115px"
               />
             </div>
           </div>

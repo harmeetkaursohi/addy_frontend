@@ -15,8 +15,7 @@ const BillingForm = () => {
                                 <div className='login_outer'>
                                     <div className='reach_user_outer'>
                                         <img src={atm_img} className='girl_img_width'/>
-                                        <h2 className='mt-5'>Reach your users with new tools. Reach your users with new
-                                            tools. Reach your users with new tools.</h2>
+                                        <h2 className='mt-5'>Reach your users with new tools.</h2>
                                         <p>Efficiently unleash cross-media information without cross-media value.
                                             Quickly maximize.Efficiently unleash cross-media information without
                                             cross-media value. Quickly maximize.Efficiently unleash cross-media.</p>
