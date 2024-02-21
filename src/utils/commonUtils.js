@@ -374,7 +374,7 @@ export const computeAndBuildChildCard = (childCardProps, key) => {
             case 'INSTAGRAM':
                 return "Instagram"
             case 'LINKEDIN':
-                return "Linkdin";
+                return "Linkedin";
             case 'TWITTER':
                 return "Twitter"
             default: {

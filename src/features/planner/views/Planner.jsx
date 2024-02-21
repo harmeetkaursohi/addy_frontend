@@ -32,7 +32,7 @@ import SkeletonEffect from '../../loader/skeletonEffect/SkletonEffect'
 const Planner = () => {
     const dispatch = useDispatch();
     const token = getToken();
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
     const calendarRef = useRef(null);
@@ -100,9 +100,9 @@ const Planner = () => {
     }, [getAllPlannerPostsData]);
 
     const handleCreatePost = () => {
-        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length>0
-        const isAnyAccountConnected=getAllConnectedSocialAccountData?.data?.length>0
-        if (isAnyPageConnected && isAnyAccountConnected ) {
+        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
+        const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
+        if (isAnyPageConnected && isAnyAccountConnected) {
             navigate("/planner/post")
         } else {
             setShowConnectAccountModal(true)
@@ -140,7 +140,6 @@ const Planner = () => {
                 }
 
                 dispatch(getAllPostsForPlannerAction(requestBody));
-
                 dispatch(getPlannerPostCountAction(requestBody));
             }
 
@@ -151,36 +150,46 @@ const Planner = () => {
 
     // render event content
     const renderCalendarCards = ({event}) => {
+        const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
         return (
             <div className={"cal_Div w-100 test"}
                  style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
 
                 <div className="w-100 p-0 calendar_card">
-
-                    {event?._def?.extendedProps?.childCardContent?.map((c, index) => {
-                        return (
-
-                            <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}
-                                 onClick={(e) => {
-                                 }}>
-                                <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>
-                                <h3>{c.title}</h3>
-                            </div>
-                        )
-                    })}
-                </div>
-                {/*{event?._def?.extendedProps?.showMoreContent > 0 &&*/}
-                <button className="createPost_btn crate_btn cmn_btn_color w-100 ms-0 mt-2 mb-3"
-                        onClick={(e) => handleShowMorePostModal(event)}
-                >
                     {
-                        event?._def?.extendedProps?.showMoreContent > 0 ?
-                            "View " + event?._def?.extendedProps?.showMoreContent + " more" :
-                            "View more"
+                        postOnSocialMedia !== null &&
+                        <div className={"custom_event mb-2"}
+                             onClick={(e) => {
+                             }}>
+                            <img className={"ms-4"} src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
+                            <h3>{postOnSocialMedia.title}</h3>
+                        </div>
                     }
 
-                </button>
-                {/*}*/}
+
+                    {/*{event?._def?.extendedProps?.childCardContent?.map((c, index) => {*/}
+                    {/*    return (*/}
+
+                    {/*        <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}*/}
+                    {/*             onClick={(e) => {*/}
+                    {/*             }}>*/}
+                    {/*            <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>*/}
+                    {/*            /!*<h3>{c.title}</h3>*!/*/}
+                    {/*        </div>*/}
+                    {/*    )*/}
+                    {/*})}*/}
+                </div>
+                {
+                    event?._def?.extendedProps?.showMoreContent > 0 &&
+                    <button className="createPost_btn crate_btn cmn_btn_color w-100 ms-0 mt-2 mb-3"
+                            onClick={(e) => handleShowMorePostModal(event)}>
+                        {
+                            (event?._def?.extendedProps?.showMoreContent > 0) ?
+                                "View " + event?._def?.extendedProps?.showMoreContent + " more" :
+                                "View more"
+                        }
+                    </button>
+                }
             </div>)
     }
 
@@ -277,7 +286,7 @@ const Planner = () => {
                                 <h6>{isDraftPost ? "All of your saved draft posts are located here." : "Here you find all the upcoming Posts you scheduled."}</h6>
                             </div>
                             <div className='create_post_btn_Wrapper'>
-                                
+
                                 <GenericButtonWithLoader
                                     label={isDraftPost ? jsondata.backToPlanner : jsondata.draftPost}
                                     className={"draft_btn create_post_btn cmn_white_text"}
@@ -285,30 +294,42 @@ const Planner = () => {
                                     onClick={handleDraft}
                                     isDisabled={false}
                                 />
-                                {(!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data) ? <span onClick={handleCreatePost} className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
-                                >{jsondata.createpost}</span>: <span className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
-                                ><Loader className='create-post-loader'/></span>}
+                                {(!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data) ?
+                                    <span onClick={handleCreatePost}
+                                          className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
+                                    >{jsondata.createpost}</span> :
+                                    <span className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
+                                    ><Loader className='create-post-loader'/></span>}
                             </div>
                         </div>
                         {
                             isDraftPost === false && <div className='events_wrapper'>
                                 <div className='row'>
                                     {/* Loader */}
-                                    {(getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data)) ? (<></>): (<>
-                                        <div className='col-lg-4 col-md-6 col-sm-12'><div className='event_group'>
-                                            <h2 className='cmn_text_heading'><Loader/></h2>
-                                            <h5 className='cmn_small_heading'><SkeletonEffect count={1}></SkeletonEffect></h5>
-                                        </div></div>
-                                        <div className='col-lg-4 col-md-6 col-sm-12'><div className='event_group' style={{borderRight: "unset"}}>
-                                            <h2 className='cmn_text_heading'><Loader/></h2>
-                                            <h5 className='cmn_small_heading'><SkeletonEffect count={1}></SkeletonEffect></h5>    
-                                        </div></div>
-                                        <div className='col-lg-4 col-md-6 col-sm-12'><div className='event_group'>
-                                            <h2 className='cmn_text_heading'><Loader/></h2>
-                                            <h5 className='cmn_small_heading'><SkeletonEffect count={1}></SkeletonEffect></h5>    
-                                        </div></div>
-                                    </>)}                                    
-                                    {/* Loader end */}                                    
+                                    {(getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data)) ? (<></>) : (<>
+                                        <div className='col-lg-4 col-md-6 col-sm-12'>
+                                            <div className='event_group'>
+                                                <h2 className='cmn_text_heading'><Loader/></h2>
+                                                <h5 className='cmn_small_heading'><SkeletonEffect
+                                                    count={1}></SkeletonEffect></h5>
+                                            </div>
+                                        </div>
+                                        <div className='col-lg-4 col-md-6 col-sm-12'>
+                                            <div className='event_group' style={{borderRight: "unset"}}>
+                                                <h2 className='cmn_text_heading'><Loader/></h2>
+                                                <h5 className='cmn_small_heading'><SkeletonEffect
+                                                    count={1}></SkeletonEffect></h5>
+                                            </div>
+                                        </div>
+                                        <div className='col-lg-4 col-md-6 col-sm-12'>
+                                            <div className='event_group'>
+                                                <h2 className='cmn_text_heading'><Loader/></h2>
+                                                <h5 className='cmn_small_heading'><SkeletonEffect
+                                                    count={1}></SkeletonEffect></h5>
+                                            </div>
+                                        </div>
+                                    </>)}
+                                    {/* Loader end */}
                                     {getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data).map((key, index) => {
                                         return (
                                             <div className='col-lg-4 col-md-6 col-sm-12' key={index}>
@@ -354,7 +375,8 @@ const Planner = () => {
                                         <option value={"All"}>All</option>
                                         {Object.keys(SocialAccountProvider).map((cur, index) => {
                                             return (
-                                                <option key={index} value={cur} disabled={getAllConnectedSocialAccountData?.data?.filter(c => c.provider === cur).length === 0}>{ SocialAccountProvider[cur].charAt(0).toUpperCase() + SocialAccountProvider[cur].slice(1)}</option>)
+                                                <option key={index} value={cur}
+                                                        disabled={getAllConnectedSocialAccountData?.data?.filter(c => c.provider === cur).length === 0}>{SocialAccountProvider[cur].charAt(0).toUpperCase() + SocialAccountProvider[cur].slice(1)}</option>)
                                         })}
                                     </select>
 

@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import './CommonShowMorePlannerModal.css'
-import {computeImageURL, handleSeparateCaptionHashtag, isPlannerPostEditable, redirectToURL, sortByKey} from "../../../utils/commonUtils";
+import {computeImageURL, handleSeparateCaptionHashtag, isPlannerPostEditable,  sortByKey} from "../../../utils/commonUtils";
 import CommonSlider from "./CommonSlider";
 import CommonLoader from "./CommonLoader";
 import {useNavigate} from "react-router-dom";
@@ -11,6 +11,7 @@ import {
 } from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "./Toast";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
+import Swal from "sweetalert2";
 
 
 const CommonShowMorePlannerModal = ({
@@ -25,38 +26,51 @@ const CommonShowMorePlannerModal = ({
     const dispatch = useDispatch();
     const token = getToken();
     const getAllPlannerPostsDataLoading = useSelector(state => state.post.getAllPlannerPostReducer.loading);
+    const deletePostByBatchIdData = useSelector(state => state.post.deletePostByBatchIdReducer);
     const [deleteBatchIdRef, setDeleteBatchIdRef] = useState(null);
 
     const handleClose = () => setCommonShowMorePlannerModal(false);
 
-    const handleDeletePlannerPost = (e, postId) => {
+
+
+    const handleDeletePlannerPost = (e,postId) => {
         e.preventDefault();
-        if (postId !== null) {
+        if (postId !== null){
             setDeleteBatchIdRef(postId);
-            dispatch(deletePostByBatchIdAction({postId: postId, token: token}))
-                .then((response) => {
-                    if (response.meta.requestStatus === "fulfilled") {
-                        showSuccessToast("Posts has been deleted successfully");
-                        setDeleteBatchIdRef(null);
-                        const decodeJwt = decodeJwtToken(token);
-                        dispatch(getAllPostsForPlannerAction({
-                            customerId: decodeJwt.customerId,
-                            token: token,
-                            query: baseSearchQuery
-                        }));
-                        dispatch(getPlannerPostCountAction({
-                            customerId: decodeJwt.customerId,
-                            token: token,
-                            query: baseSearchQuery
-                        }));
-                        setCommonShowMorePlannerModal(false);
-                    }
-                })
-                .catch((error) => {
-                    setCommonShowMorePlannerModal(false);
-                    setDeleteBatchIdRef(null);
-                    showErrorToast(error.response.data.message);
-                });
+            Swal.fire({
+                icon: 'warning',
+                title: `Delete Post`,
+                text: `Are you sure you want to delete this post?`,
+                showCancelButton: true,
+                confirmButtonText: 'Delete',
+                cancelButtonText: 'Cancel',
+                confirmButtonColor: "#F07C33",
+                cancelButtonColor: "#E6E9EC",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    dispatch(deletePostByBatchIdAction({postId: postId, token: token}))
+                        .then((response) => {
+                            if (response.meta.requestStatus === "fulfilled") {
+                                showSuccessToast("Posts has been deleted successfully");
+                                setDeleteBatchIdRef(null);
+                                const decodeJwt = decodeJwtToken(token);
+                                const requestBody={
+                                    customerId: decodeJwt.customerId,
+                                    token: token,
+                                    query: baseSearchQuery
+                                }
+                                dispatch(getAllPostsForPlannerAction(requestBody));
+                                dispatch(getPlannerPostCountAction(requestBody));
+                                setCommonShowMorePlannerModal(false);
+                            }
+                        })
+                        .catch((error) => {
+                            setCommonShowMorePlannerModal(false);
+                            setDeleteBatchIdRef(null);
+                            showErrorToast(error.response.data.message);
+                        });
+                }
+            });
         }
     }
 
@@ -152,7 +166,7 @@ const CommonShowMorePlannerModal = ({
                                                                     </button>
 
                                                                     {
-                                                                        deleteBatchIdRef === plannerPost?.id ?
+                                                                        deleteBatchIdRef === plannerPost?.id && deletePostByBatchIdData?.loading ?
                                                                             <i className="fa fa-spinner fa-spin"/> :
                                                                             <button onClick={(e) => {
                                                                                 handleDeletePlannerPost(e, plannerPost?.id);
