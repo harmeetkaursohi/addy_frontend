@@ -24,7 +24,7 @@ export const contactUsFormActions = createAsyncThunk('web/contactUsFormActions',
 });
 
 export const list = createAsyncThunk('web/list', async (data, thunkAPI) => {
-    return await baseAxios.get(`${import.meta.env.VITE_APP_CMS_API_BASE_URL}faq?per_page=1&page=${data.page}&search=${data.search}`).then(res => {
+    return await baseAxios.get(`${import.meta.env.VITE_APP_CMS_API_BASE_URL}faq?per_page=20&page=${data.page}&search=${data.search}`).then(res => {
         const linkHeader = res.headers.link;                
         return {hasNextPage:(linkHeader && linkHeader.includes('rel="next"')),dataList:res.data};
     }).catch(error => {

@@ -8,7 +8,7 @@ const Signup = () => {
     const [showTab, setShowTab] = useState(1);
 
     useEffect(() => {
-        document.title = 'Signup';
+        document.title = 'Sign up';
     }, []);
 
     const [formData, setFormData] = useState({

@@ -68,7 +68,7 @@ const App = () => {
                     </Route>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/" element={<Login/>}/>
-                    <Route path="/signup" element={<Signup/>}/>
+                    <Route path="/sign-up" element={<Signup/>}/>
                     <Route path="/reset-password" element={<CreatePassword/>}/>
                     <Route path="/forgot-password" element={<ForgotPassword/>}/>
                     <Route path="/fb" element={<ConnectPagesModal/>}/>
