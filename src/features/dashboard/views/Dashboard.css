@@ -478,6 +478,9 @@ img.connection-error-svg {
 .No_Upcoming_Outer img{
     width: 400px;
 }
+div.noDraftPosts_outer {    
+    background-color:#fff;
+}
 @media screen and (min-width:2560px){
     .followers_outer {
         gap: 40px;
