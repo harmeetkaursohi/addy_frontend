@@ -249,7 +249,9 @@ p.disable-reply-comment {
 .comment_section .comments_messages {
     flex-grow: 1;
 }
-
+.RotatingLines-loader{
+    height: calc(100vh - 319px);
+}
 @media screen and (min-width:1600px) {
     .acc_not_connected_outer img{
         width: 600px;
@@ -273,11 +275,20 @@ p.disable-reply-comment {
         scrollbar-color: gray;
         scrollbar-width: thin;
     }
+    .review_header{
+        flex-wrap: wrap;
+    }
 }
 
 @media screen and (max-width: 767px) {
     .review_header {
         display: block;
+    }
+    .review-social-media-dropdown{
+        margin-top: 20px;
+    }
+    .review-pages-media-dropdown{
+        margin-top: 10px;
     }
     .acc_not_connected_outer img {
         width: 100%;

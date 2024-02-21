@@ -57,10 +57,9 @@
 .draft-heading {
     display: flex;
     align-items: center;
-    gap: 14px;
+
     padding: 20px;
-    /*flex-wrap: wrap;*/
-    /*position: relative;*/
+  
 }
 
 .draft-outer {
@@ -243,6 +242,12 @@ button.outline_btn.schedule_btn {
         height: auto;
     }
 }
+
+@media screen and (max-width:1280px) and (min-width:992px){
+    .draft_button_outer {
+        flex-wrap: wrap;
+    }
+}
 @media screen and (min-width:992px) {
  
 .mt-4.upcomingPostBtn_Outer button {
@@ -268,7 +273,9 @@ button.outline_btn.schedule_btn{
         min-width: 102px;
         font-size: 19px;
     }
-
+    .draft-heading{
+        gap: 14px;
+    }
     
     h2.acc_not_connected_heading {
         font-size: 19px;

@@ -50,7 +50,7 @@ ul {
 .comment_container {
   padding-left: 280px;
   width: 100%;
-  background-color: #fff;
+  background-color: #f4f8fe;
 }
 
 .cmn_wrapper_outer {
@@ -276,7 +276,7 @@ div#swal2-html-container {
 @media screen and (min-width:1600px){
   .cmn_wrapper_outer {
   width: 100%;
-  max-width: 80%;
+  max-width: 78%;
   margin: auto;
 }
 
@@ -310,5 +310,8 @@ div#swal2-html-container {
   h2.acc_not_connected_heading {
     font-size: 12px;
     margin-top: 20px;
+}
+.cmn_wrapper_outer{
+  padding: 0px 10px 30px;
 }
 }

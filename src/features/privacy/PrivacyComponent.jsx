@@ -20,7 +20,9 @@ const PrivacyComponent = () => {
   }, [url, divId]);
   const extractDivContent = (html, divId) => {
     const doc = new DOMParser().parseFromString(html, "text/html");
+   
     const specificDiv = doc.getElementById(divId);
+    
     return specificDiv ? specificDiv.outerHTML : "";
   };
   return (

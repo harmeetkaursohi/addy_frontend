@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {useLocation, useNavigate} from "react-router-dom"
+import {Link, useLocation, useNavigate} from "react-router-dom"
 import default_user_icon from '../../../images/default_user_icon.svg'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
@@ -112,6 +112,12 @@ const Layout = () => {
 
                             ))
                         }
+                        <li className='sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer'>
+                            <div className=' sidebar_item_outers Profile_Img_outer'>
+                                {/* <img className='userimg'  src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> */}
+                                <Link to="/profile"><img className='userimg'  src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> Profile </Link>
+                            </div>
+                        </li>
                         <li className='sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer'>
                             <div className=' sidebar_item_outers'>
                                 <BiLogOut/>

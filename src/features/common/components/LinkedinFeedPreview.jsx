@@ -7,6 +7,7 @@ import { BiRepost } from "react-icons/bi";
 import { IoIosSend, IoMdArrowDropdown } from "react-icons/io";
 import nature from "../../../images/nature.png"
 import {FaLinkedin} from "react-icons/fa"
+import { SlLike } from "react-icons/sl";
 import "./common.css"
 const LinkedinFeedpreview = ({
                                   previewTitle,
@@ -48,7 +49,8 @@ const LinkedinFeedpreview = ({
                         <IoMdArrowDropdown />
                     </div>
                     <div className="linkedin_likes">
-                        <FiThumbsUp/>
+                    <SlLike className="thumbsup_icon"/>
+                        {/* <FiThumbsUp className="thumbsup_icon"/> */}
                         <h3 className="cmn_text_style">Like</h3>
                     </div>
                     <div className="linkedin_likes">

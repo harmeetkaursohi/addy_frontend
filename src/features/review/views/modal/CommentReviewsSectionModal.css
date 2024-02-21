@@ -160,7 +160,7 @@ div.main_user {
 
 .user_card {
     display: flex;
-    gap: 12px;
+    gap: 10px;
 }
 
 .user_card p {
@@ -317,3 +317,21 @@ svg.comment-edit-del-icon {
         line-height: 20px;
 }
 }
+ @media screen and (max-width:991px) {
+    .reply_wrap{
+        flex-wrap: wrap;
+    }
+    .user p.user_name {
+        font-size: 12px;
+    }
+    .reply_wrap input{
+        margin-top: 10px;
+    }
+    .reply_wrap button.view_post_btn.cmn_bg_btn{
+        margin-top: 10px;
+    }
+    .emoji-picker-icon{
+    height: 20px;
+    width: 20px;
+    }
+ }

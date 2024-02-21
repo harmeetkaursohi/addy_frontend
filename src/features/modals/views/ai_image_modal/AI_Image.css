@@ -2,14 +2,14 @@
     position: absolute;
     left: auto;
     right: 8px;
-    top: 11px;
+    top: 6px;
     border-radius: 5px;
-background: #97A1AD;
+    background: #97A1AD;
     font-size: 16px;
     font-weight: 600;
     line-height: normal;
     border: none;
-    padding: 11px 15px
+    padding: 8px 16px;
 
 }
 .selectedImg {
@@ -34,7 +34,7 @@ background: #97A1AD;
     position: relative;
 }
 .generate_image_outer input{
-    padding: 20px 17px;
+    padding: 12px 17px;
 }
 .generate_image_outer input::placeholder{
 color: #5F6D7E;

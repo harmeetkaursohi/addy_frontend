@@ -450,7 +450,7 @@ const Insight = () => {
                                         id="dropdown-basic"
                                         className="instagram_dropdown"
                                     >
-                                        <i className={`fa-brands fa-facebook me-3 `}
+                                        <i className={`fa-brands fa-facebook me-2 `}
                                            style={{color: "#0866ff", fontSize: "20px"}}/>
 
                                         Facebook {(!connectedFacebookPages?.length && getAllByCustomerIdData?.loading) ? <Loader className="social-account-loader"/> : (<></>)}
@@ -486,7 +486,7 @@ const Insight = () => {
                                         id="dropdown-basic"
                                         className="instagram_dropdown"
                                     >
-                                        <img src={instagram_img} className="me-3  "
+                                        <img src={instagram_img} className="me-2  "
                                              style={{height: "18px", width: "18px"}}/>
                                         Instagram {(!connectedInstagramPages?.length && getAllByCustomerIdData?.loading) ? <Loader className="social-account-loader"/> : (<></>)}
                                     </Dropdown.Toggle>
@@ -521,7 +521,7 @@ const Insight = () => {
                                         id="dropdown-basic"
                                         className="instagram_dropdown"
                                     >
-                                        <i className={`fa-brands fa-pinterest me-3 `}
+                                        <i className={`fa-brands fa-pinterest me-2 `}
                                            style={{color: "#e60023", fontSize: "20px"}}/>
 
                                         Pinterest {(!connectedPinterestBoards?.length && getAllByCustomerIdData?.loading) ? <Loader className="social-account-loader"/> : (<></>)}
@@ -559,7 +559,7 @@ const Insight = () => {
                                         id="dropdown-basic"
                                         className="instagram_dropdown"
                                     >
-                                        <img src={linkedin_img} className="me-3  "/>
+                                        <img src={linkedin_img} className="me-2  "/>
                                         Linkedin {(!connectedLinkedinPages?.length && getAllByCustomerIdData?.loading) ? <Loader className="social-account-loader"/> : (<></>)}
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
@@ -608,16 +608,16 @@ const Insight = () => {
                                         <div className="Social_media_platform Content_Container_box">
                                             {
                                                 selectedPage?.socialMediaType === "FACEBOOK" &&
-                                                <i className={`fa-brands fa-facebook me-3 `}
+                                                <i className={`fa-brands fa-facebook  `}
                                                    style={{color: "#0866ff", fontSize: "20px"}}/>
                                             }
                                             {
                                                 selectedPage?.socialMediaType === "INSTAGRAM" &&
-                                                <img src={instagram_img} className="me-3  "/>
+                                                <img src={instagram_img} className="  "/>
                                             }
                                             {
                                                 selectedPage?.socialMediaType === "LINKEDIN" &&
-                                                <img src={linkedin_img} className="me-3  "/>
+                                                <img src={linkedin_img} className="  "/>
                                             }
                                             <h3>{selectedPage?.name}</h3>
                                         </div>
