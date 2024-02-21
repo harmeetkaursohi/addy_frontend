@@ -16,6 +16,9 @@ import {Industries, SignupSource, UpdatedSuccessfully} from "../../utils/contant
 import {showSuccessToast} from "../common/components/Toast";
 import CommonLoader from "../common/components/CommonLoader";
 
+import { FaCamera } from "react-icons/fa";
+import { RiEditBoxFill } from "react-icons/ri";
+
 const Profile = () => {
     const userInfo = useSelector(state => state.user.userInfoReducer);
     const updateProfilePicData = useSelector(state => state.user.updateProfilePicReducer);
@@ -158,6 +161,7 @@ const Profile = () => {
         setCities([]);
         setStates(State.getStatesOfCountry(country?.isoCode));
     };
+  
 
 
     return (
@@ -185,6 +189,7 @@ const Profile = () => {
 
                                 <div className="editProfile_wrapper mt-3">
                                     <div className="change_profile_outer">
+                                        <div>
                                         <div className="user_pic_container">
                                             {
                                                 (userInfo?.loading || updateProfilePicData?.loading) &&
@@ -205,10 +210,12 @@ const Profile = () => {
                                                 className='user_pic '/>
                                         </div>
 
-                                        <div className="form-group">
+                                        <div className="edit_label_container">
+                                            {updateCustomerData?.loading || !editMode ? "" :
                                             <label className="changeProfile_label" htmlFor="changeProfile">
-                                                Change Profile
+                                            <FaCamera />
                                             </label>
+                                            }
                                             <input
                                                 type="file"
                                                 accept={"image/*"}
@@ -217,17 +224,24 @@ const Profile = () => {
                                                 onChange={changeProfileHandler}
                                             />
                                         </div>
+                                        
+
+                                        </div>
                                         <div className="form-group">
                                             <label onClick={() => {
                                                 setEditMode(true)
-                                            }} className="changeProfile_label updateAccount_label" htmlFor="">
-                                                Update Account
+                                            }} className="edit_label updateAccount_label" htmlFor="">
+                                               <RiEditBoxFill/>
+
                                             </label>
                                         </div>
                                     </div>
 
                                     <div className="edit_content">
                                         <form onSubmit={formik.handleSubmit}>
+                                            <div className="row">
+                                                <div className="col-lg-6 col-sm-12 col-md-12">
+
                                             <div className="row">
                                                 <div className="col-lg-6 col-sm-12 col-md-6">
                                                     <div className="form-group">
@@ -349,7 +363,7 @@ const Profile = () => {
                                                 <label htmlFor="country">{jsondata.industry}</label>
                                                 <select
                                                     name="industry"
-                                                    className="form-control mt-1"
+                                                    className="form-control cmn_select_box mt-1"
                                                     onChange={editMode ? formik.handleChange : undefined}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.industry}
@@ -377,8 +391,10 @@ const Profile = () => {
                                                     disabled={!editMode}
                                                 />
                                             </div>
+                                                </div>
 
-                                            {/* address */}
+                                                <div className="col-lg-6 col-sm-12 col-md-12">
+                                                {/* address */}
                                             <div className="login_form">
                                                 <div className="form-group">
                                                     <label>
@@ -422,13 +438,14 @@ const Profile = () => {
                                                         Country{isAddressRequired && <span className="astrick">*</span>}
                                                     </label>
                                                     <select
+                                                    
                                                         id="country"
                                                         name="country"
                                                         onChange={editMode ? handleCountryChange : undefined}
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.country}
                                                         disabled={!editMode}
-                                                        className="form-control mt-1"
+                                                        className="form-control mt-1 cmn_select_box"
                                                     >
                                                         <option value="">Select Country</option>
                                                         {countries?.map((country) => (
@@ -458,7 +475,7 @@ const Profile = () => {
                                                                 onBlur={formik.handleBlur}
                                                                 value={formik.values.state}
                                                                 disabled={!editMode}
-                                                                className="form-control mt-1"
+                                                                className="form-control mt-1 cmn_select_box"
                                                             >
                                                                 <option value="">Select State</option>
                                                                 {states?.map((state) => (
@@ -506,7 +523,7 @@ const Profile = () => {
                                                                 onChange={editMode ? formik.handleChange : undefined}
                                                                 onBlur={formik.handleBlur}
                                                                 value={formik.values.county}
-                                                                className="form-control mt-1"
+                                                                className="form-control mt-1 cmn_select_box"
                                                                 disabled={!editMode}
                                                             >
                                                                 <option value="">Select County</option>
@@ -542,7 +559,8 @@ const Profile = () => {
                                                 </div>
 
                                                 <div className="text-center">
-                                                    <button disabled={updateCustomerData?.loading || !editMode}
+                                                    {updateCustomerData?.loading || !editMode ? "" :
+                                                    <button 
                                                             className={"cmn_btn_color btn_style " + (!editMode ? "opacity-50" : "")}>
                                                         Update
                                                         {
@@ -552,8 +570,14 @@ const Profile = () => {
                                                                   aria-hidden="true"></span>
                                                         }
                                                     </button>
+                                                    }
                                                 </div>
                                             </div>
+                                            </div>
+                                            </div>
+
+                                            
+
                                         </form>
                                     </div>
                                 </div>

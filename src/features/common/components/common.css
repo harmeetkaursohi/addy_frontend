@@ -17,15 +17,17 @@
 }
 .linkedin_likes h3{
     font-size: 16px;
-    color: #939090;
+    color: #696969;
 }
 .linkedin_likes{
     display: flex;
-    gap: 10px;
+    gap: 4px;
     align-items: center;
-    color: #939090;
+    color: #696969;
 }
-
+.thumbsup_icon{
+    transform: scale(-1, 1);
+}
 .update-password-btn {
     margin-right: 5px;
 }
@@ -73,17 +75,18 @@
 }
 
 @media screen and (max-width:767px) {
-    .linkedin_post_likes{
-        display: block;
+    .linkedin_dropdown{
+        display: none;
     }
     .not_connect_heading {
         font-size: 20px;
     }
-    .linkedin_dropdown{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    }
+   .linkedin_likes {
+    display: block;
+   }
+   .linkedin_likes h3{
+    line-height: 22px;
+   }
     
 }
 @media screen and (max-width:300px) {

@@ -469,7 +469,7 @@ img.connection-error-svg {
     text-decoration: underline;
 }
 .linkedin-icon-color{
-    color: rgb(8, 102, 255);
+    color: #004190;
     font-size: 24px;
 }
 .upcomingPostBtn_Outer button{
@@ -703,7 +703,13 @@ img.connection-error-svg {
     min-width: 193px;
     width: 100%;
 }
-
+.dropdown_btn .dropdown-item{
+    padding: 9px 20px 15px;
+    border-bottom: 1px solid #e1d7d7;
+}
+.dropdown_btn .dropdown-item:last-child{
+    border-bottom: unset;
+}
 .dropdown-page-logo {
     height: 27px;
     width: 27px;

@@ -1,8 +1,8 @@
 .editprofile_outer {
     padding: 20px;
-    width: 60%;
+    /* width: 60%;
     margin: auto;
-    height: 100%;
+    height: 100%; */
 
 }
 .user_pic{
@@ -43,8 +43,9 @@ ul.mb-3.edit_tabs.nav.nav-tabs {
 label.changeProfile_label.updateAccount_label {
     background: #f07c33;
     color: white;
-    padding: 5px 15px;
     border-radius: 7px;
+    padding: 6px 9px;
+    font-size: 21px;
 }
 .edit_tabs.nav-link:focus, .nav-link:hover {
     color: #e97011 !important;
@@ -71,12 +72,38 @@ isolation: unset !important;
 .change_profile{
     display: none;
 }
+label.edit_label{
+    background: #e97011;
+
+    padding: 6px 10px;
+    border-radius: 5px;
+    color: white;
+    font-size: 22px;
+
+}
 .changeProfile_label{
     cursor: pointer;
+    font-size: 16px;
+    background: #e97011;
+    border-radius: 30px;
+    height: 35px;
+    width: 35px;
+    color: white;
+    text-align: center;
+    padding-top: 4px;
+    transform: translate(-8px, -36px)
+    
 }
 .change_profile_outer {
-    text-align: center;
+    display: flex;
+   justify-content: space-between;
+
 }
+.user_name_heading{
+    color: #2E3646;
+    font-size: 20px;
+}
+
 .ImSpinner_icon{
     font-size: 20px;
 }
@@ -92,22 +119,25 @@ isolation: unset !important;
     border-color: #ee7817 !important; /* Change arrow color */
     
   }
-
-@media screen and (min-width:1600px) {
+  .edit_label_container{
+    text-align: right;
+  }
+  .cmn_select_box{
+    appearance: auto !important;
+  }
+@media screen and (min-width:1499px) {
     .editprofile_outer{
-        width: 35%;
+        width: 1100px;
+        margin: auto;
+    
     }
 }
 @media screen and (max-width:1024px) {
-    .editprofile_outer{
-        width: 70%;
-    }
+  
 }
 
 @media screen and (max-width:991px) {
-    .editprofile_outer{
-        width: 100%;
-    }
+  
 }
  @media screen and (max-width:767px){
     .update-pic-loading{
@@ -119,5 +149,20 @@ isolation: unset !important;
     .user_pic {
         height: 100px;
         width: 100px;
+    }
+    .change_profile_outer{
+       align-items: center;
+       
+    }
+    .changeProfile_label{
+        transform: translate(5px, -36px );
+        font-size: 14px;
+        height: 30px;
+        width: 30px;
+        padding-top: 2px;
+    }
+    h3.user_name_heading {
+        margin-top: 12px;
+      
     }
  }
