@@ -1750,5 +1750,11 @@ export const createOptionListForSelectTag = (data=null, label, value, additional
         list=[additionalOption,...list]
     }
     return list
+}
 
+export const getValueOrDefault=(value,defaultValue)=>{
+    if(isNullOrEmpty(value)){
+        return defaultValue
+    }
+    return value
 }
