@@ -400,6 +400,12 @@ a.fc-daygrid-dot-event:hover {
     }
     
 }
+
+@media screen and (max-width:1280px) {
+    .planner_outer {
+        padding: 16px;
+    }
+}
 @media screen and (max-width: 991px) {
     .planner_header_outer {
         display: block;
@@ -426,6 +432,9 @@ a.fc-daygrid-dot-event:hover {
 @media screen and (max-width: 767px) {
     .planner_header h6 {
         font-size: 14px;
+    }
+    .card-body.post_card{
+        padding: 0px 12px;
     }
     .planner_outer {
         padding: 15px;

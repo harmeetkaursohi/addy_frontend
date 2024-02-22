@@ -166,7 +166,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                     <label htmlFor="country">{jsondata.industry}</label>
                                                     <select
                                                         name="industry"
-                                                        className="form-control mt-1"
+                                                        className="form-control mt-1 cmn_select_box"
                                                         onChange={formik.handleChange} // Use the custom onChange handler
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.industry}

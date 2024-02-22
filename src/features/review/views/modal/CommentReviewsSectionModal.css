@@ -74,7 +74,7 @@ p.liked_by {
 .post_image_outerwrapper img {
     width: 100%;
     object-fit: cover;
-    /*height: 100%;*/
+    /* height: 100%; */
 }
 .comment_review_wrapper .post_image_outerwrapper img{
    height: 531px;
@@ -108,6 +108,11 @@ div.main_user {
 }
 .comment_header a, .comment_header i {
     color: #fff;
+
+}
+.comment_header a{
+    cursor: pointer;
+
 }
 .comment_review_wrapper img {
     height: 430px;
@@ -309,6 +314,10 @@ svg.comment-edit-del-icon {
 @media screen and (min-width:2560px){
     .post_image_outerwrapper{
         height: 500px;
+        
+    }
+    .post_image_outerwrapper img{
+        height: 100%;
     }
 }
 @media screen and (max-width:1024px){
@@ -324,6 +333,14 @@ svg.comment-edit-del-icon {
     .user p.user_name {
         font-size: 12px;
     }
+    .comments_messages h4 {
+        font-size: 14px;
+       
+}
+    /* .post_image_outerwrapper img {
+        height: 100%;
+        max-height: 400px;
+    } */
     .reply_wrap input{
         margin-top: 10px;
     }

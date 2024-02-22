@@ -224,7 +224,7 @@ button.outline_btn.schedule_btn {
     background-color: transparent ;
 }
 .hash_tags_outer_container{
-    height: 67px;
+    height: 57px;
     overflow-x: hidden;
     overflow-y: scroll;
 }
@@ -247,6 +247,13 @@ button.outline_btn.schedule_btn {
     .draft_button_outer {
         flex-wrap: wrap;
     }
+    .card-body.post_card{
+        padding: 0px 10px 10px;
+    }
+    .draft-heading{
+        padding: 10px;
+    }
+    
 }
 @media screen and (min-width:992px) {
  
@@ -309,6 +316,9 @@ button.outline_btn.schedule_btn{
         width: 100%;
     }
     h2.acc_not_connected_heading{
+        font-size: 12px;
+    }
+    h3.caption{
         font-size: 12px;
     }
    

@@ -114,8 +114,13 @@ button.slider_btn {
         width: 100%;
     }
     .insights-post-date-outer {
-        width: 100%;
         padding: 0px 12px;
+    }
+    .date_Time_container {
+        left: 6px;
+    }
+    .post_date{
+        line-height: 14px;
     }
 }
 @media screen and (max-width:767px) {

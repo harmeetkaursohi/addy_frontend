@@ -24,7 +24,7 @@
 .comment_header {
     display: flex;
     justify-content: space-between;
-    padding: 26px 32px;
+    padding: 14px 32px;
 }
 
 .back_heading_outer {
