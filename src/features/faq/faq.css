@@ -1,5 +1,5 @@
 div.faq_section{
-    background: #fff;
+    background: #f4f8fe;
 }
 
 .accordian_wrapper .accordion-item {
@@ -115,7 +115,7 @@ background-color: #fff;
 .faq_searchbar .cmn_btn_color {border: transparent;display: flex;width: 133.888px;height: 48.13px;padding: 16px 32px 19px 32px;justify-content: center;align-items: center;gap: 8px;flex-shrink: 0;border-radius: 35px;color: #fff;font-weight: 600;}
 .accordian_wrapper {
     border-radius: 20px;
-    background: #F6F6F6;
+    background: #fff;
     padding: 70px 80px;
 }
 .sendMessageBtn{

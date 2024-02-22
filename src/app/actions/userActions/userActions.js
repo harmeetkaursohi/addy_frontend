@@ -57,8 +57,8 @@ export const updateProfilePic = createAsyncThunk('user/updateProfilePic', async 
     const formData = new FormData();
     formData.append('mediaType', data.formData?.mediaType);
     formData.append('file', data.formData?.file);
-
     return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/customers/profile-pic`, formData,setAuthenticationHeader(data.token)).then(res => {
+        showSuccessToast(`Profile Image Updated Successfully.`);
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

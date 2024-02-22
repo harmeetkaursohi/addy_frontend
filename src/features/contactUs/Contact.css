@@ -57,7 +57,7 @@ h2.cmn_title {
 }
 .contact_form {
     border-radius: 10px;
-    background: #F4F7FC;
+    background: #fff;
     padding: 30px;
 }
 .contact_form .cmn_bg_btn.schedule_btn.loading {
