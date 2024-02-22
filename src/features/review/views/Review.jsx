@@ -16,6 +16,7 @@ import notConnected_img from "../../../images/not_connected_img.svg"
 import {RotatingLines} from "react-loader-spinner";
 import {useNavigate} from "react-router-dom";
 import Select from "react-select";
+import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 const Review = () => {
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: -1, socialMediaType: null});
@@ -269,29 +270,11 @@ const Review = () => {
                             }
                             {
                                 getAllConnectedSocialAccountData?.data?.length === 0 &&
-                                <div className="acc_not_connected_outer text-center">
-                                    <img className={"acc_not_connected_img"} src={notConnected_img}
-                                         alt="notConnected_img"/>
-                                    <h2 className="acc_not_connected_heading">No Account is connected Yet! Please
-                                        connect an account.</h2>
-                                    <button onClick={() => {
-                                        navigate("/dashboard")
-                                    }} className={"connection-error-close-btn mt-3"}>Connect Now
-                                    </button>
-                                </div>
+                                <ConnectSocialMediaAccount messageFor={"ACCOUNT"}/>
                             }
                             {
                                 getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 &&
-                                <div className="acc_not_connected_outer text-center">
-                                    <img className={"acc_not_connected_img"} src={notConnected_img}
-                                         alt="notConnected_img"/>
-                                    <h2 className="acc_not_connected_heading">No Page is connected Yet! Please
-                                        connect an page.</h2>
-                                    <button onClick={() => {
-                                        navigate("/dashboard")
-                                    }} className={"connection-error-close-btn mt-3"}>Connect Now
-                                    </button>
-                                </div>
+                                <ConnectSocialMediaAccount messageFor={"PAGE"}/>
                             }
                         </div>
                     </div>

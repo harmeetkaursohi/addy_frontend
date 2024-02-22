@@ -333,7 +333,7 @@ export function sortByKey(list, key) {
     }
 
     list.sort(sortBy);
-    return list; // return the sorted list
+    return list;
 }
 
 export const redirectToURL = (redirectedURL) => {

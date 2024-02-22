@@ -64,7 +64,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                                 showSuccessToast("Post has been deleted successfully");
                                 dispatch(getAllSocialMediaPostsByCriteria({
                                     token: token,
-                                    query: {limit: 5, postStatus: ["SCHEDULED"]}
+                                    query: {limit: 1000, postStatus: ["DRAFT"]}
                                 }));
                             }
                         }).catch((error) => {

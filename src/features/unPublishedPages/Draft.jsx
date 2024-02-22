@@ -48,9 +48,9 @@ const Draft = () => {
 
     };
     const handleCreatePost = () => {
-        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length>0
-        const isAnyAccountConnected=getAllConnectedSocialAccountData?.data?.length>0
-        if (isAnyPageConnected && isAnyAccountConnected ) {
+        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
+        const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
+        if (isAnyPageConnected && isAnyAccountConnected) {
             navigate("/planner/post")
         } else {
             setShowConnectAccountModal(true)
@@ -87,11 +87,16 @@ const Draft = () => {
                                 <FullCalendar
                                     ref={calendarRef}
                                     plugins={[dayGridPlugin]}
-                                    headerToolbar={{
-                                        left: '  prev',
-                                        center: 'title',
-                                        right: 'next,timeGridDay,',
-                                    }}
+                                    headerToolbar={(getAllConnectedSocialAccountData?.loading || getAllConnectedSocialAccountData?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0) ?
+                                        {
+                                            left: '  ',
+                                            center: '',
+                                            right: '',
+                                        } : {
+                                            left: '  prev',
+                                            center: 'title',
+                                            right: 'next,timeGridDay,',
+                                        }}
                                     customButtons={{
                                         prev: {text: 'Custom Prev', click: () => customHeaderClick("Prev")},
                                         next: {text: 'Custom Next', click: () => customHeaderClick("Next")},

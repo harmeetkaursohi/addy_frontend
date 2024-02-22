@@ -399,11 +399,16 @@ const Planner = () => {
                                             return "calendar_card_disable";
                                         }
                                     }}
-                                    headerToolbar={{
-                                        left: '  prev',
-                                        center: 'title',
-                                        right: 'next,timeGridDay,',
-                                    }}
+                                    headerToolbar={ (isDraftPost && (getAllConnectedSocialAccountData?.loading || getAllConnectedSocialAccountData?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0)) ?
+                                        {
+                                            left: '  ',
+                                            center: '',
+                                            right: '',
+                                        } : {
+                                            left: '  prev',
+                                            center: 'title',
+                                            right: 'next,timeGridDay,',
+                                        }}
 
                                     customButtons={{
                                         prev: {text: 'Custom Prev', click: () => customHeaderClick("Prev")},

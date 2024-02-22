@@ -47,14 +47,13 @@ const Layout = () => {
         }
     }, [token, userData, dispatch])
 
-    useEffect(()=>{
+    useEffect(() => {
         const decodeJwt = decodeJwtToken(token);
-        if(getAllConnectedSocialAccountData?.data===undefined ||connectedPagesData?.facebookConnectedPages===undefined ){
+        if (getAllConnectedSocialAccountData?.data === undefined || connectedPagesData?.facebookConnectedPages === undefined) {
             dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
         }
-
-    },[])
+    }, [])
 
     const LogOut = () => {
         Swal.fire({
@@ -91,7 +90,7 @@ const Layout = () => {
                                 className='profile_img'/>
                             <div>
                                 <h3 className='profile_container'>{userData?.fullName || "name"}</h3>
-                                <h4 className="profile_container">{userData?.email }</h4>
+                                <h4 className="profile_container">{userData?.email}</h4>
                             </div>
                         </div>
                     </div>
@@ -115,7 +114,9 @@ const Layout = () => {
                         <li className='sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer'>
                             <div className=' sidebar_item_outers Profile_Img_outer'>
                                 {/* <img className='userimg'  src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> */}
-                                <Link to="/profile"><img className='userimg'  src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> Profile </Link>
+                                <Link to="/profile"><img className='userimg'
+                                                         src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> Profile
+                                </Link>
                             </div>
                         </li>
                         <li className='sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer'>
