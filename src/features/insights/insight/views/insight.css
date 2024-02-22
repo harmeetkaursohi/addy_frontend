@@ -358,7 +358,9 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
         margin-top: 20px;
         font-size: 15px;
     }
-   
+    .insight_inner_content {
+        padding: 10px;
+    }
     
    
 }

@@ -72,12 +72,18 @@ isolation: unset !important;
 .change_profile{
     display: none;
 }
+label.edit_label:hover {
+    color: #e97011;
+    background: white;
+    border: 1px solid #e97011;
+}
 label.edit_label{
     background: #e97011;
-    padding: 6px 10px;
+    cursor: pointer;
+    padding: 8px 11px;
     border-radius: 5px;
     color: white;
-    font-size: 22px;
+    font-size: 24px;
 }
 .changeProfile_label{
     cursor: pointer;
@@ -122,7 +128,9 @@ label.edit_label{
   }
   .cmn_select_box{
     appearance: auto !important;
+    /* color: #9d9a9a !important; */
   }
+ 
 @media screen and (min-width:1499px) {
     .editprofile_outer{
         width: 1100px;
@@ -143,6 +151,10 @@ label.edit_label{
         left: 40%;
         right: 40%;
    
+    }
+    label.edit_label {
+        padding: 6px 8px;
+        font-size: 23px;
     }
     .user_pic {
         height: 100px;

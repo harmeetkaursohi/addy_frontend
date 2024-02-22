@@ -180,7 +180,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                     onChange={handleCountryChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.country}
-                                                    className="form-control mt-1"
+                                                    className="form-control mt-1 cmn_select_box"
                                                 >
                                                     <option value="">Select Country</option>
                                                     {countries?.map((country) => (
@@ -210,7 +210,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                             onChange={handleStateChange}
                                                             onBlur={formik.handleBlur}
                                                             value={formik.values.state}
-                                                            className="form-control mt-1"
+                                                            className="form-control mt-1 cmn_select_box"
                                                         >
                                                             <option value="">Select State</option>
                                                             {states?.map((state) => (
@@ -254,7 +254,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                             onChange={formik.handleChange}
                                                             onBlur={formik.handleBlur}
                                                             value={formik.values.county}
-                                                            className="form-control mt-1"
+                                                            className="form-control mt-1 cmn_select_box"
                                                         >
                                                             <option value="">Select County</option>
                                                             {cities?.map((city, index) => (
