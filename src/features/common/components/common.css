@@ -2,11 +2,13 @@
     padding: 9px 13px;
     display: flex;
     justify-content: space-between;
+    border-top: 1px solid #ece3e3;
+    margin: 12px 10px 0px;
 }
 .linkedin_dropdown {
     /* background: #f4f1f1; */
     padding: 10px 0px;
-    /* border-radius: 5px; */
+  /* border-radius: 5px; */
 }
 .FaLinkedin_icon{
     color: #0866ff;
@@ -36,6 +38,7 @@
 }
 .repost__icon{
     font-size: 22px;
+    transform: rotate(91deg);
 }
 .not_connect_heading{
     font-size: 25px;

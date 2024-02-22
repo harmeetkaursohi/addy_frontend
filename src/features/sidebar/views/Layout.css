@@ -13,6 +13,7 @@
 .userimg{
     height: 28px;
     width: 28px;
+    border-radius: 100%;
 }
 .svg_color {
     stroke: black;

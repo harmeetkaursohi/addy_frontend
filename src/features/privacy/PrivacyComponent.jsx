@@ -22,13 +22,21 @@ const PrivacyComponent = () => {
     const doc = new DOMParser().parseFromString(html, "text/html");
    
     const specificDiv = doc.getElementById(divId);
-    
-    return specificDiv ? specificDiv.outerHTML : "";
+    if (specificDiv) {
+     
+      specificDiv.style.fontFamily = 'Nunito sans-serif';
+      specificDiv.style.color = "#2E3646"; 
+      return specificDiv ? specificDiv.outerHTML : "";
+  } else {
+      return "";
+  }
+
+  
   };
   return (
     <>
       <SideBar />
-      <div className="cmn_container faq_section pt-5">
+      <div className="cmn_container  pt-5">
         <div className="cmn_wrapper_outer">
           <div className="dashboard_outer">
             <h2 className="cmn_title">Privacy Policy</h2>

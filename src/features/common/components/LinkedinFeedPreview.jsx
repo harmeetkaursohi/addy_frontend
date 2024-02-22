@@ -1,4 +1,3 @@
-import {FiThumbsUp} from "react-icons/fi";
 import ellipse_img from "../../../images/ellipse.svg"
 import default_user_icon from "../../../images/default_user_icon.svg"
 import CommonSlider from "./CommonSlider";
@@ -9,6 +8,7 @@ import nature from "../../../images/nature.png"
 import {FaLinkedin} from "react-icons/fa"
 import { SlLike } from "react-icons/sl";
 import "./common.css"
+import {TiWorld}  from "react-icons/ti"
 const LinkedinFeedpreview = ({
                                   previewTitle,
                                   pageName,
@@ -32,7 +32,8 @@ const LinkedinFeedpreview = ({
                     <div>
                         <h3 className='create_post_text user_name boost_post_text'>{pageName} <FaLinkedin className="FaLinkedin_icon"/></h3>
                         <h6 className='status create_post_text'>just now
-                            <img src={ellipse_img}/>
+                            <img src={ellipse_img} className="ms-1"/>
+                            <TiWorld className="world_icon ms-1"/>
                         </h6>
                     </div>
                 </div>

@@ -250,10 +250,10 @@ h2.acc_not_connected_heading {
 }
 .Caption_outer {
   text-overflow: ellipsis;
-  /* width: 394px; */
+   
   cursor: pointer;
   overflow: hidden;
-  /* text-wrap: nowrap;  */
+
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;

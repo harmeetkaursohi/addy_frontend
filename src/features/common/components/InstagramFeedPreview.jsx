@@ -21,7 +21,7 @@ const InstagramFeedPreview = ({previewTitle, pageName, userData, files, selected
                     <div>
                         <h3 className='create_post_text user_name boost_post_text'>{pageName}</h3>
                         <h6 className='status create_post_text'>just now
-                            <img src={ellipse_img}/>
+                            <img src={ellipse_img} className="ms-1" />
                         </h6>
                     </div>
                 </div>
