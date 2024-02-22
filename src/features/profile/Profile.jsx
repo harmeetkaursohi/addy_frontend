@@ -15,12 +15,15 @@ import SideBar from "../sidebar/views/Layout";
 import {Industries, SignupSource, UpdatedSuccessfully} from "../../utils/contantData";
 import {showSuccessToast} from "../common/components/Toast";
 import CommonLoader from "../common/components/CommonLoader";
-
 import { FaCamera } from "react-icons/fa";
-import { RiEditBoxFill } from "react-icons/ri";
+import { RiCloseFill, RiEditBoxFill } from "react-icons/ri";
+import CropImageModal from "../common/components/CropImageModal";
+
 
 const Profile = () => {
     const userInfo = useSelector(state => state.user.userInfoReducer);
+    const [image, setImage] = useState(null);
+
     const updateProfilePicData = useSelector(state => state.user.updateProfilePicReducer);
     const updateCustomerData = useSelector(state => state.user.updateCustomerReducer);
     const [userData, setUserData] = useState(null);
@@ -30,6 +33,8 @@ const Profile = () => {
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
     const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useState(false);
+    const [showCropImageModal, setShowCropImageModal] = useState(false);
+    const [blob, setBlob] = useState(null)
     const token = getToken();
     const dispatch = useDispatch();
 
@@ -107,21 +112,31 @@ const Profile = () => {
         },
     });
 
+    const getBlob = (blob) => {        
+        setBlob(blob)
+    }
     const changeProfileHandler = (e) => {
-        if (e.target.files[0]) {
-            const updateProfilePicData = {
-                token: token,
-                formData: {
-                    mediaType: "IMAGE",
-                    file: e.target.files[0]
-                }
+        if (e.target.files[0]) {            
+            // convert image file to base64 string
+            const file = e.target.files[0]
+            const reader = new FileReader()
+            reader.addEventListener('load', () => {                
+                setShowCropImageModal(true)            
+                setImage(reader.result);
+            }, false)
+            if (file) {
+                reader.readAsDataURL(file)
             }
-            dispatch(updateProfilePic(updateProfilePicData)).then(res => {
-                if (res.meta.requestStatus === "fulfilled") {
-                    getUserAccountInfo();
-                }
-            })
         }
+    }
+
+    const UploadCroppedImage = ()=>{        
+        setShowCropImageModal(false)                          
+        dispatch(updateProfilePic({token:token,formData:{mediaType:'IMAGE',file:blob}})).then(res => {
+            if (res.meta.requestStatus === "fulfilled") {
+                getUserAccountInfo();
+            }
+        })
     }
 
     const getUserAccountInfo = () => {
@@ -229,10 +244,9 @@ const Profile = () => {
                                         </div>
                                         <div className="form-group">
                                             <label onClick={() => {
-                                                setEditMode(true)
+                                                setEditMode(!editMode)
                                             }} className="edit_label updateAccount_label" htmlFor="">
-                                               <RiEditBoxFill/>
-
+                                               {!editMode ? <RiEditBoxFill/> : <RiCloseFill />}
                                             </label>
                                         </div>
                                     </div>
@@ -585,6 +599,7 @@ const Profile = () => {
                         </>
                 }
             </section>
+            {showCropImageModal &&  <CropImageModal imageUrl={image} showModal={showCropImageModal} setShowModal={setShowCropImageModal} UploadCroppedImage={UploadCroppedImage} getBlob={getBlob}/>}
             {
                 showUpdatePasswordModal && <UpdatePasswordModal showModal={showUpdatePasswordModal}
                                                                 setShowModal={setShowUpdatePasswordModal}></UpdatePasswordModal>

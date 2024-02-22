@@ -1758,3 +1758,69 @@ export const getValueOrDefault=(value,defaultValue)=>{
     }
     return value
 }
+
+// Helper function to load image based on its type
+const createImage = (url) =>
+    new Promise((resolve, reject) => {
+        const image = new Image()
+        image.addEventListener('load', () => resolve(image))
+        image.addEventListener('error', error => reject(error))
+        image.setAttribute('crossOrigin', 'anonymous')
+        image.src = url
+    })
+export async function getCroppedImg(imageSrc, crop, zoom) {
+    const image = await createImage(imageSrc)
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+
+    /* setting canvas width & height allows us to 
+    resize from the original image resolution */
+    canvas.width = 250
+    canvas.height = 250
+
+    ctx.drawImage(
+        image,
+        crop.x,
+        crop.y,
+        crop.width,
+        crop.height,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    )
+
+    return new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+            resolve(blob)
+        }, 'image/jpeg')
+    })
+    // const imageBitmap = await createImage(image);        
+    // const canvas = document.createElement('canvas');
+    // const ctx = canvas.getContext('2d');    
+    // // Set the canvas size based on the crop area and zoom level
+    // const scaleX = imageBitmap.width / image.width;
+    // const scaleY = imageBitmap.height / image.height;
+    // canvas.width = crop.width * scaleX * zoom;
+    // canvas.height = crop.height * scaleY * zoom;
+  
+    // // Draw the cropped image on the canvas
+    // ctx.drawImage(
+    //   imageBitmap,
+    //   crop.x * scaleX,
+    //   crop.y * scaleY,
+    //   crop.width * scaleX * zoom,
+    //   crop.height * scaleY * zoom,
+    //   0,
+    //   0,
+    //   canvas.width,
+    //   canvas.height
+    // );
+  
+    // // Convert the canvas content to a Blob
+    // return new Promise((resolve) => {
+    //   canvas.toBlob((blob) => {
+    //     resolve(blob);
+    //   }, 'image/jpeg');
+    // });
+  }

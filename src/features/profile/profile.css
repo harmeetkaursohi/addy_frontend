@@ -74,12 +74,10 @@ isolation: unset !important;
 }
 label.edit_label{
     background: #e97011;
-
     padding: 6px 10px;
     border-radius: 5px;
     color: white;
     font-size: 22px;
-
 }
 .changeProfile_label{
     cursor: pointer;
