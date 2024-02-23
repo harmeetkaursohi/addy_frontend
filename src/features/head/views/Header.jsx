@@ -7,13 +7,21 @@ import {useSelector} from "react-redux";
 import Loader from "../../loader/Loader";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 
-const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList, setShowConnectAccountModal}) => {
+const Header = ({userData, setShowConnectAccountModal}) => {
 
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+
+    const getAllFacebookPagesData = useSelector(state => state.facebook.getFacebookPageReducer);
+    const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
+    const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
+    const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
+
+
     const navigate = useNavigate();
     const handleCreatePost = () => {
-        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length>0
-        const isAnyAccountConnected=getAllConnectedSocialAccountData?.data?.length>0
+        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
+        const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
         if (isAnyPageConnected && isAnyAccountConnected) {
             navigate("/planner/post")
         } else {
@@ -24,14 +32,16 @@ const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList, s
         <>
             <header>
                 <div className="header_outer">
-                    
+
                     <form>
                         <div className="row">
                             <div className="col-lg-5 col-md-12 col-sm-12">
                                 <div className="header_outer_container">
                                     <div className="header_container">
-                                        <h2 className="">{typeof userData?.fullName !== "undefined" ? `${jsondata.heythere} ${userData?.fullName}!` : <SkeletonEffect count={1}></SkeletonEffect>}</h2>
-                                        <h6>{typeof userData?.fullName !== "undefined" ? `Curious to explore? Welcome  to your all-in Dashboard and discover more!` : <SkeletonEffect count={1}></SkeletonEffect>}</h6>
+                                        <h2 className="">{typeof userData?.fullName !== "undefined" ? `${jsondata.heythere} ${userData?.fullName}!` :
+                                            <SkeletonEffect count={1}></SkeletonEffect>}</h2>
+                                        <h6>{typeof userData?.fullName !== "undefined" ? `Curious to explore? Welcome  to your all-in Dashboard and discover more!` :
+                                            <SkeletonEffect count={1}></SkeletonEffect>}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -44,27 +54,15 @@ const Header = ({userData, getAllConnectedSocialAccountData, facebookPageList, s
 
                                     <div className="flex-grow-1"></div>
                                     <div className="create_Ad_outer">
-                                        {/*<button className="Create_Ad_btn crate_btn">*/}
-                                        {/*    {jsondata.createad}*/}
-                                        {/*</button>*/}
-                                        {/*{*/}
-                                        {/*    ((!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && facebookPageList?.length > 0) &&*/}
-                                        {/*        <Link to="/planner/post" className="createPost_btn crate_btn cmn_btn_color">*/}
-                                        {/*            {jsondata.createpost}*/}
-                                        {/*        </Link>*/}
-
-                                        {/*}*/}
                                         {
-                                            (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data) ?
-                                            <div onClick={handleCreatePost}
-                                                 className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
-                                                {jsondata.createpost}
-                                            </div> : (
-                                                <div className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
+                                            (connectedPagesData?.loading || getAllConnectedSocialAccountData?.loading || getAllFacebookPagesData?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading) ?
+                                                <div
+                                                    className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
                                                     <Loader/>
+                                                </div> : <div onClick={handleCreatePost}
+                                                              className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
+                                                    {jsondata.createpost}
                                                 </div>
-                                            )
-
                                         }
 
                                     </div>

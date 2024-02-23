@@ -294,12 +294,14 @@ const Planner = () => {
                                     onClick={handleDraft}
                                     isDisabled={false}
                                 />
-                                {(!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data) ?
-                                    <span onClick={handleCreatePost}
-                                          className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
-                                    >{jsondata.createpost}</span> :
-                                    <span className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
-                                    ><Loader className='create-post-loader'/></span>}
+                                {
+                                    (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
+                                        <span className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
+                                        ><Loader className='create-post-loader'/></span> :
+                                        <span onClick={handleCreatePost}
+                                              className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
+                                        >{jsondata.createpost}</span>
+                                }
                             </div>
                         </div>
                         {
@@ -399,7 +401,7 @@ const Planner = () => {
                                             return "calendar_card_disable";
                                         }
                                     }}
-                                    headerToolbar={ (isDraftPost && (getAllConnectedSocialAccountData?.loading || getAllConnectedSocialAccountData?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0)) ?
+                                    headerToolbar={(isDraftPost && (getAllConnectedSocialAccountData?.loading || getAllConnectedSocialAccountData?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0)) ?
                                         {
                                             left: '  ',
                                             center: '',

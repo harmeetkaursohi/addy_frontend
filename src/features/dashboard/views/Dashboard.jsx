@@ -37,7 +37,7 @@ const Dashboard = () => {
             <SideBar/>
             <div className="cmn_container">
                 <div className="cmn_wrapper_outer">
-                    <Header userData={userData} getAllConnectedSocialAccountData={getAllConnectedSocialAccountData}
+                    <Header userData={userData}
                             facebookPageList={facebookPageList} setShowConnectAccountModal={setShowConnectAccountModal}/>
                     <div className="dashboard_outer">
                         <div className="row">
