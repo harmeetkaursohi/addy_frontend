@@ -17,7 +17,11 @@
 
 }
 
- 
+.no-account-connected-insights-outer {
+    background: white;
+    border-radius: 20px;
+    padding-bottom: 30px;
+}
 
 .select-account-txt {
     color: #000;

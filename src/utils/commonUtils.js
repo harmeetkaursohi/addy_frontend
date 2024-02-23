@@ -1227,7 +1227,6 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
             return formattedData;
         }
         case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
-            console.log("data====>", data)
             formattedData = {
                 total_like: data?.shareStatistics?.totalShareStatistics?.likeCount,
                 total_comment: data?.shareStatistics?.totalShareStatistics?.commentCount,
@@ -1242,33 +1241,33 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
 
 }
 export const getAttachmentsData = (data, socialMediaType) => {
-    if (data === undefined || data === null) {
+    if (data === undefined || data === null || socialMediaType===undefined ||socialMediaType===null) {
         return []
     }
     switch (socialMediaType) {
         case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
-            if (data?.attachments?.data[0]?.type === undefined) {
+            if ( data?.attachments?.data?.[0]?.type === undefined) {
                 return []
-            } else if (data?.attachments?.data[0]?.type === "album") {
-                return data?.attachments?.data[0]?.subattachments?.data?.map(attachment => {
+            } else if (data?.attachments?.data?.[0]?.type === "album") {
+                return data?.attachments?.data?.[0]?.subattachments?.data?.map(attachment => {
                     return {
                         mediaType: "IMAGE",
                         imageURL: attachment?.media?.image?.src,
                         pageId: data?.id,
                     }
                 })
-            } else if (data?.attachments?.data[0]?.type === "photo") {
+            } else if (data?.attachments?.data?.[0]?.type === "photo") {
                 return [{
                     mediaType: "IMAGE",
-                    imageURL: data?.attachments?.data[0]?.media?.image?.src,
+                    imageURL: data?.attachments?.data?.[0]?.media?.image?.src,
                     pageId: data?.id,
 
                 }]
             } else {
                 return [{
                     mediaType: "VIDEO",
-                    imageURL: data?.attachments?.data[0]?.media?.image?.src,
-                    sourceURL: data?.attachments?.data[0]?.media?.source,
+                    imageURL: data?.attachments?.data?.[0]?.media?.image?.src,
+                    sourceURL: data?.attachments?.data?.[0]?.media?.source,
                     pageId: data?.id,
                 }]
             }

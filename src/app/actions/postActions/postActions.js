@@ -491,7 +491,7 @@ export const generateAICaptionAndHashTagService = async (requestBody) => {
     return await baseAxios.post(`${import.meta.env.VITE_APP_AI_GENERATE_CAPTION_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
 }
 export const getPostByPageIdAndPostStatus = createAsyncThunk('post/getPostByPageIdAndPostStatus', async (data, thunkAPI) => {
-    if (typeof data.insightPostsCache === "undefined") {
+    if (data?.insightPostsCache?.getPostByPageIdAndPostStatusDataCache[data?.requestBody?.pageNumber] === undefined) {
         return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/byPageAndStatus`, data?.requestBody, setAuthenticationHeader(data.token)).then(res => {
             return res.data;
         }).catch(error => {
@@ -499,7 +499,7 @@ export const getPostByPageIdAndPostStatus = createAsyncThunk('post/getPostByPage
             return thunkAPI.rejectWithValue(error.response);
         });
     } else {
-        return data.insightPostsCache
+        return data.insightPostsCache.getPostByPageIdAndPostStatusDataCache[data?.requestBody?.pageNumber]
     }
 });
 

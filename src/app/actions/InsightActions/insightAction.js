@@ -11,80 +11,105 @@ import {
 import {getToken, setAuthenticationHeader} from "../../auth/auth";
 
 
-export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWithInsights', async (data, thunkAPI) => {    
-        switch (data?.socialMediaType) {
-            case "INSTAGRAM": {
-                const insightsCache = typeof data.insightsCache === "object" ? data.insightsCache:{}
-                const existingKeys = data.postIds.filter(key => insightsCache.hasOwnProperty(key));
-                if(Object.keys(data.postIds).length === existingKeys.length){
-                    const valuesArray = await Promise.all(existingKeys.map(key => data.insightsCache[key]));                    
-                    return valuesArray
-                }else{
-                    const postIds = data.postIds.map(id => id).join(',');
-                    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,insights.metric(reach,shares),caption,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
-                    return await baseAxios.get(apiUrl).then(res => {                        
-                        return res.data;
-                    }).catch(error => {
-                        showErrorToast(error.response.data.error.message);
-                        return thunkAPI.rejectWithValue(error.response);
-                    });
-                }                
+export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWithInsights', async (data, thunkAPI) => {
+
+    switch (data?.socialMediaType) {
+        case "INSTAGRAM": {
+            const filteredArray = data?.insightsCache?.getPostDataWithInsightsDataCache.filter(obj => {
+                const id = Object.keys(obj)[0];
+                return data?.postIds.includes(id);
+            });
+            if (filteredArray.length === data?.postIds.length) {
+                let response = {};
+                filteredArray?.forEach(postWithInsight => {
+                    const postId = Object.keys(postWithInsight)[0]
+                    response = {...response, [postId]: postWithInsight[postId]}
+                })
+                return response
+            } else {
+                const postIds = data.postIds.map(id => id).join(',');
+                const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,insights.metric(reach,shares),caption,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
+                return await baseAxios.get(apiUrl).then(res => {
+                    return res.data;
+                }).catch(error => {
+                    showErrorToast(error.response.data.error.message);
+                    return thunkAPI.rejectWithValue(error.response);
+                });
             }
-            case "FACEBOOK": {
-                const insightsCache = typeof data.insightsCache === "object" ? data.insightsCache:{}
-                const existingKeys = data.postIds.filter(key => insightsCache.hasOwnProperty(key));
-                if(Object.keys(data.postIds).length === existingKeys.length){
-                    const valuesArray = await Promise.all(existingKeys.map(key => data.insightsCache[key]));                    
-                    return valuesArray
-                }else{
-                    const postIds = data.postIds.map(id => id).join(',');
-                    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
-                    return await baseAxios.get(apiUrl).then(res => {
-                        return res.data;
-                    }).catch(error => {
-                        showErrorToast(error.response.data.error.message);
-                        return thunkAPI.rejectWithValue(error.response);
-                    });
-                }
+        }
+        case "FACEBOOK": {
+            const filteredArray = data?.insightsCache?.getPostDataWithInsightsDataCache.filter(obj => {
+                const id = Object.keys(obj)[0];
+                return data?.postIds.includes(id);
+            });
+            if (filteredArray.length === data?.postIds.length) {
+                let response = {};
+                filteredArray?.forEach(postWithInsight => {
+                    const postId = Object.keys(postWithInsight)[0]
+                    response = {...response, [postId]: postWithInsight[postId]}
+                })
+                return response
+            } else {
+                const postIds = data.postIds.map(id => id).join(',');
+                const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
+                return await baseAxios.get(apiUrl).then(res => {
+                    return res.data;
+                }).catch(error => {
+                    showErrorToast(error.response.data.error.message);
+                    return thunkAPI.rejectWithValue(error.response);
+                });
             }
-            case "PINTEREST": {
-                const insightsCache = typeof data.insightsCache === "object" ? data.insightsCache:{}
-                const existingKeys = data.postIds.filter(key => insightsCache.hasOwnProperty(key));
-                if(Object.keys(data.postIds).length === existingKeys.length){
-                    const valuesArray = await Promise.all(existingKeys.map(key => data.insightsCache[key]));                    
-                    return valuesArray
-                }else{
-                    const postIds = data.postIds.map(id => id).join(',');
-                    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${postIds}`;
-                    return await baseAxios.get(apiUrl, setAuthenticationHeader(data.token)).then(res => {
-                        return res.data;
-                    }).catch(error => {
-                        showErrorToast(error.response.data.error.message);
-                        return thunkAPI.rejectWithValue(error.response);
-                    });
-                }                
-                break;
+        }
+        case "PINTEREST": {
+            const filteredArray = data?.insightsCache?.getPostDataWithInsightsDataCache.filter(obj => {
+                const id = Object.keys(obj)[0];
+                return data?.postIds.includes(id);
+            });
+            if (filteredArray.length === data?.postIds.length) {
+                let response = {};
+                filteredArray?.forEach(postWithInsight => {
+                    const postId = Object.keys(postWithInsight)[0]
+                    response = {...response, [postId]: postWithInsight[postId]}
+                })
+                return response
+            } else {
+                const postIds = data.postIds.map(id => id).join(',');
+                const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${postIds}`;
+                return await baseAxios.get(apiUrl, setAuthenticationHeader(data.token)).then(res => {
+                    return res.data;
+                }).catch(error => {
+                    showErrorToast(error.response.data.error.message);
+                    return thunkAPI.rejectWithValue(error.response);
+                });
             }
-            case "LINKEDIN": {
-                const insightsCache = typeof data.insightsCache === "object" ? data.insightsCache:{}
-                const existingKeys = data.postIds.filter(key => insightsCache.hasOwnProperty(key));
-                if(Object.keys(data.postIds).length === existingKeys.length){
-                    const valuesArray = await Promise.all(existingKeys.map(key => data.insightsCache[key]));
-                    return valuesArray
-                }else{
-                    const postIds = data.postIds.map(id => id).join(',');
-                    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/post/insights?ids=${postIds}&orgId=${data?.pageId}`;
-                    return await baseAxios.get(apiUrl,setAuthenticationHeader(data.token)).then(res => {
-                        return res.data;
-                    }).catch(error => {
-                        showErrorToast(error.response.data.error.message);
-                        return thunkAPI.rejectWithValue(error.response);
-                    });
-                }
-                break;
+            break;
+        }
+        case "LINKEDIN": {
+            const filteredArray = data?.insightsCache?.getPostDataWithInsightsDataCache.filter(obj => {
+                const id = Object.keys(obj)[0];
+                return data?.postIds.includes(id);
+            });
+            if (filteredArray.length === data?.postIds.length) {
+                let response = {};
+                filteredArray?.forEach(postWithInsight => {
+                    const postId = Object.keys(postWithInsight)[0]
+                    response = {...response, [postId]: postWithInsight[postId]}
+                })
+                return response
+            } else {
+                const postIds = data.postIds.map(id => id).join(',');
+                const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/post/insights?ids=${postIds}&orgId=${data?.pageId}`;
+                return await baseAxios.get(apiUrl, setAuthenticationHeader(data.token)).then(res => {
+                    return res.data;
+                }).catch(error => {
+                    showErrorToast(error.response.data.error.message);
+                    return thunkAPI.rejectWithValue(error.response);
+                });
             }
-        }    
-    
+            break;
+        }
+    }
+
 });
 export const getTotalFollowers = createAsyncThunk('insight/getTotalFollowers', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
@@ -149,7 +174,7 @@ export const getAccountReachedAndAccountEngaged = createAsyncThunk('insight/getA
             break;
         }
         case "LINKEDIN": {
-            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationalEntityShareStatistics?q=organizationalEntity&organizationalEntity=${data?.pageId}&timeGranularityType=DAY&startDate=${generateUnixTimestampFor(data?.period*2)*1000}&endDate=${generateUnixTimestampFor("now")*1000}&timePeriod=timeBound`;
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationalEntityShareStatistics?q=organizationalEntity&organizationalEntity=${data?.pageId}&timeGranularityType=DAY&startDate=${generateUnixTimestampFor(data?.period * 2) * 1000}&endDate=${generateUnixTimestampFor("now") * 1000}&timePeriod=timeBound`;
             return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token))
                 .then((response) => {
                     return getFormattedAccountReachAndEngagementData(response?.data, data?.socialMediaType);
@@ -303,8 +328,8 @@ const getLinkedInDemographicData = async (data, thunkAPI) => {
         geo: null,
         industry: null,
     }
-    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationalEntityFollowerStatistics/${data?.pageId}?pageAccessToken=${data?.pageAccessToken}`;    
-    await baseAxios.get(apiUrl, setAuthenticationHeader(getToken())).then(demographicData => {             
+    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationalEntityFollowerStatistics/${data?.pageId}?pageAccessToken=${data?.pageAccessToken}`;
+    await baseAxios.get(apiUrl, setAuthenticationHeader(getToken())).then(demographicData => {
         demographicData = demographicData.data
         formattedApiResponse = {
             ...formattedApiResponse,

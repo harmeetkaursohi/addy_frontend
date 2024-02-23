@@ -81,7 +81,7 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
             //total lifeTime followers
             await baseAxios.get(fullPathTotalFollowers)
-                .then((response) => {x
+                .then((response) => {
                     const pageData = response.data;
                     if (pageData) {
                         initialObject.Followers.lifeTime += pageData?.followers_count || 0;

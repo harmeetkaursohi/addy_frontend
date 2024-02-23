@@ -4,7 +4,7 @@ import jsondata from "../../../locales/data/initialdata.json"
 import {SocialAccountProvider} from "../../../utils/contantData";
 import {useCallback, useEffect, useRef, useState} from "react";
 import usePosts from "../../common/hooks/usePosts";
-import {computeImageURL, createOptionListForSelectTag, getInitialLetterCap} from "../../../utils/commonUtils";
+import {computeImageURL, createOptionListForSelectTag} from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
 import CommonLoader from "../../common/components/CommonLoader";
@@ -12,7 +12,6 @@ import {FaArrowCircleRight} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
 import {getPostPageInfoAction} from "../../../app/actions/postActions/postActions";
 import {getToken} from "../../../app/auth/auth";
-import notConnected_img from "../../../images/not_connected_img.svg"
 import {RotatingLines} from "react-loader-spinner";
 import {useNavigate} from "react-router-dom";
 import Select from "react-select";
