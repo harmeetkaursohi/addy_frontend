@@ -312,7 +312,7 @@ const Profile = () => {
                                                         </label>
                                                         <OverlayTrigger
                                                             placement="right"
-                                                            overlay={<Tooltip id="button-tooltip">
+                                                            overlay={<Tooltip id="button-tooltip custom-tooltip">
                                                                 Please refrain from changing username.
                                                                 Your username are integral to several functionalities.
                                                                 Altering them might disrupt some services. For more

@@ -58,7 +58,7 @@ const CommonSlider = ({
                             files?.map((file, index) => (
                                 <div key={index}>
                                     <ReactPlayer
-                                        height={"100%"}
+                                        height={"300px"}
                                         width={"100%"}
                                         className='post_img'
                                         url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}

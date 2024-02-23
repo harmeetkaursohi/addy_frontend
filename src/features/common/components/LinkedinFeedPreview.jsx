@@ -21,6 +21,7 @@ const LinkedinFeedpreview = ({
                                   hashTag,
                                   destinationUrl = null
                               }) => {
+                     
 
     return (
         <>
@@ -28,7 +29,7 @@ const LinkedinFeedpreview = ({
             <div className='preview_wrapper '>
                 <div>
                 <div className='user_profile_info'>
-                <img style={{background:"white"}} src={userData?.profilePic?userData?.profilePic:default_user_icon} height="30px" width="30px"/>
+                <img style={{background:"white"}} src={pageImage?pageImage:default_user_icon} height="30px" width="30px"/>
                     <div>
                         <h3 className='create_post_text user_name boost_post_text'>{pageName} <FaLinkedin className="FaLinkedin_icon"/></h3>
                         <h6 className='status create_post_text'>just now
@@ -46,7 +47,7 @@ const LinkedinFeedpreview = ({
                         {/*<img src={noImageAvailable} width="100%"/>*/}
                         <div className=' linkedin_post_likes'>
                         <div className="linkedin_dropdown">
-                            <img src={userData?.profilePic?userData?.profilePic:default_user_icon} height="30px" width="30px"/>
+                            <img src={pageImage?pageImage:default_user_icon} height="30px" width="30px"/>
                         <IoMdArrowDropdown />
                     </div>
                     <div className="linkedin_likes">

@@ -12,9 +12,9 @@
 }
 .update-pic-loading{
     position: absolute;
-    left: 47%;
-    right: 47%;
-    top: 50px;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
 }
 .change_password_btn{
     flex-direction: row-reverse;
@@ -123,6 +123,7 @@ label.edit_label{
     border-color: #ee7817 !important; /* Change arrow color */
     
   }
+ 
   .edit_label_container{
     text-align: right;
   }
@@ -146,12 +147,7 @@ label.edit_label{
   
 }
  @media screen and (max-width:767px){
-    .update-pic-loading{
-       top:35px;
-        left: 40%;
-        right: 40%;
-   
-    }
+
     label.edit_label {
         padding: 6px 8px;
         font-size: 23px;

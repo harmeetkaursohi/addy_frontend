@@ -23,7 +23,7 @@ const PinterestFeedPreview = ({
             <h2 className={"cmn_white_text feed_preview facebookFeedpreview_text"}>{previewTitle}</h2>
             <div className='preview_wrapper1 preview_img_container'>
                 <div>
-                    <div className='img_container mt-2 ms-2'>
+                    <div className='img_container '>
                         <div className='select_options_container z-index-2'>
                             <select disabled={true}>
                                 <option>{pageName}</option>
@@ -32,7 +32,7 @@ const PinterestFeedPreview = ({
                         </div>
                         <button className='save_button z-index-2'>Save</button>
                         <CommonSlider files={files} selectedFileType={selectedFileType} caption={""} hashTag={""} ></CommonSlider>
-                        {/*<img src={noImageAvailable} width="100%"/>*/}
+                        {/* <img src={noImageAvailable} width="100%"/> */}
                         <div className='img_footer'>
                             <div className="FiArrowUpRight">
 
@@ -63,7 +63,7 @@ const PinterestFeedPreview = ({
                     </div>
                     <h3 className={" pin-title"}>{pinTitle}</h3>
                     <div className="user_caption_wrapper">
-                        <img style={{background:"white"}} src={userData?.profilePic?userData?.profilePic:default_user_icon} height="30px" width="30px"/>
+                        <img style={{background:"white"}} src={pageImage?pageImage:default_user_icon} height="30px" width="30px"/>
                         <h6>{userData.fullName}</h6>
                     </div>
                 </div>

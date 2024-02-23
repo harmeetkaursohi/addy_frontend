@@ -3,7 +3,8 @@ import Modal from 'react-bootstrap/Modal';
 import "./CropImageModal.css"
 import Cropper from 'react-easy-crop'
 import { getCroppedImg } from '../../../utils/commonUtils';
-
+import "./common.css"
+import { FaMinus, FaPlus } from 'react-icons/fa';
 
 const CropImageModal = ({imageUrl, showModal, setShowModal, UploadCroppedImage, getBlob }) => {
     const handleClose = () => setShowModal(false);                   
@@ -16,11 +17,17 @@ const CropImageModal = ({imageUrl, showModal, setShowModal, UploadCroppedImage, 
         )
         getBlob(croppedImage)
     }
-
+    const handleZoomIn = () => {
+        setZoom(prevZoom => Math.min(prevZoom + 0.1, 3)); 
+      };
+    
+      const handleZoomOut = () => {
+        setZoom(prevZoom => Math.max(prevZoom - 0.1, 1)); 
+      };
 
     return (
         <>        
-                <Modal className='facebook_modal_outer' size="md" show={showModal} onHide={handleClose} backdrop="static">
+                <Modal className='facebook_modal_outer' size="lg" show={showModal} onHide={handleClose} backdrop="static">
                     <Modal.Header closeButton>
                         <Modal.Title className="CropImageModal_header">
                             <div className='facebook_title'>
@@ -43,7 +50,10 @@ const CropImageModal = ({imageUrl, showModal, setShowModal, UploadCroppedImage, 
                             />
                         </div>                        
                         <div className="controls">
-                            <input type="range" id="range" min="1" max="3"  value={zoom} step={0.1} onChange={function(e){ setZoom(e.target.value) }}/>                            
+                        <button onClick={handleZoomIn}><FaPlus/></button>
+
+                        <input type="range" id="range" min="1" max="3"  value={zoom} step={0.1} onChange={function(e){ setZoom(e.target.value) }}/>                            
+                        <button onClick={handleZoomOut}><FaMinus /></button>
                         </div>                              
                     </Modal.Body>
                     <Modal.Footer className='crop-image-footer'>                    

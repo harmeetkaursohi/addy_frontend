@@ -142,12 +142,12 @@ const ScheduledComponent = ({scheduledData}) => {
                                         <div className="card-body post_card">
 
 
-                                            <div className={""}>
+                                            <div className={"post_card_inner_content"}>
                                                 <span className={"post_caption"}>Post Caption:</span>
                                                 <h3 className={"caption"}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
                                             </div>
 
-                                            <div className={""}>
+                                            <div className={"hash_tags_outer_container"}>
                                                 <h5>Hashtags: </h5>
                                                 <div className={'mb-2'}>
                         <span
