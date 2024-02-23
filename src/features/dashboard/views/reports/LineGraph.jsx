@@ -23,13 +23,9 @@ ChartJS.register(
 
 
 export const LineGraph = ({reportData}) => {
-    console.log("reportData of linkedin",reportData)
 
     const [labels, setLabels] = useState(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
-
     const [dataSet, setDataSet] = useState([],)
-
-
     const [data, setData] = useState({labels, datasets: dataSet});
 
 

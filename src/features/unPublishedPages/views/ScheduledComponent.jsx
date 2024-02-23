@@ -2,9 +2,7 @@ import './DraftComponent.css'
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {
     computeImageURL,
-    getInitialLetterCap,
     handleSeparateCaptionHashtag,
-    redirectToURL,
     sortByKey
 } from "../../../utils/commonUtils";
 import {formatDate} from "@fullcalendar/core";
@@ -16,16 +14,11 @@ import {useEffect, useState} from "react";
 import {
     deletePostByBatchIdAction, getAllSocialMediaPostsByCriteria
 } from "../../../app/actions/postActions/postActions";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth";
+import { getToken} from "../../../app/auth/auth";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import noPostScheduled from "../../../images/no_post_scheduled.svg";
 import CommonLoader from "../../common/components/CommonLoader";
 import Swal from "sweetalert2";
-import {SocialAccountProvider} from "../../../utils/contantData";
-import {
-    disconnectSocialAccountAction,
-    getAllConnectedSocialAccountAction
-} from "../../../app/actions/socialAccountActions/socialAccountActions";
 
 
 const ScheduledComponent = ({scheduledData}) => {

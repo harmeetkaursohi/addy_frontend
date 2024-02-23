@@ -78,18 +78,18 @@ export const validationSchemas = {
         "g-recaptcha-response": yup.string().required("Please check on the reCAPTCHA box."),
     }),
 
-    editProfileInfo:yup.object().shape({
+    editProfileInfo: yup.object().shape({
         firstName: yup.string().required('First Name is required'),
         lastName: yup.string().required('Last Name is required'),
     }),
 
-    editProfileInfoWithAddressRequired:yup.object().shape({
+    editProfileInfoWithAddressRequired: yup.object().shape({
         firstName: yup.string().required('First Name is required'),
         lastName: yup.string().required('Last Name is required'),
         username: yup.string().required('Username is required'),
         addressLine1: yup.string().required('Address is required'),
         country: yup.string().required('Country is required'),
-        state:yup.string().required('State is  required'),
+        state: yup.string().required('State is  required'),
         county: yup.string().required('County is required'),
     }),
 
@@ -117,7 +117,6 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
                     return null;
                 }
             }
-
             return {
                 ...response, socialAccountData: {
                     ...response.socialAccountData,
@@ -1241,12 +1240,12 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
 
 }
 export const getAttachmentsData = (data, socialMediaType) => {
-    if (data === undefined || data === null || socialMediaType===undefined ||socialMediaType===null) {
+    if (data === undefined || data === null || socialMediaType === undefined || socialMediaType === null) {
         return []
     }
     switch (socialMediaType) {
         case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
-            if ( data?.attachments?.data?.[0]?.type === undefined) {
+            if (data?.attachments?.data?.[0]?.type === undefined) {
                 return []
             } else if (data?.attachments?.data?.[0]?.type === "album") {
                 return data?.attachments?.data?.[0]?.subattachments?.data?.map(attachment => {
@@ -1725,9 +1724,9 @@ export const extractIdFromLinkedinMessageAtrributes = (attribute = null) => {
     return attribute?.value[firstLevelKey][secondLevelKey]
 }
 
-export const createOptionListForSelectTag = (data=null, label, value, additionalOption = null) => {
-    let list=[];
-    if(data===null){
+export const createOptionListForSelectTag = (data = null, label, value, additionalOption = null) => {
+    let list = [];
+    if (data === null) {
         return list;
     }
     if (Array.isArray(data)) {
@@ -1738,21 +1737,21 @@ export const createOptionListForSelectTag = (data=null, label, value, additional
             }
         })
     } else if (typeof data === 'object') {
-         list = Object.keys(SocialAccountProvider)?.map(cur => {
+        list = Object.keys(SocialAccountProvider)?.map(cur => {
             return {
                 value: SocialAccountProvider[cur],
                 label: getInitialLetterCap(SocialAccountProvider[cur]),
             }
         })
     }
-    if(additionalOption !== null){
-        list=[additionalOption,...list]
+    if (additionalOption !== null) {
+        list = [additionalOption, ...list]
     }
     return list
 }
 
-export const getValueOrDefault=(value,defaultValue)=>{
-    if(isNullOrEmpty(value)){
+export const getValueOrDefault = (value, defaultValue) => {
+    if (isNullOrEmpty(value)) {
         return defaultValue
     }
     return value
@@ -1767,6 +1766,7 @@ const createImage = (url) =>
         image.setAttribute('crossOrigin', 'anonymous')
         image.src = url
     })
+
 export async function getCroppedImg(imageSrc, crop, zoom) {
     const image = await createImage(imageSrc)
     const canvas = document.createElement('canvas')
@@ -1802,7 +1802,7 @@ export async function getCroppedImg(imageSrc, crop, zoom) {
     // const scaleY = imageBitmap.height / image.height;
     // canvas.width = crop.width * scaleX * zoom;
     // canvas.height = crop.height * scaleY * zoom;
-  
+
     // // Draw the cropped image on the canvas
     // ctx.drawImage(
     //   imageBitmap,
@@ -1815,11 +1815,11 @@ export async function getCroppedImg(imageSrc, crop, zoom) {
     //   canvas.width,
     //   canvas.height
     // );
-  
+
     // // Convert the canvas content to a Blob
     // return new Promise((resolve) => {
     //   canvas.toBlob((blob) => {
     //     resolve(blob);
     //   }, 'image/jpeg');
     // });
-  }
+}

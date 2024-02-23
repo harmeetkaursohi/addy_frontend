@@ -106,9 +106,7 @@ const CommonModal = ({
                                                         }}
 
                                                     >
-                                                      {console.log(currentConnectedPages.includes(data?.id),"id90",state,"state")}
                                                         {currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"}
-                                                        {/* {(facebookPageConnectData && data?.id===mediaPageData?.id ) ?"ing...":""} */}
                                                         {(state && data?.id===mediaPageData?.id ) ?"ing...":""} 
                                                     </button>
                                                 </div>
