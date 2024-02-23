@@ -82,22 +82,24 @@ const SocialAccounts = ({}) => {
     // }, [token])
 
 
-    useEffect(() => {
-
-        if (enabledSocialMedia.isFaceBookEnabled && (!getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) && getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK') !== undefined) {
+    useEffect(() => {        
+        const fbPagesInfo = getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK')
+        if (enabledSocialMedia.isFaceBookEnabled && typeof fbPagesInfo !== "undefined" && fbPagesInfo.length) {            
             let faceBookSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK');
             dispatch(getAllFacebookPages({
                 providerId: faceBookSocialAccount?.providerId,
                 accessToken: faceBookSocialAccount?.accessToken
             })).then((res) => {
                 const decodeJwt = decodeJwtToken(token);
+                console.log("getAllFacebookPagesData",getAllFacebookPagesData)
                 // dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             })
         }
 
     }, [getAllConnectedSocialAccountData]);
-    useEffect(() => {
-        if (enabledSocialMedia.isInstagramEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM').length > 0) {
+    useEffect(() => {        
+        const instaPagesInfo = getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM')
+        if (enabledSocialMedia.isInstagramEnabled && typeof instaPagesInfo !== "undefined" && instaPagesInfo.length) {
             let instagramSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'INSTAGRAM');
             dispatch(getAllInstagramBusinessAccounts({
                 accessToken: instagramSocialAccount?.accessToken
@@ -111,7 +113,9 @@ const SocialAccounts = ({}) => {
 
 
     useEffect(() => {
-        if (enabledSocialMedia.isPinterestEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'PINTEREST').length > 0) {
+
+        const pinterestPagesInfo = getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'PINTEREST')
+        if (enabledSocialMedia.isInstagramEnabled && typeof pinterestPagesInfo !== "undefined" && pinterestPagesInfo.length) {        
             let pinterestSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'PINTEREST');
             dispatch(getAllPinterestBoards({
                 token: token,
@@ -124,7 +128,8 @@ const SocialAccounts = ({}) => {
     }, [getAllConnectedSocialAccountData]);
 
     useEffect(() => {
-        if (enabledSocialMedia.isLinkedinEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length > 0) {
+        const liPagesInfo = getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN')
+        if (enabledSocialMedia.isLinkedinEnabled && typeof liPagesInfo !== "undefined" && liPagesInfo.length) {
             dispatch(getAllLinkedinPages({
                 token: token,
                 q: "roleAssignee",
@@ -436,11 +441,11 @@ const SocialAccounts = ({}) => {
                                             {
                                                 facebookDropDown === true &&
 
-                                                <ul className="menu_items">
+                                                <>
+                                                
                                                     {
                                                         getAllFacebookPagesData?.loading ?
                                                             <SkeletonEffect  count={3}/> :
-
                                                             currentConnectedFacebookPages?.length === 0 ?
                                                                 <div className={"no-page-connected-outer text-center"}>
                                                                     <div>No active connections at the moment.</div>
@@ -450,7 +455,7 @@ const SocialAccounts = ({}) => {
                                                                         now
                                                                     </div>
                                                                 </div> :
-                                                                <>
+                                                                <ul className="menu_items">
                                                                     {
                                                                         currentConnectedFacebookPages?.map((data, index) => {
                                                                             return (
@@ -491,15 +496,9 @@ const SocialAccounts = ({}) => {
 
                                                                         }
                                                                     </li>
-
-
-                                                                </>
-
-
+                                                                </ul>
                                                     }
-
-
-                                                </ul>}
+                                                </>}
 
                                         </div>
                                     </div>
@@ -585,9 +584,7 @@ const SocialAccounts = ({}) => {
 
                                             {
                                                 instagramDropDown === true &&
-
-                                                <ul className="menu_items">
-
+                                                <>                                            
                                                     {
                                                         instagramBusinessAccountsData?.loading ?
                                                             <SkeletonEffect  count={3}/> :
@@ -601,7 +598,7 @@ const SocialAccounts = ({}) => {
                                                                         now
                                                                     </div>
                                                                 </div> :
-                                                                <>
+                                                                <ul className="menu_items">
                                                                     {
                                                                         currentConnectedInstagramPages?.map((data, index) => {
                                                                             return (
@@ -643,13 +640,10 @@ const SocialAccounts = ({}) => {
 
                                                                         }
                                                                     </li>
-
-
-                                                                </>
-
-
+                                                                </ul>
                                                     }
-                                                </ul>}
+                                                
+                                                </>}
 
                                         </div>
                                     </div>
@@ -743,13 +737,10 @@ const SocialAccounts = ({}) => {
 
                                             {
                                                 linkedinDropDown &&
-
-                                                <ul className="menu_items">
-
+                                                <>                                                
                                                     {
                                                         getAllLinkedinPagesData?.loading ?
                                                             <SkeletonEffect  count={3}/> :
-
                                                             currentConnectedLinkedinPages?.length === 0 ?
                                                                 <div className={"no-page-connected-outer text-center"}>
                                                                     <div>No active connections at the moment.</div>
@@ -759,7 +750,7 @@ const SocialAccounts = ({}) => {
                                                                         now
                                                                     </div>
                                                                 </div> :
-                                                                <>
+                                                                <ul className="menu_items">
                                                                     {
                                                                         currentConnectedLinkedinPages?.map((data, index) => {
                                                                             return (
@@ -790,23 +781,14 @@ const SocialAccounts = ({}) => {
                                                                                         disConnectSocialMediaAccountToCustomer("LINKEDIN")}>
                                                                                     Disconnect
                                                                                 </button>
-                                                                                <button
-                                                                                    className="ConnectBtn cmn_connect_btn"
-                                                                                    onClick={() => setShowLinkedinModal(true)}
-                                                                                >
-                                                                                    Connect More
-                                                                                </button>
+                                                                                <button className="ConnectBtn cmn_connect_btn" onClick={() => setShowLinkedinModal(true)} >Connect More</button>
                                                                             </div>
-
                                                                         }
                                                                     </li>
-
-
-                                                                </>
-
-
+                                                                </ul>
                                                     }
-                                                </ul>}
+                                                
+                                                </>}
 
                                         </div>
                                     </div>
@@ -890,9 +872,7 @@ const SocialAccounts = ({}) => {
 
                                             {
                                                 pinterestDropDown === true &&
-
-                                                <ul className="menu_items">
-
+                                                <>                                            
                                                     {
                                                         pinterestBoardsData?.loading ?
                                                             <SkeletonEffect  count={3}/> :
@@ -906,7 +886,7 @@ const SocialAccounts = ({}) => {
                                                                         now
                                                                     </div>
                                                                 </div> :
-                                                                <>
+                                                                <ul className="menu_items">
                                                                     {
                                                                         currentConnectedPinterestPages?.map((data, index) => {
                                                                             return (
@@ -950,11 +930,12 @@ const SocialAccounts = ({}) => {
                                                                     </li>
 
 
-                                                                </>
+                                                                </ul>
 
 
                                                     }
-                                                </ul>}
+                                                
+                                                </>}
 
                                         </div>
                                     </div>

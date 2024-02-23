@@ -58,12 +58,15 @@ const socialAccountSlice = createSlice({
 
         // social account connect
         [socialAccountConnectActions.pending]: (state) => {
+            state.getAllConnectedSocialAccountReducer = {loading: true}
             state.connectSocialAccountReducer = {loading: true}
         },
         [socialAccountConnectActions.fulfilled]: (state) => {
+            state.getAllConnectedSocialAccountReducer = {loading: false}
             state.connectSocialAccountReducer = {loading: false}
         },
         [socialAccountConnectActions.rejected]: (state) => {
+            state.getAllConnectedSocialAccountReducer = {loading: false}
             state.connectSocialAccountReducer = {loading: false}
         },
 
