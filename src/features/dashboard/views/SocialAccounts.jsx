@@ -60,22 +60,16 @@ const SocialAccounts = ({}) => {
     const [showLinkedinModal, setShowLinkedinModal] = useState(false);
 
 
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const getAllFacebookPagesData = useSelector(state => state.facebook.getFacebookPageReducer);
     const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
     const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
-    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
-    const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
     const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
 
 
+    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+    const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
 
-    // useEffect(() => {
-    //     if (token) {
-    //         const decodeJwt = decodeJwtToken(token);
-    //         dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt.customerId, token: token}))
-    //     }
-    // }, [token])
 
 
     useEffect(() => {

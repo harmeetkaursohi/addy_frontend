@@ -23,13 +23,15 @@ import {getToken} from "../../../../app/auth/auth";
 
 export const DashboardReports = () => {
 
-    const token=getToken();
+    const token = getToken();
     const reportSectionData = useSelector(state => state.socialAccount.getSocialMediaReportByProviderTypeReducer);
     const reportGraphSectionData = useSelector(state => state.socialAccount.getSocialMediaGraphByProviderTypeReducer);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesReducer = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const facebookPageListReducer = useSelector(state => state.facebook.getFacebookPageReducer);
     const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
+    const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
+    const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
 
     const [connectedPagesToSelectedSocialMediaAccount, setConnectedPagesToSelectedSocialMediaAccount] = useState([])
     const [selectedPage, setSelectedPage] = useState(null);
@@ -38,9 +40,9 @@ export const DashboardReports = () => {
     const [reportSelectedAccountData, setReportSelectedAccountData] = useState(null);
     const [graphDaysSelected, setGraphDaysSelected] = useState(9);
 
-  
+
     useEffect(() => {
-        if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages) && (Array.isArray(facebookPageListReducer?.facebookPageList) || Array.isArray(instagramBusinessAccountsData?.data))) {
+        if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages)) {
             let selectedSocialMediaAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === reportSelectedAccountType.toUpperCase() && connectedPagesReducer?.facebookConnectedPages?.some(connectedPage => connectedPage?.socialMediaAccountId === c?.id))
             //  In case any account is disconnected and it was selected on reports section selectedSocialMediaAccount will be null so set 1st account selected
             if (selectedSocialMediaAccount === null || selectedSocialMediaAccount === undefined) {
@@ -53,30 +55,26 @@ export const DashboardReports = () => {
             const connectedPagesToSelectedSocialMediaAccount = connectedPagesReducer?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === selectedSocialMediaAccount?.id);
             setConnectedPagesToSelectedSocialMediaAccount(connectedPagesToSelectedSocialMediaAccount)
             if (!isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount)) {
-                selectedSocialMediaAccount?.provider === "PINTEREST" ? setSelectedPage(selectedSocialMediaAccount) : setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
+                selectedSocialMediaAccount?.provider === "PINTEREST" ? setSelectedPage(selectedSocialMediaAccount)  : setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
             } else {
                 setSelectedPage(null)
             }
         }
-    }, [connectedPagesReducer, facebookPageListReducer, getAllConnectedSocialAccountData, reportSelectedAccountType]);
+    }, [connectedPagesReducer,  getAllConnectedSocialAccountData, reportSelectedAccountType]);
 
 
     useEffect(() => {
         setGraphDaysSelected(9)
-
     }, [reportSelectedAccountType]);
 
     useEffect(() => {
         if (selectedPage) {
             handleFetchSocialMediaReport(null, null, false)
-         
         }
-     
     }, [selectedPage]);
 
     useEffect(() => {
         if (graphDaysSelected) {
-          
             handleFetchSocialMediaReport(null, null, true);
         }
     }, [graphDaysSelected]);
@@ -84,20 +82,23 @@ export const DashboardReports = () => {
 
     const handleFetchSocialMediaReport = (socialAccountData, pages, searchGraphOnly = false) => {
 
-        !searchGraphOnly && dispatch(getSocialMediaReportByProviderTypeAction({
-            token: token,
-            pages: [selectedPage],
-            socialMediaType: reportSelectedAccountType,
-            socialAccountData: reportSelectedAccountData
-        }))
+        if(selectedPage && reportSelectedAccountData && selectedPage.socialMediaAccountId===reportSelectedAccountData.id){
+            !searchGraphOnly && dispatch(getSocialMediaReportByProviderTypeAction({
+                token: token,
+                pages: [selectedPage],
+                socialMediaType: reportSelectedAccountType,
+                socialAccountData: reportSelectedAccountData
+            }))
 
-        dispatch(getSocialMediaGraphByProviderTypeAction({
-            token: token,
-            pages: [selectedPage],
-            socialMediaType: reportSelectedAccountType,
-            socialAccountData: reportSelectedAccountData,
-            query: getQueryForGraphData(reportSelectedAccountType, graphDaysSelected)
-        }))
+            dispatch(getSocialMediaGraphByProviderTypeAction({
+                token: token,
+                pages: [selectedPage],
+                socialMediaType: reportSelectedAccountType,
+                socialAccountData: reportSelectedAccountData,
+                query: getQueryForGraphData(reportSelectedAccountType, graphDaysSelected)
+            }))
+        }
+
     }
 
 
@@ -107,8 +108,8 @@ export const DashboardReports = () => {
 
             <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer">
 
-               
-                {getAllConnectedSocialAccountData?.loading || connectedPagesReducer?.loading || facebookPageListReducer?.loading ?
+
+                {getAllConnectedSocialAccountData?.loading || connectedPagesReducer?.loading || facebookPageListReducer?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading ?
                     <div className="cmn_background p-5 text-center ">
                         <CommonLoader/>
                     </div> :
@@ -125,7 +126,6 @@ export const DashboardReports = () => {
 
                         // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
                         isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
-
                             <div className="cmn_background p-5 text-center ">
                                 <img src={noAccountData} className="img-fluid" alt=""/>
                             </div>
@@ -134,7 +134,8 @@ export const DashboardReports = () => {
 
                             <div className="post_activity_outer cmn_background">
 
-                                <div className="d-flex gap-2 ps-3 postActivity_InnerWrapper dropdown_btn_Outer_container">
+                                <div
+                                    className="d-flex gap-2 ps-3 postActivity_InnerWrapper dropdown_btn_Outer_container">
                                     <Dropdown className="dropdown_btn">
 
                                         <Dropdown.Toggle variant="success" id="dropdown-basic"
@@ -253,42 +254,42 @@ export const DashboardReports = () => {
 
 
                                 {
-                                 reportSectionData?.loading ?
-                                  
-                                    //loader component
-                                    <DashBoardReportLoader/>
-                                    :
-                                    <div className="followers_outer ">
+                                    reportSectionData?.loading ?
 
-                                        {reportSectionData?.data &&
-                                            Object.keys(reportSectionData?.data).map((curKey, index) => (
-                                            
-                                                <div className="followers_wrapper " key={index}>
-                                                    <h5>{curKey.replace(/_/g, ' ')}
-                                                        {
-                                                            ["INSTAGRAM","PINTEREST"].includes(reportSelectedAccountType) &&
-                                                            <span className={"90-day-txt"}> (90 days)</span>
-                                                        }
+                                        //loader component
+                                        <DashBoardReportLoader/>
+                                        :
+                                        <div className="followers_outer ">
 
-                                                    </h5>
-                                                    <div className="followers_inner_content">
-                                                        <h2> {reportSectionData?.data[curKey]?.lifeTime || 0
-                                                        }</h2>
-                                                        <div className="monthly_growth">
-                                                            <button className="cmn_followers_btn">
-                                                                <img src={polygon_img} className="polygon_img"/>
-                                                                {reportSectionData?.data[curKey]?.month || 0}
-                                                            </button>
-                                                            <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
+                                            {reportSectionData?.data &&
+                                                Object.keys(reportSectionData?.data).map((curKey, index) => (
+
+                                                    <div className="followers_wrapper " key={index}>
+                                                        <h5>{curKey.replace(/_/g, ' ')}
+                                                            {
+                                                                ["INSTAGRAM", "PINTEREST"].includes(reportSelectedAccountType) &&
+                                                                <span className={"90-day-txt"}> (90 days)</span>
+                                                            }
+
+                                                        </h5>
+                                                        <div className="followers_inner_content">
+                                                            <h2> {reportSectionData?.data[curKey]?.lifeTime || 0
+                                                            }</h2>
+                                                            <div className="monthly_growth">
+                                                                <button className="cmn_followers_btn">
+                                                                    <img src={polygon_img} className="polygon_img"/>
+                                                                    {reportSectionData?.data[curKey]?.month || 0}
+                                                                </button>
+                                                                <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
 
-                                            ))
-                                        }
+                                                ))
+                                            }
 
-                                    </div>
+                                        </div>
                                 }
 
                                 {/* chart */}
