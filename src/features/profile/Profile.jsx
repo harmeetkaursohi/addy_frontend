@@ -263,7 +263,7 @@ const Profile = () => {
                                                             Firstname <span className="astrick">*</span>
                                                         </label>
                                                         <input
-                                                            value={formik.values.firstName}
+                                                            defaultValue={formik.values.firstName}
                                                             type="text"
                                                             onChange={editMode ? formik.handleChange : undefined}
                                                             onBlur={formik.handleBlur}
@@ -286,7 +286,7 @@ const Profile = () => {
                                                             Lastname <span className="astrick">*</span>
                                                         </label>
                                                         <input
-                                                            value={formik.values.lastName}
+                                                            defaultValue={formik.values.lastName}
                                                             type="text"
                                                             onChange={editMode ? formik.handleChange : undefined}
                                                             onBlur={formik.handleBlur}
@@ -321,7 +321,7 @@ const Profile = () => {
                                                             </Tooltip>}
                                                         >
                                                             <input
-                                                                value={formik.values.username}
+                                                                defaultValue={formik.values.username}
                                                                 type="text"
                                                                 onBlur={formik.handleBlur}
                                                                 name="username"
@@ -357,7 +357,7 @@ const Profile = () => {
                                                             <input
                                                                 readOnly={true}
                                                                 placeholder="Email"
-                                                                value={formik.values.email}
+                                                                defaultValue={formik.values.email}
                                                                 type="text"
                                                                 onBlur={formik.handleBlur}
                                                                 name="email"
@@ -380,7 +380,7 @@ const Profile = () => {
                                                     className="form-control cmn_select_box mt-1"
                                                     onChange={editMode ? formik.handleChange : undefined}
                                                     onBlur={formik.handleBlur}
-                                                    value={formik.values.industry}
+                                                    defaultValue={formik.values.industry}
                                                     disabled={!editMode}
                                                 >
                                                     <option value="">Select Industry</option>
@@ -396,7 +396,7 @@ const Profile = () => {
                                                 <label> Contact No</label>
                                                 <input
                                                     placeholder="Contact No"
-                                                    value={formik.values.contactNo}
+                                                    defaultValue={formik.values.contactNo}
                                                     type="text"
                                                     onChange={editMode ? formik.handleChange : undefined}
                                                     onBlur={formik.handleBlur}
@@ -419,7 +419,7 @@ const Profile = () => {
                                                         onChange={editMode ? formik.handleChange : undefined}
                                                         placeholder={jsondata.addressLine1}
                                                         onBlur={formik.handleBlur}
-                                                        value={formik.values.addressLine1}
+                                                        defaultValue={formik.values.addressLine1}
                                                         type="text"
                                                         className="form-control"
                                                         name="addressLine1"
@@ -438,7 +438,7 @@ const Profile = () => {
                                                     <input
                                                         onChange={editMode ? formik.handleChange : undefined}
                                                         onBlur={formik.handleBlur}
-                                                        value={formik.values.addressLine2}
+                                                        defaultValue={formik.values.addressLine2}
                                                         disabled={!editMode}
                                                         name="addressLine2"
                                                         className="form-control mt-1"
@@ -457,7 +457,7 @@ const Profile = () => {
                                                         name="country"
                                                         onChange={editMode ? handleCountryChange : undefined}
                                                         onBlur={formik.handleBlur}
-                                                        value={formik.values.country}
+                                                        defaultValue={formik.values.country}
                                                         disabled={!editMode}
                                                         className="form-control mt-1 cmn_select_box"
                                                     >
@@ -487,7 +487,7 @@ const Profile = () => {
                                                                 name="state"
                                                                 onChange={editMode ? handleStateChange : undefined}
                                                                 onBlur={formik.handleBlur}
-                                                                value={formik.values.state}
+                                                                defaultValue={formik.values.state}
                                                                 disabled={!editMode}
                                                                 className="form-control mt-1 cmn_select_box"
                                                             >
@@ -514,7 +514,7 @@ const Profile = () => {
                                                             <input
                                                                 onChange={editMode ? formik.handleChange : undefined}
                                                                 onBlur={formik.handleBlur}
-                                                                value={formik.values.city}
+                                                                defaultValue={formik.values.city}
                                                                 name="city"
                                                                 className="form-control mt-1"
                                                                 type="text"
@@ -561,7 +561,7 @@ const Profile = () => {
                                                             <input
                                                                 onChange={editMode ? formik.handleChange : undefined}
                                                                 onBlur={formik.handleBlur}
-                                                                value={formik.values.pinCode}
+                                                                defaultValue={formik.values.pinCode}
                                                                 name="pinCode"
                                                                 className="form-control mt-1"
                                                                 type="number"
