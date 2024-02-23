@@ -55,12 +55,12 @@ export const DashboardReports = () => {
             const connectedPagesToSelectedSocialMediaAccount = connectedPagesReducer?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === selectedSocialMediaAccount?.id);
             setConnectedPagesToSelectedSocialMediaAccount(connectedPagesToSelectedSocialMediaAccount)
             if (!isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount)) {
-                selectedSocialMediaAccount?.provider === "PINTEREST" ? setSelectedPage(selectedSocialMediaAccount)  : setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
+                selectedSocialMediaAccount?.provider === "PINTEREST" ? setSelectedPage(selectedSocialMediaAccount) : setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
             } else {
                 setSelectedPage(null)
             }
         }
-    }, [connectedPagesReducer,  getAllConnectedSocialAccountData, reportSelectedAccountType]);
+    }, [connectedPagesReducer, getAllConnectedSocialAccountData, reportSelectedAccountType]);
 
 
     useEffect(() => {
@@ -81,8 +81,7 @@ export const DashboardReports = () => {
 
 
     const handleFetchSocialMediaReport = (socialAccountData, pages, searchGraphOnly = false) => {
-
-        if(selectedPage && reportSelectedAccountData && selectedPage.socialMediaAccountId===reportSelectedAccountData.id){
+        if (selectedPage && reportSelectedAccountData && (reportSelectedAccountData?.provider === "PINTEREST" ? (selectedPage.id === reportSelectedAccountData.id) : (selectedPage.socialMediaAccountId === reportSelectedAccountData.id))) {
             !searchGraphOnly && dispatch(getSocialMediaReportByProviderTypeAction({
                 token: token,
                 pages: [selectedPage],
