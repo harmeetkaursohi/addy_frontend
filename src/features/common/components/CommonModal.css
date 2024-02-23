@@ -193,4 +193,8 @@ button, .modal_inner_content.disconnect_wrapper
     .facebook_content_outer {
         padding: 0px;
     }
+    .facebook_content_outer h6 {
+        font-size: 13px;
+        line-height: 19px;
+    }
 }

@@ -14,7 +14,7 @@
     margin-top: 5px;
 }
 .img_container {
-    width: 300px;
+    /* width: 300px; */
     /*height: 400px;*/
     position: relative;
     border-radius: 15px;
@@ -32,7 +32,7 @@ button.save_button {
     position: absolute;
     left: auto;
     right: 10px;
-    margin-top: 10px;
+    margin-top: 18px;
     border:none
 }
 .img_footer_wrapper{
@@ -55,11 +55,11 @@ white-space: nowrap;
     display: flex;
     align-items: center;
     bottom: 18px;
-    gap: 10px;
-    left: auto;
+
+    left: 0;
     right: 0px;
-    width: 100%;
-    justify-content: space-around;
+    margin: 0px 20px;
+    justify-content: space-evenly;
 }
 .z-index-2{
     z-index:2;
@@ -73,6 +73,7 @@ white-space: nowrap;
 .select_options_container select{
     border: none;
     background: transparent;
+    color: white;
 }
 .select_options_container select:focus-visible {
     outline-offset: 0px;
@@ -100,7 +101,7 @@ white-space: nowrap;
     justify-content: center;
 }
 .user_caption_heading{
-    width: 154px;
+    /* width: 154px; */
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
@@ -598,7 +599,10 @@ createPost_outer select {
     font-size: 14px;
     margin-bottom: 10px;
 }
-
+.instagram_like svg {
+    height: 22px;
+    width: 22px;
+}
 .like_comment_outer {
     display: flex;
     justify-content: space-between;
@@ -606,6 +610,7 @@ createPost_outer select {
     border-top: 1px solid #dad6d6;
     border-bottom: 1px solid #dad6d6;
     margin: 5px 10px 10px;
+    align-items: center;
    
 }
 
@@ -933,6 +938,12 @@ button.loading {
     .file_outer {
         gap: 10px;
     }
+    .preview_img_container{
+        display: block;
+    }
+    .img_footer{
+        margin: 0px;
+    }
     .instagram_outer{
     padding: 15px 20px;
     }
@@ -973,13 +984,7 @@ button.loading {
     .create_post_content {
         padding: 30px 19px;
     }
-    .img_footer {
-        gap: 8px;
-        left: 24px;
-        right: 0;
-
-        justify-content: unset;
-    }
+  
 
     .caption_header {
         display: block;

@@ -1,12 +1,11 @@
 import default_user_icon from "../../../images/default_user_icon.svg";
 import ellipse_img from "../../../images/ellipse.svg";
 import CommonSlider from "./CommonSlider";
-import {IoMdHeartEmpty,IoIosSend} from "react-icons/io";
-import { RiChat1Line } from "react-icons/ri";
+import {IoMdHeartEmpty} from "react-icons/io";
 import { RiBookmarkLine } from "react-icons/ri";
-
-
+import { BsSend } from "react-icons/bs";
 import React from "react";
+import { FaRegComment } from "react-icons/fa";
 
 const InstagramFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType, pageImage,caption, hashTag}) => {
     return (
@@ -28,11 +27,12 @@ const InstagramFeedPreview = ({previewTitle, pageName, userData, files, selected
 
                 <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
 
-                <div className='like_comment_outer d-flex'>
+                <div className='like_comment_outer instagram_like'>
                    <div className="flex-grow-1">
                        <IoMdHeartEmpty size={25}/>
-                       <RiChat1Line size={25} className="ms-4 me-4"/>
-                       <IoIosSend size={25}/>
+                       <FaRegComment size={25} className="fb_cmt_icon ms-4 me-4" />
+                      
+                       <BsSend size={25}/>
                    </div>
                     <div>
                         <RiBookmarkLine size={25}/>

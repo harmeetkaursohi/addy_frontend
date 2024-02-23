@@ -6,9 +6,9 @@
     margin: 12px 10px 0px;
 }
 .linkedin_dropdown {
-    /* background: #f4f1f1; */
+
     padding: 10px 0px;
-  /* border-radius: 5px; */
+
 }
 .FaLinkedin_icon{
     color: #0866ff;
@@ -62,6 +62,30 @@
 .multiselect_dropdown {
     min-width: 185px;
 }
+.CropImageModal_header.modal-title.h4 {
+    flex-grow: 1;
+}
+.facebook_title h2 {
+    text-align: center;
+}
+.controls{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+.controls button{
+    border: none;
+    background: transparent;
+}
+.reactEasyCrop_Container {
+    height: 500px;
+    object-fit: fill;
+}
+.crop-image-parent.modal-body {
+    padding: 0px 17px;
+}
 @media screen and (max-width:1280px) {
     .linkedin_likes h3{
         font-size: 14px;
@@ -71,6 +95,9 @@
     .linkedin_likes{
         gap: 6px;
        
+    }
+    .linkedin_post_likes{
+        padding: 0px;
     }
     .linkedin_likes h3 {
         font-size: 12px;
@@ -82,7 +109,7 @@
         display: none;
     }
     .not_connect_heading {
-        font-size: 20px;
+        font-size: 18px;
     }
    .linkedin_likes {
     display: block;

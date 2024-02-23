@@ -252,6 +252,10 @@ p.disable-reply-comment {
 .RotatingLines-loader{
     height: calc(100vh - 319px);
 }
+.review_wrapper {
+    height: 100vh;
+    min-height: 100%;
+}
 @media screen and (min-width:1600px) {
     .acc_not_connected_outer img{
         width: 600px;
@@ -292,6 +296,7 @@ p.disable-reply-comment {
     }
     .acc_not_connected_outer img {
         width: 100%;
+        height: auto;
     }
     .review-post-icon {
         height: 20px;

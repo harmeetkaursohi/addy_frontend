@@ -12,7 +12,7 @@ const AccountAlreadyConnectedWarningModal = ({accountAlreadyConnectedWarningModa
                     <Modal.Header closeButton>
                         <Modal.Title className="commonmodal_header">
                             <div className='facebook_title'>
-                                <h1 className='cmn_text_style connection-warning-text'>Account Already Linked</h1>
+                                <h1 className='cmn_text_style not_connect_heading'>Account Already Linked</h1>
                             </div>
                         </Modal.Title>
                     </Modal.Header>
