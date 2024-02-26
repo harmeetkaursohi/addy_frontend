@@ -114,16 +114,16 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
             <div className="card-body post_card">
 
 
-                <div className={"post_card_inner_content"}>
+                <div className={""}>
                     <span className={"post_caption"}>Post Caption:</span>
-                    <h3 className={"caption"}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
+                    <h3 className={"caption upcoming_post_content"}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
                 </div>
 
                 <div className={""}>
                     <h5>Hashtags: </h5>
-                    <div className={'hash_tags_outer_container mb-2'}>
+                    <div className=' mb-2 hash_tags_outer_container'>
                         <span
-                            className={"hash_tags"}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
+                            className={"hash_tags "}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
                     </div>
 
                 </div>

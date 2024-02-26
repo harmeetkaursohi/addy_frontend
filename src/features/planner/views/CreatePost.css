@@ -7,21 +7,28 @@
 
 .instagram_outer {
     background: rgba(254, 127, 31, 0.10);
-    padding: 26px 28px 0px;
+    padding: 26px 28px;
 
 }
+.date_input , .time_input::-webkit-calendar-picker-indicator{
+    margin-top: 8px;
+}
+input.date_input::-webkit-calendar-picker-indicator{
+    margin-top: 8px;
+}
+
 .media_outer .cmn_heading {
     margin-top: 5px;
 }
 .img_container {
-    /* width: 300px; */
-    /*height: 400px;*/
+    width: 300px;
+    height: 400px;
     position: relative;
     border-radius: 15px;
     overflow: hidden;
 }
 .img_container img{
-    height: 100%;
+    height: 400px;
     object-fit: cover;
 }
 button.save_button {
@@ -93,18 +100,19 @@ white-space: nowrap;
     font-size: 14px;
     padding: 8px 17px;
     text-align: center;
-   align-items: center;
-    display: flex;
+ 
 }
 .preview_img_container{
     display: flex;
     justify-content: center;
 }
 .user_caption_heading{
-    /* width: 154px; */
+    width: 126px;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
+    white-space: nowrap;
+    cursor: pointer;
 }
 .user_caption_wrapper{
     display:flex;
@@ -122,7 +130,7 @@ white-space: nowrap;
 }
 .pinterest-icon {
     color: #e60023;
-    fontSize: 24px;
+    font-size: 24px;
 }
 
 .instagramPages .checkbox-button_outer img {
@@ -228,7 +236,7 @@ white-space: nowrap;
     width: 24px;
 }
 
-/*===========csss*/
+
 .social_list {
     border-bottom: 1px solid #d1d1d1;
     margin: 15px 20px 0px;
@@ -411,7 +419,7 @@ button.ai_btn {
     color: #525254;
     font-size: 14px;
     font-weight: 400;
-    line-height: normal;
+
 }
 
 .get_measage_heading {
@@ -486,11 +494,10 @@ button.ai_btn {
 
 }
 
-createPost_outer select {
+.createPost_outer select {
     width: 100%;
     border-radius: 8px;
     border: 0.8px solid #C3C3C3;
-    /* background: #FFF; */
     padding: 7px 16px;
     margin-top: 14px;
 }
@@ -731,9 +738,7 @@ input {
 }
 
 
-/*.checkbox-button__control {*/
-/*    transform: scale(0.75);*/
-/*}*/
+
 
 button.instagram_dropdown.dropdown-toggle.show::after {
     transform: rotate(-180deg);
@@ -751,9 +756,9 @@ button.instagram_dropdown.dropdown-toggle.show::after {
 }
 
 button.disabledButton {
-    background-color: gray; /* Change the background color to gray or any color you prefer */
-    color: white; /* Change the text color to white or any color you prefer */
-    cursor: not-allowed; /* Change the cursor to indicate that the button is disabled */
+    background-color: gray; 
+    color: white; 
+    cursor: not-allowed; 
 }
 
 button.delete_upload {
@@ -938,11 +943,20 @@ button.loading {
     .file_outer {
         gap: 10px;
     }
+    .img_container{
+        width: 100%;
+    }
     .preview_img_container{
         display: block;
     }
     .img_footer{
-        margin: 0px;
+    margin: 0px;
+    gap: 8px;
+    left: 47%;
+    transform: translate(-44%, -34%);
+    }
+    .user_caption_heading {
+        width: 103px;
     }
     .instagram_outer{
     padding: 15px 20px;

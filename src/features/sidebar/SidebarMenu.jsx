@@ -52,11 +52,7 @@ export const SidebarMenuItems = [
         "path": "/contact",
         "icon": <BsTelephone />
     },
-    // {
-    //     "name": "Profile",
-    //     "path": "/profile",
-    //     "icon": <FaUserEdit /> 
-    // },
+
     
       
    

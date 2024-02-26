@@ -87,7 +87,7 @@
 
 .reach_user_outer h2 {
     color: #FFF;
-    font-size: 22px;
+    font-size: 19px;
     font-weight: 600;
     line-height: 30px;
     letter-spacing: -0.22px;
@@ -95,8 +95,9 @@
 
 .reach_user_outer p {
     color: #E2E2E2;
-
-    font-size: 16px;
+    margin: 0px;
+    margin-top: 10px;
+    font-size: 15px;
 
     font-weight: 400;
     line-height: 24px;
@@ -226,10 +227,7 @@
     margin-top: 15px;
 }
 
-.reach_user_outer p {
-    margin: 0px;
-    margin-top: 10px;
-}
+
 
 /*21 sep*/
 @media (max-width: 1440px) {

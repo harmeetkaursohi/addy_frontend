@@ -152,9 +152,13 @@ label.edit_label{
         padding: 6px 8px;
         font-size: 23px;
     }
+    .update-pic-loading svg{
+        height: 25px;
+        width: 25px;
+    }
     .user_pic {
-        height: 100px;
-        width: 100px;
+        height: 80px;
+        width: 80px;
     }
     .change_profile_outer{
        align-items: center;

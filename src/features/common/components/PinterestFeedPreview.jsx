@@ -37,11 +37,8 @@ const PinterestFeedPreview = ({
                             <div className="FiArrowUpRight">
 
                                 <>
-                                      <span>
-                                <FiArrowUpRight/>
-                                </span>
                                     <h4 className=' user_caption_heading'>
-
+                                    <FiArrowUpRight/>
                                         {destinationUrl || "Destination Url"}
                                     </h4>
 
