@@ -263,7 +263,7 @@ h2#swal2-title {
 }
 
 div#swal2-html-container {
-  font-size: 13px;
+  font-size: 16px;
 }
 
 
@@ -314,4 +314,8 @@ div#swal2-html-container {
 .cmn_wrapper_outer{
   padding: 0px 10px 30px;
 }
+div#swal2-html-container {
+  font-size: 13px;
+}
+
 }

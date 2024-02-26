@@ -2,42 +2,67 @@ import default_user_icon from "../../../images/default_user_icon.svg";
 import ellipse_img from "../../../images/ellipse.svg";
 import CommonSlider from "./CommonSlider";
 import {IoMdHeartEmpty} from "react-icons/io";
-import { RiBookmarkLine } from "react-icons/ri";
-import { BsSend } from "react-icons/bs";
-import React from "react";
-import { FaRegComment } from "react-icons/fa";
+import React, { useState } from "react";
+import CommentText from "../../review/views/comments/CommentText";
+import like_img from "../../../images/like.svg"
+import comment_img from "../../../images/comment.svg"
+import save_img from "../../../images/save.svg"
+import send_img from "../../../images/send.svg"
+import { BsThreeDotsVertical } from "react-icons/bs";
+
 
 const InstagramFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType, pageImage,caption, hashTag}) => {
+const[showContent,setShowContent]=useState(false)
     return (
         <>
             <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>{previewTitle}</h2>
 
             <div className='preview_wrapper'>
-                <div className='user_profile_info'>
+                <div className='user_profile_info  align-items-center d-flex justify-content-between'>
+                    <div className="d-flex align-items-center gap-2">
                     <img src={pageImage ? pageImage : default_user_icon}
                          height="36px"
                          width="36px"/>
                     <div>
-                        <h3 className='create_post_text user_name boost_post_text'>{pageName}</h3>
-                        <h6 className='status create_post_text'>just now
+                        <h3 className='create_post_text user_name boost_post_text mt-1'>{pageName}</h3>
+                        {/* <h6 className='status create_post_text'>just now
                             <img src={ellipse_img} className="ms-1" />
-                        </h6>
+                        </h6> */}
                     </div>
+
+                    </div>
+                    <BsThreeDotsVertical />
+
                 </div>
 
-                <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
-
+                <CommonSlider isrequired={true} files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
+ 
                 <div className='like_comment_outer instagram_like'>
                    <div className="flex-grow-1">
-                       <IoMdHeartEmpty size={25}/>
-                       <FaRegComment size={25} className="fb_cmt_icon ms-4 me-4" />
+                    <img src={like_img} />
+                       <img src={comment_img} className=" ms-4 me-4" />
+                       <img src={send_img} />
                       
-                       <BsSend size={25}/>
                    </div>
                     <div>
-                        <RiBookmarkLine size={25}/>
+                    <img src={save_img} />
                     </div>
                 </div>
+                <div className={`ms-2  ${showContent ?"feed_preview_Caption_outer":"Caption_outer instagram_caption_outer mb-2" }`}>
+              
+               <div className={showContent?"feed_preview_Caption_outer":"Caption_outer"}>
+                <CommentText isRequire={true} pageName={pageName} socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
+                  className={"highlight cursor-pointer"} setShowText={setShowContent} showText={showContent} />
+
+               </div>
+
+                    </div>
+                   {
+                    caption.length!==0 ?<h6 className='status create_post_text ps-4 pb-2'>just now
+                    <img src={ellipse_img} className="ms-1" /> </h6>:""
+                   }
+                     
+                
             </div>
         </>
     )

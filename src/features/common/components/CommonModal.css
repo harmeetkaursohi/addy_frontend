@@ -108,8 +108,9 @@ div.commonmodal_header {
 }
 
 .disabled-button {
-    background-color: gray;
+    background-color: #d1cece;
     color: white;
+    cursor: not-allowed;
 }
 
 /*26 sep*/

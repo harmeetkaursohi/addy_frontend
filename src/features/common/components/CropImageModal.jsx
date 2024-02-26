@@ -50,10 +50,10 @@ const CropImageModal = ({imageUrl, showModal, setShowModal, UploadCroppedImage, 
                             />
                         </div>                        
                         <div className="controls">
+                        <button onClick={handleZoomOut}><FaMinus /></button>
+                        <input type="range" id="range" min="1" max="3"  value={zoom} step={0.1} onChange={function(e){ setZoom(e.target.value) }}/>                            
                         <button onClick={handleZoomIn}><FaPlus/></button>
 
-                        <input type="range" id="range" min="1" max="3"  value={zoom} step={0.1} onChange={function(e){ setZoom(e.target.value) }}/>                            
-                        <button onClick={handleZoomOut}><FaMinus /></button>
                         </div>                              
                     </Modal.Body>
                     <Modal.Footer className='crop-image-footer'>                    

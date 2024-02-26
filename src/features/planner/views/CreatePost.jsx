@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import {Dropdown} from 'react-bootstrap'
 import SideBar from "../../sidebar/views/Layout.jsx";
-import {BiUser} from "react-icons/bi";
+import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
 import {createFacebookPostAction} from "../../../app/actions/postActions/postActions.js";
@@ -28,6 +28,7 @@ import GenericButtonWithLoader from "../../common/components/GenericButtonWithLo
 import default_user_icon from "../../../images/default_user_icon.svg";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
+import EditImageModal from '../../common/components/EditImageModal.jsx';
 
 const CreatePost = () => {
 
@@ -334,7 +335,15 @@ const CreatePost = () => {
         setSelectedGroups([]);
         setSocialAccountData(socialAccountData);
     }
+   
 
+    // edit handler
+    const[showEditImageModal,setShowEditImageModal]=useState()
+    const[file,setFile]=useState(null)
+    const editHandler=(file)=>{
+        setFile(file)
+        setShowEditImageModal(true)
+    }
     return (
         <>
             <SideBar/>
@@ -507,6 +516,13 @@ const CreatePost = () => {
                                                                 }
 
                                                             </div>
+                                                            <button className="edit_upload delete_upload me-2" onClick={(e) => {
+                                                                                      e.preventDefault();
+                                                                                      editHandler(file);
+                                                                                  }}>
+                                                                <BiSolidEditAlt style={{fontSize: '24px'}}
+                                                                                  />
+                                                            </button>
                                                             <button className="delete_upload" onClick={(e) => {
                                                                                       e.preventDefault();
                                                                                       handleRemoveSelectFile(file);
@@ -514,6 +530,7 @@ const CreatePost = () => {
                                                                 <RiDeleteBin5Fill style={{fontSize: '24px'}}
                                                                                   />
                                                             </button>
+                                                            
                                                         </div>
                                                     )
                                                 })
@@ -824,6 +841,8 @@ const CreatePost = () => {
             {
                 showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal} setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
             }
+
+            {showEditImageModal && <EditImageModal file={file} setFile={setFile} showEditImageModal={showEditImageModal} setShowEditImageModal={setShowEditImageModal}/>}
         </>)
 }
 export default CreatePost

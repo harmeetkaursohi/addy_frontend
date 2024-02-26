@@ -8,7 +8,7 @@ import {updatePassword} from "../../../app/actions/userActions/userActions";
 import {getToken} from "../../../app/auth/auth";
 import {showSuccessToast} from "./Toast";
 import {NoBusinessAccountFound, UpdatedSuccessfully} from "../../../utils/contantData";
-
+import "./common.css"
 
 const UpdatePasswordModal = ({showModal, setShowModal}) => {
 
@@ -52,18 +52,18 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
         <>
             <section className='facebook_modal_outer'>
                 <Modal size="md" show={showModal} onHide={handleClose}>
-                    <Modal.Header closeButton>
+                    <Modal.Header closeButton className="mb-1">
                         <Modal.Title className="commonmodal_header">
                             <div className='facebook_title'>
                                 Update Password
                             </div>
                         </Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
-                        <div className='facebook_content_outer'>
+                    <Modal.Body className="pt-0">
+                        <div className='px-2'>
                             <form onSubmit={formik.handleSubmit}>
                                 <div className="form-group">
-                                    <label className="changeProfile_label" htmlFor="changeProfile">
+                                    <label className="">
                                         Old Password
                                     </label>
                                     <input
@@ -94,7 +94,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                     }
                                 </div>
                                 <div className="form-group">
-                                    <label className="changeProfile_label" htmlFor="changeProfile">
+                                    <label className="">
                                         New Password
                                     </label>
                                     <input
@@ -125,7 +125,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                     }
                                 </div>
                                 <div className="form-group">
-                                    <label className="changeProfile_label" htmlFor="changeProfile">
+                                    <label className="">
                                         Confirm Password
                                     </label>
                                     <input
@@ -170,7 +170,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                     </button>
                                     <button onClick={handleClose}
                                             disabled={updatePasswordData?.loading}
-                                            className={"close-update-password-btn connection-error-close-btn "}>Cancel
+                                            className={"close-update-password-btn cancel_button "}>Cancel
                                     </button>
                                 </div>
                             </form>

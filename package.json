@@ -40,6 +40,7 @@
     "react-easy-crop": "^5.0.5",
     "react-google-recaptcha": "^3.1.0",
     "react-icons": "^4.10.1",
+    "react-image-crop": "^11.0.5",
     "react-loader-spinner": "^5.4.5",
     "react-player": "^2.13.0",
     "react-redux": "^8.1.2",

@@ -19,6 +19,7 @@
     stroke: black;
 }
 
+
 ::-webkit-scrollbar {
     width: 5px;
 }
@@ -72,6 +73,7 @@ i.bar_icon {
 }
 .sidebar_item_outers.Profile_Img_outer a {
     gap: 10px;
+    line-height: 0px;
 }
 .sidebar_item li svg {
     height: 19px;
@@ -219,8 +221,13 @@ border-radius: 20px;
         width: 59px;
     }
 
-    
-
+    .userimg{
+        height: 23px;
+        width: 23px;
+    }
+    .sidebar_item_outers.Profile_Img_outer a{
+        gap: 15px;
+    }
     .cmn_container {
         padding-left: 62px;
     }
