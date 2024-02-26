@@ -63,8 +63,8 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
 
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-5 text-dark'>Connect with your audience using cutting-edge tools.</h2>
-                                        <p className={"text-dark mb-4"}>Engage your audience with innovative tools.Effectively deliver information across different media channels to create maximum impact. We specialize in optimizing cross-media content delivery, ensuring your message reaches your audience efficiently and effectively.</p>
+                                        <h2 className='mt-5 text-dark'>Connect with your audience using smart tools.</h2>
+                                        <p className={"text-dark mb-4"}>Share information seamlessly across various channels to make a strong impact. We specialize in making sure your message reaches your audience smoothly and effectively through different media.</p>
                                     </div>
                                 </div>
 
