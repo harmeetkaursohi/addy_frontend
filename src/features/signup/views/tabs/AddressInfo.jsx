@@ -127,9 +127,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
                                         <h2 className='mt-5 text-dark'>Reach your users with new tools.</h2>
-                                        <p className={"text-dark mb-4"}>Efficiently unleash cross-media information without cross-media value.
-                                            Quickly maximize.Efficiently unleash cross-media information without
-                                            cross-media value. Quickly maximize.Efficiently unleash cross-media.</p>
+                                        <p className={"text-dark mb-4"}>Empower your user engagement through innovative tools. Seamlessly amplify cross-media information, unlocking unprecedented value across diverse channels. Harness the synergy of cutting-edge strategies to captivate your audience and revolutionize their experience.</p>
                                     </div>
                                 </div>
 
