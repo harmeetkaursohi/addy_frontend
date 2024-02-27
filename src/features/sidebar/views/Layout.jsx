@@ -17,6 +17,7 @@ import {
 } from "../../../app/actions/socialAccountActions/socialAccountActions";
 import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
+import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 
 const Layout = () => {
 
@@ -73,7 +74,7 @@ const Layout = () => {
         });
 
     }
-const path=useLocation()
+    const path = useLocation()
 
     return (
 
@@ -90,7 +91,8 @@ const path=useLocation()
                                 src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
                                 className='profile_img'/>
                             <div>
-                                <h3 className='profile_container'>{userData?.fullName || "name"}</h3>
+                                <h3 className='profile_container'>{userData?.fullName ||
+                                    <SkeletonEffect count={1}></SkeletonEffect>}</h3>
                                 <h4 className="profile_container">{userData?.email}</h4>
                             </div>
                         </div>
@@ -112,8 +114,9 @@ const path=useLocation()
 
                             ))
                         }
-                        <li className={`sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer ${path?.pathname==="/profile"? "bar":""}` }>
-                            <div className={` sidebar_item_outers Profile_Img_outer ${path?.pathname==="/profile"?"sidebar_inner_content":""}`}>
+                        <li className={`sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer ${path?.pathname === "/profile" ? "bar" : ""}`}>
+                            <div
+                                className={` sidebar_item_outers Profile_Img_outer ${path?.pathname === "/profile" ? "sidebar_inner_content" : ""}`}>
                                 {/* <img className='userimg'  src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> */}
                                 <Link to="/profile"><img className='userimg'
                                                          src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> Profile

@@ -29,18 +29,12 @@ import {
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {resetReducers} from "../../../app/actions/commonActions/commonActions";
 import default_user_icon from "../../../images/default_user_icon.svg";
-import {SocialAccountProvider} from "../../../utils/contantData";
+import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantData";
 import Loader from '../../loader/Loader.jsx';
 
 
 const UpdatePost = () => {
 
-        const enabledSocialMedia = {
-            isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
-            isInstagramEnabled: `${import.meta.env.VITE_APP_ENABLE_INSTAGRAM}` === "true",
-            isLinkedinEnabled: `${import.meta.env.VITE_APP_ENABLE_LINKEDIN}` === "true",
-            isPinterestEnabled: `${import.meta.env.VITE_APP_ENABLE_PINTEREST}` === "true",
-        }
         const dispatch = useDispatch();
         const navigate = useNavigate();
         const token = getToken();
@@ -56,6 +50,7 @@ const UpdatePost = () => {
         const [pinDestinationUrl, setPinDestinationUrl] = useState("");
         const [scheduleDate, setScheduleDate] = useState("");
         const [scheduleTime, setScheduleTime] = useState("");
+
 
         const [boostPost, setBoostPost] = useState(false);
         const [socialAccountData, setSocialAccountData] = useState([]);
@@ -76,9 +71,25 @@ const UpdatePost = () => {
         const userData = useSelector(state => state.user.userInfoReducer.data);
         const getPostsByIdData = useSelector(state => state.post.getPostsByIdReducer?.data);
         const loadingUpdatePost = useSelector(state => state.post.updatePostOnSocialMediaReducer.loading);
-        
-        const loader=useSelector(state => state.post.getPostsByIdReducer?.loading)
-   
+
+        const loader = useSelector(state => state.post.getPostsByIdReducer?.loading)
+
+
+        console.log("hashTag==>", hashTag)
+        console.log("caption==>", caption)
+        console.log("pinTitle==>", pinTitle)
+        console.log("pinDestinationUrl==>", pinDestinationUrl)
+        console.log("scheduleDate==>", scheduleDate)
+        console.log("scheduleTime==>", scheduleTime)
+        console.log("socialAccountData==>", socialAccountData)
+        console.log("selectedFileType==>", selectedFileType)
+
+        console.log("files==>", files)
+        console.log("allOptions==>", allOptions)
+        console.log("selectedOptions==>", selectedOptions)
+        console.log("selectedAllDropdownData==>", selectedAllDropdownData)
+        console.log("selectedGroups==>", selectedGroups)
+
 
         useEffect(() => {
             return () => {
@@ -101,28 +112,75 @@ const UpdatePost = () => {
             }
         }, []);
 
+        useEffect(() => {
+            const userInfo = decodeJwtToken(token);
+            dispatch(getAllByCustomerIdAction({token: token, customerId: userInfo?.customerId}));
+        }, []);
 
         useEffect(() => {
-            if (files && files.length <= 0) {
-                setDisableVideo(false);
-                setDisableImage(false);
+            if (socialAccounts) {
+                const filteredSocialMediaData = socialAccounts.filter((account) => {
+                    switch (account.provider) {
+                        case "FACEBOOK":
+                            return enabledSocialMedia?.isFaceBookEnabled;
+                        case "INSTAGRAM":
+                            return enabledSocialMedia?.isInstagramEnabled;
+                        case "LINKEDIN":
+                            return enabledSocialMedia?.isLinkedinEnabled;
+                        case "PINTEREST":
+                            return enabledSocialMedia?.isPinterestEnabled;
+                        default:
+                            return true;
+                    }
+                });
+                setSocialAccountData(filteredSocialMediaData);
             }
-            if (files.length > 0) {
-                files.filter((c) => c.mediaType === "IMAGE").length > 0 && setDisableVideo(true);
-                files.filter((c) => c.mediaType === "VIDEO").length > 0 && setDisableImage(true);
+        }, [socialAccounts]);
+
+        // Create all Options
+        useEffect(() => {
+            if (socialAccountData) {
+                console.log("socialAccountData==>", socialAccountData)
+                const optionList = socialAccountData.map((socialAccount) => {
+                    return {
+                        group: socialAccount?.provider, allOptions: socialAccount?.pageAccessToken
+                    }
+                });
+                setAllOptions(optionList);
             }
-        }, [files])
+        }, [socialAccountData]);
 
 
         useEffect(() => {
-         
+            if (socialAccountData) {
+                const selectedGroup=[];
+                socialAccountData?.forEach((socialAccount) => {
+                    const socialMediaAccountPageIds=socialAccount?.pageAccessToken.map((page) => {
+                        return page?.pageId
+                    })
+                    const isEveryPageSelected = socialMediaAccountPageIds.every((id) => selectedOptions.includes(id));
+                    if(isEveryPageSelected){
+                        selectedGroup.push(socialAccount.provider);
+                    }
+                });
+                setSelectedGroups(selectedGroup)
+            }
+        }, [socialAccountData, selectedOptions])
+
+        useEffect(() => {
+            if (id) {
+                dispatch(getPostsByIdAction({id: id, token: token}))
+            }
+        }, [id]);
+
+        useEffect(() => {
             if (getPostsByIdData && Object.keys(getPostsByIdData).length > 0) {
                 if (getPostsByIdData.scheduledPostDate) {
                     setScheduleDate(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.date)
                     setScheduleTime(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.time)
                 }
                 setSelectedOptions(getPostsByIdData?.postPageInfos?.map(c => c.pageId) || []);
-               
+
                 setCaption(getPostsByIdData?.caption || "");
                 setPinTitle(getPostsByIdData?.pinTitle || "");
                 setPinDestinationUrl(getPostsByIdData?.pinDestinationUrl || "");
@@ -134,57 +192,15 @@ const UpdatePost = () => {
 
 
         useEffect(() => {
-            if (socialAccounts) {
-                const filteredSocialMediaData = socialAccounts.filter((account) => {
-                    switch (account.provider) {
-                        case "FACEBOOK":
-                            return enabledSocialMedia.isFaceBookEnabled;
-                        case "INSTAGRAM":
-                            return enabledSocialMedia.isInstagramEnabled;
-                        case "LINKEDIN":
-                            return enabledSocialMedia.isLinkedinEnabled;
-                        case "PINTEREST":
-                            return enabledSocialMedia.isPinterestEnabled;
-                        default:
-                            return true;
-                    }
-                });
-                setSocialAccountData(filteredSocialMediaData);
+            if (files && files.length <= 0) {
+                setDisableVideo(false);
+                setDisableImage(false);
             }
-        }, [socialAccounts]);
-
-
-        useEffect(() => {
-            if (id) {
-                dispatch(getPostsByIdAction({id: id, token: token}))
+            if (files.length > 0) {
+                files.filter((c) => c.mediaType === "IMAGE").length > 0 && setDisableVideo(true);
+                files.filter((c) => c.mediaType === "VIDEO").length > 0 && setDisableImage(true);
             }
-        }, [id]);
-
-
-        useEffect(() => {
-            const userInfo = decodeJwtToken(token);
-            dispatch(getAllByCustomerIdAction({token: token, customerId: userInfo?.customerId}));
-
-        }, []);
-
-
-        // Create all Options
-        useEffect(() => {
-            if (socialAccountData) {
-                
-                const optionList = socialAccountData.map((socialAccount) => {
-                    socialAccount?.pageAccessToken.map(function(page){
-                        if(selectedOptions.includes(page.pageId)){             
-                            setSelectedGroups(prevArray => [...prevArray, socialAccount.provider]);
-                        }
-                    })
-                    return {
-                        group: socialAccount?.provider, allOptions: socialAccount?.pageAccessToken
-                    }
-                });
-                setAllOptions(optionList);
-            }
-        }, [socialAccountData]);
+        }, [files])
 
 
         useEffect(() => {
@@ -200,7 +216,7 @@ const UpdatePost = () => {
 
         // handle Group selector
         const handleGroupCheckboxChange = (group) => {
-          
+
             const updatedSelectedGroups = new Set(selectedGroups);
             const updatedSelectedOptions = new Set(selectedOptions);
             if (selectedGroups.includes(group)) {
@@ -220,25 +236,19 @@ const UpdatePost = () => {
         //handle single selector
         const handleCheckboxChange = (option) => {
             const {group, selectOption} = option;
-         
-  
+
             const updatedSelectedOptions = [...selectedOptions];
             const updatedSelectedGroups = [...selectedGroups];
-     
-            updatedSelectedOptions.push(group);
-            updatedSelectedGroups.push(selectOption);
+            // updatedSelectedOptions.push(group);
+            // updatedSelectedGroups.push(selectOption);
             const groupOptionIds = allOptions.find((cur) => cur.group === group).allOptions.map((opt) => opt.pageId);
-
             if (selectedOptions.includes(selectOption.pageId)) {
                 updatedSelectedOptions.splice(updatedSelectedOptions.indexOf(selectOption.pageId), 1);
 
             } else {
                 updatedSelectedOptions.push(selectOption.pageId);
-
             }
-
             const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
-
             if (isGroupFullySelected) {
                 if (!updatedSelectedGroups.includes(group)) {
                     updatedSelectedGroups.push(group);
@@ -246,9 +256,8 @@ const UpdatePost = () => {
             } else {
                 updatedSelectedGroups.splice(updatedSelectedGroups.indexOf(group), 1);
             }
-
-            setSelectedOptions(updatedSelectedOptions);
-            setSelectedGroups(updatedSelectedGroups);
+            setSelectedOptions(Array.from(new Set(updatedSelectedOptions)));
+            setSelectedGroups(Array.from(new Set(updatedSelectedGroups)));
         };
 
 
@@ -301,7 +310,7 @@ const UpdatePost = () => {
                 if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
 
                     if (!scheduleDate && !scheduleTime) {
-                        showErrorToast("Please enter scheduleDate and scheduleTime!!");
+                        showErrorToast("Please enter scheduleDate or scheduleTime!!");
                         return;
                     }
 
@@ -331,12 +340,13 @@ const UpdatePost = () => {
                         boostPost: boostPost,
                         postPageInfos: selectedOptions?.map((obj) => ({
                             pageId: obj,
-                            id: selectedAllDropdownData?.find(c=>c?.selectOption?.pageId===obj)?.selectOption?.id || null,
-                            socialMediaType: selectedAllDropdownData?.find(c=>c?.selectOption?.pageId===obj)?.group || null
+                            id: selectedAllDropdownData?.find(c => c?.selectOption?.pageId === obj)?.selectOption?.id || null,
+                            socialMediaType: selectedAllDropdownData?.find(c => c?.selectOption?.pageId === obj)?.group || null
                         })),
                         scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
                 };
+                console.log("requestBody===>", requestBody)
                 dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         showSuccessToast("Post has uploaded successfully");
@@ -364,7 +374,7 @@ const UpdatePost = () => {
         const handleRemoveSelectFile = (attachmentReferenceNameToRemove) => {
             const updatedFiles = files.filter((file) => file.fileName !== attachmentReferenceNameToRemove);
             setFiles(updatedFiles);
-           
+
         };
 
         const resetForm = (e) => {
@@ -380,46 +390,6 @@ const UpdatePost = () => {
         }
 
 
-        const handleKeyDown = (event) => {
-            // Prevent the default behavior for both Enter and Space keys
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        };
-
-        // edit handler===
-
-
-          // edit handler
-    const [showEditImageModal, setShowEditImageModal] = useState()
-    const[cropImgUrl,setCropImgUrl]=useState(null)
-    const[editImgIndex,setEditImgIndex]=useState(null)
-    const [imgFile, setImgFile] = useState(null)
-    const [fileSize, setFileSize] = useState(null)
-    const editHandler = (index,file) => {
-        setImgFile(file)
-        setEditImgIndex(index)
-        setShowEditImageModal(true)
-   
-        
-        
-    }
-
-    useEffect(()=>{
-        if(cropImgUrl){
-            const updatedFiles = [...files];
-
-            updatedFiles[editImgIndex] = {
-              file:fileSize,               
-                url:cropImgUrl,
-                filleName:imgFile?.fileName,
-                mediaType:imgFile?.mediaType};
-            
-            setFiles(updatedFiles);
-            
-        }
-    },[cropImgUrl])
-    
         return (
             <>
                 <SideBar/>
@@ -481,9 +451,9 @@ const UpdatePost = () => {
                                                                            checked={areAllOptionsSelected}
                                                                            onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
                                                                     />
-                                                                     <h3 className="cmn_headings" onClick={function(){
-                                                                            document.getElementById("choice1-2").click()
-                                                                        }}>Select all Platform</h3>
+                                                                    <h3 className="cmn_headings" onClick={function () {
+                                                                        document.getElementById("choice1-2").click()
+                                                                    }}>Select all Platform</h3>
                                                                 </div>
 
                                                                 {
@@ -500,7 +470,7 @@ const UpdatePost = () => {
                                                                                         <>
                                                                                             <input type="checkbox"
                                                                                                    className=""
-                                                                                                   id={socialAccount.provider+"-checkbox"}
+                                                                                                   id={socialAccount.provider + "-checkbox"}
                                                                                                    name="choice1"
                                                                                                    checked={selectedGroups.includes(socialAccount?.provider)}
                                                                                                    onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
@@ -523,7 +493,10 @@ const UpdatePost = () => {
                                                                                             onClick={(e) =>
                                                                                                 handleCheckboxChange({
                                                                                                     group: socialAccount?.provider,
-                                                                                                    selectOption: {...page ,socialMediaType:socialAccount?.provider}
+                                                                                                    selectOption: {
+                                                                                                        ...page,
+                                                                                                        socialMediaType: socialAccount?.provider
+                                                                                                    }
                                                                                                 })}
                                                                                         >
                                                                                             <div
@@ -569,7 +542,7 @@ const UpdatePost = () => {
                                             <div className="media_outer">
                                                 <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                                 <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
-                                                    {loader && <div className='text-center mt-4'><Loader/></div>}
+                                                {loader && <div className='text-center mt-4'><Loader/></div>}
                                                 <div className="drag_scroll">
                                                     {files?.map((file, index) => {
                                                         return (
@@ -595,23 +568,13 @@ const UpdatePost = () => {
                                                                         />
                                                                     }
                                                                 </div>
-
-                                                                <button className="edit_upload delete_upload me-2"
-                                                                            onClick={(e) => {
-                                                                                e.preventDefault();
-                                                                                editHandler(index,file);
-                                                                            }}>
-                                                                        <BiSolidEditAlt style={{fontSize: '24px'}}
-                                                                        />
-                                                                    </button>
-
-                                                                <button className="delete_upload"  onClick={(e) => {
-                                                                            e.preventDefault();
-                                                                            handleRemoveSelectFile(file?.fileName);
-                                                                        }}>
+                                                                <button className="delete_upload" onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    handleRemoveSelectFile(file?.fileName);
+                                                                }}>
                                                                     <RiDeleteBin5Fill
                                                                         style={{fontSize: '24px'}}
-                                                                       />
+                                                                    />
                                                                 </button>
                                                             </div>
                                                         )
@@ -622,7 +585,7 @@ const UpdatePost = () => {
 
                                                     {disableImage === false &&
                                                         <div
-                                                            className={" add_media_outer"}   >
+                                                            className={" add_media_outer"}>
                                                             <input type="file" id='image'
                                                                    className='file'
                                                                    multiple
@@ -643,7 +606,7 @@ const UpdatePost = () => {
                                                     }
 
                                                     {disableVideo === false &&
-                                                        <div className=" add_media_outer"    >
+                                                        <div className=" add_media_outer">
                                                             <input
                                                                 type="file"
                                                                 id='video'
@@ -755,10 +718,8 @@ const UpdatePost = () => {
                                                     <h6 className='create_post_text'>{jsondata.addText}</h6>
                                                     <textarea className='textarea mt-2' rows={3}
                                                               value={hashTag}
-                                                              onKeyDown={handleKeyDown}
                                                               onChange={(e) => {
                                                                   e.preventDefault();
-                                                                  console.log("@@@ key", e.key)
                                                                   const inputValue = e.target.value;
                                                                   const hashtags = convertSentenceToHashtags(inputValue);
                                                                   setHashTag(hashtags);
