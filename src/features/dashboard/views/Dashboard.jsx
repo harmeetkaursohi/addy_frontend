@@ -17,7 +17,6 @@ const Dashboard = () => {
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
 
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const getAllPostsByCriteriaData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
 
@@ -52,7 +51,7 @@ const Dashboard = () => {
             </div>
             {
                 showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal}
-                                                                      setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
+                                                                      setShowModal={setShowConnectAccountModal}/>
             }
         </>
     )

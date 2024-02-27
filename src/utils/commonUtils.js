@@ -555,12 +555,11 @@ const eliminateDuplicateHashTags = (hashtags) => {
 }
 
 export const convertSentenceToHashtags = (sentence) => {
-    let words = sentence.split(' ');
+    let words = sentence.replace("\n"," #").split(' ');
     // Eliminate Duplicate Tags
     if (words[words.length - 1] === "") {
         words = eliminateDuplicateHashTags(words)
     }
-
     const hashtags = words.map(word => convertToHashtag(word));
     const result = hashtags.join(' ');
     return result;

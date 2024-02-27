@@ -124,42 +124,46 @@ const Review = () => {
                                         have
                                         posted.</h6>
                                 </div>
-                                <Select
-                                    className={"review-pages-media-dropdown"}
-                                    isMulti
-                                    value={selectedDropdownOptions?.pages}
-                                    isDisabled={getPostsPageData?.loading}
-                                    options={createOptionListForSelectTag(pageDropdown, "name", "pageId")}
-                                    onChange={(val) => {
-                                        setSelectedDropDownOptions({...selectedDropdownOptions,pages: val})
-                                        setResults([])
-                                        setBaseSearchQuery({
-                                            ...baseSearchQuery,
-                                            pageNum: 0,
-                                            pageIds: val?.map(cur => cur?.value)
-                                        });
-                                    }}
-                                />
+                                {
+                                    getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0 && <>
+                                        <Select
+                                            className={"review-pages-media-dropdown"}
+                                            isMulti
+                                            value={selectedDropdownOptions?.pages}
+                                            isDisabled={getPostsPageData?.loading}
+                                            options={createOptionListForSelectTag(pageDropdown, "name", "pageId")}
+                                            onChange={(val) => {
+                                                setSelectedDropDownOptions({...selectedDropdownOptions,pages: val})
+                                                setResults([])
+                                                setBaseSearchQuery({
+                                                    ...baseSearchQuery,
+                                                    pageNum: 0,
+                                                    pageIds: val?.map(cur => cur?.value)
+                                                });
+                                            }}
+                                        />
 
-                                <Select
-                                    className={"review-social-media-dropdown"}
-                                    options={createOptionListForSelectTag(SocialAccountProvider, null, null, {
-                                        label: "All",
-                                        value: null
-                                    })}
-                                    value={selectedDropdownOptions?.socialMediaType}
-                                    isDisabled={getPostsPageData?.loading}
-                                    onChange={(val) => {
-                                        setSelectedDropDownOptions({...selectedDropdownOptions,socialMediaType: val,pages: []})
-                                        setResults([])
-                                        setBaseSearchQuery({
-                                            ...baseSearchQuery,
-                                            pageNum: 0,
-                                            socialMediaType: val?.value?.toUpperCase(),
-                                            pageIds:[]
-                                        });
-                                    }}
-                                />
+                                        <Select
+                                            className={"review-social-media-dropdown"}
+                                            options={createOptionListForSelectTag(SocialAccountProvider, null, null, {
+                                                label: "All",
+                                                value: null
+                                            })}
+                                            value={selectedDropdownOptions?.socialMediaType}
+                                            isDisabled={getPostsPageData?.loading}
+                                            onChange={(val) => {
+                                                setSelectedDropDownOptions({...selectedDropdownOptions,socialMediaType: val,pages: []})
+                                                setResults([])
+                                                setBaseSearchQuery({
+                                                    ...baseSearchQuery,
+                                                    pageNum: 0,
+                                                    socialMediaType: val?.value?.toUpperCase(),
+                                                    pageIds:[]
+                                                });
+                                            }}
+                                        />
+                                    </>
+                                }
                             </div>
                             {
                            

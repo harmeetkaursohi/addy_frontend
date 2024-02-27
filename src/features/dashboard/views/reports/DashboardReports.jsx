@@ -1,5 +1,6 @@
 import CommonLoader from "../../../common/components/CommonLoader";
-import noAccountData from "../../../../images/no_social_account.png";
+import noAccountData from "../../../../images/no_social_account.svg";
+import noPageData from "../../../../images/no_page.svg";
 import Dropdown from "react-bootstrap/Dropdown";
 import {
     computeImageURL, generateUnixTimestampFor,
@@ -126,7 +127,7 @@ export const DashboardReports = () => {
                         // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
                         isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
                             <div className="cmn_background p-5 text-center ">
-                                <img src={noAccountData} className="img-fluid" alt=""/>
+                                <img src={noPageData} className="img-fluid" alt=""/>
                             </div>
 
                             :

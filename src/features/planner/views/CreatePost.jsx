@@ -26,18 +26,12 @@ import {
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import default_user_icon from "../../../images/default_user_icon.svg";
-import {SocialAccountProvider} from "../../../utils/contantData";
+import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantData";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
+import CommonLoader from "../../common/components/CommonLoader";
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 
 const CreatePost = () => {
-
-    const enabledSocialMedia = {
-        isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
-        isInstagramEnabled: `${import.meta.env.VITE_APP_ENABLE_INSTAGRAM}` === "true",
-        isLinkedinEnabled: `${import.meta.env.VITE_APP_ENABLE_LINKEDIN}` === "true",
-        isPinterestEnabled: `${import.meta.env.VITE_APP_ENABLE_PINTEREST}` === "true",
-    }
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -74,9 +68,9 @@ const CreatePost = () => {
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
 
     useEffect(() => {
-        if(connectedPagesData.loading){
+        if (connectedPagesData.loading) {
             setShowConnectAccountModal(false)
-        }else{
+        } else {
             const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
             const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
             if (isAnyPageConnected && isAnyAccountConnected) {
@@ -84,7 +78,7 @@ const CreatePost = () => {
             } else {
                 setShowConnectAccountModal(true)
             }
-        }        
+        }
     }, [connectedPagesData, getAllConnectedSocialAccountData])
 
     useEffect(() => {
@@ -100,13 +94,13 @@ const CreatePost = () => {
             const filteredSocialMediaData = socialAccounts.filter((account) => {
                 switch (account.provider) {
                     case "FACEBOOK":
-                        return enabledSocialMedia.isFaceBookEnabled;
+                        return enabledSocialMedia?.isFaceBookEnabled;
                     case "INSTAGRAM":
-                        return enabledSocialMedia.isInstagramEnabled;
+                        return enabledSocialMedia?.isInstagramEnabled;
                     case "LINKEDIN":
-                        return enabledSocialMedia.isLinkedinEnabled;
+                        return enabledSocialMedia?.isLinkedinEnabled;
                     case "PINTEREST":
-                        return enabledSocialMedia.isPinterestEnabled;
+                        return enabledSocialMedia?.isPinterestEnabled;
                     default:
                         return true;
                 }
@@ -144,7 +138,7 @@ const CreatePost = () => {
 
     //handle single selector
     const handleCheckboxChange = (option) => {
-        
+
         const {group, selectOption} = option;
         const updatedSelectedOptions = [...selectedOptions];
         const updatedSelectedGroups = [...selectedGroups];
@@ -152,9 +146,9 @@ const CreatePost = () => {
         updatedSelectedOptions.push(group);
         updatedSelectedGroups.push(selectOption);
 
-    
+
         const groupOptionIds = allOptions.find((cur) => cur.group === group).allOptions.map((opt) => opt.pageId);
-     
+
         if (selectedOptions.includes(selectOption.pageId)) {
             updatedSelectedOptions.splice(updatedSelectedOptions.indexOf(selectOption.pageId), 1);
         } else {
@@ -162,20 +156,19 @@ const CreatePost = () => {
         }
 
         const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
-    
 
 
-        if (isGroupFullySelected ) {
+        if (isGroupFullySelected) {
             if (!updatedSelectedGroups.includes(group)) {
                 updatedSelectedGroups.push(group);
             }
-        } else   {
+        } else {
             updatedSelectedGroups.splice(updatedSelectedGroups.indexOf(group), 1);
         }
 
         setSelectedOptions(updatedSelectedOptions);
         setSelectedGroups(updatedSelectedGroups);
-      
+
     };
 
 
@@ -335,460 +328,466 @@ const CreatePost = () => {
         setSelectedGroups([]);
         setSocialAccountData(socialAccountData);
     }
-   
+
 
     // edit handler
-    const[showEditImageModal,setShowEditImageModal]=useState()
-    const[file,setFile]=useState(null)
-    const editHandler=(file)=>{
+    const [showEditImageModal, setShowEditImageModal] = useState()
+    const [file, setFile] = useState(null)
+    const editHandler = (file) => {
         setFile(file)
         setShowEditImageModal(true)
     }
     return (
         <>
             <SideBar/>
-            <div className="cmn_container">
-                <div className="Container">
-                    <div className="create_post_wrapper">
-                        <div className="row">
-                            <div className="col-lg-6 col-md-12 col-sm-12">
+            {
+                (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
+                    <CommonLoader></CommonLoader> : <div className="cmn_container">
+                        <div className="Container">
+                            <div className="create_post_wrapper">
+                                <div className="row">
+                                    <div className="col-lg-6 col-md-12 col-sm-12">
 
-                                <div className="create_post_content">
+                                        <div className="create_post_content">
 
-                                    <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
+                                            <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
 
-                                    <form onSubmit={(e) => {
-                                        e.preventDefault();
-                                        handlePostSubmit(e);
-                                    }}>
+                                            <form onSubmit={(e) => {
+                                                e.preventDefault();
+                                                handlePostSubmit(e);
+                                            }}>
 
-                                        <div className="createPost_outer">
-                                            <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
+                                                <div className="createPost_outer">
+                                                    <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
 
-                                            <Dropdown className='insta_dropdown_btn mt-2'>
-                                                <Dropdown.Toggle id="instagram" className="instagram_dropdown tabs_grid"
-                                                                 disabled={allOptions.flatMap((group) => group.allOptions).length <= 0}>
-                                                    {selectedAllDropdownData.length > 0 ?
-                                                        (
-                                                            selectedAllDropdownData.map((data, index) => (
-                                                                <div key={index} className="selected-option">
-                                                                    <img
-                                                                        src={data?.selectOption?.imageUrl || default_user_icon}
-                                                                        alt={data?.selectOption?.name}/>
-                                                                    <span>{data?.selectOption?.name}</span>
-                                                                    <RxCross2 onClick={(e) => {
-                                                                        handleCheckboxChange(data);
-                                                                    }}/>
-                                                                </div>
-                                                            ))
-                                                        )
-                                                        :
-                                                        (
-                                                            <div className="social_inner_content">
-                                                                <div>
-                                                                    <BiUser/>
-                                                                </div>
-                                                                <h6 className="cmn_headings">
-                                                                    Select platform
-                                                                </h6>
-                                                            </div>
-                                                        )}
-                                                </Dropdown.Toggle>
-
-
-                                                <Dropdown.Menu className='w-100 social_media_list'>
-                                                    <div className="dropdown-options">
-
-                                                        <div className='_'>
-
-                                                            <div className="select_platform_outer">
-                                                                <input type="checkbox"
-                                                                       id="choice1-2"
-                                                                       name="choice2"
-                                                                       checked={areAllOptionsSelected}
-                                                                       onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
-                                                                />
-                                                                 <h3 className="cmn_headings" onClick={function(){
-                                                                    document.getElementById("choice1-2").click()
-                                                                }}>Select all Platform</h3>
-                                                            </div>
-
-                                                            {
-                                                                socialAccountData?.map((socialAccount, index) => {
-                                                                    return (
-
-                                                                        <div
-                                                                            className='instagram_outer facebook_outer '
-                                                                            key={index}>
-                                                                            <div className="checkbox-button_outer">
-                                                                                {
-                                                                                    socialAccount && socialAccount?.pageAccessToken.length > 0 &&
-                                                                                    <>
-                                                                                        <input type="checkbox"
-                                                                                               className=""
-                                                                                               id={socialAccount.provider+"-checkbox"}
-                                                                                               name="choice1"
-                                                                                               checked={selectedGroups.includes(socialAccount?.provider)}
-                                                                                               onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
-                                                                                        />
-                                                                                        <SocialMediaProviderBadge
-                                                                                            provider={socialAccount.provider}/>
-                                                                                    </>
-                                                                                }
-
-                                                                            </div>
-
-                                                                            {
-                                                                                socialAccount?.pageAccessToken?.map((page, index) => (
-                                                                                    <div
-                                                                                        className="instagramPages unselectedpages"
-                                                                                        key={index}
-                                                                                        style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
-                                                                                        onClick={(e) =>
-                                                                                            handleCheckboxChange({
-                                                                                                group: socialAccount?.provider,
-                                                                                                selectOption: page
-                                                                                            })}
-                                                                                    >
-                                                                                        <div
-                                                                                            className="checkbox-button_outer">
-                                                                                            <img
-                                                                                                src={page?.imageUrl || default_user_icon}/>
-                                                                                            <h2 className="cmn_text_style">{page?.name}</h2>
-                                                                                        </div>
-                                                                                        <input
-                                                                                            type="checkbox"
-                                                                                            id={page.id}
-                                                                                            name={page.name}
-                                                                                            value={page.id}
-                                                                                            checked={selectedOptions.includes(page.pageId)}
-                                                                                            onChange={() =>
-                                                                                                handleCheckboxChange({
-                                                                                                    group: socialAccount?.provider,
-                                                                                                    selectOption: page
-                                                                                                })}
-                                                                                        />
-                                                                                    </div>
-                                                                                ))
-                                                                            }
+                                                    <Dropdown className='insta_dropdown_btn mt-2'>
+                                                        <Dropdown.Toggle id="instagram"
+                                                                         className="instagram_dropdown tabs_grid"
+                                                                         disabled={allOptions.flatMap((group) => group.allOptions).length <= 0}>
+                                                            {selectedAllDropdownData.length > 0 ?
+                                                                (
+                                                                    selectedAllDropdownData.map((data, index) => (
+                                                                        <div key={index} className="selected-option">
+                                                                            <img
+                                                                                src={data?.selectOption?.imageUrl || default_user_icon}
+                                                                                alt={data?.selectOption?.name}/>
+                                                                            <span>{data?.selectOption?.name}</span>
+                                                                            <RxCross2 onClick={(e) => {
+                                                                                handleCheckboxChange(data);
+                                                                            }}/>
                                                                         </div>
-                                                                    )
-                                                                })
-                                                            }
+                                                                    ))
+                                                                )
+                                                                :
+                                                                (
+                                                                    <div className="social_inner_content">
+                                                                        <div>
+                                                                            <BiUser/>
+                                                                        </div>
+                                                                        <h6 className="cmn_headings">
+                                                                            Select platform
+                                                                        </h6>
+                                                                    </div>
+                                                                )}
+                                                        </Dropdown.Toggle>
 
 
-                                                        </div>
+                                                        <Dropdown.Menu className='w-100 social_media_list'>
+                                                            <div className="dropdown-options">
 
-                                                    </div>
+                                                                <div className='_'>
+
+                                                                    <div className="select_platform_outer">
+                                                                        <input type="checkbox"
+                                                                               id="choice1-2"
+                                                                               name="choice2"
+                                                                               checked={areAllOptionsSelected}
+                                                                               onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
+                                                                        />
+                                                                        <h3 className="cmn_headings" onClick={function () {
+                                                                            document.getElementById("choice1-2").click()
+                                                                        }}>Select all Platform</h3>
+                                                                    </div>
+
+                                                                    {
+                                                                        socialAccountData?.map((socialAccount, index) => {
+                                                                            return (
+
+                                                                                <div
+                                                                                    className='instagram_outer facebook_outer '
+                                                                                    key={index}>
+                                                                                    <div className="checkbox-button_outer">
+                                                                                        {
+                                                                                            socialAccount && socialAccount?.pageAccessToken.length > 0 &&
+                                                                                            <>
+                                                                                                <input type="checkbox"
+                                                                                                       className=""
+                                                                                                       id={socialAccount.provider + "-checkbox"}
+                                                                                                       name="choice1"
+                                                                                                       checked={selectedGroups.includes(socialAccount?.provider)}
+                                                                                                       onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
+                                                                                                />
+                                                                                                <SocialMediaProviderBadge
+                                                                                                    provider={socialAccount.provider}/>
+                                                                                            </>
+                                                                                        }
+
+                                                                                    </div>
+
+                                                                                    {
+                                                                                        socialAccount?.pageAccessToken?.map((page, index) => (
+                                                                                            <div
+                                                                                                className="instagramPages unselectedpages"
+                                                                                                key={index}
+                                                                                                style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
+                                                                                                onClick={(e) =>
+                                                                                                    handleCheckboxChange({
+                                                                                                        group: socialAccount?.provider,
+                                                                                                        selectOption: page
+                                                                                                    })}
+                                                                                            >
+                                                                                                <div
+                                                                                                    className="checkbox-button_outer">
+                                                                                                    <img
+                                                                                                        src={page?.imageUrl || default_user_icon}/>
+                                                                                                    <h2 className="cmn_text_style">{page?.name}</h2>
+                                                                                                </div>
+                                                                                                <input
+                                                                                                    type="checkbox"
+                                                                                                    id={page.id}
+                                                                                                    name={page.name}
+                                                                                                    value={page.id}
+                                                                                                    checked={selectedOptions.includes(page.pageId)}
+                                                                                                    onChange={() =>
+                                                                                                        handleCheckboxChange({
+                                                                                                            group: socialAccount?.provider,
+                                                                                                            selectOption: page
+                                                                                                        })}
+                                                                                                />
+                                                                                            </div>
+                                                                                        ))
+                                                                                    }
+                                                                                </div>
+                                                                            )
+                                                                        })
+                                                                    }
 
 
-                                                </Dropdown.Menu>
-                                            </Dropdown>
-
-                                        </div>
-
-                                        {/* add media */}
-                                        <div className="media_outer">
-                                            <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
-                                            <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
-                                            <div className="drag_scroll">
-
-                                                {files?.map((file, index) => {
-                                                    return (
-                                                        <div
-                                                            className="file_outer dragable_files"
-                                                            key={index}
-                                                        >
-                                                            <div className="flex-grow-1 d-flex align-items-center">
-                                                                {/* <i className="fas fa-grip-vertical me-2"></i> */}
-                                                                {
-                                                                    file.file.type.startsWith('image/') &&
-                                                                    <img className={"upload_image me-3"}
-                                                                         src={file.url}
-                                                                         alt={`Image ${index}`}/>
-                                                                }
-                                                                {
-                                                                    file.file.type.startsWith('video/') &&
-                                                                    <video className={"upload_image me-3"}
-                                                                           src={file.url} alt={`Videos ${index}`}
-                                                                           autoPlay={false}
-                                                                    />
-                                                                }
+                                                                </div>
 
                                                             </div>
-                                                            <button className="edit_upload delete_upload me-2" onClick={(e) => {
-                                                                                      e.preventDefault();
-                                                                                      editHandler(file);
-                                                                                  }}>
-                                                                <BiSolidEditAlt style={{fontSize: '24px'}}
-                                                                                  />
-                                                            </button>
-                                                            <button className="delete_upload" onClick={(e) => {
-                                                                                      e.preventDefault();
-                                                                                      handleRemoveSelectFile(file);
-                                                                                  }}>
-                                                                <RiDeleteBin5Fill style={{fontSize: '24px'}}
-                                                                                  />
-                                                            </button>
-                                                            
+
+
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
+
+                                                </div>
+
+                                                {/* add media */}
+                                                <div className="media_outer">
+                                                    <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
+                                                    <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+                                                    <div className="drag_scroll">
+
+                                                        {files?.map((file, index) => {
+                                                            return (
+                                                                <div
+                                                                    className="file_outer dragable_files"
+                                                                    key={index}
+                                                                >
+                                                                    <div className="flex-grow-1 d-flex align-items-center">
+                                                                        {/* <i className="fas fa-grip-vertical me-2"></i> */}
+                                                                        {
+                                                                            file.file.type.startsWith('image/') &&
+                                                                            <img className={"upload_image me-3"}
+                                                                                 src={file.url}
+                                                                                 alt={`Image ${index}`}/>
+                                                                        }
+                                                                        {
+                                                                            file.file.type.startsWith('video/') &&
+                                                                            <video className={"upload_image me-3"}
+                                                                                   src={file.url} alt={`Videos ${index}`}
+                                                                                   autoPlay={false}
+                                                                            />
+                                                                        }
+
+                                                                    </div>
+                                                                    <button className="edit_upload delete_upload me-2"
+                                                                            onClick={(e) => {
+                                                                                e.preventDefault();
+                                                                                editHandler(file);
+                                                                            }}>
+                                                                        <BiSolidEditAlt style={{fontSize: '24px'}}
+                                                                        />
+                                                                    </button>
+                                                                    <button className="delete_upload" onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        handleRemoveSelectFile(file);
+                                                                    }}>
+                                                                        <RiDeleteBin5Fill style={{fontSize: '24px'}}
+                                                                        />
+                                                                    </button>
+                                                                </div>
+                                                            )
+                                                        })
+                                                        }
+                                                    </div>
+
+                                                    <div className="darg_navs file_outer">
+                                                        {
+                                                            disableImage === false && <div
+                                                                className={" add_media_outer"}>
+                                                                <input type="file" id='image'
+                                                                       className='file'
+                                                                       multiple
+                                                                       name={'file'}
+                                                                       onClick={e => (e.target.value = null)}
+                                                                       accept={"image/png, image/jpeg"}
+                                                                       onChange={(e) => {
+                                                                           setDisableVideo(true);
+                                                                           setSelectedFileType("IMAGE")
+                                                                           handleSelectedFile(e);
+                                                                       }}
+                                                                />
+                                                                <label htmlFor='image' className='cmn_headings cmn_blue_border'>
+                                                                    <i className="fa fa-image"
+                                                                       style={{marginTop: "2px"}}/>{"Add Photo"}
+                                                                </label>
+                                                            </div>
+                                                        }
+
+                                                        {
+                                                            disableVideo === false &&
+                                                            <div className=" add_media_outer">
+                                                                <input
+                                                                    type="file"
+                                                                    id='video'
+                                                                    onClick={e => (e.target.value = null)}
+                                                                    accept={"video/mp4,video/x-m4v,video/*"}
+                                                                    onChange={(e) => {
+                                                                        setDisableImage(true);
+                                                                        setSelectedFileType("VIDEO");
+                                                                        handleSelectedVideoFile(e);
+                                                                    }}/>
+                                                                <label htmlFor='video'
+                                                                       className='cmn_headings cmn_blue_border'>
+                                                                    <i className="fa fa-video-camera"
+                                                                       style={{marginTop: "2px"}}/>Add
+                                                                    Video
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    </div>
+
+                                                    {
+                                                        disableImage === false && <>
+                                                            <h2 className='cmn_heading'>{jsondata.OR}</h2>
+                                                            <div className="ai_outer_btn">
+                                                                <button
+                                                                    className={`ai_btn cmn_white_text mt-2`}
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        setAIGenerateImageModal(true);
+                                                                    }}>
+                                                                    <i className="fa-solid fa-robot ai_icon me-2"
+                                                                       style={{fontSize: "15px"}}/> {jsondata.generateAi}
+                                                                </button>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+
+                                                {/* Pinterest Options*/}
+
+                                                {
+                                                    selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&
+                                                    <div className='post_caption_outer media_outer'>
+                                                        <div className='caption_header'>
+                                                            <h5 className='post_heading create_post_text'>Pinterest Only
+                                                                *</h5>
+
+
                                                         </div>
-                                                    )
-                                                })
-                                                }
-                                            </div>
-
-                                            <div className="darg_navs file_outer">
-                                                {
-                                                    disableImage === false && <div
-                                                        className={" add_media_outer"}    >
-                                                        <input type="file" id='image'
-                                                               className='file'
-                                                               multiple
-                                                               name={'file'}
-                                                               onClick={e => (e.target.value = null)}
-                                                               accept={"image/png, image/jpeg"}
-                                                               onChange={(e) => {
-                                                                   setDisableVideo(true);
-                                                                   setSelectedFileType("IMAGE")
-                                                                   handleSelectedFile(e);
-                                                               }}
-                                                        />
-                                                        <label htmlFor='image' className='cmn_headings cmn_blue_border'>
-                                                            <i className="fa fa-image"
-                                                               style={{marginTop: "2px"}}/>{"Add Photo"}
-                                                        </label>
+                                                        <div className='textarea_outer'>
+                                                            <h6 className='create_post_text'>Pin Title*</h6>
+                                                            <input type={"text"} className='textarea mt-2'
+                                                                   value={pinTitle}
+                                                                   onChange={(e) => {
+                                                                       e.preventDefault()
+                                                                       setPinTitle(e.target.value);
+                                                                   }}/>
+                                                        </div>
+                                                        <div className='textarea_outer mt-2'>
+                                                            <h6 className='create_post_text'>Destination Url*</h6>
+                                                            <input type={"text"} className='textarea mt-2'
+                                                                   value={pinDestinationUrl}
+                                                                   onChange={(e) => {
+                                                                       e.preventDefault();
+                                                                       setPinDestinationUrl(e.target.value);
+                                                                   }}/>
+                                                        </div>
                                                     </div>
                                                 }
 
-                                                {
-                                                    disableVideo === false &&
-                                                    <div className=" add_media_outer"  >
-                                                        <input
-                                                            type="file"
-                                                            id='video'
-                                                            onClick={e => (e.target.value = null)}
-                                                            accept={"video/mp4,video/x-m4v,video/*"}
-                                                            onChange={(e) => {
-                                                                setDisableImage(true);
-                                                                setSelectedFileType("VIDEO");
-                                                                handleSelectedVideoFile(e);
-                                                            }}/>
-                                                        <label htmlFor='video' className='cmn_headings cmn_blue_border'>
-                                                            <i className="fa fa-video-camera"
-                                                               style={{marginTop: "2px"}}/>Add
-                                                            Video
-                                                        </label>
-                                                    </div>
-                                                }
-                                            </div>
+                                                {/* post caption */}
 
-                                            {
-                                                disableImage === false && <>
-                                                    <h2 className='cmn_heading'>{jsondata.OR}</h2>
-                                                    <div className="ai_outer_btn">
-                                                        <button
-                                                            className={`ai_btn cmn_white_text mt-2`}
+                                                <div className='post_caption_outer media_outer'>
+                                                    <div className='caption_header'>
+                                                        <h5 className='post_heading create_post_text'>Add Caption *</h5>
+
+                                                        <button className="ai_btn cmn_white_text"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    setAIGenerateCaptionModal(true);
+                                                                }}>
+                                                            <img src={ai_icon}
+                                                                 className='ai_icon me-2'/>{jsondata.generateCaptionAi}
+                                                        </button>
+
+                                                    </div>
+                                                    <div className='textarea_outer'>
+                                                        <h6 className='create_post_text'>{jsondata.addText}</h6>
+                                                        <textarea className='textarea mt-2' rows={3}
+                                                                  value={caption}
+                                                                  onChange={(e) => {
+                                                                      e.preventDefault()
+                                                                      setCaption(e.target.value);
+                                                                  }}></textarea>
+                                                    </div>
+                                                    <div className='caption_header hashtag_outer'>
+                                                        <h5 className='post_heading create_post_text'>Add
+                                                            Hashtag *</h5>
+
+                                                        <button className="ai_btn cmn_white_text"
+                                                                onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                    setAIGenerateHashTagModal(true);
+                                                                }}>
+                                                            <img src={ai_icon}
+                                                                 className='ai_icon me-2'/>
+                                                            {jsondata.generateHashtagAi}
+                                                        </button>
+
+                                                    </div>
+                                                    <div className='textarea_outer'>
+                                                        <h6 className='create_post_text'>{jsondata.addText}</h6>
+                                                        <textarea className='textarea mt-2' rows={3}
+                                                                  value={hashTag}
+                                                                  onChange={(e) => {
+                                                                      e.preventDefault();
+                                                                      const inputValue = e.target.value;
+                                                                      const hashtags = convertSentenceToHashtags(inputValue, e.key);
+                                                                      setHashTag(hashtags);
+                                                                  }}></textarea>
+                                                    </div>
+
+                                                </div>
+
+                                                {/* schedule */}
+                                                <div className='schedule_outer media_outer'>
+
+                                                    <div className='schedule_btn_outer'>
+                                                        <h5 className='create_post_text post_heading'>{jsondata.setSchedule}</h5>
+                                                        <div className='schedule_btn_wrapper d-flex'>
+
+                                                            <GenericButtonWithLoader label={jsondata.schedule}
+                                                                                     onClick={(e) => {
+                                                                                         setReference("Scheduled")
+                                                                                         handleSchedulePost(e);
+                                                                                     }}
+                                                                                     isDisabled={false}
+                                                                                     className={"cmn_bg_btn schedule_btn loading"}
+                                                                                     isLoading={reference === "Scheduled" && loadingCreateFacebookPost}/>
+
+                                                            <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                                                     onClick={(e) => {
+                                                                                         setReference("Draft")
+                                                                                         handleDraftPost(e);
+                                                                                     }}
+                                                                                     isDisabled={false}
+                                                                                     className={"save_btn cmn_bg_btn loading"}
+                                                                                     isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div className='schedule_date_outer'>
+
+                                                        <div className='date_time_outer'>
+                                                            <h6 className='create_post_text'>{jsondata.setdate}</h6>
+                                                            <input type='date' placeholder='set date'
+                                                                   className='form-control mt-2 date_input'
+                                                                   value={scheduleDate}
+                                                                   onChange={(e) => {
+                                                                       e.preventDefault();
+                                                                       setScheduleDate(e.target.value);
+                                                                   }}
+                                                            />
+                                                        </div>
+
+                                                        <div className='date_time_outer'>
+                                                            <h6 className='create_post_text'>{jsondata.settime}</h6>
+                                                            <input type='time' placeholder="set time"
+                                                                   className='mt-2 form-control time_input'
+                                                                   value={scheduleTime}
+                                                                   onChange={(e) => {
+                                                                       e.preventDefault();
+                                                                       setScheduleTime(e.target.value);
+                                                                   }}
+                                                            />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                {/* boost post */}
+                                                <div className='publish_post_outer media_outer '>
+                                                    <div className="d-flex align-items-center gap-2 ps-0 form-switch">
+
+                                                        <i
+                                                            className={`fa ${boostPost ? "fa-toggle-on" : "fa-toggle-off"}`}
+                                                            style={{fontSize: "24px", color: "#0d6efd"}}
                                                             onClick={(e) => {
                                                                 e.preventDefault();
-                                                                setAIGenerateImageModal(true);
-                                                            }}>
-                                                            <i className="fa-solid fa-robot ai_icon me-2"
-                                                               style={{fontSize: "15px"}}/> {jsondata.generateAi}
-                                                        </button>
+                                                                setBoostPost(!boostPost);
+                                                            }}
+                                                            aria-hidden="true"
+                                                        />
+
+                                                        <label
+                                                            className="form-check-label create_post_label boost_post_text"
+                                                            htmlFor="flexSwitchCheckChecked">Boost Post</label>
                                                     </div>
-                                                </>
-                                            }
-                                        </div>
 
-                                        {/* Pinterest Options*/}
-
-                                        {
-                                            selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&
-                                            <div className='post_caption_outer media_outer'>
-                                                <div className='caption_header'>
-                                                    <h5 className='post_heading create_post_text'>Pinterest Only *</h5>
-
-
-                                                </div>
-                                                <div className='textarea_outer'>
-                                                    <h6 className='create_post_text'>Pin Title*</h6>
-                                                    <input type={"text"} className='textarea mt-2'
-                                                           value={pinTitle}
-                                                           onChange={(e) => {
-                                                               e.preventDefault()
-                                                               setPinTitle(e.target.value);
-                                                           }}/>
-                                                </div>
-                                                <div className='textarea_outer mt-2'>
-                                                    <h6 className='create_post_text'>Destination Url*</h6>
-                                                    <input type={"text"} className='textarea mt-2'
-                                                           value={pinDestinationUrl}
-                                                           onChange={(e) => {
-                                                               e.preventDefault();
-                                                               setPinDestinationUrl(e.target.value);
-                                                           }}/>
-                                                </div>
-                                            </div>
-                                        }
-
-                                        {/* post caption */}
-
-                                        <div className='post_caption_outer media_outer'>
-                                            <div className='caption_header'>
-                                                <h5 className='post_heading create_post_text'>Add Caption *</h5>
-
-                                                <button className="ai_btn cmn_white_text"
-                                                        onClick={(e) => {
+                                                    <div className='cancel_publish_btn_outer d-flex'>
+                                                        <button className='cancel_btn cmn_bg_btn' onClick={(e) => {
                                                             e.preventDefault();
-                                                            setAIGenerateCaptionModal(true);
-                                                        }}>
-                                                    <img src={ai_icon}
-                                                         className='ai_icon me-2'/>{jsondata.generateCaptionAi}
-                                                </button>
+                                                            resetForm(e);
+                                                        }}>{jsondata.cancel}</button>
 
-                                            </div>
-                                            <div className='textarea_outer'>
-                                                <h6 className='create_post_text'>{jsondata.addText}</h6>
-                                                <textarea className='textarea mt-2' rows={3}
-                                                          value={caption}
-                                                          onChange={(e) => {
-                                                              e.preventDefault()
-                                                              setCaption(e.target.value);
-                                                          }}></textarea>
-                                            </div>
-                                            <div className='caption_header hashtag_outer'>
-                                                <h5 className='post_heading create_post_text'>Add
-                                                    Hashtag *</h5>
-
-                                                <button className="ai_btn cmn_white_text"
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            setAIGenerateHashTagModal(true);
-                                                        }}>
-                                                    <img src={ai_icon}
-                                                         className='ai_icon me-2'/>
-                                                    {jsondata.generateHashtagAi}
-                                                </button>
-
-                                            </div>
-                                            <div className='textarea_outer'>
-                                                <h6 className='create_post_text'>{jsondata.addText}</h6>
-                                                <textarea className='textarea mt-2' rows={3}
-                                                          value={hashTag}
-                                                          onChange={(e) => {
-                                                              e.preventDefault();
-                                                              const inputValue = e.target.value;
-                                                              const hashtags = convertSentenceToHashtags(inputValue,e.key);
-                                                              setHashTag(hashtags);
-                                                          }}></textarea>
-                                            </div>
-
-                                        </div>
-
-                                        {/* schedule */}
-                                        <div className='schedule_outer media_outer'>
-
-                                            <div className='schedule_btn_outer'>
-                                                <h5 className='create_post_text post_heading'>{jsondata.setSchedule}</h5>
-                                                <div className='schedule_btn_wrapper d-flex'>
-
-                                                    <GenericButtonWithLoader label={jsondata.schedule}
-                                                                             onClick={(e) => {
-                                                                                 setReference("Scheduled")
-                                                                                 handleSchedulePost(e);
-                                                                             }}
-                                                                             isDisabled={false}
-                                                                             className={"cmn_bg_btn schedule_btn loading"}
-                                                                             isLoading={reference === "Scheduled" && loadingCreateFacebookPost}/>
-
-                                                    <GenericButtonWithLoader label={jsondata.saveasdraft}
-                                                                             onClick={(e) => {
-                                                                                 setReference("Draft")
-                                                                                 handleDraftPost(e);
-                                                                             }}
-                                                                             isDisabled={false}
-                                                                             className={"save_btn cmn_bg_btn loading"}
-                                                                             isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
-                                                </div>
-                                            </div>
-
-
-                                            <div className='schedule_date_outer'>
-
-                                                <div className='date_time_outer'>
-                                                    <h6 className='create_post_text'>{jsondata.setdate}</h6>
-                                                    <input type='date' placeholder='set date'
-                                                           className='form-control mt-2 date_input'
-                                                           value={scheduleDate}
-                                                           onChange={(e) => {
-                                                               e.preventDefault();
-                                                               setScheduleDate(e.target.value);
-                                                           }}
-                                                    />
+                                                        <GenericButtonWithLoader label={jsondata.publishnow}
+                                                                                 onClick={(e) => {
+                                                                                     setReference("Published")
+                                                                                     handlePostSubmit(e);
+                                                                                 }}
+                                                                                 isDisabled={false}
+                                                                                 className={"publish_btn cmn_bg_btn loading"}
+                                                                                 isLoading={reference === "Published" && loadingCreateFacebookPost}/>
+                                                    </div>
                                                 </div>
 
-                                                <div className='date_time_outer'>
-                                                    <h6 className='create_post_text'>{jsondata.settime}</h6>
-                                                    <input type='time' placeholder="set time"
-                                                           className='mt-2 form-control time_input'
-                                                           value={scheduleTime}
-                                                           onChange={(e) => {
-                                                               e.preventDefault();
-                                                               setScheduleTime(e.target.value);
-                                                           }}
-                                                    />
-                                                </div>
-
-                                            </div>
+                                            </form>
                                         </div>
+                                    </div>
+                                    <div className="col-lg-6 col-md-12 col-sm-12">
 
-                                        {/* boost post */}
-                                        <div className='publish_post_outer media_outer '>
-                                            <div className="d-flex align-items-center gap-2 ps-0 form-switch">
+                                        <div className='post_preview_outer'>
 
-                                                <i
-                                                    className={`fa ${boostPost ? "fa-toggle-on" : "fa-toggle-off"}`}
-                                                    style={{fontSize: "24px", color: "#0d6efd"}}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        setBoostPost(!boostPost);
-                                                    }}
-                                                    aria-hidden="true"
-                                                />
+                                            {
+                                                allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
+                                                    let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                <label className="form-check-label create_post_label boost_post_text"
-                                                       htmlFor="flexSwitchCheckChecked">Boost Post</label>
-                                            </div>
-
-                                            <div className='cancel_publish_btn_outer d-flex'>
-                                                <button className='cancel_btn cmn_bg_btn' onClick={(e) => {
-                                                    e.preventDefault();
-                                                    resetForm(e);
-                                                }}>{jsondata.cancel}</button>
-
-                                                <GenericButtonWithLoader label={jsondata.publishnow}
-                                                                         onClick={(e) => {
-                                                                             setReference("Published")
-                                                                             handlePostSubmit(e);
-                                                                         }}
-                                                                         isDisabled={false}
-                                                                         className={"publish_btn cmn_bg_btn loading"}
-                                                                         isLoading={reference === "Published" && loadingCreateFacebookPost}/>
-                                            </div>
-                                        </div>
-
-                                    </form>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-md-12 col-sm-12">
-
-                                <div className='post_preview_outer'>
-
-                                    {
-                                        allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
-                                            let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
-                       
-                                            return (<span key={index}>
+                                                    return (<span key={index}>
                                                     {selectedPageData &&
                                                         <CommonFeedPreview
                                                             socialMediaType={option.group}
@@ -806,18 +805,20 @@ const CreatePost = () => {
                                                     }
 
                                                 </span>
-                                            )
-                                        })
-                                    }
+                                                    )
+                                                })
+                                            }
+                                        </div>
+
+
+                                    </div>
                                 </div>
-
-
                             </div>
                         </div>
-                    </div>
-                </div>
 
-            </div>
+                    </div>
+            }
+
 
             {
                 aiGenerateImageModal && <AI_ImageModal
@@ -839,10 +840,12 @@ const CreatePost = () => {
                     setAIGenerateHashTagModal={setAIGenerateHashTagModal}/>
             }
             {
-                showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal} setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
+                showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal}
+                                                                      setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
             }
 
-            {showEditImageModal && <EditImageModal file={file} setFile={setFile} showEditImageModal={showEditImageModal} setShowEditImageModal={setShowEditImageModal}/>}
+            {showEditImageModal && <EditImageModal file={file} setFile={setFile} showEditImageModal={showEditImageModal}
+                                                   setShowEditImageModal={setShowEditImageModal}/>}
         </>)
 }
 export default CreatePost
