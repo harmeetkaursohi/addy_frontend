@@ -115,6 +115,7 @@ const Profile = () => {
     const getBlob = (blob) => {        
         setBlob(blob)
     }
+   
     const changeProfileHandler = (e) => {
         if (e.target.files[0]) {            
             // convert image file to base64 string

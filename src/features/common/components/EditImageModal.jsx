@@ -5,80 +5,95 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import { useRef } from 'react';
+import "./common.css"
 
-const EditImageModal = ({setShowEditImageModal,showEditImageModal,file}) => {
-    console.log(file.file.fileName,"file")
+const EditImageModal = ({setShowEditImageModal,showEditImageModal,file,setCropImgUrl,setFileSize}) => {
+
+
     const [src, setSrc] = useState(null);
-    const [crop, setCrop] = useState({ unit: "%", x: 0, y: 0, width: 50, height: 50 });
+    const [crop, setCrop] = useState({ unit: "%", width: 50 ,aspect:1/1});
     const [croppedImageUrl, setCroppedImageUrl] = useState(null);
     const imageRef = useRef(null);
-    const fileUrlRef = useRef(null);
 
-    const onSelectFile=(e)  => {
-        // if (e.target.files && e.target.files.length > 0) {
-        //   const reader = new FileReader();
-        //   reader.addEventListener("load", () => setSrc(reader.result));
-        //   reader.readAsDataURL(e.target.files[0]);
-        // }
-      };
-    
-      const onImageLoaded = image => {
-        imageRef.current = image;
-      };
-    
-      const onCropComplete = crop => {
-        makeClientCrop(crop);
-      };
-    
-      const onCropChange = (crop, percentCrop) => {
-        setCrop(crop);
-      };
-    
-      const makeClientCrop = async crop => {
-        if (imageRef.current && crop.width && crop.height) {
-          const croppedImageUrl = await getCroppedImg(imageRef.current, crop, "newFile.jpeg");
-          setCroppedImageUrl(croppedImageUrl);
-        }
-      };
-    
-      const getCroppedImg = (image, crop, fileName) => {
-        return new Promise((resolve, reject) => {
-          const canvas = document.createElement("canvas");
-          const scaleX = image.naturalWidth / image.width;
-          const scaleY = image.naturalHeight / image.height;
-          canvas.width = crop.width;
-          canvas.height = crop.height;
-          const ctx = canvas.getContext("2d");
-    
-          ctx.drawImage(
-            image,
-            crop.x * scaleX,
-            crop.y * scaleY,
-            crop.width * scaleX,
-            crop.height * scaleY,
-            0,
-            0,
-            crop.width,
-            crop.height
-          );
-    
-          canvas.toBlob(blob => {
-            if (!blob) {
-              console.error("Canvas is empty");
-              return;
-            }
-            blob.name = fileName;
-            if (fileUrlRef.current) {
-              window.URL.revokeObjectURL(fileUrlRef.current);
-            }
-            fileUrlRef.current = window.URL.createObjectURL(blob);
-            resolve(fileUrlRef.current);
-          }, "image/jpeg");
-        });
-      };
+
 const handleClose=()=>{
     setShowEditImageModal(false)
 }
+
+
+
+const onImageLoaded = (image) => {
+
+  imageRef.current = image.target;
+  if (imageRef.current && crop.width && crop.height) {
+    makeClientCrop(crop);
+  }
+};
+
+const onCropComplete = crop => {
+  makeClientCrop(crop);
+};
+
+const onCropChange = (crop) => {
+  setCrop(crop);
+};
+
+const makeClientCrop = async crop => {
+  if (imageRef.current && crop.width && crop.height) {
+    const croppedImageBlob = await getCroppedImg(
+      imageRef.current,
+      crop,
+      "newFile.jpeg"
+    );
+  
+   
+    setCroppedImageUrl(URL.createObjectURL(croppedImageBlob.blob));
+    setFileSize(croppedImageBlob.blob)
+  }
+};
+
+const getCroppedImg = (image, crop, fileName) => {
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement("canvas");
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    canvas.width = crop.width;
+    canvas.height = crop.height ;
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+      image,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width ,
+      crop.height ,
+    );
+
+    canvas.toBlob(blob => {
+      if (!blob) {
+        console.error("Canvas is empty");
+        reject(new Error("Canvas is empty"));
+        return;
+      }
+      blob.name = fileName;
+
+      resolve({ blob });
+     
+    }, "image/jpeg",1);
+
+  });
+};
+
+const saveHandler=()=>{
+  setCropImgUrl(croppedImageUrl)
+  setShowEditImageModal(false)
+}
+
+
   return (
     <div className='edit_imag_modal_outer'>
 
@@ -86,34 +101,39 @@ const handleClose=()=>{
 
       <Modal show={showEditImageModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Edit picture</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        {/* <div>
-          <input type="file" accept="image/*" onChange={onSelectFile()} />
-        </div> */}
-        {src && (
+
+        {file.url && (
           <ReactCrop
-            src={src}
+            src={file.url}
             crop={crop}
-            ruleOfThirds
-            onImageLoaded={this.onImageLoaded}
-            onComplete={this.onCropComplete}
-            onChange={this.onCropChange}
-          />
+         
+            onComplete={onCropComplete}
+            onChange={onCropChange}>
+
+              <img src={file.url} alt="Selected"  height="auto" width="auto" onLoad={onImageLoaded} />
+            </ReactCrop>
+          
         )}
-        {croppedImageUrl && (
-          <img alt="Crop" style={{ maxWidth: "100%" }} src={croppedImageUrl} />
-        )}
-    
+
+        {/* {croppedImageUrl && (
+          <img alt="Crop"  src={croppedImageUrl} height="200px" width="200px" />
+        )} */}
+      
+         
+      
+
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
+        <button className='cmn_btn_color save_changesbtn' onClick={saveHandler}>
             Save Changes
-          </Button>
+          </button>
+          <button className='cancel_button' onClick={handleClose}>
+            Cancel
+          </button>
+          
         </Modal.Footer>
       </Modal>
 
@@ -122,3 +142,8 @@ const handleClose=()=>{
 }
 
 export default EditImageModal
+
+
+
+
+

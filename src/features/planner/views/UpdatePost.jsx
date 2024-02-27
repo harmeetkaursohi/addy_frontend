@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import {Dropdown} from 'react-bootstrap'
 import SideBar from "../../sidebar/views/Layout.jsx";
-import {BiUser} from "react-icons/bi";
+import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
 import {getPostsByIdAction, updatePostOnSocialMediaAction} from "../../../app/actions/postActions/postActions.js";

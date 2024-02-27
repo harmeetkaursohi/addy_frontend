@@ -170,7 +170,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                     </button>
                                     <button onClick={handleClose}
                                             disabled={updatePasswordData?.loading}
-                                            className={"close-update-password-btn cancel_button "}>Cancel
+                                            className={"close-update-password-btn cancel_button connection-error-close-btn "}>Cancel
                                     </button>
                                 </div>
                             </form>
