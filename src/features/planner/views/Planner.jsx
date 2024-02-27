@@ -180,6 +180,7 @@ const Planner = () => {
                     {/*})}*/}
                 </div>
                 {
+                    !getAllPostsForPlannerData?.loading && !getPlannerPostCountReportData?.loading &&
                     <button className="createPost_btn crate_btn cmn_btn_color w-100 ms-0 mt-2 mb-3"
                             onClick={(e) => handleShowMorePostModal(event)}>
                         {
