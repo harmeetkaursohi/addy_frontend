@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import {Dropdown} from 'react-bootstrap'
 import SideBar from "../../sidebar/views/Layout.jsx";
-import {BiUser} from "react-icons/bi";
+import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
 import {getPostsByIdAction, updatePostOnSocialMediaAction} from "../../../app/actions/postActions/postActions.js";
@@ -387,6 +387,39 @@ const UpdatePost = () => {
             }
         };
 
+        // edit handler===
+
+
+          // edit handler
+    const [showEditImageModal, setShowEditImageModal] = useState()
+    const[cropImgUrl,setCropImgUrl]=useState(null)
+    const[editImgIndex,setEditImgIndex]=useState(null)
+    const [imgFile, setImgFile] = useState(null)
+    const [fileSize, setFileSize] = useState(null)
+    const editHandler = (index,file) => {
+        setImgFile(file)
+        setEditImgIndex(index)
+        setShowEditImageModal(true)
+   
+        
+        
+    }
+
+    useEffect(()=>{
+        if(cropImgUrl){
+            const updatedFiles = [...files];
+
+            updatedFiles[editImgIndex] = {
+              file:fileSize,               
+                url:cropImgUrl,
+                filleName:imgFile?.fileName,
+                mediaType:imgFile?.mediaType};
+            
+            setFiles(updatedFiles);
+            
+        }
+    },[cropImgUrl])
+    
         return (
             <>
                 <SideBar/>
@@ -562,6 +595,16 @@ const UpdatePost = () => {
                                                                         />
                                                                     }
                                                                 </div>
+
+                                                                <button className="edit_upload delete_upload me-2"
+                                                                            onClick={(e) => {
+                                                                                e.preventDefault();
+                                                                                editHandler(index,file);
+                                                                            }}>
+                                                                        <BiSolidEditAlt style={{fontSize: '24px'}}
+                                                                        />
+                                                                    </button>
+
                                                                 <button className="delete_upload"  onClick={(e) => {
                                                                             e.preventDefault();
                                                                             handleRemoveSelectFile(file?.fileName);

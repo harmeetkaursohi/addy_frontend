@@ -332,11 +332,35 @@ const CreatePost = () => {
 
     // edit handler
     const [showEditImageModal, setShowEditImageModal] = useState()
-    const [file, setFile] = useState(null)
-    const editHandler = (file) => {
-        setFile(file)
+    const[cropImgUrl,setCropImgUrl]=useState(null)
+    const[editImgIndex,setEditImgIndex]=useState(null)
+    const [imgFile, setImgFile] = useState(null)
+    const [fileSize, setFileSize] = useState(null)
+    const editHandler = (index,file) => {
+        setImgFile(file)
+        setEditImgIndex(index)
         setShowEditImageModal(true)
+   
+        
+        
     }
+
+    useEffect(()=>{
+        if(cropImgUrl){
+            const updatedFiles = [...files];
+
+            updatedFiles[editImgIndex] = {
+              file:fileSize,               
+                url:cropImgUrl,
+                filleName:imgFile?.fileName,
+                mediaType:imgFile?.mediaType};
+            
+            setFiles(updatedFiles);
+            
+        }
+    },[cropImgUrl])
+
+
     return (
         <>
             <SideBar/>
@@ -489,7 +513,8 @@ const CreatePost = () => {
                                                     <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
                                                     <div className="drag_scroll">
 
-                                                        {files?.map((file, index) => {
+                                                        {files?.length>0 && files?.map((file, index) => {
+                                                          
                                                             return (
                                                                 <div
                                                                     className="file_outer dragable_files"
@@ -498,13 +523,13 @@ const CreatePost = () => {
                                                                     <div className="flex-grow-1 d-flex align-items-center">
                                                                         {/* <i className="fas fa-grip-vertical me-2"></i> */}
                                                                         {
-                                                                            file.file.type.startsWith('image/') &&
+                                                                            file?.file?.type.startsWith('image/') &&
                                                                             <img className={"upload_image me-3"}
                                                                                  src={file.url}
                                                                                  alt={`Image ${index}`}/>
                                                                         }
                                                                         {
-                                                                            file.file.type.startsWith('video/') &&
+                                                                            file?.file?.type.startsWith('video/') &&
                                                                             <video className={"upload_image me-3"}
                                                                                    src={file.url} alt={`Videos ${index}`}
                                                                                    autoPlay={false}
@@ -515,7 +540,7 @@ const CreatePost = () => {
                                                                     <button className="edit_upload delete_upload me-2"
                                                                             onClick={(e) => {
                                                                                 e.preventDefault();
-                                                                                editHandler(file);
+                                                                                editHandler(index,file);
                                                                             }}>
                                                                         <BiSolidEditAlt style={{fontSize: '24px'}}
                                                                         />
@@ -795,6 +820,7 @@ const CreatePost = () => {
                                                             pageName={selectedPageData?.name}
                                                             pageImageUrl={selectedPageData?.imageUrl}
                                                             userData={userData}
+                                                            cropImage={cropImgUrl!==null?cropImgUrl:""}
                                                             files={files}
                                                             selectedFileType={selectedFileType}
                                                             caption={caption}
@@ -844,7 +870,7 @@ const CreatePost = () => {
                                                                       setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
             }
 
-            {showEditImageModal && <EditImageModal file={file} setFile={setFile} showEditImageModal={showEditImageModal}
+            {showEditImageModal && <EditImageModal setFileSize={setFileSize} setCropImgUrl={setCropImgUrl} cropImgUrl={cropImgUrl}   file={imgFile} setFile={setImgFile} showEditImageModal={showEditImageModal}
                                                    setShowEditImageModal={setShowEditImageModal}/>}
         </>)
 }
