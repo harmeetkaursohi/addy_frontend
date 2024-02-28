@@ -395,7 +395,7 @@ const SocialAccounts = ({}) => {
                                                 >
                                                     <img className="cmn_width" src={fb_img}/>
 
-                                                    <h2 className="pagecount">{currentConnectedFacebookPages!==null && currentConnectedFacebookPages!==undefined ?currentConnectedFacebookPages?.length:0}</h2>
+                                                    <h2 className={`pagecount ${currentConnectedFacebookPages?.length===undefined? "blink" :""}` }>{currentConnectedFacebookPages!==null && currentConnectedFacebookPages!==undefined ?currentConnectedFacebookPages?.length:0}</h2>
 
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
@@ -546,7 +546,7 @@ const SocialAccounts = ({}) => {
                                                 <div className="social_media_content"
                                                      onClick={() => setInstagramDropDown(!instagramDropDown)}>
                                                     <i className="fa-brands fa-instagram insta-icon"/>
-                                                    <h2 className="pagecount">{currentConnectedInstagramPages!==null && currentConnectedInstagramPages!==undefined?currentConnectedInstagramPages?.length:0}</h2>
+                                                    <h2 className={`pagecount ${currentConnectedInstagramPages?.length===undefined?"blink":""}`} >{currentConnectedInstagramPages!==null && currentConnectedInstagramPages!==undefined?currentConnectedInstagramPages?.length:0}</h2>
 
                                                     
                                                     {/*<img className="cmn_width " src={fb_img}/>*/}
@@ -701,7 +701,7 @@ const SocialAccounts = ({}) => {
                                                 <div className="social_media_content"
                                                      onClick={() => setLinkedinDropDown(!linkedinDropDown)}>
                                                     <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
-                                                    <h2 className="pagecount">{currentConnectedLinkedinPages!==null ?currentConnectedLinkedinPages?.length:0}</h2>
+                                                    <h2 className={`pagecount ${currentConnectedLinkedinPages?.length===undefined?"blink":""}`}>{currentConnectedLinkedinPages!==null ?currentConnectedLinkedinPages?.length:0}</h2>
 
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'LINKEDIN')?.name || "linkedin"}</h5>
@@ -854,7 +854,7 @@ const SocialAccounts = ({}) => {
                                                 <div className="social_media_content"
                                                      onClick={() => setPinterestDropDown(!pinterestDropDown)}>
                                                     <i className="fa-brands fa-pinterest pinterest-icon"/>
-                                                    <h2 className="pagecount">{currentConnectedPinterestPages!==null ?currentConnectedPinterestPages?.length:0}</h2>
+                                                    <h2 className={`pagecount ${currentConnectedPinterestPages?.length===undefined?"blink":""}`}>{currentConnectedPinterestPages!==null ?currentConnectedPinterestPages?.length:0}</h2>
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'PINTEREST')?.name || "pinterest"}</h5>
                                                         <h4 className="connect_text cmn_text_style">Connected</h4>

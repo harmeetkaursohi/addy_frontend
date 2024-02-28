@@ -86,7 +86,7 @@ const Layout = () => {
                         <div className='logo_outer'>
                             <img src={addy_logo} className='addy_logo'/>
                         </div>
-                        <div className='user_profile_wrapper'>
+                        {/* <div className='user_profile_wrapper'>
                             <img
                                 src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
                                 className='profile_img'/>
@@ -95,7 +95,7 @@ const Layout = () => {
                                     <SkeletonEffect count={1}></SkeletonEffect>}</h3>
                                 <h4 className="profile_container">{userData?.email}</h4>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                     <ul className='sidebar_item'>
                         {

@@ -10,7 +10,7 @@ const CropVideoModal = ({videoInfo,showCropVideModal,setShowCropVideoModal,getBl
 
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
-
+  const[croppedVideoBlob,setCroppedVideoBlob]=useState(null)
 
 const handleClose=()=>{
   setShowCropVideoModal(false)
@@ -24,14 +24,37 @@ const handleZoomIn = () => {
 const handleZoomOut = () => {
   setZoom(prevZoom => Math.max(prevZoom - 0.1, 1)); 
 };
-const onCropComplete = async (_, croppedAreaPixels) => {        
-  const croppedImage = await getCroppedImg(
-      videoInfo?.url,
-      croppedAreaPixels
-  )
-  getBlob(croppedImage)
-}
 
+const handleCropComplete = async (_, croppedAreaPixels) => {
+  const videoElement = document.createElement('video');
+  console.log(croppedAreaPixels,"croppedAreaPixels")
+  videoElement.src = videoInfo?.url; 
+
+  const canvas = document.createElement('canvas');
+  canvas.width = croppedAreaPixels.width;
+  canvas.height = croppedAreaPixels.height;
+  const ctx = canvas.getContext('2d');
+
+  ctx.drawImage(
+    videoElement,
+    croppedAreaPixels.x,
+    croppedAreaPixels.y,
+    croppedAreaPixels.width,
+    croppedAreaPixels.height,
+    0,
+    0,
+    croppedAreaPixels.width,
+    croppedAreaPixels.height
+  );
+
+  canvas.toBlob((blob) => {    
+    setCroppedVideoBlob(blob);
+  }, 'video/mp4');
+};
+
+
+
+console.log(croppedVideoBlob,"croppedVideoBlob")
   return (
     <Modal className='facebook_modal_outer' size="lg" show={showCropVideModal} onHide={handleClose} backdrop="static">
     <Modal.Header closeButton>
@@ -52,10 +75,9 @@ const onCropComplete = async (_, croppedAreaPixels) => {
           aspect={4 / 3}
           onCropChange={setCrop}
           onZoomChange={setZoom}
-          onCropComplete={onCropComplete}
-          onImageLoaded={res => {
-            console.log(res,"res--")
-          }}/>
+          onCropComplete={handleCropComplete}
+        
+          />
         }
         </div>                        
         <div className="controls">
@@ -63,7 +85,13 @@ const onCropComplete = async (_, croppedAreaPixels) => {
         <input type="range" id="range" min="1" max="3"  value={zoom} step={0.1} onChange={function(e){ setZoom(e.target.value) }}/>                            
         <button onClick={handleZoomIn}><FaPlus/></button>
 
-        </div>                              
+        </div>   
+        {croppedVideoBlob && (
+        <video controls>
+          <source src={URL.createObjectURL(croppedVideoBlob)} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      )}                           
     </Modal.Body>
     <Modal.Footer className='crop-image-footer'>                    
     <div className="confirm_btn ">
