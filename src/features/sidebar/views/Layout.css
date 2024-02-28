@@ -69,6 +69,7 @@ i.bar_icon {
     background-color: white;
     margin-top: 8px;
     width: 275px;
+    cursor: pointer;
 
 }
 .sidebar_item_outers.Profile_Img_outer a {
@@ -108,7 +109,7 @@ a.active {
 .sidebar_item_outers {
     display: flex;
     gap: 10px;
-    padding: 0px 18px;
+    padding: 4px 18px;
     flex-grow: 1;
     /* margin-right: 10px; */
     align-items: center;
@@ -126,7 +127,7 @@ a.active {
     letter-spacing: -0.016px;
     text-decoration: none;
     gap: 20px;
-    cursor: pointer;
+   
 
 }
 
