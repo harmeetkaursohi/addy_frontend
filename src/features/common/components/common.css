@@ -103,16 +103,16 @@ div.instagram_like {
     color: white;
     border-radius: 10px;
 }
-.save_changesbtn{
-    border: none ;
-    padding: 7px ;
-    color: white;
-}
+
 .instagram_caption_outer{
     display: flex;
     align-items: center;
     gap: 7px;
     padding: 0px 19px;
+}
+.ReactCrop{
+    display: flex !important;
+    justify-content: center  !important;
 }
 @media screen and (max-width:1280px) {
     .linkedin_likes h3{

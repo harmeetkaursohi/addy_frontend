@@ -131,7 +131,10 @@ label.edit_label{
     appearance: auto !important;
     /* color: #9d9a9a !important; */
   }
- 
+  .changeProfile_label:hover {
+    background: white;
+    color: #e97011;
+}
 @media screen and (min-width:1499px) {
     .editprofile_outer{
         width: 1100px;

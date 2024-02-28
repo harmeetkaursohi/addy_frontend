@@ -809,6 +809,10 @@ button.delete_upload {
     overflow: auto;
     margin-top: 15px;
 }
+.delete_upload:hover{
+    background: #00A3FF;
+    color: white;
+}
 
 .drag_scroll .dragable_files:first-child {
     margin-top: 0;

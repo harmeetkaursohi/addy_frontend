@@ -23,7 +23,7 @@ import {
     convertSentenceToHashtags,
     convertToUnixTimestamp, convertUnixTimestampToDateTime,
     getEnumValue,
-    groupByKey, isNullOrEmpty,
+    groupByKey, isNullOrEmpty, urlToFile,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
@@ -32,6 +32,7 @@ import default_user_icon from "../../../images/default_user_icon.svg";
 import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantData";
 import Loader from '../../loader/Loader.jsx';
 
+import EditImageModal from '../../common/components/EditImageModal.jsx';
 
 const UpdatePost = () => {
 
@@ -74,21 +75,6 @@ const UpdatePost = () => {
 
         const loader = useSelector(state => state.post.getPostsByIdReducer?.loading)
 
-
-        console.log("hashTag==>", hashTag)
-        console.log("caption==>", caption)
-        console.log("pinTitle==>", pinTitle)
-        console.log("pinDestinationUrl==>", pinDestinationUrl)
-        console.log("scheduleDate==>", scheduleDate)
-        console.log("scheduleTime==>", scheduleTime)
-        console.log("socialAccountData==>", socialAccountData)
-        console.log("selectedFileType==>", selectedFileType)
-
-        console.log("files==>", files)
-        console.log("allOptions==>", allOptions)
-        console.log("selectedOptions==>", selectedOptions)
-        console.log("selectedAllDropdownData==>", selectedAllDropdownData)
-        console.log("selectedGroups==>", selectedGroups)
 
 
         useEffect(() => {
@@ -140,7 +126,6 @@ const UpdatePost = () => {
         // Create all Options
         useEffect(() => {
             if (socialAccountData) {
-                console.log("socialAccountData==>", socialAccountData)
                 const optionList = socialAccountData.map((socialAccount) => {
                     return {
                         group: socialAccount?.provider, allOptions: socialAccount?.pageAccessToken
@@ -153,13 +138,13 @@ const UpdatePost = () => {
 
         useEffect(() => {
             if (socialAccountData) {
-                const selectedGroup=[];
+                const selectedGroup = [];
                 socialAccountData?.forEach((socialAccount) => {
-                    const socialMediaAccountPageIds=socialAccount?.pageAccessToken.map((page) => {
+                    const socialMediaAccountPageIds = socialAccount?.pageAccessToken.map((page) => {
                         return page?.pageId
                     })
                     const isEveryPageSelected = socialMediaAccountPageIds.every((id) => selectedOptions.includes(id));
-                    if(isEveryPageSelected){
+                    if (isEveryPageSelected) {
                         selectedGroup.push(socialAccount.provider);
                     }
                 });
@@ -346,7 +331,6 @@ const UpdatePost = () => {
                         scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
                 };
-                console.log("requestBody===>", requestBody)
                 dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         showSuccessToast("Post has uploaded successfully");
@@ -389,6 +373,33 @@ const UpdatePost = () => {
             setBoostPost(false);
         }
 
+        // edit handler
+        const [showEditImageModal, setShowEditImageModal] = useState(false)
+        const [cropImgUrl, setCropImgUrl] = useState(null)
+        const [editImgIndex, setEditImgIndex] = useState(null)
+        const [imgFile, setImgFile] = useState(null)
+        const [fileSize, setFileSize] = useState(null)
+
+        const editHandler = (index, file) => {
+            setImgFile(file)
+            setEditImgIndex(index)
+            setShowEditImageModal(true)
+        }
+
+        useEffect(() => {
+            if (cropImgUrl) {
+                const updatedFiles = [...files];
+                urlToFile(cropImgUrl, imgFile?.fileName, imgFile?.mediaType).then(result => {
+                    updatedFiles[editImgIndex] = {
+                        file: result,
+                        fileName: imgFile?.fileName,
+                        mediaType: imgFile?.mediaType,
+                        url: cropImgUrl,
+                    };
+                    setFiles(updatedFiles);
+                })
+            }
+        }, [cropImgUrl])
 
         return (
             <>
@@ -568,6 +579,18 @@ const UpdatePost = () => {
                                                                         />
                                                                     }
                                                                 </div>
+
+                                                                {
+                                                                    file?.mediaType === "IMAGE" &&
+                                                                    <button className="edit_upload delete_upload me-2"
+                                                                            onClick={(e) => {
+                                                                                e.preventDefault();
+                                                                                editHandler(index, file);
+                                                                            }}>
+                                                                        <BiSolidEditAlt style={{fontSize: '24px'}}
+                                                                        />
+                                                                    </button>
+                                                                }
                                                                 <button className="delete_upload" onClick={(e) => {
                                                                     e.preventDefault();
                                                                     handleRemoveSelectFile(file?.fileName);
@@ -876,6 +899,18 @@ const UpdatePost = () => {
                         parentHashTag={hashTag}
                         setParentHashTag={setHashTag}
                     />
+                }
+
+                {
+
+                    showEditImageModal && <EditImageModal
+                        showEditImageModal={showEditImageModal}
+                        setShowEditImageModal={setShowEditImageModal}
+                        file={imgFile}
+                        setFileSize={setFileSize}
+                        setCropImgUrl={setCropImgUrl}
+                    />
+
                 }
             </>)
     }
