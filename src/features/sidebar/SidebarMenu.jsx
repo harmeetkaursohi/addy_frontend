@@ -8,7 +8,10 @@ import { TbSmartHome } from "react-icons/tb";
 import { AiOutlinePicture } from "react-icons/ai";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import {RiDraftLine} from "react-icons/ri";
-import Profile from "../profile/Profile";
+import { CgProfile } from "react-icons/cg";
+
+
+
 
 
 export const SidebarMenuItems = [
@@ -56,7 +59,7 @@ export const SidebarMenuItems = [
     {
         "name": "Profile",
         "path": "/profile",
-        "icon": <Profile />
+        "icon": <CgProfile />
     },
 
     
