@@ -870,7 +870,7 @@ const CreatePost = () => {
                                                                       setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
             }
 
-            {showEditImageModal && <EditImageModal setFileSize={setFileSize} setCropImgUrl={setCropImgUrl} cropImgUrl={cropImgUrl}   file={imgFile} setFile={setImgFile} showEditImageModal={showEditImageModal}
+            {showEditImageModal && <EditImageModal setFileSize={setFileSize} setCropImgUrl={setCropImgUrl} cropImgUrl={cropImgUrl}  file={imgFile} setFile={setImgFile} showEditImageModal={showEditImageModal}
                                                    setShowEditImageModal={setShowEditImageModal}/>}
         </>)
 }

@@ -32,6 +32,7 @@ import default_user_icon from "../../../images/default_user_icon.svg";
 import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantData";
 import Loader from '../../loader/Loader.jsx';
 
+import EditImageModal from '../../common/components/EditImageModal.jsx';
 
 const UpdatePost = () => {
 
@@ -388,7 +389,41 @@ const UpdatePost = () => {
             setScheduleDate("");
             setBoostPost(false);
         }
+        
+         // edit handler
+    const [showEditImageModal, setShowEditImageModal] = useState()
+    const[cropImgUrl,setCropImgUrl]=useState(null)
+    const[editImgIndex,setEditImgIndex]=useState(null)
+    const [imgFile, setImgFile] = useState(null)
+    const [fileSize, setFileSize] = useState(null)
+  
+    const editHandler = (index,file) => {
+        setImgFile(file)
+        setEditImgIndex(index)
+        setShowEditImageModal(true)
+   
+        
+        
+    }
 
+    useEffect(()=>{
+        if(cropImgUrl){
+            const updatedFiles = [...files];
+
+            updatedFiles[editImgIndex] = {
+               file:fileSize,               
+                url:cropImgUrl,
+                filleName:imgFile?.fileName,
+                mediaType:imgFile?.mediaType,
+                id:imgFile?.id,
+                gridFsId:imgFile?.gridFsId
+            };
+            console.log(updatedFiles,"updatedFiles")
+            setFiles(updatedFiles);
+            
+        }
+    },[cropImgUrl])
+    console.log(fileSize,"fileSize12")
 
         return (
             <>
@@ -568,6 +603,15 @@ const UpdatePost = () => {
                                                                         />
                                                                     }
                                                                 </div>
+
+                                                                <button className="edit_upload delete_upload me-2"
+                                                                            onClick={(e) => {
+                                                                                e.preventDefault();
+                                                                                editHandler(index,file);
+                                                                            }}>
+                                                                        <BiSolidEditAlt style={{fontSize: '24px'}}
+                                                                        />
+                                                                    </button>
                                                                 <button className="delete_upload" onClick={(e) => {
                                                                     e.preventDefault();
                                                                     handleRemoveSelectFile(file?.fileName);
@@ -876,6 +920,19 @@ const UpdatePost = () => {
                         parentHashTag={hashTag}
                         setParentHashTag={setHashTag}
                     />
+                }
+
+                {
+
+                showEditImageModal && <EditImageModal
+                etFileSize={setFileSize} 
+                setCropImgUrl={setCropImgUrl} cropImgUrl={cropImgUrl}   
+                file={imgFile} setFile={setImgFile}
+                showEditImageModal={showEditImageModal}
+                setShowEditImageModal={setShowEditImageModal}
+                isRequired={true}
+                />
+                
                 }
             </>)
     }

@@ -7,8 +7,7 @@ import { useState } from 'react';
 import { useRef } from 'react';
 import "./common.css"
 
-const EditImageModal = ({setShowEditImageModal,showEditImageModal,file,setCropImgUrl,setFileSize}) => {
-
+const EditImageModal = ({setShowEditImageModal,showEditImageModal,file,setCropImgUrl,setFileSize,isRequired}) => {
 
     const [src, setSrc] = useState(null);
     const [crop, setCrop] = useState({ unit: "%", width: 50 ,aspect:1/1});
@@ -104,8 +103,20 @@ const saveHandler=()=>{
           <Modal.Title>Edit picture</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        {isRequired ? file?.attachmentSource &&
+        
+        <ReactCrop
+        src={"data:image/jpeg; base64,"+ file?.attachmentSource}
+        crop={crop}
+     
+        onComplete={onCropComplete}
+        onChange={onCropChange}>
 
-        {file.url && (
+          <img src={"data:image/jpeg; base64,"+ file?.attachmentSource } alt="Selected"  height="auto" width="auto" onLoad={onImageLoaded} />
+        </ReactCrop>
+
+        :
+        file.url && (
           <ReactCrop
             src={file.url}
             crop={crop}
