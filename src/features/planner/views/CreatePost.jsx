@@ -369,17 +369,14 @@ const CreatePost = () => {
         }
     }, [cropImgUrl])
 
-// crop video handler
 
- const getBlob = (blob) => {        
-    setBlob(blob)
-}
     return (
         <>
             <SideBar/>
+            <div className="cmn_container">
             {
                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
-                    <CommonLoader></CommonLoader> : <div className="cmn_container">
+                    <CommonLoader></CommonLoader> : 
                         <div className="Container">
                             <div className="create_post_wrapper">
                                 <div className="row">
@@ -857,9 +854,9 @@ const CreatePost = () => {
                                 </div>
                             </div>
                         </div>
-
+                }
                     </div>
-            }
+           
 
 
             {

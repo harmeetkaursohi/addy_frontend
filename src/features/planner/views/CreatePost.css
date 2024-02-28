@@ -3,6 +3,7 @@
     gap: 10px;
     padding: 15px 28px;
     align-items: center;
+    cursor: pointer;
 }
 
 .instagram_outer {

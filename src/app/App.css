@@ -266,7 +266,14 @@ div#swal2-html-container {
   font-size: 16px;
 }
 
-
+.blink{
+  animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
 
 @media screen and (max-width: 2560px) {
   div.cmn_loader_outer {

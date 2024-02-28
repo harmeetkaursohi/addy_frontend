@@ -152,7 +152,8 @@ span.highlight {
 }
 
 .post_review_wrapper table thead th {
-    background: #F4F7FC;
+    /* background: #F4F7FC; */
+    background-color: white ;
 }
 
 .post_review_wrapper table thead {
@@ -211,6 +212,7 @@ table.review_data tbody tr:nth-child(odd) td {
 table.review_data tbody tr td:first-child {
     border-bottom-left-radius: 10px;
     border-top-left-radius: 10px;
+    background-color: white;
 }
 
 table.review_data tbody tr td:last-child {

@@ -8,7 +8,7 @@ import {useRef} from 'react';
 import "./common.css"
 
 const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFileSize, setCropImgUrl}) => {
-    const [crop, setCrop] = useState({unit: "%", width: 50, aspect: 1 / 1});
+    const [crop, setCrop] = useState({unit: "%", width: 50, aspect: 1 / 1, height: 50,  x: 25, y: 25});
     const [croppedImageUrl, setCroppedImageUrl] = useState(null);
     const imageRef = useRef(null);
 
@@ -89,7 +89,7 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
         <div className='edit_imag_modal_outer'>
 
 
-            <Modal show={showEditImageModal} onHide={handleClose}>
+            <Modal show={showEditImageModal} onHide={handleClose}  backdrop="static">
                 <Modal.Header closeButton>
                     <Modal.Title>Edit picture</Modal.Title>
                 </Modal.Header>
@@ -103,19 +103,19 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
                             onChange={onCropChange}>
 
                             <img src={file.url ? file.url : "data:image/jpeg; base64," + file?.attachmentSource}
-                                 alt="Selected" height="auto" width="auto" onLoad={onImageLoaded}/>
+                                 alt="Selected" height="400px" width="400px" onLoad={onImageLoaded}/>
                         </ReactCrop>
                     }
 
 
                 </Modal.Body>
                 <Modal.Footer>
-                    <button className='cmn_btn_color save_changesbtn' onClick={saveHandler}>
-                        Save Changes
-                    </button>
-                    <button className='cancel_button' onClick={handleClose}>
-                        Cancel
-                    </button>
+
+                <button className="cmn_btn_color cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
+        <button type="button" disabled ={crop?.unit==="%"} onClick={saveHandler} className={`cmn_btn_color cmn_connect_btn connect_btn yes_btn ${crop?.unit==="%" ? "disabled-button":""}`}
+               > Save
+        </button>
+                
 
                 </Modal.Footer>
             </Modal>
