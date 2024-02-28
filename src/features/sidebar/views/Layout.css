@@ -109,7 +109,7 @@ a.active {
 .sidebar_item_outers {
     display: flex;
     gap: 10px;
-    padding: 4px 18px;
+    padding: 6px 18px;
     flex-grow: 1;
     /* margin-right: 10px; */
     align-items: center;
@@ -150,10 +150,10 @@ a.active {
 }
 
 .sidebar_inner_content {
-    /* width: 100%; */
+  
     background: #F4F4F4;
  
-    border-radius: 12px;
+
     padding: 16px 14px;
     display: flex;
     gap: 10px;
@@ -161,8 +161,7 @@ a.active {
     color: black;
    
     cursor: pointer;
-    /* transform: scale(1); */
-    /* transition: 0.4s; */
+
 }
 
 .sidebar_inner_content h6 {
@@ -190,8 +189,8 @@ a.active {
 }
 
 .user_profile_outer {
-    border-bottom: 1px solid #D1D9E2;
-    padding-bottom: 12px;
+    /* border-bottom: 1px solid #D1D9E2;
+    padding-bottom: 12px; */
 }
 
 .sidebar_container {
