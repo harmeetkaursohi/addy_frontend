@@ -33,6 +33,7 @@ import Draft from "../features/unPublishedPages/Draft";
 // import Insight from "../features/insights/insight/views/Insight";
 import Insight from "../features/insights/insight/views/Insight";
 import Profile from '../features/profile/Profile.jsx'
+import CropVideoModal from '../features/common/components/CropVideoModal.jsx'
 
 const App = () => {
     const PrivateRoute = () => {
@@ -73,7 +74,9 @@ const App = () => {
                     <Route path="/forgot-password" element={<ForgotPassword/>}/>
                     <Route path="/fb" element={<ConnectPagesModal/>}/>
                     <Route path="/auth-redirect" element={<Oauth2RedirectComponent/>}/>
+                    <Route path="/video" element={<CropVideoModal/>}/>
                     <Route path="*" element={<NotFound/>}/>
+                    
                 </Routes>
             </BrowserRouter>
             <ToastContainer/>

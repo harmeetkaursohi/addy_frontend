@@ -12,7 +12,7 @@ import {RiDraftLine} from "react-icons/ri";
 
 export const SidebarMenuItems = [
     {
-        "name": "Home",
+        "name": "Dashboard",
         "path": "/dashboard",
         "icon": <TbSmartHome />,
         

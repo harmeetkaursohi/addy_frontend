@@ -30,6 +30,7 @@ import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantD
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
 import CommonLoader from "../../common/components/CommonLoader";
 import EditImageModal from '../../common/components/EditImageModal.jsx';
+import CropVideoModal from '../../common/components/CropVideoModal.jsx';
 
 const CreatePost = () => {
 
@@ -335,12 +336,20 @@ const CreatePost = () => {
     const [cropImgUrl, setCropImgUrl] = useState(null)
     const [editImgIndex, setEditImgIndex] = useState(null)
     const [imgFile, setImgFile] = useState(null)
+    const [videoFile, setVideoFile] = useState(null)
     const [fileSize, setFileSize] = useState(null)
+    const[showCropVideModal,setShowCropVideoModal]=useState(false)
+    const[blob,setBlob]=useState(null)
     const editHandler = (index, file) => {
         setImgFile(file)
         setEditImgIndex(index)
+      
+       if(file.mediaType==='VIDEO'){
+        setShowCropVideoModal(true)
+        setVideoFile(file)
+       }else{
         setShowEditImageModal(true)
-
+       }
 
     }
 
@@ -360,7 +369,11 @@ const CreatePost = () => {
         }
     }, [cropImgUrl])
 
+// crop video handler
 
+ const getBlob = (blob) => {        
+    setBlob(blob)
+}
     return (
         <>
             <SideBar/>
@@ -538,7 +551,7 @@ const CreatePost = () => {
 
                                                                     </div>
                                                                     {
-                                                                        file?.mediaType === "IMAGE" &&
+                                                                        // file?.mediaType === "IMAGE" &&
                                                                         <button className="edit_upload delete_upload me-2"
                                                                                 onClick={(e) => {
                                                                                     e.preventDefault();
@@ -881,6 +894,8 @@ const CreatePost = () => {
                     setFileSize={setFileSize}
                     setCropImgUrl={setCropImgUrl}
                 />}
+
+                {showCropVideModal && <CropVideoModal showCropVideModal={showCropVideModal} getBlob={getBlob} setShowCropVideoModal={setShowCropVideoModal} videoInfo={videoFile}/>}
         </>)
 }
 export default CreatePost

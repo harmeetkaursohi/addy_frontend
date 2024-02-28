@@ -83,11 +83,11 @@ const Login = () => {
                                         <form onSubmit={formik.handleSubmit}>
 
                                             <div className='form-group'>
-                                                <label>{jsondata.email} or {jsondata.username}</label>
+                                                <label className={formik.values.username && "filled"}>{jsondata.email} or {jsondata.username}</label>
                                                 <input
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='Email'
+                                                    // placeholder='Email'
                                                     name="username"
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
@@ -102,11 +102,11 @@ const Login = () => {
 
                                             
                                             <div className='form-group '>
-                                                <label>{jsondata.password}</label>
+                                                <label className={formik.values.username && "filled"}>{jsondata.password}</label>
                                                 <input
                                                     className="form-control mt-1"
                                                     type={showPassword ? 'text' : 'password'}
-                                                    placeholder='Password'
+                                                    // placeholder='Password'
                                                     name="password"
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
