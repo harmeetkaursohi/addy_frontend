@@ -115,15 +115,15 @@ const Layout = () => {
 
                             ))
                         }
-                        <li className={`sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer ${path?.pathname === "/profile" ? "bar" : ""}`}>
-                            <div
-                                className={` sidebar_item_outers Profile_Img_outer ${path?.pathname === "/profile" ? "sidebar_inner_content" : ""}`}>
-                                {/* <img className='userimg'  src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> */}
-                                <Link to="/profile"><FaRegUser />
-                                                          Profile
-                                </Link>
-                            </div>
-                        </li>
+                        {/*<li className={`sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer ${path?.pathname === "/profile" ? "bar" : ""}`}>*/}
+                        {/*    <div*/}
+                        {/*        className={` sidebar_item_outers Profile_Img_outer ${path?.pathname === "/profile" ? "sidebar_inner_content" : ""}`}>*/}
+                        {/*        /!* <img className='userimg'  src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> *!/*/}
+                        {/*        <Link to="/profile"><FaRegUser />*/}
+                        {/*                                  Profile*/}
+                        {/*        </Link>*/}
+                        {/*    </div>*/}
+                        {/*</li>*/}
                         <li className='sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer'>
                             <div className=' sidebar_item_outers'>
                                 <BiLogOut/>
