@@ -18,6 +18,7 @@ import {
 import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
+import { FaRegUser } from 'react-icons/fa';
 
 const Layout = () => {
 
@@ -118,8 +119,8 @@ const Layout = () => {
                             <div
                                 className={` sidebar_item_outers Profile_Img_outer ${path?.pathname === "/profile" ? "sidebar_inner_content" : ""}`}>
                                 {/* <img className='userimg'  src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> */}
-                                <Link to="/profile"><img className='userimg'
-                                                         src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> Profile
+                                <Link to="/profile"><FaRegUser />
+                                                          Profile
                                 </Link>
                             </div>
                         </li>
