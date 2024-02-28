@@ -332,33 +332,33 @@ const CreatePost = () => {
 
     // edit handler
     const [showEditImageModal, setShowEditImageModal] = useState()
-    const[cropImgUrl,setCropImgUrl]=useState(null)
-    const[editImgIndex,setEditImgIndex]=useState(null)
+    const [cropImgUrl, setCropImgUrl] = useState(null)
+    const [editImgIndex, setEditImgIndex] = useState(null)
     const [imgFile, setImgFile] = useState(null)
     const [fileSize, setFileSize] = useState(null)
-    const editHandler = (index,file) => {
+    const editHandler = (index, file) => {
         setImgFile(file)
         setEditImgIndex(index)
         setShowEditImageModal(true)
-   
-        
-        
+
+
     }
 
-    useEffect(()=>{
-        if(cropImgUrl){
+    useEffect(() => {
+        if (cropImgUrl) {
             const updatedFiles = [...files];
 
             updatedFiles[editImgIndex] = {
-              file:fileSize,               
-                url:cropImgUrl,
-                filleName:imgFile?.fileName,
-                mediaType:imgFile?.mediaType};
-            
+                file: fileSize,
+                url: cropImgUrl,
+                filleName: imgFile?.fileName,
+                mediaType: imgFile?.mediaType
+            };
+
             setFiles(updatedFiles);
-            
+
         }
-    },[cropImgUrl])
+    }, [cropImgUrl])
 
 
     return (
@@ -513,8 +513,8 @@ const CreatePost = () => {
                                                     <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
                                                     <div className="drag_scroll">
 
-                                                        {files?.length>0 && files?.map((file, index) => {
-                                                          
+                                                        {files?.length > 0 && files?.map((file, index) => {
+
                                                             return (
                                                                 <div
                                                                     className="file_outer dragable_files"
@@ -537,14 +537,17 @@ const CreatePost = () => {
                                                                         }
 
                                                                     </div>
-                                                                    <button className="edit_upload delete_upload me-2"
-                                                                            onClick={(e) => {
-                                                                                e.preventDefault();
-                                                                                editHandler(index,file);
-                                                                            }}>
-                                                                        <BiSolidEditAlt style={{fontSize: '24px'}}
-                                                                        />
-                                                                    </button>
+                                                                    {
+                                                                        file?.mediaType === "IMAGE" &&
+                                                                        <button className="edit_upload delete_upload me-2"
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    editHandler(index, file);
+                                                                                }}>
+                                                                            <BiSolidEditAlt style={{fontSize: '24px'}}
+                                                                            />
+                                                                        </button>
+                                                                    }
                                                                     <button className="delete_upload" onClick={(e) => {
                                                                         e.preventDefault();
                                                                         handleRemoveSelectFile(file);
@@ -820,7 +823,7 @@ const CreatePost = () => {
                                                             pageName={selectedPageData?.name}
                                                             pageImageUrl={selectedPageData?.imageUrl}
                                                             userData={userData}
-                                                            cropImage={cropImgUrl!==null?cropImgUrl:""}
+                                                            cropImage={cropImgUrl !== null ? cropImgUrl : ""}
                                                             files={files}
                                                             selectedFileType={selectedFileType}
                                                             caption={caption}
@@ -870,8 +873,14 @@ const CreatePost = () => {
                                                                       setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
             }
 
-            {showEditImageModal && <EditImageModal setFileSize={setFileSize} setCropImgUrl={setCropImgUrl} cropImgUrl={cropImgUrl}  file={imgFile} setFile={setImgFile} showEditImageModal={showEditImageModal}
-                                                   setShowEditImageModal={setShowEditImageModal}/>}
+            {showEditImageModal &&
+                <EditImageModal
+                    showEditImageModal={showEditImageModal}
+                    setShowEditImageModal={setShowEditImageModal}
+                    file={imgFile}
+                    setFileSize={setFileSize}
+                    setCropImgUrl={setCropImgUrl}
+                />}
         </>)
 }
 export default CreatePost
