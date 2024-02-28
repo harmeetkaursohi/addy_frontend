@@ -153,7 +153,7 @@ const Insight = () => {
 
     useEffect(() => {
         if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
-            const updatedInsightsCacheData={...insightsCacheData,getPostByPageIdAndPostStatusDataCache:{...insightsCacheData?.getPostByPageIdAndPostStatusDataCache,[getPostByPageIdAndPostStatusData?.data?.paging?.pageNumber]:getPostByPageIdAndPostStatusData?.data}}
+            const updatedInsightsCacheData={...insightsCacheData,getPostByPageIdAndPostStatusDataCache:{...insightsCacheData?.getPostByPageIdAndPostStatusDataCache,[getPostByPageIdAndPostStatusData?.data?.pageNumber]:getPostByPageIdAndPostStatusData?.data}}
             setInsightCacheData(updatedInsightsCacheData)
             dispatch(getPostDataWithInsights({
                 socialMediaType: selectedPage?.socialMediaType,

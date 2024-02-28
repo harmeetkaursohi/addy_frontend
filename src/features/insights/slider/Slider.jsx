@@ -42,7 +42,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
 
 
     const previous = () => {
-        const prevPageNumber = parseInt(getPostByPageIdAndPostStatusData?.data?.paging?.pageNumber) - 1;
+        const prevPageNumber = parseInt(getPostByPageIdAndPostStatusData?.data?.pageNumber) - 1;
         dispatch(
             getPostByPageIdAndPostStatus({
                 token: token,
@@ -57,7 +57,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
         );
     };
     const next = () => {
-        const nextPageNumber = parseInt(getPostByPageIdAndPostStatusData?.data?.paging?.pageNumber) + 1;
+        const nextPageNumber = parseInt(getPostByPageIdAndPostStatusData?.data?.pageNumber) + 1;
         dispatch(
             getPostByPageIdAndPostStatus({
                 token: token,
@@ -78,7 +78,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                     <button
                         disabled={
                             getPostByPageIdAndPostStatusData?.loading ||
-                            getPostByPageIdAndPostStatusData?.data?.paging?.pageNumber === 0
+                            getPostByPageIdAndPostStatusData?.data?.pageNumber === 0
                         }
                         className="slider_btn previousSliderButton"
                         onClick={previous}
@@ -88,7 +88,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                     <button
                         disabled={
                             getPostByPageIdAndPostStatusData?.loading ||
-                            getPostByPageIdAndPostStatusData?.data?.paging?.lastPage
+                            getPostByPageIdAndPostStatusData?.data?.isLast
                         }
                         className="slider_btn  nextSliderButton"
                         onClick={next}

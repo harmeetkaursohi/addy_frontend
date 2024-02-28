@@ -493,7 +493,7 @@ export const generateAICaptionAndHashTagService = async (requestBody) => {
 export const getPostByPageIdAndPostStatus = createAsyncThunk('post/getPostByPageIdAndPostStatus', async (data, thunkAPI) => {
     if (data?.insightPostsCache?.getPostByPageIdAndPostStatusDataCache[data?.requestBody?.pageNumber] === undefined) {
         return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/byPageAndStatus`, data?.requestBody, setAuthenticationHeader(data.token)).then(res => {
-            return res.data;
+            return {...res.data,data:{...res.data.data[0]}};
         }).catch(error => {
             showErrorToast(error.response.data.message);
             return thunkAPI.rejectWithValue(error.response);
