@@ -30,7 +30,7 @@ import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantD
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
 import CommonLoader from "../../common/components/CommonLoader";
 import EditImageModal from '../../common/components/EditImageModal.jsx';
-import CropVideoModal from '../../common/components/CropVideoModal.jsx';
+import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 
 const CreatePost = () => {
 
@@ -61,12 +61,15 @@ const CreatePost = () => {
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
-
-
+    const [videoBlob, setVideoBlob] = useState(null)    
     const [allOptions, setAllOptions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
+    const getVideoBlob = (videoBlob) => {   
+        console.log(videoBlob,"videoBlob")     
+        setVideoBlob(videoBlob)
+    }
 
     useEffect(() => {
         if (connectedPagesData.loading) {
@@ -338,14 +341,14 @@ const CreatePost = () => {
     const [imgFile, setImgFile] = useState(null)
     const [videoFile, setVideoFile] = useState(null)
     const [fileSize, setFileSize] = useState(null)
-    const[showCropVideModal,setShowCropVideoModal]=useState(false)
+    const[showEditVideoModal,setShowEditVideoModal]=useState(false)
     const[blob,setBlob]=useState(null)
     const editHandler = (index, file) => {
         setImgFile(file)
         setEditImgIndex(index)
       
        if(file.mediaType==='VIDEO'){
-        setShowCropVideoModal(true)
+        setShowEditVideoModal(true)
         setVideoFile(file)
        }else{
         setShowEditImageModal(true)
@@ -892,7 +895,13 @@ const CreatePost = () => {
                     setCropImgUrl={setCropImgUrl}
                 />}
 
-                {showCropVideModal && <CropVideoModal showCropVideModal={showCropVideModal} getBlob={getBlob} setShowCropVideoModal={setShowCropVideoModal} videoInfo={videoFile}/>}
+            {showEditVideoModal && 
+                <EditVideoModal 
+                    showEditVideoModal={showEditVideoModal} 
+                    getVideoBlob={getVideoBlob} 
+                    setShowEditVideoModal={setShowEditVideoModal} 
+                    videoInfo={videoFile}
+                />}
         </>)
 }
 export default CreatePost

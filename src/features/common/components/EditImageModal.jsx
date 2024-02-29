@@ -93,7 +93,7 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
                 <Modal.Header closeButton>
                     <Modal.Title>Edit picture</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='text-center'>
                     {
                         (file?.attachmentSource || file.url) &&
                         <ReactCrop
