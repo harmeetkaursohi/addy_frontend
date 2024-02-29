@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import {SocialAccountProvider} from "./contantData.js";
+import {NoBusinessAccountFound, SocialAccountProvider, SomethingWentWrongTryLater} from "./contantData.js";
 import {exchangeForLongLivedToken, getAllFacebookConnectedSocialMediaAccounts} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
 import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/facebookActions/facebookActions.js";
@@ -114,7 +114,7 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
                     return accountData.hasOwnProperty("instagram_business_account")
                 })
                 if (isNullOrEmpty(instagramBusinessAccount)) {
-                    return null;
+                    throw new Error(formatMessage(NoBusinessAccountFound, getInitialLetterCap(tokenProvider)));
                 }
             }
             return {
@@ -131,11 +131,9 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
             break;
         }
         case SocialAccountProvider.LINKEDIN : {
-            if (jsonObj === null || jsonObj === undefined) {
-                return null;
+            if (jsonObj === null || jsonObj === undefined || Object?.keys(jsonObj?.data)?.includes("error")) {
+                throw new Error(SomethingWentWrongTryLater);
             }
-            console.log(" 1held it for ",tokenProvider)
-            console.log(" JSON for linked after obtain is ",jsonObj)
             const imageArray = jsonObj?.data?.profilePicture?.["displayImage~"]?.elements
             return {
                 ...response, socialAccountData: {
@@ -154,7 +152,7 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
 
         case SocialAccountProvider.PINTEREST : {
             if (jsonObj.data.account_type !== "BUSINESS") {
-                return null;
+                throw new Error(formatMessage(NoBusinessAccountFound, getInitialLetterCap(tokenProvider)));
             }
             return {
                 ...response, socialAccountData: {
@@ -169,11 +167,7 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
                 }
             }
         }
-
-
     }
-
-
 }
 
 

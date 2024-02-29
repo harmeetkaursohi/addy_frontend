@@ -70,7 +70,6 @@ const SocialAccounts = ({}) => {
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
 
 
-
     useEffect(() => {
 
         if (enabledSocialMedia?.isFaceBookEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) {
@@ -204,10 +203,6 @@ const SocialAccounts = ({}) => {
 
     const connectSocialMediaAccountToCustomer = (object, socialMediaType) => {
         object.then((res) => {
-            if (res === null) {
-                showErrorToast(formatMessage(NoBusinessAccountFound, getInitialLetterCap(socialMediaType)));
-            }
-            console.log("res after api in async===>",res)
             dispatch(socialAccountConnectActions(res)).then((response) => {
                 if (response.meta.requestStatus === "rejected" && response.payload.status === 409) {
                     setAccountAlreadyConnectedWarningModal({
@@ -222,9 +217,7 @@ const SocialAccounts = ({}) => {
                 }));
             })
         }).catch((error) => {
-            console.log(" 2held it for ",socialMediaType)
-            console.log(" 2held it for error",error)
-            showErrorToast(error.response.data.message);
+            showErrorToast(error?.response?.data?.message || error?.message);
         })
     }
 
@@ -398,7 +391,7 @@ const SocialAccounts = ({}) => {
                                                 >
                                                     <img className="cmn_width" src={fb_img}/>
 
-                                                    <h2 className={`pagecount ${currentConnectedFacebookPages?.length===undefined? "blink" :""}` }>{currentConnectedFacebookPages!==null && currentConnectedFacebookPages!==undefined ?currentConnectedFacebookPages?.length:0}</h2>
+                                                    <h2 className={`pagecount ${currentConnectedFacebookPages?.length === undefined ? "blink" : ""}`}>{currentConnectedFacebookPages !== null && currentConnectedFacebookPages !== undefined ? currentConnectedFacebookPages?.length : 0}</h2>
 
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
@@ -549,9 +542,9 @@ const SocialAccounts = ({}) => {
                                                 <div className="social_media_content"
                                                      onClick={() => setInstagramDropDown(!instagramDropDown)}>
                                                     <i className="fa-brands fa-instagram insta-icon"/>
-                                                    <h2 className={`pagecount ${currentConnectedInstagramPages?.length===undefined?"blink":""}`} >{currentConnectedInstagramPages!==null && currentConnectedInstagramPages!==undefined?currentConnectedInstagramPages?.length:0}</h2>
+                                                    <h2 className={`pagecount ${currentConnectedInstagramPages?.length === undefined ? "blink" : ""}`}>{currentConnectedInstagramPages !== null && currentConnectedInstagramPages !== undefined ? currentConnectedInstagramPages?.length : 0}</h2>
 
-                                                    
+
                                                     {/*<img className="cmn_width " src={fb_img}/>*/}
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'INSTAGRAM')?.name || "instagram"}</h5>
@@ -682,7 +675,6 @@ const SocialAccounts = ({}) => {
                                             client_secret={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_SECRET}`}
                                             scope={`${import.meta.env.VITE_APP_LINKEDIN_SCOPE}`}
                                             onResolve={(response) => {
-                                                console.log("response of linkedin ---->",response)
                                                 setLinkedinDropDown(true)
                                                 setInstagramDropDown(false)
                                                 setPinterestDropDown(false)
@@ -705,7 +697,7 @@ const SocialAccounts = ({}) => {
                                                 <div className="social_media_content"
                                                      onClick={() => setLinkedinDropDown(!linkedinDropDown)}>
                                                     <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
-                                                    <h2 className={`pagecount ${currentConnectedLinkedinPages?.length===undefined?"blink":""}`}>{currentConnectedLinkedinPages!==null ?currentConnectedLinkedinPages?.length:0}</h2>
+                                                    <h2 className={`pagecount ${currentConnectedLinkedinPages?.length === undefined ? "blink" : ""}`}>{currentConnectedLinkedinPages !== null ? currentConnectedLinkedinPages?.length : 0}</h2>
 
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'LINKEDIN')?.name || "linkedin"}</h5>
@@ -858,7 +850,7 @@ const SocialAccounts = ({}) => {
                                                 <div className="social_media_content"
                                                      onClick={() => setPinterestDropDown(!pinterestDropDown)}>
                                                     <i className="fa-brands fa-pinterest pinterest-icon"/>
-                                                    <h2 className={`pagecount ${currentConnectedPinterestPages?.length===undefined?"blink":""}`}>{currentConnectedPinterestPages!==null ?currentConnectedPinterestPages?.length:0}</h2>
+                                                    <h2 className={`pagecount ${currentConnectedPinterestPages?.length === undefined ? "blink" : ""}`}>{currentConnectedPinterestPages !== null ? currentConnectedPinterestPages?.length : 0}</h2>
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'PINTEREST')?.name || "pinterest"}</h5>
                                                         <h4 className="connect_text cmn_text_style">Connected</h4>

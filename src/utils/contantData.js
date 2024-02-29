@@ -30,6 +30,7 @@ export const Linkedin_URN_Id_Types = Object.freeze({
 
 export const UpdateCommentFailedMsg="Update Fail: User can only edit comments made from Addy."
 export const SomethingWentWrong="Something went wrong!"
+export const SomethingWentWrongTryLater="Something went wrong, Please try again later!"
 export const NoBusinessAccountFound="No business account found for {0} to connect!"
 export const CouldNotPostComment="Could not post comment!"
 export const UpdatedSuccessfully="{0} updated successfully"
