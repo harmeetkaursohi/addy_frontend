@@ -42,19 +42,23 @@ ul {
 }
 
 .cmn_container {
-  padding-left: 280px;
+  /* padding-left: 280px; */
+  padding-left: 63px;
   width: 100%;
   background-color: #f4f8fe;
 }
-
+.cmn_padding{
+  padding-left: 63px;
+}
 .comment_container {
-  padding-left: 280px;
+  /* padding-left: 280px; */
+  padding-left: 63px;
   width: 100%;
   background-color: #f4f8fe;
 }
 
 .cmn_wrapper_outer {
-  padding: 0px 20px 30px;
+  padding: 0px 40px 30px;
 }
 
 .form-control {

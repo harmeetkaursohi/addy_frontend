@@ -85,13 +85,13 @@ button.slider_btn {
     margin-left: 12px;
 }
 .slider_outer_container button.slick-prev:before{
-    /* background-image: url('../../images/leftIcon.svg') ; */
+
     opacity: 1; 
      color: unset;
      content: url('../../../images/leftIcon.svg');
 }
 .slider_outer_container button.slick-next:before{
-    /* background-image: url('../../images/rightIcon.svg') ; */
+
     opacity: 1; 
      color: unset;
      content: url('../../../images/rightIcon.svg');
