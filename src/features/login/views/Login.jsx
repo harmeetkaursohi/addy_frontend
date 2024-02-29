@@ -87,7 +87,7 @@ const Login = () => {
                                                 <input
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    // placeholder='Email'
+                                                    placeholder='Email'
                                                     name="username"
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
@@ -106,7 +106,7 @@ const Login = () => {
                                                 <input
                                                     className="form-control mt-1"
                                                     type={showPassword ? 'text' : 'password'}
-                                                    // placeholder='Password'
+                                                    placeholder='Password'
                                                     name="password"
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}

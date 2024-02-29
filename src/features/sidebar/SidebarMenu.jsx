@@ -2,10 +2,10 @@ import React from 'react';
 import { BsTelephone } from "react-icons/bs";
 import { BsHouseLock } from "react-icons/bs";
 import { BsExclamationSquare } from "react-icons/bs";
-import { FaRegCommentDots, FaUserEdit } from "react-icons/fa";
+import { FaRegCommentDots } from "react-icons/fa";
 import { BiCalendar } from "react-icons/bi";
-import { TbSmartHome } from "react-icons/tb";
-import { AiOutlinePicture } from "react-icons/ai";
+
+import { AiOutlineDashboard } from "react-icons/ai";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import {RiDraftLine} from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
@@ -18,7 +18,7 @@ export const SidebarMenuItems = [
     {
         "name": "Dashboard",
         "path": "/dashboard",
-        "icon": <TbSmartHome />,
+        "icon":<AiOutlineDashboard />
         
     },
     {

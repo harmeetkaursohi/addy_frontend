@@ -1,6 +1,9 @@
+
+
 import React, {useEffect, useState} from 'react'
-import {Link, useLocation, useNavigate} from "react-router-dom"
+import {useLocation, useNavigate} from "react-router-dom"
 import default_user_icon from '../../../images/default_user_icon.svg'
+import addy_crop_logo from '../../../images/cropLogo.png'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
 import './Layout.css'
@@ -19,6 +22,7 @@ import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions
 import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import { FaRegUser } from 'react-icons/fa';
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
 const Layout = () => {
 
@@ -75,18 +79,28 @@ const Layout = () => {
         });
 
     }
-    const path = useLocation()
+    
 
     return (
 
         <>
             <section className='sidebar_container'>
+           
+                <div  onClick={show_sidebar} className={`cmn_forward_arrow ${sidebar? " forward_arrow":'right_forward_arrow'} `}>
+                    {sidebar ? <IoIosArrowForward  /> : <IoIosArrowBack />}
+                    
+                </div>
                 <div className={sidebar ? "sidebar_content sidebar_wrapper" : "sidebar_wrapper"}>
-                    <i className="fa fa-bars bar_icon" aria-hidden="true" onClick={show_sidebar}></i>
-                    <div className={sidebar ? "user_Profile_outer user_profile_outer" : "user_profile_outer"}>
-                        <div className='logo_outer'>
-                            <img src={addy_logo} className='addy_logo'/>
-                        </div>
+              
+                    {/* <i className="fa fa-bars bar_icon" aria-hidden="true" onClick={show_sidebar}></i> */}
+                    <div className="user_profile_outer">
+                            {sidebar? 
+                            <img src={addy_crop_logo} height="45px" width="45px" className='mt-4'/>: 
+                         
+                            <img src={addy_logo} className='addy_logo'/>   
+                       
+                            }
+                           
                         {/* <div className='user_profile_wrapper'>
                             <img
                                 src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
@@ -125,13 +139,14 @@ const Layout = () => {
                         {/*    </div>*/}
                         {/*</li>*/}
                         <li className='sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer'>
-                            <div className=' sidebar_item_outers'>
+                            <div className=' sidebar_item_outers' onClick={LogOut}>
                                 <BiLogOut/>
-                                <h6 className='' onClick={LogOut}>Logout </h6>
+                                <h6 className='' >Logout </h6>
                             </div>
                         </li>
                     </ul>
                 </div>
+           
 
 
             </section>

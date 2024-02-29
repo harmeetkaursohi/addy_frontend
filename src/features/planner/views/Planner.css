@@ -7,12 +7,12 @@
 }
 .create_post_btn {
     border: none;
-    padding: 8px 21px;
+    padding: 10px 21px;
     border-radius: 6px;
 }
 
 .planner_outer {
-    padding: 24px;
+    padding: 24px 40px;
 }
 
 .calendar_card {
@@ -27,7 +27,7 @@
     border-radius: 6px;
     border: 1px solid #D1D9E2;
     background: #FFF;
-    padding: 7px ;
+    padding: 9px ;
     min-width: 117px;
     color: black;
     margin-right: 15px;
@@ -402,9 +402,8 @@ a.fc-daygrid-dot-event:hover {
 }
 
 @media screen and (max-width:1280px) {
-    .planner_outer {
-        padding: 16px;
-    }
+  
+ 
 }
 @media screen and (max-width: 991px) {
     .planner_header_outer {
@@ -434,7 +433,7 @@ a.fc-daygrid-dot-event:hover {
         font-size: 14px;
     }
     .card-body.post_card{
-        padding: 0px 12px;
+        padding: 0px 12px 12px;
     }
     .planner_outer {
         padding: 15px;

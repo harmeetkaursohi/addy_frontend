@@ -155,7 +155,7 @@ span.post_caption {
 h3.caption {
     color: #5F6D7E;
     font-family: Nunito;
-    font-size: 15px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
   
@@ -247,16 +247,12 @@ button.outline_btn.schedule_btn {
     }
 }
 
-@media screen and (max-width:1280px) and (min-width:992px){
+@media screen and (max-width:1100px) and (min-width:992px){
     .draft_button_outer {
         flex-wrap: wrap;
     }
-    .card-body.post_card{
-        padding: 0px 10px 10px;
-    }
-    .draft-heading{
-        padding: 10px;
-    }
+  
+
     
 }
 @media screen and (min-width:992px) {
@@ -298,6 +294,7 @@ button.outline_btn.schedule_btn{
     }
     div.draft_button_outer{
         display: flex !important;
+        flex-wrap: wrap;
     }
     h2.acc_not_connected_heading {
         font-size: 16px;
