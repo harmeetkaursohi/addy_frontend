@@ -110,10 +110,6 @@ div.instagram_like {
     gap: 7px;
     padding: 0px 19px;
 }
-.ReactCrop{
-    display: flex !important;
-    justify-content: center  !important;
-}
 @media screen and (max-width:1280px) {
     .linkedin_likes h3{
         font-size: 14px;
