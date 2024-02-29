@@ -134,6 +134,8 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
             if (jsonObj === null || jsonObj === undefined) {
                 return null;
             }
+            console.log(" 1held it for ",tokenProvider)
+            console.log(" JSON for linked after obtain is ",jsonObj)
             const imageArray = jsonObj?.data?.profilePicture?.["displayImage~"]?.elements
             return {
                 ...response, socialAccountData: {

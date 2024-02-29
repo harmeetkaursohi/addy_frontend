@@ -207,6 +207,7 @@ const SocialAccounts = ({}) => {
             if (res === null) {
                 showErrorToast(formatMessage(NoBusinessAccountFound, getInitialLetterCap(socialMediaType)));
             }
+            console.log("res after api in async===>",res)
             dispatch(socialAccountConnectActions(res)).then((response) => {
                 if (response.meta.requestStatus === "rejected" && response.payload.status === 409) {
                     setAccountAlreadyConnectedWarningModal({
@@ -221,6 +222,8 @@ const SocialAccounts = ({}) => {
                 }));
             })
         }).catch((error) => {
+            console.log(" 2held it for ",socialMediaType)
+            console.log(" 2held it for error",error)
             showErrorToast(error.response.data.message);
         })
     }
@@ -679,6 +682,7 @@ const SocialAccounts = ({}) => {
                                             client_secret={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_SECRET}`}
                                             scope={`${import.meta.env.VITE_APP_LINKEDIN_SCOPE}`}
                                             onResolve={(response) => {
+                                                console.log("response of linkedin ---->",response)
                                                 setLinkedinDropDown(true)
                                                 setInstagramDropDown(false)
                                                 setPinterestDropDown(false)
