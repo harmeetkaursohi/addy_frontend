@@ -12,6 +12,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 
 
 const InstagramFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType, pageImage,caption, hashTag}) => {
+   
 const[showContent,setShowContent]=useState(false)
     return (
         <>
@@ -25,9 +26,9 @@ const[showContent,setShowContent]=useState(false)
                          width="36px"/>
                     <div>
                         <h3 className='create_post_text user_name boost_post_text mt-1'>{pageName}</h3>
-                        {/* <h6 className='status create_post_text'>just now
+                        <h6 className='status create_post_text'>just now
                             <img src={ellipse_img} className="ms-1" />
-                        </h6> */}
+                        </h6>
                     </div>
 
                     </div>
@@ -49,18 +50,19 @@ const[showContent,setShowContent]=useState(false)
                     </div>
                 </div>
                 <div className={`ms-2  ${showContent ?"feed_preview_Caption_outer":"Caption_outer instagram_caption_outer mb-2" }`}>
-              
-               <div className={showContent?"feed_preview_Caption_outer":"Caption_outer"}>
+               
+               <div className={showContent?"feed_preview_Caption_outer":"Caption_outer d-flex align-items-center"}>
+              {(caption.length > 0 || hashTag.length > 0) || (caption.length > 0 && hashTag.length > 0)   ? <h2 className=" me-2">{pageName}</h2>:"" }  
                 <CommentText isRequire={true} pageName={pageName} socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
                   className={"highlight cursor-pointer"} setShowText={setShowContent} showText={showContent} />
 
                </div>
 
                     </div>
-                   {
+                   {/* {
                     caption.length!==0 ?<h6 className='status create_post_text ps-4 pb-2'>just now
                     <img src={ellipse_img} className="ms-1" /> </h6>:""
-                   }
+                   } */}
                      
                 
             </div>

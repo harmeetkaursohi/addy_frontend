@@ -12,11 +12,14 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { showErrorToast, showSuccessToast } from "../common/components/Toast";
 import { useNavigate } from 'react-router'
 import Loader from "../loader/Loader";
+import { useAppContext } from "../common/components/AppProvider";
 
 const ContactUs = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const navigate = useNavigate()
   const dispatch = useDispatch();
+  const{sidebar}=useAppContext()
+
   const contactUsFormReducer = useSelector((state) => state.web.contactUsFormReducer);
   const [formData, setFormData] = useState({
     first_name: "",
@@ -88,7 +91,7 @@ const ContactUs = () => {
   return (
     <>
       <SideBar />
-      <div className="cmn_container faq_section pt-5">
+      <div className={`cmn_container faq_section pt-5 ${sidebar ?"": "cmn_Padding" }`}>
         <div className="cmn_wrapper_outer">
           <div className="dashboard_outer">
             <h2 className="cmn_title">Contact Us</h2>

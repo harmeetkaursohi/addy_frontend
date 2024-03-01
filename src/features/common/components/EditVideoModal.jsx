@@ -4,7 +4,7 @@ import Nouislider from 'nouislider-react';
 import 'nouislider/distribute/nouislider.css';
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { toBlobURL, fetchFile } from "@ffmpeg/util";
-
+import "./common.css"
 const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getVideoBlob}) => {
   const [videoDuration, setVideoDuration] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -13,6 +13,9 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
   const [videoFileValue, setVideoFileValue] = useState('');  
   const [videoTrimmedUrl, setVideoTrimmedUrl] = useState('');
   const ffmpegRef = useRef(new FFmpeg());
+
+
+  console.log(ffmpegRef,"ffmpegRef")
   const videoRef = useRef(null)
   const messageRef = useRef(null)
   let initialSliderValue = 0;
@@ -75,11 +78,11 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
   const handleTrim = async () => {        
       const baseURL = "/public/js";       
       const { name } = videoFileValue.file;      
-      console.log(name)
+     
       const ffmpeg = ffmpegRef.current;      
-      
+      console.log(ffmpeg,"ffmpeg000")
       ffmpeg.on("log", ({ message }) => {
-        console.log(message)
+        console.log(message,"message12")
         if (messageRef.current) messageRef.current.innerHTML = message;
       });    
       ffmpeg.load({
@@ -106,7 +109,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
         '-vcodec',
         'copy',
         `out.${videoFileType}`,
-      ).then(()=>console.log("ffmpeg3")).catch((e)=>console.log("ffmpeg",e));   
+      ).then(()=>console.log("ffmpeg3")).catch((e)=>console.log("error ",e));   
       console.log("ffmpeg3",ffmpeg)   
       const fileData = await ffmpeg.readFile(`out.${videoFileType}`).then(()=>console.log("ffmpeg4")).catch((e)=>console.log("ffmpeg",e));
       console.log("fileData",fileData)
@@ -143,12 +146,12 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
   };
   
   const handleClose=()=>{
-    setShowCropVideoModal(false)
+    setShowEditVideoModal(false)
   }
 
 
   return (
-    <Modal className='facebook_modal_outer' size="lg" show={showEditVideoModal} onHide={handleClose} backdrop="static">
+    <Modal className='facebook_modal_outer' size="md" show={showEditVideoModal} onHide={handleClose} backdrop="static">
     <Modal.Header closeButton>
         <Modal.Title className="CropImageModal_header">
             <div className='facebook_title'>
@@ -158,7 +161,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     </Modal.Header>
     <Modal.Body className='crop-image-parent container'>                    
         <div className='crop-image-container video-element-container'>   
-        <video src={videoSrc} ref={videoRef} onTimeUpdate={handlePauseVideo} className='w-100'>
+        <video className='w-100'  src={videoSrc} ref={videoRef} onTimeUpdate={handlePauseVideo} >
             <source src={videoSrc} type={videoFileValue.type} />
           </video>
           <br />
@@ -176,10 +179,11 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
           Start duration: {convertToHHMMSS(startTime)} &nbsp; End duration:{' '}
           {convertToHHMMSS(endTime)}
           <br />
-          <button onClick={handlePlay}>Play</button> &nbsp;
-          <button onClick={handleTrim}>Trim</button>
+          <button className='cmn_crop_video_btn ' onClick={handlePlay}>Play</button> &nbsp;
+          <button className=" cmn_crop_video_btn "onClick={handleTrim}>Trim</button>
           <br />
           {videoTrimmedUrl && (
+            
             <video controls>
               <source src={videoTrimmedUrl} type={videoFileValue.type} />
             </video>
@@ -188,10 +192,10 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
         </div>
                                                                                 
     </Modal.Body>
-    <Modal.Footer className='crop-image-footer'>                    
-    <div className="confirm_btn ">
+    <Modal.Footer>                    
+    <div className=" ">
         <button className="cmn_btn_color cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
-        <button type="button" className="cmn_btn_color cmn_connect_btn connect_btn yes_btn"
+        <button type="button" className="cmn_btn_color cmn_connect_btn connect_btn ms-3"
                > Save
         </button>
     </div>

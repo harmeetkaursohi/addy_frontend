@@ -43,7 +43,7 @@ const LinkedinFeedpreview = ({
                     <div className='linkedInimg_container '>
                         
                     
-                        <CommonSlider files={files} selectedFileType={selectedFileType} caption={""} hashTag={""} ></CommonSlider>
+                        <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag} ></CommonSlider>
                         {/*<img src={noImageAvailable} width="100%"/>*/}
                         <div className=' linkedin_post_likes'>
                         <div className="linkedin_dropdown">
@@ -52,7 +52,7 @@ const LinkedinFeedpreview = ({
                     </div>
                     <div className="linkedin_likes">
                     <SlLike className="thumbsup_icon"/>
-                        {/* <FiThumbsUp className="thumbsup_icon"/> */}
+                        
                         <h3 className="cmn_text_style">Like</h3>
                     </div>
                     <div className="linkedin_likes">

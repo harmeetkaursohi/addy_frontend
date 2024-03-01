@@ -28,11 +28,13 @@ import CommonShowMorePlannerModel from "../../common/components/CommonShowMorePl
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
 import Loader from '../../loader/Loader'
 import SkeletonEffect from '../../loader/skeletonEffect/SkletonEffect'
+import { useAppContext } from '../../common/components/AppProvider'
 
 const Planner = () => {
     const dispatch = useDispatch();
     const token = getToken();
     const navigate = useNavigate();
+    const { sidebar } = useAppContext();
 
     const [isLoading, setIsLoading] = useState(false);
     const calendarRef = useRef(null);
@@ -277,7 +279,7 @@ const Planner = () => {
         <>
             <section>
                 <SideBar/>
-                <div className='cmn_container'>
+                <div className={sidebar? 'cmn_container':"cmn_Padding"}>
                     <div className='planner_outer'>
                         <div className='planner_header_outer'>
                             <div className='planner_header'>

@@ -16,8 +16,9 @@ import {RotatingLines} from "react-loader-spinner";
 import {useNavigate} from "react-router-dom";
 import Select from "react-select";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
+import { useAppContext } from "../../common/components/AppProvider";
 const Review = () => {
-
+    const { sidebar } = useAppContext();
     const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: -1, socialMediaType: null});
     const [isDirty, setDirty] = useState({isDirty: false})
     const {
@@ -114,7 +115,7 @@ const Review = () => {
         <>
             <section>
                 <SideBar/>
-                <div className="comment_container">
+                <div className={sidebar?"comment_container":"cmn_Padding bg_Color" }>
                     <div className="cmn_wrapper_outer">
                         <div className="review_wrapper">
                             <div className="review_header align-items-center gap-3">

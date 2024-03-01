@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import "./profile.css";
 import jsondata from "../../locales/data/initialdata.json";
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
@@ -18,6 +18,7 @@ import CommonLoader from "../common/components/CommonLoader";
 import { FaCamera } from "react-icons/fa";
 import { RiCloseFill, RiEditBoxFill } from "react-icons/ri";
 import CropImageModal from "../common/components/CropImageModal";
+import { useAppContext } from "../common/components/AppProvider";
 
 
 const Profile = () => {
@@ -37,6 +38,7 @@ const Profile = () => {
     const [blob, setBlob] = useState(null)
     const token = getToken();
     const dispatch = useDispatch();
+    const{sidebar}=useAppContext()
 
     useEffect(() => {
         if (userInfo?.data !== undefined) {
@@ -184,7 +186,7 @@ const Profile = () => {
     return (
         <>
             <SideBar/>
-            <section className=" cmn_container " style={{background: "white"}}>
+            <section className={` cmn_container ${sidebar? "":"cmn_Padding"}`} style={{background: "white"}}>
 
                 <div className="addy_img">
                     <h3 className="edit_profile_heading cmn_text_heading">Profile</h3>

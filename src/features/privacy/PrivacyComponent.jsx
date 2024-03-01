@@ -1,9 +1,11 @@
 import SideBar from "../sidebar/views/Layout";
 import React, { useEffect, useState } from "react";
 import "./privacy.css";
+import { useAppContext } from "../common/components/AppProvider";
 
 const PrivacyComponent = () => {
   const [iframeContent, setIframeContent] = useState("");
+  const{sidebar}=useAppContext()
   const url = import.meta.env.VITE_APP_CMS_API_BASE_URL+"privacy-policy";
   const divId = "privacy-policy-content";
   useEffect(() => {
@@ -36,7 +38,7 @@ const PrivacyComponent = () => {
   return (
     <>
       <SideBar />
-      <div className="cmn_container  pt-5">
+      <div className={`cmn_container  pt-5 ${sidebar?" " :"cmn_Padding"}`}>
         <div className="cmn_wrapper_outer">
           <div className="dashboard_outer">
             <h2 className="cmn_title">Privacy Policy</h2>

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {useLocation, useNavigate} from "react-router-dom"
+import {Link, useLocation, useNavigate} from "react-router-dom"
 import addy_crop_logo from '../../../images/cropLogo.png'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
@@ -14,10 +14,10 @@ import {
 } from "../../../app/actions/socialAccountActions/socialAccountActions";
 import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
 import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
+import { useAppContext } from '../../common/components/AppProvider.jsx';
 
 const Layout = () => {
 
-    const [sidebar, setSidebar] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
     const {pathname} = location;
@@ -27,11 +27,10 @@ const Layout = () => {
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+    const { sidebar, show_sidebar} = useAppContext();
 
-    const show_sidebar = () => {
-        setSidebar(!sidebar)
-    }
 
+    
     useEffect(() => {
         if (token && !userData) {
             const decodeJwt = decodeJwtToken(token);
@@ -84,12 +83,9 @@ const Layout = () => {
                 <div className={sidebar ? "sidebar_content sidebar_wrapper" : "sidebar_wrapper"}>
 
                     <div className="user_profile_outer">
-                            {sidebar?
-                            <img src={addy_crop_logo} height="45px" width="45px" className='mt-4'/>:
-
-                            <img src={addy_logo} className='addy_logo'/>
-
-                            }
+                        <Link to="/dashboard" >
+                            {sidebar?<img src={addy_crop_logo} height="45px" width="45px" className='mt-4'/>: <img src={addy_logo} className='addy_logo'/>}
+                        </Link>
                     </div>
                     <ul className='sidebar_item'>
                         {

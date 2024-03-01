@@ -15,6 +15,7 @@ import {getAllSocialMediaPostsByCriteria} from "../../app/actions/postActions/po
 import {useDispatch, useSelector} from "react-redux";
 import {getToken} from "../../app/auth/auth";
 import ConnectSocialAccountModal from "../common/components/ConnectSocialAccountModal";
+import { useAppContext } from "../common/components/AppProvider";
 
 const Draft = () => {
     const dispatch = useDispatch();
@@ -56,12 +57,12 @@ const Draft = () => {
             setShowConnectAccountModal(true)
         }
     }
-
+    const { sidebar } = useAppContext();
     return (
         <>
             <section>
                 <SideBar/>
-                <div className='cmn_container'>
+                <div className={sidebar? 'cmn_container':"cmn_Padding"}>
                     <div className='planner_outer'>
 
                         <div className='planner_header_outer'>
