@@ -22,8 +22,8 @@ const Draft = () => {
     const navigate = useNavigate();
     const [baseSearchQuery, setBaseSearchQuery] = useState({
         postStatus: ["DRAFT"],
-        limit: 1000,
-        plannerCardDate: new Date()
+        plannerCardDate: new Date(),
+        period:"MONTH"
     });
     const [resetData, setResetData] = useState(true)
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)

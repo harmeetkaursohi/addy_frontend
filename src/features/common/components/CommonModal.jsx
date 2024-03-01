@@ -54,9 +54,9 @@ const CommonModal = ({
                     <Modal.Header closeButton>
                         <Modal.Title className="commonmodal_header">
                             <div className='facebook_title'>
-                                <h2 className='cmn_text_style'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
-                                <p className='user_contents'>You have Personal Plan, you can add only one page.</p>
-                                <button className='cmn_blue_bg cmn_white_text upgrade_paln_btn'>Upgrade Plan</button>
+                                <h2 className='cmn_text_style mb-3'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
+                                {/*<p className='user_contents'>You have Personal Plan, you can add only one page.</p>*/}
+                                {/*<button className='cmn_blue_bg cmn_white_text upgrade_paln_btn'>Upgrade Plan</button>*/}
                             </div>
                         </Modal.Title>
                     </Modal.Header>

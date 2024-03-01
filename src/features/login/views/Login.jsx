@@ -146,7 +146,7 @@ const Login = () => {
 
                                                 {/*======= login with  google =======*/}
                                                 <a className=''
-                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/google?redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
+                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/google?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
                                                     <div className="google_img_outer login_btn login_google_btn">
                                                         <img src={google_img}/>
                                                         <h2 className="ps-2">{jsondata.loginwithgoogle} </h2></div>
@@ -155,7 +155,7 @@ const Login = () => {
                                                 {/*======= login with  facebook =======*/}
 
                                                 <a className=''
-                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
+                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
                                                     <div className="google_img_outer login_btn login_google_btn">
                                                         <img src={fbImg}/>
                                                         <h2 className="ps-2">{jsondata.loginwithfb} </h2></div>

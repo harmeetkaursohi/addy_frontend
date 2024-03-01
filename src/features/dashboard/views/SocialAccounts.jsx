@@ -213,7 +213,7 @@ const SocialAccounts = ({}) => {
                 dispatch(getAllConnectedSocialAccountAction(res))
                 dispatch(getAllSocialMediaPostsByCriteria({
                     token: token,
-                    query: {limit: 1000, postStatus: ["SCHEDULED"]}
+                    query: {limit: 5, period:"MONTH",postStatus: ["SCHEDULED"]}
                 }));
             })
         }).catch((error) => {
@@ -279,7 +279,7 @@ const SocialAccounts = ({}) => {
                     dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt?.customerId, token: token}));
                     dispatch(getAllSocialMediaPostsByCriteria({
                         token: token,
-                        query: {limit: 5, postStatus: ["SCHEDULED"]}
+                        query: {limit: 5, period:"MONTH", postStatus: ["SCHEDULED"]}
                     }));
                     Swal.fire({
                         icon: 'success',

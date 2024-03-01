@@ -249,7 +249,7 @@ export const pageConnectAction = (dispatch, token, data, socialMediaAccountInfo)
     if (data) {
         dispatch(facebookPageConnect(requestBody)).then((response) => {
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5, postStatus: ["SCHEDULED"]}}));
+            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5,period:"MONTH" ,postStatus: ["SCHEDULED"]}}));
         }).catch((error) => {
             console.log("--->error", error)
         })

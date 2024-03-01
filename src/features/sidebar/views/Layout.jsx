@@ -1,8 +1,5 @@
-
-
 import React, {useEffect, useState} from 'react'
 import {useLocation, useNavigate} from "react-router-dom"
-import default_user_icon from '../../../images/default_user_icon.svg'
 import addy_crop_logo from '../../../images/cropLogo.png'
 import addy_logo from '../../../images/addylogo.png'
 import {BiLogOut} from "react-icons/bi";
@@ -12,17 +9,11 @@ import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
-import {getInitialLetterCap} from "../../../utils/commonUtils";
-import {SocialAccountProvider} from "../../../utils/contantData";
 import {
-    disconnectSocialAccountAction,
     getAllConnectedSocialAccountAction
 } from "../../../app/actions/socialAccountActions/socialAccountActions";
-import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
-import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
-import { FaRegUser } from 'react-icons/fa';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
 
 const Layout = () => {
 
@@ -79,38 +70,26 @@ const Layout = () => {
         });
 
     }
-    
+
 
     return (
 
         <>
             <section className='sidebar_container'>
-           
+
                 <div  onClick={show_sidebar} className={`cmn_forward_arrow ${sidebar? " forward_arrow":'right_forward_arrow'} `}>
                     {sidebar ? <IoIosArrowForward  /> : <IoIosArrowBack />}
-                    
+
                 </div>
                 <div className={sidebar ? "sidebar_content sidebar_wrapper" : "sidebar_wrapper"}>
-              
-                    {/* <i className="fa fa-bars bar_icon" aria-hidden="true" onClick={show_sidebar}></i> */}
+
                     <div className="user_profile_outer">
-                            {sidebar? 
-                            <img src={addy_crop_logo} height="45px" width="45px" className='mt-4'/>: 
-                         
-                            <img src={addy_logo} className='addy_logo'/>   
-                       
+                            {sidebar?
+                            <img src={addy_crop_logo} height="45px" width="45px" className='mt-4'/>:
+
+                            <img src={addy_logo} className='addy_logo'/>
+
                             }
-                           
-                        {/* <div className='user_profile_wrapper'>
-                            <img
-                                src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
-                                className='profile_img'/>
-                            <div>
-                                <h3 className='profile_container'>{userData?.fullName ||
-                                    <SkeletonEffect count={1}></SkeletonEffect>}</h3>
-                                <h4 className="profile_container">{userData?.email}</h4>
-                            </div>
-                        </div> */}
                     </div>
                     <ul className='sidebar_item'>
                         {
@@ -129,15 +108,6 @@ const Layout = () => {
 
                             ))
                         }
-                        {/*<li className={`sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer ${path?.pathname === "/profile" ? "bar" : ""}`}>*/}
-                        {/*    <div*/}
-                        {/*        className={` sidebar_item_outers Profile_Img_outer ${path?.pathname === "/profile" ? "sidebar_inner_content" : ""}`}>*/}
-                        {/*        /!* <img className='userimg'  src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}/> *!/*/}
-                        {/*        <Link to="/profile"><FaRegUser />*/}
-                        {/*                                  Profile*/}
-                        {/*        </Link>*/}
-                        {/*    </div>*/}
-                        {/*</li>*/}
                         <li className='sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer'>
                             <div className=' sidebar_item_outers' onClick={LogOut}>
                                 <BiLogOut/>
@@ -146,7 +116,7 @@ const Layout = () => {
                         </li>
                     </ul>
                 </div>
-           
+
 
 
             </section>

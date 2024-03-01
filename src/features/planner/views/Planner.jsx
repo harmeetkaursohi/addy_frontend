@@ -117,7 +117,7 @@ const Planner = () => {
             if (isDraftPost) {
                 dispatch(getAllSocialMediaPostsByCriteria({
                     token: token,
-                    query: {postStatus: ["DRAFT"], plannerCardDate: baseSearchQuery?.plannerCardDate, limit: 1000}
+                    query: {postStatus: ["DRAFT"], plannerCardDate: baseSearchQuery?.plannerCardDate, period:"MONTH"}
                 }));
             } else {
 
@@ -259,15 +259,14 @@ const Planner = () => {
 
         setBatchIds(batchIdList);
 
+
         dispatch(getAllPlannerPostAction({
             token: token,
             query: JSON.parse(JSON.stringify({
                 postStatus: ["PUBLISHED", "SCHEDULED"],
                 batchIds: batchIdList,
-                creationDateRange: {
-                    startDate: computeStartEndDate(startDate, 'T00:01:00.000Z'),
-                    endDate: computeStartEndDate(startDate, 'T23:59:59.000Z')
-                }
+                plannerCardDate:targetDate,
+                period:"DAY"
             }))
         }));
 

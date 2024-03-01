@@ -18,11 +18,13 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
 
     const token = getToken();
     const publishedPostData = useSelector((state) => state.post.publishedPostReducer);
+    const deletePostByBatchIdData = useSelector((state) => state.post.deletePostByBatchIdReducer);
     const [batchToDelete,setBatchToDelete]=useState(null);
+    const [postToPublish,setPostToPublish]=useState(null);
 
     const handlePublishedPost = (e) => {
         e.preventDefault();
-        setBatchToDelete(batchIdData?.id)
+        setPostToPublish(batchIdData?.id)
         dispatch(publishedPostAction({postId: batchIdData?.id, token: token}))
             .then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
@@ -44,6 +46,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
 
     const handleDeletePost = (e) => {
         e.preventDefault();
+        setBatchToDelete(batchIdData?.id)
         Swal.fire({
             icon: 'warning',
             title: `Delete Post`,
@@ -64,7 +67,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                                 showSuccessToast("Post has been deleted successfully");
                                 dispatch(getAllSocialMediaPostsByCriteria({
                                     token: token,
-                                    query: {limit: 1000, postStatus: ["DRAFT"]}
+                                    query: {period:"MONTH",postStatus: ["DRAFT"]}
                                 }));
                             }
                         }).catch((error) => {
@@ -137,7 +140,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
 
                 <div className="mt-4 d-flex gap-2 justify-content-center align-items-center draft_button_outer">
                     <GenericButtonWithLoader className={"post_now cmn_bg_btn loading"} label={"Post Now"}
-                                             isLoading={batchIdData?.id===batchToDelete && publishedPostData?.loading}
+                                             isLoading={batchIdData?.id===postToPublish && publishedPostData?.loading}
                                              onClick={handlePublishedPost}
                                              isDisabled={false}
                     />
@@ -146,7 +149,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
 
                     <GenericButtonWithLoader className={"outline_btn schedule_btn loading"}
                             label={"Delete Post"}
-                            isLoading={batchIdData?.id===batchToDelete && publishedPostData?.loading}
+                            isLoading={batchIdData?.id===batchToDelete && deletePostByBatchIdData?.loading}
                             onClick={handleDeletePost}
                             id={batchIdData?.id}
                             contentText={"Deleting..."}

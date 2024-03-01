@@ -325,7 +325,7 @@ const UpdatePost = () => {
                         boostPost: boostPost,
                         postPageInfos: selectedOptions?.map((obj) => ({
                             pageId: obj,
-                            id: selectedAllDropdownData?.find(c => c?.selectOption?.pageId === obj)?.selectOption?.id || null,
+                            id:  getPostsByIdData.postPageInfos && getPostsByIdData.postPageInfos?.find(c => c.pageId === obj)?.id || null,
                             socialMediaType: selectedAllDropdownData?.find(c => c?.selectOption?.pageId === obj)?.group || null
                         })),
                         scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
