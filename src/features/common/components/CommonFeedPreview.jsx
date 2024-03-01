@@ -17,6 +17,7 @@ const CommonFeedPreview = ({
                                destinationUrl=null,
                                pinTitle=null,
                            }) => {
+                           
     return (
         <>
             {

@@ -5,6 +5,7 @@ import './faq.css'
 import { list  } from "../../app/actions/webActions/webActions";
 import { useDispatch, useSelector } from "react-redux";
 import { resetReducers } from "../../app/actions/commonActions/commonActions";
+import { useAppContext } from "../common/components/AppProvider";
 const FaqComponent = () => {
     const dispatch = useDispatch();
     const faqList = useSelector(state => state.web.listReducer);        
@@ -26,11 +27,12 @@ const FaqComponent = () => {
     const handleLoadMore = () => {
         dispatch(list({page,search}));
     }
+    const{sidebar}=useAppContext()
 
     return (
         <>
             <SideBar/>
-            <div className="cmn_container faq_section pt-5">
+            <div className={`cmn_container faq_section pt-5 ${sidebar?"":"cmn_Padding" }`}>
            
                     <div className="dashboard_outer">
                         <div className="faq_wrapper">

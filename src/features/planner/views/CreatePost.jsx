@@ -31,6 +31,7 @@ import ConnectSocialAccountModal from "../../common/components/ConnectSocialAcco
 import CommonLoader from "../../common/components/CommonLoader";
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
+import { useAppContext } from '../../common/components/AppProvider.jsx';
 
 const CreatePost = () => {
 
@@ -372,11 +373,11 @@ const CreatePost = () => {
         }
     }, [cropImgUrl])
 
-
+const{sidebar}=useAppContext()
     return (
         <>
             <SideBar/>
-            <div className="cmn_container">
+            <div className={`cmn_container ${sidebar?"":"cmn_Padding"}`}>
             {
                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
                     <CommonLoader></CommonLoader> : 

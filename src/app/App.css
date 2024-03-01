@@ -46,9 +46,10 @@ ul {
   padding-left: 63px;
   width: 100%;
   background-color: #f4f8fe;
+  transition: all ease-in 0.7s;
 }
-.cmn_padding{
-  padding-left: 63px;
+.cmn_Padding{
+  padding-left: 280px;
 }
 .comment_container {
   /* padding-left: 280px; */
@@ -273,6 +274,9 @@ div#swal2-html-container {
 .blink{
   animation: blinker 1s linear infinite;
 }
+.bg_Color{
+  background-color: #f4f8fe;
+}
 @keyframes blinker {
   50% {
     opacity: 0;
@@ -327,6 +331,9 @@ div#swal2-html-container {
 }
 div#swal2-html-container {
   font-size: 13px;
+}
+.cmn_Padding{
+  padding-left: 60px;
 }
 
 }

@@ -964,6 +964,14 @@ button.loading {
     .preview_img_container{
         display: block;
     }
+    button.delete_upload {
+        padding: 3px 6px;
+
+    }
+    .delete_upload  svg{
+    font-size: 18px !important;
+    margin-bottom: 2px;
+    }
     .img_footer{
     margin: 0px;
     gap: 8px;

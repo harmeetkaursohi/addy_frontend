@@ -30,6 +30,7 @@ import ContactUs from "../features/contactUs/ContactUs";
 import Draft from "../features/unPublishedPages/Draft";
 import Insight from "../features/insights/insight/views/Insight";
 import Profile from '../features/profile/Profile.jsx'
+import { AppProvider } from '../features/common/components/AppProvider.jsx'
 
 const App = () => {
     const PrivateRoute = () => {
@@ -40,6 +41,7 @@ const App = () => {
 
     return (
         <>
+          <AppProvider>
             <BrowserRouter>
                 <Routes>
                     <Route element={<PrivateRoute/>}>
@@ -74,6 +76,7 @@ const App = () => {
                     
                 </Routes>
             </BrowserRouter>
+            </AppProvider>
             <ToastContainer/>
         </>
     )

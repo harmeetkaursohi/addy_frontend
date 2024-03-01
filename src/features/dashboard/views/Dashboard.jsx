@@ -9,8 +9,10 @@ import {DashboardReports} from "./reports/DashboardReports";
 import SocialAccounts from "./SocialAccounts";
 import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
+import { useAppContext } from "../../common/components/AppProvider.jsx";
 
 const Dashboard = () => {
+    const { sidebar } = useAppContext();
 
     const dispatch = useDispatch();
     const token = getToken();
@@ -34,7 +36,7 @@ const Dashboard = () => {
     return (
         <>
             <SideBar/>
-            <div className="cmn_container">
+            <div className={sidebar? 'cmn_container':"cmn_Padding"}>
                 <div className="cmn_wrapper_outer">
                     <Header userData={userData}
                             facebookPageList={facebookPageList} setShowConnectAccountModal={setShowConnectAccountModal}/>

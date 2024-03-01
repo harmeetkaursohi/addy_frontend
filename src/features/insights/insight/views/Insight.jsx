@@ -34,11 +34,14 @@ import Loader from "../../../loader/Loader";
 import CommonLoader from "../../../common/components/CommonLoader";
 import ConnectSocialMediaAccount from "../../../common/components/ConnectSocialMediaAccount";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
+import { useAppContext } from "../../../common/components/AppProvider";
 
 
 const Insight = () => {
     const dispatch = useDispatch();
     const token = getToken();
+    const { sidebar } = useAppContext();
+
     const getAllByCustomerIdData = useSelector(state => state.socialAccount.getAllByCustomerIdReducer);
     const getTotalFollowersData = useSelector(state => state.insight.getTotalFollowersReducer);
     const getAccountReachedAndAccountEngagedData = useSelector(state => state.insight.getAccountReachedAndAccountEngagedReducer);
@@ -243,7 +246,7 @@ const Insight = () => {
     return (
         <section>
             <SideBar/>
-            <div className="insight_wrapper cmn_container">
+            <div className={`insight_wrapper ${sidebar?"cmn_container":"cmn_Padding"}`}>
                 <div className="insight_outer  cmn_wrapper_outer">
                     <h2 className="insight_heading cmn_text_style">Insights</h2>
                     {

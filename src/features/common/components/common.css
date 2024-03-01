@@ -95,6 +95,9 @@ div.instagram_like {
 .Caption_outer span{
     font-size: 13px;
 }
+.instaFeedPrev_outer{
+   display: block;
+}
 .cancel_button{
     background: #d1d1d1;
     border: none ;
@@ -104,11 +107,51 @@ div.instagram_like {
     border-radius: 10px;
 }
 
+.cmn_crop_video_btn{
+    padding: 5px 0px;
+    border-radius: 5px;
+    width: 104px;
+    border: 1px solid #ed7e22;
+    background: white;
+    color: #ed7e22;
+    margin: 16px 0px;
+}
+.video-element-container .noUi-connect {
+    background: #efedec !important;
+}
+.video-element-container .noUi-horizontal {
+  
+    margin: 10px !important;
+}
 .instagram_caption_outer{
     display: flex;
     align-items: center;
     gap: 7px;
     padding: 0px 19px;
+}
+.aspect_ratio_outer {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 16px;
+}
+.aspect_ratio_outer li h5{
+    font-size: 12px;
+    font-weight: 600;
+    padding-top: 2px;
+    
+}
+.aspect_ratio_outer li {
+
+    cursor: pointer;
+}
+.aspect_ratio_outer li svg{
+
+   font-size: 22px;
+
+}
+.Caption_outer h2 {
+    font-size: 12px;
 }
 @media screen and (max-width:1280px) {
     .linkedin_likes h3{
