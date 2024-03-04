@@ -33,6 +33,7 @@ import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantD
 import Loader from '../../loader/Loader.jsx';
 
 import EditImageModal from '../../common/components/EditImageModal.jsx';
+import { useAppContext } from '../../common/components/AppProvider.jsx';
 
 const UpdatePost = () => {
 
@@ -75,7 +76,7 @@ const UpdatePost = () => {
 
         const loader = useSelector(state => state.post.getPostsByIdReducer?.loading)
 
-
+      const{sidebar}=useAppContext()
 
         useEffect(() => {
             return () => {
@@ -404,7 +405,7 @@ const UpdatePost = () => {
         return (
             <>
                 <SideBar/>
-                <div className="cmn_container">
+                <div className={`cmn_container ${sidebar?"":"cmn_Padding"}`}>
                     <div className="Container">
                         <div className="create_post_wrapper">
                             <div className="row">

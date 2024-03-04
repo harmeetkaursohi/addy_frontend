@@ -16,7 +16,7 @@
     border: 2px solid #F07C33;
 }
 .generate_image_wrapper_box {
-    padding: 30px;
+    padding: 15px 20px;
 }
 .modal-header{
     border-bottom: unset;
@@ -48,7 +48,7 @@ line-height: normal;
 
 @media screen and (max-width:767px){
     .generate_image_wrapper_box {
-        padding: 9px;
+        padding: 0px;
     }
     .ai_images_outer{
         display: block;
@@ -61,6 +61,7 @@ line-height: normal;
         margin-top: 20px;
         position: unset;
         padding: 7px 20px;
+        font-size: 14px;
     }
     .generate_image_outer input {
         padding: 11px 7px;

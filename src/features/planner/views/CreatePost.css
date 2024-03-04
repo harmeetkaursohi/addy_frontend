@@ -305,6 +305,7 @@ social_inner_content h6 {
 
 .create_post_content {
     padding: 30px 70px;
+  
 }
 
 button#instagram {
@@ -333,6 +334,7 @@ button#instagram::after {
 /* ======= */
 .date_input::-webkit-calendar-picker-indicator {
     background: url('../../../images/calendar_today.svg') no-repeat;
+   
     /* position: absolute; */
     /* right: 0; 
     left: 10px; */
@@ -392,6 +394,7 @@ content: url("../../../images/down_arrow.svg");
 .create_post_wrapper {
     width: 100%;
     overflow: hidden;
+    background-color: white;
   
 }
 
@@ -532,11 +535,13 @@ button.ai_btn {
 
 .add_media_outer {
     padding: 9px 25px;
+ 
 }
 
 .add_media_outer label {
     display: flex;
     gap: 10px;
+    cursor: pointer;
 }
 
 .file_outer input {
@@ -627,7 +632,7 @@ button.ai_btn {
 }
 
 .post_preview_outer {
-
+    transition: all 0.7s ease;
     background: #1E1E1E;
     padding: 3em;
     height: 100%;
@@ -690,11 +695,16 @@ input[type=checkbox] {
     accent-color: #048709;
 }
 .preview_btn{
-    border: none;
+    border: 1px solid transparent;
     background: #f07c32;
     color: white;
     padding: 6px 11px;
     border-radius: 10px;
+}
+.preview_btn:hover {
+    background: white;
+    color: #f07c32;
+    border: 1px solid #f07c32;
 }
 .preview_btn_outer{
     display: flex;

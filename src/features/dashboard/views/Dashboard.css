@@ -494,6 +494,9 @@ img.connection-error-svg {
 div.noDraftPosts_outer {    
     background-color:#fff;
 }
+.dropdown_btn_Outer_container{
+    padding:0px 20px
+}
 @media screen and (min-width:2560px){
     .followers_outer {
         gap: 40px;
@@ -580,6 +583,9 @@ div.noDraftPosts_outer {
         font-size: 13px;
 
     }
+    .followers_outer{
+        padding: 21px 0px;
+    }
     select.page_title_options {
         font-size: 14px;
     }
@@ -600,8 +606,8 @@ div.noDraftPosts_outer {
     }
     
     img.dropdown-page-logo {
-        margin-right: 4px !important;
-        font-size: 12px;
+        height: 20px;
+        width: 20px;
     }
     
     div.dropdown_btn_Outer_container{
@@ -678,6 +684,7 @@ div.noDraftPosts_outer {
     div.cmn_background {
         min-height: 100%;
         padding: 14px !important;
+       
     }
     .No_Upcoming_Posts_heading{
         font-size: 14px;
@@ -720,6 +727,8 @@ div.noDraftPosts_outer {
 .dropdown_btn .dropdown-item{
     padding: 9px 20px 15px;
     border-bottom: 1px solid #e1d7d7;
+    color: #5F6D7E;
+    font-weight: 500;
 }
 .dropdown_btn .dropdown-item:last-child{
     border-bottom: unset;

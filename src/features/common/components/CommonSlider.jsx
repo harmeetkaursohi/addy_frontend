@@ -38,7 +38,7 @@ const CommonSlider = ({
 
             {viewSimilarToSocialMedia ?
                 <div>
-                    <div className={`ms-2  ${showText ?"feed_preview_Caption_outer":"Caption_outer mb-2" }`}>
+                    <div className={`ms-2  ${showText ?"feed_preview_Caption_outer":"Caption_outer " }`}>
                        {isrequired? "": <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
                                      className={"highlight cursor-pointer"} setShowText={setShowText} showText={showText} />}
                     </div>
@@ -60,7 +60,7 @@ const CommonSlider = ({
                             files?.map((file, index) => (
                                 <div key={index}>
                                     <ReactPlayer
-                                        height={"300px"}
+                                        height={"250px"}
                                         width={"100%"}
                                         className='post_img'
                                         url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}

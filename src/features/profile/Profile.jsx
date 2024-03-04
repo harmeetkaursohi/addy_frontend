@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import "./profile.css";
 import jsondata from "../../locales/data/initialdata.json";
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';

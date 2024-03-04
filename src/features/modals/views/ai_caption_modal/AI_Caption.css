@@ -65,14 +65,16 @@ li.selectedCaption{
         font-size: 14px;
         }
         .add_caption_btn {
-            width: 108px;
-            height: 39px;
+            width: 83px;
+           height: 36px;
+           font-size: 12px;
         }
         .regenerate_btn  {
-            width: 108px;
-            height: 39px;
+            width: 87px;
+            height: 34px;
+            font-size: 12px;
         }
-        .ai_caption{
+        div.ai_caption{
             font-size: 16px;
         }
 
