@@ -76,11 +76,11 @@ const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, se
 
                 <Modal show={aiGenerateImageModal} onHide={handleClose}>
 
-                    <Modal.Header closeButton>
-                        <Modal.Title>Generate Image with AI</Modal.Title>
+                    <Modal.Header closeButton className='mb-0'>
+                        <Modal.Title className='ai_caption flex-grow-1 text-center'>Generate Image with AI</Modal.Title>
                     </Modal.Header>
 
-                    <Modal.Body>
+                    <Modal.Body className='pt-0'>
 
                         <div className='generate_image_wrapper_box'>
                             <form onSubmit={handleOnSubmit}>

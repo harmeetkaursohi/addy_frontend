@@ -31,12 +31,13 @@ ul.mb-3.edit_tabs.nav.nav-tabs {
 .edit_profile_heading{
    font-weight: 600;
     border-bottom: 1px solid #dddbdb;
-    padding: 20px;
+    padding: 20px 30px;
     color: #2e3646;
     font-size: 28px;
     font-weight: 700;
     line-height: 38px;
     letter-spacing: -0.28px;
+
 }
 label.changeProfile_label.updateAccount_label {
     background: #f07c33;
@@ -115,12 +116,10 @@ label.edit_label{
     border: 1px solid #ee7817; 
   }
   
-  /* Style for tooltip arrow */
-  .tooltip-arrow {
-   
-    border-color: #ee7817 !important; /* Change arrow color */
-    
+  .tooltip-arrow::before {
+    border-right-color: #ee7817 !important; 
   }
+  
  
   .edit_label_container{
     text-align: right;
@@ -135,23 +134,21 @@ label.edit_label{
 }
 @media screen and (min-width:1499px) {
     .editprofile_outer{
-        width: 1100px;
+        width: 78%;
         margin: auto;
     
     }
-}
-@media screen and (max-width:1024px) {
-  
+    .edit_profile_heading {
+        width: 78%;
+        margin: auto;
+    }
 }
 
-@media screen and (max-width:991px) {
-  
-}
  @media screen and (max-width:767px){
 
     label.edit_label {
-        padding: 6px 8px;
-        font-size: 23px;
+        padding: 4px 6px;
+        font-size: 20px;
     }
     .update-pic-loading svg{
         height: 25px;

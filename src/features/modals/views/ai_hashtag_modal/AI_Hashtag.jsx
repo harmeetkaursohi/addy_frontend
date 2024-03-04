@@ -127,11 +127,11 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
             <div className='generate_ai_img_container'>
                 <Modal show={aiGenerateHashTagModal} onHide={handleClose}>
 
-                    <Modal.Header closeButton>
-                        <Modal.Title>Generate Hashtag with AI </Modal.Title>
+                    <Modal.Header closeButton className='mb-0'>
+                        <Modal.Title className='ai_caption flex-grow-1 text-center'>Generate Hashtag with AI </Modal.Title>
                     </Modal.Header>
 
-                    <Modal.Body>
+                    <Modal.Body className='pt-0'>
                         <div className='generate_image_wrapper_box'>
                             <form>
                                 <div className='generate_image_outer'>

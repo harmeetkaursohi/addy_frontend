@@ -93,7 +93,7 @@ div.instagram_like {
     margin: 0px;
 }
 .Caption_outer span{
-    font-size: 13px;
+    font-size: 14px;
 }
 .instaFeedPrev_outer{
    display: block;
@@ -141,6 +141,9 @@ div.instagram_like {
     padding-top: 2px;
     
 }
+.active_color{
+    color: #ed7e22;
+}
 .aspect_ratio_outer li {
 
     cursor: pointer;
@@ -151,7 +154,9 @@ div.instagram_like {
 
 }
 .Caption_outer h2 {
-    font-size: 12px;
+    font-size: 14px;
+    color: #000;
+    font-weight: 600;
 }
 @media screen and (max-width:1280px) {
     .linkedin_likes h3{

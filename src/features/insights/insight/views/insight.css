@@ -320,9 +320,7 @@ h2.Review_Heading {
     min-height: 464px;
 }
 
-::-webkit-calendar-picker-indicator {
-    filter: invert(10%) sepia(100%) saturate(150%) hue-rotate(190deg) brightness(90%) contrast(85%);
-}
+
 .noPageHeading{
     padding: 8px 0px;
     color: #000;

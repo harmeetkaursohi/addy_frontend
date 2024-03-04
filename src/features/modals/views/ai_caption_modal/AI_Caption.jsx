@@ -54,10 +54,10 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
         <>
             <div className='generate_ai_img_container'>
                 <Modal show={aiGenerateCaptionModal} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title className='ai_caption'>Generate Caption with AI </Modal.Title>
+                    <Modal.Header className='mb-0' closeButton>
+                        <Modal.Title className='ai_caption flex-grow-1 text-center'>Generate Caption with AI </Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Body className='pt-0'>
                         <div className='generate_image_wrapper_box'>
                             <form onSubmit={handleCaptionSubmit}>
                                 <div className='generate_image_outer'>

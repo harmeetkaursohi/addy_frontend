@@ -50,6 +50,7 @@ ul {
 }
 .cmn_Padding{
   padding-left: 280px;
+  background-color: #f4f8fe;
 }
 .comment_container {
   /* padding-left: 280px; */
@@ -59,7 +60,7 @@ ul {
 }
 
 .cmn_wrapper_outer {
-  padding: 0px 40px 30px;
+  padding: 0px 30px 30px;
 }
 
 .form-control {
@@ -253,6 +254,13 @@ h2.acc_not_connected_heading {
   height: 170px;
   overflow-x: hidden;
 }
+.feed_preview_Caption_outer span{
+  font-size: 14px;
+}
+.feed_preview_Caption_outer h2{
+  font-size: 14px;
+}
+
 .Caption_outer {
   text-overflow: ellipsis;
    
@@ -262,6 +270,7 @@ h2.acc_not_connected_heading {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  margin-bottom: 10px;
 }
 h2#swal2-title {
   font-size: 18px;

@@ -158,6 +158,9 @@ button, .modal_inner_content.disconnect_wrapper
         font-size: 16px;
         line-height: initial;
     }
+    .facebook_title h2 {
+        font-size: 18px;
+    }
 }
 
 

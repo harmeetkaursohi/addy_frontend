@@ -73,8 +73,8 @@ export const LineGraph = ({reportData}) => {
                 dataSets.push({
                         label: 'Followers',
                         data: reportData?.data.Followers.map((entry) => entry.percentageGrowth),
-                        borderColor: 'rgb(255, 99, 132)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgb(240, 124, 51)',
+                        backgroundColor: 'rgba(240, 124, 51, 0.5)',
                     }
                 )
             }

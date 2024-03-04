@@ -67,8 +67,10 @@ const CreatePost = () => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
+    const[showPreview,setShowPreview]=useState(false)
+
     const getVideoBlob = (videoBlob) => {   
-        console.log(videoBlob,"videoBlob")     
+     
         setVideoBlob(videoBlob)
     }
 
@@ -374,6 +376,9 @@ const CreatePost = () => {
     }, [cropImgUrl])
 
 const{sidebar}=useAppContext()
+
+
+
     return (
         <>
             <SideBar/>
@@ -383,8 +388,16 @@ const{sidebar}=useAppContext()
                     <CommonLoader></CommonLoader> : 
                         <div className="Container">
                             <div className="create_post_wrapper">
+                            <div className='preview_btn_outer'>
+                                    {
+                                       selectedAllDropdownData?.length > 0 && showPreview? <button  className='preview_btn me-2 my-2' onClick={()=>{setShowPreview(false)}}>Hide Preview</button>:
+
+                                       selectedAllDropdownData?.length > 0 && <button  className='preview_btn me-2 my-2' onClick={()=>{setShowPreview(true)}}>Show Preview</button>
+                                    }
+                                    
+                                </div>
                                 <div className="row">
-                                    <div className="col-lg-6 col-md-12 col-sm-12">
+                                    <div className={showPreview ? "col-lg-6 col-md-12 col-sm-12":"col-lg-12 col-md-12 col-sm-12"}>
 
                                         <div className="create_post_content">
 
@@ -821,6 +834,8 @@ const{sidebar}=useAppContext()
                                             </form>
                                         </div>
                                     </div>
+                                    {
+                                    showPreview  &&
                                     <div className="col-lg-6 col-md-12 col-sm-12">
 
                                         <div className='post_preview_outer'>
@@ -855,6 +870,7 @@ const{sidebar}=useAppContext()
 
 
                                     </div>
+                                    }
                                 </div>
                             </div>
                         </div>

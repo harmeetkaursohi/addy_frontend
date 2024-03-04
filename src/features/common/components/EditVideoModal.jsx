@@ -15,7 +15,6 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
   const ffmpegRef = useRef(new FFmpeg());
 
 
-  console.log(ffmpegRef,"ffmpegRef")
   const videoRef = useRef(null)
   const messageRef = useRef(null)
   let initialSliderValue = 0;
@@ -28,14 +27,16 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     if (videoRef && videoRef.current) {
       const currentVideo = videoRef.current;
       currentVideo.onloadedmetadata = () => {
+      
         setVideoDuration(currentVideo.duration);
         setEndTime(currentVideo.duration);
       };
     }
   }, [videoSrc]);
 
+
   useEffect(function(){
-    console.log("videoTrimmedUrl",videoTrimmedUrl)
+   
   },[videoTrimmedUrl])  
 
     //Called when handle of the nouislider is being dragged
@@ -75,21 +76,23 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
   };
 
   //Trim functionality of the video
-  const handleTrim = async () => {        
+  const handleTrim = async () => {    
+    
       const baseURL = "/public/js";       
       const { name } = videoFileValue.file;      
      
       const ffmpeg = ffmpegRef.current;      
-      console.log(ffmpeg,"ffmpeg000")
+ 
       ffmpeg.on("log", ({ message }) => {
-        console.log(message,"message12")
         if (messageRef.current) messageRef.current.innerHTML = message;
       });    
+
       ffmpeg.load({
         coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
         wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`,"application/wasm"),
         workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`,"text/javascript"),
       }).then(()=>console.log("ffmpeg1")).catch((e)=>console.log("ffmpeg",e));
+
       //Write video to memory
       await ffmpeg.writeFile(        
         name,
@@ -110,18 +113,21 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
         'copy',
         `out.${videoFileType}`,
       ).then(()=>console.log("ffmpeg3")).catch((e)=>console.log("error ",e));   
-      console.log("ffmpeg3",ffmpeg)   
+
+   
       const fileData = await ffmpeg.readFile(`out.${videoFileType}`).then(()=>console.log("ffmpeg4")).catch((e)=>console.log("ffmpeg",e));
-      console.log("fileData",fileData)
-      //Convert data to url and store in videoTrimmedUrl state      
+     
       const url = URL.createObjectURL(
         new Blob([fileData.buffer], { type: videoFileValue.file.type }),
       );
+
       setVideoTrimmedUrl(url);    
   };
+
   //Convert the time obtained from the video to HH:MM:SS format
   const convertToHHMMSS = (val) => {
     const secNum = parseInt(val, 10);
+   
     let hours = Math.floor(secNum / 3600);
     let minutes = Math.floor((secNum - hours * 3600) / 60);
     let seconds = secNum - hours * 3600 - minutes * 60;
@@ -142,6 +148,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     } else {
       time = hours + ':' + minutes + ':' + seconds;
     }
+    
     return time;
   };
   
@@ -149,7 +156,10 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     setShowEditVideoModal(false)
   }
 
-
+//  const handlePause = () => {
+//   const videoPlayer = document.getElementById('videoPlayer');
+//   videoPlayer.pause();
+// };
   return (
     <Modal className='facebook_modal_outer' size="md" show={showEditVideoModal} onHide={handleClose} backdrop="static">
     <Modal.Header closeButton>
@@ -161,7 +171,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     </Modal.Header>
     <Modal.Body className='crop-image-parent container'>                    
         <div className='crop-image-container video-element-container'>   
-        <video className='w-100'  src={videoSrc} ref={videoRef} onTimeUpdate={handlePauseVideo} >
+        <video className='w-100' id='videoPlayer'  src={videoSrc} ref={videoRef} onTimeUpdate={handlePauseVideo} >
             <source src={videoSrc} type={videoFileValue.type} />
           </video>
           <br />
@@ -176,11 +186,16 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
             onUpdate={updateOnSliderChange}
           />
           <br />
+     
+         
           Start duration: {convertToHHMMSS(startTime)} &nbsp; End duration:{' '}
           {convertToHHMMSS(endTime)}
+        
           <br />
+          
           <button className='cmn_crop_video_btn ' onClick={handlePlay}>Play</button> &nbsp;
           <button className=" cmn_crop_video_btn "onClick={handleTrim}>Trim</button>
+          {/* <button className=" cmn_crop_video_btn "onClick={handlePause}>Pause</button> */}
           <br />
           {videoTrimmedUrl && (
             

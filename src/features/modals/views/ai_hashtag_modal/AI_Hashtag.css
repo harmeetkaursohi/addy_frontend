@@ -34,12 +34,12 @@ border: 1px solid #C3C3C3;
     gap: 20px;
 }
  @media screen and (max-width:767px){
-    .regenerate_btn_outer button {
-        margin: 8px;
+    .regenerate_btn_outer {
+       gap: 10px;   
     }
-    .regenerate_btn_outer{
+    /* .regenerate_btn_outer{
         display: block;
-    }
+    } */
  }
 
 .hashtag_btn_outer{

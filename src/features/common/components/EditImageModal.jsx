@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { IoSquareOutline } from "react-icons/io5";
@@ -6,7 +6,7 @@ import { LuRectangleHorizontal } from "react-icons/lu";
 import Modal from 'react-bootstrap/Modal';
 import { TbRectangleVertical } from "react-icons/tb";
 import { BiRectangle } from "react-icons/bi";
-import {useState,useEffect} from 'react';
+import {useState} from 'react';
 import {useRef} from 'react';
 import "./common.css"
 
@@ -19,7 +19,14 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
     const [croppedImageUrl, setCroppedImageUrl] = useState(null);
     const imageRef = useRef(null);
 
-    
+    const aspectData=[
+    {icon:<IoSquareOutline />,title:"Square" ,aspectRatio:1 / 1,height:180,width:180},
+    {icon:<LuRectangleHorizontal />,title:"3:2" ,aspectRatio:2 / 3,height:190,width:190},
+    {icon:<TbRectangleVertical /> ,title:"3:2" ,aspectRatio:4 / 3,height:200,width:200},
+    {icon:<LuRectangleHorizontal />,title:"4:3" ,aspectRatio:5 / 4,height:230,width:230},
+    {icon:<BiRectangle />,title:"7:5" ,aspectRatio:7 / 5,height:300,width:300},
+    {icon:<LuRectangleHorizontal />,title:"16:9" ,aspectRatio:16 / 9,height:400,width:400},
+]
 
     const handleClose = () => {
         setShowEditImageModal(false)
@@ -93,15 +100,44 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
         setShowEditImageModal(false)
     }
    
-    const handleAspectChange = (aspect,height,width) => {
+    const [index,setIndex]=useState("")
+    const handleAspectChange = (aspect,height,width,i) => {
        
         const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
     const maxWidth = Math.min(screenWidth * 0.8, width);
     const maxHeight = Math.min(screenHeight * 0.8, height);
         setCrop({ ...crop, aspect: aspect, height:maxHeight, width:maxWidth,x:0,y:0});
+        setIndex(i)
       };
-   console.log(crop,"crop")
+  
+      useEffect(() => {
+        const handleResize = () => {
+
+            if (window.innerWidth < 600) { 
+                setCrop(prevCrop => ({
+                    ...prevCrop,
+                    x: 25, 
+                    y: 25  
+                }));
+            } else {
+              
+                setCrop(prevCrop => ({
+                    ...prevCrop,
+                    x: 105,
+                    y: 105
+                }));
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        handleResize();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [])
     return (
         <div className='edit_imag_modal_outer'>
 
@@ -124,12 +160,11 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
                         </ReactCrop>
                     }
                    <ul className='aspect_ratio_outer'>
-                        <li onClick={()=>{handleAspectChange(1 / 1,200,200)}}><IoSquareOutline />  <h5 >Square</h5></li>
-                        <li onClick={()=>{handleAspectChange(2 / 3,190,190)}}><LuRectangleHorizontal /> <h5  >3:2</h5> </li>
-                        <li  onClick={()=>{handleAspectChange(4 / 3,200,200)}}> <TbRectangleVertical /> <h5 > 4:3</h5> </li>
-                        <li onClick={()=>{handleAspectChange(5 / 4 ,230,230)}}><LuRectangleHorizontal /><h5  >5:4</h5></li>
-                        <li onClick={()=>{handleAspectChange(7 /5, 300,300)}}><BiRectangle /><h5  >7:5</h5></li>
-                        <li onClick={()=>{handleAspectChange(16 / 9 ,400,400)}}><LuRectangleHorizontal /><h5  >16:9</h5></li>
+                    {aspectData.map((data,i)=>(
+                       
+                        <li className={index===i?"active_color":""} key={i}  onClick={()=>{handleAspectChange(data.aspectRatio,data.height,data.width,i)}}>{data.icon}  <h5 >{ data.title}</h5></li>
+                    ))}
+                       
                         
                        
                     </ul>

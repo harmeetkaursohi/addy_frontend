@@ -87,7 +87,8 @@ div.Contact_us_Outer {
     .contact_content{
         margin-bottom: 2em;
     }
-}@media(max-width: 767px){
+}
+@media(max-width: 767px){
     h2.cmn_title{
         font-size: 24px;
     }
