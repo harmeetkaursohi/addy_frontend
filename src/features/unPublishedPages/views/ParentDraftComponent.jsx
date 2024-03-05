@@ -30,7 +30,7 @@ export const ParentDraftComponent = ({setDraftPost, reference = "", resetData = 
         <div className={"row m-0"}>
             {
                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading || getAllDraftPostsByCustomerAndPeriodData.loading) ?
-                    <CommonLoader/> :
+                    <CommonLoader classname={"cmn_loader_outer"}/> :
                     getAllConnectedSocialAccountData?.data?.length === 0 ?
                         <ConnectSocialMediaAccount messageFor={"ACCOUNT"}/> :
                         getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 ?

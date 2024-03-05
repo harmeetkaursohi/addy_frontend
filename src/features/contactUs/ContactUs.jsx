@@ -219,7 +219,8 @@ const ContactUs = () => {
                         style={{
                           transform: isSmallScreen?'scale(0.6)':"",
                           transformOrigin: isSmallScreen?'0 0':"",
-                          width:isSmallScreen?"200px":""
+                          width:isSmallScreen?"200px":"",
+                          marginTop:"13px",
                       }}
                       />
                       {formik.touched["g-recaptcha-response"] &&

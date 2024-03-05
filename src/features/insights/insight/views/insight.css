@@ -376,6 +376,9 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
         font-size: 14px;
        
     }
+    .insight_inner_content {
+        padding: 20px;
+    }
     .account_reach_overview_outer h5 {
         font-size: 12px;
     }
@@ -434,6 +437,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     .reach-engagement-select {
         margin-bottom: 20px;
     }
+   
     .noPageHeading {
         font-size: 12px;
     }

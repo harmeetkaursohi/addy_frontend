@@ -9,9 +9,13 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
   const [videoDuration, setVideoDuration] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [startTime, setStartTime] = useState(0);
+  const [startTimeMs, setStartTimeMs] = useState(0);
+  const [endTimeMs, setEndTimeMs] = useState(0);
+  
   const [videoSrc, setVideoSrc] = useState('');
   const [videoFileValue, setVideoFileValue] = useState('');  
   const [videoTrimmedUrl, setVideoTrimmedUrl] = useState('');
+
   const ffmpegRef = useRef(new FFmpeg());
 
 
@@ -47,6 +51,8 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
         readValue = values[handle] | 0;
         if (endTime !== readValue) {
           setEndTime(readValue);
+          setEndTimeMs(readValue * 1000);
+          
         }
       } else {
         readValue = values[handle] | 0;
@@ -55,6 +61,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
           if (videoRef && videoRef.current) {
             videoRef.current.currentTime = readValue;
             setStartTime(readValue);
+            setStartTimeMs(readValue * 1000)
           }
         }
       }
@@ -76,8 +83,21 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
   };
 
   //Trim functionality of the video
-  const handleTrim = async () => {    
+  const handleTrim = async () => {  
+   
     
+    const videoDurationSeconds = endTime - startTime;
+  
+    if (videoDurationSeconds < 4) {
+   
+        alert('Video duration must be at least 4 seconds.');
+        return;
+    }
+    if (videoDurationSeconds > 15 * 60) { 
+    
+        alert('Video duration cannot exceed 15 minutes.');
+        return;
+    }
       const baseURL = "/public/js";       
       const { name } = videoFileValue.file;      
      
@@ -156,10 +176,11 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     setShowEditVideoModal(false)
   }
 
-//  const handlePause = () => {
-//   const videoPlayer = document.getElementById('videoPlayer');
-//   videoPlayer.pause();
-// };
+ const handlePause = () => {
+  if (videoRef && videoRef.current) {
+    videoRef.current.pause();
+  }
+};
   return (
     <Modal className='facebook_modal_outer' size="md" show={showEditVideoModal} onHide={handleClose} backdrop="static">
     <Modal.Header closeButton>
@@ -171,7 +192,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     </Modal.Header>
     <Modal.Body className='crop-image-parent container'>                    
         <div className='crop-image-container video-element-container'>   
-        <video className='w-100' id='videoPlayer'  src={videoSrc} ref={videoRef} onTimeUpdate={handlePauseVideo} >
+        <video className='w-100'  src={videoSrc} ref={videoRef} onTimeUpdate={handlePauseVideo} >
             <source src={videoSrc} type={videoFileValue.type} />
           </video>
           <br />
@@ -195,7 +216,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
           
           <button className='cmn_crop_video_btn ' onClick={handlePlay}>Play</button> &nbsp;
           <button className=" cmn_crop_video_btn "onClick={handleTrim}>Trim</button>
-          {/* <button className=" cmn_crop_video_btn "onClick={handlePause}>Pause</button> */}
+          <button className=" ms-2 cmn_crop_video_btn "onClick={handlePause}>Pause</button>
           <br />
           {videoTrimmedUrl && (
             

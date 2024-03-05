@@ -111,7 +111,7 @@ export const DashboardReports = () => {
 
                 {getAllConnectedSocialAccountData?.loading || connectedPagesReducer?.loading || facebookPageListReducer?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading ?
                     <div className="cmn_background p-5 text-center ">
-                        <CommonLoader/>
+                        <CommonLoader classname={"cmn_loader_outer"}/>
                     </div> :
 
                     (getAllConnectedSocialAccountData?.data === null || (Array.isArray(getAllConnectedSocialAccountData?.data) && getAllConnectedSocialAccountData?.data.filter(c => c.provider !== "GOOGLE").length === 0))
