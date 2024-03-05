@@ -3,7 +3,7 @@ name: Deploy Prod
 on:
   push:
     branches:
-      - pre
+      - pre-prod
 
 jobs:
   build-and-deploy:
