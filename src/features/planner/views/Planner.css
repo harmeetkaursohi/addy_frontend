@@ -432,6 +432,9 @@ a.fc-daygrid-dot-event:hover {
     .planner_header h6 {
         font-size: 14px;
     }
+    .planner_header h2 {
+        font-size: 22px;
+    }
     .card-body.post_card{
         padding: 0px 12px 12px;
     }

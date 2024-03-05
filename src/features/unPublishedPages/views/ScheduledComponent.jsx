@@ -49,6 +49,10 @@ const ScheduledComponent = ({scheduledData}) => {
             cancelButtonText: 'Cancel',
             confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
+            customClass: {
+                confirmButton: 'custom-confirm-button-class',
+                cancelButton: 'custom-cancel-button-class'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 if (e?.target?.id !== null) {

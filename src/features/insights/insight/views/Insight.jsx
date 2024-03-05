@@ -627,7 +627,7 @@ const Insight = () => {
 
                                                         {/* account reach graph */}
                                                         <div className="account_reach_graph_outer">
-                                                            <h3 className="cmn_text_style">Audience Growth</h3>
+                                                            <h3 className="cmn_text_style fw-bold">Audience Growth</h3>
                                                             <div className="page_title_header">
                                                                 <div className="page_title_container">
                                                                     <div className="page_title_dropdown">

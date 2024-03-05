@@ -19,7 +19,7 @@
 .no-draft-img{
     height: 300px;
 }
-
+ 
 
 .selected-option p{
 
@@ -312,6 +312,16 @@ button.outline_btn.schedule_btn{
     .draft-heading{
         display: block;
     }
+    .custom-confirm-button-class {
+        padding: 8px 21px !important;
+        font-size: 14px !important;
+    }
+    
+    .custom-cancel-button-class {
+        padding: 8px 21px !important;
+        font-size: 15px !important;
+    }
+   
     .no-draft-img{
         height: auto;
         width: 100%;

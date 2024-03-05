@@ -52,7 +52,7 @@ const[showContent,setShowContent]=useState(false)
                 <div className={`ms-2  ${showContent ?"feed_preview_Caption_outer":"Caption_outer instagram_caption_outer " }`}>
                
                <div className={showContent?"feed_preview_Caption_outer":"Caption_outer"}>
-              {(caption.length > 0 || hashTag.length > 0) || (caption.length > 0 && hashTag.length > 0)   ? <h2 className=" me-2">{pageName}</h2>:"" }  
+              {(caption.length > 0 || hashTag.length > 0) || (caption.length > 0 && hashTag.length > 0)   ? <h2 className=" mt-2">{pageName}</h2>:"" }  
                 <CommentText isRequire={true} pageName={pageName} socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
                   className={"highlight cursor-pointer"} setShowText={setShowContent} showText={showContent} />
 

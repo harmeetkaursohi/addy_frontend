@@ -60,7 +60,7 @@ const CommonModal = ({
                             </div>
                         </Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Body className='pt-0'>
                         <div className='facebook_content_outer'>
                             <div className=''>
                                 {Array.isArray(allPagesList) && allPagesList.length > 0 ? allPagesList?.map((data, index) => {

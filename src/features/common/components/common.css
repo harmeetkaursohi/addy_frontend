@@ -116,6 +116,9 @@ div.instagram_like {
     color: #ed7e22;
     margin: 16px 0px;
 }
+.video-element-container video{
+    width: 100%;
+}
 .video-element-container .noUi-connect {
     background: #efedec !important;
 }
@@ -127,7 +130,7 @@ div.instagram_like {
     display: flex;
     align-items: center;
     gap: 7px;
-    padding: 0px 19px;
+    padding: 0px 16px;
 }
 .aspect_ratio_outer {
     display: flex;

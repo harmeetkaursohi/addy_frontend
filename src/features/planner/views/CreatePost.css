@@ -633,6 +633,7 @@ button.ai_btn {
 
 .post_preview_outer {
     transition: all 0.7s ease;
+    
     background: #1E1E1E;
     padding: 3em;
     height: 100%;
@@ -956,14 +957,22 @@ button.loading {
         text-align: center;
         padding-top: 10px;
     }
+    .creare_post_heading{
+        font-size: 25px;
+    }
 }
 
 @media screen and (max-width: 767px) {
     .post_preview_outer {
         display: block;
+        padding: 20px;
+    }
+    .preview_btn {
+    padding: 5px 10px;
+    font-size: 14px;
     }
     .select_platform_outer {
-        padding: 20px;
+        padding: 10px;
     }
     .file_outer {
         gap: 10px;
@@ -992,7 +1001,7 @@ button.loading {
         width: 103px;
     }
     .instagram_outer{
-    padding: 15px 20px;
+    padding: 15px 10px;
     }
     .add_media_outer label{
         display: block;
@@ -1056,10 +1065,6 @@ button.loading {
         margin-top: 10px;
     }
 
-   
-
-
-
     .add_media_outer {
         margin-top: 20px;
     }
@@ -1072,8 +1077,6 @@ button.loading {
         height: 20px;
         width: 20px;
     }
-
-
 
     .like_img {
         margin-right: 23px;

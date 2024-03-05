@@ -289,6 +289,10 @@ p.disable-reply-comment {
 @media screen and (max-width: 767px) {
     .review_header {
         display: block;
+        padding-top: 36px;
+    }
+    .no-post-review{
+        font-size: 16px;
     }
     .review-social-media-dropdown{
         margin-top: 20px;

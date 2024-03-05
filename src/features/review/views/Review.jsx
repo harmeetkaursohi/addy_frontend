@@ -169,7 +169,7 @@ const Review = () => {
                             {
                            
                                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
-                                    <CommonLoader></CommonLoader> :
+                                    <CommonLoader classname={"cmn_loader_outer"}></CommonLoader> :
                                     getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0 &&
                                     <>
                                         <div className="post_review_wrapper  table-responsive">
