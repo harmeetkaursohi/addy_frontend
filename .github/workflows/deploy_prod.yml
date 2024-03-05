@@ -3,7 +3,7 @@ name: Deploy Prod
 on:
   push:
     branches:
-      - master
+      - pre
 
 jobs:
   build-and-deploy:
@@ -26,12 +26,12 @@ jobs:
 
       - name: Set up SSH key and permissions
         run: |
-          echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" > prod_private_key.pem
+          echo "${{ secrets.PRODU_SSH_PRIVATE_KEY }}" > prod_private_key.pem
           chmod 600 prod_private_key.pem
 
       - name: Execute cleanup script on Prod Server
         run: |
-          sudo ssh -o StrictHostKeyChecking=no -i prod_private_key.pem ubuntu@ec2-13-234-179-94.ap-south-1.compute.amazonaws.com "/var/www/html/Addy_Prod/frontend_cleanup.sh"
+          sudo ssh -o StrictHostKeyChecking=no -i prod_private_key.pem ubuntu@${{ secrets.EC2_HOST }} "/var/www/html/Addy_Prod/frontend_cleanup.sh"
 
       - name: Set up SSH key and permissions for frontend
         run: |
@@ -47,4 +47,4 @@ jobs:
       - name: Execute deployment script for frontend
         working-directory: /home/runner/work/addy_frontend/addy_frontend
         run: |
-          sudo scp -o StrictHostKeyChecking=no -i prod_private_key.pem -r dist ubuntu@ec2-13-234-179-94.ap-south-1.compute.amazonaws.com:/var/www/html/Addy_Prod/addy_frontend
+          sudo scp -o StrictHostKeyChecking=no -i prod_private_key.pem -r dist ubuntu@${{ secrets.EC2_HOST }}:/var/www/html/Addy_Prod/addy_frontend
