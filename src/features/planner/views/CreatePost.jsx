@@ -345,7 +345,7 @@ const CreatePost = () => {
     const [videoFile, setVideoFile] = useState(null)
     const [fileSize, setFileSize] = useState(null)
     const[showEditVideoModal,setShowEditVideoModal]=useState(false)
-    const[blob,setBlob]=useState(null)
+    
     const editHandler = (index, file) => {
         setImgFile(file)
         setEditImgIndex(index)

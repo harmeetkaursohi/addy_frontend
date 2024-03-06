@@ -274,8 +274,6 @@ export const validateScheduleDateAndTime = (scheduleDate, scheduleTime) => {
 
 export const checkDimensions = (file) => {
 
-    console.log("file.tpye", file?.type)
-    console.log("file.name", file?.name)
     if (file.type.startsWith('image/')) {
         return new Promise((resolve, reject) => {
             const img = new Image();
@@ -766,7 +764,7 @@ export async function urlsToFiles(fileUrlList) {
 }
 
 export const getImagePostList = async (postData) => {
-    console.log("postData---->", postData);
+   
 
     return postData.flatMap(post => post.attachments).map(async attachment => {
         let file = null;
@@ -1114,7 +1112,6 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
                     }
                 }
             }
-            console.log('formattedData==>', formattedData)
             return formattedData;
             break;
         }
