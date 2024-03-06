@@ -98,48 +98,49 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
         alert('Video duration cannot exceed 15 minutes.');
         return;
     }
-      const baseURL = "/public/js";       
-      const { name } = videoFileValue.file;      
+    
+      // const baseURL = "/public/js";       
+      // const { name } = videoFileValue.file;      
      
-      const ffmpeg = ffmpegRef.current;      
+      // const ffmpeg = ffmpegRef.current;      
  
-      ffmpeg.on("log", ({ message }) => {
-        if (messageRef.current) messageRef.current.innerHTML = message;
-      });    
+      // ffmpeg.on("log", ({ message }) => {
+      //   if (messageRef.current) messageRef.current.innerHTML = message;
+      // });    
 
-      ffmpeg.load({
-        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
-        wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`,"application/wasm"),
-        workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`,"text/javascript"),
-      }).then(()=>console.log("ffmpeg1")).catch((e)=>console.log("ffmpeg",e));
+      // ffmpeg.load({
+      //   coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, "text/javascript"),
+      //   wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`,"application/wasm"),
+      //   workerURL: await toBlobURL(`${baseURL}/ffmpeg-core.worker.js`,"text/javascript"),
+      // }).then(()=>console.log("ffmpeg1")).catch((e)=>console.log("ffmpeg",e));
 
-      //Write video to memory
-      await ffmpeg.writeFile(        
-        name,
-        videoFileValue.file,
-      ).then(()=>console.log("ffmpeg2")).catch((e)=>console.log("ffmpeg",e));
-      const videoFileType = videoFileValue.file.type.split('/')[1];
-      //Run the ffmpeg command to trim video
-      await ffmpeg.exec(
-        '-i',
-        name,
-        '-ss',
-        `${convertToHHMMSS(startTime)}`,
-        '-to',
-        `${convertToHHMMSS(endTime)}`,
-        '-acodec',
-        'copy',
-        '-vcodec',
-        'copy',
-        `out.${videoFileType}`,
-      ).then(()=>console.log("ffmpeg3")).catch((e)=>console.log("error ",e));   
+      // //Write video to memory
+      // await ffmpeg.writeFile(        
+      //   name,
+      //   videoFileValue.file,
+      // ).then(()=>console.log("ffmpeg2")).catch((e)=>console.log("ffmpeg",e));
+      // const videoFileType = videoFileValue.file.type.split('/')[1];
+      // //Run the ffmpeg command to trim video
+      // await ffmpeg.exec(
+      //   '-i',
+      //   name,
+      //   '-ss',
+      //   `${convertToHHMMSS(startTime)}`,
+      //   '-to',
+      //   `${convertToHHMMSS(endTime)}`,
+      //   '-acodec',
+      //   'copy',
+      //   '-vcodec',
+      //   'copy',
+      //   `out.${videoFileType}`,
+      // ).then(()=>console.log("ffmpeg3")).catch((e)=>console.log("error ",e));   
 
    
-      const fileData = await ffmpeg.readFile(`out.${videoFileType}`).then(()=>console.log("ffmpeg4")).catch((e)=>console.log("ffmpeg",e));
+      // const fileData = await ffmpeg.readFile(`out.${videoFileType}`).then(()=>console.log("ffmpeg4")).catch((e)=>console.log("ffmpeg",e));
      
-      const url = URL.createObjectURL(
-        new Blob([fileData.buffer], { type: videoFileValue.file.type }),
-      );
+      // const url = URL.createObjectURL(
+      //   new Blob([fileData.buffer], { type: videoFileValue.file.type }),
+      // );
 
       setVideoTrimmedUrl(url);    
   };
@@ -181,6 +182,21 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     videoRef.current.pause();
   }
 };
+
+// const saveHandler=()=>{
+//   console.log("save handler")
+//   const addformdata=new FormData
+//     addformdata.append("startTime",startTime)
+//     addformdata.append("endTime",endTime)
+//     addformdata.append("video",videoInfo)
+    
+//     const fetchtrimvideo=fetch("http://localhost:5000/trim-video",{header:{"Accept":"Application/json"},addformdata})
+//     .then((data)=>{
+//       console.log(data,"data90")
+//       return data})
+//     .then((res)=>res.json())
+//     .catch((err)=>{console.log("error while fetching data",err)})
+// }
   return (
     <Modal className='facebook_modal_outer' size="md" show={showEditVideoModal} onHide={handleClose} backdrop="static">
     <Modal.Header closeButton>
@@ -231,7 +247,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     <Modal.Footer>                    
     <div className=" ">
         <button className="cmn_btn_color cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
-        <button type="button" className="cmn_btn_color cmn_connect_btn connect_btn ms-3"
+        <button onClick={saveHandler}type="button" className="cmn_btn_color cmn_connect_btn connect_btn ms-3"
                > Save
         </button>
     </div>

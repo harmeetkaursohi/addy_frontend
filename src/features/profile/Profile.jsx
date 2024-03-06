@@ -115,7 +115,7 @@ const Profile = () => {
     });
 
     const getBlob = (blob) => {   
-        console.log(blob,"blob")     
+       
         setBlob(blob)
     }
    
