@@ -15,6 +15,7 @@ import {
 import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
 import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
 import { useAppContext } from '../../common/components/AppProvider.jsx';
+import { OverlayTrigger,Tooltip } from 'react-bootstrap';
 
 const Layout = () => {
 
@@ -95,9 +96,21 @@ const Layout = () => {
                                     onClick={() => {
                                         navigate(item.path)
                                     }}>
+
                                     <div
                                         className={item.path === '/' + splitLocation[1] ? 'sidebar_inner_content' : "sidebar_item_outers"}>
-                                        {item.icon}
+                                        { sidebar ? 
+                                        <OverlayTrigger
+                                                            placement="right"
+                                                            overlay={<Tooltip id="button-tooltip">
+                                                               {item.name}         
+                                                             </Tooltip>} >
+                                                             <h3>
+                                                            {item.icon}
+                                                             </h3>
+                                                        </OverlayTrigger>
+                                                    :item.icon    
+                                                    }
                                         <h6 className=''>{item.name} </h6>
                                     </div>
                                 </li>
@@ -106,10 +119,21 @@ const Layout = () => {
                         }
                         <li className='sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer'>
                             <div className=' sidebar_item_outers' onClick={LogOut}>
-                                <BiLogOut/>
+                            {sidebar ? 
+                            <OverlayTrigger
+                                                            placement="right"
+                                                            overlay={<Tooltip id="button-tooltip">
+                                                                Logout          
+                                                             </Tooltip>} >
+                                                             <h3>
+                                                             <BiLogOut/>
+                                                             </h3>
+                                                        </OverlayTrigger> :<BiLogOut/>}
                                 <h6 className='' >Logout </h6>
                             </div>
                         </li>
+
+                        
                     </ul>
                 </div>
 

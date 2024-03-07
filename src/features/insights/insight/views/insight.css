@@ -372,6 +372,9 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
         width: 208px;
     }
+    ul.overview_tabs.nav.nav-tabs{
+        margin-top: 10px;
+    }
     .noPageHeading{
         font-size: 14px;
        
@@ -381,6 +384,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     }
     .account_reach_overview_outer h5 {
         font-size: 12px;
+        line-height: 20px;
     }
 
     .account_reach_overview_outer {

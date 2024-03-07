@@ -10,6 +10,9 @@
     padding: 10px 0px;
 
 }
+.video_player_outer {
+    height: 250px !important;
+}
 .FaLinkedin_icon{
     color: #0866ff;
      
@@ -139,9 +142,9 @@ div.instagram_like {
     margin-top: 16px;
 }
 .aspect_ratio_outer li h5{
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
-    padding-top: 2px;
+    padding-top: 5px;
     
 }
 .active_color{
@@ -153,7 +156,7 @@ div.instagram_like {
 }
 .aspect_ratio_outer li svg{
 
-   font-size: 22px;
+   font-size: 2.1rem;
 
 }
 .Caption_outer h2 {
@@ -161,9 +164,19 @@ div.instagram_like {
     color: #000;
     font-weight: 600;
 }
+
+@media screen and (min-width:2560px)
+{
+    .video_player_outer {
+        height: 500px !important;
+    }
+}
 @media screen and (max-width:1280px) {
     .linkedin_likes h3{
         font-size: 14px;
+    }
+    .aspect_ratio_outer li svg{
+        font-size: 32px;
     }
 }
 @media screen and (max-width:1024px) {
@@ -183,6 +196,12 @@ div.instagram_like {
     .linkedin_dropdown{
         display: none;
     }
+    .aspect_ratio_outer li svg {
+        font-size: 18px;
+    }
+    .aspect_ratio_outer li h5{
+        font-size: 12px ;
+    }
     .not_connect_heading {
         font-size: 18px;
     }
@@ -191,6 +210,9 @@ div.instagram_like {
    }
    .linkedin_likes h3{
     line-height: 22px;
+   }
+   .video_player_outer{
+    height: 100% !important;
    }
     
 }

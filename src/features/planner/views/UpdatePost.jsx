@@ -671,7 +671,7 @@ const UpdatePost = () => {
 
                                             {
                                                 selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&
-                                                <div className='post_caption_outer media_outer'>
+                                                <div className=' media_outer'>
                                                     <div className='caption_header'>
                                                         <h5 className='post_heading create_post_text'>Pinterest Only *</h5>
 
@@ -700,7 +700,7 @@ const UpdatePost = () => {
 
                                             {/* post caption */}
 
-                                            <div className='post_caption_outer media_outer'>
+                                            <div className=' media_outer'>
                                                 <div className='caption_header'>
                                                     <h5 className='post_heading create_post_text'>Add
                                                         Post Caption *</h5>

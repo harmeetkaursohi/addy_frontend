@@ -2,7 +2,7 @@ function GenericButtonWithLoader({label, onClick = null, className, isLoading = 
 
     return (
 
-        <button className={className} id={id} onClick={onClick} disabled={isLoading || isDisabled} style={{opacity:isDisabled ?  "0.6" :"1.0"}}>
+        <button className={className} id={id} onClick={onClick} disabled={isLoading || isDisabled} style={{opacity:isDisabled ?  "0.6" :"1.0",cursor:isDisabled?"not-allowed":""}}>
             {isLoading ? (
                     <>
                         <span className={loaderClassName ? loaderClassName : "spinner-border spinner-border-sm me-1"}

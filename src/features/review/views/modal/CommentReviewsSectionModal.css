@@ -72,7 +72,7 @@ p.liked_by {
 
 .post_image_outerwrapper img {
     width: 100%;
-    object-fit: cover;
+    object-fit: contain;
     height: 250px;
 }
 .comment_review_wrapper .post_image_outerwrapper img{
@@ -348,10 +348,17 @@ svg.comment-edit-del-icon {
     height: 20px;
     width: 20px;
     }
+    .comment_wrap a.dropdown-item {
+        font-size: 14px;
+    }
  }
 
  @media screen and (max-width:767px) {
     .post_image_outerwrapper img{
-        object-fit: cover;
+        object-fit: unset;
+        height: unset;
+    }
+    .post_image_outerwrapper{
+        height: unset;
     }
  }

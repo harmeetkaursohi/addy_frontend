@@ -52,7 +52,6 @@ button.slider_btn {
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
     height: 35px;
     width: 35px;
-    /*margin-top:2rem*/
 
 }
 .insights-post-date-outer {
@@ -127,6 +126,9 @@ button.slider_btn {
     .insights-post-date-outer {
 
         padding: 10px;
+    }
+    .slider_outer_container {
+        padding-bottom: 28px;
     }
     .post_date{
         font-size: 10px;
