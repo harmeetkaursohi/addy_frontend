@@ -21,8 +21,10 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
     const deletePostByBatchIdData = useSelector((state) => state.post.deletePostByBatchIdReducer);
     const [batchToDelete,setBatchToDelete]=useState(null);
     const [postToPublish,setPostToPublish]=useState(null);
+      const[labels,setLabels]=useState("")
 
     const handlePublishedPost = (e) => {
+        setLabels("Post Now")
         e.preventDefault();
         setPostToPublish(batchIdData?.id)
         dispatch(publishedPostAction({postId: batchIdData?.id, token: token}))
@@ -45,6 +47,7 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
     }
 
     const handleDeletePost = (e) => {
+        setLabels("Delete Post")
         e.preventDefault();
         setBatchToDelete(batchIdData?.id)
         Swal.fire({
@@ -146,10 +149,15 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                     <GenericButtonWithLoader className={"post_now cmn_bg_btn loading"} label={"Post Now"}
                                              isLoading={batchIdData?.id===postToPublish && publishedPostData?.loading}
                                              onClick={handlePublishedPost}
-                                             isDisabled={false}
+                                             isDisabled={labels!=="Post Now" && deletePostByBatchIdData?.loading}
+                                            //  isDisabled={false}
                     />
                     <GenericButtonWithLoader className={"outline_btn schedule_btn loading"} label={"Schedule Post"}
-                                             onClick={() => navigate("/post/" + batchIdData?.id)} isDisabled={false}/>
+                                             onClick={() => {setLabels("Schedule Post") 
+                                             navigate("/post/" + batchIdData?.id)}} 
+                                            //  isDisabled={false}
+                                             isDisabled={labels!=="Schedule Post" && deletePostByBatchIdData?.loading ||publishedPostData?.loading }
+                                            />
 
                     <GenericButtonWithLoader className={"outline_btn schedule_btn loading"}
                             label={"Delete Post"}
@@ -157,7 +165,8 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                             onClick={handleDeletePost}
                             id={batchIdData?.id}
                             contentText={"Deleting..."}
-                            isDisabled={false}
+                            isDisabled={labels!=="Delete Post" && publishedPostData?.loading}
+                            // isDisabled={false}
                     />
                 </div>
 

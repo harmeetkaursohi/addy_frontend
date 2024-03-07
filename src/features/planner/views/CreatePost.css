@@ -305,6 +305,7 @@ social_inner_content h6 {
 
 .create_post_content {
     padding: 30px 70px;
+    
   
 }
 
@@ -396,6 +397,10 @@ content: url("../../../images/down_arrow.svg");
     overflow: hidden;
     background-color: white;
   
+}
+.width_class{
+    width: 80%;
+    margin: auto;
 }
 
 .create_post_label {
@@ -632,20 +637,27 @@ button.ai_btn {
 }
 
 .post_preview_outer {
-    transition: all 0.7s ease;
     
+    animation-name: fadeInLeft;
+    animation-duration: 1s;
+    animation-timing-function: all ease 0.7s;
     background: #1E1E1E;
     padding: 3em;
     height: 100%;
 }
-
+.post_caption_outer{
+    display: flex;
+    gap: 30px;
+}
 .feed_preview {
     font-size: 22px;
     line-height: normal;
     background-color: #1E1E1E;
     padding-bottom: 16px;
 }
-
+.media_inner_content{
+    display: flex;
+}
 .facebookFeedpreview_text {
     padding-top: 40px
 }
@@ -907,6 +919,9 @@ button.loading {
     .get_messages_outer {
         display: block;
     }
+    .width_class{
+        width: 100%;
+    }
 
 
     .add_media_outer {
@@ -918,7 +933,7 @@ button.loading {
     }
 
     .create_post_content {
-        padding: 30px 10px
+        padding: 30px 15px
     }
 
     
@@ -957,8 +972,14 @@ button.loading {
         text-align: center;
         padding-top: 10px;
     }
+    .post_caption_outer{
+        display: block;
+    }
     .creare_post_heading{
         font-size: 25px;
+    }
+    .caption_header {
+        margin-top: 15px;
     }
 }
 
@@ -966,6 +987,9 @@ button.loading {
     .post_preview_outer {
         display: block;
         padding: 20px;
+    }
+    .media_inner_content{
+        display: block;
     }
     .preview_btn {
     padding: 5px 10px;
@@ -1037,9 +1061,7 @@ button.loading {
         font-size: 12px;
     }
 
-    .create_post_content {
-        padding: 30px 19px;
-    }
+    
   
 
     .caption_header {

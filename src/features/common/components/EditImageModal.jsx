@@ -6,6 +6,7 @@ import { LuRectangleHorizontal } from "react-icons/lu";
 import Modal from 'react-bootstrap/Modal';
 import { TbRectangleVertical } from "react-icons/tb";
 import { BiRectangle } from "react-icons/bi";
+import { MdOutlinePhoto } from "react-icons/md";
 import {useState} from 'react';
 import {useRef} from 'react';
 import "./common.css"
@@ -20,11 +21,12 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
     const imageRef = useRef(null);
 
     const aspectData=[
-    {icon:<IoSquareOutline />,title:"Square" ,aspectRatio:1 / 1,height:180,width:180},
-    {icon:<LuRectangleHorizontal />,title:"3:2" ,aspectRatio:2 / 3,height:190,width:190},
-    {icon:<TbRectangleVertical /> ,title:"3:2" ,aspectRatio:4 / 3,height:200,width:200},
-    {icon:<LuRectangleHorizontal />,title:"4:3" ,aspectRatio:5 / 4,height:230,width:230},
-    {icon:<BiRectangle />,title:"7:5" ,aspectRatio:7 / 5,height:300,width:300},
+    {icon:<MdOutlinePhoto/>,title:"Original" ,aspectRatio:3/ 2,height:260,width:280},
+    {icon:<IoSquareOutline />,title:"Square" ,aspectRatio:1 / 1,height:270,width:270},
+    {icon:<LuRectangleHorizontal />,title:"2:3" ,aspectRatio:2 / 3,height:200,width:360},
+    {icon:<TbRectangleVertical /> ,title:"4:5" ,aspectRatio:4 / 5,height:360,width:250},
+    {icon:<LuRectangleHorizontal />,title:"5:4" ,aspectRatio:5 / 4,height:230,width:320},
+    {icon:<BiRectangle />,title:"7:5" ,aspectRatio:7 / 5,height:290,width:310},
     {icon:<LuRectangleHorizontal />,title:"16:9" ,aspectRatio:16 / 9,height:400,width:400},
 ]
 
@@ -100,7 +102,7 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
         setShowEditImageModal(false)
     }
    
-    const [index,setIndex]=useState("")
+    const [index,setIndex]=useState(0)
     const handleAspectChange = (aspect,height,width,i) => {
        
         const screenWidth = window.innerWidth;

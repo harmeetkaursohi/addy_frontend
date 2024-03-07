@@ -171,7 +171,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                     }
                                 )}
                         </Row> :
-                        <div className={"text-center select-account-txt"}>
+                        <div className={"text-center select-account-txt mt-3"}>
                             No posts to display
                         </div>
             }

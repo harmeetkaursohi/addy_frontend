@@ -247,7 +247,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,getV
     <Modal.Footer>                    
     <div className=" ">
         <button className="cmn_btn_color cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
-        <button onClick={saveHandler}type="button" className="cmn_btn_color cmn_connect_btn connect_btn ms-3"
+        <button type="button" className="cmn_btn_color cmn_connect_btn connect_btn ms-3"
                > Save
         </button>
     </div>

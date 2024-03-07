@@ -32,6 +32,7 @@ import CommonLoader from "../../common/components/CommonLoader";
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 import { useAppContext } from '../../common/components/AppProvider.jsx';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 const CreatePost = () => {
 
@@ -62,6 +63,9 @@ const CreatePost = () => {
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
+    
+console.log(loadingCreateFacebookPost,"loadingCreateFacebookPost")
+
     const [videoBlob, setVideoBlob] = useState(null)    
     const [allOptions, setAllOptions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
@@ -387,19 +391,19 @@ const{sidebar}=useAppContext()
                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
                     <CommonLoader></CommonLoader> : 
                         <div className="Container">
-                            <div className="create_post_wrapper">
+                            <div className={`create_post_wrapper ${showPreview? "" :"width_class" }`}>
                             <div className='preview_btn_outer'>
                                     {
-                                       selectedAllDropdownData?.length > 0 && showPreview? <button  className='preview_btn me-2 my-2' onClick={()=>{setShowPreview(false)}}>Hide Preview</button>:
+                                       selectedAllDropdownData?.length > 0 && showPreview? <button  className='preview_btn me-2 my-2' onClick={()=>{setShowPreview(false)}}><AiOutlineEyeInvisible /></button>:
 
-                                       selectedAllDropdownData?.length > 0 && <button  className='preview_btn me-2 my-2' onClick={()=>{setShowPreview(true)}}>Show Preview</button>
+                                       selectedAllDropdownData?.length > 0 && <button  className='preview_btn me-2 my-2' onClick={()=>{setShowPreview(true)}}><AiOutlineEye /></button>
                                     }
                                     
                                 </div>
                                 <div className="row">
                                     <div className={showPreview ? "col-lg-6 col-md-12 col-sm-12":"col-lg-12 col-md-12 col-sm-12"}>
 
-                                        <div className="create_post_content">
+                                        <div className={`create_post_content ${showPreview?"":"animation" } `}>
 
                                             <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
 
@@ -536,15 +540,18 @@ const{sidebar}=useAppContext()
 
                                                 {/* add media */}
                                                 <div className="media_outer">
+                                                    <div className={showPreview? "":'media_inner_content'}>
+                                                    <div className={showPreview? "":"flex-grow-1"}>
                                                     <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                                     <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
-                                                    <div className="drag_scroll">
+                                                    </div>
+                                                    <div className={`drag_scroll ${showPreview? "":"flex-grow-1"}`}>
 
                                                         {files?.length > 0 && files?.map((file, index) => {
 
                                                             return (
                                                                 <div
-                                                                    className="file_outer dragable_files"
+                                                                    className={`file_outer dragable_files ${showPreview?"":"mt-0" }`}
                                                                     key={index}
                                                                 >
                                                                     <div className="flex-grow-1 d-flex align-items-center">
@@ -586,6 +593,8 @@ const{sidebar}=useAppContext()
                                                             )
                                                         })
                                                         }
+                                                    </div>
+
                                                     </div>
 
                                                     <div className="darg_navs file_outer">
@@ -686,7 +695,8 @@ const{sidebar}=useAppContext()
 
                                                 {/* post caption */}
 
-                                                <div className='post_caption_outer media_outer'>
+                                                <div className={`media_outer ${showPreview ?"":"post_caption_outer"}` }>
+                                                    <div className='flex-grow-1'>
                                                     <div className='caption_header'>
                                                         <h5 className='post_heading create_post_text'>Add Caption *</h5>
 
@@ -709,7 +719,9 @@ const{sidebar}=useAppContext()
                                                                       setCaption(e.target.value);
                                                                   }}></textarea>
                                                     </div>
-                                                    <div className='caption_header hashtag_outer'>
+                                                    </div>
+                                                    <div className='flex-grow-1'>
+                                                    <div className={`caption_header ${showPreview?"hashtag_outer" :""} `} >
                                                         <h5 className='post_heading create_post_text'>Add
                                                             Hashtag *</h5>
 
@@ -735,6 +747,7 @@ const{sidebar}=useAppContext()
                                                                       setHashTag(hashtags);
                                                                   }}></textarea>
                                                     </div>
+                                                    </div>
 
                                                 </div>
 
@@ -750,17 +763,24 @@ const{sidebar}=useAppContext()
                                                                                          setReference("Scheduled")
                                                                                          handleSchedulePost(e);
                                                                                      }}
-                                                                                     isDisabled={false}
-                                                                                     className={"cmn_bg_btn schedule_btn loading"}
-                                                                                     isLoading={reference === "Scheduled" && loadingCreateFacebookPost}/>
+                                                                                    //  isDisabled={false}
+                                                                                    isDisabled={loadingCreateFacebookPost && reference !== "Scheduled"} // Disable if not null and not "Scheduled"
 
+                                                                                     className={"cmn_bg_btn schedule_btn loading"}
+                                                                                     isLoading={reference === "Scheduled" && loadingCreateFacebookPost}
+                                                                                    
+                                                                                     />
+                                                                                     
                                                             <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                                      onClick={(e) => {
                                                                                          setReference("Draft")
                                                                                          handleDraftPost(e);
                                                                                      }}
-                                                                                     isDisabled={false}
+                                                                                    //  isDisabled={false}
+                                                                                    isDisabled={ loadingCreateFacebookPost && reference !== "Draft"} // Disable if not null and not "Scheduled"
+
                                                                                      className={"save_btn cmn_bg_btn loading"}
+                                                                                
                                                                                      isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
                                                         </div>
                                                     </div>
@@ -825,7 +845,8 @@ const{sidebar}=useAppContext()
                                                                                      setReference("Published")
                                                                                      handlePostSubmit(e);
                                                                                  }}
-                                                                                 isDisabled={false}
+                                                                                //  isDisabled={false}
+                                                                                isDisabled={ loadingCreateFacebookPost && reference !=="Published"}
                                                                                  className={"publish_btn cmn_bg_btn loading"}
                                                                                  isLoading={reference === "Published" && loadingCreateFacebookPost}/>
                                                     </div>

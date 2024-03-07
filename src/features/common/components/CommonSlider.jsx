@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import noImageAvailable from "../../../images/no_img_posted.png"
 import ReactPlayer from "react-player";
 import CommentText from "../../review/views/comments/CommentText";
-
+import './common.css'
 
 const CommonSlider = ({
                           files,
@@ -15,7 +15,7 @@ const CommonSlider = ({
                           showThumbnail = false,
                           viewSimilarToSocialMedia = true,
                           isPublished = false,
-                          height = "350px",
+                          height = "250px",
                           enableShowPlannerModel = false,
                           isrequired,
                         
@@ -119,9 +119,9 @@ const CommonSlider = ({
                                         :
 
                                         <ReactPlayer
-                                            height={height}
+                                            
                                             width={"100%"}
-                                            className=''
+                                            className='video_player_outer'
                                             url={isPublished ? file.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
                                             controls={true}
                                         />
