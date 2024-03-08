@@ -139,7 +139,7 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [])
+    }, [window.innerWidth])
     return (
         <div className='edit_imag_modal_outer'>
 

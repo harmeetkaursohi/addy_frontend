@@ -102,7 +102,7 @@ const Layout = () => {
                                         { sidebar ? 
                                         <OverlayTrigger
                                                             placement="right"
-                                                            overlay={<Tooltip id="button-tooltip">
+                                                            overlay={<Tooltip id="button-tooltip" className='ms-4'>
                                                                {item.name}         
                                                              </Tooltip>} >
                                                              <h3>

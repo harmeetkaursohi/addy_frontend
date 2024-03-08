@@ -93,6 +93,7 @@ white-space: nowrap;
     background: white;
     border-radius: 30px;
     text-align: center;
+    cursor: pointer;
 }
 .FiArrowUpRight{
     margin-bottom: 0px;
@@ -714,6 +715,9 @@ input[type=checkbox] {
     padding: 6px 11px;
     border-radius: 10px;
 }
+.preview_btn svg{
+   transform:translate(1px, -1px);
+}
 .preview_btn:hover {
     background: white;
     color: #f07c32;
@@ -909,16 +913,22 @@ button.loading {
     }
 
     .post_preview_outer {
-        padding: 2em;
+        padding: 2rem;
     }
 
 
 }
-
+@media screen and (max-width:1100px) {
+    .post_preview_outer {
+        padding: 1rem;
+    }
+}
 @media screen and (max-width: 1024px) {
     .get_messages_outer {
         display: block;
     }
+    
+
     .width_class{
         width: 100%;
     }
@@ -971,6 +981,9 @@ button.loading {
     .feed_preview {
         text-align: center;
         padding-top: 10px;
+    }
+    .post_preview_outer {
+        padding: 3rem;
     }
     .post_caption_outer{
         display: block;

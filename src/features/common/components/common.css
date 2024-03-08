@@ -6,7 +6,7 @@
     margin: 12px 10px 0px;
 }
 .linkedin_dropdown {
-
+   cursor: pointer;
     padding: 10px 0px;
 
 }
@@ -27,6 +27,7 @@
 .linkedin_likes{
     display: flex;
     gap: 4px;
+    cursor: pointer;
     align-items: center;
     color: #696969;
 }

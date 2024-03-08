@@ -34,6 +34,7 @@ import Loader from '../../loader/Loader.jsx';
 
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import { useAppContext } from '../../common/components/AppProvider.jsx';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 const UpdatePost = () => {
 
@@ -402,16 +403,25 @@ const UpdatePost = () => {
             }
         }, [cropImgUrl])
 
+        const [showPreview,setShowPreview]=useState(false)
         return (
             <>
                 <SideBar/>
                 <div className={`cmn_container ${sidebar?"":"cmn_Padding"}`}>
                     <div className="Container">
-                        <div className="create_post_wrapper">
-                            <div className="row">
-                                <div className="col-lg-6 col-md-12 col-sm-12">
+                        <div className={`create_post_wrapper ${showPreview? "" :"width_class" }`}>
+                        <div className='preview_btn_outer'>
+                                    {
+                                       selectedAllDropdownData?.length > 0 && showPreview? <button  className='preview_btn me-2 my-2' onClick={()=>{setShowPreview(false)}}><AiOutlineEyeInvisible /></button>:
 
-                                    <div className="create_post_content">
+                                       selectedAllDropdownData?.length > 0 && <button  className='preview_btn me-2 my-2' onClick={()=>{setShowPreview(true)}}><AiOutlineEye /></button>
+                                    }
+                                    
+                                </div>
+                            <div className="row">
+                                <div className={showPreview ? "col-lg-6 col-md-12 col-sm-12":"col-lg-12 col-md-12 col-sm-12"}>
+
+                                    <div className={`create_post_content ${showPreview?"":"animation" } `}>
 
                                         <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
 
@@ -551,11 +561,17 @@ const UpdatePost = () => {
                                             </div>
 
                                             {/* add media */}
-                                            <div className="media_outer">
+                                            <div className={`media_outer ${showPreview? "":"row align-items-center mt-4 mx-0 "} `}>
+                                            <div className={showPreview? "":'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
+                                            
+                                             <div className="post_content_wrapper">
                                                 <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                                 <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+
+                                         
                                                 {loader && <div className='text-center mt-4'><Loader/></div>}
-                                                <div className="drag_scroll">
+
+                                                <div className="drag_scroll ">
                                                     {files?.map((file, index) => {
                                                         return (
                                                             <div
@@ -604,6 +620,11 @@ const UpdatePost = () => {
                                                         )
                                                     })}
                                                 </div>
+                                                </div>
+
+                                            </div>
+
+                                                <div className={showPreview? "":"col-lg-6 col-sm-12 col-md-12"}>
 
                                                 <div className="darg_navs file_outer">
 
@@ -667,6 +688,8 @@ const UpdatePost = () => {
                                                     </>
                                                 }
                                             </div>
+
+                                            </div>
                                             {/* Pinterest Options*/}
 
                                             {
@@ -700,7 +723,8 @@ const UpdatePost = () => {
 
                                             {/* post caption */}
 
-                                            <div className=' media_outer'>
+                                            <div className={`media_outer ${showPreview ?"":"post_caption_outer"}` }>
+                                                <div className='flex-grow-1'>
                                                 <div className='caption_header'>
                                                     <h5 className='post_heading create_post_text'>Add
                                                         Post Caption *</h5>
@@ -724,7 +748,10 @@ const UpdatePost = () => {
                                                                   setCaption(e.target.value);
                                                               }}></textarea>
                                                 </div>
-                                                <div className='caption_header hashtag_outer'>
+
+                                                </div>
+                                                <div className='flex-grow-1'>
+                                                <div className={`caption_header ${showPreview?"hashtag_outer" :""} `}>
                                                     <h5 className='post_heading create_post_text'>Add
                                                         Hashtag *</h5>
 
@@ -748,6 +775,7 @@ const UpdatePost = () => {
                                                                   const hashtags = convertSentenceToHashtags(inputValue);
                                                                   setHashTag(hashtags);
                                                               }}></textarea>
+                                                </div>
                                                 </div>
 
                                             </div>
@@ -845,6 +873,8 @@ const UpdatePost = () => {
                                         </form>
                                     </div>
                                 </div>
+                                {
+                                showPreview && 
                                 <div className="col-lg-6 col-md-12 col-sm-12">
 
                                     <div className='post_preview_outer'>
@@ -875,6 +905,7 @@ const UpdatePost = () => {
                                     </div>
 
                                 </div>
+                                }
                             </div>
                         </div>
                     </div>

@@ -459,6 +459,7 @@ a.fc-daygrid-dot-event:hover {
         overflow: scroll;
         display: flex;
         scrollbar-width: thin;
+        justify-content: center;
       }
     .custom-header {
         margin-top: 13px;
