@@ -197,7 +197,15 @@ const Planner = () => {
 
 
     const customDayHeaderContent = (args) => {
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        let days
+        
+        if(window.innerWidth<=767){
+             days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
+        }else{
+             days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        }
+        
+      
         return days[args.date.getDay()];
     };
 

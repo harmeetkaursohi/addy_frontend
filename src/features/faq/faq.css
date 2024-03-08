@@ -56,6 +56,9 @@ div.faq_section{
 .faq_wrapper h2.accordion-header {
     margin-bottom: 0px !important;
 }
+.faq_wrapper h2{
+    font-size: 27px;
+}
 .accordian_wrapper .accordion-button.collapsed::after {
 background-color: #fff;
 }
@@ -152,8 +155,9 @@ background-color: #fff;
         padding: 30px;
     }
     .faq_wrapper h2 {
-        font-size: 18px;
+        font-size: 17px;
     }
+
     .load-more-faqs-btn{
         margin-top: 20px;
     }

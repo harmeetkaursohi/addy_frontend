@@ -539,19 +539,20 @@ const{sidebar}=useAppContext()
                                                 </div>
 
                                                 {/* add media */}
-                                                <div className="media_outer">
-                                                    <div className={showPreview? "":'media_inner_content'}>
-                                                    <div className={showPreview? "":"flex-grow-1"}>
+                                                <div className={`media_outer ${showPreview? "":"row align-items-center mt-4 mx-0 "} `}>
+                                                    <div className={showPreview? "":'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
+                                                    <div className="post_content_wrapper">
+                                                        
                                                     <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
                                                     <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
-                                                    </div>
-                                                    <div className={`drag_scroll ${showPreview? "":"flex-grow-1"}`}>
+
+                                                    <div className={`drag_scroll`}>
 
                                                         {files?.length > 0 && files?.map((file, index) => {
 
                                                             return (
                                                                 <div
-                                                                    className={`file_outer dragable_files ${showPreview?"":"mt-0" }`}
+                                                                    className={`file_outer dragable_files`}
                                                                     key={index}
                                                                 >
                                                                     <div className="flex-grow-1 d-flex align-items-center">
@@ -596,6 +597,10 @@ const{sidebar}=useAppContext()
                                                     </div>
 
                                                     </div>
+
+                                                    </div>
+                                                    
+                                                    <div className={showPreview? "":"col-lg-6 col-sm-12 col-md-12"}>
 
                                                     <div className="darg_navs file_outer">
                                                         {
@@ -659,20 +664,23 @@ const{sidebar}=useAppContext()
                                                             </div>
                                                         </>
                                                     }
+                                                    </div>
+
                                                 </div>
 
                                                 {/* Pinterest Options*/}
 
                                                 {
                                                     selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&
-                                                    <div className='post_caption_outer media_outer'>
-                                                        <div className='caption_header'>
-                                                            <h5 className='post_heading create_post_text'>Pinterest Only
+                                                    <div className=' media_outer'>
+                                                        <div className='caption_header mt-2'>
+                                                            <h5 className='post_heading create_post_text mb-2'>Pinterest Only
                                                                 *</h5>
 
 
                                                         </div>
-                                                        <div className='textarea_outer'>
+                                                      <div className={showPreview? "":'post_caption_outer'}>
+                                                        <div className='textarea_outer flex-grow-1'>
                                                             <h6 className='create_post_text'>Pin Title*</h6>
                                                             <input type={"text"} className='textarea mt-2'
                                                                    value={pinTitle}
@@ -681,7 +689,8 @@ const{sidebar}=useAppContext()
                                                                        setPinTitle(e.target.value);
                                                                    }}/>
                                                         </div>
-                                                        <div className='textarea_outer mt-2'>
+
+                                                        <div className={`textarea_outer  ${showPreview? "mt-2":"flex-grow-1"}`}>
                                                             <h6 className='create_post_text'>Destination Url*</h6>
                                                             <input type={"text"} className='textarea mt-2'
                                                                    value={pinDestinationUrl}
@@ -689,6 +698,7 @@ const{sidebar}=useAppContext()
                                                                        e.preventDefault();
                                                                        setPinDestinationUrl(e.target.value);
                                                                    }}/>
+                                                        </div>
                                                         </div>
                                                     </div>
                                                 }
