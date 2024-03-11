@@ -419,12 +419,18 @@ a.fc-daygrid-dot-event:hover {
     .event_group h5 {
         font-size: 13px;
     }
+    .planner_outer {
+        padding: 24px 20px;
+    }
 
     .event_group {
         border-right: unset;
     }
     .fc .fc-col-header-cell-cushion {
         font-size: 11px;
+    }
+    .planner_header h2 {
+        font-size: 24px;
     }
 }
 

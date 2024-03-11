@@ -157,7 +157,7 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
                             onComplete={onCropComplete}
                             onChange={onCropChange}>
 
-                            <img  src={file.url ? file.url : "data:image/jpeg; base64," + file?.attachmentSource}
+                            <img  src={file.url ? file?.url : "data:image/jpeg; base64," + file?.attachmentSource}
                                  alt="Selected" height="400px" width="400px" onLoad={onImageLoaded}/>
                         </ReactCrop>
                     }

@@ -1,5 +1,5 @@
 .editprofile_outer {
-    padding: 20px;
+    padding: 20px 35px;
   
 
 }
@@ -149,6 +149,9 @@ label.edit_label{
     label.edit_label {
         padding: 4px 6px;
         font-size: 20px;
+    }
+    .editprofile_outer {
+        padding: 20px 16px;
     }
     .update-pic-loading svg{
         height: 25px;

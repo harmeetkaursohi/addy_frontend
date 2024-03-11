@@ -57,7 +57,7 @@ const CommentReviewsSectionModal = ({
 
                     <Modal.Body>
                         <Row className="m-0">
-                            <Col lg="6"  md="6" sm="12" className="p-0">
+                            <Col lg="6"  md="12" sm="12" className="p-0">
                                 <div className='comment_review_wrapper'>
                                     <div className="comment_header d-flex gap-2">
                                         <Link to={""} className="flex-grow-1 d-flex align-item-center">
@@ -80,7 +80,7 @@ const CommentReviewsSectionModal = ({
                                                   viewSimilarToSocialMedia={false}/>
                                 </div>
                             </Col>
-                            <Col lg="6"  md="6" sm="12" className="p-0">
+                            <Col lg="6"  md="12" sm="12" className="p-0">
                                 <div className="comment_section">
                                     <div className="comments_messages pb-0">
                                         <div className="">
