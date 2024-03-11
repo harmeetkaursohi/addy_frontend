@@ -247,7 +247,7 @@ button.outline_btn.schedule_btn {
     }
 }
 
-@media screen and (max-width:1100px) and (min-width:992px){
+@media screen and (max-width:1279px) and (min-width:992px){
     .draft_button_outer {
         flex-wrap: wrap;
     }
@@ -298,6 +298,13 @@ button.outline_btn.schedule_btn{
     }
     h2.acc_not_connected_heading {
         font-size: 16px;
+    }
+    .card-body.post_card {
+        padding: 10px;
+    }
+    .draft-heading h4.posted-on-txt {
+        min-width: 83px;
+        font-size: 15px;
     }
 }
 @media screen and (max-width:767px) {

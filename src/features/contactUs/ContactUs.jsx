@@ -217,9 +217,9 @@ const ContactUs = () => {
                         }}
                         
                         style={{
-                          transform: isSmallScreen?'scale(0.6)':"",
-                          transformOrigin: isSmallScreen?'0 0':"",
-                          width:isSmallScreen?"200px":"",
+                          transform: isSmallScreen?'scale(0.6)':"scale(0.9)",
+                          transformOrigin: isSmallScreen?'0 0':"0",
+                          width:isSmallScreen?"200px":"250px",
                           marginTop:"13px",
                       }}
                       />

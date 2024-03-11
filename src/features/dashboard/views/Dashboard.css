@@ -536,11 +536,17 @@ div.noDraftPosts_outer {
     .followers_outer {
         display: block;
     }
+    .social_media_wrapper {
+        padding: 16px;
+    }
     button#dropdown-basic {
         min-width: 180px;
     }
     .followers_wrapper {
         margin-top: 15px;
+    }
+    .connectDisconnect_btn_outer {
+        gap: 14px;
     }
 
    

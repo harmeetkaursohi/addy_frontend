@@ -76,7 +76,7 @@ p.liked_by {
     height: 250px;
 }
 .comment_review_wrapper .post_image_outerwrapper img{
-   height: 531px;
+   height: 100%;
     object-fit: contain;
     object-position: center;
 }

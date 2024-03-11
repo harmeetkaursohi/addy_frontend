@@ -365,7 +365,9 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
         padding: 10px;
     }
     
-   
+    .demographic_data {
+        font-size: 14px;
+    }
 }
 
 @media screen and (max-width: 991px) {

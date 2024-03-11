@@ -1479,6 +1479,11 @@ export const computeStartEndDate = (date, appendPart) => {
     const isoDateString = `${year}-${month}-${day}${appendPart}`;
     return isoDateString;
 }
+
+export function sliderValueToVideoTime(duration, sliderValue) {
+    return Math.round(duration * sliderValue / 100)
+}
+
 export const formatMessage = (message = null, dynamicValue) => {
     if (isNullOrEmpty(message)) {
         return ""
