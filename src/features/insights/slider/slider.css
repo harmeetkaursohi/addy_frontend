@@ -25,9 +25,38 @@ button.slider_btn {
     width: 35px;
     margin-left: 12px;
 }
-
+.deleted-post-info-outer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 190px;
+}
 .caresoul_inner_content_outer {
     position: relative;
+}
+.deleted-post-from-socialMedia{
+    font-family: "Nunito", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.016px;
+    font-size: 17px;
+}
+.deleted-post-from-socialMedia {
+    min-height: 475px;
+}
+.deleted-post-caption{
+    font-family: "Nunito", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.016px;
+    font-size: 17px;
+}
+.deleted-post-error-message{
+    color:red;
+    margin: 4px 2px 4px 2px;
 }
 .acountReach_content_container li h4{
     color: black;

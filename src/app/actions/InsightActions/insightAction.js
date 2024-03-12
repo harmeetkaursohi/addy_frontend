@@ -6,9 +6,11 @@ import {
     generateUnixTimestampFor, getDatesForPinterest,
     getFormattedAccountReachAndEngagementData,
     getFormattedDemographicData,
-    getFormattedPostTime, getFormattedTotalFollowersCountData
+    getFormattedPostTime, getFormattedPostWithInsightsApiResponse, getFormattedTotalFollowersCountData
 } from "../../../utils/commonUtils.js";
 import {getToken, setAuthenticationHeader} from "../../auth/auth";
+import {getFacebookInsightForSinglePost} from "../../../services/facebookService";
+import {ErrorFetchingPost, SocialAccountProvider} from "../../../utils/contantData";
 
 
 export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWithInsights', async (data, thunkAPI) => {
@@ -30,7 +32,7 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
                 const postIds = data.postIds.map(id => id).join(',');
                 const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,insights.metric(reach,shares),caption,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
                 return await baseAxios.get(apiUrl).then(res => {
-                    return res.data;
+                    return getFormattedPostWithInsightsApiResponse(res.data,data.postIds,SocialAccountProvider?.INSTAGRAM);
                 }).catch(error => {
                     showErrorToast(error.response.data.error.message);
                     return thunkAPI.rejectWithValue(error.response);
@@ -50,13 +52,22 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
                 })
                 return response
             } else {
-                const postIds = data.postIds.map(id => id).join(',');
+                const postIds = data?.postIds?.map(postId => postId).join(",");
                 const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
                 return await baseAxios.get(apiUrl).then(res => {
                     return res.data;
-                }).catch(error => {
-                    showErrorToast(error.response.data.error.message);
-                    return thunkAPI.rejectWithValue(error.response);
+                }).catch(async error => {
+                    if (error?.response?.status === 400) {
+                        return getFormattedPostWithInsightsApiResponse(await Promise.all(data?.postIds?.map(postId => {
+                            return getFacebookInsightForSinglePost(data?.pageAccessToken, postId).catch(error => {
+                                return {id: postId, ...error.response.data}
+                            })
+                        })), postIds, SocialAccountProvider?.FACEBOOK);
+
+                    } else {
+                        showErrorToast(ErrorFetchingPost);
+                        // showErrorToast(error.response.data.error.message);
+                    }
                 });
             }
         }
@@ -76,7 +87,7 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
                 const postIds = data.postIds.map(id => id).join(',');
                 const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${postIds}`;
                 return await baseAxios.get(apiUrl, setAuthenticationHeader(data.token)).then(res => {
-                    return res.data;
+                    return getFormattedPostWithInsightsApiResponse(res.data,data.postIds,SocialAccountProvider?.PINTEREST);
                 }).catch(error => {
                     showErrorToast(error.response.data.error.message);
                     return thunkAPI.rejectWithValue(error.response);
@@ -100,7 +111,7 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
                 const postIds = data.postIds.map(id => id).join(',');
                 const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/post/insights?ids=${postIds}&orgId=${data?.pageId}`;
                 return await baseAxios.get(apiUrl, setAuthenticationHeader(data.token)).then(res => {
-                    return res.data;
+                    return getFormattedPostWithInsightsApiResponse(res.data,data.postIds,SocialAccountProvider?.LINKEDIN);
                 }).catch(error => {
                     showErrorToast(error.response.data.error.message);
                     return thunkAPI.rejectWithValue(error.response);

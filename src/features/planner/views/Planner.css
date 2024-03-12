@@ -10,7 +10,9 @@
     padding: 10px 21px;
     border-radius: 6px;
 }
-
+.planner_tag_container{
+    position: relative;
+}
 .planner_outer {
     padding: 24px 30px;
 }

@@ -34,6 +34,8 @@ export const SomethingWentWrongTryLater="Something went wrong, Please try again 
 export const NoBusinessAccountFound="No business account found for {0} to connect!"
 export const CouldNotPostComment="Could not post comment!"
 export const UpdatedSuccessfully="{0} updated successfully"
+export const PostAlreadyDeleted="Looks like the post has been taken down"
+export const ErrorFetchingPost="Something went wrong while fetching the post !"
 
 export const Industries = Object.freeze({
     ACCOUNTING: 'Accounting',

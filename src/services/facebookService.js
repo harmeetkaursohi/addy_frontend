@@ -7,10 +7,10 @@ import {
 import {showErrorToast} from "../features/common/components/Toast";
 import {SocialAccountProvider, SomethingWentWrong} from "../utils/contantData";
 
-export async function exchangeForLongLivedToken(shortLivedToken,socialMediaType) {
+export async function exchangeForLongLivedToken(shortLivedToken, socialMediaType) {
     const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/oauth/access_token`;
     const client_Id = import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID;
-    const client_secret =import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET;
+    const client_secret = import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET;
 
     const params = {
         grant_type: 'fb_exchange_token',
@@ -32,11 +32,12 @@ export async function exchangeForLongLivedToken(shortLivedToken,socialMediaType)
         throw error;
     }
 }
+
 export async function getAllFacebookConnectedSocialMediaAccounts(accessToken) {
     const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/me/accounts?access_token=${accessToken}&fields=instagram_business_account{id,name,username,profile_picture_url},access_token,name,id`;
     try {
         const response = await baseAxios.get(url);
-        if (response.status === 200 ) {
+        if (response.status === 200) {
             return response.data.data;
         } else {
             throw new Error(SomethingWentWrong);
@@ -56,8 +57,8 @@ export const conventStringToArrayString = (captionData) => {
     });
 
     // Filter Empty Array Elements
-    return captionList?.filter(caption=>{
-        return caption!=="";
+    return captionList?.filter(caption => {
+        return caption !== "";
     });
 }
 
@@ -183,15 +184,15 @@ export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
                     followersReportCount?.push(...response.data?.data[1].values || [])
                 }
             }).catch((error) => {
-                    console.error('Error:', error);
-                });
+                console.error('Error:', error);
+            });
 
         }
     }
 
 
-    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount,SocialAccountProvider.FACEBOOK?.toUpperCase()));
-    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount,SocialAccountProvider.FACEBOOK?.toUpperCase()));
+    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount, SocialAccountProvider.FACEBOOK?.toUpperCase()));
+    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount, SocialAccountProvider.FACEBOOK?.toUpperCase()));
     return initialObject;
 };
 
@@ -226,3 +227,7 @@ const finalQueryParam = async (pageId, metric, pageAccessToken, isLifeTime = fal
 
 }
 
+export const getFacebookInsightForSinglePost = async (accessToken, postId) => {
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${postId}?access_token=${accessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
+    return baseAxios.get(apiUrl);
+}

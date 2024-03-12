@@ -17,6 +17,21 @@
 .acc_not_connected_outer img {
     width: 400px;
 }
+td.disabled-table-grid {
+    background: #80808036 !important;
+}
+.review-errorMessage{
+    min-height: 60px;
+    display: grid;
+    place-items: center;
+    color: #000;
+    font-family: Nunito;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+    letter-spacing: -0.014px;
+}
 .acc_not_connected_outer{
     text-align: center;
 }
@@ -250,6 +265,9 @@ p.disable-reply-comment {
 
 .comment_section .comments_messages {
     flex-grow: 1;
+}
+.font-size-20{
+    font-size: 20px;
 }
 .RotatingLines-loader{
     height: calc(100vh - 319px);

@@ -46,7 +46,7 @@
     gap: 10px;
     position: relative;
     width: 100%;
-    min-height: 60px;
+    min-height: 68px;
 }
 
 .plans_tags_wrapper .d-flex.page_tags {
@@ -56,7 +56,7 @@
 .plans_tags_wrapper .d-flex {
     overflow-x: scroll;
     width: 100%;
-    position: absolute;
+    /*position: absolute;*/
     white-space: nowrap;
 }
 
@@ -152,11 +152,38 @@ img.plan_social_img {
 
 .more_plans_wrapper {
     margin-top: 20px;
+    height: 500px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 .disable_more_plans_grid{
     opacity: 0.6!important;
     pointer-events: none !important;
 }
+.delete-from-addy-icon{
+    margin-left: 4px;
+    margin-bottom: 2px;
+}
+.post-deleted-tag {
+    color: #000;
+    font-family: Nunito;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    background: red;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    position: absolute;
+    top: 38px;
+    left: auto;
+    right: 0px;
+}
+
+.delete-planner-post-loader{
+    position: relative;
+}
+
 p.hasTags {
     color: #00A3FF;
     font-family: Nunito;

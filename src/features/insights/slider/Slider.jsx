@@ -7,8 +7,9 @@ import calender_icon from "../../../images/calender_icon2.svg";
 import "./slider.css";
 import {useDispatch, useSelector} from "react-redux";
 import {
+    concatenateString,
     getFormattedPostDataForSlider,
-    getFormattedPostTime,
+    getFormattedPostTime, getValueOrDefault,
 } from "../../../utils/commonUtils";
 import CommonLoader from "../../common/components/CommonLoader";
 import {useEffect, useRef, useState} from "react";
@@ -16,6 +17,7 @@ import CommonSlider from "../../common/components/CommonSlider";
 import {FaGreaterThan, FaLessThan} from "react-icons/fa";
 import {getPostByPageIdAndPostStatus} from "../../../app/actions/postActions/postActions";
 import {getToken} from "../../../app/auth/auth";
+import {ErrorFetchingPost, PostAlreadyDeleted, SocialAccountProvider} from "../../../utils/contantData";
 
 
 const Carousel = ({selectedPage, cacheData}) => {
@@ -43,8 +45,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
 
     const previous = () => {
         const prevPageNumber = parseInt(getPostByPageIdAndPostStatusData?.data?.pageNumber) - 1;
-        dispatch(
-            getPostByPageIdAndPostStatus({
+        dispatch(getPostByPageIdAndPostStatus({
                 token: token,
                 insightPostsCache: insightsCache,
                 requestBody: {
@@ -58,8 +59,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
     };
     const next = () => {
         const nextPageNumber = parseInt(getPostByPageIdAndPostStatusData?.data?.pageNumber) + 1;
-        dispatch(
-            getPostByPageIdAndPostStatus({
+        dispatch(getPostByPageIdAndPostStatus({
                 token: token,
                 insightPostsCache: insightsCache,
                 requestBody: {
@@ -74,7 +74,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
     return (
         <>
             {
-                hasPosts  && <>
+                hasPosts && <>
                     <button
                         disabled={
                             getPostByPageIdAndPostStatusData?.loading ||
@@ -110,7 +110,50 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                             getPostDataWithInsightsData?.data[key],
                                             selectedPage?.socialMediaType
                                         );
-                                        return (
+                                        const deletedPostData = formattedData?.hasError ? getPostByPageIdAndPostStatusData?.data?.data[selectedPage?.pageId]?.filter(post => post?.postPageInfos[0]?.socialMediaPostId === formattedData?.id)[0] : {}
+                                        return formattedData?.hasError ?
+                                            <Col lg="4" md="6" sm="12" xs="12" key={key + "slide"}>
+                                                <Card className="card_body_content deleted-post-from-socialMedia">
+                                                    <Card.Body className="p-0">
+                                                        <div className="caresoul_inner_content_outer">
+                                                            <CommonSlider
+                                                                files={[]}
+                                                                selectedFileType={null}
+                                                                caption={null}
+                                                                hashTag={null}
+                                                                showThumbnail={false}
+                                                                isPublished={true}
+                                                                viewSimilarToSocialMedia={false}
+                                                            />
+                                                            <div className="date_Time_container">
+                                                                <div className={"insights-post-date-outer"}>
+                                                                    <img src={calender_icon} className="me-1  ms-2"/>
+                                                                    <div className={"post_date"}>
+                                                                        {getFormattedPostTime(
+                                                                            deletedPostData?.createdAt
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className={"deleted-post-info-outer"}>
+                                                            {
+                                                                deletedPostData?.postPageInfos?.[0]?.socialMediaType === SocialAccountProvider?.PINTEREST?.toUpperCase() &&
+                                                                <div className={"deleted-post-caption text-center "}>
+                                                                    {concatenateString(getValueOrDefault(deletedPostData?.pinTitle, ""), 100)}
+                                                                </div>
+                                                            }
+                                                            <div className={"deleted-post-caption text-center mt-1"}>
+                                                                {concatenateString(getValueOrDefault(deletedPostData?.caption, "") + " " + getValueOrDefault(deletedPostData?.hashtag, ""), 100)}
+                                                            </div>
+                                                            <div
+                                                                className={"deleted-post-error-message text-center mt-3"}>
+                                                                {formattedData?.errorInfo?.isDeletedFromSocialMedia ? PostAlreadyDeleted : ErrorFetchingPost}
+                                                            </div>
+                                                        </div>
+                                                    </Card.Body>
+                                                </Card>
+                                            </Col> :
                                             <Col lg="4" md="6" sm="12" xs="12" key={key + "slide"}>
                                                 <Card className="card_body_content">
                                                     <Card.Body className="p-0">
@@ -126,7 +169,8 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                                             />
                                                             <div className="date_Time_container">
                                                                 <div className={"insights-post-date-outer"}>
-                                                                    <img src={calender_icon} className="me-1  ms-2"/>
+                                                                    <img src={calender_icon}
+                                                                         className="me-1  ms-2"/>
                                                                     <div className={"post_date"}>
                                                                         {getFormattedPostTime(
                                                                             formattedData?.creation_time
@@ -154,12 +198,14 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                                             </li>
                                                             {selectedPage?.socialMediaType === "PINTEREST" ? (
                                                                 <li>
-                                                                    <h4 className="cmn_small_heading">Total Save</h4>
+                                                                    <h4 className="cmn_small_heading">Total
+                                                                        Save</h4>
                                                                     <h3>{formattedData?.total_save}</h3>
                                                                 </li>
                                                             ) : (
                                                                 <li>
-                                                                    <h4 className="cmn_small_heading">Total Share</h4>
+                                                                    <h4 className="cmn_small_heading">Total
+                                                                        Share</h4>
                                                                     <h3>{formattedData?.total_share}</h3>
                                                                 </li>
                                                             )}
@@ -167,7 +213,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                                     </Card.Body>
                                                 </Card>
                                             </Col>
-                                        );
+
                                     }
                                 )}
                         </Row> :

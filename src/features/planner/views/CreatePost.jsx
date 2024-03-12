@@ -63,8 +63,6 @@ const CreatePost = () => {
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
-    
-console.log(loadingCreateFacebookPost,"loadingCreateFacebookPost")
 
     const [videoBlob, setVideoBlob] = useState(null)    
     const [allOptions, setAllOptions] = useState([]);

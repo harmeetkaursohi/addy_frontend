@@ -1,5 +1,10 @@
 import * as yup from "yup";
-import {NoBusinessAccountFound, SocialAccountProvider, SomethingWentWrongTryLater} from "./contantData.js";
+import {
+    ErrorFetchingPost,
+    NoBusinessAccountFound,
+    SocialAccountProvider,
+    SomethingWentWrongTryLater
+} from "./contantData.js";
 import {exchangeForLongLivedToken, getAllFacebookConnectedSocialMediaAccounts} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
 import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/facebookActions/facebookActions.js";
@@ -249,7 +254,10 @@ export const pageConnectAction = (dispatch, token, data, socialMediaAccountInfo)
     if (data) {
         dispatch(facebookPageConnect(requestBody)).then((response) => {
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-            dispatch(getAllSocialMediaPostsByCriteria({token: token, query: {limit: 5,period:"MONTH" ,postStatus: ["SCHEDULED"]}}));
+            dispatch(getAllSocialMediaPostsByCriteria({
+                token: token,
+                query: {limit: 5, period: "MONTH", postStatus: ["SCHEDULED"]}
+            }));
         }).catch((error) => {
             console.log("--->error", error)
         })
@@ -333,8 +341,14 @@ export const redirectToURL = (redirectedURL) => {
     window.open(redirectedURL, '_blank');
 }
 
-export const isPlannerPostEditable = (feedPostDate) => {
-    return (new Date(feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0;
+export const isPlannerPostEditable = (btnReference, data = null) => {
+    if (data === null) {
+        return false
+    }
+    if (btnReference === "DELETE") {
+        return ((new Date(data?.feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0) || (data?.postPages?.every(postPage => postPage?.errorInfo?.isDeletedFromSocialMedia));
+    }
+    return (new Date(data?.feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0;
 }
 
 
@@ -549,7 +563,7 @@ const eliminateDuplicateHashTags = (hashtags) => {
 }
 
 export const convertSentenceToHashtags = (sentence) => {
-    let words = sentence.replace("\n"," #").split(' ');
+    let words = sentence.replace("\n", " #").split(' ');
     // Eliminate Duplicate Tags
     if (words[words.length - 1] === "") {
         words = eliminateDuplicateHashTags(words)
@@ -764,7 +778,7 @@ export async function urlsToFiles(fileUrlList) {
 }
 
 export const getImagePostList = async (postData) => {
-   
+
 
     return postData.flatMap(post => post.attachments).map(async attachment => {
         let file = null;
@@ -963,6 +977,7 @@ export const convertUnixTimestampToDateTime = (unixTimestamp) => {
     return {date: formattedDate, time: formattedTime};
 }
 export const getFormattedPostTime = (inputDate, format = "") => {
+
     const inputDateObject = new Date(inputDate);
     let options;
     if (format === "") {
@@ -1178,13 +1193,68 @@ export const extractParameterFromUrl = (url, parameterName) => {
     const urlSearchParams = new URLSearchParams(new URL(url).search);
     return urlSearchParams.get(parameterName);
 }
+
+export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, socialMediaType) => {
+    let response = {};
+    console.log("insightsData===>", insightsData)
+    switch (socialMediaType) {
+        case SocialAccountProvider?.FACEBOOK: {
+            insightsData?.map(res => {
+                response = res.hasOwnProperty("error") ? {...response, [res?.id]: res} : {
+                    ...response,
+                    [res?.data?.id]: res?.data
+                }
+            })
+            return response;
+        }
+        case SocialAccountProvider?.INSTAGRAM: {
+            postIds?.map(postId => {
+                response = insightsData[postId] === undefined ? {
+                    ...response,
+                    [postId]: {id: postId, error: {message: "Object does not exist"}}
+                } : {...response, [postId]: insightsData[postId]}
+            })
+            return response;
+        }
+        case SocialAccountProvider?.PINTEREST: {
+            postIds?.map(postId => {
+                response = insightsData[postId].hasOwnProperty("error") ? {
+                    ...response,
+                    [postId]: {id: postId, error: insightsData[postId]}
+                } : {...response, [postId]: insightsData[postId]}
+            })
+            return response;
+        }
+        case SocialAccountProvider?.LINKEDIN: {
+            postIds?.map(postId => {
+                response = insightsData[postId].hasOwnProperty("error") ? {
+                    ...response,
+                    [postId]: {id: postId, error: insightsData[postId]?.error}
+                } : {...response, [postId]: insightsData[postId]}
+            })
+            return response;
+        }
+    }
+}
+
+
 export const getFormattedPostDataForSlider = (data, socialMediaType) => {
     if (data === null || data === undefined) {
         return []
     }
     let formattedData = {}
+    let errorResponse = {id: data?.id, hasError: true, errorInfo: {}}
     switch (socialMediaType) {
         case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
+            if (data?.hasOwnProperty("error")) {
+                return {
+                    ...errorResponse,
+                    errorInfo: {
+                        isDeletedFromSocialMedia: data?.error?.message?.includes("Object does not exist"),
+                        errorMessage: data?.error?.message
+                    }
+                }
+            }
             formattedData = {
                 total_like: data?.like_count,
                 total_comment: data?.comments_count,
@@ -1196,6 +1266,15 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
             return formattedData
         }
         case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
+            if (data?.hasOwnProperty("error")) {
+                return {
+                    ...errorResponse,
+                    errorInfo: {
+                        isDeletedFromSocialMedia: data?.error?.message?.includes("Object does not exist"),
+                        errorMessage: data?.error?.message
+                    }
+                }
+            }
             formattedData = {
                 total_like: data?.likes?.summary?.total_count,
                 total_comment: data?.comments?.summary?.total_count,
@@ -1207,6 +1286,15 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
             return formattedData
         }
         case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            if (data?.hasOwnProperty("error")) {
+                return {
+                    ...errorResponse,
+                    errorInfo: {
+                        isDeletedFromSocialMedia: data?.error?.status === "404",
+                        errorMessage: data?.error?.message
+                    }
+                }
+            }
             formattedData = {
                 total_like: data?.pin_metrics?.all_time?.reaction,
                 total_comment: data?.pin_metrics?.all_time?.comment,
@@ -1218,6 +1306,15 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
             return formattedData;
         }
         case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            if (data?.hasOwnProperty("error")) {
+                return {
+                    ...errorResponse,
+                    errorInfo: {
+                        isDeletedFromSocialMedia: data?.error?.status === "404",
+                        errorMessage: data?.error?.message || ErrorFetchingPost
+                    }
+                }
+            }
             formattedData = {
                 total_like: data?.shareStatistics?.totalShareStatistics?.likeCount,
                 total_comment: data?.shareStatistics?.totalShareStatistics?.commentCount,
@@ -1820,3 +1917,11 @@ export async function getCroppedImg(imageSrc, crop, zoom) {
     //   }, 'image/jpeg');
     // });
 }
+
+export const concatenateString = (originalString, maxLength) => {
+    if (originalString?.length <= maxLength) {
+        return originalString;
+    } else {
+        return originalString?.substring(0, maxLength) + "...";
+    }
+};

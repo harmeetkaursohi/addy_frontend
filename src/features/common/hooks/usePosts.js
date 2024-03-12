@@ -22,20 +22,21 @@ const usePosts = (searchQuery) => {
         const requestBody = {
             postStatus: ["PUBLISHED"],
             token: token,
-            pageNumber: searchQuery?.pageNum,
             socialMediaType: searchQuery?.socialMediaType,
-            pageIds:searchQuery?.pageIds
+            pageIds:searchQuery?.pageIds,
+            pageSize:searchQuery?.pageSize,
+            offSet:searchQuery?.offSet
         }
 
 
-        if (searchQuery?.pageNum >= 0 && error) {
+        if (searchQuery?.offSet >= 0 && error) {
             dispatch(getPostsPageAction(requestBody)).then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     if (response?.payload?.data === null) {
                         setResults([]);
-                    } else if (searchQuery?.pageNum === 0) {
+                    } else if (searchQuery?.offSet === 0) {
                         setResults(response?.payload?.data);
-                    } else if (searchQuery?.pageNum > 0) {
+                    } else if (searchQuery?.offSet > 0) {
                         setResults((prev) => [...prev, ...response?.payload?.data]);
                     }
                     setHasNextPage(response?.payload?.hasNext);

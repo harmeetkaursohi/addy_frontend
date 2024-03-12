@@ -1,25 +1,37 @@
 import SideBar from "../../sidebar/views/Layout"
 import "./Review.css"
 import jsondata from "../../../locales/data/initialdata.json"
-import {SocialAccountProvider} from "../../../utils/contantData";
+import {
+    ErrorFetchingPost,
+    PostAlreadyDeleted,
+    SocialAccountProvider,
+    SomethingWentWrong,
+    UpdatedSuccessfully
+} from "../../../utils/contantData";
 import {useCallback, useEffect, useRef, useState} from "react";
 import usePosts from "../../common/hooks/usePosts";
-import {computeImageURL, createOptionListForSelectTag} from "../../../utils/commonUtils";
+import {
+    computeImageURL,
+    concatenateString,
+    createOptionListForSelectTag,
+} from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
 import CommonLoader from "../../common/components/CommonLoader";
 import {FaArrowCircleRight} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
-import {getPostPageInfoAction} from "../../../app/actions/postActions/postActions";
+import {deletePostFromPage, getPostPageInfoAction} from "../../../app/actions/postActions/postActions";
 import {getToken} from "../../../app/auth/auth";
 import {RotatingLines} from "react-loader-spinner";
 import {useNavigate} from "react-router-dom";
 import Select from "react-select";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
-import { useAppContext } from "../../common/components/AppProvider";
+import {useAppContext} from "../../common/components/AppProvider";
+import {MdDelete} from "react-icons/md";
+
 const Review = () => {
-    const { sidebar } = useAppContext();
-    const [baseSearchQuery, setBaseSearchQuery] = useState({pageNum: -1, socialMediaType: null});
+    const {sidebar} = useAppContext();
+    const [baseSearchQuery, setBaseSearchQuery] = useState({socialMediaType: null, pageSize: 5, offSet: -1});
     const [isDirty, setDirty] = useState({isDirty: false})
     const {
         isLoading = true,
@@ -36,11 +48,13 @@ const Review = () => {
     const navigate = useNavigate();
     const [pageDropdown, setPageDropdown] = useState([])
     const [selectedDropdownOptions, setSelectedDropDownOptions] = useState({
-        socialMediaType:{label: "All", value: null},
-        pages:[]
+        socialMediaType: {label: "All", value: null},
+        pages: []
 
     })
     const dispatch = useDispatch();
+    const [removedPosts, setRemovedPosts] = useState([])
+    const [deletePostPageInfo, setDeletePostPageInfo] = useState(null)
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
     const getPostsPageData = useSelector((state) => state.post.getPostsPageReducer);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
@@ -48,10 +62,38 @@ const Review = () => {
 
 
     useEffect(() => {
+        if (deletePostPageInfo !== null && deletePostPageInfo !== undefined) {
+            dispatch(deletePostFromPage({
+                token: token,
+                postId: deletePostPageInfo?.id,
+                pageIds: [deletePostPageInfo?.page?.pageId]
+            })).then(res => {
+
+                if (res.meta.requestStatus === "fulfilled") {
+                    setRemovedPosts([...removedPosts, {
+                        postId: deletePostPageInfo?.id,
+                        pageId: deletePostPageInfo?.page?.pageId
+                    }]);
+                }
+                setDeletePostPageInfo(null)
+            })
+        }
+    }, [deletePostPageInfo])
+
+
+    useEffect(() => {
+        return () => {
+            removedPosts.length > 0 && setRemovedPosts([])
+        }
+    }, [])
+
+
+    useEffect(() => {
         if (getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
-            setBaseSearchQuery({...baseSearchQuery, pageNum: 0})
+            setBaseSearchQuery({...baseSearchQuery, offSet: 0})
         }
     }, [getAllConnectedSocialAccountData, connectedPagesData])
+
 
     useEffect(() => {
         if (getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
@@ -104,18 +146,18 @@ const Review = () => {
         if (intObserver.current) intObserver.current.disconnect()
         intObserver.current = new IntersectionObserver(posts => {
             if (posts[0].isIntersecting && hasNextPage && !isError) {
-                setBaseSearchQuery({...baseSearchQuery, pageNum: baseSearchQuery.pageNum + 1})
+                setBaseSearchQuery({...baseSearchQuery, offSet: results?.length - removedPosts?.length})
             }
         })
         if (post) intObserver.current.observe(post)
-    }, [isLoading, hasNextPage]);
+    }, [isLoading, hasNextPage, removedPosts]);
 
-    
+
     return (
         <>
             <section>
                 <SideBar/>
-                <div className={sidebar?"comment_container":"cmn_Padding bg_Color" }>
+                <div className={sidebar ? "comment_container" : "cmn_Padding bg_Color"}>
                     <div className="cmn_wrapper_outer">
                         <div className="review_wrapper">
                             <div className="review_header align-items-center gap-3">
@@ -134,7 +176,7 @@ const Review = () => {
                                             isDisabled={getPostsPageData?.loading}
                                             options={createOptionListForSelectTag(pageDropdown, "name", "pageId")}
                                             onChange={(val) => {
-                                                setSelectedDropDownOptions({...selectedDropdownOptions,pages: val})
+                                                setSelectedDropDownOptions({...selectedDropdownOptions, pages: val})
                                                 setResults([])
                                                 setBaseSearchQuery({
                                                     ...baseSearchQuery,
@@ -153,13 +195,17 @@ const Review = () => {
                                             value={selectedDropdownOptions?.socialMediaType}
                                             isDisabled={getPostsPageData?.loading}
                                             onChange={(val) => {
-                                                setSelectedDropDownOptions({...selectedDropdownOptions,socialMediaType: val,pages: []})
+                                                setSelectedDropDownOptions({
+                                                    ...selectedDropdownOptions,
+                                                    socialMediaType: val,
+                                                    pages: []
+                                                })
                                                 setResults([])
                                                 setBaseSearchQuery({
                                                     ...baseSearchQuery,
                                                     pageNum: 0,
                                                     socialMediaType: val?.value?.toUpperCase(),
-                                                    pageIds:[]
+                                                    pageIds: []
                                                 });
                                             }}
                                         />
@@ -167,7 +213,7 @@ const Review = () => {
                                 }
                             </div>
                             {
-                           
+
                                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
                                     <CommonLoader classname={"cmn_loader_outer"}></CommonLoader> :
                                     getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0 &&
@@ -205,49 +251,107 @@ const Review = () => {
                                                             </td>
 
                                                         </tr> :
-                                                        results?.map((post, index) => (
-                                                         
-                                                            <tr
-                                                                key={index}
-                                                                ref={index === results?.length - 1 ? lastPostRef : null}
-                                                            >
-                                                                <td>
-                                                                    <img
-                                                                        src={post?.attachments[0]?.imageURL || noImageAvailable}
-                                                                        className="bg_img"/>
-                                                                </td>
-                                                                <td>
-                                                                    <div className={"d-flex align-items-center"}>
-                                                                        <img className={"me-2 review-post-icon"}
-                                                                             src={computeImageURL(post?.socialMediaType)}/>
-                                                                        <span>{post?.page?.name}</span>
-                                                                    </div>
+                                                        results?.map((post, index) => {
+                                                            return removedPosts?.some(removedPost => removedPost?.postId === post.id && removedPost?.pageId === post.page.pageId) ?
+                                                                <></> :
+                                                                (post.errorInfo === undefined || post.errorInfo === null) ?
+                                                                    <tr
+                                                                        key={index}
+                                                                        ref={index === results?.length - 1 ? lastPostRef : null}>
+                                                                        <td>
+                                                                            <img
+                                                                                src={post?.attachments[0]?.imageURL || noImageAvailable}
+                                                                                className="bg_img"/>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div
+                                                                                className={"d-flex align-items-center"}>
+                                                                                <img className={"me-2 review-post-icon"}
+                                                                                     src={computeImageURL(post?.socialMediaType)}/>
+                                                                                <span>{post?.page?.name}</span>
+                                                                            </div>
 
 
-                                                                </td>
-                                                                <td>{post?.likes} Likes</td>
-                                                                <td>{post?.comments} Comments</td>
-                                                                <td>{post?.shares} {post?.socialMediaType === "PINTEREST" ? "Save" : "Share"} </td>
-                                                                <td>
+                                                                        </td>
+                                                                        <td>{post?.likes} Likes</td>
+                                                                        <td>{post?.comments} Comments</td>
+                                                                        <td>{post?.shares} {post?.socialMediaType === "PINTEREST" ? "Save" : "Share"} </td>
+                                                                        <td>
 
-                                                                    <div className={"view-post-txt cursor-pointer"}
-                                                                         onClick={(e) => {
-                                                                             setPostData(post);
-                                                                             setDirty({
-                                                                                 ...isDirty,
-                                                                                 index: index,
-                                                                                 socialMediaType: post?.socialMediaType
-                                                                             })
-                                                                             setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
-                                                                         }}
+                                                                            <div
+                                                                                className={"view-post-txt cursor-pointer"}
+                                                                                onClick={(e) => {
+                                                                                    setPostData(post);
+                                                                                    setDirty({
+                                                                                        ...isDirty,
+                                                                                        index: index,
+                                                                                        socialMediaType: post?.socialMediaType
+                                                                                    })
+                                                                                    setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
+                                                                                }}
+                                                                            >
+                                                                                <span>View</span> <FaArrowCircleRight
+                                                                                style={{color: "#F07C33"}}/>
+
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    :
+
+                                                                    <tr
+                                                                        key={index}
+                                                                        ref={index === results?.length - 1 ? lastPostRef : null}
                                                                     >
-                                                                        <span>View</span> <FaArrowCircleRight
-                                                                        style={{color: "#F07C33"}}/>
+                                                                        <td className={"disabled-table-grid"}>
+                                                                            <img
+                                                                                src={noImageAvailable}
+                                                                                className="bg_img"/>
+                                                                        </td>
+                                                                        <td className={"disabled-table-grid"}>
+                                                                            <div
+                                                                                className={"d-flex align-items-center"}>
+                                                                                <img className={"me-2 review-post-icon"}
+                                                                                     src={computeImageURL(post?.socialMediaType)}/>
+                                                                                <span>{post?.page?.name}</span>
+                                                                            </div>
 
-                                                                    </div>
-                                                                </td>
-                                                            </tr>
-                                                        ))
+
+                                                                        </td>
+                                                                        <td className={"disabled-table-grid"}>
+                                                                            {concatenateString(post.message, 20)}
+                                                                        </td>
+
+                                                                        <td className={"disabled-table-grid "}
+                                                                            colSpan={post.errorInfo.isDeletedFromSocialMedia ? 2 : 3}>
+                                                                            {
+                                                                                post.errorInfo.isDeletedFromSocialMedia ?
+                                                                                    <div
+                                                                                        className={"review-errorMessage d-flex"}>
+                                                                                        {PostAlreadyDeleted}
+
+                                                                                    </div>
+                                                                                    :
+                                                                                    <div
+                                                                                        className={"review-errorMessage "}>{ErrorFetchingPost}
+                                                                                    </div>
+                                                                            }
+                                                                        </td>
+                                                                        {
+                                                                            post.errorInfo.isDeletedFromSocialMedia &&
+                                                                            <td className={"disabled-table-grid "}>
+                                                                                <MdDelete
+                                                                                    onClick={() => {
+                                                                                        !isLoading && setDeletePostPageInfo(post)
+                                                                                    }}
+                                                                                    className={"ms-2 cursor-pointer font-size-20"}
+                                                                                    title={"Delete From Addy"}/>
+                                                                            </td>
+                                                                        }
+
+                                                                    </tr>
+                                                        })
+
+
                                                 }
 
 
@@ -260,7 +364,7 @@ const Review = () => {
                                         {
                                             isLoading &&
                                             <div className="d-flex justify-content-center RotatingLines-loader mt-4">
-                                             
+
                                                 <RotatingLines
                                                     strokeColor="#F07C33"
                                                     strokeWidth="5"

@@ -22,7 +22,7 @@ import {
     deleteCommentsOnPostAction,
     updateCommentsOnPostAction,
     getPostByPageIdAndPostStatus,
-    getRepliesOnComment
+    getRepliesOnComment, deletePostFromPage
 } from "../../actions/postActions/postActions.js";
 
 
@@ -52,6 +52,7 @@ const postSlice = createSlice({
         replyCommentOnPostActionReducer:{loading: false},
         getPostByPageIdAndPostStatusReducer:{loading: false},
         getRepliesOnCommentReducer:{loading: false},
+        deletePostFromPageReducer:{loading: false},
     },
 
     reducers: {
@@ -192,6 +193,16 @@ const postSlice = createSlice({
         },
         [deletePostByBatchIdAction.rejected]: (state) => {
             state.deletePostByBatchIdReducer = {loading: false}
+        },
+        // Delete Post From Page
+        [deletePostFromPage.pending]: (state) => {
+            state.deletePostFromPageReducer = {loading: true}
+        },
+        [deletePostFromPage.fulfilled]: (state) => {
+            state.deletePostFromPageReducer = {loading: false, data: "success"}
+        },
+        [deletePostFromPage.rejected]: (state) => {
+            state.deletePostFromPageReducer = {loading: false}
         },
 
 

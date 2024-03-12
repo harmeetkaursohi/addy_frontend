@@ -261,6 +261,7 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
 });
 
 export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
+    console.log("data--->",data)
     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
@@ -292,6 +293,15 @@ export const publishedPostAction = createAsyncThunk('post/publishedPostAction', 
 
 export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatchIdAction', async (data, thunkAPI) => {
     return await baseAxios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data?.postId}`, setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});
+
+export const deletePostFromPage = createAsyncThunk('post/deletePostFromPage', async (data, thunkAPI) => {
+    return await baseAxios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/posts?postId=${data?.postId}&pageIds=${data.pageIds.map(id => id).join(',')}`, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

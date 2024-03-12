@@ -1,17 +1,24 @@
 import Modal from 'react-bootstrap/Modal';
 import './CommonShowMorePlannerModal.css'
-import {computeImageURL, handleSeparateCaptionHashtag, isPlannerPostEditable,  sortByKey} from "../../../utils/commonUtils";
+import {
+    computeImageURL,
+    handleSeparateCaptionHashtag,
+    isPlannerPostEditable,
+    sortByKey
+} from "../../../utils/commonUtils";
 import CommonSlider from "./CommonSlider";
 import CommonLoader from "./CommonLoader";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
-    deletePostByBatchIdAction, getAllPostsForPlannerAction, getPlannerPostCountAction
+    deletePostByBatchIdAction, deletePostFromPage, getAllPostsForPlannerAction, getPlannerPostCountAction
 } from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "./Toast";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import Swal from "sweetalert2";
+import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
+import {RiDeleteBin7Line} from "react-icons/ri";
 
 
 const CommonShowMorePlannerModal = ({
@@ -27,16 +34,36 @@ const CommonShowMorePlannerModal = ({
     const token = getToken();
     const getAllPlannerPostsDataLoading = useSelector(state => state.post.getAllPlannerPostReducer.loading);
     const deletePostByBatchIdData = useSelector(state => state.post.deletePostByBatchIdReducer);
+    const deletePostFromPageData = useSelector(state => state.post.deletePostFromPageReducer);
     const [deleteBatchIdRef, setDeleteBatchIdRef] = useState(null);
+    const [deletedPostsIds, setDeletedPostsIds] = useState([]);
+    const [removedPostPagesRef, setRemovedPostPagesRef] = useState(null);
+    const [removedPostPages, setRemovedPostPages] = useState([]);
+
+    useEffect(() => {
+        if (removedPostPagesRef !== null && removedPostPagesRef !== undefined) {
+            dispatch(deletePostFromPage({
+                token: token,
+                postId: removedPostPagesRef?.postId,
+                pageIds: [removedPostPagesRef?.pageId]
+            })).then(res => {
+                if (res.meta.requestStatus === "fulfilled") {
+                    setRemovedPostPages([...removedPostPages, {
+                        postId: removedPostPagesRef?.postId,
+                        pageId: removedPostPagesRef?.pageId
+                    }]);
+                }
+                setRemovedPostPagesRef(null)
+            })
+        }
+    }, [removedPostPagesRef])
 
     const handleClose = () => setCommonShowMorePlannerModal(false);
 
 
-
-    const handleDeletePlannerPost = (e,postId) => {
+    const handleDeletePlannerPost = (e, postId) => {
         e.preventDefault();
-        if (postId !== null){
-            setDeleteBatchIdRef(postId);
+        if (postId !== null) {
             Swal.fire({
                 icon: 'warning',
                 title: `Delete Post`,
@@ -52,24 +79,26 @@ const CommonShowMorePlannerModal = ({
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
+                    setDeleteBatchIdRef(postId);
                     dispatch(deletePostByBatchIdAction({postId: postId, token: token}))
                         .then((response) => {
                             if (response.meta.requestStatus === "fulfilled") {
                                 showSuccessToast("Posts has been deleted successfully");
-                                setDeleteBatchIdRef(null);
                                 const decodeJwt = decodeJwtToken(token);
-                                const requestBody={
+                                const requestBody = {
                                     customerId: decodeJwt.customerId,
                                     token: token,
                                     query: baseSearchQuery
                                 }
                                 dispatch(getAllPostsForPlannerAction(requestBody));
                                 dispatch(getPlannerPostCountAction(requestBody));
-                                setCommonShowMorePlannerModal(false);
+                                setDeletedPostsIds([...deletedPostsIds, postId])
+                                setDeleteBatchIdRef(null);
+                                plannerPosts?.length === deletedPostsIds?.length + 1 && setCommonShowMorePlannerModal(false);
+
                             }
                         })
                         .catch((error) => {
-                            setCommonShowMorePlannerModal(false);
                             setDeleteBatchIdRef(null);
                             showErrorToast(error.response.data.message);
                         });
@@ -78,17 +107,26 @@ const CommonShowMorePlannerModal = ({
         }
     }
 
+    useEffect(() => {
+        return () => {
+            setDeletedPostsIds([])
+            setRemovedPostPages([])
+        }
+    }, [])
+
     const handleCloseModal = (e) => {
         e.preventDefault();
         setCommonShowMorePlannerModal(false);
     }
+
     function extractNumbers(inputString) {
         // Use a regular expression to find all sequences of digits
         const numbers = inputString.match(/\d+/g);
-    
+
         // Convert the matched substrings to numbers
         return numbers ? numbers.map(Number) : [];
     }
+
     return (
         <>
             <div className='generate_ai_img_container '>
@@ -104,89 +142,133 @@ const CommonShowMorePlannerModal = ({
 
                             <div className="more_plans">
                                 <h2 className="text-center">{eventDate}</h2>
-                                <div className="more_plans_wrapper">
+                                <div className={getAllPlannerPostsDataLoading?"":"more_plans_wrapper"}>
                                     {/*map starts here for gird*/}
                                     {
-                                        getAllPlannerPostsDataLoading ? (
+                                        getAllPlannerPostsDataLoading  ? (
                                                 <CommonLoader/>) :
                                             sortByKey(plannerPosts, "feedPostDate")?.map((plannerPost, index) => {
-                                                return (
-                                                    <div
-                                                        className={!isPlannerPostEditable(plannerPost?.feedPostDate) ? "more_plans_grid mb-3 disable_more_plans_grid" : "more_plans_grid mb-3"}
-                                                        key={index}>
-                                                        <div className="plan_grid_img">
-                                                            {plannerPost?.attachments &&
-                                                                <CommonSlider files={plannerPost?.attachments}
-                                                                              selectedFileType={null} caption={null}
-                                                                              hashTag={null}
-                                                                              showThumbnail={true}
-                                                                              viewSimilarToSocialMedia={false}
-                                                                              enableShowPlannerModel={true}
-                                                                />
-                                                            }
-                                                        </div>
-                                                        <div className="plan_grid_content">
-                                                            <div className="plan_content_header">
 
-                                                                {/*tags map grid starts here*/}
-                                                                <div className="plans_tags_wrapper ">
+                                                return deletedPostsIds.includes(plannerPost?.id) ? <></> :
+                                                    <>
+                                                        <div
+                                                            className={"more_plans_grid mb-3 " + (deleteBatchIdRef === plannerPost?.id ? "disable_more_plans_grid" : "")}
+                                                            key={index}>
+                                                            <div className="plan_grid_img">
+                                                                {plannerPost?.attachments &&
+                                                                    <CommonSlider files={plannerPost?.attachments}
+                                                                                  selectedFileType={null} caption={null}
+                                                                                  hashTag={null}
+                                                                                  showThumbnail={true}
+                                                                                  viewSimilarToSocialMedia={false}
+                                                                                  enableShowPlannerModel={true}
+                                                                    />
+                                                                }
+                                                            </div>
+                                                            <div className="plan_grid_content">
+                                                                <div className="plan_content_header">
 
-                                                                    <div className="d-flex page_tags">
-                                                                        {plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
-                                                                            plannerPost?.postPages.map((curPage, index) => {
-                                                                                console.log("curPage",curPage)
-                                                                                return (
-                                                                                    <div
-                                                                                        className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}                                                                                        
-                                                                                        key={index}
-                                                                                    >
-                                                                                        <div
-                                                                                            className="plan_tag_img position-relative">
-                                                                                            <img className="plan_image"
-                                                                                                 src={curPage?.imageURL}
-                                                                                                 alt="fb"/>
-                                                                                            <img
-                                                                                                className="plan_social_img"
-                                                                                                src={computeImageURL(curPage?.socialMediaType)}
-                                                                                                alt="fb"/>
+                                                                    {/*tags map grid starts here*/}
+                                                                    <div className="plans_tags_wrapper ">
 
-                                                                                        </div>
-                                                                                        <p className="mb-0">{curPage?.pageName}</p>
-                                                                                    </div>
-                                                                                )
+                                                                        <div className="d-flex page_tags">
+                                                                            {
+                                                                                plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
+                                                                                plannerPost?.postPages.map((curPage, index) => {
+                                                                                    return removedPostPages?.some(removedPostPages => removedPostPages?.postId === plannerPost?.id && removedPostPages?.pageId === curPage?.pageId) ? <></> : (
+                                                                                        (removedPostPagesRef?.postId === plannerPost.id && removedPostPagesRef?.pageId === curPage?.pageId) ?
+                                                                                            <SkeletonEffect
+                                                                                                count={1}></SkeletonEffect>
+                                                                                            : <div key={index}
+                                                                                                   className={"planner_tag_container"}>
+                                                                                                {
+                                                                                                    deleteBatchIdRef === plannerPost?.id ?
+                                                                                                        <SkeletonEffect
+                                                                                                            count={1}></SkeletonEffect> :
+                                                                                                        <div
+                                                                                                            className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}
+                                                                                                        >
+                                                                                                            <div
+                                                                                                                className="plan_tag_img position-relative">
+                                                                                                                <img
+                                                                                                                    className="plan_image"
+                                                                                                                    src={curPage?.imageURL}
+                                                                                                                    alt="fb"/>
+                                                                                                                <img
+                                                                                                                    className="plan_social_img"
+                                                                                                                    src={computeImageURL(curPage?.socialMediaType)}
+                                                                                                                    alt="fb"/>
 
-                                                                            })
-                                                                        }
+                                                                                                            </div>
+                                                                                                            <p className="mb-0">{curPage?.pageName}</p>
+                                                                                                        </div>
+                                                                                                }
+                                                                                                {
+                                                                                                    (deleteBatchIdRef !== plannerPost?.id && curPage?.errorInfo?.isDeletedFromSocialMedia) &&
+                                                                                                    <>
+                                                                                                        <div
+                                                                                                            className={"post-deleted-tag"}> Deleted
+                                                                                                            {
+                                                                                                                !plannerPost?.postPages?.every(postPage => postPage?.errorInfo?.isDeletedFromSocialMedia) &&
+                                                                                                                <RiDeleteBin7Line
+                                                                                                                    onClick={() => {
+                                                                                                                        !deletePostFromPageData?.loading && setRemovedPostPagesRef({
+                                                                                                                            postId: plannerPost?.id,
+                                                                                                                            pageId: curPage?.pageId
+                                                                                                                        })
+                                                                                                                    }}
+                                                                                                                    title={"Delete From Addy"}
+                                                                                                                    className={"cursor-pointer delete-from-addy-icon"}/>
+                                                                                                            }
+
+                                                                                                        </div>
+                                                                                                    </>
+                                                                                                }
+
+                                                                                            </div>
+                                                                                    )
+
+                                                                                })
+                                                                            }
+                                                                        </div>
+
                                                                     </div>
-
-                                                                </div>
-                                                                <div className="plan_grid_navigations">
-                                                                    <button onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        navigate(`/post/${plannerPost?.id}`)
-                                                                    }}>
-                                                                        <i className="fa fa-pencil"
-                                                                           aria-hidden="true"/>
-                                                                    </button>
-
-                                                                    {
-                                                                        deleteBatchIdRef === plannerPost?.id && deletePostByBatchIdData?.loading ?
-                                                                            <i className="fa fa-spinner fa-spin"/> :
-                                                                            <button onClick={(e) => {
+                                                                    <div className="plan_grid_navigations ">
+                                                                        <button
+                                                                            className={isPlannerPostEditable("EDIT", plannerPost) ? "" : "disable_more_plans_grid"}
+                                                                            disabled={!isPlannerPostEditable("EDIT", plannerPost)}
+                                                                            onClick={(e) => {
+                                                                                e.preventDefault();
+                                                                                navigate(`/post/${plannerPost?.id}`)
+                                                                            }}>
+                                                                            <i className="fa fa-pencil"
+                                                                               aria-hidden="true"/>
+                                                                        </button>
+                                                                        <button
+                                                                            className={isPlannerPostEditable("DELETE", plannerPost) ? "" : "disable_more_plans_grid"}
+                                                                            disabled={!isPlannerPostEditable("DELETE", plannerPost)}
+                                                                            onClick={(e) => {
                                                                                 handleDeletePlannerPost(e, plannerPost?.id);
                                                                             }}>
-                                                                                <i className="fa fa-trash"
-                                                                                   aria-hidden="true"/>
-                                                                            </button>
-                                                                    }
+                                                                            <i className="fa fa-trash"
+                                                                               aria-hidden="true"/>
+                                                                        </button>
 
+                                                                    </div>
                                                                 </div>
+                                                                {
+                                                                    deleteBatchIdRef === plannerPost?.id ?
+                                                                        <SkeletonEffect count={1}></SkeletonEffect> :
+                                                                        <>
+                                                                            <p className="mt-2 mb-1">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.caption || "" : ""}</p>
+                                                                            <p className="hasTags">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.hashtag || "" : ""}</p>
+                                                                        </>
+                                                                }
+
                                                             </div>
-                                                            <p className="mt-2 mb-1">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.caption || "" : ""}</p>
-                                                            <p className="hasTags">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.hashtag || "" : ""}</p>
                                                         </div>
-                                                    </div>
-                                                )
+                                                    </>
+
 
                                             })
                                     }
