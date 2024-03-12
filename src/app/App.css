@@ -293,12 +293,14 @@ div#swal2-html-container {
 }
 .animation{
   animation-name: fadeInLeft;
-  animation-duration: 1s;
+  animation-duration: 3s;
 }
-
+.Sidebar_containerbox li{
+  width: 60px !important;
+}
 @keyframes fadeInLeft {
   0% {
-     opacity: 0.9;
+     opacity: 0.2;
      transform: translateX(-50px);
   }
   100% {

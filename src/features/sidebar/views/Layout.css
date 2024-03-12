@@ -259,7 +259,7 @@ li.sidebar_item_outer:hover svg {
         display: none;
     }
     .sidebar_inner_content {
-        padding: 16px 19px;
+        padding: 10px 19px;
         gap: 17px;
     }
     i.bar_icon {
@@ -267,7 +267,7 @@ li.sidebar_item_outer:hover svg {
         padding: 10px 16px;
     }
     div.sidebar_item_outers {
-        padding: 8px 20px;
+        padding: 4px 20px;
         gap: 21px;
     }
 @media screen and (max-width: 767px) {

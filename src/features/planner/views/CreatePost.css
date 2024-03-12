@@ -638,9 +638,8 @@ button.ai_btn {
 }
 
 .post_preview_outer {
-    
     animation-name: fadeInLeft;
-    animation-duration: 1s;
+    animation-duration: 3s;
     animation-timing-function: all ease 0.7s;
     background: #1E1E1E;
     padding: 3em;

@@ -186,7 +186,7 @@ const Profile = () => {
     return (
         <>
             <SideBar/>
-            <section className={` cmn_container ${sidebar? "":"cmn_Padding"}`} style={{background: "white"}}>
+            <section className={` cmn_container ${sidebar? "":"cmn_Padding"}`} >
 
                 <div className="addy_img">
                     <h3 className="edit_profile_heading cmn_text_heading">Profile</h3>
