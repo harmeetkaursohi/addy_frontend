@@ -64,17 +64,15 @@ const CreatePost = () => {
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
 
-    const [videoBlob, setVideoBlob] = useState(null)    
+  
+    const [trimmedVideoUrl, setTrimmedVideoUrl] = useState()    
     const [allOptions, setAllOptions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
     const[showPreview,setShowPreview]=useState(false)
 
-    const getVideoBlob = (videoBlob) => {   
-     
-        setVideoBlob(videoBlob)
-    }
+   console.log(trimmedVideoUrl,"trimmedVideoUrl123",files,"files000")
 
     useEffect(() => {
         if (connectedPagesData.loading) {
@@ -346,6 +344,9 @@ const CreatePost = () => {
     const [imgFile, setImgFile] = useState(null)
     const [videoFile, setVideoFile] = useState(null)
     const [fileSize, setFileSize] = useState(null)
+
+    const [videoBlob, setVideoBlob] = useState(null)
+
     const[showEditVideoModal,setShowEditVideoModal]=useState(false)
     
     const editHandler = (index, file) => {
@@ -360,7 +361,7 @@ const CreatePost = () => {
        }
 
     }
-
+console.log(videoBlob,"videoBlob---",fileSize,"fileSize")
     useEffect(() => {
         if (cropImgUrl) {
             const updatedFiles = [...files];
@@ -376,6 +377,24 @@ const CreatePost = () => {
 
         }
     }, [cropImgUrl])
+    // trimmed video url
+    useEffect(() => {
+        if (trimmedVideoUrl) {
+            const updatedFiles = [...files];
+
+            updatedFiles[editImgIndex] = {
+                file: videoBlob,
+                url: trimmedVideoUrl,
+                filleName: imgFile?.fileName,
+                mediaType: imgFile?.mediaType
+            };
+
+            setFiles(updatedFiles);
+
+        }
+    }, [trimmedVideoUrl])
+    
+
 
 const{sidebar}=useAppContext()
 
@@ -944,9 +963,10 @@ const{sidebar}=useAppContext()
             {showEditVideoModal && 
                 <EditVideoModal 
                     showEditVideoModal={showEditVideoModal} 
-                    getVideoBlob={getVideoBlob} 
+                    setTrimmedVideoUrl={setTrimmedVideoUrl}
                     setShowEditVideoModal={setShowEditVideoModal} 
                     videoInfo={videoFile}
+                    setVideoBlob={setVideoBlob}
                 />}
         </>)
 }

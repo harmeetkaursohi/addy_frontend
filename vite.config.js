@@ -16,6 +16,16 @@ const VITE_HMR_PROTOCOL = process.env.VITE_HMR_PROTOCOL;
 export default defineConfig({
     plugins: [
         react(),
+        {
+            name: "configure-response-headers",
+            configureServer: (server) => {
+              server.middlewares.use((_req, res, next) => {
+                res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+                res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+                next();
+              });
+            },
+          },
     ],
     server: {
         port: Number(PORT || 5143),
@@ -26,11 +36,14 @@ export default defineConfig({
         },
         watch: {
             usePolling: true
-        }
-    },
+        },
+        
+        },
+
     build: {
         watch: false
-    }
+    },
+ 
 })
 
 
