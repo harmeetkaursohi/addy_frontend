@@ -218,27 +218,9 @@ li.sidebar_item_outer:hover {
 
   
 }
-.right_forward_arrow{
-    left: 16.5rem;
-}
-.cmn_forward_arrow{
-   cursor: pointer;
-    position: fixed;
-    z-index: 3;
-    color: #f07c33;
-    top: 2rem;
-  
-    background: #eee8e8;
-    height: 30px;
-    width: 30px;
-    border-radius: 20px;
-    text-align: center;
-    transition: all 0.7s ease;
-}
-.cmn_forward_arrow  svg{
-    vertical-align: text-top;
-    font-size: 25px
-}
+
+
+
 .forward_arrow{
     left: 3rem;
     transition: all ease-in 0.5s;
@@ -257,9 +239,10 @@ li.sidebar_item_outer:hover svg {
     }
     .user_Profile_outer {
         display: none;
+        
     }
     .sidebar_inner_content {
-        padding: 10px 19px;
+        padding: 6px 19px;
         gap: 17px;
     }
     i.bar_icon {
@@ -269,6 +252,11 @@ li.sidebar_item_outer:hover svg {
     div.sidebar_item_outers {
         padding: 4px 20px;
         gap: 21px;
+    }
+    .cmn_forward_arrow{
+       
+        padding: 10px 10px 0px 0px;
+        cursor: pointer;
     }
 @media screen and (max-width: 767px) {
     /* div.sidebar_item_outers {
@@ -282,10 +270,8 @@ li.sidebar_item_outer:hover svg {
     /* .sidebar_content {
         width: 59px;
     } */
-    .cmn_forward_arrow{
-        height: 25px;
-        width: 25px;
-    }
+   
+    
     .cmn_forward_arrow svg {
         font-size: 20px;
     }

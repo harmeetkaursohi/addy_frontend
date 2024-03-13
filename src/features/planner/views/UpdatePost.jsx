@@ -35,6 +35,7 @@ import Loader from '../../loader/Loader.jsx';
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import { useAppContext } from '../../common/components/AppProvider.jsx';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 
 const UpdatePost = () => {
 
@@ -74,6 +75,10 @@ const UpdatePost = () => {
         const userData = useSelector(state => state.user.userInfoReducer.data);
         const getPostsByIdData = useSelector(state => state.post.getPostsByIdReducer?.data);
         const loadingUpdatePost = useSelector(state => state.post.updatePostOnSocialMediaReducer.loading);
+        
+        const [videoFile, setVideoFile] = useState(null)
+        const [videoBlob, setVideoBlob] = useState(null)
+        const [trimmedVideoUrl, setTrimmedVideoUrl] = useState()   
 
         const loader = useSelector(state => state.post.getPostsByIdReducer?.loading)
 
@@ -177,7 +182,7 @@ const UpdatePost = () => {
             }
         }, [allOptions, getPostsByIdData]);
 
-
+console.log(files,"all_files")
         useEffect(() => {
             if (files && files.length <= 0) {
                 setDisableVideo(false);
@@ -382,10 +387,18 @@ const UpdatePost = () => {
         const [imgFile, setImgFile] = useState(null)
         const [fileSize, setFileSize] = useState(null)
 
+        const [showEditVideoModal,setShowEditVideoModal]=useState(false)
         const editHandler = (index, file) => {
+             console.log(file,"file78")
             setImgFile(file)
             setEditImgIndex(index)
-            setShowEditImageModal(true)
+
+            if(file.mediaType==='VIDEO'){
+                setShowEditVideoModal(true)
+                setVideoFile(file)
+               }else{
+                setShowEditImageModal(true)
+               }
         }
 
         useEffect(() => {
@@ -402,6 +415,27 @@ const UpdatePost = () => {
                 })
             }
         }, [cropImgUrl])
+        // trimmed video url
+
+        useEffect(() => {
+            if (trimmedVideoUrl) {
+
+                const updatedFiles = [...files];
+                urlToFile(trimmedVideoUrl, imgFile?.fileName, imgFile?.mediaType).then(result => {
+                    console.log(result,"result901")
+                    updatedFiles[editImgIndex] = {
+                        file: result,
+                        fileName: imgFile?.fileName,
+                        mediaType: imgFile?.mediaType,
+                        url: trimmedVideoUrl,
+                    };
+                    setFiles(updatedFiles);
+                })
+              
+                setFiles(updatedFiles);
+    
+            }
+        }, [trimmedVideoUrl])
 
         const [showPreview,setShowPreview]=useState(false)
         return (
@@ -573,6 +607,7 @@ const UpdatePost = () => {
 
                                                 <div className="drag_scroll ">
                                                     {files?.map((file, index) => {
+
                                                         return (
                                                             <div
                                                                 className="file_outer dragable_files"
@@ -598,7 +633,7 @@ const UpdatePost = () => {
                                                                 </div>
 
                                                                 {
-                                                                    file?.mediaType === "IMAGE" &&
+                                                                    // file?.mediaType === "IMAGE" &&
                                                                     <button className="edit_upload delete_upload me-2"
                                                                             onClick={(e) => {
                                                                                 e.preventDefault();
@@ -664,8 +699,7 @@ const UpdatePost = () => {
                                                                 }}/>
                                                             <label htmlFor='video' className='cmn_blue_border cmn_headings'>
                                                                 <i className="fa fa-video-camera"
-                                                                   style={{marginTop: "2px"}}/>Add
-                                                                Video
+                                                                   style={{marginTop: "2px"}}/>{files?.length>0?"Change Video":"Add Video"}
                                                             </label>
                                                         </div>
                                                     }
@@ -944,6 +978,16 @@ const UpdatePost = () => {
                     />
 
                 }
+
+           {showEditVideoModal && 
+                <EditVideoModal
+                isReuired={true}
+                    showEditVideoModal={showEditVideoModal} 
+                    setTrimmedVideoUrl={setTrimmedVideoUrl}
+                    setShowEditVideoModal={setShowEditVideoModal} 
+                    videoInfo={videoFile}
+                    setVideoBlob={setVideoBlob}
+                />}
             </>)
     }
 ;

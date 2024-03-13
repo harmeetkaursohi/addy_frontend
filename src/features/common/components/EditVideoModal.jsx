@@ -6,8 +6,9 @@ import 'nouislider/distribute/nouislider.css';
 
 import "./common.css"
 let ffmpeg;
-const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setTrimmedVideoUrl,setVideoBlob}) => {
 
+const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setTrimmedVideoUrl,setVideoBlob,isReuired}) => {
+console.log(videoInfo,"videoInfo",isReuired,"isReuired")
   const [videoDuration, setVideoDuration] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [startTime, setStartTime] = useState(0);
@@ -17,6 +18,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
   const [videoFileValue, setVideoFileValue] = useState('');  
   const [videoTrimmedUrl, setVideoTrimmedUrl] = useState('');
   const [play,setPlay]=useState(false)
+
 
 
 
@@ -47,17 +49,16 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
 
   useEffect(()=>{
     setVideoFileValue(videoInfo);
-    
-    setVideoSrc(URL.createObjectURL(videoInfo.file))
+    setVideoSrc(videoInfo.url? videoInfo.url:`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + videoInfo?.id)
+    // setVideoSrc(URL.createObjectURL(videoInfo?.file!==null?videoInfo?.file:`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id))
   },[])
 
-
+ 
   useEffect(() => {
 
+    console.log("fdsfds");
     // Load the ffmpeg script
-    loadScript(
-      'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.2/dist/ffmpeg.min.js',
-    ).then(() => {
+    loadScript('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.2/dist/ffmpeg.min.js').then(() => {
       if (typeof window !== 'undefined') {
         // Create a dummy SharedArrayBuffer if SharedArrayBuffer is not defined
         if (typeof SharedArrayBuffer === 'undefined') {
@@ -75,8 +76,7 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
         setIsScriptLoaded(true);
       }
     }).catch((err) => console.error(err));
-
-
+    
   }, []);
 
    //Get the duration of the video using videoRef
@@ -134,61 +134,25 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
     }
   };
 
-  //Trim functionality of the video
-  // const handleTrim = async () => {
-  //   const videoDurationSeconds = endTime - startTime;
+
   
-  //     if (videoDurationSeconds < 4) {
-     
-  //         alert('Video duration must be at least 4 seconds.');
-  //         return;
-  //     }
-  //     if (videoDurationSeconds > 15 * 60) { 
-      
-  //         alert('Video duration cannot exceed 15 minutes.');
-  //         return;
-  //     }
-  //   if (isScriptLoaded) {
-  
-  //     const { name, type } = videoFileValue;
-  //     // Write video to memory
-  //     ffmpeg.FS('writeFile', name, await window.FFmpeg.fetchFile(videoFileValue));
-  //     const videoFileType = type.split('/')[1];
-  //     // Run the ffmpeg command to trim video
-  //     await ffmpeg.run(
-  //       '-i',
-  //       name,
-  //       '-ss',
-  //       `${convertToHHMMSS(startTime)}`,
-  //       '-to',
-  //       `${convertToHHMMSS(endTime)}`,
-  //       '-acodec',
-  //       'copy',
-  //       '-vcodec',
-  //       'copy',
-  //       `out.${videoFileType}`,
-  //     );
-  //     // Convert data to URL and store it in videoTrimmedUrl state
-  //     const data = ffmpeg.FS('readFile', `out.${videoFileType}`);
-  //     const url = URL.createObjectURL(new Blob([data.buffer], { type: videoFileValue.type }));
-  //     setVideoTrimmedUrl(url);
-  //   }
-  // };
-  
-   console.log(videoFileValue.file?.name,"videoFileValue")
+ 
   const handleTrim = async () => {
+    console.log("hlow")
     if (isScriptLoaded) {
-  
-      // const  name = videoFileValue.file.name;
-      // const type=videoFileValue.file?.type
-     
+      
      const { name, type } = videoFileValue.file;
     
-
+     const fileData = await window.FFmpeg.fetchFile(videoFileValue.url, {
+      headers: {
+        'Cross-Origin-Embedder-Policy': 'require-corp',
+        'Cross-Origin-Opener-Policy': 'same-origin',
+        // Add any other headers you need here
+      }
+      });
       // Write video to memory
-      ffmpeg.FS('writeFile', name, await window.FFmpeg.fetchFile(videoFileValue.file));
+      ffmpeg.FS('writeFile', name, fileData);
       const videoFileType = type.split('/')[1];
-     
       // Run the ffmpeg command to trim video
       await ffmpeg.run(
         '-i',
@@ -206,9 +170,62 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
       // Convert data to URL and store it in videoTrimmedUrl state
       const data = ffmpeg.FS('readFile', `out.${videoFileType}`);
       const url = URL.createObjectURL(new Blob([data.buffer], { type: videoFileValue.type }));
-      const videodata=new Blob([data.buffer], { type: type })
-      console.log(videodata,"url123")
-      setVideoBlobData(videodata)
+      var file = new File([data.buffer], name, {type: type});
+
+      setVideoBlobData(file)
+      setVideoTrimmedUrl(url);
+    }
+  };
+ 
+
+
+  const handleTrim1 = async () => {
+    console.log("hlo world")
+    if (isScriptLoaded) {
+
+      const name=videoFileValue.fileName
+     const { fileName , mediaType  } = videoFileValue;
+     const fileExtension = fileName.split('.').pop();
+
+     // Append file extension to mediaType
+     const newMediaType = `${mediaType}/${fileExtension}`;
+     
+     const fileData = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + videoInfo?.id;
+
+     // Create a Blob object from the data
+     const blob = new Blob([fileData], { type: mediaType });
+     
+     // Create a new File object from the Blob and specify the filename
+     const fileinfo = new File([blob], name, { type: mediaType});
+     console.log(fileinfo,"filedata56")
+
+      // Write video to memory
+      ffmpeg.FS('writeFile', name, await window.FFmpeg.fetchFile(fileinfo));
+
+      const videoFileType = newMediaType.split('/')[1];
+
+      // Run the ffmpeg command to trim video
+      await ffmpeg.run(
+        '-i',
+        name,
+        '-ss',
+        `${convertToHHMMSS(startTime)}`,
+        '-to',
+        `${convertToHHMMSS(endTime)}`,
+        '-acodec',
+        'copy',
+        '-vcodec',
+        'copy',
+        `out.${videoFileType}`,
+      );
+      // Convert data to URL and store it in videoTrimmedUrl state
+      const data = ffmpeg.FS('readFile', `out.${videoFileType}`);
+      const url = URL.createObjectURL(new Blob([data.buffer], { type: newMediaType }));
+
+      var file = new File([data.buffer], name, {type: type});
+
+
+      setVideoBlobData(file)
       setVideoTrimmedUrl(url);
     }
   };
@@ -281,7 +298,7 @@ const saveHandler=()=>{
             behaviour="tap-drag"
             step={1}
             margin={3}
-            limit={30}
+            // limit={130}
             range={{ min: 0, max: videoDuration || 2 }}
             start={[0, videoDuration || 2]}
             connect
@@ -296,7 +313,7 @@ const saveHandler=()=>{
           <br />
           
           <button className='cmn_crop_video_btn ' onClick={play? handlePause: handlePlay }>{play?"Pause":"Play"}</button> &nbsp;
-          <button className=" cmn_crop_video_btn "onClick={handleTrim}>Trim</button>
+          <button className=" cmn_crop_video_btn "onClick={isReuired? handleTrim1:handleTrim}>Trim</button>
           <br />
           {videoTrimmedUrl && (
             
@@ -311,7 +328,7 @@ const saveHandler=()=>{
     <Modal.Footer>                    
     <div className=" ">
         <button className="cmn_btn_color cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
-        <button onClick={saveHandler} type="button" className="cmn_btn_color cmn_connect_btn connect_btn ms-3"
+        <button disabled={videoTrimmedUrl===undefined|| videoTrimmedUrl===null}onClick={saveHandler} type="button" className={videoTrimmedUrl===undefined|| videoTrimmedUrl===null? "disabled-button":"cmn_btn_color cmn_connect_btn connect_btn ms-3"}
                > Save
         </button>
     </div>
