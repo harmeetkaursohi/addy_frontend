@@ -350,6 +350,7 @@ const CreatePost = () => {
     const[showEditVideoModal,setShowEditVideoModal]=useState(false)
     
     const editHandler = (index, file) => {
+        console.log(file,"file data")
         setImgFile(file)
         setEditImgIndex(index)
       
@@ -658,8 +659,7 @@ const{sidebar}=useAppContext()
                                                                 <label htmlFor='video'
                                                                        className='cmn_headings cmn_blue_border'>
                                                                     <i className="fa fa-video-camera"
-                                                                       style={{marginTop: "2px"}}/>Add
-                                                                    Video
+                                                                       style={{marginTop: "2px"}}/>{files?.length>0?"Change Video":"Add Video"}
                                                                 </label>
                                                             </div>
                                                         }

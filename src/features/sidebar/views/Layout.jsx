@@ -14,6 +14,7 @@ import { getFacebookConnectedPages } from "../../../app/actions/facebookActions/
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useAppContext } from "../../common/components/AppProvider.jsx";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { FaBars } from "react-icons/fa";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -85,19 +86,18 @@ const Layout = () => {
   return (
     <>
       <section className="sidebar_container">
-        <div
-          onClick={show_sidebar}
-          className={`cmn_forward_arrow ${
-            sidebar ? " forward_arrow" : "right_forward_arrow"
-          } `}
-        >
-          {sidebar ? <IoIosArrowForward /> : <IoIosArrowBack />}
-        </div>
+        
         <div
           className={
             sidebar ? "sidebar_content sidebar_wrapper" : "sidebar_wrapper"
           }
         >
+          <div
+          onClick={show_sidebar}
+          className={`cmn_forward_arrow ${sidebar?"text-center":"text-end" }`}
+        >
+         <FaBars/>
+        </div>
           <div className="user_profile_outer">
             <Link to="/dashboard">
               {sidebar ? (
