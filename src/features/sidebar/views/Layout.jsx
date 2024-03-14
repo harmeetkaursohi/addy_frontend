@@ -162,7 +162,7 @@ const Layout = () => {
                 >
                   <div className="sidebar_item_outers" onClick={LogOut}>
                     <BiLogOut />
-                    <h6 className="">Logout</h6>
+                  
                   </div>
                 </OverlayTrigger>
               ) : (

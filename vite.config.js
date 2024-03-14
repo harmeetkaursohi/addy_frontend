@@ -1,6 +1,7 @@
 import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import dotenv from 'dotenv';
+import { customHeadersMiddleware } from './src/features/common/components/CustomHeaderMiddleware';
 
 // Load environment variables from the appropriate .env.local file
 dotenv.config({
@@ -15,8 +16,11 @@ const VITE_HMR_PROTOCOL = process.env.VITE_HMR_PROTOCOL;
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
-        react()
+        react(),
+        customHeadersMiddleware()
     ],
+   
+
     server: {
         port: Number(PORT || 5143),
         hmr: {
@@ -27,7 +31,7 @@ export default defineConfig({
         watch: {
             usePolling: true
         },
-        
+      
         },
 
     build: {

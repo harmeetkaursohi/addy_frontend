@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import Nouislider from 'nouislider-react';
 import 'nouislider/distribute/nouislider.css';
-
+import axios from 'axios';
 
 import "./common.css"
 let ffmpeg;
 
 const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setTrimmedVideoUrl,setVideoBlob,isReuired}) => {
-console.log(videoInfo,"videoInfo",isReuired,"isReuired")
+
   const [videoDuration, setVideoDuration] = useState(0);
   const [endTime, setEndTime] = useState(0);
   const [startTime, setStartTime] = useState(0);
@@ -29,6 +29,7 @@ console.log(videoInfo,"videoInfo",isReuired,"isReuired")
 
   const loadScript = (src) => {
     return new Promise((onFulfilled, _) => {
+      
       const script = document.createElement('script');
       let loaded;
       script.async = 'async';
@@ -56,7 +57,7 @@ console.log(videoInfo,"videoInfo",isReuired,"isReuired")
  
   useEffect(() => {
 
-    console.log("fdsfds");
+ 
     // Load the ffmpeg script
     loadScript('https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.2/dist/ffmpeg.min.js').then(() => {
       if (typeof window !== 'undefined') {
@@ -137,98 +138,59 @@ console.log(videoInfo,"videoInfo",isReuired,"isReuired")
 
   
  
+  
+ let isTrimming=false
   const handleTrim = async () => {
-    console.log("hlow")
-    if (isScriptLoaded) {
+
+    if (isTrimming) {
+        console.log("Trimming is already in progress. Skipping.");
+        return;
+    }
+
+    try {
       
-     const { name, type } = videoFileValue.file;
-    
-     const fileData = await window.FFmpeg.fetchFile(videoFileValue.url, {
-      headers: {
-        'Cross-Origin-Embedder-Policy': 'require-corp',
-        'Cross-Origin-Opener-Policy': 'same-origin',
-        // Add any other headers you need here
-      }
-      });
-      // Write video to memory
-      ffmpeg.FS('writeFile', name, fileData);
-      const videoFileType = type.split('/')[1];
-      // Run the ffmpeg command to trim video
-      await ffmpeg.run(
-        '-i',
-        name,
-        '-ss',
-        `${convertToHHMMSS(startTime)}`,
-        '-to',
-        `${convertToHHMMSS(endTime)}`,
-        '-acodec',
-        'copy',
-        '-vcodec',
-        'copy',
-        `out.${videoFileType}`,
-      );
-      // Convert data to URL and store it in videoTrimmedUrl state
-      const data = ffmpeg.FS('readFile', `out.${videoFileType}`);
-      const url = URL.createObjectURL(new Blob([data.buffer], { type: videoFileValue.type }));
-      var file = new File([data.buffer], name, {type: type});
+        isTrimming = true;
 
-      setVideoBlobData(file)
-      setVideoTrimmedUrl(url);
+        console.log("Starting video trimming...");
+
+        if (isScriptLoaded) {
+            const { name, type } = videoFileValue.file;
+            
+            // Fetch file using Axios with custom headers
+            const response = await axios.get(videoFileValue.url, {
+                responseType: 'blob',
+           
+            });
+          
+            const fileData = response.data;
+
+            ffmpeg.FS('writeFile', name, new Uint8Array(await fileData.arrayBuffer()));
+
+            const videoFileType = type.split('/')[1];
+            await ffmpeg.run(
+                '-i', name,
+                '-ss', `${convertToHHMMSS(startTime)}`,
+                '-to', `${convertToHHMMSS(endTime)}`,
+                '-acodec', 'copy',
+                '-vcodec', 'copy',
+                `out.${videoFileType}`
+            );
+            const data = ffmpeg.FS('readFile', `out.${videoFileType}`);
+            const trimmedBlob = new Blob([data.buffer], { type: videoFileValue.type });
+            const trimmedUrl = URL.createObjectURL(trimmedBlob);
+            const trimmedFile = new File([data.buffer], name, { type: type });
+            setVideoBlobData(trimmedFile);
+            setVideoTrimmedUrl(trimmedUrl);
+        }
+    } catch (error) {
+        console.error("Error while trimming video:", error);
+    } finally {
+
+        isTrimming = false;
     }
-  };
- 
+};
 
 
-  const handleTrim1 = async () => {
-   
-    if (isScriptLoaded) {
-
-      const name=videoFileValue.fileName
-     const { fileName , mediaType  } = videoFileValue;
-     const fileExtension = fileName.split('.').pop();
-
-     // Append file extension to mediaType
-     const newMediaType = `${mediaType}/${fileExtension}`;
-     
-     const fileData = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + videoInfo?.id;
-
-     // Create a Blob object from the data
-     const blob = new Blob([fileData], { type: mediaType });
-     
-     // Create a new File object from the Blob and specify the filename
-     const fileinfo = new File([blob], name, { type: mediaType});
-     console.log(fileinfo,"filedata56")
-
-      // Write video to memory
-      ffmpeg.FS('writeFile', name, await window.FFmpeg.fetchFile(fileinfo));
-
-      const videoFileType = newMediaType.split('/')[1];
-
-      // Run the ffmpeg command to trim video
-      await ffmpeg.run(
-        '-i',
-        name,
-        '-ss',
-        `${convertToHHMMSS(startTime)}`,
-        '-to',
-        `${convertToHHMMSS(endTime)}`,
-        '-acodec',
-        'copy',
-        '-vcodec',
-        'copy',
-        `out.${videoFileType}`,
-      );
-      // Convert data to URL and store it in videoTrimmedUrl state
-      const data = ffmpeg.FS('readFile', `out.${videoFileType}`);
-      const url = URL.createObjectURL(new Blob([data.buffer], { type: newMediaType }));
-
-      var file = new File([data.buffer], name, {type: type});
-
-
-      setVideoBlobData(file)
-      setVideoTrimmedUrl(url);
-    }
-  };
   
     
 
@@ -278,6 +240,7 @@ const saveHandler=()=>{
   
   setShowEditVideoModal(false)
 }
+console.log(videoTrimmedUrl,"videoTrimmedUrl12")
 
   return (
     <Modal className='facebook_modal_outer' size="md" show={showEditVideoModal} onHide={handleClose} backdrop="static">
@@ -313,7 +276,7 @@ const saveHandler=()=>{
           <br />
           
           <button className='cmn_crop_video_btn ' onClick={play? handlePause: handlePlay }>{play?"Pause":"Play"}</button> &nbsp;
-          <button className=" cmn_crop_video_btn "onClick={isReuired? handleTrim1:handleTrim}>Trim</button>
+          <button className=" cmn_crop_video_btn "onClick={handleTrim}>Trim</button>
           <br />
           {videoTrimmedUrl && (
             
@@ -328,7 +291,7 @@ const saveHandler=()=>{
     <Modal.Footer>                    
     <div className=" ">
         <button className="cmn_btn_color cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
-        <button disabled={videoTrimmedUrl===undefined|| videoTrimmedUrl===null}onClick={saveHandler} type="button" className={videoTrimmedUrl===undefined|| videoTrimmedUrl===null? "disabled-button":"cmn_btn_color cmn_connect_btn connect_btn ms-3"}
+        <button disabled={videoTrimmedUrl.length===0} onClick={saveHandler} type="button" className={`ms-3 connect_btn ${videoTrimmedUrl.length===0?"disabled-button": "cmn_btn_color cmn_connect_btn  "}`}
                > Save
         </button>
     </div>
