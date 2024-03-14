@@ -180,7 +180,7 @@ console.log(videoInfo,"videoInfo",isReuired,"isReuired")
 
 
   const handleTrim1 = async () => {
-    console.log("hlo world")
+   
     if (isScriptLoaded) {
 
       const name=videoFileValue.fileName
