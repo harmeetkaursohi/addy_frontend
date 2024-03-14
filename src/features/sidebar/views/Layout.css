@@ -67,7 +67,7 @@ i.bar_icon {
 
 .sidebar_item li {
     background-color: white;
-    margin-top: 8px;
+    /* margin-top: 8px; */
     width: 275px;
     cursor: pointer;
 
@@ -147,6 +147,7 @@ a.active {
     border-left: 4px solid #f07c33;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+    margin: 10px 0px;
 }
 
 .sidebar_inner_content {
@@ -168,10 +169,7 @@ a.active {
     font-weight: 600;
 }
 
-/* .sidebar_item li{
-    display: flex;
-    gap: 7px;
-} */
+
 .user_profile_outer h4 {
     color: #5F6D7E;
     font-size: 13px;
@@ -257,6 +255,7 @@ li.sidebar_item_outer:hover svg {
        
         padding: 10px 10px 0px 0px;
         cursor: pointer;
+        margin-left: 10px;
     }
 @media screen and (max-width: 767px) {
     /* div.sidebar_item_outers {
@@ -270,7 +269,9 @@ li.sidebar_item_outer:hover svg {
     /* .sidebar_content {
         width: 59px;
     } */
-   
+    .sidebar_item li{
+    margin-top: 8px;
+    }
     
     .cmn_forward_arrow svg {
         font-size: 20px;

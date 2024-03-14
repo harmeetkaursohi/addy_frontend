@@ -159,11 +159,13 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
             // Fetch file using Axios with custom headers
             const response = await axios.get(videoFileValue.url, {
                 responseType: 'blob',
-           
+                // headers: {
+                //   'Cross-Origin-Embedder-Policy': 'require-corp',
+                //   'Cross-Origin-Opener-Policy': 'same-origin'
+                // }
             });
           
             const fileData = response.data;
-
             ffmpeg.FS('writeFile', name, new Uint8Array(await fileData.arrayBuffer()));
 
             const videoFileType = type.split('/')[1];

@@ -242,7 +242,7 @@ const Review = () => {
                                                     (!isLoading && results !== null && results?.length === 0) ?
                                                         <tr>
 
-                                                            <td className="W-100 text-center" colSpan={6}>
+                                                            <td className="W-100 text-center" style={{background:"white"}} colSpan={6}>
                                                                 <div
                                                                     className={"no-post-review acc_not_connected_heading"}>Oops!
                                                                     It seems there are no posts to display at the

@@ -174,7 +174,7 @@ export const DashboardReports = () => {
                                             <img
                                                 src={selectedPage?.imageUrl ? selectedPage?.imageUrl : default_user_icon}
                                                 className="me-3 dropdown-page-logo"
-                                                alt={selectedPage?.name}/>{selectedPage?.name}
+                                                alt={""}/>{selectedPage?.name}
                                         </Dropdown.Toggle>
 
                                         {
