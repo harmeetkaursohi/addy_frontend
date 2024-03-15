@@ -1,7 +1,7 @@
 import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import dotenv from 'dotenv';
-import { customHeadersMiddleware } from './src/features/common/components/CustomHeaderMiddleware';
+// import { customHeadersMiddleware } from './src/features/common/components/CustomHeaderMiddleware';
 
 // Load environment variables from the appropriate .env.local file
 dotenv.config({
@@ -17,7 +17,7 @@ const VITE_HMR_PROTOCOL = process.env.VITE_HMR_PROTOCOL;
 export default defineConfig({
     plugins: [
         react(),
-        customHeadersMiddleware()
+        // customHeadersMiddleware()
     ],
    
 

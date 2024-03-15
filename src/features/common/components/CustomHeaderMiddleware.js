@@ -1,6 +1,6 @@
 // customHeadersMiddleware.js
-export function customHeadersMiddleware(url) {
-console.log(url,"url90")
+export function customHeadersMiddleware() {
+
     return {
         name: 'custom-headers-middleware',
         apply: 'serve',

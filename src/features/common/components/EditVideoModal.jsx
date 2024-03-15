@@ -7,7 +7,7 @@ import axios from 'axios';
 import "./common.css"
 let ffmpeg;
 
-const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setTrimmedVideoUrl,setVideoBlob,isReuired}) => {
+const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setTrimmedVideoUrl,setBlobVideo,isReuired}) => {
 
   const [videoDuration, setVideoDuration] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -35,7 +35,9 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
       script.async = 'async';
       script.defer = 'defer';
       script.setAttribute('src', src);
+      
       script.onreadystatechange = script.onload = () => {
+        
         if (!loaded) {
           onFulfilled(script);
         }
@@ -136,12 +138,21 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
   };
 
 
-  
- 
-  
  let isTrimming=false
-  const handleTrim = async () => {
 
+  const handleTrim = async () => {
+     const videoDurationSeconds = endTime - startTime;
+  
+        if (videoDurationSeconds < 4) {
+       
+            alert('Video duration must be at least 4 seconds.');
+            return;
+        }
+        if (videoDurationSeconds > 15 * 60) { 
+        
+            alert('Video duration cannot exceed 15 minutes.');
+            return;
+        }
     if (isTrimming) {
         console.log("Trimming is already in progress. Skipping.");
         return;
@@ -151,7 +162,6 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
       
         isTrimming = true;
 
-        console.log("Starting video trimming...");
 
         if (isScriptLoaded) {
             const { name, type } = videoFileValue.file;
@@ -238,11 +248,10 @@ const EditVideoModal = ({videoInfo,showEditVideoModal,setShowEditVideoModal,setT
 
 const saveHandler=()=>{
   setTrimmedVideoUrl(videoTrimmedUrl)
-  setVideoBlob(videoBlobData)
+  setBlobVideo(videoBlobData)
   
   setShowEditVideoModal(false)
 }
-console.log(videoTrimmedUrl,"videoTrimmedUrl12")
 
   return (
     <Modal className='facebook_modal_outer' size="md" show={showEditVideoModal} onHide={handleClose} backdrop="static">
@@ -263,7 +272,7 @@ console.log(videoTrimmedUrl,"videoTrimmedUrl12")
             behaviour="tap-drag"
             step={1}
             margin={3}
-            // limit={130}
+            // limit={60*3}
             range={{ min: 0, max: videoDuration || 2 }}
             start={[0, videoDuration || 2]}
             connect

@@ -411,7 +411,12 @@ a.fc-daygrid-dot-event:hover {
     .planner_header_outer {
         display: block;
     }
-
+    .planner_view_more_btn{
+    overflow-x: scroll;
+    scrollbar-width: thin;
+    font-size: 12px;
+    padding: 4px 10px;
+    }
     .create_post_btn {
         margin-top: 12px
     }
