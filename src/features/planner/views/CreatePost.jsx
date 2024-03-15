@@ -72,7 +72,7 @@ const CreatePost = () => {
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
     const[showPreview,setShowPreview]=useState(false)
 
-   console.log(trimmedVideoUrl,"trimmedVideoUrl123",files,"files000")
+
 
     useEffect(() => {
         if (connectedPagesData.loading) {
@@ -345,12 +345,12 @@ const CreatePost = () => {
     const [videoFile, setVideoFile] = useState(null)
     const [fileSize, setFileSize] = useState(null)
 
-    const [videoBlob, setVideoBlob] = useState(null)
+    const [blobVideo, setBlobVideo] = useState(null)
 
     const[showEditVideoModal,setShowEditVideoModal]=useState(false)
     
     const editHandler = (index, file) => {
-        console.log(file,"file data")
+ 
         setImgFile(file)
         setEditImgIndex(index)
       
@@ -362,7 +362,7 @@ const CreatePost = () => {
        }
 
     }
-console.log(videoBlob,"videoBlob---",fileSize,"fileSize")
+
     useEffect(() => {
         if (cropImgUrl) {
             const updatedFiles = [...files];
@@ -384,10 +384,10 @@ console.log(videoBlob,"videoBlob---",fileSize,"fileSize")
             const updatedFiles = [...files];
 
             updatedFiles[editImgIndex] = {
-                file: videoBlob,
+                file: blobVideo,
                 url: trimmedVideoUrl,
-                filleName: imgFile?.fileName,
-                mediaType: imgFile?.mediaType
+                filleName: videoFile?.fileName,
+                mediaType: videoFile?.mediaType
             };
 
             setFiles(updatedFiles);
@@ -966,7 +966,7 @@ const{sidebar}=useAppContext()
                     setTrimmedVideoUrl={setTrimmedVideoUrl}
                     setShowEditVideoModal={setShowEditVideoModal} 
                     videoInfo={videoFile}
-                    setVideoBlob={setVideoBlob}
+                    setBlobVideo={setBlobVideo}
                 />}
         </>)
 }

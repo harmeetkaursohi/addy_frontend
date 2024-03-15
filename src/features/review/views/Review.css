@@ -302,6 +302,9 @@ p.disable-reply-comment {
     .review_header{
         flex-wrap: wrap;
     }
+    .no-post-review{
+        font-size: 16px;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -309,9 +312,7 @@ p.disable-reply-comment {
         display: block;
         padding-top: 36px;
     }
-    .no-post-review{
-        font-size: 16px;
-    }
+   
     .review-social-media-dropdown{
         margin-top: 20px;
     }

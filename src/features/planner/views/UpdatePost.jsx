@@ -182,7 +182,7 @@ const UpdatePost = () => {
             }
         }, [allOptions, getPostsByIdData]);
 
-console.log(files,"all_files")
+
         useEffect(() => {
             if (files && files.length <= 0) {
                 setDisableVideo(false);
@@ -383,15 +383,15 @@ console.log(files,"all_files")
         // edit handler
         const [showEditImageModal, setShowEditImageModal] = useState(false)
         const [cropImgUrl, setCropImgUrl] = useState(null)
-        const [editImgIndex, setEditImgIndex] = useState(null)
+        const [editIndex, setEditIndex] = useState(null)
         const [imgFile, setImgFile] = useState(null)
         const [fileSize, setFileSize] = useState(null)
 
         const [showEditVideoModal,setShowEditVideoModal]=useState(false)
         const editHandler = (index, file) => {
-             console.log(file,"file78")
+       
             setImgFile(file)
-            setEditImgIndex(index)
+            setEditIndex(index)
 
             if(file.mediaType==='VIDEO'){
                 setShowEditVideoModal(true)
@@ -405,7 +405,7 @@ console.log(files,"all_files")
             if (cropImgUrl) {
                 const updatedFiles = [...files];
                 urlToFile(cropImgUrl, imgFile?.fileName, imgFile?.mediaType).then(result => {
-                    updatedFiles[editImgIndex] = {
+                    updatedFiles[editIndex] = {
                         file: result,
                         fileName: imgFile?.fileName,
                         mediaType: imgFile?.mediaType,
@@ -421,12 +421,12 @@ console.log(files,"all_files")
             if (trimmedVideoUrl) {
 
                 const updatedFiles = [...files];
-                urlToFile(trimmedVideoUrl, imgFile?.fileName, imgFile?.mediaType).then(result => {
-                    console.log(result,"result901")
-                    updatedFiles[editImgIndex] = {
+                urlToFile(trimmedVideoUrl, videoFile?.fileName, videoFile?.mediaType).then(result => {
+                   
+                    updatedFiles[editIndex] = {
                         file: result,
-                        fileName: imgFile?.fileName,
-                        mediaType: imgFile?.mediaType,
+                        fileName: videoFile?.fileName,
+                        mediaType: videoFile?.mediaType,
                         url: trimmedVideoUrl,
                     };
                     setFiles(updatedFiles);
@@ -826,6 +826,7 @@ console.log(files,"all_files")
                                                                                      setReference("Scheduled")
                                                                                      handleSchedulePost(e);
                                                                                  }}
+
                                                                                  className={"cmn_bg_btn schedule_btn loading"}
                                                                                  isLoading={reference === "Scheduled" && loadingUpdatePost}/>
 
@@ -834,6 +835,7 @@ console.log(files,"all_files")
                                                                                      setReference("Draft")
                                                                                      handleDraftPost(e);
                                                                                  }}
+
                                                                                  className={"save_btn cmn_bg_btn loading"}
                                                                                  isLoading={reference === "Draft" && loadingUpdatePost}/>
                                                     </div>

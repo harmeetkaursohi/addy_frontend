@@ -184,6 +184,9 @@ background-color: #fff;
     .faq_wrapper h2 {
         font-size: 14px;
     }
+    .load-more-faqs-btn{
+        padding: 6px 15px;
+    }
     .submit_Button_Wrapper{
         display: flex;
         justify-content: center;
