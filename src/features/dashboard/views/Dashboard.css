@@ -292,7 +292,7 @@ element.style {
     display: flex;
     justify-content: center;
     align-items: center;
-   gap: 10px;
+    gap: 10px;
 
 }
 .cmn_drop_down.dropdown svg {
@@ -575,6 +575,7 @@ div.noDraftPosts_outer {
     }
     .upcomingPostBtn_Outer{
         margin-bottom: 20px;
+   
     }
 }
 
@@ -598,9 +599,7 @@ div.noDraftPosts_outer {
     .instagram_overview_heading {
         font-size: 12px;
     }
-    .upcomingPostBtn_Outer{
-        display: block;
-    }
+    
     .upcomingPostBtn_Outer .post_now{
         margin-top: 10px;
     }

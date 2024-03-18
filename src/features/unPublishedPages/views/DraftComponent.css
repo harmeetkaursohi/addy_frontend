@@ -207,15 +207,19 @@ button.post_now{
     border:1px solid transparent
 }
 
-button.outline_btn.schedule_btn {
+button.outline_btn {
     border-radius: 6px;
     border: 1px solid #00A3FF;
     background: #FFF;
     padding: 10px 15px;
     font-size: 10px;
 }
+.draft_button_outer button.post_now {
+    width: 100%;
+    max-width: 100%;
+}
 
-/* new css */
+
 .post_card_inner_content{
     height: 100px;
     overflow-y: scroll;
@@ -260,7 +264,7 @@ button.outline_btn.schedule_btn {
 .mt-4.upcomingPostBtn_Outer button {
     min-width: 86px;
     width: 100%;
-    padding: 9px ;
+    padding: 10px ;
 }
 .draft_button_outer button {
     padding: 9px;
@@ -292,9 +296,15 @@ button.outline_btn.schedule_btn{
     button.outline_btn.schedule_btn{
         margin-top: 0px;
     }
+    button.outline_btn {
+        padding: 10px;
+        width: 100%;
+    }
+    .draft_button_outer .cmn_bg_btn {
+        padding: 10px;
+    }
     div.draft_button_outer{
         display: flex !important;
-        flex-wrap: wrap;
     }
     h2.acc_not_connected_heading {
         font-size: 16px;
@@ -311,6 +321,9 @@ button.outline_btn.schedule_btn{
     button.outline_btn.schedule_btn{
         margin-top: 10px;
 
+    }
+    div.draft_button_outer button {
+        margin-top: 10px;
     }
     div.draft_button_outer{
         display: block !important;

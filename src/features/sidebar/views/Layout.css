@@ -256,6 +256,10 @@ li.sidebar_item_outer:hover svg {
         padding: 10px 10px 0px 0px;
         cursor: pointer;
         margin-left: 10px;
+       
+    }
+    .cross_icon{
+        font-size: 22px;
     }
 @media screen and (max-width: 767px) {
     /* div.sidebar_item_outers {
@@ -299,14 +303,9 @@ li.sidebar_item_outer:hover svg {
     .cmn_forward_arrow{
         top: 1rem;
     }
-    .sidebar_content h2 {
-        display: none;
-    }
+    
 
-    /* i.bar_icon {
-        display: flex;
-        padding: 10px 16px;
-    } */
+   
 
 
 .connect_text {

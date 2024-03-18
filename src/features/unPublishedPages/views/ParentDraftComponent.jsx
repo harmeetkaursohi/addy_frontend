@@ -8,9 +8,10 @@ import CommonLoader from "../../common/components/CommonLoader";
 import noDraftPosts from "../../../images/no_draft_posts.png";
 import {useLocation} from "react-router-dom";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
+import { useAppContext } from "../../common/components/AppProvider";
 
 export const ParentDraftComponent = ({setDraftPost, reference = "", resetData = null}) => {
-
+     const{sidebar}=useAppContext()
     const [drafts, setDrafts] = useState(null);
     const getAllDraftPostsByCustomerAndPeriodData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
@@ -45,7 +46,7 @@ export const ParentDraftComponent = ({setDraftPost, reference = "", resetData = 
                                 :
                                 drafts !== null && Array.isArray(drafts) && drafts?.length > 0 &&
                                 sortByKey(drafts, "createdAt").map((curDraftObject, key) => (
-                                    <div className={"col-lg-4 col-md-6 col-sm-12"} key={key + "curDraftObject"}>
+                                    <div className={sidebar? "col-lg-4 col-md-6 col-sm-12": "col-lg-4 col-md-12 col-sm-12"} key={key + "curDraftObject"}>
                                         {
                                             <DraftComponent resetData={resetData} batchIdData={curDraftObject}
                                                             setDraftPost={setDraftPost}
