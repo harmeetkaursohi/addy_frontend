@@ -253,6 +253,7 @@ button.fc-customText-button.fc-button.fc-button-primary {
     display: flex;
     align-items: center;
     gap: 10px;
+    justify-content: center;
 
 }
 
@@ -273,7 +274,6 @@ button.fc-customText-button.fc-button.fc-button-primary {
 
 .custom_event h3 {
     color: #000;
-    overflow: hidden;
     font-family: "Nunito";
     font-size: 12px;
     font-style: normal;
@@ -410,6 +410,11 @@ a.fc-daygrid-dot-event:hover {
 @media screen and (max-width: 991px) {
     .planner_header_outer {
         display: block;
+    }
+    .custom_event{
+        overflow: scroll;
+        scrollbar-width: thin;
+        flex-wrap: wrap;
     }
     .planner_view_more_btn{
     overflow-x: scroll;

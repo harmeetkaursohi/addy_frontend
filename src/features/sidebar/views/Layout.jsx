@@ -15,6 +15,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useAppContext } from "../../common/components/AppProvider.jsx";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -96,7 +97,8 @@ const Layout = () => {
           onClick={show_sidebar}
           className={`cmn_forward_arrow ${sidebar?"text-center":"text-end" }`}
         >
-         <FaBars/>
+          {sidebar?  <FaBars/>:<RxCross2 className="cross_icon"/> }
+        
         </div>
           <div className="user_profile_outer">
             <Link to="/dashboard">

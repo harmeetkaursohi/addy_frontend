@@ -517,6 +517,7 @@ button.ai_btn {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 
 }
 
@@ -921,6 +922,15 @@ button.loading {
     .post_preview_outer {
         padding: 1rem;
     }
+    .create_post_content{
+        padding: 30px 10px;
+    }
+    .schedule_date_outer{
+     gap :10px
+    }
+    .width_class {
+        width: 90%;
+    }
 }
 @media screen and (max-width: 1024px) {
     .get_messages_outer {
@@ -970,9 +980,7 @@ button.loading {
     .date_time_outer {
         margin-top: 20px;
     }
-    .schedule_btn_outer {
-        display: block;
-    }
+    
 
 }
 

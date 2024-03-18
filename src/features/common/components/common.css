@@ -211,6 +211,7 @@ div.instagram_like {
     }
    .linkedin_likes {
     display: block;
+    text-align: center;
    }
    .linkedin_likes h3{
     line-height: 22px;

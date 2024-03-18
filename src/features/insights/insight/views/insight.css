@@ -437,6 +437,9 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     .account_reach_overview_wrapper {
         display: block;
     }
+    .overview_tabs.nav-tabs .nav-link {
+        padding: 3px 11px;
+    }
     .insight_inner_content{
         padding: 17px;
     }

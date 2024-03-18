@@ -163,7 +163,7 @@ const Planner = () => {
                         <div className={"custom_event mb-2"}
                              onClick={(e) => {
                              }}>
-                            <img className={"ms-4"} src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
+                            <img  src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
                             <h3>{postOnSocialMedia.title}</h3>
                         </div>
                     }

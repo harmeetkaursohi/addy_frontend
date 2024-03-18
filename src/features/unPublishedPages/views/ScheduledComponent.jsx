@@ -19,10 +19,11 @@ import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import noPostScheduled from "../../../images/no_post_scheduled.svg";
 import CommonLoader from "../../common/components/CommonLoader";
 import Swal from "sweetalert2";
+import { useAppContext } from '../../common/components/AppProvider';
 
 
 const ScheduledComponent = ({scheduledData}) => {
-
+const {sidebar}=useAppContext()
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -111,8 +112,8 @@ const ScheduledComponent = ({scheduledData}) => {
 
                                 // <div className={scheduledPosts.length===1 ? "col-lg-12" : scheduledPosts.length===2 ? "col-lg-6" :"col-lg-4"}>
 
-                                <div className={"col-lg-4"} key={index}>
-                                    <div className="draft-outer mb-3">
+                                <div className={sidebar?"col-lg-4 col-md-6 col-sm-12 ":"col-lg-4 col-md-12 col-sm-12 "} key={index}>
+                                    <div className="draft-outer ">
 
                                         <div className={"draft-heading"}>
                                             <h4 className={"posted-on-txt"}>Posted On : </h4>

@@ -152,14 +152,14 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
                                              isDisabled={labels!=="Post Now" && deletePostByBatchIdData?.loading}
                                             //  isDisabled={false}
                     />
-                    <GenericButtonWithLoader className={"outline_btn schedule_btn loading"} label={"Schedule Post"}
+                    <GenericButtonWithLoader className={"outline_btn  loading"} label={"Schedule Post"}
                                              onClick={() => {setLabels("Schedule Post") 
                                              navigate("/post/" + batchIdData?.id)}} 
                                             //  isDisabled={false}
                                              isDisabled={labels!=="Schedule Post" && deletePostByBatchIdData?.loading ||publishedPostData?.loading }
                                             />
 
-                    <GenericButtonWithLoader className={"outline_btn schedule_btn loading"}
+                    <GenericButtonWithLoader className={"outline_btn  loading"}
                             label={"Delete Post"}
                             isLoading={batchIdData?.id===batchToDelete && deletePostByBatchIdData?.loading}
                             onClick={handleDeletePost}
