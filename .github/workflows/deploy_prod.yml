@@ -48,3 +48,11 @@ jobs:
         working-directory: /home/runner/work/addy_frontend/addy_frontend
         run: |
           sudo scp -o StrictHostKeyChecking=no -i prod_private_key.pem -r dist ubuntu@${{ secrets.EC2_HOST }}:/var/www/html/Addy_Prod/addy_frontend
+          
+      - name: Check the new build and verify port status
+        run: |
+          # Check the content of the new build directory
+          ls -al /var/www/html/Addy_Prod/addy_frontend
+          ls -al /var/www/html/Addy_Prod/addy_frontend/dist
+          
+          
