@@ -50,7 +50,7 @@ const ContactUs = () => {
     handleChange: handleOnChange,
     onSubmit: (values, { resetForm }) => {
       dispatch(contactUsFormActions(values)).then((res)=>{
-        console.log("res",res);
+        
         res = res?.payload
         if(res?.status){     
           resetForm()
@@ -95,7 +95,7 @@ const ContactUs = () => {
         <div className="cmn_wrapper_outer">
           <div className="dashboard_outer">
             <h2 className="cmn_title">Contact Us</h2>
-            <div className="row m-0">
+            <div className="row mt-4">
               <div className="col-md-12 col-lg-6 Contact_us_Outer">
                 <div className="contact_content">
                   <h3>Let's talk with us</h3>
@@ -106,7 +106,7 @@ const ContactUs = () => {
                   <ul>
                     <li>
                       <CiLocationOn size={22} />
-                      <span>
+                      <span style={{fontWeight:700}}>
                         1055 Arthur ave Elk Groot, 67. <br />
                         New Palmas South Carolina.
                       </span>
@@ -198,6 +198,7 @@ const ContactUs = () => {
                       <textarea
                         rows="5"
                         name="message"
+                        placeholder="Your message...."
                         className="form-control"
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
@@ -230,7 +231,7 @@ const ContactUs = () => {
                         </p>
                       ) : null}
                     </div>
-                    <div className="col-12 mt-3">
+                    <div className="col-lg-12 mt-3">
                       <button type="submit" className={"cmn_btn_color sendMessageBtn"} disabled={contactUsFormReducer.loading} >
                         {contactUsFormReducer.loading ? <Loader/> : "Send Message"}
                       </button>

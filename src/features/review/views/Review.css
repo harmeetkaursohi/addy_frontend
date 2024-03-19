@@ -167,8 +167,8 @@ span.highlight {
 }
 
 .post_review_wrapper table thead th {
-    /* background: #F4F7FC; */
-    background-color: white ;
+    background: #F4F7FC;
+    /* background-color: white ; */
 }
 
 .post_review_wrapper table thead {
@@ -305,6 +305,13 @@ p.disable-reply-comment {
     .no-post-review{
         font-size: 16px;
     }
+    .review-post-icon {
+        height: 20px;
+        width: 20px;
+    }
+    .cmn_text_heading {
+        font-size: 22px;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -323,10 +330,7 @@ p.disable-reply-comment {
         width: 100%;
         height: auto;
     }
-    .review-post-icon {
-        height: 20px;
-        width: 20px;
-    }
+    
     .cmn_small_heading {
         font-size: 14px;
     }
@@ -335,9 +339,7 @@ p.disable-reply-comment {
         padding: 14px 0px 10px 14px;
     }
 
-    .cmn_text_heading {
-        font-size: 22px;
-    }
+    
 
     .filter_select_btn {
         margin-top: 14px;

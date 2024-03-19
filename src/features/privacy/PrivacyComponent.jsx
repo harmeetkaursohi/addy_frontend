@@ -42,6 +42,7 @@ const PrivacyComponent = () => {
         <div className="cmn_wrapper_outer">
           <div className="dashboard_outer">
             <h2 className="cmn_title">Privacy Policy</h2>
+            <h6 className="cmn_small_heading">Your Privacy Matters. Our Commitment to Protecting Your Personal Information.</h6>
             <div className="privacy_wrapper">
               <iframe
                 title="Embedded Content"

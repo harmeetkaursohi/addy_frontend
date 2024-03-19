@@ -36,8 +36,8 @@ const FaqComponent = () => {
            
                     <div className="dashboard_outer">
                         <div className="faq_wrapper">
-                            <h2>Frequently Asked Questions Hello, how can we help you ?</h2>
-                            <p className="pt-2">Check out some of these frequently asked questions about the AddyAds.</p>
+                            <h2 className="text-center">Frequently Asked Questions <br></br>  Hello, how can we help you ?</h2>
+                            <p className="pt-2 text-center">Check out some of these frequently asked questions about the AddyAds.</p>
                             <form method="post" onSubmit={function(e){ e.preventDefault();
                                 setPage(1); setSearch(document.getElementById("searchText").value);
                                 return false; }}>
@@ -52,7 +52,7 @@ const FaqComponent = () => {
                                 </div>
                             </form>
                             <div className="accordian_wrapper">
-                                {items.length ? <Accordion eventKey="0">
+                                {items.length ? <Accordion defaultActiveKey="0">
                                     {items.map(function(v,i){
                                         return (<Accordion.Item eventKey={i} key={i}>
                                             <Accordion.Header>{v.title.rendered}</Accordion.Header>
