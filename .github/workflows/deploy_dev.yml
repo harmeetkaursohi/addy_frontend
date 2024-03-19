@@ -48,3 +48,14 @@ jobs:
         working-directory: /home/runner/work/addy_frontend/addy_frontend
         run: |
           sudo scp -o StrictHostKeyChecking=no -i dev_private_key.pem -r dist ubuntu@${{ secrets.EC2_HOST }}:/var/www/html/dev.addyads.com/addy_frontend
+
+      - name: SSH into EC2 instance and view directory contents
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            ls -al /var/www/html/Addy_Prod/addy_frontend
+            ls -al /var/www/html/Addy_Prod/addy_frontend/dist    
