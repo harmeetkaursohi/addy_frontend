@@ -31,7 +31,7 @@ jobs:
 
       - name: Execute cleanup script on Dev Server
         run: |
-          sudo ssh -o StrictHostKeyChecking=no -i dev_private_key.pem ubuntu@${{ secrets.EC2_HOST }} "/var/www/html/dev.addyads.com/frontend_cleanup.sh"
+          sudo ssh -o StrictHostKeyChecking=no -i dev_private_key.pem ubuntu@${{ secrets.EC2_HOST_DEV }} "/var/www/html/dev.addyads.com/frontend_cleanup.sh"
 
       - name: Set up SSH key and permissions for frontend
         run: |
@@ -47,12 +47,12 @@ jobs:
       - name: Execute deployment script for frontend
         working-directory: /home/runner/work/addy_frontend/addy_frontend
         run: |
-          sudo scp -o StrictHostKeyChecking=no -i dev_private_key.pem -r dist ubuntu@${{ secrets.EC2_HOST }}:/var/www/html/dev.addyads.com/addy_frontend
+          sudo scp -o StrictHostKeyChecking=no -i dev_private_key.pem -r dist ubuntu@${{ secrets.EC2_HOST_DEV }}:/var/www/html/dev.addyads.com/addy_frontend
 
       - name: SSH into EC2 instance and view directory contents
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST }}
+          host: ${{ secrets.EC2_HOST_DEV }}
           username: ubuntu
           key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
           port: 22
