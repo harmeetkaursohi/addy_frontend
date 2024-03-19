@@ -1,6 +1,7 @@
 .contact_content ul li a{
     color: #000;
     cursor: pointer;
+    font-weight: 700;
 }
 .contact_content ul li {
     display: flex;
@@ -16,16 +17,18 @@
 }
 
 h2.cmn_title {
-    text-align: center;
-    margin-bottom: 30px !important;
-    font-size: 40px;
+    font-size: 30px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    color: #2E3646;
 }
 
 .contact_content {
-    padding: 0px 3em;
+    padding: 20px;
+    background: white;
+    min-height: 540px;
+    border-radius: 10px;
 }
 
 
@@ -35,6 +38,7 @@ h2.cmn_title {
     font-style: normal;
     font-weight: 700;
     margin-bottom: 10px !important;
+    color: #333333;
 }
 
 .contact_content p {
@@ -58,27 +62,24 @@ h2.cmn_title {
 .contact_form {
     border-radius: 10px;
     background: #fff;
-    padding: 30px;
+    padding: 20px;
 }
 .contact_form .cmn_bg_btn.schedule_btn.loading {
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
 }
-
-@media screen and (min-width:2560px){
-div.Contact_us_Outer {
-        width: 38%;
-        margin: auto;
-    }
+.contact_form input::placeholder {
+    color: #828282;
+}
+.contact_form textarea::placeholder {
+    color: #828282;
 }
 @media screen and (max-width: 1299px){
     h2.cmn_title{
         font-size: 30px;
     }
-    .contact_content {
-        padding:0px;
-    }
+    
     .contact_form {
         padding: 15px 5px;
     }
@@ -86,6 +87,7 @@ div.Contact_us_Outer {
 @media(max-width: 991px){
     .contact_content{
         margin-bottom: 2em;
+        min-height: unset;
     }
 }
 @media(max-width: 767px){

@@ -188,8 +188,11 @@ const Profile = () => {
             <SideBar/>
             <section className={` cmn_container ${sidebar? "":"cmn_Padding"}`} >
 
-                <div className="addy_img">
-                    <h3 className="edit_profile_heading cmn_text_heading">Profile</h3>
+                <div className="edit_profile_heading">
+                    <h3 className=" cmn_text_heading">Profile</h3>
+                    <h6 className="cmn_small_heading">Here you can manage your account.</h6>
+
+               
                 </div>
                 {
                     userData === null ? <CommonLoader></CommonLoader> :

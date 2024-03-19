@@ -65,8 +65,8 @@ const CommonSlider = ({
                                         className='post_img'
                                         url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
                                         controls={true}
-                                        playing={true}
-                                        muted={true}
+                                        // playing={true}
+                                        // muted={true}
                                     />
                                 </div>
                             ))
@@ -104,8 +104,8 @@ const CommonSlider = ({
                                 className=''
                                 url={`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + files[0].sourceURL}
                                 controls={true}
-                                playing={true}
-                                muted={true}
+                                // playing={true}
+                                // muted={true}
                             />
                         }
 
@@ -128,8 +128,8 @@ const CommonSlider = ({
                                             className='video_player_outer'
                                             url={isPublished ? file.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
                                             controls={true}
-                                            playing={true}
-                                            muted={true}
+                                            // playing={true}
+                                            // muted={true}
                                         />
 
                                     }

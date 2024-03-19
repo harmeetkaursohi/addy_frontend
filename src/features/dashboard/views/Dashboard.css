@@ -107,7 +107,6 @@ button#dropdown-basic {
     border: 1px solid #F3F7FD;
     background: #F4F4F4;
     color: #5F6D7E;
-    color: #5F6D7E;
     font-family: Nunito;
     font-size: 17px;
     font-style: normal;
@@ -731,8 +730,8 @@ div.noDraftPosts_outer {
 }
 .dropdown_btn .dropdown-item{
     padding: 9px 20px 15px;
-    border-bottom: 1px solid #e1d7d7;
-    color: #5F6D7E;
+    border-bottom: 1px solid #ededed;
+    color: #5F6D7E !important;
     font-weight: 500;
 }
 .dropdown_btn .dropdown-item:last-child{

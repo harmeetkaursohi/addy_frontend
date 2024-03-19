@@ -29,14 +29,10 @@ ul.mb-3.edit_tabs.nav.nav-tabs {
  
 }
 .edit_profile_heading{
-   font-weight: 600;
     border-bottom: 1px solid #dddbdb;
     padding: 20px 30px;
-    color: #2e3646;
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 38px;
-    letter-spacing: -0.28px;
+
+
 
 }
 label.changeProfile_label.updateAccount_label {

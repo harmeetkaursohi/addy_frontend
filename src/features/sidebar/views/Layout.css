@@ -153,14 +153,11 @@ a.active {
 .sidebar_inner_content {
   
     background: #F4F4F4;
- 
-
-    padding: 16px 14px;
+    padding: 6px 19px;
+    gap: 17px;
     display: flex;
-    gap: 10px;
     align-items: center;
     color: black;
-   
     cursor: pointer;
 
 }
@@ -239,10 +236,7 @@ li.sidebar_item_outer:hover svg {
         display: none;
         
     }
-    .sidebar_inner_content {
-        padding: 6px 19px;
-        gap: 17px;
-    }
+   
     i.bar_icon {
         display: flex;
         padding: 10px 16px;

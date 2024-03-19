@@ -284,7 +284,8 @@ div#swal2-html-container {
   animation: blinker 1s linear infinite;
 }
 .bg_Color{
-  background-color: #f4f8fe;
+  background-color: white;
+  /* background-color: #f4f8fe; */
 }
 @keyframes blinker {
   50% {
