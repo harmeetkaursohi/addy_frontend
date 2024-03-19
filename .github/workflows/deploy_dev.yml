@@ -54,8 +54,9 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ubuntu
-          key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            ls -al /var/www/html/Addy_Prod/addy_frontend
-            ls -al /var/www/html/Addy_Prod/addy_frontend/dist    
+            ls -al /var/www/html/dev.addyads.com/addy_frontend
+            uptime
+            free -m 
