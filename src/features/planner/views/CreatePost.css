@@ -390,7 +390,7 @@ content: url("../../../images/down_arrow.svg");
     position: absolute;
 } */
 .date_time_outer {
-    width: 100%;
+    width: 50%;
 }
 
 .create_post_wrapper {
@@ -961,17 +961,13 @@ button.loading {
         margin-top: 10px;
     }
 
-    .schedule_date_outer {
-        display: block;
-    }
+   
 
     .publish_post_outer {
-        display: block;
+        flex-wrap: wrap;
     }
 
-    .cancel_publish_btn_outer {
-        margin-top: 13px;
-    }
+   
 
     .date_time_outer select {
         width: 100%;
@@ -1007,6 +1003,12 @@ button.loading {
     .post_preview_outer {
         display: block;
         padding: 20px;
+    }
+    .schedule_date_outer{
+        display: block;
+    }
+    .date_time_outer{
+        width: 100%;
     }
     .media_inner_content{
         display: block;

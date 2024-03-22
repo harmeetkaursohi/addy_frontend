@@ -150,7 +150,7 @@ const CommonShowMorePlannerModal = ({
                                             sortByKey(plannerPosts, "feedPostDate")?.map((plannerPost, index) => {
 
                                                 return deletedPostsIds.includes(plannerPost?.id) ? <></> :
-                                                    <>
+                                               
                                                         <div
                                                             className={"more_plans_grid mb-3 " + (deleteBatchIdRef === plannerPost?.id ? "disable_more_plans_grid" : "")}
                                                             key={index}>
@@ -267,7 +267,7 @@ const CommonShowMorePlannerModal = ({
 
                                                             </div>
                                                         </div>
-                                                    </>
+                                                   
 
 
                                             })

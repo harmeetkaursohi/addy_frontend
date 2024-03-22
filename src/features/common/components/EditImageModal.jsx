@@ -12,7 +12,6 @@ import {useRef} from 'react';
 import "./common.css"
 
 const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFileSize, setCropImgUrl}) => {
-
    
    
    
@@ -54,7 +53,7 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
             const croppedImageBlob = await getCroppedImg(
                 imageRef.current,
                 crop,
-                "newFile.jpeg"
+                file?.file?.name
             );
             setCroppedImageUrl(URL.createObjectURL(croppedImageBlob.blob));
             setFileSize(croppedImageBlob.blob)
@@ -92,7 +91,7 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
 
                 resolve({blob});
 
-            }, "image/jpeg", 1);
+            }, file?.file?.type, 1);
 
         });
     };
