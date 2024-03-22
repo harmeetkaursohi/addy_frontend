@@ -139,7 +139,12 @@ label.edit_label{
         margin: auto;
     }
 }
-
+@media screen and (max-width:991px) {
+    .user_pic {
+        height: 110px;
+        width: 110px;
+    }
+}
  @media screen and (max-width:767px){
 
     label.edit_label {

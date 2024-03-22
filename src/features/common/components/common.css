@@ -200,6 +200,10 @@ div.instagram_like {
     .linkedin_dropdown{
         display: none;
     }
+    .reactEasyCrop_Container {
+        height: 300px;
+   
+    }
     .aspect_ratio_outer li svg {
         font-size: 18px;
     }

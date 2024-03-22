@@ -659,7 +659,7 @@ const UpdatePost = () => {
 
                                             </div>
 
-                                                <div className={showPreview? "":"col-lg-6 col-sm-12 col-md-12"}>
+                                                <div className={showPreview? "":"col-lg-6 col-sm-12 col-md-12 p-0"}>
 
                                                 <div className="darg_navs file_outer">
 

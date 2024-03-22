@@ -218,16 +218,10 @@
     height: 100%;
 }
 
-
-
-/*21 sep*/
 .login_form h3 {
     margin-top: 15px;
 }
 
-
-
-/*21 sep*/
 @media (max-width: 1440px) {
     img.girl_img_width {
         height: 300px;

@@ -9,7 +9,6 @@
     overflow-x: hidden;
     transition: all 0.7s ease;
     scrollbar-width: none;
-    /* transition: 1s cubic-bezier(.36,-0.01,0,.77); */
 
 
 }
@@ -57,7 +56,7 @@ i.bar_icon {
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 37px; /* 231.25% */
+    line-height: 37px; 
     letter-spacing: -0.016px;
     text-decoration: none;
     gap: 20px;
@@ -67,8 +66,7 @@ i.bar_icon {
 
 .sidebar_item li {
     background-color: white;
-    /* margin-top: 8px; */
-    width: 275px;
+     width: 275px;
     cursor: pointer;
 
 }
@@ -123,7 +121,7 @@ a.active {
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 37px; /* 231.25% */
+    line-height: 37px; 
     letter-spacing: -0.016px;
     text-decoration: none;
     gap: 20px;
@@ -184,11 +182,10 @@ a.active {
 }
 
 .user_profile_outer {
-    /* border-bottom: 1px solid #D1D9E2;
-    padding-bottom: 12px; */
+
   text-align: center;
   cursor: pointer;
-   /* margin-left: 18px;  */
+
 }
 
 .sidebar_container {
@@ -231,30 +228,29 @@ li.sidebar_item_outer:hover svg {
 }
 .sidebar_content {
         width: 59px;
-    }
-    .user_Profile_outer {
-        display: none;
+}
+.user_Profile_outer {
+     display: none;
         
-    }
+}
    
-    i.bar_icon {
+i.bar_icon {
         display: flex;
         padding: 10px 16px;
-    }
-    div.sidebar_item_outers {
+}
+div.sidebar_item_outers {
         padding: 4px 20px;
         gap: 21px;
-    }
-    .cmn_forward_arrow{
-       
+}
+.cmn_forward_arrow{    
         padding: 10px 10px 0px 0px;
         cursor: pointer;
         margin-left: 10px;
        
-    }
-    .cross_icon{
+}
+.cross_icon{
         font-size: 22px;
-    }
+}
 @media screen and (max-width: 767px) {
     /* div.sidebar_item_outers {
         padding: 11px 16px;
@@ -297,11 +293,6 @@ li.sidebar_item_outer:hover svg {
     .cmn_forward_arrow{
         top: 1rem;
     }
-    
-
-   
-
-
 .connect_text {
     color: #038000;
     line-height: 18px;

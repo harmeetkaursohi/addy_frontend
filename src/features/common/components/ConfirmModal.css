@@ -55,8 +55,3 @@ ul.slick-dots li button:before {
     }
 }
 
-@media screen and (max-width:767px){
-    img.post_img{
-        height: unset;
-    }
-}
