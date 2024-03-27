@@ -1,7 +1,6 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+
 import Card from "react-bootstrap/Card";
 import calender_icon from "../../../images/calender_icon2.svg";
 import "./slider.css";
@@ -18,10 +17,11 @@ import {FaGreaterThan, FaLessThan} from "react-icons/fa";
 import {getPostByPageIdAndPostStatus} from "../../../app/actions/postActions/postActions";
 import {getToken} from "../../../app/auth/auth";
 import {ErrorFetchingPost, PostAlreadyDeleted, SocialAccountProvider} from "../../../utils/contantData";
+import { useAppContext } from "../../common/components/AppProvider";
 
 
 const Carousel = ({selectedPage, cacheData}) => {
-
+   
     return (
         <div className="slider_outer_container content_outer">
             <DisplayPosts selectedPage={selectedPage} insightsCache={cacheData}/>
@@ -32,6 +32,9 @@ export default Carousel;
 
 const DisplayPosts = ({selectedPage, insightsCache}) => {
     const dispatch = useDispatch();
+
+    const { sidebar, show_sidebar } = useAppContext();
+
     const token = getToken();
     const getPostDataWithInsightsData = useSelector(state => state.insight.getPostDataWithInsightsReducer);
     const getPostByPageIdAndPostStatusData = useSelector(state => state.post.getPostByPageIdAndPostStatusReducer);
@@ -101,7 +104,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                 (getPostDataWithInsightsData?.loading || getPostByPageIdAndPostStatusData?.loading) ?
                     <CommonLoader></CommonLoader> :
                     Object.keys(getPostDataWithInsightsData?.data || {})?.length > 0 ?
-                        <Row className="">
+                        <div className="row">
                             {
 
                                 Object.keys(getPostDataWithInsightsData?.data)?.map(
@@ -112,7 +115,7 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                         );
                                         const deletedPostData = formattedData?.hasError ? getPostByPageIdAndPostStatusData?.data?.data[selectedPage?.pageId]?.filter(post => post?.postPageInfos[0]?.socialMediaPostId === formattedData?.id)[0] : {}
                                         return formattedData?.hasError ?
-                                            <Col lg="4" md="6" sm="12" xs="12" key={key + "slide"}>
+                                            <div className={sidebar ? "col-lg-4 col-md-6 col-sm-12":"col-lg-4 col-md-12 col-sm-12"}  key={key + "slide"}>
                                                 <Card className="card_body_content deleted-post-from-socialMedia">
                                                     <Card.Body className="p-0">
                                                         <div className="caresoul_inner_content_outer">
@@ -153,8 +156,8 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                                         </div>
                                                     </Card.Body>
                                                 </Card>
-                                            </Col> :
-                                            <Col lg="4" md="6" sm="12" xs="12" key={key + "slide"}>
+                                            </div> :
+                                            <div className={sidebar ? "col-lg-4 col-md-6 col-sm-12":"col-lg-4 col-md-12 col-sm-12"}   key={key + "slide"}>
                                                 <Card className="card_body_content">
                                                     <Card.Body className="p-0">
                                                         <div className="caresoul_inner_content_outer">
@@ -212,11 +215,11 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                                         </ul>
                                                     </Card.Body>
                                                 </Card>
-                                            </Col>
+                                            </div>
 
                                     }
                                 )}
-                        </Row> :
+                        </div> :
                         <div className={"text-center select-account-txt mt-3"}>
                             No posts to display
                         </div>
