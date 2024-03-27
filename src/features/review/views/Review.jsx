@@ -42,6 +42,8 @@ const Review = () => {
         hasNextPage,
 
     } = usePosts(baseSearchQuery);
+
+    
     const token = getToken();
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
@@ -259,9 +261,12 @@ const Review = () => {
                                                                         key={index}
                                                                         ref={index === results?.length - 1 ? lastPostRef : null}>
                                                                         <td>
-                                                                            <img
+                                                                            {post?.attachments[0]?.imageURL===null && post?.attachments[0]?.mediaType==="VIDEO"? 
+                                                                            <video style={{objectFit:"fill"}} className="bg_img" src={post?.attachments[0]?.sourceURL}></video>
+                                                                            :<img
                                                                                 src={post?.attachments[0]?.imageURL || noImageAvailable}
                                                                                 className="bg_img"/>
+                                                                            }
                                                                         </td>
                                                                         <td>
                                                                             <div

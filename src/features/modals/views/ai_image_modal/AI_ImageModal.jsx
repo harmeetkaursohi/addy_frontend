@@ -94,7 +94,7 @@ const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, se
                                             className={'generate_btn cmn_white_text' + (isNullOrEmpty(imageName) ? " opacity-50 " : "")}>
                                         {
                                             generateAIImageData?.loading ?
-                                                <div className={"loading_txt"}><Loader className={"me-2"}/> Loading
+                                                <div className={"loading_txt"}><Loader className={"me-2 ai_caption_loading_btn"}/> Loading
                                                 </div> :
                                                 (generateAIImageData?.data===null ||generateAIImageData?.data===undefined)?
 

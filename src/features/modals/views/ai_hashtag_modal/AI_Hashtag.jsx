@@ -151,7 +151,7 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
                                                 handleHashTagSubmit(e)
                                             }}>
                                         {generateAIHashTagData?.loading ?
-                                            <div className={"loading_txt"}><Loader className={"me-2"}/> Loading
+                                            <div className={"loading_txt"}><Loader className={"me-2 ai_caption_loading_btn"}/> Loading
                                             </div> : aiGeneratedHashTag?.length === 0 ? "Generate" : "Regenerate"
                                         }
                                     </button>

@@ -221,7 +221,7 @@ div.instagram_like {
     line-height: 22px;
    }
    .video_player_outer{
-    height: 100% !important;
+    height: unset !important;
    }
     
 }

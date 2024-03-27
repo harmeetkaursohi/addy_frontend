@@ -62,7 +62,7 @@ div.faq_section{
     color: #333333;
 }
 .faq_wrapper p{
-    color: #5F6D7E;
+    color: #888888
 }
 .accordian_wrapper .accordion-button.collapsed::after {
 background-color: #fff;

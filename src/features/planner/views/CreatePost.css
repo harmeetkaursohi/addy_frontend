@@ -1128,6 +1128,7 @@ button.loading {
     }
     .cancel_publish_btn_outer{
         justify-content: space-between;
+        margin-top: 10px;
     }
     .fb_likes {
         gap: 5px;

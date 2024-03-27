@@ -75,7 +75,7 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
                                             className={'generate_btn cmn_white_text ' + (isNullOrEmpty(caption) ? " opacity-50" : "")}>
                                         {
                                             generateAICaptionData?.loading ?
-                                                <div className={"loading_txt"}><Loader className={"me-2"}/> Loading
+                                                <div className={"loading_txt"}><Loader className={"me-2 ai_caption_loading_btn"}/> Loading
                                                 </div> : captionSuggestionList?.length === 0 ? "Generate" : "Regenerate"
                                         }
                                     </button>
