@@ -20,7 +20,7 @@ const AccountAlreadyConnectedWarningModal = ({accountAlreadyConnectedWarningModa
                         <div className='facebook_content_outer'>
                             <div className='text-center'>
                                 <img className={"connection-error-svg"} src={Connection_error}></img>
-                                <h6 className={"text-center mb-4"}>Oops,It appears that this {accountAlreadyConnectedWarningModal?.socialMediaType} account is already
+                                <h6 className="text-center mb-4 cmn_small_heading">Oops,It appears that this {accountAlreadyConnectedWarningModal?.socialMediaType} account is already
                                     linked. To proceed, kindly disconnect from the existing connection and try
                                     again.</h6>
                                 <button onClick={handleClose} className={"connection-error-close-btn"}>Close</button>

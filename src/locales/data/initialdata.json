@@ -11,12 +11,13 @@
     "contact": "Contact Us"
   },
   "createPassword": {
-    "createPassword": "Create Password",
+    "createPassword": "CREATE PASSWORD",
+    "createpasstext":"Create Password",
     "confirmnewpass":"Confirm New Password",
     "newpass":" New Password"
   },
   "forgotPassword": {
-    "forgotPassword": "Forgot Password"
+    "forgotPassword": "FORGOT PASSWORD ?"
   },
   "post": "Post",
   "currentpassword":"Current Password",
@@ -31,8 +32,8 @@
   "cancel": "Cancel",
   "reset": "Reset",
   "changepassword": "Change Password",
-  "loginwithfb": "Login with Facebook",
-  "loginwithgoogle": "Login with Google",
+   "enternewpass":"Enter new password",
+  "connect_audience_title":"Connect With Your Audience Using Smart Tools.",
   "publishnow": "Publish Now",
   "schedule": "Schedule",
   "generateAi": "Generate Image with AI",
@@ -49,10 +50,10 @@
   "mediaPlatform": "Please Select Media Platform",
   "username": "Username",
   "password": "Password",
-  "login": "Log in",
+  "login": "Log in!",
   "forgotpassword": "Forgot Password",
-  "signup": "Sign up",
-  "welcomeBack": "Welcome Back",
+  "signup": "Sign up!",
+  "welcomeBack": "WELCOME BACK",
   "email": "E-mail",
   "rememberPassword": "Remember Password",
   "account": "Don’t have an account ?",
@@ -63,7 +64,7 @@
   "confirmPass": "Confirm Password",
   "next": "Next",
   "alreadyAccount": "Already have an account?",
-  "oneStepAway": "Just One Step Away.",
+  "oneStepAway": "JUST ONE STEP AWAY",
   "state": "State",
   "county": "County",
   "contactNo": "Contact No",
@@ -72,7 +73,7 @@
   "addressLine2": "Address Line2 ",
   "city": "City",
   "pinCode": "Pin Code",
-  "address": "Enter Your Address",
+  "address": "Enter your address",
   "signUp": "Sign up",
   "billingAddress": "Enter Your Billing Information",
   "paymentMethod": "Select Payment Method",

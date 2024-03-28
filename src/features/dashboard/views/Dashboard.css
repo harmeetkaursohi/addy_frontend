@@ -74,7 +74,9 @@ button.ConnectBtn {
     color: #038000;
     line-height: 20px;
     letter-spacing: -0.01px;
-    font-size: 10px;;
+    font-size: 10px;
+    font-family: "Nunito";
+    font-weight: 400;
 }
 
 
@@ -107,7 +109,7 @@ button#dropdown-basic {
     border: 1px solid #F3F7FD;
     background: #F4F4F4;
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 17px;
     font-style: normal;
     font-weight: 700;
@@ -169,6 +171,7 @@ element.style {
     letter-spacing: 0.024px;
     background: #F4F4F4;
     padding: 16px 20px;
+    font-family: "Nunito";
 }
 
 .followers_inner_content {
@@ -213,6 +216,7 @@ element.style {
     font-weight: 700;
     line-height: 24px;
     letter-spacing: 0.024px;
+    font-family: "Nunito";
 }
 
 .social_media_account h6 {
@@ -237,7 +241,7 @@ element.style {
 }
 
 .cmn_connect_btn {
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
@@ -310,6 +314,7 @@ element.style {
     font-weight: 600;
     line-height: 22px;
     letter-spacing: -0.015px;
+    font-family: "Nunito";
 }
 
 .disconnect_btn {
@@ -404,7 +409,7 @@ button.facebook_connect {
     background: white;
     border: none;
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-style: normal;
     font-weight: 600;
     line-height: 24px;
@@ -700,9 +705,7 @@ div.noDraftPosts_outer {
 
 
 
-.sidebar_item {
-    margin-top: 0px !important;
-}
+
 
 .addy_logo {
     width: 160px;

@@ -27,7 +27,7 @@
 
 .select-account-txt {
     color: #000;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 22px;
     font-style: normal;
     font-weight: 600;
@@ -37,7 +37,7 @@
 
 .no-account-txt {
     color: #000;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
@@ -173,7 +173,7 @@ ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
 
 .overview_tabs.nav-tabs .nav-link {
     color: rgba(46, 54, 70, 0.80);
-    font-family: "Nunito";
+    font-family: "Poppins";
     font-size: 16px;
     font-style: normal;
     font-weight: 700;
@@ -494,7 +494,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     }
     .demographic_data {
         font-size: 12px;
-        font-family:  'Nunito', sans-serif;
+        font-family:  'Poppins';
         font-style: normal;
         padding-top: 10px;
     }

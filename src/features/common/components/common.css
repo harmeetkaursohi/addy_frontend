@@ -45,9 +45,10 @@
     transform: rotate(91deg);
 }
 .not_connect_heading{
-    font-size: 25px;
-    color: #2E3646;
-    font-weight: 700;
+    font-size: 26px;
+    color: #263238;
+    font-weight: 600;
+    font-family: "Nunito";
 }
 
 .dropdown_opions {

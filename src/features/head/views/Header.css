@@ -6,7 +6,7 @@
 .crate_btn {
     padding: 8px 16px;
     color: #F8F9FB;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 14px;
     font-style: normal;
     font-weight: 700;
@@ -14,7 +14,10 @@
     border: none;
     border-radius: 6px;
 }
-
+.header_container_box{
+    display: flex;
+    justify-content: space-between;
+}
 .header_outer_container {
     display: flex;
 }
@@ -29,11 +32,12 @@
     font-weight: 700;
     line-height: 38px;
     letter-spacing: -0.28px;
+    font-family: "Nunito";
 }
 
 .header_container h6 {
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -81,6 +85,9 @@
 @media screen and (max-width: 991px) {
     .create_Ad_outer {
         margin-top: 21px;
+    }
+    .header_container_box{
+        flex-wrap: wrap;
     }
 
     button.createPost_btn {

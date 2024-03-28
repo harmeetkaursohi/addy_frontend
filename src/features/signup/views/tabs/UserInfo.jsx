@@ -1,4 +1,4 @@
-import Frame from "../../../../images/Frame.svg"
+import Frame from "../../../../images/signup_bg.svg"
 import addyads_img from "../../../../images/addylogo.png";
 import {Link} from "react-router-dom"
 import jsondata from "../../../../locales/data/initialdata.json";
@@ -58,13 +58,12 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                 <div className="login_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12 ">
-                            <div className='addy_container bg_pastel_blue'>
-                                <div className='login_outer bg_white_cream'>
+                            <div className='addy_container bg_light_orange'>
+                                <div className='login_outer'>
 
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-5 text-dark'>Connect with your audience using smart tools.</h2>
-                                        <p className={"text-dark mb-4"}>Share information seamlessly across various channels to make a strong impact. We specialize in making sure your message reaches your audience smoothly and effectively through different media.</p>
+                                        <h2 className='mt-5'>{jsondata.connect_audience_title}</h2>
                                     </div>
                                 </div>
 
@@ -77,7 +76,8 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                     <div className="addy_img">
                                         <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                         </div>
-                                        <h2 className='cmn_fontFamily'>Create New Account</h2>
+                                        <h2>CREATE ACCOUNT</h2>
+                                        <p>Please enter your details</p>
                                     </div>
                                     <div className='login_form'>
 
@@ -90,7 +90,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                     name="firstName"
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='First Name'
+                                                    placeholder='Enter your firstname'
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.firstName}
@@ -108,7 +108,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                     name="lastName"
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='Last Name'
+                                                    placeholder='Enter your lastname'
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.lastName}
@@ -128,7 +128,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                     name="username"
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='Username'
+                                                    placeholder='Enter your username'
                                                     onChange={(e)=>{
                                                         formik.handleChange({ target: { name: e.target.name, value: e.target.value.replace(/\s/g, '') } });
                                                     }}
@@ -148,7 +148,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                     name="email"
                                                     className="form-control mt-1"
                                                     type='email'
-                                                    placeholder='Email'
+                                                    placeholder='Enter your email'
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.email}
@@ -188,7 +188,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                         name="contactNo"
                                                         className="form-control mt-1"
                                                         type='number'
-                                                        placeholder='Contact No'
+                                                        placeholder='Enter your contact no'
                                                         onChange={formik.handleChange}
                                                         onBlur={formik.handleBlur}
                                                         onKeyDown={blockInvalidChar}
@@ -199,7 +199,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                 <Button type={"Submit"} text={jsondata.next}/>
                                             </div>
                                         </form>
-                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/sign-up" : "/"}><span
+                                        <h3>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/sign-up" : "/"}><span
                                             className='sign_up'>{jsondata.login}</span></Link></h3>
                                     </div>
                                 </div>
