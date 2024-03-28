@@ -34,25 +34,21 @@ const Header = ({userData, setShowConnectAccountModal}) => {
                 <div className="header_outer">
 
                     <form>
-                        <div className="row">
-                            <div className="col-lg-5 col-md-12 col-sm-12">
-                                <div className="header_outer_container">
+                        <div className="header_container_box">
                                     <div className="header_container">
                                         <h2 className="">{typeof userData?.fullName !== "undefined" ? `${jsondata.heythere} ${userData?.fullName}!` :
                                             <SkeletonEffect count={1}></SkeletonEffect>}</h2>
                                         <h6>{typeof userData?.fullName !== "undefined" ? `Curious to explore? Welcome  to your all-in Dashboard and discover more!` :
                                             <SkeletonEffect count={1}></SkeletonEffect>}</h6>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="col-lg-7 col-md-12 col-sm-12">
-                                <div className="d-flex  gap-3 flex-wrap">
+                               
+                           
                                     {/*<div className="search_outer flex-grow-1">*/}
                                     {/*    <img src={search_icon} className="search_icon"/>*/}
                                     {/*    <input type="text" className="form-control search_input" placeholder="Search"/>*/}
                                     {/*</div>*/}
 
-                                    <div className="flex-grow-1"></div>
+                                    
                                     <div className="create_Ad_outer">
                                         {
                                             (connectedPagesData?.loading || getAllConnectedSocialAccountData?.loading || getAllFacebookPagesData?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading) ?
@@ -66,8 +62,9 @@ const Header = ({userData, setShowConnectAccountModal}) => {
                                         }
 
                                     </div>
-                                </div>
-                            </div>
+
+                               
+                           
                         </div>
 
                     </form>

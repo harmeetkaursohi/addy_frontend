@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import addy_crop_logo from "../../../images/cropLogo.png";
 import addy_logo from "../../../images/addylogo.png";
-import { BiLogOut } from "react-icons/bi";
 import "./Layout.css";
 import { SidebarMenuItems } from "../SidebarMenu.jsx";
 import { decodeJwtToken, getToken } from "../../../app/auth/auth";
@@ -11,11 +10,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 import { getAllConnectedSocialAccountAction } from "../../../app/actions/socialAccountActions/socialAccountActions";
 import { getFacebookConnectedPages } from "../../../app/actions/facebookActions/facebookActions";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useAppContext } from "../../common/components/AppProvider.jsx";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { FaBars } from "react-icons/fa";
+import { FaArrowRight, FaBars } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
+import profile_img from '../../../images/profile_img.png'
+import logout_img from '../../../images/log-out.svg'
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -90,9 +90,10 @@ const Layout = () => {
         
         <div
           className={
-            sidebar ? "sidebar_content sidebar_wrapper" : "sidebar_wrapper"
+            sidebar ? "sidebar_content sidebar_wrapper bg_light_orange" : "sidebar_wrapper bg_light_orange"
           }
         >
+          
           <div
           onClick={show_sidebar}
           className={`cmn_forward_arrow ${sidebar?"text-center":"text-end" }`}
@@ -113,6 +114,20 @@ const Layout = () => {
                 <img src={addy_logo} className="addy_logo" />
               )}
             </Link>
+
+          
+          </div>
+          <div className={sidebar? "d-none":"d-flex align-items-center justify-content-evenly mt-4 mb-4"}>
+          <div className="user_info_outer">
+          
+       
+
+          <img src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : profile_img} className='profile_img'/>
+           <h3>{userData?.fullName || "name"}</h3>
+          </div>
+           <FaArrowRight />
+             
+                            
           </div>
           <ul className={sidebar?"sidebar_item Sidebar_containerbox":"sidebar_item" }>
             {SidebarMenuItems &&
@@ -121,7 +136,7 @@ const Layout = () => {
                   key={index}
                   className={
                     item.path === "/" + splitLocation[1]
-                      ? "sidebar_container_items sidebar_item_outer bar text-center"
+                      ? "sidebar_container_items sidebar_item_outer"
                       : "sidebar_item_outer"
                   }
                   onClick={() => {
@@ -139,7 +154,9 @@ const Layout = () => {
                         }
                       >
                          <div className={ item.path === "/" + splitLocation[1] ? "sidebar_inner_content" : "sidebar_item_outers"}>
-                       <h3>{item.icon}</h3>
+                    
+                        {/* <img src={item.icon}/> */}
+                        {item.icon}
                      
                       </div>
                    
@@ -147,7 +164,8 @@ const Layout = () => {
                     ) : (
                         <div
                         className={ item.path === "/" + splitLocation[1] ? "sidebar_inner_content" : "sidebar_item_outers"}>
-                           <h3>{item.icon}</h3>
+                           {/* <img src={item.icon}/> */}
+                           {item.icon}
                            <h6 className=''>{item.name} </h6>
                       </div>
                     )
@@ -156,22 +174,22 @@ const Layout = () => {
                   
                 </li>
               ))}
-            <li className="sidebar_container_items sidebar_item_outer  text-center sidebar_item_outer">
+            <li className=" sidebar_item_outer  sidebar_item_outer">
               {sidebar ? (
                 <OverlayTrigger
                   placement="right"
                   overlay={<Tooltip id="button-tooltip">Logout</Tooltip>}
                 >
                   <div className="sidebar_item_outers" onClick={LogOut}>
-                    <BiLogOut />
+                    <img src={logout_img}/>
                   
                   </div>
                 </OverlayTrigger>
               ) : (
                 <>
-                  <div className="sidebar_item_outers" onClick={LogOut}>
-                    <BiLogOut />
-                    <h6 className="">Logout</h6>
+                  <div className="sidebar_item_outers " onClick={LogOut}>
+                  <img src={logout_img}/>
+                    <h6 className="red_color">Logout</h6>
                   </div>
                 </>
               )}

@@ -10,7 +10,7 @@ import {loginUser} from "../../../app/actions/userActions/userActions.js";
 import {validationSchemas} from "../../../utils/commonUtils.js";
 import React, {useEffect, useState} from "react";
 import {showErrorToast} from "../../common/components/Toast";
-import Frame from "../../../images/Frame.svg";
+import Frame from "../../../images/login_bg.svg";
 import {RotatingLines} from "react-loader-spinner";
 
 const Login = () => {
@@ -56,13 +56,13 @@ const Login = () => {
                 <div className="login_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12 ">
-                            <div className='addy_container bg_pastel_blue'>
-                                <div className='login_outer bg_white_cream'>
+                            <div className='addy_container bg_light_orange'>
+                                <div className='login_outer'>
 
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-5 text-dark'>Connect with your audience using smart tools.</h2>
-                                        <p className={"text-dark mb-4"}>Share information seamlessly across various channels to make a strong impact. We specialize in making sure your message reaches your audience smoothly and effectively through different media.</p>
+                                        <h2 className='mt-5'>{jsondata.connect_audience_title}</h2>
+                                       
                                     </div>
                                 </div>
 
@@ -77,7 +77,8 @@ const Login = () => {
                                         <div className='logo_outer'>
                                             <img src={addyads_img} height="90px" width="238px"/>
                                         </div>
-                                        <h2 className='cmn_fontFamily'>{jsondata.welcomeBack}</h2>
+                                        <h2>{jsondata.welcomeBack}</h2>
+                                        <p>Welcome back! Please enter your details</p>
                                     </div>
                                     <div className='login_form'>
                                         <form onSubmit={formik.handleSubmit}>
@@ -87,7 +88,7 @@ const Login = () => {
                                                 <input
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='Email'
+                                                    placeholder='Enter your email'
                                                     name="username"
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
@@ -133,38 +134,42 @@ const Login = () => {
 
                                             <div className='rememberPass_outer mt-2'>
 
-                                                <div className='check_box_outer'>
-                                                    <div></div>
+                                                <div className='text-end mt-3'>
+                                                  
                                                     <Link to="/forgot-password">
                                                         <label
-                                                            className='forgotPass_heading cursor_pointer'>{jsondata.forgotpassword}?</label>
+                                                            className='forgotPass_heading cursor_pointer'>{jsondata.forgotpassword}</label>
                                                     </Link>
 
                                                 </div>                                                
-                                                <button type={"submit"} className='login_btn' disabled={isLoading}>{jsondata.login} {isLoading ? (<span className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines width={30} strokeColor={"white"}></RotatingLines></span>): ""}</button>
-                                                <h2 className='cmn_heading'>OR</h2>
+                                                <button type={"submit"} className='login_btn' disabled={isLoading}>Log In {isLoading ? (<span className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines width={30} strokeColor={"white"}></RotatingLines></span>): ""}</button>
+                                                <h2 className='or_text'>OR</h2>
 
-                                                {/*======= login with  google =======*/}
-                                                <a className=''
-                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/google?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
-                                                    <div className="google_img_outer login_btn login_google_btn">
-                                                        <img src={google_img}/>
-                                                        <h2 className="ps-2">{jsondata.loginwithgoogle} </h2></div>
-                                                </a>
+                                               
+                                                <div className='social_login_outer'>
+                                               
 
-                                                {/*======= login with  facebook =======*/}
-
+                                                
+                                                 {/*======= login with  facebook =======*/}
                                                 <a className=''
                                                    href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
-                                                    <div className="google_img_outer login_btn login_google_btn">
+                                                    <div className="google_img_outer">
                                                         <img src={fbImg}/>
-                                                        <h2 className="ps-2">{jsondata.loginwithfb} </h2></div>
+                                                    </div>
                                                 </a>
+                                                 {/*======= login with  google =======*/}
+                                                <a className=''
+                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/google?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
+                                                    <div className="google_img_outer">
+                                                        <img src={google_img}/>
+                                                    </div>
+                                                </a>
+                                                </div>
 
                                             </div>
                                         </form>
 
-                                        <h3 className='cmn_heading'>{jsondata.account}
+                                        <h3>{jsondata.account}
                                             <Link className="ms-2" to="/sign-up">
                                                 <span className='sign_up'>{jsondata.signup}</span>
                                             </Link>

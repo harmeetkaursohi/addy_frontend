@@ -37,6 +37,7 @@ const Dashboard = () => {
         <>
             <SideBar/>
             <div className={sidebar? 'cmn_container':"cmn_Padding"}>
+                <div className="cmn_outer">
                 <div className="cmn_wrapper_outer">
                     <Header userData={userData}
                             facebookPageList={facebookPageList} setShowConnectAccountModal={setShowConnectAccountModal}/>
@@ -47,6 +48,8 @@ const Dashboard = () => {
                         </div>
                         <ScheduledComponent scheduledData={getAllPostsByCriteriaData}/>
                     </div>
+
+                </div>
 
                 </div>
 

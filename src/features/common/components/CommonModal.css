@@ -25,11 +25,11 @@
 
 .user_contents {
     color: #000;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 16px;
     font-style: normal;
     font-weight: 300;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px; 
     letter-spacing: -0.014px;
     margin-bottom: 0px;
 }

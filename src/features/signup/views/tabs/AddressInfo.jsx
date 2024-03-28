@@ -11,7 +11,8 @@ import {Country, State, City} from 'country-state-city';
 import {signUpUser} from "../../../../app/actions/userActions/userActions";
 import {showErrorToast} from "../../../common/components/Toast";
 import Swal from "sweetalert2";
-import Frame from "../../../../images/Frame.svg";
+import Frame from "../../../../images/signup_bg.svg";
+import { GrPrevious } from "react-icons/gr";
 
 const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
@@ -122,12 +123,13 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                 <div className="login_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12 ">
-                            <div className='addy_container bg_pastel_blue'>
-                                <div className='login_outer bg_white_cream'>
+                       
+
+                            <div className='addy_container bg_light_orange'>
+                                <div className='login_outer'>
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-5 text-dark'>Reach your users with new tools.</h2>
-                                        <p className={"text-dark mb-4"}>Empower your user engagement through innovative tools. Seamlessly amplify cross-media information, unlocking unprecedented value across diverse channels. Harness the synergy of cutting-edge strategies to captivate your audience and revolutionize their experience.</p>
+                                        <h2 className='mt-5 '>{jsondata.connect_audience_title}</h2>
                                     </div>
                                 </div>
 
@@ -135,13 +137,18 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                         </div>
                         <div className="col-lg-6 col-md-12 col-sm-12">
-                            <div className='addy_container'>
+                        <div className="gr_previous_outer" 
+                          onClick={(e) =>
+                            !signUpReducer?.loading && handlePreviousTab(e)}><GrPrevious />
+                            </div>
+
+                            
                                 <div className="addy_outer">
                                     <div className="addy_img">
                                         <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                         </div>
-                                        <h2 className='cmn_fontFamily'>{jsondata.oneStepAway}</h2>
-                                        <p className="pt-2">{jsondata.address}</p>
+                                        <h2>{jsondata.oneStepAway}</h2>
+                                        <p>{jsondata.address}</p>
                                     </div>
                                     <div className='login_form'>
 
@@ -277,17 +284,12 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                                placeholder={jsondata.pinCode}/>
                                                     </div>
                                                 </div>
-
-
-                                                <div className='col-lg-6'>
-                                                    <Button text={"Previous"} loading={false} type=""
-                                                            handleOnClickFunction={(e) =>
-                                                                !signUpReducer?.loading && handlePreviousTab(e)}/>
-                                                </div>
-                                                <div className='col-lg-6'>
+                                                <div className="mt-2">
                                                     <Button type={"Submit"} text={jsondata.signUp}
                                                             loading={signUpReducer?.loading}/>
+
                                                 </div>
+                                               
 
                                             </div>
                                         </form>
@@ -299,7 +301,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                     </div>
                                 </div>
 
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

@@ -98,7 +98,7 @@
 
 .plan_tags p {
     color: #000;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -141,7 +141,7 @@ img.plan_social_img {
 }
 .more_plans h2 {
     color: #000;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 24px;
     font-style: normal;
     font-weight: 600;
@@ -166,7 +166,7 @@ img.plan_social_img {
 }
 .post-deleted-tag {
     color: #000;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -186,7 +186,7 @@ img.plan_social_img {
 
 p.hasTags {
     color: #00A3FF;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 12px;
 }
 @media only screen and (max-width: 1024px) and (min-width: 576px)  {

@@ -19,7 +19,7 @@ const SelectPlan = () => {
                         <div className='logo_outer'><img src={addyads_img} height="90px" width="238px" />
                         </div>
                         <div className='selectplan_heading mt-5'>
-                        <h2 className='cmn_fontFamily'>Select your Plan</h2>
+                        <h2>Select your Plan</h2>
                         <p className='pt-2'>Lorem Ipsum is simply dummy text of the printing and type setting industry.</p>
                         </div>
                     </div>

@@ -395,7 +395,7 @@ const SocialAccounts = ({}) => {
 
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
-                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                        <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
 
@@ -452,7 +452,7 @@ const SocialAccounts = ({}) => {
                                                                                                 width="30px"/>
                                                                                             <h4 className="cmn_text_style">{data.name}</h4>
                                                                                         </div>
-                                                                                        <h4 className={"connect_text cmn_text_style"}>Connected</h4>
+                                                                                        <h4 className={"connect_text"}>Connected</h4>
                                                                                     </div>
                                                                                 </li>
                                                                             )
@@ -548,7 +548,7 @@ const SocialAccounts = ({}) => {
                                                     {/*<img className="cmn_width " src={fb_img}/>*/}
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'INSTAGRAM')?.name || "instagram"}</h5>
-                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                        <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
                                                         (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedInstagramPages?.length === 0 &&
@@ -604,7 +604,7 @@ const SocialAccounts = ({}) => {
                                                                                                 width="30px"/>
                                                                                             <h4 className="cmn_text_style">{data.name}</h4>
                                                                                         </div>
-                                                                                        <h4 className={"connect_text cmn_text_style"}>Connected</h4>
+                                                                                        <h4 className={"connect_text"}>Connected</h4>
                                                                                     </div>
                                                                                 </li>
                                                                             )
@@ -701,7 +701,7 @@ const SocialAccounts = ({}) => {
 
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'LINKEDIN')?.name || "linkedin"}</h5>
-                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                        <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
                                                         (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedLinkedinPages?.length === 0 &&
@@ -761,7 +761,7 @@ const SocialAccounts = ({}) => {
                                                                                                 width="30px"/>
                                                                                             <h4 className="cmn_text_style">{data?.name}</h4>
                                                                                         </div>
-                                                                                        <h4 className={"connect_text cmn_text_style"}>Connected</h4>
+                                                                                        <h4 className={"connect_text"}>Connected</h4>
                                                                                     </div>
                                                                                 </li>
                                                                             )
@@ -853,7 +853,7 @@ const SocialAccounts = ({}) => {
                                                     <h2 className={`pagecount ${currentConnectedPinterestPages?.length === undefined ? "blink" : ""}`}>{currentConnectedPinterestPages !== null ? currentConnectedPinterestPages?.length : 0}</h2>
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'PINTEREST')?.name || "pinterest"}</h5>
-                                                        <h4 className="connect_text cmn_text_style">Connected</h4>
+                                                        <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
                                                         (!getAllFacebookPagesData?.loading || !getAllConnectedSocialAccountData?.loading || !connectedPagesData?.loading) && currentConnectedPinterestPages?.length === 0 &&
@@ -909,7 +909,7 @@ const SocialAccounts = ({}) => {
                                                                                                 width="30px"/>
                                                                                             <h4 className="cmn_text_style">{data.name}</h4>
                                                                                         </div>
-                                                                                        <h4 className={"connect_text cmn_text_style"}>Connected</h4>
+                                                                                        <h4 className={"connect_text"}>Connected</h4>
                                                                                     </div>
                                                                                 </li>
                                                                             )

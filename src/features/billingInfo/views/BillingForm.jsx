@@ -14,9 +14,8 @@ const BillingForm = () => {
                             <div className='addy_container bg_color'>
                                 <div className='login_outer'>
                                     <div className='reach_user_outer'>
-                                        <img src={atm_img} className='girl_img_width'/>
+                                        <img src={atm_img} className='w-100'/>
                                         <h2 className='mt-5'>Reach your users with new tools.</h2>
-                                        <p>Empower your user engagement through innovative tools. Seamlessly amplify cross-media information, unlocking unprecedented value across diverse channels. Harness the synergy of cutting-edge strategies to captivate your audience and revolutionize their experience.</p>
                                     </div>
                                 </div>
 
@@ -27,7 +26,7 @@ const BillingForm = () => {
                             <div className='addy_container'>
                                 <div className="addy_outer">
                                     <div className="addy_img">
-                                        <h2 className='cmn_fontFamily'
+                                        <h2
                                             style={{fontSize: "32px"}}>{jsondata.billingAddress}</h2>
                                         <p className="pt-2">Lorem Ipsum is simply dummy text of the printing and type
                                             setting industry.</p>

@@ -1,6 +1,5 @@
 .sidebar_wrapper {
     width: 280px;
-    background: #FFF;
     box-shadow: 2px 0px 50px 0px rgba(226, 232, 240, 0.68);
     z-index: 2;
     position: fixed;
@@ -65,8 +64,7 @@ i.bar_icon {
 }
 
 .sidebar_item li {
-    background-color: white;
-     width: 275px;
+     margin: 10px 6px 0px;
     cursor: pointer;
 
 }
@@ -80,9 +78,10 @@ i.bar_icon {
 }
 
 .sidebar_container_items {
-    border-radius: 15px;
-    background: #F4F4F4;
-    /* padding: 11px 18px !important; */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 3px 2px 18px #e5e5e5;
+
 }
 
 h4.icon {
@@ -104,33 +103,20 @@ a.active {
     width: 80px;
 }
 
-.sidebar_item_outers {
-    display: flex;
-    gap: 10px;
-    padding: 6px 18px;
-    flex-grow: 1;
-    /* margin-right: 10px; */
-    align-items: center;
-    color: #97A1AD;
 
-}
 
 .sidebar_item_outers h6 {
-    color: #97A1AD;
-    font-family: Nunito;
+    color: #767177;
     font-size: 16px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 37px; 
-    letter-spacing: -0.016px;
-    text-decoration: none;
-    gap: 20px;
-   
-
+    font-weight: 500;
+    line-height: 27px;
 }
-
-.sidebar_item {
-    margin-top: 37px;
+.sidebar_item_outers img{
+    height: 24px;
+    width: 24px;
+}
+.red_color{
+    color: #EB5757 !important;
 }
 
 .user_profile_outer h3 {
@@ -141,26 +127,24 @@ a.active {
     letter-spacing: -0.015px;
 }
 
-.bar {
-    border-left: 4px solid #f07c33;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    margin: 10px 0px;
+.Sidebar_containerbox li {
+    margin: 0px;
 }
 
 .sidebar_inner_content {
-  
-    background: #F4F4F4;
-    padding: 6px 19px;
+ 
+    background: white;
+    padding: 12px 19px;
     gap: 17px;
     display: flex;
     align-items: center;
-    color: black;
+    color: #E05905;
     cursor: pointer;
 
 }
 
 .sidebar_inner_content h6 {
+    font-size: 16px;
     font-weight: 600;
 }
 
@@ -205,14 +189,23 @@ a.active {
     width: 64px;
 border-radius: 20px;
 }
-li.sidebar_item_outer:hover {
-    background:#f4f4f4b0;
 
-  
+
+.user_info_outer{
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-
-
-
+.user_info_outer img {
+height: 25px;
+width: 25px;
+}
+.user_info_outer h3{
+    color: #2A2D37;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+}
 .forward_arrow{
     left: 3rem;
     transition: all ease-in 0.5s;
@@ -241,6 +234,12 @@ i.bar_icon {
 div.sidebar_item_outers {
         padding: 4px 20px;
         gap: 21px;
+        margin: 10px 0px 0px;
+        display: flex;
+        gap: 10px;
+        flex-grow: 1;
+        align-items: center;
+        color: #97A1AD;
 }
 .cmn_forward_arrow{    
         padding: 10px 10px 0px 0px;
@@ -250,6 +249,10 @@ div.sidebar_item_outers {
 }
 .cross_icon{
         font-size: 22px;
+}
+
+.sidebar_inner_content svg path{
+        stroke: #E05905;
 }
 @media screen and (max-width: 767px) {
     /* div.sidebar_item_outers {
@@ -294,9 +297,7 @@ div.sidebar_item_outers {
         top: 1rem;
     }
 .connect_text {
-    color: #038000;
     line-height: 18px;
-    letter-spacing: -0.01px;
     font-size: 13px;
 }
 }

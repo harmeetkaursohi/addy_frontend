@@ -1,6 +1,6 @@
 import CommonLoader from "../../../common/components/CommonLoader";
 import noAccountData from "../../../../images/no_social_account.svg";
-import noPageData from "../../../../images/no_page.svg";
+import noPageData from "../../../../images/no_connected_ac_bg.svg"; 
 import Dropdown from "react-bootstrap/Dropdown";
 import {
     computeImageURL, generateUnixTimestampFor,
@@ -127,7 +127,9 @@ export const DashboardReports = () => {
                         // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
                         isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
                             <div className="cmn_background p-5 text-center ">
-                                <img src={noPageData} className="img-fluid" alt=""/>
+                                <h6 className="no_acc_title">No Account is Connected yet!</h6>
+                                <h3 className="connected_heading mt-3">Click on Connect to add your <br></br>pages in Addy.</h3>
+                                <img src={noPageData} className="img-fluid mt-5" alt=""/>
                             </div>
 
                             :
@@ -324,7 +326,8 @@ export const DashboardReports = () => {
                                     </div>
                                 </div>
 
-                            </div>}
+                            </div>
+                            }
 
             </div>
 
