@@ -1,7 +1,9 @@
 .contact_content ul li a{
-    color: #000;
+    color: #141414;
     cursor: pointer;
     font-weight: 700;
+    font-size: 18px;
+    font-family: "DM Sans", sans-serif;
 }
 .contact_content ul li {
     display: flex;
@@ -23,22 +25,29 @@ h2.cmn_title {
     line-height: normal;
     color: #2E3646;
 }
-
+.contact_content input::placeholder {
+    color: #828282;
+}
+.contact_content textarea::placeholder {
+    color: #828282;
+}
 .contact_content {
     padding: 20px;
     background: white;
-    min-height: 540px;
+    min-height: 490px;
     border-radius: 10px;
+    box-shadow: 0px 0px 8px 3px #f1eded;
+   
 }
 
 
 
 .contact_content h3 {
     font-size: 26px;
-    font-style: normal;
     font-weight: 700;
     margin-bottom: 10px !important;
     color: #333333;
+    font-family: "DM Sans", sans-serif;
 }
 
 .contact_content p {
@@ -46,8 +55,15 @@ h2.cmn_title {
     font-style: normal;
     font-weight: 400;
     line-height: 26px;
-    margin-bottom: 25px;
-    margin-top: 10px;
+    margin:10px 0px;
+    font-family: "DM Sans", sans-serif;
+}
+.contact_content ul li span{
+    color: #141414;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 18px;
+    font-family: "DM Sans", sans-serif;
 }
 .contact_form .form-control {
     border-radius: 8px;
@@ -75,6 +91,12 @@ h2.cmn_title {
 .contact_form textarea::placeholder {
     color: #828282;
 }
+.contact_content input{
+    margin-top: 15px;
+}
+.contact_content textarea{
+    margin-top: 15px;
+}
 @media screen and (max-width: 1299px){
     h2.cmn_title{
         font-size: 30px;
@@ -83,19 +105,43 @@ h2.cmn_title {
     .contact_form {
         padding: 15px 5px;
     }
+    .contact_content h3 {
+        font-size: 22px;
+    }
+    .contact_content ul li span {
+        font-size: 16px;
+    }
+    .contact_content ul li a{
+        font-size: 16px;
+    }
 }
-@media(max-width: 991px){
+@media screen and (max-width: 991px){
     .contact_content{
         margin-bottom: 2em;
         min-height: unset;
     }
 }
-@media(max-width: 767px){
+@media screen and (max-width: 767px){
     h2.cmn_title{
         font-size: 24px;
     }
     .contact_content h3 {
-        font-size: 23px;
+        font-size: 20px;
+    }
+    .contact_content ul li span {
+        font-size: 13px;
+    }
+    .contact_content ul li a {
+        font-size: 13px;
+    }
+    .contact_content input {
+        margin-top: 13px;
+    }
+    .contact_content textarea {
+        margin-top: 13px;
+    }
+    .contact_content {
+        padding: 13px;
     }
     .contact_content p {
         font-size: 14px;

@@ -480,7 +480,10 @@ img.connection-error-svg {
     font-size: 14px;
     color: gray;
 }
-
+.choose_platform_dropdown{
+    display: flex;
+    justify-content: space-between;
+}
 .connect-page-btn {
     color: #04a3ff;
     text-decoration: underline;

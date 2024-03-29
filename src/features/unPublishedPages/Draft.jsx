@@ -63,9 +63,11 @@ const Draft = () => {
             <section>
                 <SideBar/>
                 <div className={sidebar? 'cmn_container':"cmn_Padding"}>
-                    <div className='planner_outer'>
+                    <div className="cmn_outer">
+                    <div className="planner_outer white_bg_color">
+                   
 
-                        <div className='planner_header_outer'>
+                        <div className='planner_header_outer  align-items-center'>
                             <div className='planner_header'>
                                 <h2>{jsondata.sidebarContent.draft}</h2>
                                 <h6>All of your saved draft posts are located here.</h6>
@@ -107,12 +109,15 @@ const Draft = () => {
 
                             </div>
 
-                            <div className={"hr-line"}></div>
+                           
 
                         </div>
 
                         <ParentDraftComponent resetData={setResetData} reference={"DRAFT"}/>
 
+                    
+
+                    </div>
                     </div>
                 </div>
             </section>

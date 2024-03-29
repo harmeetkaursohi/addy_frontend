@@ -145,13 +145,16 @@ export const DashboardReports = () => {
                                                          disabled={getAllConnectedSocialAccountData?.loading || reportSectionData?.loading || reportGraphSectionData?.loading}>
                                             <img src={computeImageURL(reportSelectedAccountType)}
                                                  className="me-3 review-post-icon"
-                                                 alt={SocialAccountProvider[reportSelectedAccountType]}/>{SocialAccountProvider[reportSelectedAccountType]}
+                                                 alt={SocialAccountProvider[reportSelectedAccountType]}/>
+                                                 {SocialAccountProvider[reportSelectedAccountType]}
+                                                
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
                                             {Object.keys(SocialAccountProvider).map((cur, index) => (
 
                                                 <Dropdown.Item key={index}
+                                                
                                                                disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data, connectedPagesReducer?.facebookConnectedPages)}
                                                                onClick={() => {
                                                                    setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
@@ -159,9 +162,15 @@ export const DashboardReports = () => {
                                                                    setGraphDaysSelected(9)
 
 
-                                                               }}><img width={24}
+                                                               }}>
+                                                                <div className="choose_platform_dropdown">
+                                                                <img width={24}
                                                                        src={computeImageURL(cur)}
-                                                                       className="me-3"/> {getInitialLetterCap(SocialAccountProvider[cur])}
+                                                                       /> {getInitialLetterCap(SocialAccountProvider[cur])}
+                                                                        <input type="checkbox"/>
+
+                                                                </div>
+
                                                 </Dropdown.Item>
                                             ))
 

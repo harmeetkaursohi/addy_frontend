@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import addy_crop_logo from "../../../images/cropLogo.png";
 import addy_logo from "../../../images/addylogo.png";
@@ -16,15 +16,19 @@ import { FaArrowRight, FaBars } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import profile_img from '../../../images/profile_img.png'
 import logout_img from '../../../images/log-out.svg'
-
+import logout_bg from "../../../images/logout_bg.svg"
+import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect.jsx";
 const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  
   const { pathname } = location;
   const splitLocation = pathname.split("/");
   const token = getToken();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userInfoReducer.data);
+  const loading = useSelector((state) => state.user.userInfoReducer.loading);
+
   const getAllConnectedSocialAccountData = useSelector(
     (state) => state.socialAccount.getAllConnectedSocialAccountReducer
   );
@@ -68,14 +72,19 @@ const Layout = () => {
 
   const LogOut = () => {
     Swal.fire({
-      icon: "warning",
       title: `Logout`,
+      imageUrl: logout_bg,
       text: `Are you sure you want to logout?`,
       showCancelButton: true,
-      confirmButtonText: "Yes",
       cancelButtonText: "Cancel",
-      confirmButtonColor: "#F07C33",
+      confirmButtonText: "Log out",
+      confirmButtonColor: "#E05905",
       cancelButtonColor: "#E6E9EC",
+
+      customClass: {
+        confirmButton: 'confirmButton',
+        cancelButton: 'cancelButton'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem("token");
@@ -120,12 +129,16 @@ const Layout = () => {
           <div className={sidebar? "d-none":"d-flex align-items-center justify-content-evenly mt-4 mb-4"}>
           <div className="user_info_outer">
           
-       
-
+        
+           {loading ? <SkeletonEffect count={1}/>:userData !==undefined && 
+           <>
           <img src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : profile_img} className='profile_img'/>
            <h3>{userData?.fullName || "name"}</h3>
-          </div>
            <FaArrowRight />
+           </>
+              }
+          </div>
+          
              
                             
           </div>
@@ -197,6 +210,7 @@ const Layout = () => {
           </ul>
         </div>
       </section>
+
     </>
   );
 };

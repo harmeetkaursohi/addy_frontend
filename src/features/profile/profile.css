@@ -1,11 +1,11 @@
 .editprofile_outer {
-    padding: 20px 35px;
+    padding: 20px;
   
 
 }
 .user_pic{
-    height: 140px;
-    width: 140px;
+    height: 100px;
+    width: 100px;
     border-radius: 50%;
 }
 .update-pic-loading{
@@ -20,21 +20,15 @@
 .user_pic_container{
     position: relative;
 }
-.edit_content{
-    flex-grow: 1;
+.edit_content h3 {
+    font-size: 26px;
 }
 ul.mb-3.edit_tabs.nav.nav-tabs {
      border-bottom: unset;
     margin-left: 20px;
  
 }
-.edit_profile_heading{
-    border-bottom: 1px solid #dddbdb;
-    padding: 20px 30px;
 
-
-
-}
 label.changeProfile_label.updateAccount_label {
     background: #f07c33;
     color: white;
@@ -67,18 +61,66 @@ isolation: unset !important;
 .change_profile{
     display: none;
 }
-label.edit_label:hover {
+.edit_label:hover {
     color: #e97011;
     background: white;
     border: 1px solid #e97011;
 }
-label.edit_label{
+.edit_content .form-group label {
+    color: #7C7C7C;
+    font-weight: 400;
+    font-size: 18px;
+    font-family: "DM Sans" ,sans-serif;
+}
+.edit_content input {
+  
+    color: #263238;
+    font-weight: 500;
+    font-size: 18px;
+ 
+}
+.change_profile_outer.cmn_box_shadow.white_bg_color input {
+    background: white;
+    border: none;
+    color: #263238;
+    font-weight: 700;
+    font-size: 24px;
+    font-family: "DM Sans" ,sans-serif;
+}
+.cmn_box_shadow.white_bg_color.mt-3.profile-information input {
+    background: white;
+    border: none;
+    padding: 0px;
+}
+
+.cmn_box_shadow.white_bg_color.mt-3.address-info input {
+    background: white;
+    border: none;
+    padding: 0px;
+}
+.cmn_box_shadow.white_bg_color.mt-3.address-info input::placeholder {
+    color: #263238 !important;
+    font-weight: 500 !important;
+    font-size: 18px !important;
+    padding-top: 10px !important;
+}
+.cmn_box_shadow.white_bg_color.mt-3.profile-information input::placeholder {
+    color: #263238 !important;
+    font-weight: 500 !important;
+    font-size: 18px !important;
+    padding-top: 10px !important;
+}
+
+
+.edit_label{
     background: #e97011;
     cursor: pointer;
-    padding: 8px 11px;
-    border-radius: 5px;
+    border-radius: 7px;
     color: white;
-    font-size: 24px;
+    font-size: 20px;
+    height: 35px;
+    width: 35px;
+    text-align: center;
 }
 .changeProfile_label{
     cursor: pointer;
@@ -90,12 +132,27 @@ label.edit_label{
     color: white;
     text-align: center;
     padding-top: 4px;
-    transform: translate(-8px, -36px)
+    transform: translate(67px, -31px);
     
+}
+.profile_information_container h4 {
+    font-size: 26px;
+}
+.profile_information_container h5 {
+    font-size: 19px;
+    font-weight: 400;
+    font-family: "DM Sans", sans-serif;
+    color: black;
+}
+.cmn_box_shadow{
+    box-shadow: 4px 3px 10px #e5e2e2;
+    padding: 15px;
+    border-radius: 20px;
 }
 .change_profile_outer {
     display: flex;
    justify-content: space-between;
+  
 
 }
 .user_name_heading{
@@ -113,13 +170,13 @@ label.edit_label{
   }
   
   .tooltip-arrow::before {
-    border-right-color: #ee7817 !important; 
+    border-right-color: transparent !important; 
+    border-bottom-color: #ee7817 !important; 
+    border-left-color: transparent !important; 
   }
   
  
-  .edit_label_container{
-    text-align: right;
-  }
+  
   .cmn_select_box{
     appearance: auto !important;
     /* color: #9d9a9a !important; */
@@ -134,44 +191,72 @@ label.edit_label{
         margin: auto;
     
     }
-    .edit_profile_heading {
+    .editprofile_outer {
         width: 78%;
         margin: auto;
     }
 }
+@media screen and (max-width:1280px){
+    .edit_content h3 {
+        font-size: 22px;
+    }
+}
 @media screen and (max-width:991px) {
-    .user_pic {
-        height: 110px;
-        width: 110px;
+    .profile_information_container h5 {
+        font-size: 16px;
+    }
+    .profile_information_container h4 {
+        font-size: 20px;
+    }
+    .edit_content h3 {
+        font-size: 22px;
+    }
+    .edit_content input {
+        font-size: 16px;
+    }
+    .cmn_box_shadow.white_bg_color.mt-3.address-info input::placeholder {
+        font-size: 16px !important;
+    }
+    .cmn_box_shadow.white_bg_color.mt-3.profile-information input::placeholder {
+        font-size: 16px !important;
     }
 }
  @media screen and (max-width:767px){
-
-    label.edit_label {
-        padding: 4px 6px;
-        font-size: 20px;
-    }
     .editprofile_outer {
         padding: 20px 16px;
+    }
+    .cmn_box_shadow.white_bg_color.mt-3.address-info input::placeholder{
+        font-size: 14px !important;
+    }
+    .cmn_box_shadow.white_bg_color.mt-3.profile-information input::placeholder{
+        font-size: 14px !important;
     }
     .update-pic-loading svg{
         height: 25px;
         width: 25px;
     }
     .user_pic {
-        height: 80px;
-        width: 80px;
+        height: 60px;
+        width: 60px;
     }
-    .change_profile_outer{
-       align-items: center;
-       
+    .edit_content h3 {
+        font-size: 16px;
     }
+    .profile_information_container h5 {
+        font-size: 13px;
+    }
+   .profile_Wrapper{
+    flex-wrap: wrap;
+   }
     .changeProfile_label{
-        transform: translate(5px, -36px );
+        transform:translate(42px, -92px);
         font-size: 14px;
         height: 30px;
         width: 30px;
         padding-top: 2px;
+    }
+    .edit_content .form-group label {
+        font-size: 14px;
     }
     h3.user_name_heading {
         margin-top: 12px;
