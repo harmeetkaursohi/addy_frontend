@@ -91,13 +91,13 @@ const ContactUs = () => {
   return (
     <>
       <SideBar />
-      <div className={`cmn_container faq_section pt-5 ${sidebar ?"": "cmn_Padding" }`}>
-        <div className="cmn_wrapper_outer">
-          <div className="dashboard_outer">
-            <h2 className="cmn_title">Contact Us</h2>
-            <div className="row mt-4">
+      <div className={`cmn_container faq_section  ${sidebar ?"": "cmn_Padding" }`}>
+        <div className="cmn_outer">
+          <div className="cmn_wrapper_outer  white_bg_color">
+            <h2 className="dm-sans-font pt-5 pb-5">Contact Us</h2>
+            <div className="row">
               <div className="col-md-12 col-lg-6 Contact_us_Outer">
-                <div className="contact_content">
+                <div className="contact_content ">
                   <h3>Let's talk with us</h3>
                   <p>
                     Questions, comments, or suggestions? Simply fill in the form
@@ -106,7 +106,7 @@ const ContactUs = () => {
                   <ul>
                     <li>
                       <CiLocationOn size={22} />
-                      <span style={{fontWeight:700}}>
+                      <span >
                         1055 Arthur ave Elk Groot, 67. <br />
                         New Palmas South Carolina.
                       </span>
@@ -125,8 +125,9 @@ const ContactUs = () => {
 
               <div className="col-md-12 col-lg-6 Contact_us_Outer">
                 <form onSubmit={formik.handleSubmit} id="contactForm">
-                  <div className="row m-0 contact_form">
-                    <div className="col-lg-6">
+                  <div className=" contact_content">
+                    <div className="d-flex gap-3">
+                     <div className="flex-grow-1">
                       <input
                         className="form-control"
                         name="first_name"
@@ -140,10 +141,10 @@ const ContactUs = () => {
                           {formik.errors.first_name}
                         </p>
                       ) : null}
-                    </div>
 
-                    <div className="col-lg-6">
-                      <input
+                     </div>
+                          <div className="flex-grow-1"> 
+                          <input
                         className="form-control"
                         name="last_name"
                         onChange={formik.handleChange}
@@ -156,9 +157,13 @@ const ContactUs = () => {
                           {formik.errors.last_name}
                         </p>
                       ) : null}
+                          </div>
+
                     </div>
 
-                    <div className="col-lg-12">
+                    
+
+                    
                       <input
                         type="email"
                         className="form-control"
@@ -174,9 +179,9 @@ const ContactUs = () => {
                           {formik.errors.email_address}
                         </p>
                       ) : null}
-                    </div>
+                 
 
-                    <div className="col-lg-12">
+                
                       <input
                         type="tel"
                         className="form-control"
@@ -192,9 +197,9 @@ const ContactUs = () => {
                           {formik.errors.phone_number}
                         </p>
                       ) : null}
-                    </div>
+                   
 
-                    <div className="col-lg-12">
+                 
                       <textarea
                         rows="5"
                         name="message"
@@ -207,8 +212,8 @@ const ContactUs = () => {
                       {formik.touched.message && formik.errors.message ? (
                         <p className="error_message">{formik.errors.message}</p>
                       ) : null}
-                    </div>
-                    <div className="col-lg-12">
+                    
+                  
                       <ReCAPTCHA
                         sitekey={
                           import.meta.env.VITE_APP_ASTR_RECAPTCHA_SITE_KEY
@@ -230,8 +235,7 @@ const ContactUs = () => {
                           {formik.errors["g-recaptcha-response"]}
                         </p>
                       ) : null}
-                    </div>
-                    <div className="col-lg-12 mt-3">
+                    <div className=" mt-2">
                       <button type="submit" className={"cmn_btn_color sendMessageBtn"} disabled={contactUsFormReducer.loading} >
                         {contactUsFormReducer.loading ? <Loader/> : "Send Message"}
                       </button>

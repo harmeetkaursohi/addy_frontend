@@ -1,6 +1,7 @@
 .planner_header_outer {
     display: flex;
     justify-content: space-between;
+    
 }
 .CalenderOuter_Wrapper.fc .fc-view-harness{
     margin-top: 16px;
@@ -15,8 +16,7 @@
 }
 .planner_outer {
     padding: 24px 30px;
-    background-color: white;
-    border-radius: 10px;
+   
 }
 
 .calendar_card {

@@ -12,7 +12,9 @@
 }
 
 
-
+.edit_content.form-control:disabled{
+background-color: white !important;
+}
 
 .elementor.elementor-96 {
     display: none !important;
