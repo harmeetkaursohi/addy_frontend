@@ -276,10 +276,11 @@ export const DashboardReports = () => {
                                                 Object.keys(reportSectionData?.data).map((curKey, index) => (
 
                                                     <div className="followers_wrapper " key={index}>
+
                                                         <h5>{curKey.replace(/_/g, ' ')}
                                                             {
-                                                                ["INSTAGRAM", "PINTEREST"].includes(reportSelectedAccountType) &&
-                                                                <span className={"90-day-txt"}> (90 days)</span>
+                                                                ["INSTAGRAM", "PINTEREST","FACEBOOK"].includes(reportSelectedAccountType) &&
+                                                                <span className={"90-day-txt"}> {curKey==='Post_Activity' && reportSelectedAccountType==="FACEBOOK"  ? '(90 days)' :  reportSelectedAccountType!=="FACEBOOK" ? '(90 days)' : ''  }  </span>
                                                             }
 
                                                         </h5>

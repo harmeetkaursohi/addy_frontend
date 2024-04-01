@@ -1,7 +1,7 @@
 import {
     baseAxios,
     calculatePercentageGrowth,
-    computeAndReturnSummedDateValues,
+    computeAndReturnSummedDateValues, generateUnixTimestampFor,
 
 } from "../utils/commonUtils";
 import {showErrorToast} from "../features/common/components/Toast";
@@ -106,9 +106,12 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
 
             //Post activities lifetime
-            await baseAxios.get(await computeInsightURL(pageId, "page_engaged_users", accessToken, true))
+            await baseAxios.get(`${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${pageId}/insights?metric=page_post_engagements&access_token=${accessToken}&period=day&since=${generateUnixTimestampFor("90")}&until=${generateUnixTimestampFor("now")}`)
                 .then((response) => {
-                    const lifeTimeCount = response.data?.data.find(item => item.period === "total_over_range")?.values[0]?.value || 0;
+                    const count = response?.data?.data[0]?.values?.reduce((acc, currentValue) => {
+                        return acc + currentValue.value;
+                    }, 0)
+                    const lifeTimeCount = count || 0;
                     initialObject.Post_Activity.lifeTime += lifeTimeCount;
                 })
                 .catch((error) => {
@@ -118,9 +121,9 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
 
             //last 1 month
-            await baseAxios.get(await computeInsightURL(pageId, "page_engaged_users", accessToken, false))
+            await baseAxios.get(`${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${pageId}/insights?metric=page_post_engagements&access_token=${accessToken}&period=days_28`)
                 .then((response) => {
-                    const lastMonthCount = response.data?.data.find(item => item.period === "month")?.values[0]?.value || 0;
+                    const lastMonthCount = response?.data?.data[0]?.values[0]?.value || 0;
                     initialObject.Post_Activity.month += lastMonthCount;
                 })
                 .catch((error) => {

@@ -242,6 +242,9 @@ const Insight = () => {
         }
     }, [selectedPeriodForDemographics, selectedPage, selectedInsightSection])
 
+    console.log("generateUnixTimestampFor now===>",generateUnixTimestampFor("now"))
+    console.log("generateUnixTimestampFor 90===>",generateUnixTimestampFor(90))
+    console.log("generateUnixTimestampFor 100===>",generateUnixTimestampFor(100))
 
     return (
         <section>
