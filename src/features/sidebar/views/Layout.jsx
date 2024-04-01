@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import addy_crop_logo from "../../../images/cropLogo.png";
-import addy_logo from "../../../images/addylogo.png";
+import addy_logo from "../../../images/addy_logo.svg";
 import {BiLogOut} from "react-icons/bi";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";

@@ -323,6 +323,9 @@ button.outline_btn.schedule_btn{
         margin-top: 10px;
 
     }
+    .upcomingPostBtn_Outer{
+        flex-wrap: wrap;
+    }
     div.draft_button_outer button {
         margin-top: 10px;
     }

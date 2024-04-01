@@ -18,9 +18,10 @@ const CommonSlider = ({
                           height = "250px",
                           enableShowPlannerModel = false,
                           isrequired,
+                          className
                         
                       }) => {
-
+console.log(className,"className")
     const settings = {
         arrows: false,
         dots: true,
@@ -116,7 +117,7 @@ const CommonSlider = ({
                                 return (<div key={index}>
 
                                     {file?.mediaType === "IMAGE" || showThumbnail ?
-                                        <div className="post_image_outerwrapper">
+                                        <div className={className? className:"post_image_outerwrapper"}>
                                         <img
                                             src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
                                             alt={`Image ${index}`} className='post_img'/></div>
@@ -125,7 +126,7 @@ const CommonSlider = ({
                                         <ReactPlayer
                                             
                                             width={"100%"}
-                                            className='video_player_outer'
+                                            className={className?className:'video_player_outer'}
                                             url={isPublished ? file.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
                                             controls={true}
                                             // playing={true}

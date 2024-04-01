@@ -168,8 +168,10 @@ isolation: unset !important;
     color: #fff; 
     border: 1px solid #ee7817; 
   }
-  
   .tooltip-arrow::before {
+    border-right-color: #ee7817 !important; 
+  }
+  div.editProfile_wrapper .tooltip-arrow::before {
     border-right-color: transparent !important; 
     border-bottom-color: #ee7817 !important; 
     border-left-color: transparent !important; 
