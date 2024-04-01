@@ -1,9 +1,9 @@
 import * as yup from "yup";
 import {
-    ErrorFetchingPost,
-    NoBusinessAccountFound,
-    SocialAccountProvider,
-    SomethingWentWrongTryLater
+    ErrorFetchingPost, InvalidAspectRatio, IsRequired, IsRequiredFor, MultiMediaLimit, MultiMediaSizeLimit,
+    NoBusinessAccountFound, OnlyImageOrVideoCanBePosted, PinterestImageLimitation, SelectAtleastOnePage,
+    SocialAccountProvider, SomethingWentWrong,
+    SomethingWentWrongTryLater, VideoFormatNotSupported
 } from "./contantData.js";
 import {exchangeForLongLivedToken, getAllFacebookConnectedSocialMediaAccounts} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
@@ -17,6 +17,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import {Linkedin_URN_Id_Types} from "./contantData.js";
 import default_user_icon from "../images/default_user_icon.svg"
+import {showErrorToast} from "../features/common/components/Toast";
 
 export const validationSchemas = {
 
@@ -119,7 +120,7 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
                     return accountData.hasOwnProperty("instagram_business_account")
                 })
                 if (isNullOrEmpty(instagramBusinessAccount)) {
-                    throw new Error(formatMessage(NoBusinessAccountFound, getInitialLetterCap(tokenProvider)));
+                    throw new Error(formatMessage(NoBusinessAccountFound, [getInitialLetterCap(tokenProvider)]));
                 }
             }
             return {
@@ -157,7 +158,7 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
 
         case SocialAccountProvider.PINTEREST : {
             if (jsonObj.data.account_type !== "BUSINESS") {
-                throw new Error(formatMessage(NoBusinessAccountFound, getInitialLetterCap(tokenProvider)));
+                throw new Error(formatMessage(NoBusinessAccountFound, [getInitialLetterCap(tokenProvider)]));
             }
             return {
                 ...response, socialAccountData: {
@@ -303,7 +304,13 @@ export const checkDimensions = (file) => {
             mediaElement.src = videoUrl;
 
             mediaElement.onloadedmetadata = () => {
-                resolve({file: file, url: videoUrl, mediaType: "VIDEO", fileName: file?.name});
+                resolve({
+                    file: file,
+                    url: videoUrl,
+                    mediaType: "VIDEO",
+                    fileName: file?.name,
+                    duration: mediaElement.duration
+                });
             };
             mediaElement.onerror = (error) => {
                 reject(error);
@@ -1581,11 +1588,15 @@ export function sliderValueToVideoTime(duration, sliderValue) {
     return Math.round(duration * sliderValue / 100)
 }
 
-export const formatMessage = (message = null, dynamicValue) => {
+export const formatMessage = (message = null, values = []) => {
     if (isNullOrEmpty(message)) {
         return ""
     }
-    return message.replace("{0}", dynamicValue)
+    let replacedMessage = message;
+    for (let i = 0; i < values.length; i++) {
+        replacedMessage = replacedMessage.replace('{' + i + '}', values[i]);
+    }
+    return replacedMessage;
 }
 export const getDatesForPinterest = (daysAgo) => {
     if (isNullOrEmpty(daysAgo.toString())) {
@@ -1924,4 +1935,455 @@ export const concatenateString = (originalString, maxLength) => {
     } else {
         return originalString?.substring(0, maxLength) + "...";
     }
+};
+
+export const isCreatePostRequestValid = (requestBody, files) => {
+    let shouldBreak = false;
+    Object.keys(requestBody)?.forEach(key => {
+        if (shouldBreak) return true;
+        switch (key) {
+            case "postPageInfos": {
+                if (requestBody.postPageInfos?.length === 0) {
+                    showErrorToast(SelectAtleastOnePage);
+                    shouldBreak = true;
+                }
+                break;
+            }
+            case "caption":
+            case "hashTag": {
+                if (isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
+                    showErrorToast(formatMessage(IsRequired, ["Caption"]));
+                    shouldBreak = true;
+                }
+                break;
+            }
+            case "pinTitle": {
+                if (isNullOrEmpty(requestBody.pinTitle) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0) {
+                    showErrorToast(formatMessage(IsRequired, ["Pin Title"]));
+                    shouldBreak = true;
+                }
+                break;
+            }
+            case "destinationUrl": {
+                if (isNullOrEmpty(requestBody.destinationUrl) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0) {
+                    showErrorToast(formatMessage(IsRequired, ["Destination Url"]));
+                    shouldBreak = true;
+                }
+                break;
+            }
+            case "attachments": {
+                const hasAttachments = requestBody.attachments?.length > 0;
+                const isPostedOnFaceBook = requestBody.postPageInfos?.filter(page => page?.provider === "FACEBOOK")?.length > 0
+                const isPostedOnInstagram = requestBody.postPageInfos?.filter(page => page?.provider === "INSTAGRAM")?.length > 0
+                const isPostedOnLinkedin = requestBody.postPageInfos?.filter(page => page?.provider === "LINKEDIN")?.length > 0
+                const isPostedOnPinterest = requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0
+                if (hasAttachments) {
+                    if (files.some(file => file?.mediaType === "IMAGE") && files.some(file => file?.mediaType === "VIDEO")) {
+                        showErrorToast(OnlyImageOrVideoCanBePosted);
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "IMAGE" && files?.length > 10) {
+                        showErrorToast(formatMessage(MultiMediaLimit, ["10", "images"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "VIDEO" && files?.length > 1) {
+                        showErrorToast(formatMessage(MultiMediaLimit, ["1", "video"]));
+                        shouldBreak = true;
+                        break;
+                    }
+
+                }
+                if (isPostedOnPinterest) {
+                    if (!hasAttachments) {
+                        showErrorToast(formatMessage(IsRequiredFor, ["Image or video", "pinterest"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files?.length > 1) {
+                        showErrorToast(PinterestImageLimitation);
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "IMAGE" && files.some(file => (file?.file?.size / 1048576) > 20)) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "20 mb", "image", "pinterest"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "VIDEO") {
+                        if (files.some(file => (file?.file?.size / 1048576) > 200)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "pinterest"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if ((files[0]?.duration / 60) > 5) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "5 min", "video", "pinterest"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (files[0]?.duration < 4) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "4 sec", "video", "pinterest"]));
+                            shouldBreak = true;
+                            break;
+                        }
+
+                    }
+                }
+                if (isPostedOnLinkedin && hasAttachments && files[0]?.mediaType === "VIDEO") {
+                    const extension = files[0]?.fileName?.substring(files[0]?.fileName?.lastIndexOf('.') + 1);
+                    if (extension !== "mp4" && extension !== "MP4") {
+                        showErrorToast(formatMessage(VideoFormatNotSupported, ["mp4", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files.some(file => (file?.file?.size / 1048576) > 200)) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files.some(file => (file?.file?.size / 1024) < 75)) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "75 kb", "video", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if ((files[0]?.duration / 60) > 30) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "30 min", "video", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.duration < 3) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                }
+                if (isPostedOnInstagram) {
+                    if (!hasAttachments) {
+                        showErrorToast(formatMessage(IsRequiredFor, ["Image or video", "instagram"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "IMAGE") {
+                        if (files.some(file => (file?.file?.size / 1048576) > 8)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "8 mb", "image", "instagram"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        const isValidAspectRatio = files.some(file => {
+                            const aspectRatio = getImageAspectRatio(file?.url)
+                            return aspectRatio >= 0.8 && aspectRatio <= 1.91
+                        })
+                        if (!isValidAspectRatio) {
+                            showErrorToast(InvalidAspectRatio);
+                            shouldBreak = true;
+                            break;
+                        }
+                    }
+                    if (files[0]?.mediaType === "VIDEO") {
+                        if (files.some(file => (file?.file?.size / 1073741824) > 1)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "1 gb", "video", "instagram"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if ((files[0]?.duration / 60) > 15) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "15 min", "video", "instagram"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (files[0]?.duration < 3) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "instagram"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                    }
+                }
+                if (isPostedOnFaceBook && hasAttachments) {
+                    if (files[0]?.mediaType === "IMAGE" && files.some(file => (file?.file?.size / 1048576) > 10)) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "10 mb", "image", "facebook"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "VIDEO") {
+                        if (files.some(file => (file?.file?.size / 1073741824) > 10)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "10 gb", "video", "facebook"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if ((files[0]?.duration / 3600) > 4) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "4 hours", "video", "facebook"]));
+                            shouldBreak = true;
+                            break;
+                        }
+
+                    }
+                }
+                break;
+            }
+
+        }
+    });
+    return !shouldBreak;
+}
+
+export const getFileFromAttachmentSource = (attachment) => {
+    return new Promise((resolve, reject) => {
+        // Decode base64 string to binary data
+        const binaryData = atob(attachment?.attachmentSource);
+
+        // Convert binary data to array buffer
+        const arrayBuffer = new ArrayBuffer(binaryData.length);
+        const uint8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryData.length; i++) {
+            uint8Array[i] = binaryData.charCodeAt(i);
+        }
+
+        // Create Blob object from array buffer
+        const blob = new Blob([uint8Array], {type: 'application/octet-stream'});
+
+        // Generate URL for Blob object
+        const fileName = attachment?.fileName;
+        const fileType = 'application/octet-stream';
+        const file = new File([blob], fileName, {type: fileType});
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                resolve({
+                    id: attachment?.id,
+                    file: file,
+                    url: URL.createObjectURL(blob),
+                    mediaType: attachment?.mediaType,
+                    fileName: attachment?.fileName,
+                    height: img.height,
+                    width: img.width
+                });
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+};
+
+
+export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => {
+
+    let shouldBreak = false;
+    Object.keys(requestBody)?.forEach(key => {
+        if (shouldBreak) return true;
+        switch (key) {
+            case "postPageInfos": {
+                if (requestBody.postPageInfos?.length === 0) {
+                    showErrorToast(SelectAtleastOnePage);
+                    shouldBreak = true;
+                }
+                break;
+            }
+            case "caption":
+            case "hashTag": {
+                if (isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
+                    showErrorToast(formatMessage(IsRequired, ["Caption"]));
+                    shouldBreak = true;
+                }
+                break;
+            }
+            case "pinTitle": {
+                if (isNullOrEmpty(requestBody.pinTitle) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0) {
+                    showErrorToast(formatMessage(IsRequired, ["Pin Title"]));
+                    shouldBreak = true;
+                }
+                break;
+            }
+            case "destinationUrl": {
+                if (isNullOrEmpty(requestBody.destinationUrl) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0) {
+                    showErrorToast(formatMessage(IsRequired, ["Destination Url"]));
+                    shouldBreak = true;
+                }
+                break;
+            }
+            case "attachments": {
+                const hasAttachments = requestBody.attachments?.length > 0;
+                const newlyAddedAttachments = files?.filter(attachment => attachment?.id === null || attachment?.id === undefined);
+                const allAttachments = [...oldAttachments, ...newlyAddedAttachments];
+
+                if (hasAttachments) {
+                    if (files.some(file => file?.mediaType === "IMAGE") && files.some(file => file?.mediaType === "VIDEO")) {
+                        showErrorToast(OnlyImageOrVideoCanBePosted);
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "IMAGE" && files?.length > 10) {
+                        showErrorToast(formatMessage(MultiMediaLimit, ["10", "images"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "VIDEO" && files?.length > 1) {
+                        showErrorToast(formatMessage(MultiMediaLimit, ["1", "video"]));
+                        shouldBreak = true;
+                        break;
+                    }
+
+                }
+                const isPostedOnPinterest = requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0
+                if (isPostedOnPinterest) {
+                    if (!hasAttachments) {
+                        showErrorToast(formatMessage(IsRequiredFor, ["Image or video", "pinterest"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files?.length > 1) {
+                        showErrorToast(PinterestImageLimitation);
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "IMAGE" && allAttachments.some(attachment => (attachment?.file?.size / 1048576) > 20)) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "20 mb", "image", "pinterest"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "VIDEO") {
+                        if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1048576) > 200) || oldAttachments?.some(attachment => (attachment?.fileSize / 1048576) > 200)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "pinterest"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if ((allAttachments?.[0]?.duration / 60) > 5) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "5 min", "video", "pinterest"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (allAttachments?.[0]?.duration < 4) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "4 sec", "video", "pinterest"]));
+                            shouldBreak = true;
+                            break;
+                        }
+
+                    }
+                }
+                const isPostedOnLinkedin = requestBody.postPageInfos?.filter(page => page?.provider === "LINKEDIN")?.length > 0
+                if (isPostedOnLinkedin && hasAttachments && files[0]?.mediaType === "VIDEO") {
+                    const extension = allAttachments?.[0]?.fileName?.substring(files[0]?.fileName?.lastIndexOf('.') + 1);
+                    if (extension !== undefined && extension !== "mp4" && extension !== "MP4") {
+                        showErrorToast(formatMessage(VideoFormatNotSupported, ["mp4", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1048576) > 200) || oldAttachments.some(attachment => (attachment?.fileSize / 1048576) > 200)) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1024) < 75) || oldAttachments.some(attachment => (attachment?.fileSize / 1024) < 75)) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "75 kb", "video", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if ((allAttachments?.[0]?.duration / 60) > 30) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "30 min", "video", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (allAttachments?.[0]?.duration < 3) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "linkedin"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                }
+                const isPostedOnInstagram = requestBody.postPageInfos?.filter(page => page?.provider === "INSTAGRAM")?.length > 0
+                if (isPostedOnInstagram) {
+                    if (!hasAttachments) {
+                        showErrorToast(formatMessage(IsRequiredFor, ["Image or video", "instagram"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "IMAGE") {
+                        if (allAttachments.some(attachment => (attachment?.file?.size / 1048576) > 8)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "8 mb", "image", "instagram"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        const isValidAspectRatio = allAttachments.some(file => {
+                            const aspectRatio = (file?.id === undefined || file?.id === null) ? getImageAspectRatio(file?.url): file?.width/file?.height;
+                            return aspectRatio >= 0.8 && aspectRatio <= 1.91
+                        })
+                        if (!isValidAspectRatio) {
+                            showErrorToast(InvalidAspectRatio);
+                            shouldBreak = true;
+                            break;
+                        }
+                    }
+                    if (files[0]?.mediaType === "VIDEO") {
+                        if (files.some(file => (file?.file?.size / 1073741824) > 1)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "1 gb", "video", "instagram"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if ((files[0]?.duration / 60) > 15) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "15 min", "video", "instagram"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (files[0]?.duration < 3) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "instagram"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                    }
+                }
+                const isPostedOnFaceBook = requestBody.postPageInfos?.filter(page => page?.provider === "FACEBOOK")?.length > 0
+                if (isPostedOnFaceBook && hasAttachments) {
+                    if (files[0]?.mediaType === "IMAGE" && allAttachments.some(file => (file?.file?.size / 1048576) > 10)) {
+                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "10 mb", "image", "facebook"]));
+                        shouldBreak = true;
+                        break;
+                    }
+                    if (files[0]?.mediaType === "VIDEO") {
+                        if (allAttachments.some(file => (file?.file?.size / 1073741824) > 10)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "10 gb", "video", "facebook"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if ((allAttachments[0]?.duration / 3600) > 4) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "4 hours", "video", "facebook"]));
+                            shouldBreak = true;
+                            break;
+                        }
+
+                    }
+                }
+                break;
+            }
+
+        }
+    });
+    return !shouldBreak;
+}
+
+
+export const getImageAspectRatio = (imageUrl) => {
+    const img = new Image();
+    img.src = imageUrl;
+    while (!img.complete) {
+        // This loop will keep running until the image is loaded
+    }
+
+    return img.naturalWidth / img.naturalHeight;
+};
+
+export const getVideoDurationById = async (attachmentId) => {
+    return new Promise((resolve, reject) => {
+        const mediaElement = document.createElement("video");
+        mediaElement.src = `${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachmentId}`;
+
+        mediaElement.onloadedmetadata = () => {
+            resolve({
+                duration: mediaElement.duration,
+            });
+        };
+        mediaElement.onerror = (error) => {
+            reject(error);
+        };
+    });
+
 };

@@ -37,7 +37,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                 }
             })).then(res => {
                 if (res.meta.requestStatus === "fulfilled") {
-                    showSuccessToast(formatMessage(UpdatedSuccessfully, "Password"))
+                    showSuccessToast(formatMessage(UpdatedSuccessfully, ["Password"]))
                     handleClose();
                 }
             })

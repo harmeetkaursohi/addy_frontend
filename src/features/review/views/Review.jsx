@@ -210,7 +210,7 @@ const Review = () => {
   return (
     <>
       <section>
-        <SideBar />
+        {/*<SideBar />*/}
         <div className={sidebar ? "comment_container" : "cmn_Padding"}>
           
             <div className="cmn_outer">

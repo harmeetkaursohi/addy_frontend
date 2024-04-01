@@ -114,7 +114,7 @@ const Profile = () => {
                     setEditMode(false)
                     setEditAddressMode(false)
                     setEditInfo(false)
-                    showSuccessToast(formatMessage(UpdatedSuccessfully, "Account"))
+                    showSuccessToast(formatMessage(UpdatedSuccessfully, ["Account"]))
                 }
             })
         },
@@ -191,7 +191,7 @@ const Profile = () => {
 
     return (
         <>
-            <SideBar/>
+            {/*<SideBar/>*/}
             <section className={` cmn_container ${sidebar? "":"cmn_Padding"}`} >
              <div className=" editprofile_outer">
                 <div className="white_bg_color">

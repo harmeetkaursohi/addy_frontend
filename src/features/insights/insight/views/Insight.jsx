@@ -245,7 +245,7 @@ const Insight = () => {
 
     return (
         <section>
-            <SideBar/>
+            {/*<SideBar/>*/}
             <div className={`insight_wrapper ${sidebar?"cmn_container":"cmn_Padding"}`}>
                     <div className="cmn_outer">
                 <div className="insight_outer  cmn_wrapper_outer white_bg_color">

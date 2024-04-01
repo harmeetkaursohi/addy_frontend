@@ -31,13 +31,13 @@ import Draft from "../features/unPublishedPages/Draft";
 import Insight from "../features/insights/insight/views/Insight";
 import Profile from '../features/profile/Profile.jsx'
 import { AppProvider } from '../features/common/components/AppProvider.jsx'
-
+import Notification from "../features/notification/Notification";
 
 const App = () => {
     const PrivateRoute = () => {
 
         const token = getToken();
-        return token ? <Outlet/> : <Navigate to="/login"/>;
+        return token ? <> <SideBar/><Outlet/></> : <Navigate to="/login"/>;
     }
 
     return (
@@ -48,7 +48,7 @@ const App = () => {
                     <Route element={<PrivateRoute/>}>
                         <Route path="/plan" element={<SelectPlan/>}/>
                         <Route path="/payment" element={<BillingForm/>}/>
-                        <Route path="/sidebar" element={<SideBar/>}/>
+                        {/*<Route path="/sidebar" element={<SideBar/>}/>*/}
                         <Route path="/dashboard" element={<Dashboard/>}/>
                         <Route path="/planner" element={<Planner/>}/>
                         <Route path="/planner/post" element={<CreatePost/>}/>
@@ -65,8 +65,7 @@ const App = () => {
                         <Route path="/privacy" element={<PrivacyComponent/>}/>
                         <Route path="/contact" element={<ContactUs/>}/>
                         <Route path="/profile" element={<Profile/>}/>
-                      
-                      
+                        <Route path="/notification" element={<Notification/>}/>
                     </Route>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/" element={<Login/>}/>

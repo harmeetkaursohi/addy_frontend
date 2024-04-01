@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
-import {showErrorToast} from "../../../features/common/components/Toast.jsx";
+import {showErrorToast, showSuccessToast, showWarningToast} from "../../../features/common/components/Toast.jsx";
 import {getFacebookConnectedPageIdsReport} from "../../../services/facebookService";
 import {baseAxios, isErrorInInstagramMention} from "../../../utils/commonUtils";
 import {CouldNotPostComment, SocialAccountProvider, UpdateCommentFailedMsg} from "../../../utils/contantData";
@@ -74,7 +74,6 @@ export const replyCommentOnPostAction = createAsyncThunk('post/replyCommentOnPos
 
 
 export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostAction', async (data, thunkAPI) => {
-    console.log("data---->", data);
     switch (data?.socialMediaType) {
         case "FACEBOOK": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&order=reverse_chronological&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags,comments{id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags}`;
@@ -261,7 +260,7 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
 });
 
 export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
-    console.log("data--->",data)
+    console.log("data--->", data)
     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {
@@ -283,6 +282,13 @@ export const getAllPlannerPostAction = createAsyncThunk('post/getAllPlannerPostA
 
 export const publishedPostAction = createAsyncThunk('post/publishedPostAction', async (data, thunkAPI) => {
     return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/publish/${data?.postId}`, null, setAuthenticationHeader(data.token)).then(res => {
+        if (res?.data?.every(c => !c.success)) {
+            showErrorToast("Post encountered with an issue. Currently saved as a draft.");
+        } else if (res?.data?.every(c => c.success)) {
+            showSuccessToast("Post has been successfully shared across all the platform.");
+        } else {
+            showWarningToast(`Post successfully on ${res?.data?.filter(c => c.success)?.map(c => c.pageName).join(" , ")} and failed to post on ${res?.data?.filter(c => !c.success)?.map(c => c.pageName).join(" , ")}`)
+        }
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -330,14 +336,14 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
     if (data.updatePostRequestDTO.scheduledPostDate !== null) {
         formData.append('scheduledPostDate', data.updatePostRequestDTO.scheduledPostDate);
     }
-    if (data.updatePostRequestDTO.postPageInfos?.some(pageInfo => pageInfo?.socialMediaType === SocialAccountProvider.PINTEREST.toUpperCase())) {
+    if (data.updatePostRequestDTO.postPageInfos?.some(pageInfo => pageInfo?.provider === SocialAccountProvider.PINTEREST.toUpperCase())) {
         formData.append('pinTitle', data.updatePostRequestDTO.pinTitle);
         formData.append('pinDestinationUrl', data.updatePostRequestDTO.destinationUrl);
     }
 
     data.updatePostRequestDTO.postPageInfos.forEach((pageInfo, index) => {
         formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
-        formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.socialMediaType);
+        formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.provider);
         if (pageInfo?.id !== null) {
             formData.append(`postPageInfos[${index}].id`, pageInfo?.id);
         }
@@ -363,14 +369,23 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
         });
     }
 
-
-    // Iterate through the FormData entries and log them to the console
-    for (const entry of formData.entries()) {
-        const [key, value] = entry;
-        console.log("entries", `${key}: ${value}`);
-    }
-
     return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.id}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
+
+        if (data.updatePostRequestDTO.postStatus === "DRAFT") {
+            showSuccessToast("Post has been put to draft successfully");
+        }
+        if (data.updatePostRequestDTO.postStatus === "SCHEDULED") {
+            showSuccessToast("Post planned successfully");
+        }
+        if (data.updatePostRequestDTO.postStatus === "PUBLISHED") {
+            if (res?.data?.every(c => !c.success)) {
+                showErrorToast("Post encountered with an issue. Currently saved as a draft.");
+            } else if (res?.data?.every(c => c.success)) {
+                showSuccessToast("Post has been successfully shared across all the platform.");
+            } else {
+                showWarningToast(`Post successfully on ${res?.data?.filter(c => c.success)?.map(c => c.pageName).join(" , ")} and failed to post on ${res?.data?.filter(c => !c.success)?.map(c => c.pageName).join(" , ")}`)
+            }
+        }
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -452,6 +467,21 @@ export const createFacebookPostAction = createAsyncThunk('post/createFacebookPos
     });
 
     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
+        if (data.postRequestDto.postStatus === "DRAFT") {
+            showSuccessToast("Post has been put to draft successfully");
+        }
+        if (data.postRequestDto.postStatus === "SCHEDULED") {
+            showSuccessToast("Post planned successfully");
+        }
+        if (data.postRequestDto.postStatus === "PUBLISHED") {
+            if (res?.data?.every(response => !response.success)) {
+                showErrorToast("Post encountered with an issue. Currently saved as a draft.");
+            } else if (res?.data?.every(response => response.success)) {
+                showSuccessToast("Post has been successfully shared across all the platform.");
+            } else {
+                showWarningToast(`Post successfully on ${res?.data?.filter(response => response.success)?.map(res => res.pageName).join(" , ")} and failed to post on ${res?.data?.filter(response => !response.success)?.map(res => res.pageName).join(" , ")}`)
+            }
+        }
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
@@ -503,7 +533,7 @@ export const generateAICaptionAndHashTagService = async (requestBody) => {
 export const getPostByPageIdAndPostStatus = createAsyncThunk('post/getPostByPageIdAndPostStatus', async (data, thunkAPI) => {
     if (data?.insightPostsCache?.getPostByPageIdAndPostStatusDataCache[data?.requestBody?.pageNumber] === undefined) {
         return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/byPageAndStatus`, data?.requestBody, setAuthenticationHeader(data.token)).then(res => {
-            return {...res.data,data:{...res.data.data[0]}};
+            return {...res.data, data: {...res.data.data[0]}};
         }).catch(error => {
             showErrorToast(error.response.data.message);
             return thunkAPI.rejectWithValue(error.response);
