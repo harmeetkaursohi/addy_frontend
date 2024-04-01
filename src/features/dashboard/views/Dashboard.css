@@ -504,6 +504,59 @@ div.noDraftPosts_outer {
 .dropdown_btn_Outer_container{
     padding:0px 20px
 }
+.postdata_container{
+    height: 40px;
+    width: 40px;
+    background: #E05905;
+    border-radius: 40px;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    padding-top: 5px;
+}
+.postdata_wrapper{
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    align-items: center;
+
+}
+.post_performing_list{
+    display: flex;
+    justify-content: space-between;
+}
+
+.post_performing_list li h4{
+    background: #F8F9FB;
+    border-bottom: 1px solid #D9D9D9;
+    padding: 11px;
+}
+.Performing_Post_container  h3{
+    font-size: 22px;
+    font-weight: 700;
+    color: #2E3646;
+    line-height: 38px;
+}
+.Performing_Post_container {
+    padding: 20px;
+}
+.post_performing_list h4{
+    color: #2E3646;
+}
+ul.post_performing_list li {
+    width: 180px;
+    border-radius: 13px;
+ 
+}
+.HiMiniArrowUpRight{
+    height: 20px;
+    width: 20px;
+    border-radius: 20px;
+    background: #3C87E0;
+    color: white;
+    text-align: center;
+    font-size: 15px;
+}
 @media screen and (min-width:2560px){
     .followers_outer {
         gap: 40px;

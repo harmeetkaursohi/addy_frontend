@@ -2,6 +2,11 @@ import CommonLoader from "../../../common/components/CommonLoader";
 import noAccountData from "../../../../images/no_social_account.svg";
 import noPageData from "../../../../images/no_connected_ac_bg.svg"; 
 import Dropdown from "react-bootstrap/Dropdown";
+import { IoLocationOutline } from "react-icons/io5";
+import { TfiLocationArrow } from "react-icons/tfi";
+import { LuBarChart3 } from "react-icons/lu";
+import { HiMiniArrowUpRight } from "react-icons/hi2";
+
 import {
     computeImageURL, generateUnixTimestampFor,
     getCustomDateEarlierUnixDateTime, getDatesForPinterest, getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
@@ -20,8 +25,9 @@ import {LineGraph} from "./LineGraph";
 import {DashBoardReportLoader} from "./DashBoardReportLoader";
 import default_user_icon from "../../../../images/default_user_icon.svg"
 import {getToken} from "../../../../app/auth/auth";
-
-
+import avg_bar from "../../../../images/avg_bar.svg"
+import followers_bar from "../../../../images/followers_bar.svg"
+import reach_bar from "../../../../images/reach_bar.svg"
 export const DashboardReports = () => {
 
     const token = getToken();
@@ -270,6 +276,46 @@ export const DashboardReports = () => {
                                         //loader component
                                         <DashBoardReportLoader/>
                                         :
+                                        <>
+                                        <div className="Performing_Post_container">
+                                        <ul className="post_performing_list">
+                                    <li className="box_shadow">
+                                        <h4 className="cmn_text_style nunito_font">Avg Impression</h4>
+                                        <div className="postdata_wrapper">
+                                       
+                                        <img src={avg_bar}/>
+                                        <div>
+                                        <h5>3.5k</h5>
+                                        <span className="d-flex align-items-center gap-1"><div className="HiMiniArrowUpRight"><HiMiniArrowUpRight /></div> 89%</span>
+                                        </div>
+                                        </div>
+                                    </li>
+                                    <li className="box_shadow">
+                                        <h4 className="cmn_text_style nunito_font">Followers</h4>
+                                        <div className="postdata_wrapper">
+                                        
+                                        <img src={followers_bar}/>
+                                       <div>
+                                        <h5>3.5k</h5>
+                                        <span className="d-flex align-items-center gap-1"><div className="HiMiniArrowUpRight"><HiMiniArrowUpRight /></div> 89%</span>
+                                       </div>
+
+                                        </div>
+                                    </li>
+
+                                    <li className="box_shadow">
+                                        <h4 className="cmn_text_style nunito_font">Avg Reach</h4>
+                                        <div className="postdata_wrapper">
+                                        
+                                        <img src={avg_bar}/>
+                                     <div>
+                                        <h5>80%</h5>
+                                        <span className="d-flex align-items-center gap-1"><div className="HiMiniArrowUpRight"><HiMiniArrowUpRight /></div> 89%</span>
+                                        </div>
+                                        </div>
+                                    </li>
+                                    </ul>
+                                    </div>
                                         <div className="followers_outer ">
 
                                             {reportSectionData?.data &&
@@ -301,6 +347,7 @@ export const DashboardReports = () => {
                                             }
 
                                         </div>
+                                        </>
                                 }
 
                                 {/* chart */}
@@ -333,6 +380,44 @@ export const DashboardReports = () => {
                                         <LineGraph reportData={reportGraphSectionData}/>
 
                                     </div>
+                                </div>
+
+                                {/* Performing Post */}
+                                <div className="Performing_Post_container">
+                                    <h3 className="nunito_font">Performing Post</h3>
+                                    <ul className="post_performing_list">
+                                    <li className="box_shadow">
+                                        <h4 className="cmn_text_style nunito_font">Organic Visitors</h4>
+                                        <div className="postdata_wrapper">
+                                        <div className="postdata_container">
+                                        <IoLocationOutline />
+                                        </div>
+                                        <h5>3.5k</h5>
+
+                                        </div>
+                                    </li>
+                                    <li className="box_shadow">
+                                        <h4 className="cmn_text_style nunito_font">Visitors from Ads</h4>
+                                        <div className="postdata_wrapper">
+                                        <div className="postdata_container">
+                                        <LuBarChart3 />
+                                        </div>
+                                        <h5>3.5k</h5>
+
+                                        </div>
+                                    </li>
+
+                                    <li className="box_shadow">
+                                        <h4 className="cmn_text_style nunito_font">Ads click rate</h4>
+                                        <div className="postdata_wrapper">
+                                        <div className="postdata_container">
+                                        <TfiLocationArrow />
+                                        </div>
+                                        <h5>80%</h5>
+
+                                        </div>
+                                    </li>
+                                    </ul>
                                 </div>
 
                             </div>

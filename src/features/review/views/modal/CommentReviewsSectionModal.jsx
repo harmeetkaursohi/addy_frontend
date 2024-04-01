@@ -17,6 +17,7 @@ import {resetReducers} from "../../../../app/actions/commonActions/commonActions
 import CommentFooter from "../comments/CommentFooter";
 import InstagramCommentsSection from "../comments/InstagramCommentsSection";
 import LinkedinCommentsSection from "../comments/LinkedinCommentsSection";
+import { MdCancel } from 'react-icons/md';
 
 
 const CommentReviewsSectionModal = ({
@@ -26,6 +27,7 @@ const CommentReviewsSectionModal = ({
                                         postPageInfoData,
                                         isDirty,
                                         setDirty,
+                                        className
                                     }) => {
     const [postPageData, setPostPageData] = useState(null);
     const dispatch = useDispatch();
@@ -57,9 +59,14 @@ const CommentReviewsSectionModal = ({
 
                     <Modal.Body>
                         <Row className="m-0">
+                            <div className='md_cancel_outer'>
+                            <MdCancel  onClick={() => {
+                                                setOpenCommentReviewsSectionModal(false)
+                                            }}/>
+                            </div>
                             <Col lg="6"  md="12" sm="12" className="p-0">
                                 <div className='comment_review_wrapper'>
-                                    <div className="comment_header d-flex gap-2">
+                                    {/* <div className="comment_header d-flex gap-2">
                                         <Link to={""} className="flex-grow-1 d-flex align-item-center">
                                             <span onClick={() => {
                                                 setOpenCommentReviewsSectionModal(false)
@@ -67,17 +74,19 @@ const CommentReviewsSectionModal = ({
 
                                             <img className={"me-2 ms-2 social-media-icon-cmnt"}
                                                  src={computeImageURL(postData?.socialMediaType)}/>
-                                            {/*<i className="fa-brands fa-facebook ms-2"></i>*/}
+                                    
                                         </Link>
-                                    </div>
-
+                                    </div> */}
+                                  
                                     <CommonSlider files={postData?.attachments}
                                                   selectedFileType={null}
                                                   caption={null}
                                                   hashTag={null}
                                                   showThumbnail={false}
                                                   isPublished={true}
-                                                  viewSimilarToSocialMedia={false}/>
+                                                  viewSimilarToSocialMedia={false}
+                                                  className={className}/>
+                                                 
                                 </div>
                             </Col>
                             <Col lg="6"  md="12" sm="12" className="p-0">
