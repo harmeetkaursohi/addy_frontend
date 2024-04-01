@@ -11,6 +11,21 @@
 
 
 }
+
+.notification-count-sidebar{
+    z-index: 1;
+    font-size: 11px;
+    color: white;
+    background: #f07c33;
+    border-radius: 20px;
+    height: 16px;
+    width: 16px;
+    text-align: center;
+    padding: 2px;
+    position: absolute;
+    left: 33px;
+}
+
 .userimg{
     height: 28px;
     width: 28px;
@@ -245,7 +260,7 @@ div.sidebar_item_outers {
         padding: 10px 10px 0px 0px;
         cursor: pointer;
         margin-left: 10px;
-       
+
 }
 .cross_icon{
         font-size: 22px;
@@ -269,7 +284,9 @@ div.sidebar_item_outers {
     .sidebar_item li{
     margin-top: 8px;
     }
-    
+    /*.sidebar_content h2 {*/
+    /*    display: none;*/
+    /*}*/
     .cmn_forward_arrow svg {
         font-size: 20px;
     }

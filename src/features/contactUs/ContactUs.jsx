@@ -1,87 +1,85 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import SideBar from "../sidebar/views/Layout";
-import { useFormik } from "formik";
+import {useFormik} from "formik";
 import "./Contact.css";
-import { CiLocationOn } from "react-icons/ci";
-import { FaPhoneVolume } from "react-icons/fa6";
-import { FaRegEnvelope } from "react-icons/fa";
-import { validationSchemas } from "../../utils/commonUtils";
-import { contactUsFormActions } from "../../app/actions/webActions/webActions";
-import { useDispatch, useSelector } from "react-redux";
+import {CiLocationOn} from "react-icons/ci";
+import {FaPhoneVolume} from "react-icons/fa6";
+import {FaRegEnvelope} from "react-icons/fa";
+import {validationSchemas} from "../../utils/commonUtils";
+import {contactUsFormActions} from "../../app/actions/webActions/webActions";
+import {useDispatch, useSelector} from "react-redux";
 import ReCAPTCHA from "react-google-recaptcha";
-import { showErrorToast, showSuccessToast } from "../common/components/Toast";
-import { useNavigate } from 'react-router'
+import {showErrorToast, showSuccessToast} from "../common/components/Toast";
+import {useNavigate} from 'react-router'
 import Loader from "../loader/Loader";
-import { useAppContext } from "../common/components/AppProvider";
+import {useAppContext} from "../common/components/AppProvider";
 
 const ContactUs = () => {
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const navigate = useNavigate()
-  const dispatch = useDispatch();
-  const{sidebar}=useAppContext()
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+    const navigate = useNavigate()
+    const dispatch = useDispatch();
+    const {sidebar} = useAppContext()
 
-  const contactUsFormReducer = useSelector((state) => state.web.contactUsFormReducer);
-  const [formData, setFormData] = useState({
-    first_name: "",
-    last_name: "",
-    email_address: "",
-    phone_number: "",
-    message: "",
-    recaptcha: "",
-  });
-  const handleOnChange = (e) => {
-    setFormData((prevState) => {
-      return {
-        ...prevState,
-        [e.target.name]: e.target.value,
-      };
+    const contactUsFormReducer = useSelector((state) => state.web.contactUsFormReducer);
+    const [formData, setFormData] = useState({
+        first_name: "",
+        last_name: "",
+        email_address: "",
+        phone_number: "",
+        message: "",
+        recaptcha: "",
     });
-  };
-  const formik = useFormik({
-    initialValues: {
-      first_name: "",
-      last_name: "",
-      email_address: "",
-      phone_number: "",
-      message: "",
-      "g-recaptcha-response": "",
-    },
-    validationSchema: validationSchemas.contactForm,
-    handleChange: handleOnChange,
-    onSubmit: (values, { resetForm }) => {
-      dispatch(contactUsFormActions(values)).then((res)=>{
-        
-        res = res?.payload
-        if(res?.status){     
-          resetForm()
-          showSuccessToast(res?.message);
-          setTimeout(() => {
-            navigate(0)        
-          }, 3000);
-        }else if(res?.status === false){
-          if(res?.errors && Object.keys(res?.errors).length){
-            const key = Object.keys(res?.errors)[0]
-            showErrorToast(res?.errors[key]);
-          }else{
-            resetForm()
-            showErrorToast(res?.message);
-            setTimeout(() => {
-              navigate(0)        
-            }, 3000);
-          }      
-        }
-      });
-     
-    },
-  });
+    const handleOnChange = (e) => {
+        setFormData((prevState) => {
+            return {
+                ...prevState,
+                [e.target.name]: e.target.value,
+            };
+        });
+    };
+    const formik = useFormik({
+        initialValues: {
+            first_name: "",
+            last_name: "",
+            email_address: "",
+            phone_number: "",
+            message: "",
+            "g-recaptcha-response": "",
+        },
+        validationSchema: validationSchemas.contactForm,
+        handleChange: handleOnChange,
+        onSubmit: (values, {resetForm}) => {
+            dispatch(contactUsFormActions(values)).then((res) => {
+                res = res?.payload
+                if (res?.status) {
+                    resetForm()
+                    showSuccessToast(res?.message);
+                    setTimeout(() => {
+                        navigate(0)
+                    }, 3000);
+                } else if (res?.status === false) {
+                    if (res?.errors && Object.keys(res?.errors).length) {
+                        const key = Object.keys(res?.errors)[0]
+                        showErrorToast(res?.errors[key]);
+                    } else {
+                        resetForm()
+                        showErrorToast(res?.message);
+                        setTimeout(() => {
+                            navigate(0)
+                        }, 3000);
+                    }
+                }
+            });
 
-
+        },
+    });
 
 
     useEffect(() => {
         function handleResize() {
             setIsSmallScreen(window.innerWidth <= 767);
         }
+
         window.addEventListener('resize', handleResize);
         handleResize();
 
@@ -90,7 +88,7 @@ const ContactUs = () => {
 
   return (
     <>
-      <SideBar />
+      {/*<SideBar />*/}
       <div className={`cmn_container faq_section  ${sidebar ?"": "cmn_Padding" }`}>
         <div className="cmn_outer">
           <div className="cmn_wrapper_outer  white_bg_color">
@@ -110,18 +108,18 @@ const ContactUs = () => {
                         1055 Arthur ave Elk Groot, 67. <br />
                         New Palmas South Carolina.
                       </span>
-                    </li>
-                    <li>
-                      <FaPhoneVolume />
-                      <a href="tel:+1 234 678 9108 99">+1 234 678 9108 99</a>
-                    </li>
-                    <li>
-                      <FaRegEnvelope />
-                      <a href="mailto:Contact@addy.com">Contact@addy.com</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+                                        </li>
+                                        <li>
+                                            <FaPhoneVolume/>
+                                            <a href="tel:+1 234 678 9108 99">+1 234 678 9108 99</a>
+                                        </li>
+                                        <li>
+                                            <FaRegEnvelope/>
+                                            <a href="mailto:Contact@addy.com">Contact@addy.com</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
 
               <div className="col-md-12 col-lg-6 Contact_us_Outer">
                 <form onSubmit={formik.handleSubmit} id="contactForm">

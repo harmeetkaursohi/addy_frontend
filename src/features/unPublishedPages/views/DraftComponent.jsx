@@ -31,7 +31,6 @@ const DraftComponent = ({batchIdData,setDraftPost=null,setDrafts=null,reference=
             .then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     setBatchToDelete(null);
-                    showSuccessToast("Post has been published successfully");
                     if(reference==="PLANNER"){
                         setDrafts!==null && setDrafts([]);
                         setDraftPost!==null && setDraftPost(false)

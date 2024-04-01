@@ -10,7 +10,7 @@ const Gallery=()=>{
     return(
         <>
         <section>
-        <SideBar/>
+        {/*<SideBar/>*/}
         <div className="cmn_container">
         <div className="cmn_wrapper_outer">
             <div className="gallery_wrapper">

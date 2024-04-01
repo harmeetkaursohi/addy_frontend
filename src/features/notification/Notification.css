@@ -1,0 +1,116 @@
+.notification_wrapper {
+    height: 100vh;
+    min-height: 100%;
+}
+
+.notification_header {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 22px;
+}
+
+.notifications_outer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notifications_layout {
+
+    background: white;
+    padding: 20px;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    margin-top: 7px;
+    box-shadow: 0px 5px 16px 0px rgba(8, 15, 52, 0.06);
+
+}
+
+#edit_dropdown_wrapper {
+    background: transparent !important;
+    border-radius: 10px;
+    border: 1px solid #F3F7FD;
+    color: #5F6D7E;
+    font-family: Nunito;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -0.02px;
+    padding: 10px;
+    padding-right: 35px;
+    position: relative;
+}
+
+.notification-creation-date {
+    font-size: 11px;
+    opacity: .7;
+}
+
+.unseen_notifications {
+    font-weight: 650;
+}
+
+.clear-all-notifications, .load-more-notification-btn {
+    opacity: .8;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Nunito', sans-serif;
+}
+.clear-all-notifications{
+    display: flex;
+    flex-direction: row-reverse;
+}
+span.error-pagename {
+    font-weight: 500;
+}
+span.error-detail {
+    font-weight: 400;
+    line-height: 24px;
+    font-family: 'Nunito', sans-serif;
+    letter-spacing: -0.016px;
+}
+.no-notifications-text {
+    font-size: 20px;
+}
+
+.show-notification-details {
+    display: inline-block;
+    font-size: 13px;
+    font-family: 'Nunito', sans-serif;
+}
+
+.show-notification-details:hover, .clear-all-notifications:hover, .load-more-notification-btn:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+.load-more-not-btn-outer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0px 30px 0px;
+}
+
+.disable_btn {
+    pointer-events: none;
+}
+
+.load-more-notification-loader {
+    width: 20px;
+    height: 20px;
+}
+
+
+@media screen and (max-width: 991px) {
+    .notification_header {
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .notification_header {
+        display: block;
+        padding-top: 36px;
+    }
+}

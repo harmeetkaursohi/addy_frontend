@@ -8,7 +8,6 @@ import Loader from "../../../loader/Loader";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 
 const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, setFiles}) => {
-    console.log("files", files)
 
     const handleClose = () => setAIGenerateImageModal(false);
     const [imageName, setImageName] = useState("");
@@ -66,8 +65,6 @@ const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, se
             setSelectedImages([...selectedImages, data])
         }
     }
-    console.log("generatedImagesMultipart", generatedImagesMultipart)
-    console.log("selectedImages", selectedImages)
 
 
     return (

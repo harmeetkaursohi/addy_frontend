@@ -158,7 +158,7 @@ const Review = () => {
     return (
         <>
             <section>
-                <SideBar/>
+                {/*<SideBar/>*/}
                 <div className={sidebar ? "comment_container" : "cmn_Padding bg_Color"}>
                     <div className="cmn_wrapper_outer">
                         <div className="review_wrapper">

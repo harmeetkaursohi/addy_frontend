@@ -31,22 +31,30 @@ const FaqComponent = () => {
 
     return (
         <>
-            <SideBar/>
+            {/*<SideBar/>*/}
             <div className={`cmn_container faq_section pt-5 ${sidebar?"":"cmn_Padding" }`}>
            
                     <div className="dashboard_outer">
                         <div className="faq_wrapper">
                             <h2 className="text-center">Frequently Asked Questions <br></br>  Hello, how can we help you ?</h2>
                             <p className="pt-2 text-center">Check out some of these frequently asked questions about the AddyAds.</p>
-                            <form method="post" onSubmit={function(e){ e.preventDefault();
-                                setPage(1); setSearch(document.getElementById("searchText").value);
-                                return false; }}>
+                            <form method="post" onSubmit={function (e) {
+                                e.preventDefault();
+                                setPage(1);
+                                setSearch(document.getElementById("searchText").value);
+                                return false;
+                            }}>
                                 <div className="faq_searchbar">
-                                    <input type="text" placeholder="Search..." id="searchText" className="search-faqs-input" />
+                                    <input type="text" placeholder="Search..." id="searchText"
+                                           className="search-faqs-input"/>
                                     <div className="submit_Button_Wrapper">
-                                    <button type="submit" className={"cmn_btn_color"}  disabled={faqList.loading || searchLoading}  style={{opacity:(faqList.loading || searchLoading) ?  "0.6" :"1.0"}}>
-                                        {(faqList.loading || searchLoading) ? (<span className="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"/>) : 'Submit' }
-                                    </button>                                
+                                        <button type="submit" className={"cmn_btn_color"}
+                                                disabled={faqList.loading || searchLoading}
+                                                style={{opacity: (faqList.loading || searchLoading) ? "0.6" : "1.0"}}>
+                                            {(faqList.loading || searchLoading) ? (
+                                                <span className="spinner-border spinner-border-sm me-1" role="status"
+                                                      aria-hidden="true"/>) : 'Submit'}
+                                        </button>
 
                                     </div>
                                 </div>
@@ -61,8 +69,8 @@ const FaqComponent = () => {
                                             </Accordion.Body>
                                             </Accordion.Item>)
                                         })
-                                    }                                                                        
-                                </Accordion> : (<div>FAQ's not found.</div>)}                                
+                                    }
+                                </Accordion> : (<div>FAQ's not found.</div>)}
                                 <div className="load-more-faqs-container">
                                     {(items.length && faqList.hasNextPage) || (faqList.loading && !faqList.hasNextPage) ? <button type="button" className="load-more-faqs-btn" onClick={handleLoadMore} disabled={faqList.loading}> {faqList.loading ? 'Loading...': 'Load More'}</button> : ""}
                                 </div>
