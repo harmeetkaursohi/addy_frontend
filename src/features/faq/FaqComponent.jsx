@@ -32,11 +32,12 @@ const FaqComponent = () => {
     return (
         <>
             {/*<SideBar/>*/}
-            <div className={`cmn_container faq_section pt-5 ${sidebar?"":"cmn_Padding" }`}>
+            <div className={`cmn_container faq_section  ${sidebar?"":"cmn_Padding" }`}>
            
-                    <div className="dashboard_outer">
+                    <div className="cmn_outer">
+                        <div className="white_bg_color cmn_height_outer" >
                         <div className="faq_wrapper">
-                            <h2 className="text-center">Frequently Asked Questions <br></br>  Hello, how can we help you ?</h2>
+                            <h2 className="text-center mt-5">Frequently Asked Questions <br></br>  Hello, how can we help you ?</h2>
                             <p className="pt-2 text-center">Check out some of these frequently asked questions about the AddyAds.</p>
                             <form method="post" onSubmit={function (e) {
                                 e.preventDefault();
@@ -75,6 +76,8 @@ const FaqComponent = () => {
                                     {(items.length && faqList.hasNextPage) || (faqList.loading && !faqList.hasNextPage) ? <button type="button" className="load-more-faqs-btn" onClick={handleLoadMore} disabled={faqList.loading}> {faqList.loading ? 'Loading...': 'Load More'}</button> : ""}
                                 </div>
                             </div>                            
+                        </div>
+
                         </div>
                     </div>
                 
