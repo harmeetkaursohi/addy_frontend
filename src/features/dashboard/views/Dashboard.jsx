@@ -42,15 +42,22 @@ const Dashboard = () => {
                     <Header userData={userData}
                             facebookPageList={facebookPageList} setShowConnectAccountModal={setShowConnectAccountModal}/>
                     <div className="dashboard_outer">
+                        
                         <div className="row">
                             <DashboardReports/>
                             <SocialAccounts />
                         </div>
-                        <ScheduledComponent scheduledData={getAllPostsByCriteriaData}/>
+                        
                     </div>
-
+                   
                 </div>
 
+                </div>
+                {/* upcoming post */}
+                <div className="cmn_outer pt-0">
+                    <div className="cmn_wrapper_outer white_bg_color cmn_height_outer">
+                    <ScheduledComponent scheduledData={getAllPostsByCriteriaData}/>
+                    </div>
                 </div>
 
             </div>

@@ -308,9 +308,9 @@ const Planner = () => {
                                     (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
                                         <span className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
                                         ><Loader className='create-post-loader'/></span> :
-                                        <span onClick={handleCreatePost}
+                                        <button onClick={handleCreatePost}
                                               className='cmn_btn_color create_post_btn cmn_white_text cursor-pointer'
-                                        >{jsondata.createpost}</span>
+                                        >{jsondata.createpost}</button>
                                 }
                             </div>
                         </div>

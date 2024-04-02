@@ -251,7 +251,7 @@ const Insight = () => {
             {/*<SideBar/>*/}
             <div className={`insight_wrapper ${sidebar?"cmn_container":"cmn_Padding"}`}>
                     <div className="cmn_outer">
-                <div className="insight_outer  cmn_wrapper_outer white_bg_color">
+                <div className="insight_outer  cmn_wrapper_outer white_bg_color cmn_height_outer">
                     <h2 className="insight_heading cmn_text_style">Insights</h2>
                     <h6 className="cmn_small_heading"> Assess post performance and audience engagement across multiple social media platforms.</h6>
                     {

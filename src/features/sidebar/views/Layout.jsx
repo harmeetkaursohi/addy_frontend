@@ -99,7 +99,7 @@ const Layout = () => {
 
                 <div
                     className={
-                        sidebar ? "sidebar_content sidebar_wrapper bg_light_orange" : "sidebar_wrapper bg_light_orange"
+                        sidebar ? "sidebar_content sidebar_wrapper  bg_light_orange" : "animation sidebar_wrapper bg_light_orange"
                     }
                 >
 
