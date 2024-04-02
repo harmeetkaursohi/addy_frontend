@@ -3,7 +3,8 @@ import SideBar from "../sidebar/views/Layout";
 import {useFormik} from "formik";
 import "./Contact.css";
 import {CiLocationOn} from "react-icons/ci";
-import {FaPhoneVolume} from "react-icons/fa6";
+import { PiPhoneCall } from "react-icons/pi";
+
 import {FaRegEnvelope} from "react-icons/fa";
 import {validationSchemas} from "../../utils/commonUtils";
 import {contactUsFormActions} from "../../app/actions/webActions/webActions";
@@ -110,7 +111,7 @@ const ContactUs = () => {
                       </span>
                                         </li>
                                         <li>
-                                            <FaPhoneVolume/>
+                                        <PiPhoneCall className="PiPhoneCall"/>
                                             <a href="tel:+1 234 678 9108 99">+1 234 678 9108 99</a>
                                         </li>
                                         <li>

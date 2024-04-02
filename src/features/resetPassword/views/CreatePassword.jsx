@@ -5,7 +5,7 @@ import {useFormik} from 'formik';
 import {validationSchemas} from '../../../utils/commonUtils';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import frame from "../../../images/createpass_bg.svg";
+import frame from "../../../images/chanage_pass_bg.svg";
 import addyads_img from "../../../images/addylogo.png";
 import {createPassword} from "../../../app/actions/userActions/userActions.js";
 

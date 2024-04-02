@@ -367,7 +367,12 @@ font-weight: 700;
 font-size: 14px;
 line-height: 20px;
 }
-
+.inter_font{
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  color: #292929;
+}
 @keyframes fadeInLeft {
   0% {
      opacity: 0.2;
@@ -435,6 +440,9 @@ line-height: 20px;
   .comment_container {
       padding-left: 62px;
   }
+  .inter_font {
+    font-size: 14px;
+  }
   .connected_heading{
     font-size: 14px;
   }
@@ -443,7 +451,7 @@ line-height: 20px;
     margin-top: 20px;
 }
 .cmn_wrapper_outer{
-  padding: 0px 10px 30px;
+  padding: 0px 13px 30px;
 }
 div#swal2-html-container {
   font-size: 13px;

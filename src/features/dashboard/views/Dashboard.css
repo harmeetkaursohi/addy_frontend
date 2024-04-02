@@ -107,7 +107,8 @@ button.DisConnectBtn {
 button#dropdown-basic {
     border-radius: 10px;
     border: 1px solid #F3F7FD;
-    background: #F4F4F4;
+    /* background: #F4F4F4; */
+    background-color: white;
     color: #5F6D7E;
     font-family: "Nunito";
     font-size: 17px;
@@ -119,6 +120,7 @@ button#dropdown-basic {
     min-width: 191px;
     padding-right: 35px;
     position: relative;
+    box-shadow: 2px 2px 2px 0px #f5f4f4;
 }
 
 button#dropdown-basic::after {
@@ -130,7 +132,7 @@ button#dropdown-basic::after {
 }
 
 .followers_outer {
-    padding: 21px 20px;
+ 
     display: flex;
     gap: 15px;
 }
@@ -151,7 +153,7 @@ button#dropdown-basic::after {
 }
 
 .upcoming_post_outer {
-    margin-top: 30px;
+    padding: 15px 0px;
 }
 
 
@@ -241,7 +243,7 @@ element.style {
 }
 
 .cmn_connect_btn {
-    font-family: "Poppins";
+    font-family: "Nunito";
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
@@ -296,6 +298,8 @@ element.style {
     justify-content: center;
     align-items: center;
     gap: 10px;
+    border-top: 1px solid #D1D9E2;
+    padding-top: 14px;
 
 }
 .cmn_drop_down.dropdown svg {
@@ -333,8 +337,7 @@ element.style {
 }
 
 .page_title_header {
-    /* padding: 10px 20px; */
-    margin: 20px;
+    margin: 30px 0px;
     border-radius: 22px;
     overflow: hidden;
     background-color: white;
@@ -483,6 +486,7 @@ img.connection-error-svg {
 .choose_platform_dropdown{
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .connect-page-btn {
     color: #04a3ff;
@@ -492,8 +496,11 @@ img.connection-error-svg {
     color: #004190;
     font-size: 24px;
 }
-.upcomingPostBtn_Outer button{
+div.upcomingPostBtn_Outer button{
     flex-grow: 1;
+    font-size: 14px;
+    font-weight: 600;
+
 }
 .No_Upcoming_Outer img{
     width: 400px;
@@ -501,9 +508,7 @@ img.connection-error-svg {
 div.noDraftPosts_outer {    
     background-color:#fff;
 }
-.dropdown_btn_Outer_container{
-    padding:0px 20px
-}
+
 .postdata_container{
     height: 40px;
     width: 40px;
@@ -516,14 +521,31 @@ div.noDraftPosts_outer {
 }
 .postdata_wrapper{
     display: flex;
-    gap: 10px;
-    padding: 10px;
+    justify-content: space-between;
+    padding: 15px;
     align-items: center;
 
 }
+.postdata_wrapper span{
+    color: #3C87E0;
+    font-size: 12px;
+    font-weight: 700;
+    padding-top: 15px;
+    font-family: "Nunito";
+}
+.performing_post_heading{
+    font-size: 20px;
+    color: black;
+    font-weight: 600;
+}
+.postdata_wrapper h5{
+    font-size: 22px;
+}
 .post_performing_list{
     display: flex;
-    justify-content: space-between;
+   gap: 15px;
+   margin-top: 10px;
+   margin-bottom: 0px;
 }
 
 .post_performing_list li h4{
@@ -531,22 +553,30 @@ div.noDraftPosts_outer {
     border-bottom: 1px solid #D9D9D9;
     padding: 11px;
 }
+.Performing_Post_container{
+    padding: 20px 0px 0px;
+}
 .Performing_Post_container  h3{
     font-size: 22px;
     font-weight: 700;
     color: #2E3646;
     line-height: 38px;
 }
-.Performing_Post_container {
-    padding: 20px;
-}
+
 .post_performing_list h4{
     color: #2E3646;
 }
 ul.post_performing_list li {
-    width: 180px;
-    border-radius: 13px;
+flex-grow: 1;
+border-radius: 13px;
+width: 100%;
  
+}
+.overview_heading{
+    color: #4D4D4D;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 38px;
 }
 .HiMiniArrowUpRight{
     height: 20px;
@@ -555,7 +585,14 @@ ul.post_performing_list li {
     background: #3C87E0;
     color: white;
     text-align: center;
-    font-size: 15px;
+    font-size: 13px;
+}
+.upcomingPostBtn_Outer .outline_btn {
+    border: 1px solid #D1D9E2;
+    background: #E6E9EC;
+}
+.upcomingPostBtn_Outer .post_now {
+    background: #00A3FF;
 }
 @media screen and (min-width:2560px){
     .followers_outer {
@@ -569,6 +606,7 @@ ul.post_performing_list li {
     .social_media_outer {
       gap: 5px;
     }
+    
     .social_media_content h5 {
         font-size: 13px;
     }
@@ -591,11 +629,23 @@ ul.post_performing_list li {
     }
     
 }
+@media screen and (max-width:1220px){
+    .post_performing_list{
+        flex-wrap: wrap;
+    }
+    .post_performing_list h4{
+        font-size: 15px;
+    }
+    .performing_post_heading {
+        font-size: 17px;
+    }
+    .followers_outer {
+        flex-wrap: wrap;
+    }
+}
 
 @media screen and (max-width: 1024px) {
-    .followers_outer {
-        display: block;
-    }
+    
     .social_media_wrapper {
         padding: 16px;
     }
@@ -675,9 +725,7 @@ ul.post_performing_list li {
         width: 20px;
     }
     
-    div.dropdown_btn_Outer_container{
-       padding-left: 0px !important;
-    }
+   
     .social_media_content{
         flex-wrap: wrap;
     }

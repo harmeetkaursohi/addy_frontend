@@ -6,12 +6,14 @@
     overflow-y: scroll;
     height: 100%;
     overflow-x: hidden;
-    transition: all 0.7s ease;
     scrollbar-width: none;
-
-
 }
-
+.animation{
+    transition: all 0.7s ease-in;
+}
+.sidebar_inner_content svg path {
+    color:#f07c33;
+}
 .notification-count-sidebar{
     z-index: 1;
     font-size: 11px;
@@ -90,6 +92,7 @@ i.bar_icon {
 .sidebar_item li svg {
     height: 19px;
     width: 19px;
+    color: #767177;
 }
 
 .sidebar_container_items {

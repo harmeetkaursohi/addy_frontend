@@ -15,7 +15,8 @@
     position: relative;
 }
 .planner_outer {
-    padding: 24px 30px;
+    padding: 24px;
+
    
 }
 
@@ -405,8 +406,10 @@ a.fc-daygrid-dot-event:hover {
     
 }
 
-@media screen and (max-width:1280px) {
-  
+@media screen and (max-width:1024px) {
+  .planner_outer {
+    padding: 20px;
+  }
  
 }
 @media screen and (max-width: 991px) {
@@ -466,10 +469,10 @@ a.fc-daygrid-dot-event:hover {
 
     }
     .create_post_btn{
-        padding: 8px;
+        padding: 7px;
         width: 100%;
         text-align: center;
-        font-size: 12px;
+        font-size: 10px;
     }
     .create_post_btn_Wrapper{
         display: flex;
@@ -501,7 +504,9 @@ a.fc-daygrid-dot-event:hover {
     }
     .draft_btn{
         margin-right: 0px;
-        font-size: 12px;
+        font-size: 10px;
+        min-width: unset;
+        padding: 7px;
     }
 
 }

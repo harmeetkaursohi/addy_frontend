@@ -275,9 +275,9 @@ const Profile = () => {
                                     <div className="edit_content">
                                         <form onSubmit={formik.handleSubmit}>
                                             {/* personal information */}
-                                             <div className={`cmn_box_shadow white_bg_color mt-3 ${editMode?"" :"profile-information"}`}>
+                                             <div className={`cmn_box_shadow white_bg_color mt-4 ${editMode?"" :"profile-information"}`}>
                                                 <div className="change_profile_outer ">
-                                                <h3 className="dm-sans-font">Personal Information</h3>
+                                                <h3 className="dm-sans-font ps-3">Personal Information</h3>
                                               
                                             
                                             <div onClick={() => {
@@ -447,10 +447,10 @@ const Profile = () => {
                                             {/* address=== */}
 
 
-                                            <div className={`cmn_box_shadow white_bg_color mt-3  ${editAddressMode? "":"address-info"}`}>
+                                            <div className={`cmn_box_shadow white_bg_color mt-4  ${editAddressMode? "":"address-info"}`}>
                                                 <div className="change_profile_outer ">
 
-                                            <h3 className="dm-sans-font">Address</h3>
+                                            <h3 className="dm-sans-font ps-3">Address</h3>
                                               
                                               <div onClick={() => {
                                                 setEditAddressMode(!editAddressMode)

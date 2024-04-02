@@ -28,7 +28,7 @@ export const ParentDraftComponent = ({setDraftPost, reference = "", resetData = 
 
     return (
 
-        <div className={"row m-0"}>
+        <div className={"row mt-5"}>
             {
                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading || getAllDraftPostsByCustomerAndPeriodData.loading) ?
                     <CommonLoader classname={"cmn_loader_outer"}/> :

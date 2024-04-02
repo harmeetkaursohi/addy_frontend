@@ -82,6 +82,15 @@ p.liked_by {
     object-fit: contain;
     height: 250px;
 }
+.draft-outer .post_image_outerwrapper{
+    height: 300px;
+}
+.draft-outer  .post_image_outerwrapper img {
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+    max-height: 300px;
+}
 .comment_review_wrapper .post_image_outerwrapper img{
     height: 100%;
     object-fit: contain;
@@ -355,6 +364,7 @@ svg.comment-edit-del-icon {
         font-size: 14px;
        
 }
+
  
     .reply_wrap input{
         margin-top: 10px;
