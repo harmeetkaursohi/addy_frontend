@@ -70,6 +70,7 @@ isolation: unset !important;
     color: #7C7C7C;
     font-weight: 400;
     font-size: 18px;
+    padding-left: 12px;
     font-family: "DM Sans" ,sans-serif;
 }
 .edit_content input {
@@ -77,7 +78,14 @@ isolation: unset !important;
     color: #263238;
     font-weight: 500;
     font-size: 18px;
- 
+    background-color: white !important;
+    border: none;
+}
+
+.edit_content input.form-control::placeholder {
+    color: #263238;
+    font-weight: 500;
+    font-size: 18px;
 }
 .change_profile_outer.cmn_box_shadow.white_bg_color input {
     background: white;
@@ -98,7 +106,7 @@ isolation: unset !important;
     border: none;
     padding: 0px;
 }
-.cmn_box_shadow.white_bg_color.mt-3.address-info input::placeholder {
+/* .cmn_box_shadow.white_bg_color.mt-3.address-info input::placeholder {
     color: #263238 !important;
     font-weight: 500 !important;
     font-size: 18px !important;
@@ -109,7 +117,7 @@ isolation: unset !important;
     font-weight: 500 !important;
     font-size: 18px !important;
     padding-top: 10px !important;
-}
+} */
 
 
 .edit_label{
@@ -176,7 +184,14 @@ isolation: unset !important;
     border-bottom-color: #ee7817 !important; 
     border-left-color: transparent !important; 
   }
-  
+  .edit_content select.form-control.cmn_select_box.mt-1 {
+    color: #263238;
+    font-weight: 500;
+    font-size: 18px;
+    background: white;
+    border: none;
+    appearance: none !important;
+}
  
   
   .cmn_select_box{
@@ -216,22 +231,22 @@ isolation: unset !important;
     .edit_content input {
         font-size: 16px;
     }
-    .cmn_box_shadow.white_bg_color.mt-3.address-info input::placeholder {
-        font-size: 16px !important;
+    .edit_content input.form-control::placeholder{
+        font-size: 16px;
     }
-    .cmn_box_shadow.white_bg_color.mt-3.profile-information input::placeholder {
-        font-size: 16px !important;
+    .edit_content select.form-control.cmn_select_box.mt-1 {
+        font-size: 16px;
     }
 }
  @media screen and (max-width:767px){
     .editprofile_outer {
         padding: 20px 16px;
     }
-    .cmn_box_shadow.white_bg_color.mt-3.address-info input::placeholder{
+    .edit_content input.form-control::placeholder{
         font-size: 14px !important;
     }
-    .cmn_box_shadow.white_bg_color.mt-3.profile-information input::placeholder{
-        font-size: 14px !important;
+    .edit_content select.form-control.cmn_select_box.mt-1 {
+        font-size: 14px;
     }
     .update-pic-loading svg{
         height: 25px;

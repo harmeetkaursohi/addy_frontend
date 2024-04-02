@@ -5,9 +5,9 @@ export const DashBoardReportLoader = () => {
 
     return (
 
-        <div className="followers_outer ">
+        <div className="followers_outer mt-4">
 
-            <div className="followers_wrapper ">
+            <div className="followers_wrapper">
                 <h5>Followers</h5>
                 <div className="followers_inner_content">
                     <h2><i className="fa fa-spinner fa-spin"/></h2>

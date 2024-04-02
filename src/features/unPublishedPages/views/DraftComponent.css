@@ -68,6 +68,7 @@
     margin-top: 15px;
     box-shadow: 1px 1px 5px #89858538;
     background: white;
+    overflow: hidden;
 
 }
 .page_tags::-webkit-scrollbar {
@@ -156,17 +157,21 @@ span.post_caption {
 h3.caption {
     color: #5F6D7E;
     font-family: Nunito;
-    font-size: 14px;
+    font-size: 18px;
     font-style: normal;
     font-weight: 400;
-  
-    margin-bottom: 10px !important;
+    margin-bottom: 10px ;
 
 }
 .upcoming_post_content{
     height: 60px;
     overflow-y: scroll;
-    line-height: 21px;
+    line-height: 27px;
+    color: #585858;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Nunito';
+
 }
 .card-body.post_card h5 {
     color: #000;
@@ -181,7 +186,7 @@ h3.caption {
 span.hash_tags {
     color: #5F6D7E;
     font-family: Nunito;
-    font-size: 12px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -232,9 +237,16 @@ button.outline_btn {
 .post_card_inner_content::-webkit-scrollbar-track {
     background-color: transparent ;
 }
+.draft_button_outer button {
+    font-size: 13px;
+    font-family: "Nunito";
+    font-weight: 700;
+}
 .hash_tags_outer_container{
     overflow-y: scroll;
     height: 57px;
+    line-height: 19px;
+
 
 }
 .hash_tags_outer_container::-webkit-scrollbar-thumb {
@@ -243,6 +255,80 @@ button.outline_btn {
 
 .hash_tags_outer_container::-webkit-scrollbar-track {
     background-color: transparent ;
+}
+.draft_component_outer .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
+    background: white;
+    padding-top: 0px;
+    width: max-content;
+    border-radius: 10px;
+    box-shadow: 2px 2px 15px 0px #e9e0e0;
+}
+.draft_component_outer .dropdown {
+    position: absolute;
+    left: auto;
+    right: 10px;
+}
+
+.draft_component_outer button#dropdown-basic {
+    color: black;
+    padding: 14px 0px;
+    width: 100%;
+    min-width: 141px;
+}
+.draft_component_outer .dropdown-menu.show {
+    display: block;
+    background: #ECECEC;
+    border: none;
+}
+.draft_component_outer a.dropdown-item {
+    border-bottom: 1px solid #DBDBDB;
+    padding: 10px;
+}
+.draft_component_outer a.dropdown-item:last-child{
+    border-bottom: unset;
+}
+.filters_outer{
+    padding: 10px;
+}
+.upcoming_post_header_outer {
+    color: white;
+    font-size: 12px;
+    left: 10px;
+   
+}
+.cmn_upcoing_post_header{
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    top: 20px;
+
+}
+.upcoming_post_header_outer img{
+    border-radius: 20px;
+}
+.upcoming_post_header_outer h3{
+color: white;
+font-size: 14px;
+font-weight: 600;
+}
+.Tommorrow_header {
+    left: auto;
+    right: 10px;
+    background: #F07C33;
+    color: white;
+    border-radius: 5px;
+    padding: 2px 8px;
+    
+}
+.post-image-outer{
+    position: relative;
+}
+@media screen and (min-width:2560px){
+    div.draft-outer .post_image_outerwrapper {
+        height: 500px;
+    }
 }
 @media screen and (min-width:1600px) {
     .no-draft-img {
@@ -256,7 +342,7 @@ button.outline_btn {
     .draft_button_outer {
         flex-wrap: wrap;
     }
-  
+    
 
     
 }
@@ -297,6 +383,9 @@ button.outline_btn.schedule_btn{
     button.outline_btn.schedule_btn{
         margin-top: 0px;
     }
+    .draft_component_outer .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr{
+        margin-top: 20px;
+    }
     button.outline_btn {
         padding: 9px;
         width: 100%;
@@ -306,6 +395,7 @@ button.outline_btn.schedule_btn{
     }
     div.draft_button_outer{
         display: flex !important;
+        flex-wrap: wrap;
     }
     h2.acc_not_connected_heading {
         font-size: 16px;
@@ -317,11 +407,22 @@ button.outline_btn.schedule_btn{
         min-width: 83px;
         font-size: 15px;
     }
+    .draft_component_outer .dropdown{
+        top: 22px;
+    }
 }
 @media screen and (max-width:767px) {
     button.outline_btn.schedule_btn{
         margin-top: 10px;
 
+    }
+    .draft_createPost_outer button{
+    font-size: 14px;
+    padding: 10px 5px;
+    width: 134px !important;
+    }
+    .draft_component_outer .dropdown{
+        position: unset;
     }
     .upcomingPostBtn_Outer{
         flex-wrap: wrap;

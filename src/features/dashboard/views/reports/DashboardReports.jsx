@@ -3,10 +3,9 @@ import noAccountData from "../../../../images/no_social_account.svg";
 import noPageData from "../../../../images/no_connected_ac_bg.svg"; 
 import Dropdown from "react-bootstrap/Dropdown";
 import { IoLocationOutline } from "react-icons/io5";
-import { TfiLocationArrow } from "react-icons/tfi";
 import { LuBarChart3 } from "react-icons/lu";
 import { HiMiniArrowUpRight } from "react-icons/hi2";
-
+import send_icon from "../../../../images/send_icon.svg"
 import {
     computeImageURL, generateUnixTimestampFor,
     getCustomDateEarlierUnixDateTime, getDatesForPinterest, getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
@@ -132,7 +131,7 @@ export const DashboardReports = () => {
 
                         // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
                         isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
-                            <div className="cmn_background p-5 text-center ">
+                            <div className=" p-5 text-center ">
                                 <h6 className="no_acc_title">No Account is Connected yet!</h6>
                                 <h3 className="connected_heading mt-3">Click on Connect to add your <br></br>pages in Addy.</h3>
                                 <img src={noPageData} className="img-fluid mt-5" alt=""/>
@@ -140,10 +139,10 @@ export const DashboardReports = () => {
 
                             :
 
-                            <div className="post_activity_outer cmn_background mx-2">
+                            <div className="post_activity_outer mx-2">
 
                                 <div
-                                    className="d-flex gap-2 postActivity_InnerWrapper dropdown_btn_Outer_container">
+                                    className="d-flex gap-3 postActivity_InnerWrapper dropdown_btn_Outer_container">
                                     <Dropdown className="dropdown_btn">
 
                                         <Dropdown.Toggle variant="success" id="dropdown-basic"
@@ -159,7 +158,7 @@ export const DashboardReports = () => {
                                         <Dropdown.Menu>
                                             {Object.keys(SocialAccountProvider).map((cur, index) => (
 
-                                                <Dropdown.Item key={index}
+                                                <div className="filters_outer" key={index}
                                                 
                                                                disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data, connectedPagesReducer?.facebookConnectedPages)}
                                                                onClick={() => {
@@ -172,12 +171,13 @@ export const DashboardReports = () => {
                                                                 <div className="choose_platform_dropdown">
                                                                 <img width={24}
                                                                        src={computeImageURL(cur)}
-                                                                       /> {getInitialLetterCap(SocialAccountProvider[cur])}
+                                                                       /> 
+                                                                       <h5 className="inter_font">{getInitialLetterCap(SocialAccountProvider[cur])}</h5>
                                                                         <input type="checkbox"/>
 
                                                                 </div>
 
-                                                </Dropdown.Item>
+                                                </div>
                                             ))
 
                                             }
@@ -278,14 +278,15 @@ export const DashboardReports = () => {
                                         :
                                         <>
                                         <div className="Performing_Post_container">
+                                        <h3 className="cmn_text_heading">Dashboard <span className="overview_heading nunito_font">Overview</span></h3>
                                         <ul className="post_performing_list">
-                                    <li className="box_shadow">
+                                        <li className="box_shadow">
                                         <h4 className="cmn_text_style nunito_font">Avg Impression</h4>
                                         <div className="postdata_wrapper">
                                        
                                         <img src={avg_bar}/>
                                         <div>
-                                        <h5>3.5k</h5>
+                                        <h5 className="cmn_text_heading">3.5k</h5>
                                         <span className="d-flex align-items-center gap-1"><div className="HiMiniArrowUpRight"><HiMiniArrowUpRight /></div> 89%</span>
                                         </div>
                                         </div>
@@ -296,7 +297,7 @@ export const DashboardReports = () => {
                                         
                                         <img src={followers_bar}/>
                                        <div>
-                                        <h5>3.5k</h5>
+                                        <h5 className="cmn_text_heading">3.5k</h5>
                                         <span className="d-flex align-items-center gap-1"><div className="HiMiniArrowUpRight"><HiMiniArrowUpRight /></div> 89%</span>
                                        </div>
 
@@ -309,14 +310,14 @@ export const DashboardReports = () => {
                                         
                                         <img src={avg_bar}/>
                                      <div>
-                                        <h5>80%</h5>
+                                        <h5 className="cmn_text_heading">80%</h5>
                                         <span className="d-flex align-items-center gap-1"><div className="HiMiniArrowUpRight"><HiMiniArrowUpRight /></div> 89%</span>
                                         </div>
                                         </div>
                                     </li>
                                     </ul>
                                     </div>
-                                        <div className="followers_outer ">
+                                        <div className="followers_outer mt-4">
 
                                             {reportSectionData?.data &&
                                                 Object.keys(reportSectionData?.data).map((curKey, index) => (
@@ -388,32 +389,33 @@ export const DashboardReports = () => {
                                     <ul className="post_performing_list">
                                     <li className="box_shadow">
                                         <h4 className="cmn_text_style nunito_font">Organic Visitors</h4>
-                                        <div className="postdata_wrapper">
-                                        <div className="postdata_container">
+                                        <div className="d-flex gap-2 align-items-center p-3">
+                                        <div className="postdata_container ">
                                         <IoLocationOutline />
                                         </div>
-                                        <h5>3.5k</h5>
+                                        <h5 className="performing_post_heading nunito_font">3.5k</h5>
 
                                         </div>
                                     </li>
                                     <li className="box_shadow">
                                         <h4 className="cmn_text_style nunito_font">Visitors from Ads</h4>
-                                        <div className="postdata_wrapper">
+                                        <div className="d-flex gap-2 align-items-center p-3">
                                         <div className="postdata_container">
                                         <LuBarChart3 />
                                         </div>
-                                        <h5>3.5k</h5>
+                                        <h5 className="performing_post_heading nunito_font">3.5k</h5>
 
                                         </div>
                                     </li>
 
                                     <li className="box_shadow">
                                         <h4 className="cmn_text_style nunito_font">Ads click rate</h4>
-                                        <div className="postdata_wrapper">
-                                        <div className="postdata_container">
-                                        <TfiLocationArrow />
+                                        <div className=" d-flex gap-2 align-items-center p-3">
+                                        <div className="postdata_container ">
+                                            <img src={send_icon} height="18px" width="18px"/>
+                                      
                                         </div>
-                                        <h5>80%</h5>
+                                        <h5 className="performing_post_heading nunito_font">80%</h5>
 
                                         </div>
                                     </li>

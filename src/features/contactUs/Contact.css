@@ -31,6 +31,9 @@ h2.cmn_title {
 .contact_content textarea::placeholder {
     color: #828282;
 }
+.PiPhoneCall{
+    font-size: 20px;
+}
 .contact_content {
     padding: 20px;
     background: white;
