@@ -90,31 +90,33 @@ const Draft = () => {
 
                             <div className="calender_outer_wrapper draft_component_outer mt-3">
                                 {/* filter dropdown  */}
-                                <Dropdown>
-                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                        Filters
-                                    </Dropdown.Toggle>
+                                {
+                                    false && <Dropdown>
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                            Filters
+                                        </Dropdown.Toggle>
 
-                                    <Dropdown.Menu>
-                                        <div className="filters_outer">
-                                            <div className="choose_platform_dropdown">
-                                                <img width={24} src={linkedin}/>
-                                                <h5 className="inter_font">Linkedin</h5>
-                                                <input type="checkbox"/>
+                                        <Dropdown.Menu>
+                                            <div className="filters_outer">
+                                                <div className="choose_platform_dropdown">
+                                                    <img width={24} src={linkedin}/>
+                                                    <h5 className="inter_font">Linkedin</h5>
+                                                    <input type="checkbox"/>
+                                                </div>
+
+
+                                            </div>
+                                            <div className="filters_outer">
+                                                <div className="choose_platform_dropdown">
+                                                    <img width={24} src={instagram_img}/>
+                                                    <h5 className="inter_font">Instagram</h5>
+                                                    <input type="checkbox"/>
+                                                </div>
                                             </div>
 
-
-                                        </div>
-                                        <div className="filters_outer">
-                                            <div className="choose_platform_dropdown">
-                                                <img width={24} src={instagram_img}/>
-                                                <h5 className="inter_font">Instagram</h5>
-                                                <input type="checkbox"/>
-                                            </div>
-                                        </div>
-
-                                    </Dropdown.Menu>
-                                </Dropdown>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                }
 
                                 <div className={`calendar-container hidden`}>
                                     <FullCalendar

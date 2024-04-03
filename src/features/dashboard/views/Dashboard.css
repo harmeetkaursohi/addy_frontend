@@ -485,8 +485,11 @@ img.connection-error-svg {
 }
 .choose_platform_dropdown{
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     align-items: center;
+    gap:
+    20px;
+    cursor: pointer;
 }
 .connect-page-btn {
     color: #04a3ff;

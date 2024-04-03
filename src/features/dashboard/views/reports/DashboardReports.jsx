@@ -8,8 +8,8 @@ import {HiMiniArrowUpRight} from "react-icons/hi2";
 import send_icon from "../../../../images/send_icon.svg"
 import {
     computeImageURL,
-      getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
-     socialMediaAccountHasConnectedPages
+    getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
+    socialMediaAccountHasConnectedPages
 } from "../../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../../utils/contantData";
 import jsondata from "../../../../locales/data/initialdata.json";
@@ -143,6 +143,48 @@ export const DashboardReports = () => {
 
                                 <div
                                     className="d-flex gap-3 postActivity_InnerWrapper dropdown_btn_Outer_container">
+                                    {
+                                        false &&  <Dropdown className="dropdown_btn">
+
+                                            <Dropdown.Toggle variant="success" id="dropdown-basic"
+                                                             className="social_dropdowns"
+                                                             disabled={getAllConnectedSocialAccountData?.loading || reportSectionData?.loading || reportGraphSectionData?.loading}>
+                                                <img src={computeImageURL(reportSelectedAccountType)}
+                                                     className="me-3 review-post-icon"
+                                                     alt={SocialAccountProvider[reportSelectedAccountType]}/>
+                                                {SocialAccountProvider[reportSelectedAccountType]}
+
+                                            </Dropdown.Toggle>
+
+                                            <Dropdown.Menu>
+                                                {Object.keys(SocialAccountProvider).map((cur, index) => (
+
+                                                    <div className="filters_outer" key={index}
+
+                                                         disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data, connectedPagesReducer?.facebookConnectedPages)}
+                                                         onClick={() => {
+                                                             setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
+                                                             setReportSelectedAccountType(cur)
+                                                             setGraphDaysSelected(9)
+
+
+                                                         }}>
+                                                        <div className="choose_platform_dropdown">
+                                                            <img width={24}
+                                                                 src={computeImageURL(cur)}
+                                                            />
+                                                            <h5 className="inter_font">{getInitialLetterCap(SocialAccountProvider[cur])}</h5>
+                                                            <input type="checkbox"/>
+
+                                                        </div>
+
+                                                    </div>
+                                                ))
+
+                                                }
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    }
                                     <Dropdown className="dropdown_btn">
 
                                         <Dropdown.Toggle variant="success" id="dropdown-basic"
@@ -150,34 +192,24 @@ export const DashboardReports = () => {
                                                          disabled={getAllConnectedSocialAccountData?.loading || reportSectionData?.loading || reportGraphSectionData?.loading}>
                                             <img src={computeImageURL(reportSelectedAccountType)}
                                                  className="me-3 review-post-icon"
-                                                 alt={SocialAccountProvider[reportSelectedAccountType]}/>
-                                            {SocialAccountProvider[reportSelectedAccountType]}
-
+                                                 alt={SocialAccountProvider[reportSelectedAccountType]}/>{SocialAccountProvider[reportSelectedAccountType]}
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
                                             {Object.keys(SocialAccountProvider).map((cur, index) => (
 
-                                                <div className="filters_outer" key={index}
+                                                <Dropdown.Item key={index}
+                                                               disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data, connectedPagesReducer?.facebookConnectedPages)}
+                                                               onClick={() => {
+                                                                   setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
+                                                                   setReportSelectedAccountType(cur)
+                                                                   setGraphDaysSelected(9)
 
-                                                     disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data, connectedPagesReducer?.facebookConnectedPages)}
-                                                     onClick={() => {
-                                                         setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
-                                                         setReportSelectedAccountType(cur)
-                                                         setGraphDaysSelected(9)
 
-
-                                                     }}>
-                                                    <div className="choose_platform_dropdown">
-                                                        <img width={24}
-                                                             src={computeImageURL(cur)}
-                                                        />
-                                                        <h5 className="inter_font">{getInitialLetterCap(SocialAccountProvider[cur])}</h5>
-                                                        <input type="checkbox"/>
-
-                                                    </div>
-
-                                                </div>
+                                                               }}><img width={24}
+                                                                       src={computeImageURL(cur)}
+                                                                       className="me-3"/> {getInitialLetterCap(SocialAccountProvider[cur])}
+                                                </Dropdown.Item>
                                             ))
 
                                             }
