@@ -6,7 +6,7 @@ h5,
 h6,
 label,
 ul {
-  font-family:"Poppins";
+  font-family:"Nunito", sans-serif;
   font-style: normal;
 }
 
@@ -18,7 +18,6 @@ h6 {
   margin-bottom: 0px !important;
 }
 .dm-sans-font{
-font-family: "DM Sans", sans-serif;
 font-weight: 700;
 color: #263238;
 }
@@ -97,7 +96,6 @@ ul {
 
 .cmn_headings {
   color: #5f6d7e;
-  font-family: "Nunito";
   font-size: 13px;
   font-style: normal;
   font-weight: 500;
@@ -116,7 +114,7 @@ a {
 
 .cmn_white_text {
   color: #fff;
-  font-family: "Poppins";
+  font-family: "Nunito";
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -126,7 +124,7 @@ a {
 
 .cmn_bg_btn {
   color: #fff;
-  font-family: "Poppins";
+  font-family: "Nunito" ,sans-serif;
   font-size: 10px;
   font-style: normal;
   font-weight: 700;
@@ -143,13 +141,13 @@ a {
   font-weight: 700;
   line-height: 38px;
   letter-spacing: -0.28px;
-  font-family: "Nunito";
+  font-family: "Nunito",sans-serif;
 }
 
 .cmn_small_heading {
     font-size: 16px;
     font-weight: 400;
-    font-family: 'Nunito';
+    font-family: 'Nunito',sans-serif;
     line-height: 24px;
     color: #5F6D7E;
 }
@@ -184,12 +182,18 @@ input::-webkit-inner-spin-button {
 
 .cmn_text_style {
   color: #000;
-  font-family: "Poppins";
+  font-family: "Nunito",sans-serif;
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
   line-height: 38px;
   letter-spacing: -0.2px;
+}
+.cmn_text{
+  color: #737373;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
 }
 .connection-warning-text {
   font-size: 25px;
@@ -237,8 +241,8 @@ h2.closeEyeIcon {
   position: absolute;
   font-size: 15px;
   left: auto;
-  right: 12px;
-  top: 39px;
+  right: 10px;
+  top: 38px;
   color: #C0C0C0;
 }
 
@@ -297,9 +301,14 @@ h2.acc_not_connected_heading {
   border-radius: 10px;
 }
 .nunito_font{
-  font-family: "Nunito";
+  font-family: "Nunito",sans-serif;
 }
-
+.cmn_border{
+  border-bottom: 1px solid #D9D9D9;
+}
+.cmn_shadow{
+  box-shadow: 2px 0px 8px #e5e2e2;
+}
 h2#swal2-title {
  
   font-size: 28px;
@@ -368,7 +377,7 @@ font-size: 14px;
 line-height: 20px;
 }
 .inter_font{
-  font-family: "Inter", sans-serif;
+  font-family: "Nunito";
   font-weight: 500;
   font-size: 17px;
   color: #292929;

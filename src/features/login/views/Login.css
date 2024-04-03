@@ -85,7 +85,7 @@
     color: #202020;
     text-align: center;
     font-size: 34px;
-    font-weight: 600;
+    font-weight: 800;
     line-height: 40px;
     letter-spacing: -0.8px;
     margin-top: 25px;
@@ -107,7 +107,7 @@
     color: #636364;
     text-align: center;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 21px; 
     margin-top: 6px;
     margin-bottom: 0px;
@@ -121,7 +121,7 @@
     letter-spacing: -0.22px;
 }
 .reach_user_outer img{
-    height: 350px;
+    height: 450px;
 }
 
 
@@ -132,17 +132,17 @@
 
 .form-group label {
     color: #181818;
-    font-size: 16px;
+    font-size: 17px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 20px;
     
 }
 
 .sign_up {
     color: #F07C33;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 700;
 
    
 }
@@ -158,13 +158,14 @@
     color: #181818 !important;
     text-decoration: underline;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
+
 }
 
 .login_btn {
     background-color: #F07C33;
     color: #FFF;
-    font-family: "Poppins";
+    font-family: "Nunito";
     font-size: 20px;
     font-style: normal;
     font-weight: 600;
@@ -188,7 +189,7 @@
 
 .form-group input.form-control::placeholder {
     color: #636364;
-    font-family: "Poppins";
+    font-family: "Nunito";
     font-size: 14px;
     font-style: normal;
     font-weight: 300;
@@ -208,7 +209,7 @@
 .cmn_heading {
     color: #5F6D7E;
     text-align: center;
-    font-family: "Poppins";
+    font-family: "Nunito";
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -237,15 +238,19 @@
 }
 .login_form h3 {
     margin-top: 20px;
-    font-weight: 500;
+    font-weight: 700;
     color: #A0A0A0;
-    font-size: 16px;
+    font-size: 18px;
     text-align: center;
 }
 .login_form {
     margin-top: 30px;
 }
-
+@media screen and (min-width:1499px){
+    .reach_user_outer img {
+        height: 550px;
+    }
+}
 @media screen and  (max-width: 1440px) {
    
     .login_btn {
@@ -257,6 +262,9 @@
     .addy_img h2{
         font-size: 25px;
         margin-top: 20px;
+    }
+    .reach_user_outer h2{
+        font-size: 16px;
     }
     
 }

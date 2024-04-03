@@ -17,6 +17,12 @@ import {IoMdNotificationsOutline} from "react-icons/io";
 
 export const SidebarMenuItems = [
     {
+        "name": "Profile",
+        "path": "/profile",
+        "icon": <CgProfile />
+    },
+    {
+     
         "name": "Dashboard",
         "path": "/dashboard",
         "icon":<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,11 +64,7 @@ export const SidebarMenuItems = [
         </svg>
 
     },
-    {
-        "name": "Profile",
-        "path": "/profile",
-        "icon": <CgProfile />
-    },
+    
     {
         "name": "Notifications",
         "path": "/notification",

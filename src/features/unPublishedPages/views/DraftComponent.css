@@ -9,7 +9,7 @@
 
 .post_scheduled_content h4{
     color: #585858;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
@@ -147,7 +147,7 @@ posted-on-txt {
 
 span.post_caption {
     color: #000;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
@@ -156,7 +156,7 @@ span.post_caption {
 
 h3.caption {
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
@@ -175,7 +175,7 @@ h3.caption {
 }
 .card-body.post_card h5 {
     color: #000;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
@@ -185,7 +185,7 @@ h3.caption {
 
 span.hash_tags {
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
@@ -197,7 +197,7 @@ button.un_selected {
     border: 1px solid rgba(192, 57, 57, 0.27);
     background: rgba(255, 0, 0, 0.18);
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 10px;
     font-style: normal;
     font-weight: 500;

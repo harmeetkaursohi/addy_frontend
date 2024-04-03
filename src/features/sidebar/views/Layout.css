@@ -7,6 +7,7 @@
     height: 100%;
     overflow-x: hidden;
     scrollbar-width: none;
+    background-color: white;
 }
 .animation{
     transition: all 0.7s ease-in;
@@ -68,7 +69,7 @@ i.bar_icon {
 
 .sidebar_item_outer a {
     color: #97A1AD;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
@@ -98,7 +99,6 @@ i.bar_icon {
 .sidebar_container_items {
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 3px 2px 18px #e5e5e5;
 
 }
 
@@ -151,12 +151,12 @@ a.active {
 
 .sidebar_inner_content {
  
-    background: white;
+    background: #FCF2EC;
     padding: 12px 19px;
     gap: 17px;
     display: flex;
     align-items: center;
-    color: #E05905;
+    color: #2A2D37;
     cursor: pointer;
 
 }
@@ -164,6 +164,7 @@ a.active {
 .sidebar_inner_content h6 {
     font-size: 16px;
     font-weight: 600;
+    color: #2A2D37;
 }
 
 
@@ -213,6 +214,7 @@ border-radius: 20px;
     display: flex;
     align-items: center;
     gap: 10px;
+    cursor: pointer;
 }
 .user_info_outer img {
 height: 25px;
@@ -272,6 +274,13 @@ div.sidebar_item_outers {
 .sidebar_inner_content svg path{
         stroke: #E05905;
 }
+
+    ul.sidebar_item li:last-child{
+    bottom: 0;
+    position: absolute;
+    margin-bottom: 10px;
+    }
+
 @media screen and (max-width: 767px) {
     /* div.sidebar_item_outers {
         padding: 11px 16px;
