@@ -1,28 +1,40 @@
 import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {getToken} from "../../../app/auth/auth";
-import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
+import { useSelector} from "react-redux";
 import DraftComponent from "./DraftComponent";
 import {sortByKey} from "../../../utils/commonUtils";
 import CommonLoader from "../../common/components/CommonLoader";
 import noDraftPosts from "../../../images/no_draft_posts.png";
-import {useLocation} from "react-router-dom";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
-import { useAppContext } from "../../common/components/AppProvider";
+import {useAppContext} from "../../common/components/AppProvider";
 
-export const ParentDraftComponent = ({setDraftPost, reference = "", resetData = null}) => {
-     const{sidebar}=useAppContext()
+export const ParentDraftComponent = ({setDraftPost, reference = ""}) => {
+    const {sidebar} = useAppContext()
     const [drafts, setDrafts] = useState(null);
+    const [deletedAndPublishedPostIds, setDeletedAndPublishedPostIds] = useState({
+        deletedPostIds: [],
+        publishedPostIds: [],
+
+    });
     const getAllDraftPostsByCustomerAndPeriodData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
 
     useEffect(() => {
+        if (drafts !== null && Array.isArray(drafts) && (deletedAndPublishedPostIds.deletedPostIds.length + deletedAndPublishedPostIds.publishedPostIds.length === drafts?.length)) {
+            setDrafts([])
+        }
+    }, [deletedAndPublishedPostIds])
+
+    useEffect(() => {
         if (getAllDraftPostsByCustomerAndPeriodData?.data) {
             setDrafts(Object.values(getAllDraftPostsByCustomerAndPeriodData?.data));
         }
-        return ()=>{
+        return () => {
             setDrafts(null)
+            setDeletedAndPublishedPostIds({
+                deletedPostIds: [],
+                publishedPostIds: [],
+            })
         }
     }, [getAllDraftPostsByCustomerAndPeriodData]);
 
@@ -45,15 +57,22 @@ export const ParentDraftComponent = ({setDraftPost, reference = "", resetData = 
                                 </div>
                                 :
                                 drafts !== null && Array.isArray(drafts) && drafts?.length > 0 &&
-                                sortByKey(drafts, "createdAt").map((curDraftObject, key) => (
-                                    <div className={sidebar? "col-lg-6 col-md-6 col-sm-12": "col-lg-6 col-md-12 col-sm-12"} key={key + "curDraftObject"}>
-                                        {
-                                            <DraftComponent resetData={resetData} batchIdData={curDraftObject}
-                                                            setDraftPost={setDraftPost}
-                                                            setDrafts={setDrafts} reference={reference}/>
-                                        }
-                                    </div>
-                                ))
+                                sortByKey(drafts, "createdAt").map((curDraftObject, key) => {
+                                    return (deletedAndPublishedPostIds?.deletedPostIds?.includes(curDraftObject?.id) || deletedAndPublishedPostIds?.publishedPostIds?.includes(curDraftObject?.id)) ? <></> :
+                                        <div
+                                            className={sidebar ? "col-lg-6 col-md-6 col-sm-12" : "col-lg-6 col-md-12 col-sm-12"}
+                                            key={key + "curDraftObject"}>
+                                            {
+                                                <DraftComponent batchIdData={curDraftObject}
+                                                                setDraftPost={setDraftPost}
+                                                                setDrafts={setDrafts} reference={reference}
+                                                                deletedAndPublishedPostIds={deletedAndPublishedPostIds}
+                                                                setDeletedAndPublishedPostIds={setDeletedAndPublishedPostIds}
+                                                />
+                                            }
+                                        </div>
+
+                                })
             }
         </div>
     )

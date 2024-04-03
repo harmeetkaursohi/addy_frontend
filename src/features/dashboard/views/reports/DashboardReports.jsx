@@ -1,16 +1,15 @@
 import CommonLoader from "../../../common/components/CommonLoader";
 import noAccountData from "../../../../images/no_social_account.svg";
-import noPageData from "../../../../images/no_connected_ac_bg.svg"; 
+import noPageData from "../../../../images/no_connected_ac_bg.svg";
 import Dropdown from "react-bootstrap/Dropdown";
-import { IoLocationOutline } from "react-icons/io5";
-import { LuBarChart3 } from "react-icons/lu";
-import { HiMiniArrowUpRight } from "react-icons/hi2";
+import {IoLocationOutline} from "react-icons/io5";
+import {LuBarChart3} from "react-icons/lu";
+import {HiMiniArrowUpRight} from "react-icons/hi2";
 import send_icon from "../../../../images/send_icon.svg"
 import {
-    computeImageURL, generateUnixTimestampFor,
-    getCustomDateEarlierUnixDateTime, getDatesForPinterest, getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
-    isPageConnected,
-    notConnectedSocialMediaAccount, socialMediaAccountHasConnectedPages
+    computeImageURL,
+      getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
+     socialMediaAccountHasConnectedPages
 } from "../../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../../utils/contantData";
 import jsondata from "../../../../locales/data/initialdata.json";
@@ -26,7 +25,7 @@ import default_user_icon from "../../../../images/default_user_icon.svg"
 import {getToken} from "../../../../app/auth/auth";
 import avg_bar from "../../../../images/avg_bar.svg"
 import followers_bar from "../../../../images/followers_bar.svg"
-import reach_bar from "../../../../images/reach_bar.svg"
+
 export const DashboardReports = () => {
 
     const token = getToken();
@@ -132,8 +131,9 @@ export const DashboardReports = () => {
                         // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
                         isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
                             <div className=" p-5 text-center ">
-                                <h6 className="no_acc_title">No Account is Connected yet!</h6>
-                                <h3 className="connected_heading mt-3">Click on Connect to add your <br></br>pages in Addy.</h3>
+                                <h6 className="no_acc_title">No Page is Connected yet!</h6>
+                                <h3 className="connected_heading mt-3">Click on Connect to add your <br></br>pages in
+                                    Addy.</h3>
                                 <img src={noPageData} className="img-fluid mt-5" alt=""/>
                             </div>
 
@@ -151,31 +151,31 @@ export const DashboardReports = () => {
                                             <img src={computeImageURL(reportSelectedAccountType)}
                                                  className="me-3 review-post-icon"
                                                  alt={SocialAccountProvider[reportSelectedAccountType]}/>
-                                                 {SocialAccountProvider[reportSelectedAccountType]}
-                                                
+                                            {SocialAccountProvider[reportSelectedAccountType]}
+
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
                                             {Object.keys(SocialAccountProvider).map((cur, index) => (
 
                                                 <div className="filters_outer" key={index}
-                                                
-                                                               disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data, connectedPagesReducer?.facebookConnectedPages)}
-                                                               onClick={() => {
-                                                                   setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
-                                                                   setReportSelectedAccountType(cur)
-                                                                   setGraphDaysSelected(9)
+
+                                                     disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data, connectedPagesReducer?.facebookConnectedPages)}
+                                                     onClick={() => {
+                                                         setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
+                                                         setReportSelectedAccountType(cur)
+                                                         setGraphDaysSelected(9)
 
 
-                                                               }}>
-                                                                <div className="choose_platform_dropdown">
-                                                                <img width={24}
-                                                                       src={computeImageURL(cur)}
-                                                                       /> 
-                                                                       <h5 className="inter_font">{getInitialLetterCap(SocialAccountProvider[cur])}</h5>
-                                                                        <input type="checkbox"/>
+                                                     }}>
+                                                    <div className="choose_platform_dropdown">
+                                                        <img width={24}
+                                                             src={computeImageURL(cur)}
+                                                        />
+                                                        <h5 className="inter_font">{getInitialLetterCap(SocialAccountProvider[cur])}</h5>
+                                                        <input type="checkbox"/>
 
-                                                                </div>
+                                                    </div>
 
                                                 </div>
                                             ))
@@ -277,78 +277,85 @@ export const DashboardReports = () => {
                                         <DashBoardReportLoader/>
                                         :
                                         <>
-                                        <div className="Performing_Post_container">
-                                        <h3 className="cmn_text_heading">Dashboard <span className="overview_heading nunito_font">Overview</span></h3>
-                                        <ul className="post_performing_list">
-                                        <li className="box_shadow">
-                                        <h4 className="cmn_text_style nunito_font">Avg Impression</h4>
-                                        <div className="postdata_wrapper">
-                                       
-                                        <img src={avg_bar}/>
-                                        <div>
-                                        <h5 className="cmn_text_heading">3.5k</h5>
-                                        <span className="d-flex align-items-center gap-1"><div className="HiMiniArrowUpRight"><HiMiniArrowUpRight /></div> 89%</span>
-                                        </div>
-                                        </div>
-                                    </li>
-                                    <li className="box_shadow">
-                                        <h4 className="cmn_text_style nunito_font">Followers</h4>
-                                        <div className="postdata_wrapper">
-                                        
-                                        <img src={followers_bar}/>
-                                       <div>
-                                        <h5 className="cmn_text_heading">3.5k</h5>
-                                        <span className="d-flex align-items-center gap-1"><div className="HiMiniArrowUpRight"><HiMiniArrowUpRight /></div> 89%</span>
-                                       </div>
+                                            {
+                                                false && <div className="Performing_Post_container">
+                                                    <h3 className="cmn_text_heading">Dashboard <span
+                                                        className="overview_heading nunito_font">Overview</span></h3>
+                                                    <ul className="post_performing_list">
+                                                        <li className="box_shadow">
+                                                            <h4 className="cmn_text_style nunito_font">Avg Impression</h4>
+                                                            <div className="postdata_wrapper">
 
-                                        </div>
-                                    </li>
+                                                                <img src={avg_bar}/>
+                                                                <div>
+                                                                    <h5 className="cmn_text_heading">3.5k</h5>
+                                                                    <span className="d-flex align-items-center gap-1"><div
+                                                                        className="HiMiniArrowUpRight"><HiMiniArrowUpRight/></div> 89%</span>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        <li className="box_shadow">
+                                                            <h4 className="cmn_text_style nunito_font">Followers</h4>
+                                                            <div className="postdata_wrapper">
 
-                                    <li className="box_shadow">
-                                        <h4 className="cmn_text_style nunito_font">Avg Reach</h4>
-                                        <div className="postdata_wrapper">
-                                        
-                                        <img src={avg_bar}/>
-                                     <div>
-                                        <h5 className="cmn_text_heading">80%</h5>
-                                        <span className="d-flex align-items-center gap-1"><div className="HiMiniArrowUpRight"><HiMiniArrowUpRight /></div> 89%</span>
-                                        </div>
-                                        </div>
-                                    </li>
-                                    </ul>
-                                    </div>
-                                        <div className="followers_outer mt-4">
+                                                                <img src={followers_bar}/>
+                                                                <div>
+                                                                    <h5 className="cmn_text_heading">3.5k</h5>
+                                                                    <span className="d-flex align-items-center gap-1"><div
+                                                                        className="HiMiniArrowUpRight"><HiMiniArrowUpRight/></div> 89%</span>
+                                                                </div>
 
-                                            {reportSectionData?.data &&
-                                                Object.keys(reportSectionData?.data).map((curKey, index) => (
+                                                            </div>
+                                                        </li>
 
-                                                    <div className="followers_wrapper " key={index}>
+                                                        <li className="box_shadow">
+                                                            <h4 className="cmn_text_style nunito_font">Avg Reach</h4>
+                                                            <div className="postdata_wrapper">
 
-                                                        <h5>{curKey.replace(/_/g, ' ')}
-                                                            {
-                                                                ["INSTAGRAM", "PINTEREST","FACEBOOK"].includes(reportSelectedAccountType) &&
-                                                                <span className={"90-day-txt"}> {curKey==='Post_Activity' && reportSelectedAccountType==="FACEBOOK"  ? '(90 days)' :  reportSelectedAccountType!=="FACEBOOK" ? '(90 days)' : ''  }  </span>
-                                                            }
+                                                                <img src={avg_bar}/>
+                                                                <div>
+                                                                    <h5 className="cmn_text_heading">80%</h5>
+                                                                    <span className="d-flex align-items-center gap-1"><div
+                                                                        className="HiMiniArrowUpRight"><HiMiniArrowUpRight/></div> 89%</span>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            }
+                                            <div className="followers_outer mt-4">
 
-                                                        </h5>
-                                                        <div className="followers_inner_content">
-                                                            <h2> {reportSectionData?.data[curKey]?.lifeTime || 0
-                                                            }</h2>
-                                                            <div className="monthly_growth">
-                                                                <button className="cmn_followers_btn">
-                                                                    <img src={polygon_img} className="polygon_img"/>
-                                                                    {reportSectionData?.data[curKey]?.month || 0}
-                                                                </button>
-                                                                <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
+                                                {reportSectionData?.data &&
+                                                    Object.keys(reportSectionData?.data).map((curKey, index) => (
+
+                                                        <div className="followers_wrapper " key={index}>
+
+                                                            <h5>{curKey.replace(/_/g, ' ')}
+                                                                {
+                                                                    ["INSTAGRAM", "PINTEREST", "FACEBOOK"].includes(reportSelectedAccountType) &&
+                                                                    <span
+                                                                        className={"90-day-txt"}> {curKey === 'Post_Activity' && reportSelectedAccountType === "FACEBOOK" ? '(90 days)' : reportSelectedAccountType !== "FACEBOOK" ? '(90 days)' : ''}  </span>
+                                                                }
+
+                                                            </h5>
+                                                            <div className="followers_inner_content">
+                                                                <h2> {reportSectionData?.data[curKey]?.lifeTime || 0
+                                                                }</h2>
+                                                                <div className="monthly_growth">
+                                                                    <button className="cmn_followers_btn">
+                                                                        <img src={polygon_img} className="polygon_img"/>
+                                                                        {reportSectionData?.data[curKey]?.month || 0}
+                                                                    </button>
+                                                                    <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
 
-                                                ))
-                                            }
+                                                    ))
+                                                }
 
-                                        </div>
+                                            </div>
                                         </>
                                 }
 
@@ -385,46 +392,48 @@ export const DashboardReports = () => {
                                 </div>
 
                                 {/* Performing Post */}
-                                <div className="Performing_Post_container">
-                                    <h3 className="nunito_font">Performing Post</h3>
-                                    <ul className="post_performing_list">
-                                    <li className="box_shadow">
-                                        <h4 className="cmn_text_style nunito_font">Organic Visitors</h4>
-                                        <div className="d-flex gap-2 align-items-center p-3">
-                                        <div className="postdata_container ">
-                                        <IoLocationOutline />
-                                        </div>
-                                        <h5 className="performing_post_heading nunito_font">3.5k</h5>
+                                {
+                                    false && <div className="Performing_Post_container">
+                                        <h3 className="nunito_font">Performing Post</h3>
+                                        <ul className="post_performing_list">
+                                            <li className="box_shadow">
+                                                <h4 className="cmn_text_style nunito_font">Organic Visitors</h4>
+                                                <div className="d-flex gap-2 align-items-center p-3">
+                                                    <div className="postdata_container ">
+                                                        <IoLocationOutline/>
+                                                    </div>
+                                                    <h5 className="performing_post_heading nunito_font">3.5k</h5>
 
-                                        </div>
-                                    </li>
-                                    <li className="box_shadow">
-                                        <h4 className="cmn_text_style nunito_font">Visitors from Ads</h4>
-                                        <div className="d-flex gap-2 align-items-center p-3">
-                                        <div className="postdata_container">
-                                        <LuBarChart3 />
-                                        </div>
-                                        <h5 className="performing_post_heading nunito_font">3.5k</h5>
+                                                </div>
+                                            </li>
+                                            <li className="box_shadow">
+                                                <h4 className="cmn_text_style nunito_font">Visitors from Ads</h4>
+                                                <div className="d-flex gap-2 align-items-center p-3">
+                                                    <div className="postdata_container">
+                                                        <LuBarChart3/>
+                                                    </div>
+                                                    <h5 className="performing_post_heading nunito_font">3.5k</h5>
 
-                                        </div>
-                                    </li>
+                                                </div>
+                                            </li>
 
-                                    <li className="box_shadow">
-                                        <h4 className="cmn_text_style nunito_font">Ads click rate</h4>
-                                        <div className=" d-flex gap-2 align-items-center p-3">
-                                        <div className="postdata_container ">
-                                            <img src={send_icon} height="18px" width="18px"/>
-                                      
-                                        </div>
-                                        <h5 className="performing_post_heading nunito_font">80%</h5>
+                                            <li className="box_shadow">
+                                                <h4 className="cmn_text_style nunito_font">Ads click rate</h4>
+                                                <div className=" d-flex gap-2 align-items-center p-3">
+                                                    <div className="postdata_container ">
+                                                        <img src={send_icon} height="18px" width="18px"/>
 
-                                        </div>
-                                    </li>
-                                    </ul>
-                                </div>
+                                                    </div>
+                                                    <h5 className="performing_post_heading nunito_font">80%</h5>
+
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                }
 
                             </div>
-                            }
+                }
 
             </div>
 

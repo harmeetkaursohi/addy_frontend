@@ -23,8 +23,6 @@ import {
 } from "../../app/slices/notificationSlice/notificationSlice";
 import {resetReducers} from "../../app/actions/commonActions/commonActions";
 import Swal from "sweetalert2";
-import {deletePostByBatchIdAction, getAllSocialMediaPostsByCriteria} from "../../app/actions/postActions/postActions";
-import {showErrorToast, showSuccessToast} from "../common/components/Toast";
 
 const Notification = () => {
 
@@ -298,15 +296,16 @@ const Notification = () => {
                                                 </div>
                                         }
 
-                                        {
-                                            getAllConnectedSocialAccountData?.data?.length == 0 &&
-                                            <ConnectSocialMediaAccount messageFor={"ACCOUNT"}/>
-                                        }
-                                        {
-                                            getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 &&
-                                            <ConnectSocialMediaAccount messageFor={"PAGE"}/>
-                                        }
+
                                     </>
+                            }
+                            {
+                                getAllConnectedSocialAccountData?.data?.length == 0 &&
+                                <ConnectSocialMediaAccount messageFor={"ACCOUNT"}/>
+                            }
+                            {
+                                getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 &&
+                                <ConnectSocialMediaAccount messageFor={"PAGE"}/>
                             }
 
 

@@ -188,6 +188,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                         name="contactNo"
                                                         className="form-control mt-1"
                                                         type='number'
+                                                        onWheel={(e)=>{e.target.blur()}}
                                                         placeholder='Enter your contact no'
                                                         onChange={formik.handleChange}
                                                         onBlur={formik.handleBlur}

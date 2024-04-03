@@ -9,15 +9,18 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const handleClose = () => {
-        navigate("/dashboard")
         setShowModal(false)
+    };
+    const handleConnectNow = () => {
+        navigate("/dashboard")
+        setShowModal(false);
     };
 
 
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="md" show={showModal} onHide={handleClose}>
+                <Modal size="md" show={showModal} onHide={handleClose} backdrop="static">
                     <Modal.Header closeButton>
                         <Modal.Title className="commonmodal_header">
                             <div className='facebook_title'>
@@ -59,7 +62,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                                         </>
                                 }
 
-                                <button onClick={handleClose} className={"connection-error-close-btn"}>Connect now</button>
+                                <button onClick={handleConnectNow} className={"connection-error-close-btn"}>Connect now</button>
                             </div>
                         </div>
                     </Modal.Body>

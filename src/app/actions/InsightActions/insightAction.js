@@ -310,7 +310,7 @@ const getFacebookDemographicData = async (data, thunkAPI) => {
         country: null,
         city: null
     }
-    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?metric=page_fans_city,page_fans_country,page_fans_gender_age&period=day&access_token=${data?.pageAccessToken}`;
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?metric=page_fans_city,page_fans_country&period=day&access_token=${data?.pageAccessToken}`;
     await baseAxios.get(apiUrl).then(demographicData => {
         formattedApiResponse = {
             ...formattedApiResponse,

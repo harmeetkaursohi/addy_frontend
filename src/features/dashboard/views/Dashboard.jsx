@@ -1,5 +1,4 @@
 import Header from "../../head/views/Header"
-import SideBar from "../../sidebar/views/Layout"
 import './Dashboard.css'
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
@@ -28,14 +27,13 @@ const Dashboard = () => {
         document.title = 'Dashboard';
         token && dispatch(getAllSocialMediaPostsByCriteria({
             token: token,
-            query: {limit: 5, period:"MONTH",postStatus: ["SCHEDULED"]}
+            query: {limit: 5,sort:"feedPostDate", sortOrder:"asc",period:"MONTH",postStatus: ["SCHEDULED"]}
         }));
     }, [token]);
 
 
     return (
         <>
-            {/*<SideBar/>*/}
             <div className={sidebar? 'cmn_container':"cmn_Padding"}>
                 <div className="cmn_outer">
                 <div className="cmn_wrapper_outer white_bg_color">

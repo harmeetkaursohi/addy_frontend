@@ -1,7 +1,7 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import noImageAvailable from "../../../images/no_img_posted.png"
 import ReactPlayer from "react-player";
 import CommentText from "../../review/views/comments/CommentText";
@@ -19,9 +19,8 @@ const CommonSlider = ({
                           enableShowPlannerModel = false,
                           isrequired,
                           className
-                        
+
                       }) => {
-console.log(className,"className")
     const settings = {
         arrows: false,
         dots: true,
@@ -32,16 +31,17 @@ console.log(className,"className")
     };
 
 
-    const[showText,setShowText]=useState(false)
+    const [showText, setShowText] = useState(false)
 
     return (
         <>
 
             {viewSimilarToSocialMedia ?
                 <div>
-                    <div className={`ms-2  ${showText ?"feed_preview_Caption_outer":"Caption_outer " }`}>
-                       {isrequired? "": <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
-                                     className={"highlight cursor-pointer"} setShowText={setShowText} showText={showText} />}
+                    <div className={`ms-2  ${showText ? "feed_preview_Caption_outer" : "Caption_outer "}`}>
+                        {isrequired ? "" : <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
+                                                        className={"highlight cursor-pointer"} setShowText={setShowText}
+                                                        showText={showText}/>}
                     </div>
                     <Slider {...settings} >
 
@@ -49,7 +49,7 @@ console.log(className,"className")
                             (selectedFileType === "IMAGE" || files.every(file => file.mediaType === "IMAGE")) &&
 
                             files?.map((file, index) => {
-                                return (<div key={index} >
+                                return (<div key={index}>
                                     <img src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
                                          alt={`Image ${index}`} className='post_img'/>
                                 </div>)
@@ -117,16 +117,16 @@ console.log(className,"className")
                                 return (<div key={index}>
 
                                     {file?.mediaType === "IMAGE" || showThumbnail ?
-                                        <div className={className? className:"post_image_outerwrapper"}>
-                                        <img
-                                            src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
-                                            alt={`Image ${index}`} className='post_img'/></div>
+                                        <div className={className ? className : "post_image_outerwrapper"}>
+                                            <img
+                                                src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
+                                                alt={`Image ${index}`} className='post_img'/></div>
                                         :
 
                                         <ReactPlayer
-                                            
+
                                             width={"100%"}
-                                            className={className?className:'video_player_outer'}
+                                            className={className ? className : 'video_player_outer'}
                                             url={isPublished ? file.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
                                             controls={true}
                                             // playing={true}

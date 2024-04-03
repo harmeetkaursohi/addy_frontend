@@ -12,6 +12,7 @@ import React, {useEffect, useState} from "react";
 import {showErrorToast} from "../../common/components/Toast";
 import Frame from "../../../images/login_bg.svg";
 import {RotatingLines} from "react-loader-spinner";
+import {SomethingWentWrong} from "../../../utils/contantData";
 
 const Login = () => {
 
@@ -22,6 +23,9 @@ const Login = () => {
 
     useEffect(() => {
         document.title = 'Login';
+        localStorage.getItem("errorInOAuth")==="true" && showErrorToast(SomethingWentWrong)
+        localStorage.removeItem("errorInOAuth")
+
     }, []);
 
     const formik = useFormik({

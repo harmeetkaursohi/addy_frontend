@@ -14,17 +14,17 @@ import {useEffect, useState} from "react";
 import {
     deletePostByBatchIdAction, getAllSocialMediaPostsByCriteria
 } from "../../../app/actions/postActions/postActions";
-import { getToken} from "../../../app/auth/auth";
+import {getToken} from "../../../app/auth/auth";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import noPostScheduled from "../../../images/no_post_scheduled.svg";
 import CommonLoader from "../../common/components/CommonLoader";
 import Swal from "sweetalert2";
-import { useAppContext } from '../../common/components/AppProvider';
+import {useAppContext} from '../../common/components/AppProvider';
 import men from "../../../images/men.png"
-import { BiPolygon } from "react-icons/bi";
+import {BiPolygon} from "react-icons/bi";
 
 const ScheduledComponent = ({scheduledData}) => {
-const {sidebar}=useAppContext()
+    const {sidebar} = useAppContext()
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -66,7 +66,13 @@ const {sidebar}=useAppContext()
                                 showSuccessToast("Post has been deleted successfully");
                                 dispatch(getAllSocialMediaPostsByCriteria({
                                     token: token,
-                                    query: {limit: 5, period:"MONTH",postStatus: ["SCHEDULED"]}
+                                    query: {
+                                        limit: 5,
+                                        period: "MONTH",
+                                        sortOrder: "asc",
+                                        sort: "feedPostDate",
+                                        postStatus: ["SCHEDULED"]
+                                    }
                                 }));
                             }
                         }).catch((error) => {
@@ -79,7 +85,7 @@ const {sidebar}=useAppContext()
 
 
     }
-    
+
 
     return (
         <>
@@ -109,12 +115,13 @@ const {sidebar}=useAppContext()
                             </div>
 
                             :
-                            scheduledPosts && Array.isArray(scheduledPosts) && sortByKey(scheduledPosts, "feedPostDate").map((curBatch, index)=> (
+                            scheduledPosts && Array.isArray(scheduledPosts) && scheduledPosts.map((curBatch, index) => (
 
 
                                 // <div className={scheduledPosts.length===1 ? "col-lg-12" : scheduledPosts.length===2 ? "col-lg-6" :"col-lg-4"}>
 
-                                <div className={sidebar?"col-lg-6 col-md-6 col-sm-12 ":"col-lg-6 col-md-12 col-sm-12 "} key={index}>
+                                <div className={sidebar ? "col-lg-6 col-md-6 col-sm-12 " : "col-lg-6 col-md-12 col-sm-12 "}
+                                     key={index}>
                                     <div className="draft-outer ">
 
                                         {/* <div className={"draft-heading"}>
@@ -137,18 +144,18 @@ const {sidebar}=useAppContext()
                                         </div> */}
 
                                         <div className="post-image-outer">
-                                           
-                                            {curBatch?.attachments.length !== 0 && 
-                                            <div>
-                                                <div className='upcoming_post_header_outer cmn_upcoing_post_header'>
-                                                <img src={men} height="20px" width="20px"/>
-                                                <h3>John doe</h3>
-                                                </div>
-                                                <div className='Tommorrow_header cmn_upcoing_post_header'>
-                                                <BiPolygon />
-                                                <span>Tommorrow</span>
-                                                </div>
-                                            </div>}
+
+                                            {curBatch?.attachments.length !== 0 &&
+                                                <div>
+                                                    <div className='upcoming_post_header_outer cmn_upcoing_post_header'>
+                                                        <img src={men} height="20px" width="20px"/>
+                                                        <h3>John doe</h3>
+                                                    </div>
+                                                    <div className='Tommorrow_header cmn_upcoing_post_header'>
+                                                        <BiPolygon/>
+                                                        <span>Tommorrow</span>
+                                                    </div>
+                                                </div>}
                                             {curBatch?.attachments &&
                                                 <CommonSlider files={curBatch?.attachments} selectedFileType={null}
                                                               caption={null}
@@ -159,39 +166,37 @@ const {sidebar}=useAppContext()
 
 
                                         <div className="card-body post_card">
-                                        <div className={'mb-2'}>
+                                            <div className={'mb-2'}>
                                                     <span
                                                         className={"hash_tags"}>{formatDate(curBatch?.feedPostDate)}</span>
-                                                </div>
-                                                
-                                                <h3 className={" upcoming_post_content mb-0"}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
-                                          
+                                            </div>
 
-                                         
-                                                <div className={'mb-2 hash_tags_outer_container'}>
+                                            <h3 className={" upcoming_post_content mb-0"}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
+
+
+                                            <div className={'mb-2 hash_tags_outer_container'}>
                         <span
                             className={"hash_tags "}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
-                                                </div>
+                                            </div>
 
-                                               
-                                                
-                                           
 
                                             <div
                                                 className="mt-4 upcomingPostBtn_Outer ">
 
-                                                <GenericButtonWithLoader className={"outline_btn nunito_font schedule_btn loading"}
-                                                                         label={"Delete Post"}
-                                                                         isLoading={deleteIdRef === curBatch?.id && deletePostState?.loading}
-                                                                         onClick={handleDeletePost}
-                                                                         id={curBatch?.id}
-                                                                         contentText={"Deleting..."}
-                                                                         isDisabled={false}
+                                                <GenericButtonWithLoader
+                                                    className={"outline_btn nunito_font schedule_btn loading"}
+                                                    label={"Delete Post"}
+                                                    isLoading={deleteIdRef === curBatch?.id && deletePostState?.loading}
+                                                    onClick={handleDeletePost}
+                                                    id={curBatch?.id}
+                                                    contentText={"Deleting..."}
+                                                    isDisabled={false}
                                                 />
-                                                <GenericButtonWithLoader className={"post_now nunito_font cmn_bg_btn loading"}
-                                                                         label={"Change Post"}
-                                                                         onClick={() => navigate("/post/" + curBatch?.id)}
-                                                                         isDisabled={false}
+                                                <GenericButtonWithLoader
+                                                    className={"post_now nunito_font cmn_bg_btn loading"}
+                                                    label={"Change Post"}
+                                                    onClick={() => navigate("/post/" + curBatch?.id)}
+                                                    isDisabled={false}
                                                 />
                                             </div>
 

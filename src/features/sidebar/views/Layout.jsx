@@ -15,7 +15,7 @@ import {useAppContext} from "../../common/components/AppProvider.jsx";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import {FaBars} from "react-icons/fa";
 import {RxCross2} from "react-icons/rx";
-import profile_img from '../../../images/profile_img.png'
+import default_user_icon from '../../../images/default_user_icon.svg'
 import logout_img from '../../../images/log-out.svg'
 import {subscribeNotifications} from "../../../services/addyService";
 
@@ -87,7 +87,7 @@ const Layout = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.removeItem("token");
-                navigate("/login");
+                window.location.href = "/login"
             }
         });
     };
@@ -134,7 +134,7 @@ const Layout = () => {
                             {loading ? <SkeletonEffect count={1}/> : userData !== undefined &&
                                 <>
                                     <img
-                                        src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : profile_img}
+                                        src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
                                         className='profile_img'/>
                                     <h3>{userData?.fullName || "name"}</h3>
                                   
