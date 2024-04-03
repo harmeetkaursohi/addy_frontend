@@ -25,7 +25,7 @@ td.disabled-table-grid {
     display: grid;
     place-items: center;
     color: #000;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 18px;
     font-style: normal;
     font-weight: 600;

@@ -31,7 +31,7 @@ img.me-2.social-media-icon-cmnt {
 }
 p.liked_by {
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 12px;
     margin-bottom: 6px;
     margin-top: 3px;
@@ -41,7 +41,7 @@ p.comment_date {
     margin-bottom: 9px;
     /*padding: 0px 10px 10px;*/
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 10px;
 }
 
@@ -58,7 +58,7 @@ p.liked_by strong {
 p.liked_by {
     padding: 0px 10px;
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 12px;
     margin-bottom: 6px;
     margin-top: 9px;
@@ -153,7 +153,7 @@ div.main_user {
     background: transparent;
     border: transparent;
     color: #00A3FF;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 16px;
 }
 
@@ -247,7 +247,7 @@ p.reply_toggle::after {
 }
 .user p {
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 10px;
 }
 
@@ -259,7 +259,7 @@ p.reply_toggle::after {
 
 .comments_messages h4 {
     color: #000;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 18px;
     font-style: normal;
     font-weight: 600;

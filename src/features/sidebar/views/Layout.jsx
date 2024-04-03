@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import addy_crop_logo from "../../../images/cropLogo.png";
 import addy_logo from "../../../images/addy_logo.svg";
-import {BiLogOut} from "react-icons/bi";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
@@ -14,7 +13,7 @@ import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/fa
 import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
 import {useAppContext} from "../../common/components/AppProvider.jsx";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
-import {FaArrowRight, FaBars} from "react-icons/fa";
+import {FaBars} from "react-icons/fa";
 import {RxCross2} from "react-icons/rx";
 import profile_img from '../../../images/profile_img.png'
 import logout_img from '../../../images/log-out.svg'
@@ -99,7 +98,7 @@ const Layout = () => {
 
                 <div
                     className={
-                        sidebar ? "sidebar_content sidebar_wrapper  bg_light_orange" : "animation sidebar_wrapper bg_light_orange"
+                        sidebar ? "sidebar_content sidebar_wrapper" : "animation sidebar_wrapper"
                     }
                 >
 
@@ -126,8 +125,10 @@ const Layout = () => {
 
 
                     </div>
-                    <div className={sidebar ? "d-none" : "d-flex align-items-center justify-content-evenly mt-4 mb-4"}>
-                        <div className="user_info_outer">
+                    {/* <div className={sidebar ? "d-none" : "d-flex align-items-center justify-content-evenly mt-4 mb-4"}>
+                        <div className="user_info_outer" onClick={() => {
+                                        navigate("/profile");
+                                    }}>
 
 
                             {loading ? <SkeletonEffect count={1}/> : userData !== undefined &&
@@ -136,14 +137,14 @@ const Layout = () => {
                                         src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : profile_img}
                                         className='profile_img'/>
                                     <h3>{userData?.fullName || "name"}</h3>
-                                    <FaArrowRight/>
+                                  
                                 </>
                             }
                         </div>
 
 
-                    </div>
-                    <ul className={sidebar ? "sidebar_item Sidebar_containerbox" : "sidebar_item"}>
+                    </div> */}
+                    <ul className={sidebar ? "sidebar_item Sidebar_containerbox mt-3" : "sidebar_item mt-3"}>
                         {SidebarMenuItems &&
                             SidebarMenuItems?.map((item, index) => (
                                 <li

@@ -21,7 +21,7 @@
     position: relative;
 }
 .edit_content h3 {
-    font-size: 26px;
+    font-size: 24px;
 }
 ul.mb-3.edit_tabs.nav.nav-tabs {
      border-bottom: unset;
@@ -71,7 +71,7 @@ isolation: unset !important;
     font-weight: 400;
     font-size: 18px;
     padding-left: 12px;
-    font-family: "DM Sans" ,sans-serif;
+    font-family: "Nunito";
 }
 .edit_content input {
   
@@ -93,7 +93,7 @@ isolation: unset !important;
     color: #263238;
     font-weight: 700;
     font-size: 24px;
-    font-family: "DM Sans" ,sans-serif;
+    font-family: "Nunito";
 }
 .cmn_box_shadow.white_bg_color.mt-3.profile-information input {
     background: white;
@@ -106,18 +106,6 @@ isolation: unset !important;
     border: none;
     padding: 0px;
 }
-/* .cmn_box_shadow.white_bg_color.mt-3.address-info input::placeholder {
-    color: #263238 !important;
-    font-weight: 500 !important;
-    font-size: 18px !important;
-    padding-top: 10px !important;
-}
-.cmn_box_shadow.white_bg_color.mt-3.profile-information input::placeholder {
-    color: #263238 !important;
-    font-weight: 500 !important;
-    font-size: 18px !important;
-    padding-top: 10px !important;
-} */
 
 
 .edit_label{
@@ -149,7 +137,7 @@ isolation: unset !important;
 .profile_information_container h5 {
     font-size: 19px;
     font-weight: 400;
-    font-family: "DM Sans", sans-serif;
+    font-family: "Nunito";
     color: black;
 }
 .cmn_box_shadow{

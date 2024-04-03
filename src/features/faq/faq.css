@@ -57,20 +57,19 @@
     font-size: 27px;
     font-weight: 700;
     color: #333333;
-    font-family:"DM Sans", sans-serif;
+   
 }
 .faq_wrapper p{
     color: #888888;
     font-weight: 400;
     font-size: 16px;
-    font-family: "DM Sans", sans-serif;
 
 }
 .faq_searchbar input::placeholder {
     color: #888888;
     font-weight: 400;
     font-size: 16px;
-    font-family: "DM Sans", sans-serif;
+    font-family: "Nunito";
 }
 /* .accordian_wrapper .accordion-button.collapsed::after {
 background-color: #fff;
