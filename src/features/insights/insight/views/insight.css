@@ -5,7 +5,7 @@
     font-weight: 700;
     font-size: 30px;
     color: #263238;
-    font-family: "DM Sans", sans-serif;
+    font-family: "Nunito";
 
 }
 
@@ -24,7 +24,7 @@
 
 .select-account-txt {
     color: #000;
-    font-family: "Poppins";
+    font-family: "Nunito";
     font-size: 22px;
     font-style: normal;
     font-weight: 600;
@@ -34,7 +34,7 @@
 
 .no-account-txt {
     color: #000;
-    font-family: "Poppins";
+    font-family: "Nunito";
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
@@ -339,6 +339,82 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     height: 15px;
     width: 15px;
 }   
+.user_profile_card_wrapper img {
+    height: 100px;
+    width: 100px;
+    border-radius: 60px;
+    border: 3px solid #E05905;
+}
+.user_profile_card_wrapper h3{
+    line-height: 20px;
+    font-weight: 700;
+}
+.user_profile_card_outer {
+    padding: 28px;
+    border-radius: 11px;
+    box-shadow: 2px 2px 8px #e5e2e2;
+    min-height: 100%;
+    margin-top: 20px;
+
+}
+.Profile_visit_container{
+    margin-top:20px;
+    min-height:100%
+
+
+}
+.visitors_outer{
+    background: #F8F9FB;
+    padding: 20px;
+}
+.visitors_outer h3 {
+    font-size: 20px;
+    font-family: 'Nunito';
+    font-weight: 700;
+}
+.user_info_list{
+    justify-content: space-between;
+}
+.user_info_list li h4{
+    color:  #263238;
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 20px;
+    padding-top: 9px;
+}
+.BsThreeDots_outer {
+    height: 26px;
+    width: 26px;
+    border: 1px solid #C9C9C9;
+    text-align: center;
+    border-radius: 5px;
+    margin-left: auto;
+}
+.visitors_container {
+    border-radius: 20px;
+    overflow: hidden;
+    min-height: 100%;
+    margin-top: 20px;
+}
+.Profile_visit_dropdown button#dropdown-basic {
+    color: #263238;
+    background-color: transparent;
+    box-shadow: unset;
+    font-family: 'Nunito';
+    font-weight: 700;
+    font-size: 20px;
+}
+.profile_visit_graph_outer{
+    padding: 15px 10px 0px;
+}
+.days_dropdown button#dropdown-basic {
+    color: #263238;
+    font-size: 13px;
+    font-weight: 600;
+    background: #F3F3F3;
+    border: 1px solid #E8E8E8;
+    min-width: 110px;
+}
 @media screen and (min-width:2560px) {
     .account_reach_overview_outer{
         padding: 40px;
@@ -360,6 +436,9 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
         margin-top: 20px;
         font-size: 15px;
     }
+    ul.user_info_list {
+        flex-wrap: wrap;
+    }
    
     
     .demographic_data {
@@ -370,6 +449,15 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
 @media screen and (max-width: 991px) {
     .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
         width: 208px;
+    }
+    .visitors_container{
+        min-height: unset;
+    }
+    .Profile_visit_container{
+        min-height: unset;
+    }
+    .user_profile_card_outer{
+        min-height: unset;
     }
     ul.overview_tabs.nav.nav-tabs{
         margin-top: 10px;
@@ -432,6 +520,10 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     .account_reach_overview_wrapper {
         display: block;
     }
+    .days_dropdown.dropdown {
+        margin-top: 20px;
+        margin-left: 20px;
+    }
     .overview_tabs.nav-tabs .nav-link {
         padding: 3px 11px;
     }
@@ -485,7 +577,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     }
     .demographic_data {
         font-size: 12px;
-        font-family:  'Poppins';
+        font-family:  'Nunito';
         font-style: normal;
         padding-top: 10px;
     }

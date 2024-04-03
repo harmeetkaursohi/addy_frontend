@@ -197,7 +197,7 @@ white-space: nowrap;
 
 .tabs_grid .selected-option span {
     color: #5F6D7E;
-    font-family: "Poppins";
+    font-family: "Nunito";
     font-size: 10px;
     font-style: normal;
     font-weight: 500;
@@ -696,7 +696,7 @@ button.ai_btn {
 
 /**/
 html {
-    font-family: Arial;
+    font-family: "Nunito";
 }
 
 .checkbox-button {

@@ -21,6 +21,12 @@
 
     border-bottom: unset;
 }
+text.recharts-text.recharts-cartesian-axis-tick-value {
+    fill: #263238 !important;
+    font-size: 13px !important;
+    font-family: "Nunito" !important;
+    font-weight: 800 !important;
+}
 
 /* .recharts-wrapper.line_chart {
     width: 100%;

@@ -3,7 +3,7 @@
     cursor: pointer;
     font-weight: 700;
     font-size: 18px;
-    font-family: "DM Sans", sans-serif;
+    font-family: "Nunito";
 }
 .contact_content ul li {
     display: flex;
@@ -50,7 +50,7 @@ h2.cmn_title {
     font-weight: 700;
     margin-bottom: 10px !important;
     color: #333333;
-    font-family: "DM Sans", sans-serif;
+    font-family: "Nunito";
 }
 
 .contact_content p {
@@ -59,14 +59,14 @@ h2.cmn_title {
     font-weight: 400;
     line-height: 26px;
     margin:10px 0px;
-    font-family: "DM Sans", sans-serif;
+    font-family: "Nunito";
 }
 .contact_content ul li span{
     color: #141414;
     cursor: pointer;
     font-weight: 700;
     font-size: 18px;
-    font-family: "DM Sans", sans-serif;
+    font-family: "Nunito";
 }
 .contact_form .form-control {
     border-radius: 8px;
