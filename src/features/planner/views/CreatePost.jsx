@@ -9,14 +9,13 @@ import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import {Dropdown} from 'react-bootstrap'
-import SideBar from "../../sidebar/views/Layout.jsx";
 import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
 import {createFacebookPostAction} from "../../../app/actions/postActions/postActions.js";
 import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {RiDeleteBin5Fill} from "react-icons/ri";
-import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
+import {showErrorToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
 import {
     checkDimensions, convertSentenceToHashtags,
@@ -403,7 +402,6 @@ const CreatePost = () => {
 
     return (
         <>
-            {/*<SideBar/>*/}
             <div className={`cmn_container ${sidebar ? "" : "cmn_Padding"}`}>
                 {
                     (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
@@ -495,14 +493,12 @@ const CreatePost = () => {
                                                                         socialAccountData?.map((socialAccount, index) => {
                                                                             return (
 
-                                                                                <div
+                                                                                <>
+                                                                                { socialAccount && socialAccount?.pageAccessToken.length > 0 &&   <div
                                                                                     className='instagram_outer facebook_outer '
                                                                                     key={index}>
                                                                                     <div
                                                                                         className="checkbox-button_outer">
-                                                                                        {
-                                                                                            socialAccount && socialAccount?.pageAccessToken.length > 0 &&
-                                                                                            <>
                                                                                                 <input type="checkbox"
                                                                                                        className=""
                                                                                                        id={socialAccount.provider + "-checkbox"}
@@ -512,8 +508,6 @@ const CreatePost = () => {
                                                                                                 />
                                                                                                 <SocialMediaProviderBadge
                                                                                                     provider={socialAccount.provider}/>
-                                                                                            </>
-                                                                                        }
 
                                                                                     </div>
 
@@ -551,6 +545,8 @@ const CreatePost = () => {
                                                                                         ))
                                                                                     }
                                                                                 </div>
+                                                                            }
+                                                                            </>
                                                                             )
                                                                         })
                                                                     }

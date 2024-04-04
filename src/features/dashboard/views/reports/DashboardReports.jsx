@@ -269,39 +269,6 @@ export const DashboardReports = () => {
                                 </div>
 
 
-                                {/*<div className={"tabs_pages"}>*/}
-
-                                {/*    <div className={"d-flex gap-3"} style={{paddingRight: '2px'}}>*/}
-                                {/*        <button*/}
-                                {/*            disabled={reportSectionData?.loading || reportGraphSectionData?.loading}*/}
-                                {/*            className={allSelected ? "btn-with-fixed-width report_section_selected_btn position-relative" : "position-relative btn-with-fixed-width"}*/}
-                                {/*            onClick={(e) => {*/}
-                                {/*                handleClick("All", connectedPagesReducer?.facebookConnectedPages)*/}
-                                {/*            }}>*/}
-
-                                {/*            All Pages*/}
-                                {/*        </button>*/}
-
-                                {/*        {Array.isArray(allAvailablePages) && allAvailablePages.length > 0 &&*/}
-
-                                {/*            allAvailablePages.sort((a, b) => (b.isConnected - a.isConnected)).map(curBtn => (*/}
-                                {/*                <button*/}
-                                {/*                    disabled={reportSectionData?.loading || reportGraphSectionData?.loading}*/}
-                                {/*                    className={curBtn?.isConnected === true ? reportSelectPages?.find(c => c.pageId === curBtn?.id) && !allSelected ? "btn-with-fixed-width report_section_selected_btn" : "btn-with-fixed-width" : "btn-with-fixed-width report_section_disable_btn position-relative"}*/}
-                                {/*                    onClick={(e) => {*/}
-                                {/*                        handleClick("single", connectedPagesReducer?.facebookConnectedPages?.filter(curP => curP.pageId === curBtn?.id))*/}
-                                {/*                    }*/}
-                                {/*                    }>*/}
-                                {/*                    <button className="not_connect">Not Connected</button>*/}
-                                {/*                    {curBtn?.name}</button>*/}
-                                {/*            ))*/}
-                                {/*        }*/}
-
-
-                                {/*    </div>*/}
-                                {/*</div>*/}
-
-
                                 {
                                     reportSectionData?.loading ?
 

@@ -554,69 +554,76 @@ const UpdatePost = () => {
                                                                     socialAccountData?.map((socialAccount, index) => {
                                                                         return (
 
-                                                                            <div
-                                                                                className='instagram_outer facebook_outer '
-                                                                                key={index}>
-                                                                                <div className="checkbox-button_outer">
-
-                                                                                    {
-                                                                                        socialAccount && socialAccount?.pageAccessToken &&
-                                                                                        <>
-                                                                                            <input type="checkbox"
-                                                                                                   className=""
-                                                                                                   id={socialAccount.provider + "-checkbox"}
-                                                                                                   name="choice1"
-                                                                                                   checked={selectedGroups.includes(socialAccount?.provider)}
-                                                                                                   onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
-                                                                                            />
-
-                                                                                            <SocialMediaProviderBadge
-                                                                                                provider={socialAccount.provider}/>
-
-                                                                                        </>
-                                                                                    }
-
-                                                                                </div>
-
+                                                                            <>
                                                                                 {
-                                                                                    socialAccount?.pageAccessToken?.map((page, index) => (
+                                                                                    socialAccount && socialAccount?.pageAccessToken.length > 0 &&
+                                                                                    <div
+                                                                                        className='instagram_outer facebook_outer '
+                                                                                        key={index}>
                                                                                         <div
-                                                                                            className="instagramPages unselectedpages"
-                                                                                            key={index}
-                                                                                            style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
-                                                                                            onClick={(e) =>
-                                                                                                handleCheckboxChange({
-                                                                                                    group: socialAccount?.provider,
-                                                                                                    selectOption: {
-                                                                                                        ...page,
-                                                                                                        socialMediaType: socialAccount?.provider
-                                                                                                    }
-                                                                                                })}
-                                                                                        >
-                                                                                            <div
-                                                                                                className="checkbox-button_outer">
-                                                                                                <img
-                                                                                                    src={page?.imageUrl || default_user_icon}/>
-                                                                                                <h2 className="cmn_text_style">{page?.name}</h2>
-                                                                                            </div>
-                                                                                            <input
-                                                                                                type="checkbox"
-                                                                                                id={page.id}
-                                                                                                name={page.name}
-                                                                                                value={page.id}
-                                                                                                checked={selectedOptions.includes(page.pageId)}
-                                                                                                onChange={() =>
-                                                                                                    handleCheckboxChange({
-                                                                                                        group: socialAccount?.provider,
-                                                                                                        selectOption: page
-                                                                                                    })}
-                                                                                            />
+                                                                                            className="checkbox-button_outer">
+
+                                                                                            {
+                                                                                                socialAccount && socialAccount?.pageAccessToken &&
+                                                                                                <>
+                                                                                                    <input type="checkbox"
+                                                                                                           className=""
+                                                                                                           id={socialAccount.provider + "-checkbox"}
+                                                                                                           name="choice1"
+                                                                                                           checked={selectedGroups.includes(socialAccount?.provider)}
+                                                                                                           onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
+                                                                                                    />
+
+                                                                                                    <SocialMediaProviderBadge
+                                                                                                        provider={socialAccount.provider}/>
+
+                                                                                                </>
+                                                                                            }
+
                                                                                         </div>
-                                                                                    ))
+
+                                                                                        {
+                                                                                            socialAccount?.pageAccessToken?.map((page, index) => (
+                                                                                                <div
+                                                                                                    className="instagramPages unselectedpages"
+                                                                                                    key={index}
+                                                                                                    style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
+                                                                                                    onClick={(e) =>
+                                                                                                        handleCheckboxChange({
+                                                                                                            group: socialAccount?.provider,
+                                                                                                            selectOption: {
+                                                                                                                ...page,
+                                                                                                                socialMediaType: socialAccount?.provider
+                                                                                                            }
+                                                                                                        })}
+                                                                                                >
+                                                                                                    <div
+                                                                                                        className="checkbox-button_outer">
+                                                                                                        <img
+                                                                                                            src={page?.imageUrl || default_user_icon}/>
+                                                                                                        <h2 className="cmn_text_style">{page?.name}</h2>
+                                                                                                    </div>
+                                                                                                    <input
+                                                                                                        type="checkbox"
+                                                                                                        id={page.id}
+                                                                                                        name={page.name}
+                                                                                                        value={page.id}
+                                                                                                        checked={selectedOptions.includes(page.pageId)}
+                                                                                                        onChange={() =>
+                                                                                                            handleCheckboxChange({
+                                                                                                                group: socialAccount?.provider,
+                                                                                                                selectOption: page
+                                                                                                            })}
+                                                                                                    />
+                                                                                                </div>
+                                                                                            ))
+                                                                                        }
+
+
+                                                                                    </div>
                                                                                 }
+                                                                            </>
 
-
-                                                                            </div>
                                                                         )
                                                                     })
                                                                 }
