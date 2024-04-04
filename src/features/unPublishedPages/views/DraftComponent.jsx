@@ -136,7 +136,7 @@ const DraftComponent = ({
             <div className="card-body post_card">
 
 
-                <div className={""}>
+                <div className={"mt-3"}>
                     <span className={"post_caption"}>Post Caption:</span>
                     <h3 className={"caption upcoming_post_content"}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
                 </div>

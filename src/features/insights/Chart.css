@@ -27,7 +27,11 @@ text.recharts-text.recharts-cartesian-axis-tick-value {
     font-family: "Nunito" !important;
     font-weight: 800 !important;
 }
-
+li.recharts-legend-item span {
+    color: #263238 !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+}
 /* .recharts-wrapper.line_chart {
     width: 100%;
     min-height: 332px;

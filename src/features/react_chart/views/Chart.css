@@ -10,6 +10,7 @@
     max-width: "1440px";
     margin: "20px auto";
 }
+
  @media screen and (max-width:767px){
     .rechart_container{
         padding: 0px 10px;

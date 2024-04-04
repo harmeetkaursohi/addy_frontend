@@ -94,7 +94,7 @@
 div.instagram_like {
     border-bottom: unset;
     border-top: unset;
-    padding: 8px 23px;
+    padding:10px 0px;
     margin: 0px;
 }
 .Caption_outer span{
@@ -135,7 +135,8 @@ div.instagram_like {
     display: flex;
     align-items: center;
     gap: 7px;
-    padding: 0px 16px;
+    padding: 0px;
+    margin-bottom: 0px;
 }
 .aspect_ratio_outer {
     display: flex;

@@ -173,6 +173,10 @@ select:focus-visible {
 :focus-visible {
   outline: unset;
 }
+.active_bg_color{
+  background: #FCF2EC;
+
+}
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -264,6 +268,9 @@ h2.openEye {
 h2.acc_not_connected_heading {
   font-size: 20px;
   margin-top: 24px;
+}
+div:where(.swal2-container).swal2-center>.swal2-popup {
+  padding-bottom: 25px !important;
 }
 @keyframes shimmer {
   100% {

@@ -422,7 +422,7 @@ const CreatePost = () => {
                                                 setShowPreview(true)
                                             }}><AiOutlineEye/></button>
                                     }
-
+                                          <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
                                 </div>
                                 <div className="row">
                                     <div
@@ -430,7 +430,7 @@ const CreatePost = () => {
 
                                         <div className={`create_post_content ${showPreview ? "" : "animation"} `}>
 
-                                            <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
+                                       
 
                                             <form onSubmit={(e) => {
                                                 e.preventDefault();
@@ -913,7 +913,7 @@ const CreatePost = () => {
                                         <div className="col-lg-6 col-md-12 col-sm-12">
 
                                             <div className='post_preview_outer'>
-
+                                                <h3 className='Post_Preview_heading'>Post Preview</h3>
                                                 {
                                                     allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
                                                         let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));

@@ -128,7 +128,7 @@ white-space: nowrap;
     border-radius: 20px;
 }
 .user_caption_wrapper h6{
-    color: white;
+    color: black;
 }
 .pinterest-icon {
     color: #e60023;
@@ -588,15 +588,16 @@ button.ai_btn {
 }
 
 .preview_wrapper {
-    border-radius: 3px;
+    border-radius: 30px;
     background: #FFF;
     box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.05);
-   
+    padding: 30px;
 }
 
 .status {
-    color: #ADACAC;
-    font-size: 10px;
+    color: #898383;
+    font-weight: 700;
+    font-size: 12px;
 }
 
 .post_img {
@@ -607,7 +608,7 @@ button.ai_btn {
 .user_profile_info {
     display: flex;
     gap: 10px;
-    padding: 19px 12px 8px 12px;
+
 }
 
 .user_profile_info img {
@@ -629,7 +630,7 @@ button.ai_btn {
     padding: 14px 23px;
     border-top: 1px solid #dad6d6;
     border-bottom: 1px solid #dad6d6;
-    margin: 5px 10px 10px;
+    /* margin: 5px 10px 10px; */
     align-items: center;
    
 }
@@ -642,9 +643,10 @@ button.ai_btn {
     animation-name: fadeInLeft;
     animation-duration: 3s;
     animation-timing-function: all ease 0.7s;
-    background: #1E1E1E;
+    background: #F4F7FC;
     padding: 3em;
     height: 100%;
+    border-radius: 10px;
 }
 .post_caption_outer{
     display: flex;
@@ -653,8 +655,13 @@ button.ai_btn {
 .feed_preview {
     font-size: 22px;
     line-height: normal;
-    background-color: #1E1E1E;
+   color: #1E1E1E;
     padding-bottom: 16px;
+}
+h3.Post_Preview_heading {
+    color: #6B6B6B;
+    font-size: 24px;
+    font-weight: 600;
 }
 .media_inner_content{
     display: flex;

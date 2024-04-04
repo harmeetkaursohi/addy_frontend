@@ -147,13 +147,10 @@ const ScheduledComponent = ({scheduledData}) => {
 
                                             {curBatch?.attachments.length !== 0 &&
                                                 <div>
-                                                    <div className='upcoming_post_header_outer cmn_upcoing_post_header'>
-                                                        <img src={men} height="20px" width="20px"/>
-                                                        <h3>John doe</h3>
-                                                    </div>
+                                                   
                                                     <div className='Tommorrow_header cmn_upcoing_post_header'>
                                                         <BiPolygon/>
-                                                        <span>Tommorrow</span>
+                                                        <span>{formatDate(curBatch?.feedPostDate)}</span>
                                                     </div>
                                                 </div>}
                                             {curBatch?.attachments &&
@@ -170,18 +167,41 @@ const ScheduledComponent = ({scheduledData}) => {
                                                     <span
                                                         className={"hash_tags"}>{formatDate(curBatch?.feedPostDate)}</span>
                                             </div>
-
+                                             
+                                             <div>
+                                              <h6 className='upcoming_post_heading'>Post Captions</h6>
                                             <h3 className={" upcoming_post_content mb-0"}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
+                                             </div>
 
 
-                                            <div className={'mb-2 hash_tags_outer_container'}>
-                        <span
-                            className={"hash_tags "}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
+                                            <div className={'hash_tags_outer_container'}>
+                                                <h6 className='upcoming_post_heading mt-2'>Hashtags: </h6>
+                                          <span
+                                         className={"hash_tags "}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
                                             </div>
+                                            <div className={"draft-heading"}>
+                                            <h4 className={"posted-on-txt"}>Posted On : </h4>
+
+                                            <div className="page_tags">
+                                                {curBatch?.postPages && Array.isArray(curBatch?.postPages) &&
+                                                    curBatch?.postPages.map((curPage,index) => (
+                                                        <div className="selected-option" key={index}>
+                                                            <div>
+                                                                <img className={"me-1 social-media-icon"}
+                                                                     src={computeImageURL(curPage?.socialMediaType)}
+                                                                     alt={"instagram"}/>
+                                                            </div>
+                                                            <p className={"social-media-page-name"}>{curPage?.pageName}</p>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
 
 
+                                        </div>
                                             <div
-                                                className="mt-4 upcomingPostBtn_Outer ">
+                                                className="upcomingPostBtn_Outer ">
 
                                                 <GenericButtonWithLoader
                                                     className={"outline_btn nunito_font schedule_btn loading"}
@@ -199,8 +219,6 @@ const ScheduledComponent = ({scheduledData}) => {
                                                     isDisabled={false}
                                                 />
                                             </div>
-
-                                        </div>
 
 
                                     </div>

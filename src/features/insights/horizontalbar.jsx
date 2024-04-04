@@ -72,6 +72,7 @@
 
 // BarChartComponent.js
 import React  from 'react';
+import "./Chart.css"
 import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const data = [
@@ -125,24 +126,25 @@ const HorizontalBarChart = () => {
   return (
   
         <ResponsiveContainer width="100%" height={300}>
+          <CartesianGrid strokeDasharray="3 3" />
           <BarChart
             width={500}
             height={300}
             data={data}
             margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
+              top: 20,
+              right: 20,
+              left: 5,
+              bottom: 20,
             }}
           >
             
             <XAxis dataKey="name"  tick={{ fill: '#263238' ,fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
             <YAxis tick={{ fill: '#263238' ,fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'  }}/>
-            <Tooltip />
+            <Tooltip  cursor={{fill: 'none'}}/>
             <Legend layout="vertical" align="right" verticalAlign="middle"/>
-            <Bar dataKey="Male" fill="#90D1F6"  />
-            <Bar dataKey="Female" fill="#E05905" />
+            <Bar dataKey="Male" fill="#90D1F6"  barSize={20}/>
+            <Bar dataKey="Female" fill="#E05905" barSize={20}/>
           </BarChart>
         </ResponsiveContainer>
     

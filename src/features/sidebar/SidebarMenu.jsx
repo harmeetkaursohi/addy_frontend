@@ -64,11 +64,11 @@ export const SidebarMenuItems = [
         "path": "/notification",
         "icon": <IoMdNotificationsOutline/>
     },
-    {
-        "name": "Profile",
-        "path": "/profile",
-        "icon": <CgProfile />
-    },
+    // {
+    //     "name": "Profile",
+    //     "path": "/profile",
+    //     "icon": <CgProfile />
+    // },
     {
         "name": "Contact Us",
         "path": "/contact",
