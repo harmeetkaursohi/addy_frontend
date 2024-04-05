@@ -16,7 +16,7 @@ import usePosts from "../../common/hooks/usePosts";
 import {
     computeImageURL,
     concatenateString,
-    createOptionListForSelectTag,
+    createOptionListForSelectTag, getCommentCreationTime,
 } from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
@@ -393,7 +393,7 @@ const Review = () => {
                                                                         </div>
                                                                     </div>
 
-                                                                    <h5 className="nunito_font">6 mins ago</h5>
+                                                                    <h5 className="nunito_font"> {getCommentCreationTime(post?.feedPostDate)}</h5>
                                                                 </li>
                                                             </div>
                                                         ) : (

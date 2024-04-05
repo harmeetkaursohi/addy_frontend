@@ -10,7 +10,11 @@
     padding: 2em;
     margin-top: 25px;
 }
-
+.privacy_policy_container {
+    background-color: white;
+    border-radius: 10px;
+    padding-top: 20px;
+}
 
 .edit_content.form-control:disabled{
 background-color: white !important;

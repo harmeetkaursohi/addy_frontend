@@ -34,7 +34,7 @@ import Loader from '../../loader/Loader.jsx';
 
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import {useAppContext} from '../../common/components/AppProvider.jsx';
-import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
+import {AiOutlineEye} from 'react-icons/ai';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 
 const UpdatePost = () => {
@@ -473,19 +473,21 @@ const UpdatePost = () => {
             <>
                 {/*<SideBar/>*/}
                 <div className={`cmn_container ${sidebar ? "" : "cmn_Padding"}`}>
-                    <div className="Container">
+                    <div className="Container cmn_outer">
                         <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
-                            <div className='preview_btn_outer'>
+                            <div className='preview_btn_outer cmn_border'>
+                            <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
+
                                 {
                                     selectedAllDropdownData?.length > 0 && showPreview ?
                                         <button className='preview_btn me-2 my-2' onClick={() => {
                                             setShowPreview(false)
-                                        }}><AiOutlineEyeInvisible/></button> :
+                                        }}> <RxCross2 /></button> :
 
                                         selectedAllDropdownData?.length > 0 &&
                                         <button className='preview_btn me-2 my-2' onClick={() => {
                                             setShowPreview(true)
-                                        }}><AiOutlineEye/></button>
+                                        }}><AiOutlineEye /></button>
                                 }
 
                             </div>
@@ -495,145 +497,10 @@ const UpdatePost = () => {
 
                                     <div className={`create_post_content ${showPreview ? "" : "animation"} `}>
 
-                                        <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
 
                                         <form onSubmit={null}>
-
-                                            <div className="createPost_outer">
-                                                <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
-
-                                                {/*    dropdown select platform=====*/}
-                                                <Dropdown className='insta_dropdown_btn mt-2'>
-                                                    <Dropdown.Toggle id="instagram"
-                                                                     className="instagram_dropdown tabs_grid">
-                                                        {selectedAllDropdownData.length > 0 ?
-                                                            (
-                                                                selectedAllDropdownData.map((data, index) => (
-                                                                    <div key={index} className="selected-option">
-                                                                        <img
-                                                                            src={data?.selectOption?.imageUrl || default_user_icon}
-                                                                            alt={data?.selectOption?.name}/>
-                                                                        <span>{data?.selectOption?.name}</span>
-                                                                        <RxCross2 onClick={(e) => {
-                                                                            handleCheckboxChange(data)
-                                                                        }}/>
-                                                                    </div>
-                                                                ))
-                                                            )
-                                                            :
-                                                            (
-                                                                <div className="social_inner_content">
-                                                                    <div>
-                                                                        <BiUser/>
-                                                                    </div>
-                                                                    <h6 className="cmn_headings">
-                                                                        Select platform
-                                                                    </h6>
-                                                                </div>
-                                                            )}
-                                                    </Dropdown.Toggle>
-
-
-                                                    <Dropdown.Menu className='w-100 social_media_list'>
-                                                        <div className="dropdown-options">
-
-                                                            <div className='_'>
-                                                                <div className="select_platform_outer">
-                                                                    <input type="checkbox"
-                                                                           id="choice1-2"
-                                                                           name="choice2"
-                                                                           checked={areAllOptionsSelected}
-                                                                           onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
-                                                                    />
-                                                                    <h3 className="cmn_headings" onClick={function () {
-                                                                        document.getElementById("choice1-2").click()
-                                                                    }}>Select all Platform</h3>
-                                                                </div>
-
-                                                                {
-                                                                    socialAccountData?.map((socialAccount, index) => {
-                                                                        return (
-
-                                                                            <div
-                                                                                className='instagram_outer facebook_outer '
-                                                                                key={index}>
-                                                                                <div className="checkbox-button_outer">
-
-                                                                                    {
-                                                                                        socialAccount && socialAccount?.pageAccessToken &&
-                                                                                        <>
-                                                                                            <input type="checkbox"
-                                                                                                   className=""
-                                                                                                   id={socialAccount.provider + "-checkbox"}
-                                                                                                   name="choice1"
-                                                                                                   checked={selectedGroups.includes(socialAccount?.provider)}
-                                                                                                   onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
-                                                                                            />
-
-                                                                                            <SocialMediaProviderBadge
-                                                                                                provider={socialAccount.provider}/>
-
-                                                                                        </>
-                                                                                    }
-
-                                                                                </div>
-
-                                                                                {
-                                                                                    socialAccount?.pageAccessToken?.map((page, index) => (
-                                                                                        <div
-                                                                                            className="instagramPages unselectedpages"
-                                                                                            key={index}
-                                                                                            style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
-                                                                                            onClick={(e) =>
-                                                                                                handleCheckboxChange({
-                                                                                                    group: socialAccount?.provider,
-                                                                                                    selectOption: {
-                                                                                                        ...page,
-                                                                                                        socialMediaType: socialAccount?.provider
-                                                                                                    }
-                                                                                                })}
-                                                                                        >
-                                                                                            <div
-                                                                                                className="checkbox-button_outer">
-                                                                                                <img
-                                                                                                    src={page?.imageUrl || default_user_icon}/>
-                                                                                                <h2 className="cmn_text_style">{page?.name}</h2>
-                                                                                            </div>
-                                                                                            <input
-                                                                                                type="checkbox"
-                                                                                                id={page.id}
-                                                                                                name={page.name}
-                                                                                                value={page.id}
-                                                                                                checked={selectedOptions.includes(page.pageId)}
-                                                                                                onChange={() =>
-                                                                                                    handleCheckboxChange({
-                                                                                                        group: socialAccount?.provider,
-                                                                                                        selectOption: page
-                                                                                                    })}
-                                                                                            />
-                                                                                        </div>
-                                                                                    ))
-                                                                                }
-
-
-                                                                            </div>
-                                                                        )
-                                                                    })
-                                                                }
-
-
-                                                            </div>
-
-                                                        </div>
-
-
-                                                    </Dropdown.Menu>
-                                                </Dropdown>
-
-                                            </div>
-
-                                            {/* add media */}
-                                            <div
+                                           {/* add media */}
+                                           <div
                                                 className={`media_outer ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
                                                 <div
                                                     className={showPreview ? "" : 'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
@@ -768,6 +635,147 @@ const UpdatePost = () => {
                                                 </div>
 
                                             </div>
+                                            <div className="createPost_outer media_outer">
+                                                <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
+
+                                                {/*    dropdown select platform=====*/}
+                                                <Dropdown className='insta_dropdown_btn mt-2'>
+                                                    <Dropdown.Toggle id="instagram"
+                                                                     className="instagram_dropdown tabs_grid">
+                                                        {selectedAllDropdownData.length > 0 ?
+                                                            (
+                                                                selectedAllDropdownData.map((data, index) => (
+                                                                    <div key={index} className="selected-option">
+                                                                        <img
+                                                                            src={data?.selectOption?.imageUrl || default_user_icon}
+                                                                            alt={data?.selectOption?.name}/>
+                                                                        <span>{data?.selectOption?.name}</span>
+                                                                        <RxCross2 onClick={(e) => {
+                                                                            handleCheckboxChange(data)
+                                                                        }}/>
+                                                                    </div>
+                                                                ))
+                                                            )
+                                                            :
+                                                            (
+                                                                <div className="social_inner_content">
+                                                                    <div>
+                                                                        <BiUser/>
+                                                                    </div>
+                                                                    <h6 className="cmn_headings">
+                                                                        Select platform
+                                                                    </h6>
+                                                                </div>
+                                                            )}
+                                                    </Dropdown.Toggle>
+
+
+                                                    <Dropdown.Menu className='w-100 social_media_list'>
+                                                        <div className="dropdown-options">
+
+                                                            <div className='_'>
+                                                                <div className="select_platform_outer">
+                                                                    <input type="checkbox"
+                                                                           id="choice1-2"
+                                                                           name="choice2"
+                                                                           checked={areAllOptionsSelected}
+                                                                           onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
+                                                                    />
+                                                                    <h3 className="cmn_headings" onClick={function () {
+                                                                        document.getElementById("choice1-2").click()
+                                                                    }}>Select all Platform</h3>
+                                                                </div>
+
+                                                                {
+                                                                    socialAccountData?.map((socialAccount, index) => {
+                                                                        return (
+
+                                                                            <>
+                                                                                {
+                                                                                    socialAccount && socialAccount?.pageAccessToken.length > 0 &&
+                                                                                    <div
+                                                                                        className='instagram_outer facebook_outer '
+                                                                                        key={index}>
+                                                                                        <div
+                                                                                            className="checkbox-button_outer">
+
+                                                                                            {
+                                                                                                socialAccount && socialAccount?.pageAccessToken &&
+                                                                                                <>
+                                                                                                    <input type="checkbox"
+                                                                                                           className=""
+                                                                                                           id={socialAccount.provider + "-checkbox"}
+                                                                                                           name="choice1"
+                                                                                                           checked={selectedGroups.includes(socialAccount?.provider)}
+                                                                                                           onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
+                                                                                                    />
+
+                                                                                                    <SocialMediaProviderBadge
+                                                                                                        provider={socialAccount.provider}/>
+
+                                                                                                </>
+                                                                                            }
+
+                                                                                        </div>
+
+                                                                                        {
+                                                                                            socialAccount?.pageAccessToken?.map((page, index) => (
+                                                                                                <div
+                                                                                                    className="instagramPages unselectedpages"
+                                                                                                    key={index}
+                                                                                                    style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
+                                                                                                    onClick={(e) =>
+                                                                                                        handleCheckboxChange({
+                                                                                                            group: socialAccount?.provider,
+                                                                                                            selectOption: {
+                                                                                                                ...page,
+                                                                                                                socialMediaType: socialAccount?.provider
+                                                                                                            }
+                                                                                                        })}
+                                                                                                >
+                                                                                                    <div
+                                                                                                        className="checkbox-button_outer">
+                                                                                                        <img
+                                                                                                            src={page?.imageUrl || default_user_icon}/>
+                                                                                                        <h2 className="cmn_text_style">{page?.name}</h2>
+                                                                                                    </div>
+                                                                                                    <input
+                                                                                                        type="checkbox"
+                                                                                                        id={page.id}
+                                                                                                        name={page.name}
+                                                                                                        value={page.id}
+                                                                                                        checked={selectedOptions.includes(page.pageId)}
+                                                                                                        onChange={() =>
+                                                                                                            handleCheckboxChange({
+                                                                                                                group: socialAccount?.provider,
+                                                                                                                selectOption: page
+                                                                                                            })}
+                                                                                                    />
+                                                                                                </div>
+                                                                                            ))
+                                                                                        }
+
+
+                                                                                    </div>
+                                                                                }
+                                                                            </>
+
+                                                                        )
+                                                                    })
+                                                                }
+
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+
+                                            </div>
+
+                                            
                                             {/* Pinterest Options*/}
 
                                             {
@@ -875,14 +883,14 @@ const UpdatePost = () => {
                                                                                  className={"cmn_bg_btn schedule_btn loading"}
                                                                                  isLoading={reference === "Scheduled" && loadingUpdatePost}/>
 
-                                                        <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                        {/* <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                                  onClick={(e) => {
                                                                                      setReference("Draft")
                                                                                      handleDraftPost(e);
                                                                                  }}
 
                                                                                  className={"save_btn cmn_bg_btn loading"}
-                                                                                 isLoading={reference === "Draft" && loadingUpdatePost}/>
+                                                                                 isLoading={reference === "Draft" && loadingUpdatePost}/> */}
                                                     </div>
                                                 </div>
 
@@ -940,14 +948,14 @@ const UpdatePost = () => {
                                                         resetForm(e);
                                                     }}>{jsondata.reset}</button>
 
-                                                    <GenericButtonWithLoader label={jsondata.publishnow}
+                                                    {/* <GenericButtonWithLoader label={jsondata.publishnow}
                                                                              onClick={(e) => {
                                                                                  setReference("Published")
                                                                                  handlePostSubmit(e);
                                                                              }}
                                                                              isDisabled={false}
                                                                              className={"publish_btn cmn_bg_btn loading"}
-                                                                             isLoading={reference === "Published" && loadingUpdatePost}/>
+                                                                             isLoading={reference === "Published" && loadingUpdatePost}/> */}
                                                 </div>
                                             </div>
 
@@ -956,9 +964,10 @@ const UpdatePost = () => {
                                 </div>
                                 {
                                     showPreview &&
-                                    <div className="col-lg-6 col-md-12 col-sm-12">
-
+                                    <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
+                                 
                                         <div className='post_preview_outer'>
+                                        <h3 className='Post_Preview_heading'>Post Preview</h3>
 
                                             {
                                                 allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
@@ -987,6 +996,27 @@ const UpdatePost = () => {
 
                                     </div>
                                 }
+                            </div>
+                            
+                            <div className='draft_publish_outer'>
+                            
+                            <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                                                 onClick={(e) => {
+                                                                                     setReference("Draft")
+                                                                                     handleDraftPost(e);
+                                                                                 }}
+
+                                                                                 className={"save_btn cmn_bg_btn loading"}
+                            isLoading={reference === "Draft" && loadingUpdatePost}/>
+                               
+                            <GenericButtonWithLoader label={jsondata.publishnow}
+                                                                             onClick={(e) => {
+                                                                                 setReference("Published")
+                                                                                 handlePostSubmit(e);
+                                                                             }}
+                                                                             isDisabled={false}
+                                                                             className={"publish_btn cmn_bg_btn loading"}
+                            isLoading={reference === "Published" && loadingUpdatePost}/>
                             </div>
                         </div>
                     </div>
