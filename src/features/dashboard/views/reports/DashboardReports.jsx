@@ -142,7 +142,23 @@ export const DashboardReports = () => {
                             <div className="post_activity_outer mx-2">
 
                                 <div
-                                    className="d-flex gap-3 postActivity_InnerWrapper dropdown_btn_Outer_container">
+                                    className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container">
+
+<div className="days_outer">
+                                            <select className="custom_select_days dropdown_days "
+                                                    value={graphDaysSelected}
+                                                    onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
+                                                    disabled={connectedPagesReducer?.loading || facebookPageListReducer?.loading || reportGraphSectionData?.loading}>
+                                                <option value={9}>Last 7 days</option>
+                                                <option value={17}>Last 15 days</option>
+                                                {
+                                                    reportSelectedAccountType === "INSTAGRAM" ?
+                                                        <option value={30}> Last 28 days</option> :
+                                                        <option value={32}> Last 30 days</option>
+                                                }
+
+                                            </select>
+                                        </div>
                                     {
                                         false &&  <Dropdown className="dropdown_btn">
 
@@ -277,6 +293,8 @@ export const DashboardReports = () => {
                                         :
                                         <>
                                             {
+
+                                                //TODO-:enable this when api implemented....
                                                 false && <div className="Performing_Post_container">
                                                     <h3 className="cmn_text_heading">Dashboard <span
                                                         className="overview_heading nunito_font">Overview</span></h3>
@@ -359,12 +377,12 @@ export const DashboardReports = () => {
                                 }
 
                                 {/* chart */}
-                                <div className="page_title_header">
+                                <div className="page_title_header mb-0">
                                     <div className="page_title_container">
                                         <div className="page_title_dropdown">
                                             <h3 className="cmn_white_text instagram_overview_heading">{SocialAccountProvider[reportSelectedAccountType]?.charAt(0)?.toUpperCase() + SocialAccountProvider[reportSelectedAccountType]?.slice(1)} Overview</h3>
                                         </div>
-                                        <div className="days_outer">
+                                        {/* <div className="days_outer">
                                             <select className=" dropdown_days box_shadow"
                                                     value={graphDaysSelected}
                                                     onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
@@ -378,15 +396,15 @@ export const DashboardReports = () => {
                                                 }
 
                                             </select>
-                                        </div>
+                                        </div> */}
 
                                     </div>
                                     {/*<Chart/>*/}
 
                                     <div className="account_info mt-2">
-
+                                      
                                         <LineGraph reportData={reportGraphSectionData}/>
-
+                                        
                                     </div>
                                 </div>
 

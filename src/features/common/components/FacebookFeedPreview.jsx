@@ -18,8 +18,8 @@ const FacebookFeedPreview = ({previewTitle, pageName, userData, files, selectedF
                     <img src={pageImage ?  pageImage : default_user_icon} height="36px" width="36px"/>
                     <div>
                         <h3 className='create_post_text user_name boost_post_text'>{pageName}</h3>
-                        <h6 className='status create_post_text'>just now
-                            <img src={ellipse_img} className="ms-1"/>
+                        <h6 className='status create_post_text'> <img src={ellipse_img} className="ms-1"/> just now
+                            
                             <TiWorld className="world_icon ms-1"/>
                         </h6>
                     </div>

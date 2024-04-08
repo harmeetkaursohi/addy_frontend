@@ -128,7 +128,7 @@ white-space: nowrap;
     border-radius: 20px;
 }
 .user_caption_wrapper h6{
-    color: white;
+    color: black;
 }
 .pinterest-icon {
     color: #e60023;
@@ -289,13 +289,15 @@ social_inner_content h6 {
 }
 
 .media_outer {
-    border-radius: 3px;
+    border-radius: 20px;
     background: #F4F7FC;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
     padding: 17px 24px;
     margin-top: 30px;
 }
-
+.dashed_border{
+    border: 1px dashed  #C3C3C3;
+}
 .creare_post_heading {
     color: #000;
     font-size: 32px;
@@ -304,11 +306,7 @@ social_inner_content h6 {
     text-align: center;
 }
 
-.create_post_content {
-    padding: 30px 70px;
-    
-  
-}
+
 
 button#instagram {
     width: 100%;
@@ -471,9 +469,7 @@ button.ai_btn {
     font-size: 13px;
 }
 
-.media_outer {
-    margin-top: 30px;
-}
+
 
 .add_btn {
     border: none;
@@ -588,15 +584,16 @@ button.ai_btn {
 }
 
 .preview_wrapper {
-    border-radius: 3px;
+    border-radius: 30px;
     background: #FFF;
     box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.05);
-   
+    padding: 30px;
 }
 
 .status {
-    color: #ADACAC;
-    font-size: 10px;
+    color: #898383;
+    font-weight: 700;
+    font-size: 12px;
 }
 
 .post_img {
@@ -607,7 +604,7 @@ button.ai_btn {
 .user_profile_info {
     display: flex;
     gap: 10px;
-    padding: 19px 12px 8px 12px;
+
 }
 
 .user_profile_info img {
@@ -629,7 +626,7 @@ button.ai_btn {
     padding: 14px 23px;
     border-top: 1px solid #dad6d6;
     border-bottom: 1px solid #dad6d6;
-    margin: 5px 10px 10px;
+    /* margin: 5px 10px 10px; */
     align-items: center;
    
 }
@@ -642,9 +639,13 @@ button.ai_btn {
     animation-name: fadeInLeft;
     animation-duration: 3s;
     animation-timing-function: all ease 0.7s;
-    background: #1E1E1E;
+    background: #F4F7FC;
     padding: 3em;
     height: 100%;
+    border-radius: 10px;
+}
+.post_preview_container {
+    margin-top: 30px !important;
 }
 .post_caption_outer{
     display: flex;
@@ -653,8 +654,13 @@ button.ai_btn {
 .feed_preview {
     font-size: 22px;
     line-height: normal;
-    background-color: #1E1E1E;
+   color: #1E1E1E;
     padding-bottom: 16px;
+}
+h3.Post_Preview_heading {
+    color: #6B6B6B;
+    font-size: 24px;
+    font-weight: 600;
 }
 .media_inner_content{
     display: flex;
@@ -712,8 +718,11 @@ input[type=checkbox] {
     border: 1px solid transparent;
     background: #f07c32;
     color: white;
-    padding: 6px 11px;
-    border-radius: 10px;
+    padding: 2px 6px;
+    border-radius: 30px;
+    height: 30px;
+    width: 30px;
+
 }
 .preview_btn svg{
    transform:translate(1px, -2px);
@@ -725,7 +734,9 @@ input[type=checkbox] {
 }
 .preview_btn_outer{
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    background: #F1F1F1;
+
 }
 input {
     font-size: 1rem;
@@ -862,24 +873,32 @@ button.loading {
     gap: 5px;
     justify-content: center;
 }
-
-
+.draft_publish_outer{
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+.create_post_container {
+    height: 100%;
+   
+}
 
 @media screen and (min-width:2000px){
     .post_preview_outer{
         padding: 3rem 15rem;
     }
-    .create_post_content {
-        padding: 30px 15rem;
-      }
+ 
 }
-@media screen and (min-width:1600px ) and (max-width:2559px){
+
+@media screen and (min-width:1900px ) and (max-width:2560px){
     .post_preview_outer{
-        padding: 3rem 7rem;
+        padding: 3rem 5rem;
     }
-    .create_post_content {
-        padding: 30px 7rem;
-      }
+    .Container{
+        width: 78%;
+        margin: auto;
+    }
+    
 }
 
 @media (max-width: 1440px) {
@@ -899,9 +918,7 @@ button.loading {
 }
 
 @media (max-width: 1299px) {
-    .create_post_content {
-        padding: 30px 20px;
-    }
+
 
     .fb_likes svg {
         height: 16px;
@@ -915,16 +932,19 @@ button.loading {
     .post_preview_outer {
         padding: 2rem;
     }
-
+   .feed_preview {
+    font-size: 18px;
+   }
+   h3.Post_Preview_heading{
+    font-size: 24px;
+   }
 
 }
 @media screen and (max-width:1100px) {
     .post_preview_outer {
         padding: 1rem;
     }
-    .create_post_content{
-        padding: 30px 10px;
-    }
+
     .schedule_date_outer{
      gap :10px
     }
@@ -935,6 +955,9 @@ button.loading {
 @media screen and (max-width: 1024px) {
     .get_messages_outer {
         display: block;
+    }
+    .preview_wrapper{
+        padding: 20px;
     }
     
 
@@ -951,9 +974,6 @@ button.loading {
         text-align: center;
     }
 
-    .create_post_content {
-        padding: 30px 15px
-    }
 
     
 
@@ -1041,7 +1061,8 @@ button.loading {
     margin: 0px;
     gap: 8px;
     left: 47%;
-    transform: translate(-44%, -34%);
+    flex-wrap: wrap;
+    transform: translate(-58%, -34%);
     }
     .user_caption_heading {
         width: 103px;
@@ -1132,6 +1153,12 @@ button.loading {
     }
     .fb_likes {
         gap: 5px;
+        display: block;
+    }
+    .preview_wrapper {
+        border-radius: 15px;
+        padding: 10px;
+    
     }
     .like_comment_outer{
         padding: 9px 5px

@@ -53,7 +53,11 @@
 
 .draft-heading h4.posted-on-txt{
     min-width: 130px;
-    font-size: 20px;
+    font-size: 18px;
+    color: black;
+    font-weight: 500;
+
+
 }
 .draft-heading {
     display: flex;
@@ -61,6 +65,9 @@
 
     padding: 20px;
   
+}
+.upcoming_post_outer .draft-heading{
+    padding: 0px;
 }
 
 .draft-outer {
@@ -130,19 +137,19 @@ posted-on-txt {
 }
 
 .social-media-icon {
-    height: 18px;
-    width: 20px;
+    height: 22px;
+    width: 22px;
 }
 
 .social-media-page-name {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 500;
+    padding: 5px 0px 0px 5px;
     font-family: 'Nunito', sans-serif;
 }
 
 .card-body.post_card {
-    padding: 0px 20px;
-    padding-bottom: 24px;
+    padding: 0px 20px 20px;
 }
 
 span.post_caption {
@@ -157,16 +164,16 @@ span.post_caption {
 h3.caption {
     color: #5F6D7E;
     font-family: "Nunito";
-    font-size: 18px;
+    font-size: 15px;
     font-style: normal;
     font-weight: 400;
     margin-bottom: 10px ;
 
 }
 .upcoming_post_content{
-    height: 60px;
+    height: 40px;
     overflow-y: scroll;
-    line-height: 27px;
+    line-height: 21px;
     color: #585858;
     font-size: 16px;
     font-weight: 600;
@@ -244,7 +251,7 @@ button.outline_btn {
 }
 .hash_tags_outer_container{
     overflow-y: scroll;
-    height: 57px;
+    height: 47px;
     line-height: 19px;
 
 
@@ -261,7 +268,7 @@ button.outline_btn {
     padding-top: 0px;
     width: max-content;
     border-radius: 10px;
-    box-shadow: 2px 2px 15px 0px #e9e0e0;
+    box-shadow: 1px 1px 15px 0px #f9f0f0;
 }
 .draft_component_outer .dropdown {
     position: absolute;
@@ -274,6 +281,7 @@ button.outline_btn {
     padding: 14px 0px;
     width: 100%;
     min-width: 141px;
+    background-color: white !important;
 }
 .draft_component_outer .dropdown-menu.show {
     display: block;
@@ -290,12 +298,7 @@ button.outline_btn {
 .filters_outer{
     padding: 10px;
 }
-.upcoming_post_header_outer {
-    color: white;
-    font-size: 12px;
-    left: 10px;
-   
-}
+
 .cmn_upcoing_post_header{
     position: absolute;
     z-index: 1;
@@ -305,14 +308,7 @@ button.outline_btn {
     top: 20px;
 
 }
-.upcoming_post_header_outer img{
-    border-radius: 20px;
-}
-.upcoming_post_header_outer h3{
-color: white;
-font-size: 14px;
-font-weight: 600;
-}
+
 .Tommorrow_header {
     left: auto;
     right: 10px;

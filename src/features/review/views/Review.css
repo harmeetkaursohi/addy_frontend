@@ -98,7 +98,7 @@ img.acc_not_connected_img {
 }
 span.highlight {
 
-    color: #0064e0;
+    color: #00A3FF;
 }
 .no-cmnt-txt {
     text-align: center;
@@ -342,6 +342,7 @@ p.disable-reply-comment {
 @media screen and (min-width:1600px) {
     .acc_not_connected_outer img{
         width: 600px;
+        height: 100%;
   
     }
 }

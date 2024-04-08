@@ -12,7 +12,7 @@
 .insight_inner_content {
     border-radius: 22px;
     background: #FFF;
-    margin-top: 20px;
+    margin-top: 35px;
 
 }
 
@@ -54,8 +54,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height:calc(100vh - 200px)
-    /* height: 100vh; */
+    
+}
+.select-page-outer img{
+    width: 100%;
+    height: 400px;
+    margin-top: 50px;
 }
 
 .arrow-up-image {
@@ -179,7 +183,7 @@ ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
 }
 
 .hightlighted_text {
-    /*color: #F07C33;*/
+    color: #F07C33;
     font-size: 16px;
 }
 
@@ -255,6 +259,7 @@ ul.overview_tabs.nav.nav-tabs {
 .account_reach_overview_outer h4 {
     font-weight: 700;
     font-size: 30px;
+    color: #263238;
     padding: 7px 0px 18px;
 }
 
@@ -333,7 +338,17 @@ div.card_body_content {
 }
 .reach-engagement-select {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
+}
+.overview_btn{
+    color: #263238;
+    font-size: 20px;
+    font-weight: 600;
+    border: 1px solid #F07C33;
+    border-radius: 5px;
+    font-family: 'Nunito';
+    padding: 2px 17px;
+    background-color: white;
 }
 span.spinner-border.spinner-border-sm.loader.social-account-loader {
     height: 15px;
@@ -342,6 +357,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
 .user_profile_card_wrapper img {
     height: 100px;
     width: 100px;
+    object-fit: cover;
     border-radius: 60px;
     border: 3px solid #E05905;
 }
@@ -350,7 +366,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     font-weight: 700;
 }
 .user_profile_card_outer {
-    padding: 28px;
+    padding: 28px 28px 0px;
     border-radius: 11px;
     box-shadow: 2px 2px 8px #e5e2e2;
     min-height: 100%;
@@ -381,15 +397,9 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     font-size: 16px;
     line-height: 20px;
     padding-top: 9px;
-}
-.BsThreeDots_outer {
-    height: 26px;
-    width: 26px;
-    border: 1px solid #C9C9C9;
     text-align: center;
-    border-radius: 5px;
-    margin-left: auto;
 }
+
 .visitors_container {
     border-radius: 20px;
     overflow: hidden;
@@ -423,6 +433,11 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
         gap: 30px;
     }
 }
+ @media screen and (min-width:1499px){
+    .select-page-outer img{
+        height: 550px;
+    }
+ }
 @media screen and (max-width:1280px){
     .social_media_dropdown {
         flex-wrap: wrap;
@@ -458,6 +473,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     }
     .user_profile_card_outer{
         min-height: unset;
+        padding: 28px;
     }
     ul.overview_tabs.nav.nav-tabs{
         margin-top: 10px;
@@ -520,6 +536,13 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     .account_reach_overview_wrapper {
         display: block;
     }
+    .select-page-outer img {
+        height: 100%;
+      
+    }
+    .overview_btn {
+        font-size: 16px;
+    }
     .days_dropdown.dropdown {
         margin-top: 20px;
         margin-left: 20px;
@@ -530,6 +553,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
    
     .reach-engagement-select {
         margin-bottom: 20px;
+        flex-wrap: wrap;
     }
    
     .noPageHeading {
@@ -542,9 +566,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     .Choose_platform_title {
         font-size: 18px;
     }
-    .select-page-outer{
-        display: block;
-    }
+    
     
     .arrow-up-image {
         margin-bottom: 20px;

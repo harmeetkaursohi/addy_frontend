@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
 import addy_crop_logo from "../../../images/cropLogo.png";
 import addy_logo from "../../../images/addy_logo.svg";
 import "./Layout.css";
@@ -92,6 +92,7 @@ const Layout = () => {
         });
     };
 
+    
     return (
         <>
             <section className="sidebar_container">
@@ -109,6 +110,7 @@ const Layout = () => {
                         {sidebar ? <FaBars/> : <RxCross2 className="cross_icon"/>}
 
                     </div>
+                    
                     <div className="user_profile_outer">
                         <Link to="/dashboard">
                             {sidebar ? (
@@ -125,8 +127,8 @@ const Layout = () => {
 
 
                     </div>
-                    {/* <div className={sidebar ? "d-none" : "d-flex align-items-center justify-content-evenly mt-4 mb-4"}>
-                        <div className="user_info_outer" onClick={() => {
+                    <div className={"d-flex align-items-center"}>
+                        <div className={`user_info_outer ${sidebar?"px-3 py-2":""} ${location.pathname==="/profile"?"active_bg_color":""}`} onClick={() => {
                                         navigate("/profile");
                                     }}>
 
@@ -136,14 +138,14 @@ const Layout = () => {
                                     <img
                                         src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
                                         className='profile_img'/>
-                                    <h3>{userData?.fullName || "name"}</h3>
+                                    <h3 className={sidebar?"d-none":""}>{userData?.fullName || "name"}</h3>
                                   
                                 </>
                             }
                         </div>
 
 
-                    </div> */}
+                    </div>
                     <ul className={sidebar ? "sidebar_item Sidebar_containerbox mt-3" : "sidebar_item mt-3"}>
                         {SidebarMenuItems &&
                             SidebarMenuItems?.map((item, index) => (

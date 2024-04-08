@@ -72,7 +72,7 @@
 
 
 .Container {
-    width: 100%;
+background-color: white;
 }
 
 .login_wrapper {
@@ -262,6 +262,9 @@
     .addy_img h2{
         font-size: 25px;
         margin-top: 20px;
+    }
+    .reach_user_outer img {
+        height: 350px;
     }
     .reach_user_outer h2{
         font-size: 16px;

@@ -93,9 +93,10 @@
 // export default DonutChart;
 
 
+// new code dounuts
 import React from 'react'
 import { PieChart, Pie, Legend, Cell, ResponsiveContainer } from 'recharts';
-
+import "./Chart.css"
 const data = [
   { name: 'India', value: 70 },
   { name: 'USA', value: 12 },
@@ -137,7 +138,7 @@ const DonutsChart = () => {
           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
         ))}
       </Pie>
-      <Legend />
+      <Legend  />
     </PieChart>
   </ResponsiveContainer>
 

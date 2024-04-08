@@ -255,10 +255,10 @@ const Review = () => {
                                                     SocialAccountProvider,
                                                     null,
                                                     null,
-                                                    {
+                                                  [  {
                                                         label: "All",
                                                         value: null,
-                                                    }
+                                                    }]
                                                 )}
                                                 value={selectedDropdownOptions?.socialMediaType}
                                                 isDisabled={getPostsPageData?.loading}

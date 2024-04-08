@@ -97,50 +97,43 @@ export const LineGraph = ({reportData}) => {
 
 }
 
+// import { Line } from 'react-chartjs-2';
 
-
-
-
-
-// ---------------------------------New Code -----------------------------------------
-
-// import {Line} from 'react-chartjs-2';
-//
 // import {
-//     CategoryScale,
-//     Chart as ChartJS,
-//
-//     LinearScale,
-//     LineElement,
-//     PointElement,
-//     Title,
-//     Tooltip,
-// } from 'chart.js';
-//
+//         CategoryScale,
+//         Chart as ChartJS,
+    
+//         LinearScale,
+//         LineElement,
+//         PointElement,
+//         Title,
+//         Tooltip,
+//     } from 'chart.js';
 // ChartJS.register(
-//     CategoryScale,
-//     LinearScale,
-//     PointElement,
-//     LineElement,
-//     Title,
-//     Tooltip,
-// );
-//
+//         CategoryScale,
+//         LinearScale,
+//         PointElement,
+//         LineElement,
+//         Title,
+//         Tooltip,
+      
+//     );
+    
 // const data = {
-//     labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+//     labels: ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'],
 //     datasets: [
-//         {
-//             label: 'uv',
-//             data: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
-//             borderColor: '#00A3FF',
-//             fill: true,
-//         },
-//
+//       {
+//         label: 'uv',
+//         data: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
+//         borderColor: '#00A3FF',
+//         fill: true,
+//       },
+     
 //     ],
-// };
-// export const LineGraph = () => {
-//
-//
+//   };
+//   export const   LineGraph = () => {  
+
+
 //     const options = {
 //         responsive: true,
 //         scales: {
@@ -154,11 +147,11 @@ export const LineGraph = ({reportData}) => {
 //             },
 //         },
 //     };
-//
-//     return (
-//         <Line data={data} options={options}/>
-//
-//
+ 
+//         return (
+//             <Line data={data} options={options}/>
+        
+    
 //     )
 // }
 

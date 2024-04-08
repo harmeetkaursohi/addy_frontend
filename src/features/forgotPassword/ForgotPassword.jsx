@@ -42,7 +42,7 @@ function ForgotPassword() {
 
                                 <div className='reach_user_outer text-center'>
                                     <img src={Frame} className=' w-100 mt-4'/>
-                                    <h2 className='mt-5'>{jsondata.connect_audience_title}</h2>
+                                    <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
                                 </div>
                             </div>
 

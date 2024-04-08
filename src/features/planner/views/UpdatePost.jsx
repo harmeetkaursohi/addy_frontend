@@ -34,7 +34,7 @@ import Loader from '../../loader/Loader.jsx';
 
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import {useAppContext} from '../../common/components/AppProvider.jsx';
-import {AiOutlineEye, AiOutlineEyeInvisible} from 'react-icons/ai';
+import {AiOutlineEye} from 'react-icons/ai';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 
 const UpdatePost = () => {
@@ -475,17 +475,19 @@ const UpdatePost = () => {
                 <div className={`cmn_container ${sidebar ? "" : "cmn_Padding"}`}>
                     <div className="Container">
                         <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
-                            <div className='preview_btn_outer'>
+                            <div className='preview_btn_outer cmn_border cmn_outer'>
+                            <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
+
                                 {
                                     selectedAllDropdownData?.length > 0 && showPreview ?
-                                        <button className='preview_btn me-2 my-2' onClick={() => {
+                                        <button className='preview_btn' onClick={() => {
                                             setShowPreview(false)
-                                        }}><AiOutlineEyeInvisible/></button> :
+                                        }}> <RxCross2 /></button> :
 
                                         selectedAllDropdownData?.length > 0 &&
-                                        <button className='preview_btn me-2 my-2' onClick={() => {
+                                        <button className='preview_btn ' onClick={() => {
                                             setShowPreview(true)
-                                        }}><AiOutlineEye/></button>
+                                        }}><AiOutlineEye /></button>
                                 }
 
                             </div>
@@ -493,13 +495,147 @@ const UpdatePost = () => {
                                 <div
                                     className={showPreview ? "col-lg-6 col-md-12 col-sm-12" : "col-lg-12 col-md-12 col-sm-12"}>
 
-                                    <div className={`create_post_content ${showPreview ? "" : "animation"} `}>
+                                    <div className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
 
-                                        <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
 
                                         <form onSubmit={null}>
+                                           {/* add media */}
+                                           <div
+                                                className={`media_outer ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
+                                                <div
+                                                    className={showPreview ? "" : 'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
 
-                                            <div className="createPost_outer">
+                                                    <div className="post_content_wrapper">
+                                                        <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
+                                                        <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+
+
+                                                        {loader && <div className='text-center mt-4'><Loader/></div>}
+
+                                                        <div className="drag_scroll ">
+                                                            {files?.map((file, index) => {
+
+                                                                return (
+                                                                    <div
+                                                                        className="file_outer dragable_files"
+                                                                        key={index}
+                                                                    >
+                                                                        <div
+                                                                            className="flex-grow-1 d-flex align-items-center">
+                                                                            {/* <i className="fas fa-grip-vertical me-2"></i> */}
+                                                                            {
+                                                                                file.mediaType === "IMAGE" &&
+                                                                                <img className={"upload_image me-3"}
+                                                                                     src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
+                                                                                     alt={`Image ${index}`}/>
+                                                                            }
+                                                                            {
+                                                                                file.mediaType === "VIDEO" &&
+                                                                                <video className={"upload_image me-3"}
+                                                                                       src={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
+                                                                                       alt={`Videos ${index}`}
+                                                                                       autoPlay={true}
+                                                                                       muted={true}
+                                                                                />
+                                                                            }
+                                                                        </div>
+
+                                                                        {
+                                                                            file?.mediaType === "IMAGE" &&
+                                                                            <button
+                                                                                className="edit_upload delete_upload me-2"
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    editHandler(index, file);
+                                                                                }}>
+                                                                                <BiSolidEditAlt style={{fontSize: '24px'}}
+                                                                                />
+                                                                            </button>
+                                                                        }
+                                                                        <button className="delete_upload" onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            handleRemoveSelectFile(file?.fileName, file?.id);
+                                                                        }}>
+                                                                            <RiDeleteBin5Fill
+                                                                                style={{fontSize: '24px'}}
+                                                                            />
+                                                                        </button>
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div className={showPreview ? "" : "col-lg-6 col-sm-12 col-md-12 p-0"}>
+
+                                                    <div className="darg_navs file_outer">
+
+                                                        {disableImage === false &&
+                                                            <div
+                                                                className={" add_media_outer"}>
+                                                                <input type="file" id='image'
+                                                                       className='file'
+                                                                       multiple
+                                                                       name={'file'}
+                                                                       onClick={e => (e.target.value = null)}
+                                                                       accept={"image/png, image/jpeg"}
+                                                                       onChange={(e) => {
+                                                                           setSelectedFileType("IMAGE");
+                                                                           setDisableVideo(true);
+                                                                           handleSelectedImageFile(e);
+                                                                       }}
+                                                                />
+                                                                <label htmlFor='image'
+                                                                       className='cmn_blue_border cmn_headings'>
+                                                                    <i className="fa fa-image"
+                                                                       style={{marginTop: "2px"}}/>{"Add Photo"}
+                                                                </label>
+                                                            </div>
+                                                        }
+
+                                                        {disableVideo === false &&
+                                                            <div className=" add_media_outer">
+                                                                <input
+                                                                    type="file"
+                                                                    id='video'
+                                                                    onClick={e => (e.target.value = null)}
+                                                                    accept={"video/mp4,video/x-m4v,video/*"}
+                                                                    onChange={(e) => {
+                                                                        setSelectedFileType("VIDEO");
+                                                                        setDisableImage(true);
+                                                                        handleSelectedVideoFile(e);
+                                                                    }}/>
+                                                                <label htmlFor='video'
+                                                                       className='cmn_blue_border cmn_headings'>
+                                                                    <i className="fa fa-video-camera"
+                                                                       style={{marginTop: "2px"}}/>{files?.length > 0 ? "Change Video" : "Add Video"}
+                                                                </label>
+                                                            </div>
+                                                        }
+                                                    </div>
+
+                                                    {
+                                                        disableImage === false && <>
+                                                            <h2 className='cmn_heading'>{jsondata.OR}</h2>
+                                                            <div className="ai_outer_btn">
+                                                                <button
+                                                                    className={`ai_btn cmn_white_text mt-2`}
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        setAIGenerateImageModal(true);
+                                                                    }}>
+                                                                    <i className="fa-solid fa-robot ai_icon me-2"
+                                                                       style={{fontSize: "15px"}}/> {jsondata.generateAi}
+                                                                </button>
+                                                            </div>
+                                                        </>
+                                                    }
+                                                </div>
+
+                                            </div>
+                                            <div className="createPost_outer media_outer">
                                                 <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
 
                                                 {/*    dropdown select platform=====*/}
@@ -639,142 +775,7 @@ const UpdatePost = () => {
 
                                             </div>
 
-                                            {/* add media */}
-                                            <div
-                                                className={`media_outer ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
-                                                <div
-                                                    className={showPreview ? "" : 'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
-
-                                                    <div className="post_content_wrapper">
-                                                        <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
-                                                        <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
-
-
-                                                        {loader && <div className='text-center mt-4'><Loader/></div>}
-
-                                                        <div className="drag_scroll ">
-                                                            {files?.map((file, index) => {
-
-                                                                return (
-                                                                    <div
-                                                                        className="file_outer dragable_files"
-                                                                        key={index}
-                                                                    >
-                                                                        <div
-                                                                            className="flex-grow-1 d-flex align-items-center">
-                                                                            {/* <i className="fas fa-grip-vertical me-2"></i> */}
-                                                                            {
-                                                                                file.mediaType === "IMAGE" &&
-                                                                                <img className={"upload_image me-3"}
-                                                                                     src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
-                                                                                     alt={`Image ${index}`}/>
-                                                                            }
-                                                                            {
-                                                                                file.mediaType === "VIDEO" &&
-                                                                                <video className={"upload_image me-3"}
-                                                                                       src={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
-                                                                                       alt={`Videos ${index}`}
-                                                                                       autoPlay={true}
-                                                                                       muted={true}
-                                                                                />
-                                                                            }
-                                                                        </div>
-
-                                                                        {
-                                                                            file?.mediaType === "IMAGE" &&
-                                                                            <button
-                                                                                className="edit_upload delete_upload me-2"
-                                                                                onClick={(e) => {
-                                                                                    e.preventDefault();
-                                                                                    editHandler(index, file);
-                                                                                }}>
-                                                                                <BiSolidEditAlt style={{fontSize: '24px'}}
-                                                                                />
-                                                                            </button>
-                                                                        }
-                                                                        <button className="delete_upload" onClick={(e) => {
-                                                                            e.preventDefault();
-                                                                            handleRemoveSelectFile(file?.fileName, file?.id);
-                                                                        }}>
-                                                                            <RiDeleteBin5Fill
-                                                                                style={{fontSize: '24px'}}
-                                                                            />
-                                                                        </button>
-                                                                    </div>
-                                                                )
-                                                            })}
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                                <div className={showPreview ? "" : "col-lg-6 col-sm-12 col-md-12 p-0"}>
-
-                                                    <div className="darg_navs file_outer">
-
-                                                        {disableImage === false &&
-                                                            <div
-                                                                className={" add_media_outer"}>
-                                                                <input type="file" id='image'
-                                                                       className='file'
-                                                                       multiple
-                                                                       name={'file'}
-                                                                       onClick={e => (e.target.value = null)}
-                                                                       accept={"image/png, image/jpeg"}
-                                                                       onChange={(e) => {
-                                                                           setSelectedFileType("IMAGE");
-                                                                           setDisableVideo(true);
-                                                                           handleSelectedImageFile(e);
-                                                                       }}
-                                                                />
-                                                                <label htmlFor='image'
-                                                                       className='cmn_blue_border cmn_headings'>
-                                                                    <i className="fa fa-image"
-                                                                       style={{marginTop: "2px"}}/>{"Add Photo"}
-                                                                </label>
-                                                            </div>
-                                                        }
-
-                                                        {disableVideo === false &&
-                                                            <div className=" add_media_outer">
-                                                                <input
-                                                                    type="file"
-                                                                    id='video'
-                                                                    onClick={e => (e.target.value = null)}
-                                                                    accept={"video/mp4,video/x-m4v,video/*"}
-                                                                    onChange={(e) => {
-                                                                        setSelectedFileType("VIDEO");
-                                                                        setDisableImage(true);
-                                                                        handleSelectedVideoFile(e);
-                                                                    }}/>
-                                                                <label htmlFor='video'
-                                                                       className='cmn_blue_border cmn_headings'>
-                                                                    <i className="fa fa-video-camera"
-                                                                       style={{marginTop: "2px"}}/>{files?.length > 0 ? "Change Video" : "Add Video"}
-                                                                </label>
-                                                            </div>
-                                                        }
-                                                    </div>
-
-                                                    {
-                                                        disableImage === false && <>
-                                                            <h2 className='cmn_heading'>{jsondata.OR}</h2>
-                                                            <div className="ai_outer_btn">
-                                                                <button
-                                                                    className={`ai_btn cmn_white_text mt-2`}
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        setAIGenerateImageModal(true);
-                                                                    }}>
-                                                                    <i className="fa-solid fa-robot ai_icon me-2"
-                                                                       style={{fontSize: "15px"}}/> {jsondata.generateAi}
-                                                                </button>
-                                                            </div>
-                                                        </>
-                                                    }
-                                                </div>
-
-                                            </div>
+                                            
                                             {/* Pinterest Options*/}
 
                                             {
@@ -882,14 +883,14 @@ const UpdatePost = () => {
                                                                                  className={"cmn_bg_btn schedule_btn loading"}
                                                                                  isLoading={reference === "Scheduled" && loadingUpdatePost}/>
 
-                                                        <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                        {/* <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                                  onClick={(e) => {
                                                                                      setReference("Draft")
                                                                                      handleDraftPost(e);
                                                                                  }}
 
                                                                                  className={"save_btn cmn_bg_btn loading"}
-                                                                                 isLoading={reference === "Draft" && loadingUpdatePost}/>
+                                                                                 isLoading={reference === "Draft" && loadingUpdatePost}/> */}
                                                     </div>
                                                 </div>
 
@@ -947,14 +948,14 @@ const UpdatePost = () => {
                                                         resetForm(e);
                                                     }}>{jsondata.reset}</button>
 
-                                                    <GenericButtonWithLoader label={jsondata.publishnow}
+                                                    {/* <GenericButtonWithLoader label={jsondata.publishnow}
                                                                              onClick={(e) => {
                                                                                  setReference("Published")
                                                                                  handlePostSubmit(e);
                                                                              }}
                                                                              isDisabled={false}
                                                                              className={"publish_btn cmn_bg_btn loading"}
-                                                                             isLoading={reference === "Published" && loadingUpdatePost}/>
+                                                                             isLoading={reference === "Published" && loadingUpdatePost}/> */}
                                                 </div>
                                             </div>
 
@@ -963,9 +964,10 @@ const UpdatePost = () => {
                                 </div>
                                 {
                                     showPreview &&
-                                    <div className="col-lg-6 col-md-12 col-sm-12">
-
+                                    <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
+                                     <div className='cmn_outer create_post_container'>
                                         <div className='post_preview_outer'>
+                                        <h3 className='Post_Preview_heading'>Post Preview</h3>
 
                                             {
                                                 allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
@@ -991,9 +993,30 @@ const UpdatePost = () => {
                                                 })
                                             }
                                         </div>
-
+                                      </div>
                                     </div>
                                 }
+                            </div>
+                            
+                            <div className='draft_publish_outer cmn_outer'>
+                            
+                            <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                                                 onClick={(e) => {
+                                                                                     setReference("Draft")
+                                                                                     handleDraftPost(e);
+                                                                                 }}
+
+                                                                                 className={"save_btn cmn_bg_btn loading"}
+                            isLoading={reference === "Draft" && loadingUpdatePost}/>
+                               
+                            <GenericButtonWithLoader label={jsondata.publishnow}
+                                                                             onClick={(e) => {
+                                                                                 setReference("Published")
+                                                                                 handlePostSubmit(e);
+                                                                             }}
+                                                                             isDisabled={false}
+                                                                             className={"publish_btn cmn_bg_btn loading"}
+                            isLoading={reference === "Published" && loadingUpdatePost}/>
                             </div>
                         </div>
                     </div>

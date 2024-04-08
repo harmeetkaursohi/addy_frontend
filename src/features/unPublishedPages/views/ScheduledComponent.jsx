@@ -169,8 +169,11 @@ const ScheduledComponent = ({scheduledData}) => {
                                             <div className={'mb-2'}>
                                                 <span className={"hash_tags"}>{formatDate(curBatch?.feedPostDate)}</span>
                                             </div>
-
+                                             
+                                             <div>
+                                              <h6 className='upcoming_post_heading'>Post Captions</h6>
                                             <h3 className={" upcoming_post_content mb-0"}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
+                                             </div>
 
 
                                             <div className={'mb-2 hash_tags_outer_container'}>
@@ -179,8 +182,9 @@ const ScheduledComponent = ({scheduledData}) => {
                                             </div>
 
 
+                                        </div>
                                             <div
-                                                className="mt-4 upcomingPostBtn_Outer ">
+                                                className="upcomingPostBtn_Outer ">
 
                                                 <GenericButtonWithLoader
                                                     className={"outline_btn nunito_font schedule_btn loading"}
@@ -198,8 +202,6 @@ const ScheduledComponent = ({scheduledData}) => {
                                                     isDisabled={false}
                                                 />
                                             </div>
-
-                                        </div>
 
 
                                     </div>
