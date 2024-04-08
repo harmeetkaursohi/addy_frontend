@@ -775,7 +775,7 @@ const Planner = () => {
             backgroundColor = '#fce5d6'; 
             border="4px solid #B94D09"
             
-          } else if (eventStartDate.getDate() === 8 ||eventStartDate.getDate() === 30 || eventStartDate.getDate() === 25 ||eventStartDate.getDate() === 22 ||eventStartDate.getDate() === 18 ||eventStartDate.getDate() === 14 || eventStartDate.getDate() === 26||eventStartDate.getDate() === 3) {
+          } else if (eventStartDate.getDate() === 8 ||eventStartDate.getDate() === 30 || eventStartDate.getDate() === 25 ||eventStartDate.getDate() === 22 ||eventStartDate.getDate() === 18 ||eventStartDate.getDate() === 6 ||eventStartDate.getDate() === 14 || eventStartDate.getDate() === 26||eventStartDate.getDate() === 3) {
             backgroundColor = '#defcd6'; 
             border="4px solid #56B909"
           }

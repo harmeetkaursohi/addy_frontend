@@ -1861,7 +1861,7 @@ export const createOptionListForSelectTag = (data = null, label, value, addition
         })
     }
     if (additionalOption !== null) {
-        list = [additionalOption, ...list]
+        list = [...additionalOption, ...list]
     }
     return list
 }
