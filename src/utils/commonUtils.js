@@ -1,9 +1,20 @@
 import * as yup from "yup";
 import {
-    ErrorFetchingPost, InvalidAspectRatio, IsRequired, IsRequiredFor, MultiMediaLimit, MultiMediaSizeLimit,
-    NoBusinessAccountFound, OnlyImageOrVideoCanBePosted, PinterestImageLimitation, SelectAtleastOnePage,
-    SocialAccountProvider, SomethingWentWrong,
-    SomethingWentWrongTryLater, VideoFormatNotSupported
+    ErrorFetchingPost,
+    InvalidAspectRatio,
+    InvalidImageDimension,
+    IsRequired,
+    IsRequiredFor,
+    MultiMediaLimit,
+    MultiMediaSizeLimit,
+    NoBusinessAccountFound,
+    OnlyImageOrVideoCanBePosted,
+    PinterestImageLimitation,
+    SelectAtleastOnePage,
+    SocialAccountProvider,
+    SomethingWentWrong,
+    SomethingWentWrongTryLater,
+    VideoFormatNotSupported
 } from "./contantData.js";
 import {exchangeForLongLivedToken, getAllFacebookConnectedSocialMediaAccounts} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
@@ -2030,33 +2041,47 @@ export const isCreatePostRequestValid = (requestBody, files) => {
 
                     }
                 }
-                if (isPostedOnLinkedin && hasAttachments && files[0]?.mediaType === "VIDEO") {
-                    const extension = files[0]?.fileName?.substring(files[0]?.fileName?.lastIndexOf('.') + 1);
-                    if (extension !== "mp4" && extension !== "MP4") {
-                        showErrorToast(formatMessage(VideoFormatNotSupported, ["mp4", "linkedin"]));
-                        shouldBreak = true;
-                        break;
+                if (isPostedOnLinkedin && hasAttachments ) {
+                    if(files[0]?.mediaType === "IMAGE"){
+                        const isInValidImageDimension = files.some(file => {
+                            const imageDimensions = getImageHeightAndWidth(file?.url)
+                            console.log("imageDimensions==>",imageDimensions)
+                            return (imageDimensions.height >= 6012 || imageDimensions.width >= 6012)
+                        })
+                        if (isInValidImageDimension ) {
+                            showErrorToast(InvalidImageDimension);
+                            shouldBreak = true;
+                            break;
+                        }
                     }
-                    if (files.some(file => (file?.file?.size / 1048576) > 200)) {
-                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
-                        shouldBreak = true;
-                        break;
-                    }
-                    if (files.some(file => (file?.file?.size / 1024) < 75)) {
-                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "75 kb", "video", "linkedin"]));
-                        shouldBreak = true;
-                        break;
-                    }
-                    if ((files[0]?.duration / 60) > 30) {
-                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "30 min", "video", "linkedin"]));
-                        shouldBreak = true;
-                        break;
-                    }
-                    if (files[0]?.duration < 3) {
-                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "linkedin"]));
-                        shouldBreak = true;
-                        break;
-                    }
+                   if(files[0]?.mediaType === "VIDEO"){
+                       const extension = files[0]?.fileName?.substring(files[0]?.fileName?.lastIndexOf('.') + 1);
+                       if (extension !== "mp4" && extension !== "MP4") {
+                           showErrorToast(formatMessage(VideoFormatNotSupported, ["mp4", "linkedin"]));
+                           shouldBreak = true;
+                           break;
+                       }
+                       if (files.some(file => (file?.file?.size / 1048576) > 200)) {
+                           showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
+                           shouldBreak = true;
+                           break;
+                       }
+                       if (files.some(file => (file?.file?.size / 1024) < 75)) {
+                           showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "75 kb", "video", "linkedin"]));
+                           shouldBreak = true;
+                           break;
+                       }
+                       if ((files[0]?.duration / 60) > 30) {
+                           showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "30 min", "video", "linkedin"]));
+                           shouldBreak = true;
+                           break;
+                       }
+                       if (files[0]?.duration < 3) {
+                           showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "linkedin"]));
+                           shouldBreak = true;
+                           break;
+                       }
+                   }
                 }
                 if (isPostedOnInstagram) {
                     if (!hasAttachments) {
@@ -2262,32 +2287,46 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                     }
                 }
                 const isPostedOnLinkedin = requestBody.postPageInfos?.filter(page => page?.provider === "LINKEDIN")?.length > 0
-                if (isPostedOnLinkedin && hasAttachments && files[0]?.mediaType === "VIDEO") {
-                    const extension = allAttachments?.[0]?.fileName?.substring(files[0]?.fileName?.lastIndexOf('.') + 1);
-                    if (extension !== undefined && extension !== "mp4" && extension !== "MP4") {
-                        showErrorToast(formatMessage(VideoFormatNotSupported, ["mp4", "linkedin"]));
-                        shouldBreak = true;
-                        break;
+                if (isPostedOnLinkedin && hasAttachments ) {
+
+                    if(files[0]?.mediaType === "IMAGE"){
+                        const isInValidImageDimension = allAttachments.some(file => {
+                            const imageDimensions = (file?.id === undefined || file?.id === null) ? getImageHeightAndWidth(file?.url): {height:file?.height, width:file?.width};
+                            return (imageDimensions.height >= 6012 || imageDimensions.width >= 6012)
+                        })
+                        if (isInValidImageDimension) {
+                            showErrorToast(InvalidImageDimension);
+                            shouldBreak = true;
+                            break;
+                        }
                     }
-                    if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1048576) > 200) || oldAttachments.some(attachment => (attachment?.fileSize / 1048576) > 200)) {
-                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
-                        shouldBreak = true;
-                        break;
-                    }
-                    if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1024) < 75) || oldAttachments.some(attachment => (attachment?.fileSize / 1024) < 75)) {
-                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "75 kb", "video", "linkedin"]));
-                        shouldBreak = true;
-                        break;
-                    }
-                    if ((allAttachments?.[0]?.duration / 60) > 30) {
-                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "30 min", "video", "linkedin"]));
-                        shouldBreak = true;
-                        break;
-                    }
-                    if (allAttachments?.[0]?.duration < 3) {
-                        showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "linkedin"]));
-                        shouldBreak = true;
-                        break;
+                    if(files[0]?.mediaType === "VIDEO"){
+                        const extension = allAttachments?.[0]?.fileName?.substring(files[0]?.fileName?.lastIndexOf('.') + 1);
+                        if (extension !== undefined && extension !== "mp4" && extension !== "MP4") {
+                            showErrorToast(formatMessage(VideoFormatNotSupported, ["mp4", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1048576) > 200) || oldAttachments.some(attachment => (attachment?.fileSize / 1048576) > 200)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1024) < 75) || oldAttachments.some(attachment => (attachment?.fileSize / 1024) < 75)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "75 kb", "video", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if ((allAttachments?.[0]?.duration / 60) > 30) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "30 min", "video", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (allAttachments?.[0]?.duration < 3) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
                     }
                 }
                 const isPostedOnInstagram = requestBody.postPageInfos?.filter(page => page?.provider === "INSTAGRAM")?.length > 0
@@ -2369,6 +2408,18 @@ export const getImageAspectRatio = (imageUrl) => {
     }
 
     return img.naturalWidth / img.naturalHeight;
+};
+export const getImageHeightAndWidth = (imageUrl) => {
+    const img = new Image();
+    img.src = imageUrl;
+    while (!img.complete) {
+        // This loop will keep running until the image is loaded
+    }
+
+    return {
+        height:img.naturalHeight,
+        width:img.naturalWidth
+    }
 };
 
 export const getVideoDurationById = async (attachmentId) => {
