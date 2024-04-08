@@ -189,9 +189,10 @@ const Notification = () => {
     return (
         <>
             <section>
-                <div className={sidebar ? "comment_container" : "cmn_Padding bg_Color"}>
-                    <div className="cmn_wrapper_outer">
-                        <div className="notification_wrapper">
+                <div className={sidebar ? "comment_container" : "cmn_Padding"}>
+                    <div className="cmn_outer">
+                    
+                        <div className="notification_wrapper cmn_wrapper_outer white_bg_color cmn_height_outer">
                             <div className="notification_header align-items-center gap-3">
                                 <h2 className="cmn_text_heading">Notifications</h2>
 
@@ -310,6 +311,7 @@ const Notification = () => {
 
 
                         </div>
+                   
                     </div>
                 </div>
             </section>

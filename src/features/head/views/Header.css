@@ -5,7 +5,7 @@
 
 .crate_btn {
     padding: 8px 16px;
-    color: #F8F9FB;
+    color: black;
     font-family: "Nunito";
     font-size: 14px;
     font-style: normal;
@@ -13,6 +13,8 @@
     line-height: 20px;
     border: none;
     border-radius: 6px;
+    background-color: unset;
+    text-align: right;
 }
 .header_container_box{
     display: flex;

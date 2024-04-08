@@ -23,7 +23,7 @@ color: #263238;
 }
 
 p {
-  margin: 0px;
+  margin: 0px !important;
 }
 
 .cmn_btn_color {

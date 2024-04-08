@@ -7,7 +7,7 @@ import CommentText from "../../review/views/comments/CommentText";
 import like_img from "../../../images/like.svg"
 import comment_img from "../../../images/comment.svg"
 import save_img from "../../../images/save.svg"
-import send_img from "../../../images/send.svg"
+import send_img from "../../../images/send_img.svg"
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 

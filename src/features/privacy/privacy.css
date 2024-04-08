@@ -7,7 +7,7 @@
 .privacy_wrapper {
     border-radius: 10px;
     background: #fff;
-    padding: 2em;
+
     margin-top: 25px;
 }
 .privacy_policy_container {
@@ -35,7 +35,5 @@ background-color: white !important;
         line-height: 25px;
    
     }
-    .privacy_wrapper {
-        padding: 20px;
-    }
+   
  }

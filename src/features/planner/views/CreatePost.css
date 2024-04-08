@@ -720,6 +720,8 @@ input[type=checkbox] {
     color: white;
     padding: 2px 6px;
     border-radius: 30px;
+    height: 30px;
+    width: 30px;
 
 }
 .preview_btn svg{
@@ -733,7 +735,6 @@ input[type=checkbox] {
 .preview_btn_outer{
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
     background: #F1F1F1;
 
 }
@@ -876,9 +877,11 @@ button.loading {
     display: flex;
     gap: 10px;
     justify-content: flex-end;
-    padding-top: 30px;
 }
-
+.create_post_container {
+    height: 100%;
+   
+}
 
 @media screen and (min-width:2000px){
     .post_preview_outer{
@@ -887,7 +890,7 @@ button.loading {
  
 }
 
-@media screen and (min-width:1600px ) and (max-width:2560px){
+@media screen and (min-width:1900px ) and (max-width:2560px){
     .post_preview_outer{
         padding: 3rem 5rem;
     }
@@ -929,7 +932,12 @@ button.loading {
     .post_preview_outer {
         padding: 2rem;
     }
-
+   .feed_preview {
+    font-size: 18px;
+   }
+   h3.Post_Preview_heading{
+    font-size: 24px;
+   }
 
 }
 @media screen and (max-width:1100px) {
@@ -1053,7 +1061,8 @@ button.loading {
     margin: 0px;
     gap: 8px;
     left: 47%;
-    transform: translate(-44%, -34%);
+    flex-wrap: wrap;
+    transform: translate(-58%, -34%);
     }
     .user_caption_heading {
         width: 103px;

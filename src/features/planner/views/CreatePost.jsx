@@ -62,7 +62,7 @@ const CreatePost = () => {
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
-
+  
 
     const [trimmedVideoUrl, setTrimmedVideoUrl] = useState()
     const [allOptions, setAllOptions] = useState([]);
@@ -406,18 +406,18 @@ const CreatePost = () => {
                 {
                     (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
                         <CommonLoader></CommonLoader> :
-                        <div className="Container cmn_outer">
+                        <div className="Container">
                             <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
-                                <div className='preview_btn_outer cmn_border'>
+                                <div className='preview_btn_outer cmn_border cmn_outer'>
                                 <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
                                     {
-                                        selectedAllDropdownData?.length > 0 && showPreview ?
-                                            <button className='preview_btn me-2 my-2' onClick={() => {
+                                        selectedAllDropdownData?.length > 0  && files?.length>0 && showPreview ?
+                                            <button className='preview_btn' onClick={() => {
                                                 setShowPreview(false)
                                             }}><RxCross2 /></button> :
 
-                                            selectedAllDropdownData?.length > 0 &&
-                                            <button className='preview_btn me-2 my-2' onClick={() => {
+                                            selectedAllDropdownData?.length > 0 && files?.length>0 &&
+                                            <button className='preview_btn' onClick={() => {
                                                 setShowPreview(true)
                                             }}><AiOutlineEye/></button>
                                     }
@@ -427,7 +427,7 @@ const CreatePost = () => {
                                     <div
                                         className={showPreview ? "col-lg-6 col-md-12 col-sm-12" : "col-lg-12 col-md-12 col-sm-12"}>
 
-                                        <div className={`create_post_content ${showPreview ? "" : "animation"} `}>
+                                        <div className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
 
                                        
 
@@ -910,7 +910,7 @@ const CreatePost = () => {
                                     {
                                         showPreview &&
                                         <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
-
+                                          <div className='cmn_outer create_post_container'>
                                             <div className='post_preview_outer'>
                                                 <h3 className='Post_Preview_heading'>Post Preview</h3>
                                                 {
@@ -940,14 +940,14 @@ const CreatePost = () => {
                                                     })
                                                 }
                                             </div>
-
+                                            </div>
 
                                         </div>
                                     }
                                 </div>
 
                                 {/* draft and publish now section  */}
-                                <div className='draft_publish_outer'>
+                                <div className='draft_publish_outer cmn_outer'>
                                 <GenericButtonWithLoader label={jsondata.saveasdraft} onClick={(e) => {
                                                                                          setReference("Draft")
                                                                                          handleDraftPost(e);

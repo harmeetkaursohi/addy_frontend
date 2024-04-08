@@ -484,6 +484,7 @@ import './Planner.css'
 import SideBar from '../../sidebar/views/Layout'
 import instagram_img from '../../../images/instagram.png'
 import pinterest_icon from '../../../images/pinterest_icon.svg'
+import facebook_icon from '../../../images/fb.svg'
 import linkedin from '../../../images/linkedin.svg'
 import jsondata from '../../../locales/data/initialdata.json'
 import {Link, useNavigate} from "react-router-dom";
@@ -499,7 +500,8 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     isPostDatesOnSameDayOrInFuture,
     computeAndReturnPlannerEvent,
-    dateFormat, computeStartEndDate
+    dateFormat, computeStartEndDate,
+    computeImageURL
 } from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
@@ -646,10 +648,9 @@ const Planner = () => {
                              onClick={(e) => {
                              }}>
                             <img  src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
-                            <h3>{postOnSocialMedia.title}</h3>
+                            <h3 className='custom_event_heading'>{postOnSocialMedia.title}</h3>
                         </div>
                     }
-                    {/* <h4 className='text-end pe-2'>+2</h4> */}
 
 
                     {/*{event?._def?.extendedProps?.childCardContent?.map((c, index) => {*/}
@@ -664,17 +665,19 @@ const Planner = () => {
                     {/*    )*/}
                     {/*})}*/}
                 </div>
-                {/* {
+                {
                     !getAllPostsForPlannerData?.loading && !getPlannerPostCountReportData?.loading &&
-                    <button className="createPost_btn crate_btn cmn_btn_color w-100 ms-0 mt-2 mb-3 planner_view_more_btn"
+                    <button className="createPost_btn crate_btn ms-0 p-0 w-100 planner_view_more_btn"
                             onClick={(e) => handleShowMorePostModal(event)}>
+                                
                         {
+                           
                             (event?._def?.extendedProps?.showMoreContent > 0) ?
-                                "View " + event?._def?.extendedProps?.showMoreContent + " more" :
+                            "+" +event?._def?.extendedProps?.showMoreContent :
                                 "View more"
                         }
                     </button>
-                } */}
+                }
             </div>)
     }
 
@@ -758,6 +761,106 @@ const Planner = () => {
         setShowMorePlannerModel(true);
     };
 
+
+    const eventDidMount = (info) => {
+        const eventElement = info.el;
+        const cellElement = eventElement.closest('.fc-daygrid-day-frame');
+        
+
+      
+        const eventStartDate = new Date(info.event.start);
+        let backgroundColor;
+        let border;
+        if (eventStartDate.getDate() === 1 || eventStartDate.getDate() === 28 ||eventStartDate.getDate() === 21||eventStartDate.getDate() === 17 ||eventStartDate.getDate() === 13 ||eventStartDate.getDate() === 5 ||eventStartDate.getDate() === 9) {
+            backgroundColor = '#fce5d6'; 
+            border="4px solid #B94D09"
+            
+          } else if (eventStartDate.getDate() === 8 ||eventStartDate.getDate() === 30 || eventStartDate.getDate() === 25 ||eventStartDate.getDate() === 22 ||eventStartDate.getDate() === 18 ||eventStartDate.getDate() === 14 || eventStartDate.getDate() === 26||eventStartDate.getDate() === 3) {
+            backgroundColor = '#defcd6'; 
+            border="4px solid #56B909"
+          }
+          else if (eventStartDate.getDate() === 27 ||eventStartDate.getDate() === 4 || eventStartDate.getDate() === 23||eventStartDate.getDate() === 19 ||eventStartDate.getDate() === 12 ||eventStartDate.getDate() === 15 || eventStartDate.getDate() === 10 || eventStartDate.getDate() === 31) {
+            backgroundColor = '#e5e5e5'; 
+            border="4px solid  #098FB9"
+           
+          }
+          else if(eventStartDate.getDate() === 11 ||eventStartDate.getDate() === 29 || eventStartDate.getDate() === 24 ||eventStartDate.getDate() === 20 || eventStartDate.getDate() === 16 ||eventStartDate.getDate() === 2||eventStartDate.getDate() === 7){
+          backgroundColor = '#fcd6d6'; 
+          border="4px solid #B90909"
+          }
+         
+        cellElement.style.backgroundColor = backgroundColor
+        cellElement.style.borderLeft =border
+      };
+
+// new code
+useEffect(() => {
+
+    if (Object.keys(baseSearchQuery).length > 0) {
+
+        if (isDraftPost) {
+            dispatch(getAllSocialMediaPostsByCriteria({
+                token: token,
+                query: {postStatus: ["DRAFT"], plannerCardDate: baseSearchQuery?.plannerCardDate, period:"MONTH"}
+            }));
+        } else {
+
+            const decodeJwt = decodeJwtToken(token);
+            const calendarApi = calendarRef.current.getApi();
+            const view = calendarApi.view;
+            const startDate = view.currentStart;
+            const endDate = view.currentEnd;
+
+            const requestBody = {
+                token: token,
+                query: {
+                    ...baseSearchQuery,
+                    customerId: decodeJwt.customerId,
+                    socialMediaTypes : baseSearchQuery?.socialMediaTypes || [],
+                    creationDateRange: {
+                        startDate: startDate,
+                        endDate: endDate
+                    }
+                }
+            }
+
+            dispatch(getAllPostsForPlannerAction(requestBody));
+            dispatch(getPlannerPostCountAction(requestBody));
+        }
+
+
+    }
+}, [baseSearchQuery, isDraftPost]);
+
+const handleSocialMediaFilters =(curKey)=>{
+    if(curKey==="all"){
+        setBaseSearchQuery((prevSearchQuery) => {
+            const socialMediaTypes = baseSearchQuery.socialMediaTypes || [];
+            return {
+                ...prevSearchQuery,
+                socialMediaTypes: Object.keys(SocialAccountProvider).every(type=> socialMediaTypes.includes(type)) ? [] : Object.keys(SocialAccountProvider)
+            };
+        });
+    }else{
+        setBaseSearchQuery((prevSearchQuery) => {
+            const updatedSocialMediaTypes = prevSearchQuery.socialMediaTypes ? [...prevSearchQuery.socialMediaTypes] : [];
+
+            if (updatedSocialMediaTypes.includes(curKey)) {
+                // Remove curKey if it exists
+                const index = updatedSocialMediaTypes.indexOf(curKey);
+                updatedSocialMediaTypes.splice(index, 1);
+            } else {
+                updatedSocialMediaTypes.push(curKey);
+            }
+
+            return {
+                ...prevSearchQuery,
+                socialMediaTypes: updatedSocialMediaTypes
+            };
+        });
+    }
+
+}
     return (
         <>
             <section>
@@ -827,6 +930,7 @@ const Planner = () => {
                         events={events}
                         eventContent={renderCalendarCards}
                         dayHeaderContent={customDayHeaderContent}
+                        eventDidMount={eventDidMount}
                         dayCellClassNames={(arg) => {
                           if (arg?.isPast) {
                             return "calendar_card_disable";
@@ -883,10 +987,9 @@ const Planner = () => {
                     <div className="planner_create_post">
                       <h3 className="planner_create_post_heading">Create a post </h3>
                       <p>
-                        n publishing and graphic design, Lorem ipsum is
-                        placeholder text commonly used to document
+                      Share your story and inspire others.
                       </p>
-                      <div className="create_post_btn_Wrapper">
+                      <div className="create_post_btn_Wrapper mt-3">
                         <GenericButtonWithLoader
                           label={
                             isDraftPost
@@ -934,7 +1037,7 @@ const Planner = () => {
                         {getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data).map((key, index) => {
                                      
                                 return (
-                                <li>
+                                <li key={index}>
                                 <h4>{key}</h4>
                                 <h3>{getPlannerPostCountReportData.data[key]}</h3> </li>
                                      )
@@ -943,10 +1046,20 @@ const Planner = () => {
                         </ul>}
                       </div>
 
-                      <div className="planner_post_track_outer">
-                        <h3 className="planner_create_post_heading pb-2">Post On</h3>
+                      {/* <div className="planner_post_track_outer">
+                        <h3 className="planner_create_post_heading pb-2">Posted On</h3>
                         <ul className="schdeuled_post_list post_outer_list">
-                            <li>
+                        <li>
+                                <div className="d-flex gap-2 align-items-center ">
+                                <img src={facebook_icon} height="20px" width="20px"/>
+                                <h4>
+                                Facebook
+                                </h4>
+
+                                </div>
+                                <input type="checkbox"/>
+                         </li>
+                         <li>
                                 <div className="d-flex gap-2 align-items-center ">
                                 <img src={pinterest_icon} height="20px" width="20px"/>
                                 <h4>
@@ -955,15 +1068,56 @@ const Planner = () => {
 
                                 </div>
                                 <input type="checkbox"/>
-                                </li>
-                                <li>
+                          </li>
+                         <li>
                                 <div className="d-flex gap-2 align-items-center">
                                 <img src={linkedin}  height="20px" width="20px"/>
                                 <h4>
                                 linkedin  </h4>
                                 </div>
                                 <input type="checkbox"/>
-                                </li>
+                        </li>
+                        <li>
+                                <div className="d-flex gap-2 align-items-center">
+                                <img src={instagram_img}  height="20px" width="20px"/>
+                                <h4>
+                               Instagram </h4>
+                                </div>
+                                <input type="checkbox"/>
+                        </li>
+                        </ul>
+                      </div> */}
+                                       <div className="planner_post_track_outer">
+                          <div className={"d-flex"}>
+                              <h3 className="planner_create_post_heading pb-2 flex-grow-1">Social Media</h3>
+                              <span className={"mr-4 mt-2"}><input type={"checkbox"}
+                                           checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
+                                           onClick={(e) => handleSocialMediaFilters("all")}/></span>
+
+                          </div>
+
+                          <ul className="schdeuled_post_list post_outer_list">
+
+                              {Object.keys(SocialAccountProvider).map(curKey => {
+                               
+                                  return (
+                                      <li>
+                                          <div className="d-flex gap-2 align-items-center ">
+                                              <img src={computeImageURL(curKey)} height="20px" width="20px"/>
+                                            <h4>{SocialAccountProvider[curKey]}</h4>
+                                        </div>
+                                        <input
+                                            type="checkbox"
+                                            checked={baseSearchQuery.socialMediaTypes && baseSearchQuery.socialMediaTypes.includes(curKey)}
+                                            value={curKey}
+                                            onChange={(e) =>handleSocialMediaFilters(curKey)}
+                                        />
+
+
+                                    </li>
+                                )
+                            })}
+
                         </ul>
                       </div>
                       </div>
