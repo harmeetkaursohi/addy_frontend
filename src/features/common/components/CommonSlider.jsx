@@ -15,10 +15,10 @@ const CommonSlider = ({
                           showThumbnail = false,
                           viewSimilarToSocialMedia = true,
                           isPublished = false,
-                          height = "250px",
                           enableShowPlannerModel = false,
                           isrequired,
-                          className
+                          className,
+                          height,
 
                       }) => {
     const settings = {
@@ -61,7 +61,7 @@ const CommonSlider = ({
                             files?.map((file, index) => (
                                 <div key={index}>
                                     <ReactPlayer
-                                        height={"250px"}
+                                        height={height?height:"250px"}
                                         width={"100%"}
                                         className='post_img'
                                         url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}

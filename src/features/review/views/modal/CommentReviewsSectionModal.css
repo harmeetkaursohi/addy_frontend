@@ -386,6 +386,9 @@ svg.comment-edit-del-icon {
         object-fit: unset;
         height: unset;
     }
+    .md_cancel_outer{
+        position: unset;
+    }
     .post_image_outerwrapper {
         height: 100%;
     }

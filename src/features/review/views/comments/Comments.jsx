@@ -250,11 +250,11 @@ const Comments = ({postData, isDirty, setDirty}) => {
 
                                                     }
                                                     <div
-                                                        className="user_impressions d-flex mt-2 mb-2">
+                                                        className="user_impressions align-items-center d-flex mt-2 mb-2">
                                                         <p>{getCommentCreationTime(comment?.created_time)}</p>
                                                         {
                                                             comment?.can_like ?
-                                                                <p className={comment?.user_likes ? "cursor_pointer ms-3 color-blue" : "ms-3 cursor_pointer "}
+                                                                <p className={comment?.user_likes ? "cursor_pointer ms-3 like_text_color" : "ms-3 cursor_pointer "}
                                                                    onClick={() => {
                                                                        comment?.user_likes ? handleDisLikeComment(comment?.id) : handleLikeComment(comment?.id)
                                                                    }}
@@ -266,8 +266,8 @@ const Comments = ({postData, isDirty, setDirty}) => {
 
                                                         {comment?.like_count > 0 &&
                                                             <>
-                                                                <LiaThumbsUpSolid className={"ms-1 me-1"}
-                                                                                  fill={"blue"}/>
+                                                                <LiaThumbsUpSolid className={"ms-1 me-1 LiaThumbsUpSolid"}
+                                                                                  />
                                                                 <p className={"me-3"}>{comment?.like_count}</p>
                                                             </>
 

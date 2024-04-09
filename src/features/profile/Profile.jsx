@@ -28,11 +28,7 @@ const Profile = () => {
     const updateProfilePicData = useSelector(state => state.user.updateProfilePicReducer);
     const updateCustomerData = useSelector(state => state.user.updateCustomerReducer);
     const [userData, setUserData] = useState(null);
-    const [edit, setEdit] = useState({
-        editProfileImage: false,
-        editAddress: false,
-        editPersonalInfo: false,
-    })
+    const [edit, setEdit] = useState(false)
     const [isAddressRequired, setAddressRequired] = useState(true);
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
@@ -112,11 +108,9 @@ const Profile = () => {
             })).then(res => {
                 if (res.meta.requestStatus === "fulfilled") {
                     getUserAccountInfo();
-                    setEdit({
-                        editProfileImage: false,
-                        editAddress: false,
-                        editPersonalInfo: false,
-                    })
+                    setEdit(
+                       false
+                    )
                     showSuccessToast(formatMessage(UpdatedSuccessfully, ["Account"]))
                 }
             })
@@ -148,9 +142,7 @@ const Profile = () => {
         setShowCropImageModal(false)
         dispatch(updateProfilePic({token: token, formData: {mediaType: 'IMAGE', file: blob}})).then(res => {
             if (res.meta.requestStatus === "fulfilled") {
-                setEdit({
-                    ...edit, editProfileImage: false
-                })
+                setEdit(false)
                 getUserAccountInfo();
             }
         })
@@ -194,15 +186,37 @@ const Profile = () => {
         setStates(State.getStatesOfCountry(country?.isoCode));
     };
 
-
     return (
         <>
             <section className={` cmn_container ${sidebar ? "" : "cmn_Padding"}`}>
+            <form onSubmit={formik.handleSubmit}>
                 <div className=" editprofile_outer">
                     <div className="white_bg_color">
                         <div className="cmn_outer">
+                            <div className="edit_profile_contaniner">
                             <h3 className="dm-sans-font pb-3 pt-1"> My Profile</h3>
-
+                            {edit ?            
+                             <div>
+                                <button onClick={()=>{setEdit(false)}} className="profile_cancel_btn">Cancel</button>
+                              
+                                 <button
+                                                                    className={"edit_profile_btn ms-3 " + (edit ? "" : "opacity-50")}>
+                                                                    Save
+                                                                    {
+                                                                        updateCustomerData?.loading &&
+                                                                        <span
+                                                                            className={"spinner-border spinner-border-sm ms-2 "}
+                                                                            role="status"
+                                                                            aria-hidden="true"></span>
+                                                                    }
+                                </button>
+                             </div>:
+                             <button className="edit_profile_btn" onClick={()=>{setEdit(
+                                                         true
+                                                    )}}>Edit Profile</button>
+                                   
+                                               }
+                             </div>
 
                             {
                                 userData === null ? <CommonLoader></CommonLoader> :
@@ -221,7 +235,7 @@ const Profile = () => {
 
 
                                         <div className="editProfile_wrapper mt-3">
-                                            <div className="change_profile_outer cmn_box_shadow white_bg_color">
+                                            <div className="change_profile_outer">
 
                                                 <div className="user_pic_container">
                                                     {
@@ -251,7 +265,7 @@ const Profile = () => {
 
                                                     <div className="edit_label_container">
                                                         {
-                                                            edit.editProfileImage ?
+                                                            edit ?
                                                                 <label className="changeProfile_label"
                                                                        htmlFor="changeProfile">
                                                                     <FaCamera/>
@@ -266,37 +280,15 @@ const Profile = () => {
                                                         />
                                                     </div>
                                                 </div>
-
-
-                                                <div onClick={() => {
-                                                    setEdit({
-                                                        ...edit, editProfileImage: !edit.editProfileImage
-                                                    })
-                                                }}
-                                                     className="edit_label updateAccount_label" htmlFor="">
-                                                    {!edit.editProfileImage ? <MdEdit/> : <RiCloseFill/>}
-                                                </div>
-
                                             </div>
 
-                                            <div className="edit_content">
-                                                <form onSubmit={formik.handleSubmit}>
+                                            <div className="edit_content change_profile_outer mt-4">
+                                              
                                                     {/* personal information */}
                                                     <div
-                                                        className={`cmn_box_shadow white_bg_color mt-5 ${edit.editPersonalInfo ? "" : "profile-information"}`}>
-                                                        <div className="change_profile_outer ">
-                                                            <h3 className="dm-sans-font ps-3">Personal Information</h3>
-
-
-                                                            <div onClick={() => {
-                                                                setEdit({
-                                                                    ...edit, editPersonalInfo: !edit.editPersonalInfo
-                                                                })
-                                                            }} className="edit_label updateAccount_label" htmlFor="">
-                                                                {!edit.editPersonalInfo ? <MdEdit/> : <RiCloseFill/>}
-                                                            </div>
-
-                                                        </div>
+                                                        className={` ${edit ? "" : "profile-information"}`}>
+                                                            <h3 className="dm-sans-font">Personal Information</h3>
+                                                      
 
                                                         <div className="row">
                                                             <div className="col-lg-6 col-md-12 col-sm-12">
@@ -307,11 +299,11 @@ const Profile = () => {
                                                                     <input
                                                                         defaultValue={formik.values.firstName}
                                                                         type="text"
-                                                                        onChange={edit.editPersonalInfo ? formik.handleChange : undefined}
+                                                                        onChange={edit ? formik.handleChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         name="firstName"
                                                                         className="form-control mt-2"
-                                                                        disabled={!edit.editPersonalInfo}
+                                                                        disabled={!edit}
                                                                         placeholder="First name"
                                                                     />
                                                                     {formik.touched.firstName && formik.errors.firstName ? (
@@ -365,11 +357,11 @@ const Profile = () => {
                                                                         placeholder="Contact No"
                                                                         defaultValue={formik.values.contactNo}
                                                                         type="text"
-                                                                        onChange={edit.editPersonalInfo ? formik.handleChange : undefined}
+                                                                        onChange={edit ? formik.handleChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         name="contactNo"
                                                                         className="form-control mt-2"
-                                                                        disabled={!edit.editPersonalInfo}
+                                                                        disabled={!edit}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -381,11 +373,11 @@ const Profile = () => {
                                                                     <input
                                                                         defaultValue={formik.values.lastName}
                                                                         type="text"
-                                                                        onChange={edit.editPersonalInfo ? formik.handleChange : undefined}
+                                                                        onChange={edit ? formik.handleChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         name="lastName"
                                                                         className="form-control mt-2"
-                                                                        disabled={!edit.editPersonalInfo}
+                                                                        disabled={!edit}
                                                                         placeholder="Lastname"
                                                                     />
                                                                     {formik.touched.lastName && formik.errors.lastName ? (
@@ -443,10 +435,10 @@ const Profile = () => {
                                                                     <select
                                                                         name="industry"
                                                                         className="form-control cmn_select_box mt-1"
-                                                                        onChange={edit.editPersonalInfo ? formik.handleChange : undefined}
+                                                                        onChange={edit ? formik.handleChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         defaultValue={formik.values.industry}
-                                                                        disabled={!edit.editPersonalInfo}
+                                                                        disabled={!edit}
                                                                     >
                                                                         <option value="">Select Industry</option>
                                                                         {Object.keys(Industries)?.map((key, index) => (
@@ -468,23 +460,13 @@ const Profile = () => {
 
 
                                                     <div
-                                                        className={`cmn_box_shadow white_bg_color mt-5  ${edit.editProfileImage ? "" : "address-info"}`}>
-                                                        <div className="change_profile_outer ">
+                                                        className={` mt-5  ${edit ? "" : "address-info"}`}>
 
-                                                            <h3 className="dm-sans-font ps-3">Address</h3>
+                                                            <h3 className="dm-sans-font">Address</h3>
 
-                                                            <div
-                                                                onClick={() => {
-                                                                    setEdit({
-                                                                        ...edit, editAddress: !edit.editAddress
-                                                                    })
-                                                                }}
-                                                                className="edit_label updateAccount_label" htmlFor="">
-                                                                {!edit.editAddress ? <MdEdit/> : <RiCloseFill/>}
-                                                            </div>
+                                                          
 
-
-                                                        </div>
+                                                
 
                                                         <div className="row">
                                                             <div className="col-lg-6 col-sm-12 col-ms-12">
@@ -495,14 +477,14 @@ const Profile = () => {
                                                                         <span className="astrick">*</span>}
                                                                     </label>
                                                                     <input
-                                                                        onChange={edit.editAddress ? formik.handleChange : undefined}
+                                                                        onChange={edit ? formik.handleChange : undefined}
                                                                         placeholder={jsondata.addressLine1}
                                                                         onBlur={formik.handleBlur}
                                                                         defaultValue={formik.values.addressLine1}
                                                                         type="text"
                                                                         className="form-control"
                                                                         name="addressLine1"
-                                                                        disabled={!edit.editAddress}
+                                                                        disabled={!edit}
                                                                     />
                                                                     {formik.touched.addressLine1 &&
                                                                     formik.errors.addressLine1 ? (
@@ -521,10 +503,10 @@ const Profile = () => {
 
                                                                         id="country"
                                                                         name="country"
-                                                                        onChange={edit.editAddress ? handleCountryChange : undefined}
+                                                                        onChange={edit ? handleCountryChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         defaultValue={formik.values.country}
-                                                                        disabled={!edit.editAddress}
+                                                                        disabled={!edit}
                                                                         className="form-control mt-1 cmn_select_box"
                                                                     >
                                                                         <option value="">Select Country</option>
@@ -543,13 +525,13 @@ const Profile = () => {
                                                                 <div className="form-group">
                                                                     <label>City</label>
                                                                     <input
-                                                                        onChange={edit.editAddress ? formik.handleChange : undefined}
+                                                                        onChange={edit ? formik.handleChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         defaultValue={formik.values.city}
                                                                         name="city"
                                                                         className="form-control mt-1"
                                                                         type="text"
-                                                                        disabled={!edit.editAddress}
+                                                                        disabled={!edit}
                                                                         placeholder={"City"}
                                                                     />
                                                                 </div>
@@ -563,11 +545,11 @@ const Profile = () => {
                                                                     <select
                                                                         id="county"
                                                                         name="county"
-                                                                        onChange={edit.editAddress ? formik.handleChange : undefined}
+                                                                        onChange={edit ? formik.handleChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         value={formik.values.county}
                                                                         className="form-control mt-1 cmn_select_box"
-                                                                        disabled={!edit.editAddress}
+                                                                        disabled={!edit}
                                                                     >
                                                                         <option value="">Select County</option>
                                                                         {cities?.map((city, index) => (
@@ -589,10 +571,10 @@ const Profile = () => {
                                                                 <div className="form-group">
                                                                     <label>{jsondata.addressLine2}</label>
                                                                     <input
-                                                                        onChange={edit.editAddress ? formik.handleChange : undefined}
+                                                                        onChange={edit ? formik.handleChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         defaultValue={formik.values.addressLine2}
-                                                                        disabled={!edit.editAddress}
+                                                                        disabled={!edit}
                                                                         name="addressLine2"
                                                                         className="form-control mt-1"
                                                                         type="text"
@@ -608,10 +590,10 @@ const Profile = () => {
                                                                     <select
                                                                         id="state"
                                                                         name="state"
-                                                                        onChange={edit.editAddress ? handleStateChange : undefined}
+                                                                        onChange={edit ? handleStateChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         defaultValue={formik.values.state}
-                                                                        disabled={!edit.editAddress}
+                                                                        disabled={!edit}
                                                                         className="form-control mt-1 cmn_select_box"
                                                                     >
                                                                         <option value="">Select State</option>
@@ -630,7 +612,7 @@ const Profile = () => {
                                                                 <div className="form-group">
                                                                     <label>{jsondata.pinCode}</label>
                                                                     <input
-                                                                        onChange={edit.editAddress ? formik.handleChange : undefined}
+                                                                        onChange={edit ? formik.handleChange : undefined}
                                                                         onBlur={formik.handleBlur}
                                                                         onWheel={(e) => {
                                                                             e.target.blur()
@@ -639,7 +621,7 @@ const Profile = () => {
                                                                         name="pinCode"
                                                                         className="form-control mt-1"
                                                                         type="number"
-                                                                        disabled={!edit.editAddress}
+                                                                        disabled={!edit}
                                                                         placeholder={jsondata.pinCode}
                                                                     />
                                                                 </div>
@@ -649,10 +631,10 @@ const Profile = () => {
 
                                                         </div>
 
-                                                        <div className="text-center">
-                                                            {(edit.editPersonalInfo || edit.editAddress) ?
+                                                        {/* <div className="text-center">
+                                                            {edit ?
                                                                 <button
-                                                                    className={"cmn_btn_color btn_style " + ((edit.editPersonalInfo || edit.editAddress) ? "" : "opacity-50")}>
+                                                                    className={"cmn_btn_color btn_style " + (edit ? "" : "opacity-50")}>
                                                                     Update
                                                                     {
                                                                         updateCustomerData?.loading &&
@@ -663,11 +645,11 @@ const Profile = () => {
                                                                     }
                                                                 </button> : ""
                                                             }
-                                                        </div>
+                                                        </div> */}
                                                     </div>
 
 
-                                                </form>
+                                              
                                             </div>
                                         </div>
 
@@ -676,6 +658,7 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
+                </form>
             </section>
             {showCropImageModal &&
                 <CropImageModal imageUrl={image} showModal={showCropImageModal} setShowModal={setShowCropImageModal}
