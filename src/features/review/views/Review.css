@@ -275,6 +275,8 @@ p.disable-reply-comment {
 }
 .comment_section button#dropdown-basic {
     min-width: unset;
+    background: transparent !important;
+    box-shadow: unset;
 }
 
 .comment_section .comments_messages {

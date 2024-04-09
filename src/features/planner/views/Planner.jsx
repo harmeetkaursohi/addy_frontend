@@ -520,7 +520,7 @@ const Planner = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const calendarRef = useRef(null);
-    const [baseSearchQuery, setBaseSearchQuery] = useState({postStatus: ["SCHEDULED", "PUBLISHED"]});
+    const [baseSearchQuery, setBaseSearchQuery] = useState({postStatus: ["SCHEDULED", "PUBLISHED"],socialMediaTypes:Object.keys(SocialAccountProvider) });
     const [isDraftPost, setDraftPost] = useState(false);
     const [showMorePlannerModel, setShowMorePlannerModel] = useState(false);
     const [plannerPosts, setPlannerPosts] = useState([]);
@@ -532,6 +532,8 @@ const Planner = () => {
         {title: 'Instagram post', start: new Date().getTime(), imageUrl: instagram_img},
         {title: "Twitter", start: new Date().getTime(), imageUrl: linkedin}
     ]);
+
+  
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer);
@@ -636,6 +638,7 @@ const Planner = () => {
     // render event content
     const renderCalendarCards = ({event}) => {
         const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
+  
         return (
             <div className={"cal_Div w-100 test"}
                  style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
@@ -760,38 +763,92 @@ const Planner = () => {
 
         setShowMorePlannerModel(true);
     };
-
-
+  
+    
     const eventDidMount = (info) => {
-        const eventElement = info.el;
-        const cellElement = eventElement.closest('.fc-daygrid-day-frame');
-        
+   
+       
 
+          const eventStartDate = new Date(info?.event?.start);
+          const eventElement = info?.el;
+
+        const cellElement = eventElement?.closest('.fc-daygrid-day-frame');
+        if (!info || !info.el || !cellElement) {
+    
+            return; 
+        }
+
+         if(events?.length==0 && isNaN(eventStartDate.getDate()) && info===undefined){
+        //     info.el.style.backgroundColor = '';
+        //    info.el.style.borderLeft = '';
+    
       
-        const eventStartDate = new Date(info.event.start);
-        let backgroundColor;
-        let border;
-        if (eventStartDate.getDate() === 1 || eventStartDate.getDate() === 28 ||eventStartDate.getDate() === 21||eventStartDate.getDate() === 17 ||eventStartDate.getDate() === 13 ||eventStartDate.getDate() === 5 ||eventStartDate.getDate() === 9) {
-            backgroundColor = '#fce5d6'; 
-            border="4px solid #B94D09"
-            
-          } else if (eventStartDate.getDate() === 8 ||eventStartDate.getDate() === 30 || eventStartDate.getDate() === 25 ||eventStartDate.getDate() === 22 ||eventStartDate.getDate() === 18 ||eventStartDate.getDate() === 6 ||eventStartDate.getDate() === 14 || eventStartDate.getDate() === 26||eventStartDate.getDate() === 3) {
-            backgroundColor = '#defcd6'; 
-            border="4px solid #56B909"
-          }
-          else if (eventStartDate.getDate() === 27 ||eventStartDate.getDate() === 4 || eventStartDate.getDate() === 23||eventStartDate.getDate() === 19 ||eventStartDate.getDate() === 12 ||eventStartDate.getDate() === 15 || eventStartDate.getDate() === 10 || eventStartDate.getDate() === 31) {
-            backgroundColor = '#e5e5e5'; 
-            border="4px solid  #098FB9"
+
+                cellElement.style.backgroundColor = ""
+                cellElement.style.borderLeft =""
+                
+         }else{
+        console.log("else part ")
+         let backgroundColor;
+         let border;
+             if (eventStartDate.getDate() === 1 || eventStartDate.getDate() === 28 
+             ||eventStartDate.getDate() === 21||eventStartDate.getDate() === 17 ||
+             eventStartDate.getDate() === 13 ||eventStartDate.getDate() === 5 ||
+             eventStartDate.getDate() === 9) {
+                 backgroundColor = '#fce5d6'; 
+                 border="4px solid #B94D09"
+                 
+               } else if (eventStartDate.getDate() === 8 ||eventStartDate.getDate() === 30 || eventStartDate.getDate() === 25 ||eventStartDate.getDate() === 22 ||eventStartDate.getDate() === 18 ||eventStartDate.getDate() === 6 ||eventStartDate.getDate() === 14 || eventStartDate.getDate() === 26||eventStartDate.getDate() === 3) {
+                 backgroundColor = '#defcd6'; 
+                 border="4px solid #56B909"
+               }
+               else if (eventStartDate.getDate() === 27 ||eventStartDate.getDate() === 4 || eventStartDate.getDate() === 23||eventStartDate.getDate() === 19 ||eventStartDate.getDate() === 12 ||eventStartDate.getDate() === 15 || eventStartDate.getDate() === 10 || eventStartDate.getDate() === 31) {
+                 backgroundColor = '#d6f3fc'; 
+                 border="4px solid  #098FB9"
+              
+                
+               }
+               else if(eventStartDate.getDate() === 11 ||eventStartDate.getDate() === 29 || eventStartDate.getDate() === 24 ||eventStartDate.getDate() === 20 || eventStartDate.getDate() === 16 ||eventStartDate.getDate() === 2||eventStartDate.getDate() === 7){
+               backgroundColor = '#fcd6d6'; 
+               border="4px solid #B90909"
+             
+               }
+            //    info.el.style.backgroundColor = backgroundColor;
+            //    info.el.style.borderLeft = border;
            
-          }
-          else if(eventStartDate.getDate() === 11 ||eventStartDate.getDate() === 29 || eventStartDate.getDate() === 24 ||eventStartDate.getDate() === 20 || eventStartDate.getDate() === 16 ||eventStartDate.getDate() === 2||eventStartDate.getDate() === 7){
-          backgroundColor = '#fcd6d6'; 
-          border="4px solid #B90909"
-          }
+              if(cellElement){
+                cellElement.style.backgroundColor = backgroundColor
+                cellElement.style.borderLeft =border
+                  }
+        
+         }
+                     
          
-        cellElement.style.backgroundColor = backgroundColor
-        cellElement.style.borderLeft =border
-      };
+         }
+    
+
+    useEffect(() => {
+       
+        // Re-register eventDidMount when events change
+        const fullCalendarApi = calendarRef.current?.getApi();
+        if (fullCalendarApi) {
+            if (events.length === 0) {
+                eventDidMount();
+            } else {
+                fullCalendarApi.setOption('eventDidMount', eventDidMount);
+            }
+        }
+  
+      
+       
+        return () => {
+            if (fullCalendarApi) {
+                fullCalendarApi.setOption('eventDidMount', null);
+            }
+        };
+      }, [events]);
+
+
 
 // new code
 useEffect(() => {
@@ -833,6 +890,7 @@ useEffect(() => {
 }, [baseSearchQuery, isDraftPost]);
 
 const handleSocialMediaFilters =(curKey)=>{
+   
     if(curKey==="all"){
         setBaseSearchQuery((prevSearchQuery) => {
             const socialMediaTypes = baseSearchQuery.socialMediaTypes || [];
@@ -923,6 +981,7 @@ const handleSocialMediaFilters =(curKey)=>{
                       }`}
                     >
                       <FullCalendar
+                   
                         ref={calendarRef}
                         plugins={[dayGridPlugin]}
                         initialView="dayGridMonth"

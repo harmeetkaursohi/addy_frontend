@@ -28,9 +28,17 @@ p {
 
 .cmn_btn_color {
   border-radius: 10px;
-  background: #f07c33;
+  background: #f07c33 !important;
 }
-
+.createPost_btn.crate_btn{
+  color: white !important;
+}
+.LiaThumbsUpSolid{
+  fill: rgb(8, 102, 255);
+}
+.like_text_color{
+  color: rgb(8, 102, 255) !important;
+}
 .cmn_white_bg {
   border: 1px solid #d1d9e2;
   background: #e6e9ec;
