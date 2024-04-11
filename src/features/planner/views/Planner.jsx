@@ -650,6 +650,7 @@ let classname=event?._def?.extendedProps?.batchId
                         postOnSocialMedia !== null &&
                         <div className={"custom_event"}
                              onClick={(e) => {
+                                handleShowMorePostModal(event)
                              }}>
                             <img  src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
                             <h3 className={`custom_event_heading${classname}`}>{postOnSocialMedia.title}</h3>
