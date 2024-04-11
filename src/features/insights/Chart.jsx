@@ -22,6 +22,8 @@ const Chart=()=>{
     <Line type="monotone" dataKey="value1" stroke="#F07C33" activeDot={{ r: 7 }} /> */}
     <Area type="monotone" dataKey="value" stackId="1" stroke="#05A2FB" fill="#98d2f3"/>
     <Area type="monotone" dataKey="value1" stackId="2" stroke="#F07C33" fill='transparent'/>
+    <Legend/>
+
   </AreaChart>
   </ResponsiveContainer>
         </div>

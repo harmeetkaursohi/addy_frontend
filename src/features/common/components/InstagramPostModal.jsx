@@ -9,11 +9,12 @@ import send_img from "../../../images/send_img.svg";
 import men_img from "../../../images/men.png";
 import "./common.css";
 import { RxCross2 } from "react-icons/rx";
-function IndividualPostModal() {
-  const [show, setShow] = useState(false);
+function InstagramPostModal({show,setShow,data}) {
+  console.log(data,"data9")
+  const [show1, setShow1] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => setShow1(false);
+  const handleShow = () => setShow1(true);
 
   return (
     <>
@@ -23,7 +24,7 @@ function IndividualPostModal() {
         </Button>
 
         <Modal
-          show={show}
+          show={show1}
           onHide={handleClose}
           className="individual_post_modal_wrapper"
           centered 
@@ -38,16 +39,7 @@ function IndividualPostModal() {
                 <img src={men_img} height={"40px"} width={"40px"} />
                 <h3 className="cmn_text_style">Username</h3>
               </div>
-              <div className="plan_grid_navigations ">
-                <button
-                >
-                  <i className="fa fa-pencil" aria-hidden="true" />
-                </button>
-                <button
-                >
-                  <i className="fa fa-trash" aria-hidden="true" />
-                </button>
-              </div>
+              
             </div>
           </div>
           <Modal.Body className="individual_post_content">
@@ -74,4 +66,4 @@ function IndividualPostModal() {
   );
 }
 
-export default IndividualPostModal;
+export default InstagramPostModal;

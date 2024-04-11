@@ -144,7 +144,7 @@ export const DashboardReports = () => {
                                 <div
                                     className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container">
 
-<div className="days_outer">
+                                   {/* <div className="days_outer">
                                             <select className="custom_select_days dropdown_days "
                                                     value={graphDaysSelected}
                                                     onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
@@ -158,7 +158,7 @@ export const DashboardReports = () => {
                                                 }
 
                                             </select>
-                                        </div>
+                                        </div> */}
                                     {
                                         false &&  <Dropdown className="dropdown_btn">
 
@@ -382,7 +382,7 @@ export const DashboardReports = () => {
                                         <div className="page_title_dropdown">
                                             <h3 className="cmn_white_text instagram_overview_heading">{SocialAccountProvider[reportSelectedAccountType]?.charAt(0)?.toUpperCase() + SocialAccountProvider[reportSelectedAccountType]?.slice(1)} Overview</h3>
                                         </div>
-                                        {/* <div className="days_outer">
+                                        <div className="days_outer">
                                             <select className=" dropdown_days box_shadow"
                                                     value={graphDaysSelected}
                                                     onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
@@ -396,10 +396,10 @@ export const DashboardReports = () => {
                                                 }
 
                                             </select>
-                                        </div> */}
+                                        </div>
 
                                     </div>
-                                    {/*<Chart/>*/}
+                                    {/* <Chart/> */}
 
                                     <div className="account_info mt-2">
                                       

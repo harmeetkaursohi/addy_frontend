@@ -633,25 +633,26 @@ const Planner = () => {
 
         }
     }, [baseSearchQuery, isDraftPost]);
-
+const[showPost,setShowPost]=useState(false)
 
     // render event content
     const renderCalendarCards = ({event}) => {
+
+let classname=event?._def?.extendedProps?.batchId
         const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
-  
         return (
-            <div className={"cal_Div w-100 test"}
+            <div  className={"cal_Div w-100 test"}
                  style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
 
                 <div className="w-100 p-0 calendar_card">
                     
-               {
+            {
                         postOnSocialMedia !== null &&
                         <div className={"custom_event"}
                              onClick={(e) => {
                              }}>
                             <img  src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
-                            <h3 className='custom_event_heading'>{postOnSocialMedia.title}</h3>
+                            <h3 className={`custom_event_heading${classname}`}>{postOnSocialMedia.title}</h3>
                         </div>
                     }
 
@@ -671,14 +672,13 @@ const Planner = () => {
                 {
                     !getAllPostsForPlannerData?.loading && !getPlannerPostCountReportData?.loading &&
                     <button className="createPost_btn crate_btn ms-0 p-0 w-100 planner_view_more_btn"
-                            onClick={(e) => handleShowMorePostModal(event)}>
-                                
-                        {
-                           
-                            (event?._def?.extendedProps?.showMoreContent > 0) ?
-                            "+" +event?._def?.extendedProps?.showMoreContent :
-                                "View more"
-                        }
+                            onClick={(e) => handleShowMorePostModal(event)}
+                            >  
+                             
+                         {
+                            (event?._def?.extendedProps?.showMoreContent > 0) &&
+                            "+ " + event?._def?.extendedProps?.showMoreContent 
+                         }
                     </button>
                 }
             </div>)
@@ -725,6 +725,7 @@ const Planner = () => {
     }
 
     const handleShowMorePostModal = (event) => {
+        console.log("helo")
         const startDate = event.start;
         const targetDate = dateFormat(startDate);
 
@@ -763,32 +764,12 @@ const Planner = () => {
 
         setShowMorePlannerModel(true);
     };
-  
-    
+    console.log(events,"events90")
     const eventDidMount = (info) => {
-   
-       
-
           const eventStartDate = new Date(info?.event?.start);
           const eventElement = info?.el;
+          const cellElement = eventElement?.closest('.fc-daygrid-day-frame');
 
-        const cellElement = eventElement?.closest('.fc-daygrid-day-frame');
-        if (!info || !info.el || !cellElement) {
-    
-            return; 
-        }
-
-         if(events?.length==0 && isNaN(eventStartDate.getDate()) && info===undefined){
-        //     info.el.style.backgroundColor = '';
-        //    info.el.style.borderLeft = '';
-    
-      
-
-                cellElement.style.backgroundColor = ""
-                cellElement.style.borderLeft =""
-                
-         }else{
-        console.log("else part ")
          let backgroundColor;
          let border;
              if (eventStartDate.getDate() === 1 || eventStartDate.getDate() === 28 
@@ -796,21 +777,43 @@ const Planner = () => {
              eventStartDate.getDate() === 13 ||eventStartDate.getDate() === 5 ||
              eventStartDate.getDate() === 9) {
                  backgroundColor = '#fce5d6'; 
-                 border="4px solid #B94D09"
+                 border="4px solid #B94D09";
+          
                  
-               } else if (eventStartDate.getDate() === 8 ||eventStartDate.getDate() === 30 || eventStartDate.getDate() === 25 ||eventStartDate.getDate() === 22 ||eventStartDate.getDate() === 18 ||eventStartDate.getDate() === 6 ||eventStartDate.getDate() === 14 || eventStartDate.getDate() === 26||eventStartDate.getDate() === 3) {
+               } else if (eventStartDate.getDate() === 8 
+               ||eventStartDate.getDate() === 30 || 
+               eventStartDate.getDate() === 25 ||
+               eventStartDate.getDate() === 22 ||
+               eventStartDate.getDate() === 18 ||
+               eventStartDate.getDate() === 6 
+               ||eventStartDate.getDate() === 14 
+               || eventStartDate.getDate() === 26||
+               eventStartDate.getDate() === 3) {
                  backgroundColor = '#defcd6'; 
-                 border="4px solid #56B909"
+                 border="4px solid #56B909";
                }
-               else if (eventStartDate.getDate() === 27 ||eventStartDate.getDate() === 4 || eventStartDate.getDate() === 23||eventStartDate.getDate() === 19 ||eventStartDate.getDate() === 12 ||eventStartDate.getDate() === 15 || eventStartDate.getDate() === 10 || eventStartDate.getDate() === 31) {
+               else if (eventStartDate.getDate() === 27 ||
+               eventStartDate.getDate() === 4 || 
+               eventStartDate.getDate() === 23
+                ||eventStartDate.getDate() === 19
+                ||eventStartDate.getDate() === 12 
+                ||eventStartDate.getDate() === 15 
+                || eventStartDate.getDate() === 10 || 
+                eventStartDate.getDate() === 31) {
                  backgroundColor = '#d6f3fc'; 
-                 border="4px solid  #098FB9"
+                 border="4px solid  #098FB9";
               
                 
                }
-               else if(eventStartDate.getDate() === 11 ||eventStartDate.getDate() === 29 || eventStartDate.getDate() === 24 ||eventStartDate.getDate() === 20 || eventStartDate.getDate() === 16 ||eventStartDate.getDate() === 2||eventStartDate.getDate() === 7){
+               else if(eventStartDate.getDate() === 11 ||
+               eventStartDate.getDate() === 29 || 
+               eventStartDate.getDate() === 24 ||
+               eventStartDate.getDate() === 20 || 
+               eventStartDate.getDate() === 16 ||
+               eventStartDate.getDate() === 2||
+               eventStartDate.getDate() === 7){
                backgroundColor = '#fcd6d6'; 
-               border="4px solid #B90909"
+               border="4px solid #B90909";
              
                }
             //    info.el.style.backgroundColor = backgroundColor;
@@ -821,36 +824,41 @@ const Planner = () => {
                 cellElement.style.borderLeft =border
                   }
         
-         }
+         
                      
          
          }
-    
-
-    useEffect(() => {
-       
-        // Re-register eventDidMount when events change
-        const fullCalendarApi = calendarRef.current?.getApi();
-        if (fullCalendarApi) {
-            if (events.length === 0) {
-                eventDidMount();
-            } else {
-                fullCalendarApi.setOption('eventDidMount', eventDidMount);
-            }
-        }
-  
-      
-       
-        return () => {
+         useEffect(() => {
+            const fullCalendarApi = calendarRef.current?.getApi();
             if (fullCalendarApi) {
-                fullCalendarApi.setOption('eventDidMount', null);
+                if (events.length === 0) {
+                    // If there are no events, clear the styling for all cells
+                    const cellElements = document.querySelectorAll('.fc-daygrid-day-frame');
+                    cellElements.forEach(cellElement => {
+                     
+
+                        cellElement.style.backgroundColor = '';
+                        cellElement.style.borderLeft = '';
+                    });
+                } else {
+                
+                        // If there are events, set the eventDidMount callback after the rendering cycle
+                        setTimeout(() => {
+                            fullCalendarApi.setOption('eventDidMount', eventDidMount);
+                        });
+                    
+                    // fullCalendarApi.setOption('eventDidMount', eventDidMount);
+                }
             }
-        };
-      }, [events]);
+          
+            // Cleanup function for useEffect
+            return () => {
+                if (fullCalendarApi) {
+                    fullCalendarApi.setOption('eventDidMount', null);
+                }
+            };
+        }, [events]);
 
-
-
-// new code
 useEffect(() => {
 
     if (Object.keys(baseSearchQuery).length > 0) {
@@ -989,7 +997,6 @@ const handleSocialMediaFilters =(curKey)=>{
                         events={events}
                         eventContent={renderCalendarCards}
                         dayHeaderContent={customDayHeaderContent}
-                        eventDidMount={eventDidMount}
                         dayCellClassNames={(arg) => {
                           if (arg?.isPast) {
                             return "calendar_card_disable";
@@ -1105,48 +1112,8 @@ const handleSocialMediaFilters =(curKey)=>{
                         </ul>}
                       </div>
 
-                      {/* <div className="planner_post_track_outer">
-                        <h3 className="planner_create_post_heading pb-2">Posted On</h3>
-                        <ul className="schdeuled_post_list post_outer_list">
-                        <li>
-                                <div className="d-flex gap-2 align-items-center ">
-                                <img src={facebook_icon} height="20px" width="20px"/>
-                                <h4>
-                                Facebook
-                                </h4>
-
-                                </div>
-                                <input type="checkbox"/>
-                         </li>
-                         <li>
-                                <div className="d-flex gap-2 align-items-center ">
-                                <img src={pinterest_icon} height="20px" width="20px"/>
-                                <h4>
-                                Pinterest
-                                </h4>
-
-                                </div>
-                                <input type="checkbox"/>
-                          </li>
-                         <li>
-                                <div className="d-flex gap-2 align-items-center">
-                                <img src={linkedin}  height="20px" width="20px"/>
-                                <h4>
-                                linkedin  </h4>
-                                </div>
-                                <input type="checkbox"/>
-                        </li>
-                        <li>
-                                <div className="d-flex gap-2 align-items-center">
-                                <img src={instagram_img}  height="20px" width="20px"/>
-                                <h4>
-                               Instagram </h4>
-                                </div>
-                                <input type="checkbox"/>
-                        </li>
-                        </ul>
-                      </div> */}
-                                       <div className="planner_post_track_outer">
+                      
+                      <div className="planner_post_track_outer">
                           <div className={"d-flex"}>
                               <h3 className="planner_create_post_heading pb-2 flex-grow-1">Social Media</h3>
                               <span className={"mr-4 mt-2"}><input type={"checkbox"}
@@ -1157,10 +1124,10 @@ const handleSocialMediaFilters =(curKey)=>{
 
                           <ul className="schdeuled_post_list post_outer_list">
 
-                              {Object.keys(SocialAccountProvider).map(curKey => {
-                               
+                              {Object.keys(SocialAccountProvider).map((curKey,ind) => {
+
                                   return (
-                                      <li>
+                                      <li key={ind}>
                                           <div className="d-flex gap-2 align-items-center ">
                                               <img src={computeImageURL(curKey)} height="20px" width="20px"/>
                                             <h4>{SocialAccountProvider[curKey]}</h4>
@@ -1171,11 +1138,14 @@ const handleSocialMediaFilters =(curKey)=>{
                                             value={curKey}
                                             onChange={(e) =>handleSocialMediaFilters(curKey)}
                                         />
-
-
+    
+    
                                     </li>
                                 )
-                            })}
+                              }
+                               
+                            
+                            )}
 
                         </ul>
                       </div>
@@ -1214,6 +1184,7 @@ const handleSocialMediaFilters =(curKey)=>{
                 showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal}
                                                                       setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
             }
+            {/* {showPost && <IndividualPostModal show={showPost} setShow={setShowPost}/>} */}
 
         </>
     )

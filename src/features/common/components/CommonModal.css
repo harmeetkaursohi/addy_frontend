@@ -101,7 +101,9 @@ div.commonmodal_header {
     background-color: orange;
     color: white;
 }
-
+.facebook_post_modal_outer svg{
+font-size: 20px;
+}
 .connected-button {
     background-color: #e24a4a;
     color: white;
