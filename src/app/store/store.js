@@ -7,6 +7,7 @@ import socialAccountSlice from "../slices/socialAccountSlice/socialAccountSlice.
 import postSlice from "../slices/postSlice/postSlice.js";
 import insightSlice from "../slices/insightSlice/insightSlice";
 import notificationSlice from "../slices/notificationSlice/notificationSlice";
+import pageAccessTokenSlice from "../slices/pageAccessTokenSlice/pageAccessTokenSlice";
 import webSlice from "../slices/webSlice/webSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
 
@@ -14,6 +15,7 @@ import {resetReducers} from "../actions/commonActions/commonActions";
 const rootReducers = combineReducers({
     user: userSlice,
     facebook: facebookSlice,
+    pageAccessToken: pageAccessTokenSlice,
     socialAccount: socialAccountSlice,
     post: postSlice,
     insight: insightSlice,    
