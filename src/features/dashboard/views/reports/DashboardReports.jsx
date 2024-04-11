@@ -7,8 +7,8 @@ import {LuBarChart3} from "react-icons/lu";
 import {HiMiniArrowUpRight} from "react-icons/hi2";
 import send_icon from "../../../../images/send_icon.svg"
 import {
-    computeImageURL,
-    getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
+    computeImageURL, getImageUrl,
+    getInitialLetterCap, getPagesDataFromSocialMedia, getQueryForGraphData, isNullOrEmpty,
     socialMediaAccountHasConnectedPages
 } from "../../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../../utils/contantData";
@@ -57,7 +57,20 @@ export const DashboardReports = () => {
                 setReportSelectedAccountType(selectedSocialMediaAccount?.provider || "")
             }
             setReportSelectedAccountData(selectedSocialMediaAccount);
-            const connectedPagesToSelectedSocialMediaAccount = connectedPagesReducer?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === selectedSocialMediaAccount?.id);
+            let connectedPagesToSelectedSocialMediaAccount = connectedPagesReducer?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === selectedSocialMediaAccount?.id);
+            const pagesDataFromSocialMedia = getPagesDataFromSocialMedia(selectedSocialMediaAccount?.provider, {
+                facebook: facebookPageListReducer,
+                instagram: instagramBusinessAccountsData,
+                linkedin: getAllLinkedinPagesData,
+                pinterest: pinterestBoardsData,
+            });
+            // Get Updated Image Url For Dropdown
+            connectedPagesToSelectedSocialMediaAccount = connectedPagesToSelectedSocialMediaAccount?.map((page) => {
+                return {
+                    ...page,
+                    imageUrl: getImageUrl(selectedSocialMediaAccount?.provider, pagesDataFromSocialMedia?.filter(c => c.id === page.pageId)[0])
+                }
+            });
             setConnectedPagesToSelectedSocialMediaAccount(connectedPagesToSelectedSocialMediaAccount)
             if (!isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount)) {
                 selectedSocialMediaAccount?.provider === "PINTEREST" ? setSelectedPage(selectedSocialMediaAccount) : setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
@@ -144,23 +157,23 @@ export const DashboardReports = () => {
                                 <div
                                     className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container">
 
-<div className="days_outer">
-                                            <select className="custom_select_days dropdown_days "
-                                                    value={graphDaysSelected}
-                                                    onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
-                                                    disabled={connectedPagesReducer?.loading || facebookPageListReducer?.loading || reportGraphSectionData?.loading}>
-                                                <option value={9}>Last 7 days</option>
-                                                <option value={17}>Last 15 days</option>
-                                                {
-                                                    reportSelectedAccountType === "INSTAGRAM" ?
-                                                        <option value={30}> Last 28 days</option> :
-                                                        <option value={32}> Last 30 days</option>
-                                                }
+                                    <div className="days_outer">
+                                        <select className="custom_select_days dropdown_days "
+                                                value={graphDaysSelected}
+                                                onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
+                                                disabled={connectedPagesReducer?.loading || facebookPageListReducer?.loading || reportGraphSectionData?.loading}>
+                                            <option value={9}>Last 7 days</option>
+                                            <option value={17}>Last 15 days</option>
+                                            {
+                                                reportSelectedAccountType === "INSTAGRAM" ?
+                                                    <option value={30}> Last 28 days</option> :
+                                                    <option value={32}> Last 30 days</option>
+                                            }
 
-                                            </select>
-                                        </div>
+                                        </select>
+                                    </div>
                                     {
-                                        false &&  <Dropdown className="dropdown_btn">
+                                        false && <Dropdown className="dropdown_btn">
 
                                             <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                              className="social_dropdowns"
@@ -402,9 +415,9 @@ export const DashboardReports = () => {
                                     {/*<Chart/>*/}
 
                                     <div className="account_info mt-2">
-                                      
+
                                         <LineGraph reportData={reportGraphSectionData}/>
-                                        
+
                                     </div>
                                 </div>
 

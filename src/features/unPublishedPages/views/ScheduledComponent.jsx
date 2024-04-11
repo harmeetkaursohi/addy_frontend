@@ -67,7 +67,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                 dispatch(getAllSocialMediaPostsByCriteria({
                                     token: token,
                                     query: {
-                                        limit: 5,
+                                        limit: 6,
                                         period: "MONTH",
                                         sortOrder: "asc",
                                         sort: "feedPostDate",

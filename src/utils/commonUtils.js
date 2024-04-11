@@ -268,7 +268,7 @@ export const pageConnectAction = (dispatch, token, data, socialMediaAccountInfo)
             dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
             dispatch(getAllSocialMediaPostsByCriteria({
                 token: token,
-                query: {limit: 5, period: "MONTH",sort:"feedPostDate",sortOrder:"asc", postStatus: ["SCHEDULED"]}
+                query: {limit: 6, period: "MONTH", sort: "feedPostDate", sortOrder: "asc", postStatus: ["SCHEDULED"]}
             }));
         }).catch((error) => {
             console.log("--->error", error)
@@ -2041,47 +2041,47 @@ export const isCreatePostRequestValid = (requestBody, files) => {
 
                     }
                 }
-                if (isPostedOnLinkedin && hasAttachments ) {
-                    if(files[0]?.mediaType === "IMAGE"){
+                if (isPostedOnLinkedin && hasAttachments) {
+                    if (files[0]?.mediaType === "IMAGE") {
                         const isInValidImageDimension = files.some(file => {
                             const imageDimensions = getImageHeightAndWidth(file?.url)
-                            console.log("imageDimensions==>",imageDimensions)
+                            console.log("imageDimensions==>", imageDimensions)
                             return (imageDimensions.height >= 6012 || imageDimensions.width >= 6012)
                         })
-                        if (isInValidImageDimension ) {
+                        if (isInValidImageDimension) {
                             showErrorToast(InvalidImageDimension);
                             shouldBreak = true;
                             break;
                         }
                     }
-                   if(files[0]?.mediaType === "VIDEO"){
-                       const extension = files[0]?.fileName?.substring(files[0]?.fileName?.lastIndexOf('.') + 1);
-                       if (extension !== "mp4" && extension !== "MP4") {
-                           showErrorToast(formatMessage(VideoFormatNotSupported, ["mp4", "linkedin"]));
-                           shouldBreak = true;
-                           break;
-                       }
-                       if (files.some(file => (file?.file?.size / 1048576) > 200)) {
-                           showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
-                           shouldBreak = true;
-                           break;
-                       }
-                       if (files.some(file => (file?.file?.size / 1024) < 75)) {
-                           showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "75 kb", "video", "linkedin"]));
-                           shouldBreak = true;
-                           break;
-                       }
-                       if ((files[0]?.duration / 60) > 30) {
-                           showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "30 min", "video", "linkedin"]));
-                           shouldBreak = true;
-                           break;
-                       }
-                       if (files[0]?.duration < 3) {
-                           showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "linkedin"]));
-                           shouldBreak = true;
-                           break;
-                       }
-                   }
+                    if (files[0]?.mediaType === "VIDEO") {
+                        const extension = files[0]?.fileName?.substring(files[0]?.fileName?.lastIndexOf('.') + 1);
+                        if (extension !== "mp4" && extension !== "MP4") {
+                            showErrorToast(formatMessage(VideoFormatNotSupported, ["mp4", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (files.some(file => (file?.file?.size / 1048576) > 200)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (files.some(file => (file?.file?.size / 1024) < 75)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "75 kb", "video", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if ((files[0]?.duration / 60) > 30) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "30 min", "video", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                        if (files[0]?.duration < 3) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["Less", "3 sec", "video", "linkedin"]));
+                            shouldBreak = true;
+                            break;
+                        }
+                    }
                 }
                 if (isPostedOnInstagram) {
                     if (!hasAttachments) {
@@ -2287,11 +2287,14 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                     }
                 }
                 const isPostedOnLinkedin = requestBody.postPageInfos?.filter(page => page?.provider === "LINKEDIN")?.length > 0
-                if (isPostedOnLinkedin && hasAttachments ) {
+                if (isPostedOnLinkedin && hasAttachments) {
 
-                    if(files[0]?.mediaType === "IMAGE"){
+                    if (files[0]?.mediaType === "IMAGE") {
                         const isInValidImageDimension = allAttachments.some(file => {
-                            const imageDimensions = (file?.id === undefined || file?.id === null) ? getImageHeightAndWidth(file?.url): {height:file?.height, width:file?.width};
+                            const imageDimensions = (file?.id === undefined || file?.id === null) ? getImageHeightAndWidth(file?.url) : {
+                                height: file?.height,
+                                width: file?.width
+                            };
                             return (imageDimensions.height >= 6012 || imageDimensions.width >= 6012)
                         })
                         if (isInValidImageDimension) {
@@ -2300,7 +2303,7 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                             break;
                         }
                     }
-                    if(files[0]?.mediaType === "VIDEO"){
+                    if (files[0]?.mediaType === "VIDEO") {
                         const extension = allAttachments?.[0]?.fileName?.substring(files[0]?.fileName?.lastIndexOf('.') + 1);
                         if (extension !== undefined && extension !== "mp4" && extension !== "MP4") {
                             showErrorToast(formatMessage(VideoFormatNotSupported, ["mp4", "linkedin"]));
@@ -2343,7 +2346,7 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                             break;
                         }
                         const isValidAspectRatio = allAttachments.some(file => {
-                            const aspectRatio = (file?.id === undefined || file?.id === null) ? getImageAspectRatio(file?.url): file?.width/file?.height;
+                            const aspectRatio = (file?.id === undefined || file?.id === null) ? getImageAspectRatio(file?.url) : file?.width / file?.height;
                             return aspectRatio >= 0.8 && aspectRatio <= 1.91
                         })
                         if (!isValidAspectRatio) {
@@ -2409,6 +2412,56 @@ export const getImageAspectRatio = (imageUrl) => {
 
     return img.naturalWidth / img.naturalHeight;
 };
+
+export const isImageValid = (imageUrl,socialMediaType) => {
+    if(imageUrl===null || imageUrl===undefined){
+        return true
+    }
+    switch(socialMediaType){
+        case "FACEBOOK":
+        case "INSTAGRAM":
+        case "LINKEDIN": {
+           return fetch(imageUrl).then(res=>{
+               return res.ok
+           })
+        }
+        case "PINTEREST": {
+            const img = new Image();
+            img.src = imageUrl;
+            if (img.naturalHeight !== 0) {
+                return true
+            } else {
+                return false
+            }
+        }
+
+    }
+
+};
+export const isPageInfoAvailableFromSocialMediaFor = (socialMedia = [], data) => {
+    if (isNullOrEmpty(socialMedia) || data === null || data === undefined) {
+        return false;
+    }
+    return socialMedia.every(socialMediaType => {
+
+        switch (socialMediaType) {
+            case "FACEBOOK": {
+                return data?.facebook?.facebookPageList !== undefined && data?.facebook?.facebookPageList !== null
+            }
+            case "INSTAGRAM": {
+                return data?.instagram?.data !== undefined && data?.instagram?.data !== null
+            }
+            case "LINKEDIN": {
+                return data?.linkedin?.data !== undefined && data?.linkedin?.data !== null
+            }
+            case "PINTEREST": {
+                return data?.pinterest?.data !== undefined && data?.pinterest?.data !== null
+            }
+        }
+    })
+
+}
+
 export const getImageHeightAndWidth = (imageUrl) => {
     const img = new Image();
     img.src = imageUrl;
@@ -2417,8 +2470,8 @@ export const getImageHeightAndWidth = (imageUrl) => {
     }
 
     return {
-        height:img.naturalHeight,
-        width:img.naturalWidth
+        height: img.naturalHeight,
+        width: img.naturalWidth
     }
 };
 
@@ -2436,5 +2489,85 @@ export const getVideoDurationById = async (attachmentId) => {
             reject(error);
         };
     });
+
+};
+export const getPagesDataFromSocialMedia = (socialMediaType, data) => {
+
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            return data.facebook?.facebookPageList;
+        }
+        case "INSTAGRAM": {
+            return data.instagram?.data;
+        }
+        case "LINKEDIN": {
+            return Object?.keys(data.linkedin?.data?.results || {})?.map((key) => {
+                return {id: getLinkedInUrnId(key, "organization"), ...data.linkedin?.data?.results[key]}
+            });
+        }
+        case "PINTEREST": {
+            return data.pinterest?.data?.items;
+        }
+    }
+}
+export const getImageUrl = (socialMediaType, data) => {
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            return data?.picture?.data?.url || "";
+        }
+        case "INSTAGRAM": {
+            return data?.profile_picture_url || "";
+        }
+        case "LINKEDIN": {
+            if (data?.hasOwnProperty("logoV2")) {
+                const elements = data?.logoV2["original~"]?.elements;
+                return elements[elements.length - 1]?.identifiers[0]?.identifier;
+            }
+            return "";
+        }
+        case "PINTEREST": {
+            return data?.media?.image_cover_url || "";
+        }
+    }
+}
+export const getUpdatedNameAndImageUrlForConnectedPages = (page, data) => {
+    let updatedImageUrl;
+    let updatedName;
+    switch (page.socialMediaType) {
+        case "FACEBOOK": {
+            updatedImageUrl = data.facebook?.facebookPageList?.filter(c => c.id === page.pageId)[0]?.picture?.data?.url || null;
+            updatedName = data.facebook?.facebookPageList?.filter(c => c.id === page.pageId)[0]?.name || page?.name;
+            break;
+        }
+        case "INSTAGRAM": {
+            updatedImageUrl = data.instagram?.data?.filter(c => c.id === page.pageId)[0]?.profile_picture_url || null;
+            updatedName = data.instagram?.data?.filter(c => c.id === page.pageId)[0]?.name || page?.name;
+            break;
+        }
+        case "LINKEDIN": {
+            const linkedinPageList = Object?.keys(data.linkedin?.data?.results || {})?.map((key) => {
+                return {id: getLinkedInUrnId(key, "organization"), ...data.linkedin?.data?.results[key]}
+            })?.filter(c => c.id === page.pageId)
+            updatedName=linkedinPageList?.[0]?.localizedName || page?.name
+            if (linkedinPageList?.[0]?.hasOwnProperty("logoV2")) {
+                const elements = linkedinPageList[0]?.logoV2["original~"]?.elements;
+                updatedImageUrl = elements[elements.length - 1]?.identifiers[0]?.identifier;
+            } else {
+                updatedImageUrl = null;
+            }
+            break;
+        }
+        case "PINTEREST": {
+            updatedImageUrl = data.pinterest?.data?.items?.filter(c => c.id === page.pageId)[0]?.media?.image_cover_url || null
+            updatedName = data.pinterest?.data?.items?.filter(c => c.id === page.pageId)[0]?.name || page?.name
+            break;
+        }
+    }
+    return {
+        ...page,
+        isPageUpdated: (page?.name!==updatedName || page?.imageUrl !== updatedImageUrl || !isImageValid(page?.imageUrl,page?.socialMediaType)),
+        imageUrl: updatedImageUrl,
+        name:updatedName
+    }
 
 };

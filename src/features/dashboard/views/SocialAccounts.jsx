@@ -23,18 +23,15 @@ import Swal from "sweetalert2";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import ConnectPagesModal from "../../modals/views/facebookModal/ConnectPagesModal";
 import {
-    disconnectDisabledPages,
     getAllFacebookPages,
     getFacebookConnectedPages
 } from "../../../app/actions/facebookActions/facebookActions";
 import default_user_icon from "../../../images/default_user_icon.svg"
 import {
-    NoBusinessAccountFound,
     SocialAccountProvider
 } from "../../../utils/contantData";
 import AccountAlreadyConnectedWarningModal from "./AccountAlreadyConnectedWarningModal";
 import {SomethingWentWrong, enabledSocialMedia} from "../../../utils/contantData";
-import {resetReducers} from "../../../app/actions/commonActions/commonActions";
 
 const SocialAccounts = ({}) => {
 
@@ -63,7 +60,6 @@ const SocialAccounts = ({}) => {
     const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
     const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
     const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
-
 
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
@@ -213,7 +209,7 @@ const SocialAccounts = ({}) => {
                 dispatch(getAllConnectedSocialAccountAction(res))
                 dispatch(getAllSocialMediaPostsByCriteria({
                     token: token,
-                    query: {limit: 5,sort:"feedPostDate",sortOrder:"asc", period:"MONTH",postStatus: ["SCHEDULED"]}
+                    query: {limit: 6,sort:"feedPostDate",sortOrder:"asc", period:"MONTH",postStatus: ["SCHEDULED"]}
                 }));
             })
         }).catch((error) => {
@@ -279,7 +275,7 @@ const SocialAccounts = ({}) => {
                     dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt?.customerId, token: token}));
                     dispatch(getAllSocialMediaPostsByCriteria({
                         token: token,
-                        query: {limit: 5, period:"MONTH",sort:"feedPostDate",sortOrder:"asc", postStatus: ["SCHEDULED"]}
+                        query: {limit: 6, period:"MONTH",sort:"feedPostDate",sortOrder:"asc", postStatus: ["SCHEDULED"]}
                     }));
                     Swal.fire({
                         icon: 'success',
