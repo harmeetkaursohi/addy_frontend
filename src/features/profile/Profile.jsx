@@ -323,6 +323,7 @@ const Profile = () => {
                                                                         <OverlayTrigger
                                                                             placement="bottom"
                                                                             overlay={<Tooltip
+                                                                            className="custom-tooltip"
                                                                                 id="button-tooltip custom-tooltip">
                                                                                 Please refrain from changing username.
                                                                                 Your username are integral to several
@@ -397,7 +398,7 @@ const Profile = () => {
 
                                                                         <OverlayTrigger
                                                                             placement="bottom"
-                                                                            overlay={<Tooltip id="button-tooltip">
+                                                                            overlay={<Tooltip    className="custom-tooltip" id="button-tooltip">
                                                                                 Please refrain from changing email.
                                                                                 Your email are integral to several
                                                                                 functionalities.
