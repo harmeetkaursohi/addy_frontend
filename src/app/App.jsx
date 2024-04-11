@@ -32,6 +32,11 @@ import Insight from "../features/insights/insight/views/Insight";
 import Profile from '../features/profile/Profile.jsx'
 import { AppProvider } from '../features/common/components/AppProvider.jsx'
 import Notification from "../features/notification/Notification";
+import InstagramPostModal from "../features/common/components/InstagramPostModal.jsx"
+import PinterestPostModal from '../features/common/components/PinterestPostModal.jsx'
+import FacebookPostModal from "../features/common/components/FacebookPostModal.jsx"
+import LinkedinPostModal from "../features/common/components/LinkedinPostModal.jsx"
+
 
 const App = () => {
     const PrivateRoute = () => {
@@ -66,6 +71,10 @@ const App = () => {
                         <Route path="/contact" element={<ContactUs/>}/>
                         <Route path="/profile" element={<Profile/>}/>
                         <Route path="/notification" element={<Notification/>}/>
+                        <Route path="/insta" element={<InstagramPostModal/>}/>
+                        <Route path="/pin" element={<PinterestPostModal/>}/>
+                        <Route path="/fb" element={<FacebookPostModal/>}/>
+                        <Route path="/li" element={<LinkedinPostModal/>}/>
                     </Route>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/" element={<Login/>}/>
@@ -75,6 +84,7 @@ const App = () => {
                     <Route path="/fb" element={<ConnectPagesModal/>}/>
                     <Route path="/auth-redirect" element={<Oauth2RedirectComponent/>}/>
                     <Route path="*" element={<NotFound/>}/>
+                    
                     
                 </Routes>
             </BrowserRouter>

@@ -17,7 +17,7 @@ function PinterestPostModal() {
 
   return (
     <>
-      <div className="individual_post_modal_wrapper">
+      <div className="individual_post_modal_wrapper pinterest_post_modal_container">
         <Button variant="primary" onClick={handleShow}>
           Launch demo modal
         </Button>

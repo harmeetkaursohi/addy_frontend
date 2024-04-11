@@ -184,7 +184,7 @@ gap: 16px;
     height: 300px;
     object-fit: cover;
 }
-.individual_post_modal_wrapper .modal-header {
+.pinterest_post_modal_container .modal-header {
     border-bottom: unset;
 }
 .individual_post_header img {
@@ -218,7 +218,7 @@ gap: 16px;
 .facebook_post_modal_outer h4{
   font-size: 15px;  
 }
-.individual_post_modal_wrapper div.modal-content{
+.pinterest_post_modal_container div.modal-content{
      border-radius: unset ;
      background: transparent;
     border: none;
@@ -258,6 +258,11 @@ gap: 16px;
         height: 500px !important;
     }
 }
+ @media screen and (min-width:1950px) {
+    .pinterest_post_heading {
+        line-height: 30px;
+    }
+ }
  @media screen and (max-width:1440px){
     .RxCross2_icon {
         right: -37px;
@@ -296,6 +301,9 @@ gap: 16px;
 @media screen and (max-width:767px) {
     .linkedin_dropdown{
         display: none;
+    }
+    .pinterest_post_heading{
+        font-size: 14px;
     }
     .post_modal_like_outer{
         display: block;
