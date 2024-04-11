@@ -157,21 +157,23 @@ export const DashboardReports = () => {
                                 <div
                                     className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container">
 
-                                    <div className="days_outer">
-                                        <select className="custom_select_days dropdown_days "
-                                                value={graphDaysSelected}
-                                                onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
-                                                disabled={connectedPagesReducer?.loading || facebookPageListReducer?.loading || reportGraphSectionData?.loading}>
-                                            <option value={9}>Last 7 days</option>
-                                            <option value={17}>Last 15 days</option>
-                                            {
-                                                reportSelectedAccountType === "INSTAGRAM" ?
-                                                    <option value={30}> Last 28 days</option> :
-                                                    <option value={32}> Last 30 days</option>
-                                            }
+                                    {
+                                        false && <div className="days_outer">
+                                            <select className="custom_select_days dropdown_days "
+                                                    value={graphDaysSelected}
+                                                    onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
+                                                    disabled={connectedPagesReducer?.loading || facebookPageListReducer?.loading || reportGraphSectionData?.loading}>
+                                                <option value={9}>Last 7 days</option>
+                                                <option value={17}>Last 15 days</option>
+                                                {
+                                                    reportSelectedAccountType === "INSTAGRAM" ?
+                                                        <option value={30}> Last 28 days</option> :
+                                                        <option value={32}> Last 30 days</option>
+                                                }
 
-                                        </select>
-                                    </div>
+                                            </select>
+                                        </div>
+                                    }
                                     {
                                         false && <Dropdown className="dropdown_btn">
 
