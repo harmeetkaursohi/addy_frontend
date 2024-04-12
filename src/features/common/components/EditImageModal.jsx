@@ -174,7 +174,7 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
                 <Modal.Footer>
 
 
-                    <button className="cmn_btn_color cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel
+                    <button className=" cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel
                     </button>
                     <button type="button" disabled={crop?.unit === "%"} onClick={saveHandler}
                             className={`cmn_btn_color cmn_connect_btn connect_btn yes_btn ${crop?.unit === "%" ? "disabled-button" : ""}`}

@@ -724,6 +724,9 @@ input[type=checkbox] {
     width: 30px;
 
 }
+.black_bg_color{
+    background-color: #000;
+}
 .preview_btn svg{
    transform:translate(1px, -2px);
 }
@@ -1034,7 +1037,7 @@ button.loading {
         display: block;
     }
     .preview_btn {
-    padding: 5px 10px;
+    padding: 0px;
     font-size: 14px;
     }
     .select_platform_outer {
@@ -1062,7 +1065,7 @@ button.loading {
     gap: 8px;
     left: 47%;
     flex-wrap: wrap;
-    transform: translate(-58%, -34%);
+    transform: translate(-58%, -10px);
     }
     .user_caption_heading {
         width: 103px;
