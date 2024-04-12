@@ -110,4 +110,10 @@ span.error-detail {
         display: block;
         padding-top: 36px;
     }
+    .notification_wrapper a.dropdown-item {
+        font-size: 12px;
+    }
+    .notifications_layout p {
+        font-size: 12px;
+    }
 }

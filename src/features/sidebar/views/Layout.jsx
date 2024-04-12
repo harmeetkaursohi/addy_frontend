@@ -207,6 +207,7 @@ const Layout = () => {
                                     {sidebar ? (
                                         <OverlayTrigger
                                             placement="right"
+                                            delay={{ show: 200, hide: 200 }} 
                                             overlay={
                                                 <Tooltip id="button-tooltip" className="ms-4">
                                                     {item.name}

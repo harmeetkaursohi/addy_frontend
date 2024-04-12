@@ -19,11 +19,12 @@ const PinterestFeedPreview = ({
                               }) => {
 
     return (
+        
         <>
             <h2 className={"cmn_white_text feed_preview facebookFeedpreview_text"}>{previewTitle}</h2>
             <div className='preview_wrapper1 preview_img_container'>
                 <div>
-                    <div className='img_container ' style={{background:"black"}}>
+                    <div className={`img_container ${selectedFileType==="VIDEO" ?"black_bg_color":""}`}>
                         <div className='select_options_container z-index-2'>
                             <select disabled={true}>
                                 <option>{pageName}</option>

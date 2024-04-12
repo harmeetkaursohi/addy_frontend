@@ -601,16 +601,81 @@ const Planner = () => {
 
 
 
-    const [showPost, setShowPost] = useState(false)
 
     // render event content
     const renderCalendarCards = ({event}) => {
 
+        const eventStartDate=event?._def?.extendedProps?.postDate
+        const dateString = eventStartDate;
+        const date = new Date(dateString);
+        const dayOfMonth = date.getDate();
+        
+        let currentDateElements = document.querySelectorAll(".fc .fc-daygrid-day.fc-day-today");
+         let currentDayOfMonth=new Date().getDate()
+
+        currentDateElements.forEach(data => {
+            if (dayOfMonth !== currentDayOfMonth) {
+                data.style.setProperty('background-color', '#AAE0FF', 'important');
+
+            } else {
+           
+                data.style.setProperty('background-color', '', 'important');
+
+            }
+        });
+        
+        let backgroundColor
+        let border 
+        let textColor
+        if (dayOfMonth === 1 || dayOfMonth === 28
+        || dayOfMonth === 21 || dayOfMonth === 17 ||
+        dayOfMonth === 13 || dayOfMonth === 5 ||
+        dayOfMonth === 9) {
+        backgroundColor = '#fce5d6';
+        border = "4px solid #B94D09";
+        textColor="#782E00"
+
+
+    } 
+    else if (dayOfMonth === 8
+        || dayOfMonth === 30 ||
+        dayOfMonth === 25 ||
+        dayOfMonth === 22 ||
+        dayOfMonth === 18 ||
+        dayOfMonth === 6
+        || dayOfMonth === 14
+        || dayOfMonth === 26 ||
+        dayOfMonth === 3) {
+        backgroundColor = '#defcd6';
+        border = "4px solid #56B909";
+        textColor="#023E01"
+    } 
+    else if (dayOfMonth === 27 ||
+        dayOfMonth === 4 ||
+        dayOfMonth === 23
+        || dayOfMonth === 19
+        || dayOfMonth === 12
+        || dayOfMonth === 15
+        || dayOfMonth === 10 ||
+        dayOfMonth === 31) {
+        backgroundColor = '#d6f3fc';
+        border = "4px solid  #098FB9";
+        textColor="#033C48"
+
+
+
+    } else {
+        backgroundColor = '#fcd6d6';
+        border = "4px solid #B90909";
+        textColor="#780000" 
+
+    }
+
         let classname = event?._def?.extendedProps?.batchId
         const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
         return (
-            <div className={"cal_Div w-100 test"}
-                 style={{pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
+            <div  className={"cal_Div w-100 test"}
+                 style={{backgroundColor:backgroundColor,borderLeft:border ,pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"}}>
 
                 <div className="w-100 p-0 calendar_card">
 
@@ -621,7 +686,7 @@ const Planner = () => {
                                 handleShowMorePostModal(event)
                              }}>
                             <img src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
-                            <h3 className={`custom_event_heading${classname}`}>{postOnSocialMedia.title}</h3>
+                            <h3 style={{color:textColor}}className={`custom_event_heading${classname}`}>{postOnSocialMedia.title}</h3>
                         </div>
                     }
 
@@ -732,97 +797,8 @@ const Planner = () => {
 
         setShowMorePlannerModel(true);
     };
-    console.log(events, "events90")
-    const eventDidMount = (info) => {
-        const eventStartDate = new Date(info?.event?.start);
-        const eventElement = info?.el;
-        const cellElement = eventElement?.closest('.fc-daygrid-day-frame');
 
-        let backgroundColor;
-        let border;
-        if (eventStartDate.getDate() === 1 || eventStartDate.getDate() === 28
-            || eventStartDate.getDate() === 21 || eventStartDate.getDate() === 17 ||
-            eventStartDate.getDate() === 13 || eventStartDate.getDate() === 5 ||
-            eventStartDate.getDate() === 9) {
-            backgroundColor = '#fce5d6';
-            border = "4px solid #B94D09";
-
-
-        } else if (eventStartDate.getDate() === 8
-            || eventStartDate.getDate() === 30 ||
-            eventStartDate.getDate() === 25 ||
-            eventStartDate.getDate() === 22 ||
-            eventStartDate.getDate() === 18 ||
-            eventStartDate.getDate() === 6
-            || eventStartDate.getDate() === 14
-            || eventStartDate.getDate() === 26 ||
-            eventStartDate.getDate() === 3) {
-            backgroundColor = '#defcd6';
-            border = "4px solid #56B909";
-        } else if (eventStartDate.getDate() === 27 ||
-            eventStartDate.getDate() === 4 ||
-            eventStartDate.getDate() === 23
-            || eventStartDate.getDate() === 19
-            || eventStartDate.getDate() === 12
-            || eventStartDate.getDate() === 15
-            || eventStartDate.getDate() === 10 ||
-            eventStartDate.getDate() === 31) {
-            backgroundColor = '#d6f3fc';
-            border = "4px solid  #098FB9";
-
-
-        } else if (eventStartDate.getDate() === 11 ||
-            eventStartDate.getDate() === 29 ||
-            eventStartDate.getDate() === 24 ||
-            eventStartDate.getDate() === 20 ||
-            eventStartDate.getDate() === 16 ||
-            eventStartDate.getDate() === 2 ||
-            eventStartDate.getDate() === 7) {
-            backgroundColor = '#fcd6d6';
-            border = "4px solid #B90909";
-
-        }
-        //    info.el.style.backgroundColor = backgroundColor;
-        //    info.el.style.borderLeft = border;
-
-        if (cellElement) {
-            cellElement.style.backgroundColor = backgroundColor
-            cellElement.style.borderLeft = border
-        }
-
-
-    }
-    useEffect(() => {
-        const fullCalendarApi = calendarRef.current?.getApi();
-        if (fullCalendarApi) {
-            if (events.length === 0) {
-                // If there are no events, clear the styling for all cells
-                const cellElements = document.querySelectorAll('.fc-daygrid-day-frame');
-                cellElements.forEach(cellElement => {
-
-
-                    cellElement.style.backgroundColor = '';
-                    cellElement.style.borderLeft = '';
-                });
-            } else {
-
-                // If there are events, set the eventDidMount callback after the rendering cycle
-                setTimeout(() => {
-                    fullCalendarApi.setOption('eventDidMount', eventDidMount);
-                });
-
-                // fullCalendarApi.setOption('eventDidMount', eventDidMount);
-            }
-        }
-
-        // Cleanup function for useEffect
-        return () => {
-            if (fullCalendarApi) {
-                fullCalendarApi.setOption('eventDidMount', null);
-            }
-        };
-    }, [events]);
-
+    
     useEffect(() => {
 
         if (Object.keys(baseSearchQuery).length > 0) {
@@ -897,7 +873,7 @@ const Planner = () => {
                 {/*<SideBar/>*/}
                 <div className={sidebar ? 'cmn_container' : "cmn_Padding"}>
                     <div className='cmn_outer'>
-                        <div className='planner_outer white_bg_color'>
+                        <div className='planner_outer white_bg_color cmn_height_outer'>
                             <div className='planner_header_outer'>
                                 <div className='planner_header'>
                                     <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>

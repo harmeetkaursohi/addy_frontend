@@ -252,6 +252,9 @@ gap: 16px;
     line-height: 20px;
     margin-top: 13px;
 }
+.editVideo_cancel_btn{
+    color: white;
+}
 @media screen and (min-width:2560px)
 {
     .video_player_outer {
