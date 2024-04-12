@@ -753,12 +753,17 @@ export async function urlToFile(imageUrl, fileNameWithExtension, mediaType) {
 
         const fileExtension = (mediaType === "IMAGE") ? `image/${fileNameWithExtension.split(".")[1]}` : `video/${fileNameWithExtension.split(".")[1]}`;
 
-        const file = new File([blob], fileNameWithExtension, {type: fileExtension});
+        // const file = new File([blob], fileNameWithExtension, {type: fileExtension});
+        const file = blobToFile(blob,fileNameWithExtension,fileExtension);
         return file;
     } catch (error) {
         console.error("Error converting URL to File:", error);
         return null;
     }
+}
+
+export const blobToFile=(blob, fileName, fileType)=>{
+    return new File([blob], fileName, {type: fileType});
 }
 
 export const base64StringToFile = (base64String, fileName, fileType) => {
@@ -775,7 +780,8 @@ export const base64StringToFile = (base64String, fileName, fileType) => {
         const blob = new Blob([byteArray], {type: fileType});
 
 
-        return new File([blob], fileName, {type: fileType});
+        // return new File([blob], fileName, {type: fileType});
+        return blobToFile(blob,fileName,fileType);
     } catch (error) {
         console.error("Error converting base64 to File:", error);
         return null;
@@ -2045,7 +2051,6 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                     if (files[0]?.mediaType === "IMAGE") {
                         const isInValidImageDimension = files.some(file => {
                             const imageDimensions = getImageHeightAndWidth(file?.url)
-                            console.log("imageDimensions==>", imageDimensions)
                             return (imageDimensions.height >= 6012 || imageDimensions.width >= 6012)
                         })
                         if (isInValidImageDimension) {
@@ -2095,11 +2100,11 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                             shouldBreak = true;
                             break;
                         }
-                        const isValidAspectRatio = files.some(file => {
+                        const isInValidAspectRatio = files.some(file => {
                             const aspectRatio = getImageAspectRatio(file?.url)
-                            return aspectRatio >= 0.8 && aspectRatio <= 1.91
+                            return (aspectRatio < 0.8 || aspectRatio > 1.91)
                         })
-                        if (!isValidAspectRatio) {
+                        if (isInValidAspectRatio) {
                             showErrorToast(InvalidAspectRatio);
                             shouldBreak = true;
                             break;
@@ -2169,7 +2174,8 @@ export const getFileFromAttachmentSource = (attachment) => {
         // Generate URL for Blob object
         const fileName = attachment?.fileName;
         const fileType = 'application/octet-stream';
-        const file = new File([blob], fileName, {type: fileType});
+        // const file = new File([blob], fileName, {type: fileType});
+        const file = blobToFile(blob,fileName,fileType);
 
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -2193,7 +2199,9 @@ export const getFileFromAttachmentSource = (attachment) => {
 
 
 export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => {
-
+    console.log("requestBody==>",requestBody)
+    console.log("files==>",files)
+    console.log("oldAttachments==>",oldAttachments)
     let shouldBreak = false;
     Object.keys(requestBody)?.forEach(key => {
         if (shouldBreak) return true;
@@ -2345,11 +2353,11 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                             shouldBreak = true;
                             break;
                         }
-                        const isValidAspectRatio = allAttachments.some(file => {
+                        const isInValidAspectRatio = allAttachments.some(file => {
                             const aspectRatio = (file?.id === undefined || file?.id === null) ? getImageAspectRatio(file?.url) : file?.width / file?.height;
-                            return aspectRatio >= 0.8 && aspectRatio <= 1.91
+                            return (aspectRatio < 0.8 || aspectRatio > 1.91)
                         })
-                        if (!isValidAspectRatio) {
+                        if (isInValidAspectRatio) {
                             showErrorToast(InvalidAspectRatio);
                             shouldBreak = true;
                             break;

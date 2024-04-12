@@ -953,28 +953,28 @@ const SocialAccounts = ({}) => {
             </div>
             {enabledSocialMedia?.isFaceBookEnabled && showFacebookModal &&
                 <ConnectPagesModal showModal={showFacebookModal} setShowModal={setShowFacebookModal}
-                                   allPagesList={getAllFacebookPagesData?.facebookPageList}
+                                   allPagesList={getAllFacebookPagesData?.facebookPageList || []}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
                                    noPageFoundMessage={"No Page Found!"}
                                    socialMediaType={SocialAccountProvider.FACEBOOK}
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>}
             {enabledSocialMedia?.isInstagramEnabled && showInstagramModal &&
                 <ConnectPagesModal showModal={showInstagramModal} setShowModal={setShowInstagramModal}
-                                   allPagesList={instagramBusinessAccountsData?.data}
+                                   allPagesList={instagramBusinessAccountsData?.data ||[]}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
                                    noPageFoundMessage={"No Page Found!"}
                                    socialMediaType={SocialAccountProvider.INSTAGRAM}
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
             {enabledSocialMedia?.isPinterestEnabled && showPinterestModal &&
                 <ConnectPagesModal showModal={showPinterestModal} setShowModal={setShowPinterestModal}
-                                   allPagesList={pinterestBoardsData?.data?.items}
+                                   allPagesList={pinterestBoardsData?.data?.items || []}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
                                    noPageFoundMessage={"No Board Found!"}
                                    socialMediaType={SocialAccountProvider.PINTEREST}
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "PINTEREST")[0]}/>}
             {enabledSocialMedia?.isLinkedinEnabled && showLinkedinModal &&
                 <ConnectPagesModal showModal={showLinkedinModal} setShowModal={setShowLinkedinModal}
-                                   allPagesList={Object.keys(getAllLinkedinPagesData?.data?.results)?.map(key => {
+                                   allPagesList={Object.keys(getAllLinkedinPagesData?.data?.results || {})?.map(key => {
                                        return getFormattedLinkedinObject(key, getAllLinkedinPagesData?.data?.results[key])
                                    })}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}

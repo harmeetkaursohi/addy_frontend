@@ -18,6 +18,7 @@ import {RiDeleteBin5Fill} from "react-icons/ri";
 import {showErrorToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
 import {
+    blobToFile,
     checkDimensions, convertSentenceToHashtags,
     convertToUnixTimestamp, getEnumValue, isCreatePostRequestValid, isNullOrEmpty,
     validateScheduleDateAndTime
@@ -367,11 +368,10 @@ const CreatePost = () => {
     useEffect(() => {
         if (cropImgUrl) {
             const updatedFiles = [...files];
-
             updatedFiles[editImgIndex] = {
-                file: fileSize,
+                file:   blobToFile(fileSize,imgFile?.fileName,imgFile?.file?.type),
                 url: cropImgUrl,
-                filleName: imgFile?.fileName,
+                fileName: imgFile?.fileName,
                 mediaType: imgFile?.mediaType
             };
 
@@ -387,7 +387,7 @@ const CreatePost = () => {
             updatedFiles[editImgIndex] = {
                 file: blobVideo,
                 url: trimmedVideoUrl,
-                filleName: videoFile?.fileName,
+                fileName: videoFile?.fileName,
                 mediaType: videoFile?.mediaType
             };
 
