@@ -97,6 +97,7 @@
 import React from 'react'
 import { PieChart, Pie, Legend, Cell, ResponsiveContainer } from 'recharts';
 import "./Chart.css"
+
 const data = [
   { name: 'India', value: 70 },
   { name: 'USA', value: 12 },
@@ -119,7 +120,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
                                
     );
   };
-const DonutsChart = () => {
+const DonutsChart = ({chartData=null}) => {
   return (
     <ResponsiveContainer width="100%" height={300}>
     <PieChart>

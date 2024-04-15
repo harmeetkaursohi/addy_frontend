@@ -3,10 +3,15 @@ import {showErrorToast} from "../../../features/common/components/Toast";
 import {
     baseAxios,
     extractParameterFromUrl,
-    generateUnixTimestampFor, getDatesForPinterest,
+    generateUnixTimestampFor,
+    getDatesForPinterest,
     getFormattedAccountReachAndEngagementData,
     getFormattedDemographicData,
-    getFormattedPostTime, getFormattedPostWithInsightsApiResponse, getFormattedTotalFollowersCountData
+    getFormattedPostTime,
+    getFormattedPostWithInsightsApiResponse,
+    getFormattedInsightProfileInfo,
+    objectToQueryString,
+    getFormattedInsightsForProfileViews
 } from "../../../utils/commonUtils.js";
 import {getToken, setAuthenticationHeader} from "../../auth/auth";
 import {getFacebookInsightForSinglePost} from "../../../services/facebookService";
@@ -122,22 +127,48 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
     }
 
 });
-export const getTotalFollowers = createAsyncThunk('insight/getTotalFollowers', async (data, thunkAPI) => {
+export const getProfileInsightsInfo = createAsyncThunk('insight/getProfileInsightsInfo', async (data, thunkAPI) => {
+
     switch (data?.socialMediaType) {
-        case "INSTAGRAM":
         case "FACEBOOK": {
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}?fields=name,followers_count&access_token=${data?.pageAccessToken}`;
-            return await baseAxios.get(apiUrl).then(res => {
-                return getFormattedTotalFollowersCountData(res.data, "FACEBOOK");
+            const followers_count_url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}?fields=fan_count,name,followers_count&access_token=${data?.pageAccessToken}`;
+            let profile_fan_info = await baseAxios.get(followers_count_url).then(res => {
+                return res.data;
             }).catch(error => {
                 showErrorToast(error.response.data.error.message);
                 return thunkAPI.rejectWithValue(error.response);
             });
+
+            const profile_info_url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/published_posts?summary=total_count&access_token=${data?.pageAccessToken}`;
+            let profile_post_info = await baseAxios.get(profile_info_url).then(res => {
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+
+            return  getFormattedInsightProfileInfo({profile:profile_fan_info,post:profile_post_info},"FACEBOOK")
         }
+
+        case "INSTAGRAM": {
+            const profile_count_info = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}?fields=name,followers_count,follows_count,media_count&access_token=${data?.pageAccessToken}`;
+            let profile_fan_info = await baseAxios.get(profile_count_info).then(res => {
+                console.log("res===>",res)
+                return res;
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+
+            return  getFormattedInsightProfileInfo(profile_fan_info.data || {},"INSTAGRAM")
+        }
+
         case "PINTEREST": {
+            console.log("=======>PINTEREST",data)
             const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/user_account`;
             return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then(res => {
-                return getFormattedTotalFollowersCountData(res.data, "PINTEREST");
+                console.log("=======>res",res)
+                return getFormattedInsightProfileInfo(res.data, "PINTEREST");
             }).catch(error => {
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
@@ -146,7 +177,7 @@ export const getTotalFollowers = createAsyncThunk('insight/getTotalFollowers', a
         case "LINKEDIN": {
             const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/networkSizes/${data?.pageId}?edgeType=COMPANY_FOLLOWED_BY_MEMBER`;
             return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then(res => {
-                return getFormattedTotalFollowersCountData(res.data, "LINKEDIN");
+                return getFormattedInsightProfileInfo(res.data, "LINKEDIN");
             }).catch(error => {
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
@@ -157,6 +188,7 @@ export const getTotalFollowers = createAsyncThunk('insight/getTotalFollowers', a
 
 
 });
+
 export const getAccountReachedAndAccountEngaged = createAsyncThunk('insight/getAccountReachedAndAccountEngaged', async (data, thunkAPI) => {
 
     switch (data?.socialMediaType) {
@@ -360,3 +392,41 @@ const getLinkedInDemographicData = async (data, thunkAPI) => {
 
     return formattedApiResponse;
 }
+
+
+
+
+export const getProfileVisitsInsightsInfo = createAsyncThunk('insight/getProfileVisitsInsightsInfo', async (data, thunkAPI) => {
+    console.log("data.query===>",data.query)
+    switch (data?.socialMediaType) {
+        case "FACEBOOK": {
+            const profile_view_url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights/page_views_total?`+objectToQueryString(data.query);
+            let profile_views_analytics = await baseAxios.get(profile_view_url).then(res => {
+                return res.data;
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+            return  getFormattedInsightsForProfileViews(profile_views_analytics || {},"FACEBOOK")
+        }
+        case "INSTAGRAM": {
+            const profile_view_url= `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights/?`+objectToQueryString(data.query);
+            let profile_views_analytics = await baseAxios.get(profile_view_url).then(res => {
+                console.log("res===>",res)
+                return res;
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+
+            return  getFormattedInsightsForProfileViews(profile_views_analytics.data || {},"INSTAGRAM")
+        }
+
+        default:{
+            return {};
+        }
+
+    }
+
+
+});

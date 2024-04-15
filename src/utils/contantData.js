@@ -184,3 +184,6 @@ export const Industries = Object.freeze({
     WRITING_EDITING: 'Writing/Editing',
     OTHER: 'Other',
 });
+
+
+export const selectGraphDaysOptions= [{days:6,label:'last 7 days'},{days:14,label:'last 15 days'},{days:29,label:'last 30 days'}];

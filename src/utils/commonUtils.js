@@ -967,33 +967,46 @@ export const getQueryForGraphData = (socialMediaType, selectedGraphDays) => {
 
 
     }
-
 }
-export const convertUnixTimestampToDateTime = (unixTimestamp) => {
-    if (isNullOrEmpty(unixTimestamp.toString())) {
-        return null
+
+export const createSocialMediaProfileViewInsightsQuery = (queryObject,socialMediaType) => {
+    console.log("queryObject",queryObject)
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            let dateRange = getQueryForGraphData("FACEBOOK", (queryObject.days || 7) +2)
+            return {
+                period: "day",
+                access_token:queryObject.access_token,
+                since:dateRange?.createdFrom,
+                until:dateRange?.createdTo,
+            }
+        }
+        case "INSTAGRAM": {
+            let dateRange = getQueryForGraphData("INSTAGRAM", (queryObject.days || 7) +2)
+            return {
+                period: "day",
+                access_token:queryObject.access_token,
+                since:dateRange?.createdFrom,
+                until:dateRange?.createdTo,
+                metric:"profile_views"
+            }
+        }
+        case "PINTEREST": {
+            return {}
+
+        }
+        case "LINKEDIN": {
+            return {}
+        }
+
     }
-    // Convert Unix timestamp to milliseconds
-    const timestampInMilliseconds = unixTimestamp * 1000;
 
-    // Create a new Date object
-    const dateObject = new Date(timestampInMilliseconds);
-
-    // Extract date components
-    const year = dateObject.getFullYear();
-    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObject.getDate()).padStart(2, '0');
-
-    // Extract time components
-    const hours = String(dateObject.getHours()).padStart(2, '0');
-    const minutes = String(dateObject.getMinutes()).padStart(2, '0');
-
-    // Format the date and time
-    const formattedDate = `${year}-${month}-${day}`;
-    const formattedTime = `${hours}:${minutes}`;
-
-    return {date: formattedDate, time: formattedTime};
 }
+
+export function objectToQueryString(obj) {
+    return Object.keys(obj).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`).join('&');
+}
+
 export const getFormattedPostTime = (inputDate, format = "") => {
 
     const inputDateObject = new Date(inputDate);
@@ -1159,7 +1172,6 @@ export const calculatePercentageGrowthFor = (previousValue, currentValue, decima
     } else {
         return (((currentValue - previousValue) / previousValue) * 100).toFixed(decimalPlaces);
     }
-
 }
 export const getChartFormattedDataForInsights = (data, socialMediaType) => {
     if (data === null || data === undefined) {
@@ -1692,15 +1704,58 @@ export const filterAndSumLinkedinOrgStatisticsDataFor = (data = null, days = nul
     }
     return response;
 }
-export const getFormattedTotalFollowersCountData = (data, socialMediaType) => {
+
+
+export const convertUnixTimestampToDateTime = (unixTimestamp) => {
+    if (isNullOrEmpty(unixTimestamp.toString())) {
+        return null
+    }
+    // Convert Unix timestamp to milliseconds
+    const timestampInMilliseconds = unixTimestamp * 1000;
+
+    // Create a new Date object
+    const dateObject = new Date(timestampInMilliseconds);
+
+    // Extract date components
+    const year = dateObject.getFullYear();
+    const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObject.getDate()).padStart(2, '0');
+
+    // Extract time components
+    const hours = String(dateObject.getHours()).padStart(2, '0');
+    const minutes = String(dateObject.getMinutes()).padStart(2, '0');
+
+    // Format the date and time
+    const formattedDate = `${year}-${month}-${day}`;
+    const formattedTime = `${hours}:${minutes}`;
+
+    return {date: formattedDate, time: formattedTime};
+}
+
+
+///Insights computing using api responses
+export const getFormattedInsightProfileInfo = (data,socialMediaType) => {
+    console.log("data=====>",data)
     let response;
     switch (socialMediaType) {
-        case SocialAccountProvider.FACEBOOK?.toUpperCase():
-        case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
             response = {
-                id: data?.id,
-                name: data?.name,
-                followers_count: data?.followers_count
+                id: data?.profile?.id ||  "N/A",
+                name: data?.profile?.name ||  "N/A",
+                following_count: data?.profile?.fan_count===0 ? 0 : data?.profile?.fan_count  ||  "N/A",
+                followers_count: data?.profile?.followers_count===0 ? 0 : data?.profile?.followers_count  ||  "N/A",
+                total_posts: data?.post?.summary.total_count || "N/A"
+            }
+            break;
+        }
+        case SocialAccountProvider.INSTAGRAM.toUpperCase() :{
+            console.log("data==>",data)
+            response = {
+                id: data?.id ||  "N/A",
+                name: data?.name ||  "N/A",
+                following_count: data?.follows_count===0 ? 0 : data?.follows_count  ||  "N/A",
+                followers_count: data?.followers_count===0 ? 0 : data?.followers_count  ||  "N/A",
+                total_posts: data?.media_count || "N/A"
             }
             break;
         }
@@ -1721,6 +1776,32 @@ export const getFormattedTotalFollowersCountData = (data, socialMediaType) => {
     }
     return response;
 }
+
+export const getFormattedInsightsForProfileViews = (data,socialMediaType) => {
+    console.log("data===>",data);
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase():
+        case SocialAccountProvider.INSTAGRAM?.toUpperCase():{
+            return Array.isArray(data.data) && data.data.length>0 ? data.data[0].values || data :data;
+        }
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            break;
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            break;
+        }
+    }
+    return {};
+}
+
+export function convertTimestampToDate(timestamp) {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
+    const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
+    return `${year}-${month}-${day}`;
+}
+
 export const getLinkedInUrnId = (id = null, type = null) => {
     if (isNullOrEmpty(id)) {
         return "";
@@ -2438,3 +2519,22 @@ export const getVideoDurationById = async (attachmentId) => {
     });
 
 };
+
+
+//insight page utils
+export const fetchCssForInsightPageListOption = (curPage, selectedPage) => {
+    if (selectedPage && curPage && selectedPage.pageId === curPage.pageId) {
+        return {
+            background: '#F4F8FE',
+            ':hover': {
+                backgroundColor: '#F4F8FE',
+            },
+        };
+    }
+    return {
+        ':hover': {
+            backgroundColor: '#F4F8FE',
+        },
+    };
+};
+
