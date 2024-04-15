@@ -64,11 +64,7 @@
     min-width: 80px;
 }
 
-.plan_tags {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+
 
 .plan_grid_navigations button {
     border-radius: 9px;
@@ -94,6 +90,11 @@
     border: 1px solid rgba(254, 73, 160, 0.21);
     background: rgba(255, 88, 101, 0.18);
     padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 130px;
+    width: 100%;
 }
 
 .plan_tags p {

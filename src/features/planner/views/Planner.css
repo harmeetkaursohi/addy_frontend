@@ -15,11 +15,19 @@
 
 }
 
+
+button.planner_view_more_btn {
+    color: black;
+}
+
 .create_post_btn {
     border: none;
     padding: 10px 21px;
     border-radius: 6px;
     background: #E05905;
+}
+.current-date{
+    background-color: red;
 }
 .planner_tag_container{
     position: relative;
@@ -260,6 +268,7 @@ button.fc-customText-button.fc-button.fc-button-primary {
     background-color: unset !important;
 }
 
+
 .custom_event {
     width: 100%;
     height: 36px;
@@ -269,6 +278,7 @@ button.fc-customText-button.fc-button.fc-button-primary {
     align-items: center;
     gap: 10px;
     justify-content: center;
+    cursor: pointer;
 
 }
 
@@ -292,7 +302,7 @@ button.fc-customText-button.fc-button.fc-button-primary {
     font-family: "Nunito";
     font-size: 12px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 700;
     line-height: normal;
 }
 
@@ -503,13 +513,22 @@ td.fc-day.fc-day-mon.fc-day-today.fc-daygrid-day a#fc-dom-18 {
     padding: 0px !important;
     margin: 10px 5px 0px 0px !important;
 }
-
-
-@media screen and (min-width:1600px){
+.custom1{
+    background-color: red;
+}
+ @media screen and (min-width:1900px){
     
     .planner_outer {
         width: 100%;
         max-width: 78%;
+        margin: auto;
+    }
+ }
+@media screen and (min-width:1600px) and (max-width:1899px){
+    
+    .planner_outer {
+        width: 100%;
+        max-width: 84%;
         margin: auto;
     }
     
@@ -556,7 +575,17 @@ td.fc-day.fc-day-mon.fc-day-today.fc-daygrid-day a#fc-dom-18 {
   
   .custom_event{
     justify-content: unset;
+    flex-wrap: wrap;
+    padding:6px 4px;
+    margin-top: 4px;
+
 }
+.cal_Div.w-100.test {
+    height: 50px;
+    overflow: scroll;
+    scrollbar-width: none;
+}
+
   .planner_create_post_heading{
     font-size: 18px;
   }
@@ -619,6 +648,9 @@ ul.schdeuled_post_list li h4{
 @media screen and (max-width: 767px) {
     .planner_header h6 {
         font-size: 14px;
+    }
+    .fc .fc-col-header-cell-cushion {
+        font-size: 9px;
     }
     .planner_header h2 {
         font-size: 22px;

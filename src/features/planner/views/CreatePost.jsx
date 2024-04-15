@@ -18,6 +18,7 @@ import {RiDeleteBin5Fill} from "react-icons/ri";
 import {showErrorToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
 import {
+    blobToFile,
     checkDimensions, convertSentenceToHashtags,
     convertToUnixTimestamp, getEnumValue, isCreatePostRequestValid, isNullOrEmpty,
     validateScheduleDateAndTime
@@ -62,7 +63,7 @@ const CreatePost = () => {
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
-  
+
 
     const [trimmedVideoUrl, setTrimmedVideoUrl] = useState()
     const [allOptions, setAllOptions] = useState([]);
@@ -367,11 +368,10 @@ const CreatePost = () => {
     useEffect(() => {
         if (cropImgUrl) {
             const updatedFiles = [...files];
-
             updatedFiles[editImgIndex] = {
-                file: fileSize,
+                file:   blobToFile(fileSize,imgFile?.fileName,imgFile?.file?.type),
                 url: cropImgUrl,
-                filleName: imgFile?.fileName,
+                fileName: imgFile?.fileName,
                 mediaType: imgFile?.mediaType
             };
 
@@ -387,7 +387,7 @@ const CreatePost = () => {
             updatedFiles[editImgIndex] = {
                 file: blobVideo,
                 url: trimmedVideoUrl,
-                filleName: videoFile?.fileName,
+                fileName: videoFile?.fileName,
                 mediaType: videoFile?.mediaType
             };
 
@@ -409,14 +409,14 @@ const CreatePost = () => {
                         <div className="Container">
                             <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
                                 <div className='preview_btn_outer cmn_border cmn_outer'>
-                                <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
+                                    <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
                                     {
-                                        selectedAllDropdownData?.length > 0  && files?.length>0 && showPreview ?
+                                        (selectedAllDropdownData?.length > 0 && (files?.length > 0 || !isNullOrEmpty(caption) || !isNullOrEmpty(hashTag)) && showPreview) ?
                                             <button className='preview_btn' onClick={() => {
                                                 setShowPreview(false)
-                                            }}><RxCross2 /></button> :
+                                            }}><RxCross2/></button> :
 
-                                            selectedAllDropdownData?.length > 0 && files?.length>0 &&
+                                            (selectedAllDropdownData?.length > 0 && (files?.length > 0 || !isNullOrEmpty(caption) || !isNullOrEmpty(hashTag))) &&
                                             <button className='preview_btn' onClick={() => {
                                                 setShowPreview(true)
                                             }}><AiOutlineEye/></button>
@@ -427,16 +427,15 @@ const CreatePost = () => {
                                     <div
                                         className={showPreview ? "col-lg-6 col-md-12 col-sm-12" : "col-lg-12 col-md-12 col-sm-12"}>
 
-                                        <div className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
+                                        <div
+                                            className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
 
-                                       
 
                                             <form onSubmit={(e) => {
                                                 e.preventDefault();
                                                 handlePostSubmit(e);
                                             }}>
 
-                                                
 
                                                 {/* add media */}
                                                 <div
@@ -637,11 +636,12 @@ const CreatePost = () => {
                                                                             return (
 
                                                                                 <>
-                                                                                { socialAccount && socialAccount?.pageAccessToken.length > 0 &&   <div
-                                                                                    className='instagram_outer facebook_outer '
-                                                                                    key={index}>
-                                                                                    <div
-                                                                                        className="checkbox-button_outer">
+                                                                                    {socialAccount && socialAccount?.pageAccessToken.length > 0 &&
+                                                                                        <div
+                                                                                            className='instagram_outer facebook_outer '
+                                                                                            key={index}>
+                                                                                            <div
+                                                                                                className="checkbox-button_outer">
                                                                                                 <input type="checkbox"
                                                                                                        className=""
                                                                                                        id={socialAccount.provider + "-checkbox"}
@@ -652,44 +652,44 @@ const CreatePost = () => {
                                                                                                 <SocialMediaProviderBadge
                                                                                                     provider={socialAccount.provider}/>
 
-                                                                                    </div>
-
-                                                                                    {
-                                                                                        socialAccount?.pageAccessToken?.map((page, index) => (
-                                                                                            <div
-                                                                                                className="instagramPages unselectedpages"
-                                                                                                key={index}
-                                                                                                style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
-                                                                                                onClick={(e) =>
-                                                                                                    handleCheckboxChange({
-                                                                                                        group: socialAccount?.provider,
-                                                                                                        selectOption: page
-                                                                                                    })}
-                                                                                            >
-                                                                                                <div
-                                                                                                    className="checkbox-button_outer">
-                                                                                                    <img
-                                                                                                        src={page?.imageUrl || default_user_icon}/>
-                                                                                                    <h2 className="cmn_text_style">{page?.name}</h2>
-                                                                                                </div>
-                                                                                                <input
-                                                                                                    type="checkbox"
-                                                                                                    id={page.id}
-                                                                                                    name={page.name}
-                                                                                                    value={page.id}
-                                                                                                    checked={selectedOptions.includes(page.pageId)}
-                                                                                                    onChange={() =>
-                                                                                                        handleCheckboxChange({
-                                                                                                            group: socialAccount?.provider,
-                                                                                                            selectOption: page
-                                                                                                        })}
-                                                                                                />
                                                                                             </div>
-                                                                                        ))
+
+                                                                                            {
+                                                                                                socialAccount?.pageAccessToken?.map((page, index) => (
+                                                                                                    <div
+                                                                                                        className="instagramPages unselectedpages"
+                                                                                                        key={index}
+                                                                                                        style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
+                                                                                                        onClick={(e) =>
+                                                                                                            handleCheckboxChange({
+                                                                                                                group: socialAccount?.provider,
+                                                                                                                selectOption: page
+                                                                                                            })}
+                                                                                                    >
+                                                                                                        <div
+                                                                                                            className="checkbox-button_outer">
+                                                                                                            <img
+                                                                                                                src={page?.imageUrl || default_user_icon}/>
+                                                                                                            <h2 className="cmn_text_style">{page?.name}</h2>
+                                                                                                        </div>
+                                                                                                        <input
+                                                                                                            type="checkbox"
+                                                                                                            id={page.id}
+                                                                                                            name={page.name}
+                                                                                                            value={page.id}
+                                                                                                            checked={selectedOptions.includes(page.pageId)}
+                                                                                                            onChange={() =>
+                                                                                                                handleCheckboxChange({
+                                                                                                                    group: socialAccount?.provider,
+                                                                                                                    selectOption: page
+                                                                                                                })}
+                                                                                                        />
+                                                                                                    </div>
+                                                                                                ))
+                                                                                            }
+                                                                                        </div>
                                                                                     }
-                                                                                </div>
-                                                                            }
-                                                                            </>
+                                                                                </>
                                                                             )
                                                                         })
                                                                     }
@@ -910,14 +910,14 @@ const CreatePost = () => {
                                     {
                                         showPreview &&
                                         <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
-                                          <div className='cmn_outer create_post_container'>
-                                            <div className='post_preview_outer'>
-                                                <h3 className='Post_Preview_heading'>Post Preview</h3>
-                                                {
-                                                    allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
-                                                        let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
+                                            <div className='cmn_outer create_post_container'>
+                                                <div className='post_preview_outer'>
+                                                    <h3 className='Post_Preview_heading'>Post Preview</h3>
+                                                    {
+                                                        allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
+                                                            let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                        return (<span key={index}>
+                                                            return (<span key={index}>
                                                     {selectedPageData &&
                                                         <CommonFeedPreview
                                                             socialMediaType={option.group}
@@ -936,10 +936,10 @@ const CreatePost = () => {
                                                     }
 
                                                 </span>
-                                                        )
-                                                    })
-                                                }
-                                            </div>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
                                             </div>
 
                                         </div>
@@ -948,26 +948,26 @@ const CreatePost = () => {
 
                                 {/* draft and publish now section  */}
                                 <div className='draft_publish_outer cmn_outer'>
-                                <GenericButtonWithLoader label={jsondata.saveasdraft} onClick={(e) => {
-                                                                                         setReference("Draft")
-                                                                                         handleDraftPost(e);
-                                                                                     }}
-                                                                //  isDisabled={false}
-                                                                                     isDisabled={loadingCreateFacebookPost && reference !== "Draft"} // Disable if not null and not "Scheduled"
+                                    <GenericButtonWithLoader label={jsondata.saveasdraft} onClick={(e) => {
+                                        setReference("Draft")
+                                        handleDraftPost(e);
+                                    }}
+                                        //  isDisabled={false}
+                                                             isDisabled={loadingCreateFacebookPost && reference !== "Draft"} // Disable if not null and not "Scheduled"
 
-                                                                                     className={"save_btn cmn_bg_btn loading"}
+                                                             className={"save_btn cmn_bg_btn loading"}
 
-                                  isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
-                                   <GenericButtonWithLoader label={jsondata.publishnow}
-                                                                                 onClick={(e) => {
-                                                                                     setReference("Published")
-                                                                                     handlePostSubmit(e);
-                                                                                 }}
-                                                            //  isDisabled={false}
-                                                                                 isDisabled={loadingCreateFacebookPost && reference !== "Published"}
-                                                                                 className={"publish_btn cmn_bg_btn loading"}
-                                      isLoading={reference === "Published" && loadingCreateFacebookPost}/>
-                                
+                                                             isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
+                                    <GenericButtonWithLoader label={jsondata.publishnow}
+                                                             onClick={(e) => {
+                                                                 setReference("Published")
+                                                                 handlePostSubmit(e);
+                                                             }}
+                                        //  isDisabled={false}
+                                                             isDisabled={loadingCreateFacebookPost && reference !== "Published"}
+                                                             className={"publish_btn cmn_bg_btn loading"}
+                                                             isLoading={reference === "Published" && loadingCreateFacebookPost}/>
+
                                 </div>
                             </div>
                         </div>

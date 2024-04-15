@@ -70,21 +70,43 @@ isolation: unset !important;
     color: #7C7C7C;
     font-weight: 400;
     font-size: 18px;
-    padding-left: 12px;
     font-family: "Nunito";
+    margin-top: 20px;
+}
+.edit_profile_contaniner{
+    display: flex;
+    justify-content: space-between;
+}
+button.edit_profile_btn {
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-family: 'Nunito';
+    border-radius: 6px;
+    padding: 4px 20px;
+    font-size: 16px;
+    background: #F07C33;
+    height: 35px;
+}
+.profile_cancel_btn{
+    color: #2E3646;
+    border: 1px solid #B0B0B0;
+    border-radius: 6px;
+    font-weight: 700;
+    padding: 4px 20px;
+    height: 35px;
 }
 .edit_content input {
   
     color: #263238;
     font-weight: 500;
     font-size: 18px;
-    background-color: white !important;
-    border: none;
+
 }
 
 .edit_content input.form-control::placeholder {
     color: #263238;
-    font-weight: 500;
+    font-weight: 700;
     font-size: 18px;
 }
 .change_profile_outer.cmn_box_shadow.white_bg_color input {
@@ -145,12 +167,7 @@ isolation: unset !important;
     padding: 15px;
     border-radius: 20px;
 }
-.change_profile_outer {
-    display: flex;
-   justify-content: space-between;
-  
 
-}
 .user_name_heading{
     color: #2E3646;
     font-size: 20px;
@@ -167,7 +184,8 @@ isolation: unset !important;
   .tooltip-arrow::before {
     border-right-color: #ee7817 !important; 
   }
-  div.editProfile_wrapper .tooltip-arrow::before {
+
+  .custom-tooltip .tooltip-arrow::before {
     border-right-color: transparent !important; 
     border-bottom-color: #ee7817 !important; 
     border-left-color: transparent !important; 
@@ -176,9 +194,7 @@ isolation: unset !important;
     color: #263238;
     font-weight: 500;
     font-size: 18px;
-    background: white;
-    border: none;
-    appearance: none !important;
+   
 }
  
   
@@ -189,6 +205,12 @@ isolation: unset !important;
   .changeProfile_label:hover {
     background: white;
     color: #e97011;
+}
+.change_profile_outer {
+    background: #F8FAFD;
+    border: 1px solid #D9D9D9;
+    padding: 20px;
+    border-radius: 10px;
 }
 @media screen and (min-width:1499px) {
     .editprofile_outer{
@@ -229,6 +251,9 @@ isolation: unset !important;
  @media screen and (max-width:767px){
     .editprofile_outer {
         padding: 20px 16px;
+    }
+    .edit_profile_contaniner{
+        flex-wrap: wrap;
     }
     .edit_content input.form-control::placeholder{
         font-size: 14px !important;

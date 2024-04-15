@@ -67,7 +67,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                 dispatch(getAllSocialMediaPostsByCriteria({
                                     token: token,
                                     query: {
-                                        limit: 5,
+                                        limit: 6,
                                         period: "MONTH",
                                         sortOrder: "asc",
                                         sort: "feedPostDate",
@@ -107,7 +107,7 @@ const ScheduledComponent = ({scheduledData}) => {
 
                         {scheduledData?.data && Object.keys(scheduledData?.data).length === 0 ?
 
-                            <div className="p-5 text-center mt-3 No_Upcoming_Outer">
+                            <div className=" text-center mt-3 No_Upcoming_Outer">
                                 <h4 className="text-center mb-3">
                                     No Upcoming Posts
                                 </h4>
@@ -124,24 +124,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                      key={index}>
                                     <div className="draft-outer ">
 
-                                        <div className={"draft-heading"}>
-                                            <h4 className={"posted-on-txt"}>Posted On : </h4>
-
-                                            <div className="page_tags">
-                                                {curBatch?.postPages && Array.isArray(curBatch?.postPages) &&
-                                                    curBatch?.postPages.map((curPage, index) => (
-                                                        <div className="selected-option" key={index}>
-                                                            <div>
-                                                                <img className={"me-1 social-media-icon"}
-                                                                     src={computeImageURL(curPage?.socialMediaType)}
-                                                                     alt={"instagram"}/>
-                                                            </div>
-                                                            <p className={"social-media-page-name"}>{curPage?.pageName}</p>
-                                                        </div>
-                                                    ))
-                                                }
-                                            </div>
-                                        </div>
+                                     
 
                                         <div className="post-image-outer">
 
@@ -182,6 +165,24 @@ const ScheduledComponent = ({scheduledData}) => {
                                             </div>
 
 
+                                        <div className={"draft-heading"}>
+                                            <h4 className={"posted-on-txt"}>Posted On : </h4>
+
+                                            <div className="page_tags">
+                                                {curBatch?.postPages && Array.isArray(curBatch?.postPages) &&
+                                                    curBatch?.postPages.map((curPage, index) => (
+                                                        <div className="selected-option" key={index}>
+                                                            <div>
+                                                                <img className={"me-1 social-media-icon"}
+                                                                     src={computeImageURL(curPage?.socialMediaType)}
+                                                                     alt={"instagram"}/>
+                                                            </div>
+                                                            <p className={"social-media-page-name"}>{curPage?.pageName}</p>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
                                         </div>
                                             <div
                                                 className="upcomingPostBtn_Outer ">

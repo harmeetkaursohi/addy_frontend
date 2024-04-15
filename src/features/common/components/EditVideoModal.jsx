@@ -300,8 +300,8 @@ const saveHandler=()=>{
                                                                                 
     </Modal.Body>
     <Modal.Footer>                    
-    <div className=" ">
-        <button className="cmn_btn_color cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
+    <div className="editvideobtn_outer ">
+        <button className="cmn_btn_color cmn_connect_btn disconnect_btn editVideo_cancel_btn" onClick={handleClose}> Cancel</button>
         <button disabled={videoTrimmedUrl.length===0} onClick={saveHandler} type="button" className={`ms-3 connect_btn ${videoTrimmedUrl.length===0?"disabled-button": "cmn_btn_color cmn_connect_btn  "}`}
                > Save
         </button>

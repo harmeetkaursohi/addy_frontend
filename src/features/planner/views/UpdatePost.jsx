@@ -9,7 +9,6 @@ import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {useDispatch, useSelector} from "react-redux";
 import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import {Dropdown} from 'react-bootstrap'
-import SideBar from "../../sidebar/views/Layout.jsx";
 import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
@@ -23,10 +22,10 @@ import {
     convertSentenceToHashtags,
     convertToUnixTimestamp, convertUnixTimestampToDateTime,
     getEnumValue, getFileFromAttachmentSource, getVideoDurationById,
-    groupByKey, isCreatePostRequestValid, isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
+    groupByKey, isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
-import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
+import {showErrorToast} from "../../common/components/Toast";
 import {resetReducers} from "../../../app/actions/commonActions/commonActions";
 import default_user_icon from "../../../images/default_user_icon.svg";
 import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantData";
@@ -366,7 +365,6 @@ const UpdatePost = () => {
                     },
                 };
 
-
                 isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject) && dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         navigate("/planner");
@@ -450,10 +448,8 @@ const UpdatePost = () => {
 
         useEffect(() => {
             if (trimmedVideoUrl) {
-
                 const updatedFiles = [...files];
                 urlToFile(trimmedVideoUrl, videoFile?.fileName, videoFile?.mediaType).then(result => {
-
                     updatedFiles[editIndex] = {
                         file: result,
                         fileName: videoFile?.fileName,
@@ -462,9 +458,7 @@ const UpdatePost = () => {
                     };
                     setFiles(updatedFiles);
                 })
-
                 setFiles(updatedFiles);
-
             }
         }, [trimmedVideoUrl])
 
@@ -476,18 +470,18 @@ const UpdatePost = () => {
                     <div className="Container">
                         <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
                             <div className='preview_btn_outer cmn_border cmn_outer'>
-                            <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
+                                <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
 
                                 {
                                     selectedAllDropdownData?.length > 0 && showPreview ?
                                         <button className='preview_btn' onClick={() => {
                                             setShowPreview(false)
-                                        }}> <RxCross2 /></button> :
+                                        }}><RxCross2/></button> :
 
                                         selectedAllDropdownData?.length > 0 &&
                                         <button className='preview_btn ' onClick={() => {
                                             setShowPreview(true)
-                                        }}><AiOutlineEye /></button>
+                                        }}><AiOutlineEye/></button>
                                 }
 
                             </div>
@@ -499,8 +493,8 @@ const UpdatePost = () => {
 
 
                                         <form onSubmit={null}>
-                                           {/* add media */}
-                                           <div
+                                            {/* add media */}
+                                            <div
                                                 className={`media_outer ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
                                                 <div
                                                     className={showPreview ? "" : 'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
@@ -775,7 +769,7 @@ const UpdatePost = () => {
 
                                             </div>
 
-                                            
+
                                             {/* Pinterest Options*/}
 
                                             {
@@ -965,16 +959,16 @@ const UpdatePost = () => {
                                 {
                                     showPreview &&
                                     <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
-                                     <div className='cmn_outer create_post_container'>
-                                        <div className='post_preview_outer'>
-                                        <h3 className='Post_Preview_heading'>Post Preview</h3>
+                                        <div className='cmn_outer create_post_container'>
+                                            <div className='post_preview_outer'>
+                                                <h3 className='Post_Preview_heading'>Post Preview</h3>
 
-                                            {
-                                                allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
+                                                {
+                                                    allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
 
-                                                    let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
+                                                        let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                    return (<span key={index}>
+                                                        return (<span key={index}>
                                                         {
                                                             selectedPageData && <CommonFeedPreview
                                                                 socialMediaType={option.group}
@@ -989,34 +983,34 @@ const UpdatePost = () => {
                                                             />
                                                         }
                                                     </span>
-                                                    )
-                                                })
-                                            }
+                                                        )
+                                                    })
+                                                }
+                                            </div>
                                         </div>
-                                      </div>
                                     </div>
                                 }
                             </div>
-                            
-                            <div className='draft_publish_outer cmn_outer'>
-                            
-                            <GenericButtonWithLoader label={jsondata.saveasdraft}
-                                                                                 onClick={(e) => {
-                                                                                     setReference("Draft")
-                                                                                     handleDraftPost(e);
-                                                                                 }}
 
-                                                                                 className={"save_btn cmn_bg_btn loading"}
-                            isLoading={reference === "Draft" && loadingUpdatePost}/>
-                               
-                            <GenericButtonWithLoader label={jsondata.publishnow}
-                                                                             onClick={(e) => {
-                                                                                 setReference("Published")
-                                                                                 handlePostSubmit(e);
-                                                                             }}
-                                                                             isDisabled={false}
-                                                                             className={"publish_btn cmn_bg_btn loading"}
-                            isLoading={reference === "Published" && loadingUpdatePost}/>
+                            <div className='draft_publish_outer cmn_outer'>
+
+                                <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                         onClick={(e) => {
+                                                             setReference("Draft")
+                                                             handleDraftPost(e);
+                                                         }}
+
+                                                         className={"save_btn cmn_bg_btn loading"}
+                                                         isLoading={reference === "Draft" && loadingUpdatePost}/>
+
+                                <GenericButtonWithLoader label={jsondata.publishnow}
+                                                         onClick={(e) => {
+                                                             setReference("Published")
+                                                             handlePostSubmit(e);
+                                                         }}
+                                                         isDisabled={false}
+                                                         className={"publish_btn cmn_bg_btn loading"}
+                                                         isLoading={reference === "Published" && loadingUpdatePost}/>
                             </div>
                         </div>
                     </div>

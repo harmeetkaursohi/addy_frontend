@@ -27,7 +27,7 @@ const Dashboard = () => {
         document.title = 'Dashboard';
         token && dispatch(getAllSocialMediaPostsByCriteria({
             token: token,
-            query: {limit: 5,sort:"feedPostDate", sortOrder:"asc",period:"MONTH",postStatus: ["SCHEDULED"]}
+            query: {limit: 6,sort:"feedPostDate", sortOrder:"asc",period:"MONTH",postStatus: ["SCHEDULED"]}
         }));
     }, [token]);
 

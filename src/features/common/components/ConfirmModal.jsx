@@ -47,7 +47,7 @@ const ConfirmModal = ({
 
                             <div className="confirm_btn ">
 
-                                <button className="cmn_btn_color cmn_connect_btn disconnect_btn"
+                                <button className=" cmn_connect_btn disconnect_btn"
                                         onClick={(e) => {
                                             handleClose()
                                         }}>Cancel

@@ -7,8 +7,8 @@ import {LuBarChart3} from "react-icons/lu";
 import {HiMiniArrowUpRight} from "react-icons/hi2";
 import send_icon from "../../../../images/send_icon.svg"
 import {
-    computeImageURL,
-    getInitialLetterCap, getQueryForGraphData, isNullOrEmpty,
+    computeImageURL, getImageUrl,
+    getInitialLetterCap, getPagesDataFromSocialMedia, getQueryForGraphData, isNullOrEmpty,
     socialMediaAccountHasConnectedPages
 } from "../../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../../utils/contantData";
@@ -57,7 +57,20 @@ export const DashboardReports = () => {
                 setReportSelectedAccountType(selectedSocialMediaAccount?.provider || "")
             }
             setReportSelectedAccountData(selectedSocialMediaAccount);
-            const connectedPagesToSelectedSocialMediaAccount = connectedPagesReducer?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === selectedSocialMediaAccount?.id);
+            let connectedPagesToSelectedSocialMediaAccount = connectedPagesReducer?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === selectedSocialMediaAccount?.id);
+            const pagesDataFromSocialMedia = getPagesDataFromSocialMedia(selectedSocialMediaAccount?.provider, {
+                facebook: facebookPageListReducer,
+                instagram: instagramBusinessAccountsData,
+                linkedin: getAllLinkedinPagesData,
+                pinterest: pinterestBoardsData,
+            });
+            // Get Updated Image Url For Dropdown
+            connectedPagesToSelectedSocialMediaAccount = connectedPagesToSelectedSocialMediaAccount?.map((page) => {
+                return {
+                    ...page,
+                    imageUrl: getImageUrl(selectedSocialMediaAccount?.provider, pagesDataFromSocialMedia?.filter(c => c.id === page.pageId)[0])
+                }
+            });
             setConnectedPagesToSelectedSocialMediaAccount(connectedPagesToSelectedSocialMediaAccount)
             if (!isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount)) {
                 selectedSocialMediaAccount?.provider === "PINTEREST" ? setSelectedPage(selectedSocialMediaAccount) : setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
@@ -144,7 +157,8 @@ export const DashboardReports = () => {
                                 <div
                                     className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container">
 
-<div className="days_outer">
+                                    {
+                                        false && <div className="days_outer">
                                             <select className="custom_select_days dropdown_days "
                                                     value={graphDaysSelected}
                                                     onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
@@ -159,8 +173,9 @@ export const DashboardReports = () => {
 
                                             </select>
                                         </div>
+                                    }
                                     {
-                                        false &&  <Dropdown className="dropdown_btn">
+                                        false && <Dropdown className="dropdown_btn">
 
                                             <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                              className="social_dropdowns"
@@ -382,7 +397,7 @@ export const DashboardReports = () => {
                                         <div className="page_title_dropdown">
                                             <h3 className="cmn_white_text instagram_overview_heading">{SocialAccountProvider[reportSelectedAccountType]?.charAt(0)?.toUpperCase() + SocialAccountProvider[reportSelectedAccountType]?.slice(1)} Overview</h3>
                                         </div>
-                                        {/* <div className="days_outer">
+                                        <div className="days_outer">
                                             <select className=" dropdown_days box_shadow"
                                                     value={graphDaysSelected}
                                                     onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
@@ -396,15 +411,15 @@ export const DashboardReports = () => {
                                                 }
 
                                             </select>
-                                        </div> */}
+                                        </div>
 
                                     </div>
-                                    {/*<Chart/>*/}
+                                    {/* <Chart/> */}
 
                                     <div className="account_info mt-2">
-                                      
+
                                         <LineGraph reportData={reportGraphSectionData}/>
-                                        
+
                                     </div>
                                 </div>
 

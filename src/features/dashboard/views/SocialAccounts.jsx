@@ -23,18 +23,15 @@ import Swal from "sweetalert2";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import ConnectPagesModal from "../../modals/views/facebookModal/ConnectPagesModal";
 import {
-    disconnectDisabledPages,
     getAllFacebookPages,
     getFacebookConnectedPages
 } from "../../../app/actions/facebookActions/facebookActions";
 import default_user_icon from "../../../images/default_user_icon.svg"
 import {
-    NoBusinessAccountFound,
     SocialAccountProvider
 } from "../../../utils/contantData";
 import AccountAlreadyConnectedWarningModal from "./AccountAlreadyConnectedWarningModal";
 import {SomethingWentWrong, enabledSocialMedia} from "../../../utils/contantData";
-import {resetReducers} from "../../../app/actions/commonActions/commonActions";
 
 const SocialAccounts = ({}) => {
 
@@ -63,7 +60,6 @@ const SocialAccounts = ({}) => {
     const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
     const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
     const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
-
 
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
@@ -213,7 +209,7 @@ const SocialAccounts = ({}) => {
                 dispatch(getAllConnectedSocialAccountAction(res))
                 dispatch(getAllSocialMediaPostsByCriteria({
                     token: token,
-                    query: {limit: 5,sort:"feedPostDate",sortOrder:"asc", period:"MONTH",postStatus: ["SCHEDULED"]}
+                    query: {limit: 6,sort:"feedPostDate",sortOrder:"asc", period:"MONTH",postStatus: ["SCHEDULED"]}
                 }));
             })
         }).catch((error) => {
@@ -279,7 +275,7 @@ const SocialAccounts = ({}) => {
                     dispatch(getAllConnectedSocialAccountAction({customerId: decodeJwt?.customerId, token: token}));
                     dispatch(getAllSocialMediaPostsByCriteria({
                         token: token,
-                        query: {limit: 5, period:"MONTH",sort:"feedPostDate",sortOrder:"asc", postStatus: ["SCHEDULED"]}
+                        query: {limit: 6, period:"MONTH",sort:"feedPostDate",sortOrder:"asc", postStatus: ["SCHEDULED"]}
                     }));
                     Swal.fire({
                         icon: 'success',
@@ -957,28 +953,28 @@ const SocialAccounts = ({}) => {
             </div>
             {enabledSocialMedia?.isFaceBookEnabled && showFacebookModal &&
                 <ConnectPagesModal showModal={showFacebookModal} setShowModal={setShowFacebookModal}
-                                   allPagesList={getAllFacebookPagesData?.facebookPageList}
+                                   allPagesList={getAllFacebookPagesData?.facebookPageList || []}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
                                    noPageFoundMessage={"No Page Found!"}
                                    socialMediaType={SocialAccountProvider.FACEBOOK}
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>}
             {enabledSocialMedia?.isInstagramEnabled && showInstagramModal &&
                 <ConnectPagesModal showModal={showInstagramModal} setShowModal={setShowInstagramModal}
-                                   allPagesList={instagramBusinessAccountsData?.data}
+                                   allPagesList={instagramBusinessAccountsData?.data ||[]}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
                                    noPageFoundMessage={"No Page Found!"}
                                    socialMediaType={SocialAccountProvider.INSTAGRAM}
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
             {enabledSocialMedia?.isPinterestEnabled && showPinterestModal &&
                 <ConnectPagesModal showModal={showPinterestModal} setShowModal={setShowPinterestModal}
-                                   allPagesList={pinterestBoardsData?.data?.items}
+                                   allPagesList={pinterestBoardsData?.data?.items || []}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
                                    noPageFoundMessage={"No Board Found!"}
                                    socialMediaType={SocialAccountProvider.PINTEREST}
                                    socialMediaAccountInfo={getAllConnectedSocialAccountData?.data?.filter(account => account.provider === "PINTEREST")[0]}/>}
             {enabledSocialMedia?.isLinkedinEnabled && showLinkedinModal &&
                 <ConnectPagesModal showModal={showLinkedinModal} setShowModal={setShowLinkedinModal}
-                                   allPagesList={Object.keys(getAllLinkedinPagesData?.data?.results)?.map(key => {
+                                   allPagesList={Object.keys(getAllLinkedinPagesData?.data?.results || {})?.map(key => {
                                        return getFormattedLinkedinObject(key, getAllLinkedinPagesData?.data?.results[key])
                                    })}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}

@@ -11,7 +11,7 @@
 
 }
 .video_player_outer {
-    height: 250px !important;
+    height: 270px !important;
 }
 .FaLinkedin_icon{
     color: #0866ff;
@@ -111,7 +111,19 @@ div.instagram_like {
     color: white;
     border-radius: 10px;
 }
-
+.linkedin_post_modal_container h3{
+    font-size: 16px;
+}
+.linkedin_post_modal_container .like_comment_outer{
+    margin-top: 10px;
+    border-bottom: unset;
+    padding: 14px 0px 0px;
+}
+.post_modal_like_outer{
+display: flex;
+align-items: center;
+gap: 16px;
+}
 .cmn_crop_video_btn{
     padding: 5px 0px;
     border-radius: 5px;
@@ -172,17 +184,15 @@ div.instagram_like {
     height: 300px;
     object-fit: cover;
 }
-.individual_post_modal_wrapper .modal-header {
+.pinterest_post_modal_container .modal-header {
     border-bottom: unset;
 }
 .individual_post_header img {
     border-radius: 40px;
 }
 .individual_post_header {
-    display: flex;
-    justify-content: space-between;
     padding: 25px 25px 0px;
-    align-items: center;
+ 
 
 }
 .RxCross2_icon {
@@ -202,23 +212,80 @@ div.instagram_like {
 .individual_post_content.modal-body {
     padding: 25px;
 }
-
-
+.disconected_btn{
+  background-color:  #F07C33 
+}
+.facebook_post_modal_outer h4{
+  font-size: 15px;  
+}
+.pinterest_post_modal_container div.modal-content{
+     border-radius: unset ;
+     background: transparent;
+    border: none;
+}
+.pinterest_post_header{
+    padding: 20px;
+    background-color: white;
+}
+.pinterest_post_body_content {
+    border-radius: 30px !important;
+    padding: 0px !important;
+    overflow: hidden;
+}
+.visit_btn_outer button {
+    border: none;
+    color: white;
+    border-radius: 20px;
+    padding: 7px 24px;
+}
+.pinterest_post_header img{
+    border-radius: 35px;
+}
+.pinterest_save_btn{
+    background-color: #D42D2F;
+}
+.visit_btn{
+    background-color:  #ADAAAA;
+    
+}
+.pinterest_post_heading{
+    line-height: 20px;
+    margin-top: 13px;
+}
+.editVideo_cancel_btn{
+    color: white;
+}
 @media screen and (min-width:2560px)
 {
     .video_player_outer {
         height: 500px !important;
     }
 }
+ @media screen and (min-width:1950px) {
+    .pinterest_post_heading {
+        line-height: 30px;
+    }
+ }
+ @media screen and (max-width:1440px){
+    .RxCross2_icon {
+        right: -37px;
+        top: -21px;
+    }    
+ }
 @media screen and (max-width:1280px) {
     .linkedin_likes h3{
         font-size: 13px;
     }
+    
     .aspect_ratio_outer li svg{
         font-size: 32px;
     }
     .linkedin_post_likes{
         padding: 9px;
+    }
+    .RxCross2_icon{
+    right: -37px;
+    top: -22px;
     }
 }
 @media screen and (max-width:1024px) {
@@ -238,6 +305,39 @@ div.instagram_like {
     .linkedin_dropdown{
         display: none;
     }
+    .pinterest_post_heading{
+        font-size: 14px;
+    }
+    .post_modal_like_outer{
+        display: block;
+    }
+    .post_modal_like_outer img{
+        height: 16px;
+        width: 16px;
+    }
+    .RxCross2_icon {
+     right: 13px;
+     top: 13px;
+     height: 25px;
+    width: 25px;
+    font-size: 14px;
+    z-index: 1;
+    }
+    
+    .facebook_post_modal_outer h4 {
+        font-size: 13px;
+    }
+    .facebook_post_modal_outer svg {
+        height: 20px;
+        width: 20px;
+    }
+    .individual_post_header {
+    margin-top: 20px;
+    }
+    .individual_post_content.modal-body {
+        padding: 18px;
+    }
+    
     .reactEasyCrop_Container {
         height: 300px;
    

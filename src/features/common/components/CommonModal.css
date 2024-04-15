@@ -101,7 +101,9 @@ div.commonmodal_header {
     background-color: orange;
     color: white;
 }
-
+.facebook_post_modal_outer svg{
+font-size: 20px;
+}
 .connected-button {
     background-color: #e24a4a;
     color: white;
@@ -170,13 +172,16 @@ button, .modal_inner_content.disconnect_wrapper
     }
     
     .modal_inner_content {
-        flex-wrap: wrap;
         padding-bottom: 15px;
     }
-
+ .users_name h2{
+font-size: 12px;
+margin-top: 12px;
+ }
     .user_info_container {
-        flex-grow: 1;
+      display: block;
         width: 100%;
+        
     }
     .facebook_title h2 {
         font-size: 15px;
@@ -189,8 +194,6 @@ button, .modal_inner_content.disconnect_wrapper
 
 @media (max-width: 567px) {
     .modal_inner_content {
-        display: flex;
-        justify-content: space-between;
         gap: 0px;
     }
 

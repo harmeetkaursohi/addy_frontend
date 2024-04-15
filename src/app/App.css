@@ -28,9 +28,15 @@ p {
 
 .cmn_btn_color {
   border-radius: 10px;
-  background: #f07c33;
+  background: #f07c33 !important;
 }
 
+.LiaThumbsUpSolid{
+  fill: rgb(8, 102, 255);
+}
+.like_text_color{
+  color: rgb(8, 102, 255) !important;
+}
 .cmn_white_bg {
   border: 1px solid #d1d9e2;
   background: #e6e9ec;
@@ -73,8 +79,6 @@ ul {
 }
 .cmn_wrapper_outer {
   padding: 0px 30px 30px;
-
-
 }
 
 .form-control {
@@ -405,10 +409,17 @@ line-height: 20px;
     min-height: calc(100vh - 166px) !important;
   }
 }
-@media screen and (min-width:1600px){
+@media screen and (min-width:1900px) {
+  .cmn_wrapper_outer {
+    width: 100%;
+    max-width: 78%;
+    margin: auto;
+  }
+}
+@media screen and (min-width:1600px) and (max-width:1899px){
   .cmn_wrapper_outer {
   width: 100%;
-  max-width: 78%;
+  max-width: 84%;
   margin: auto;
 }
 

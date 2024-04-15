@@ -21,6 +21,11 @@ import {subscribeNotifications} from "../../../services/addyService";
 
 import logout_bg from "../../../images/logout_bg.svg"
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect.jsx";
+import {
+    getUpdatedNameAndImageUrlForConnectedPages,
+    isPageInfoAvailableFromSocialMediaFor
+} from "../../../utils/commonUtils";
+import {updatePageAccessTokenByIds} from "../../../app/actions/pageAccessTokenAction/pageAccessTokenAction";
 
 const Layout = () => {
     const navigate = useNavigate();
@@ -32,8 +37,14 @@ const Layout = () => {
     const userData = useSelector((state) => state.user.userInfoReducer.data);
     const loading = useSelector((state) => state.user.userInfoReducer.loading);
 
+    const facebookPageListReducer = useSelector(state => state.facebook.getFacebookPageReducer);
+    const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
+    const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
+    const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
     const getAllConnectedSocialAccountData = useSelector((state) => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector((state) => state.facebook.getFacebookConnectedPagesReducer);
+
+
     const unseenNotificationsCount = useSelector(state => state.notification.unseenNotificationsCountReducer)
     const {sidebar, show_sidebar} = useAppContext();
 
@@ -41,6 +52,38 @@ const Layout = () => {
     useEffect(() => {
         subscribeNotifications(dispatch);
     }, []);
+
+    useEffect(() => {
+        if (getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
+            // First Map -> Insert socialMediaType in each page
+            // Second Map -> Getting latest imageUrl if Updated or url expired
+            // Third Filter -> Filter all the pages whose images we need to updated
+            let pageInfoFromSocialMedia = {
+                facebook: facebookPageListReducer,
+                instagram: instagramBusinessAccountsData,
+                linkedin: getAllLinkedinPagesData,
+                pinterest: pinterestBoardsData,
+            }
+            let allConnectedPages = connectedPagesData?.facebookConnectedPages?.map((page) => {
+                return {
+                    ...page,
+                    socialMediaType: getAllConnectedSocialAccountData?.data?.filter(account => account.id === page.socialMediaAccountId)[0]?.provider
+                }
+            })
+            const connectedSocialMediaTypes = Array.from(new Set(allConnectedPages.map(page => page.socialMediaType)));
+            if (isPageInfoAvailableFromSocialMediaFor(connectedSocialMediaTypes, pageInfoFromSocialMedia)) {
+                let pageImagesToUpdate = allConnectedPages?.map(page => {
+                        return getUpdatedNameAndImageUrlForConnectedPages(page, pageInfoFromSocialMedia)
+                    }
+                ).filter(page => page?.isPageUpdated)
+                pageImagesToUpdate?.length > 0 && dispatch(updatePageAccessTokenByIds({
+                    token: token,
+                    ids: pageImagesToUpdate?.map(page => page.id).join(","),
+                    data: pageImagesToUpdate
+                }))
+            }
+        }
+    }, [connectedPagesData, getAllConnectedSocialAccountData])
 
 
     useEffect(() => {
@@ -92,7 +135,6 @@ const Layout = () => {
         });
     };
 
-    
     return (
         <>
             <section className="sidebar_container">
@@ -110,7 +152,6 @@ const Layout = () => {
                         {sidebar ? <FaBars/> : <RxCross2 className="cross_icon"/>}
 
                     </div>
-                    
                     <div className="user_profile_outer">
                         <Link to="/dashboard">
                             {sidebar ? (
@@ -128,9 +169,11 @@ const Layout = () => {
 
                     </div>
                     <div className={"d-flex align-items-center"}>
-                        <div className={`user_info_outer ${sidebar?"px-3 py-2":""} ${location.pathname==="/profile"?"active_bg_color":""}`} onClick={() => {
-                                        navigate("/profile");
-                                    }}>
+                        <div
+                            className={`user_info_outer ${sidebar ? "px-3 py-2" : ""} ${location.pathname === "/profile" ? "active_bg_color" : ""}`}
+                            onClick={() => {
+                                navigate("/profile");
+                            }}>
 
 
                             {loading ? <SkeletonEffect count={1}/> : userData !== undefined &&
@@ -138,8 +181,8 @@ const Layout = () => {
                                     <img
                                         src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
                                         className='profile_img'/>
-                                    <h3 className={sidebar?"d-none":""}>{userData?.fullName || "name"}</h3>
-                                  
+                                    <h3 className={sidebar ? "d-none" : ""}>{userData?.fullName || "name"}</h3>
+
                                 </>
                             }
                         </div>
@@ -164,6 +207,7 @@ const Layout = () => {
                                     {sidebar ? (
                                         <OverlayTrigger
                                             placement="right"
+                                            delay={{ show: 200, hide: 200 }} 
                                             overlay={
                                                 <Tooltip id="button-tooltip" className="ms-4">
                                                     {item.name}

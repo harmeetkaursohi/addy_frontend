@@ -668,7 +668,7 @@ width: 100%;
     }
     
 }
-@media screen and (max-width:1220px){
+@media screen and (max-width:1280px){
     .post_performing_list{
         flex-wrap: wrap;
     }
@@ -681,9 +681,13 @@ width: 100%;
     .followers_outer {
         flex-wrap: wrap;
     }
+    
 }
 
 @media screen and (max-width: 1024px) {
+    .social_media_content{
+        flex-wrap: wrap;
+        }
     
     .social_media_wrapper {
         padding: 16px;
