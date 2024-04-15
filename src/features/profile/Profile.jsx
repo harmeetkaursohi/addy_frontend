@@ -224,7 +224,7 @@ const Profile = () => {
                                         {
                                             userInfo?.data?.signupSource === SignupSource.ADDY && <div
                                                 className="change_password_btn text-center d-flex">
-                                                <button onClick={() => {
+                                                <button type={"button"} onClick={() => {
                                                     setShowUpdatePasswordModal(true)
                                                 }}
                                                         className={"mt-3 me-3 createPost_btn crate_btn cmn_btn_color cursor-pointer"}>Change
