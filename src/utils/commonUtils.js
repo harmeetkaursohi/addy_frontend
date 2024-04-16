@@ -1220,7 +1220,6 @@ export const extractParameterFromUrl = (url, parameterName) => {
 
 export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, socialMediaType) => {
     let response = {};
-    console.log("insightsData===>", insightsData)
     switch (socialMediaType) {
         case SocialAccountProvider?.FACEBOOK: {
             insightsData?.map(res => {
@@ -1506,7 +1505,6 @@ export const getFormattedDemographicData = (data, key, socialMediaType) => {
         case SocialAccountProvider.FACEBOOK.toUpperCase(): {
             let formattedData;
             if (data?.data?.data?.length > 0) {
-
                 let demographicData;
                 if (key === "CITY") {
                     demographicData = data?.data?.data?.filter(data => data?.name === "page_fans_city")
@@ -2597,3 +2595,105 @@ export const getUpdatedNameAndImageUrlForConnectedPages = (page, data) => {
     }
 
 };
+export function convertTimestampToDate(timestamp) {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero if needed
+    const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
+    return `${year}-${month}-${day}`;
+}
+export const getFormattedInsightProfileInfo = (data,socialMediaType) => {
+    let response;
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
+            response = {
+                id:data?.id,
+                name:data?.name,
+                followers:data?.followers_count,
+                likes:data?.fan_count,
+                about:data?.about,
+                imageUrl:data?.picture?.data?.url
+            }
+            break;
+        }
+        case SocialAccountProvider.INSTAGRAM.toUpperCase() :{
+            response = {
+                id:data?.id,
+                name:data?.name,
+                followers:data?.followers_count,
+                following:data?.follows_count,
+                about:data?.biography,
+                total_posts:data?.media_count,
+                imageUrl:data?.profile_picture_url
+            }
+            break;
+        }
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            response = {
+                id:data?.id,
+                name:data?.business_name,
+                followers:data?.follower_count,
+                following:data?.following_count,
+                about:data?.about,
+                total_posts:data?.pin_count,
+                imageUrl:data?.profile_image
+            }
+            break;
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            response = {
+                followers_count: data?.all_time?.firstDegreeSize
+            }
+            break;
+        }
+    }
+    return response;
+}
+export const createSocialMediaProfileViewInsightsQuery = (queryObject,socialMediaType) => {
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            return {
+                period: "day",
+                access_token:queryObject.access_token,
+                since:getCustomDateEarlierUnixDateTime(queryObject.days +1),
+                until:getCustomDateEarlierUnixDateTime(1),
+            }
+        }
+        case "INSTAGRAM": {
+            return {
+                period: "day",
+                access_token:queryObject.access_token,
+                since:generateUnixTimestampFor(queryObject.days),
+                until:generateUnixTimestampFor("now"),
+                metric:"profile_views"
+            }
+        }
+        case "PINTEREST": {
+            return {}
+
+        }
+        case "LINKEDIN": {
+            return {}
+        }
+
+    }
+
+}
+export function objectToQueryString(obj) {
+    return Object.keys(obj).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`).join('&');
+}
+export const getFormattedInsightsForProfileViews = (data,socialMediaType) => {
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase():
+        case SocialAccountProvider.INSTAGRAM?.toUpperCase():{
+            return Array.isArray(data.data) && data.data.length>0 ? data.data[0].values || []:[];
+        }
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            break;
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            break;
+        }
+    }
+    return {};
+}

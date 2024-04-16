@@ -186,4 +186,4 @@ export const Industries = Object.freeze({
 });
 
 
-export const selectGraphDaysOptions= [{days:6,label:'last 7 days'},{days:14,label:'last 15 days'},{days:29,label:'last 30 days'}];
+export const selectGraphDaysOptions= [{days:7,label:'last 7 days'},{days:15,label:'last 15 days'},{days:30,label:'last 30 days'}];

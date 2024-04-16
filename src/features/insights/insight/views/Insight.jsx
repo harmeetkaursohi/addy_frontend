@@ -7,15 +7,22 @@ import DonutChart from "../../DonutsChart";
 import HorizontalBarChart from "../../horizontalbar";
 import Carousel from "../../slider/Slider";
 import {useDispatch, useSelector} from "react-redux";
-import {getAllByCustomerIdAction, getSocialMediaGraphByProviderTypeAction} from "../../../../app/actions/socialAccountActions/socialAccountActions";
+import {
+    getAllByCustomerIdAction,
+} from "../../../../app/actions/socialAccountActions/socialAccountActions";
 import {getToken} from "../../../../app/auth/auth";
 import linkedin_img from "../../../../images/linkedin.svg"
-import {getAccountReachedAndAccountEngaged, getDemographicsInsight, getPostDataWithInsights, getProfileInsightsInfo, getProfileVisitsInsightsInfo} from "../../../../app/actions/InsightActions/insightAction";
+import {
+    getAccountReachedAndAccountEngaged,
+    getDemographicsInsight,
+    getPostDataWithInsights,
+    getProfileInsightsInfo,
+    getProfileVisitsInsightsInfo
+} from "../../../../app/actions/InsightActions/insightAction";
 import {getPostByPageIdAndPostStatus} from "../../../../app/actions/postActions/postActions";
 import {
     calculatePercentageGrowthFor, createSocialMediaProfileViewInsightsQuery,
     fetchCssForInsightPageListOption,
-    getQueryForGraphData
 } from "../../../../utils/commonUtils";
 import {enabledSocialMedia, selectGraphDaysOptions, SocialAccountProvider} from "../../../../utils/contantData";
 import Loader from "../../../loader/Loader";
@@ -23,18 +30,17 @@ import CommonLoader from "../../../common/components/CommonLoader";
 import ConnectSocialMediaAccount from "../../../common/components/ConnectSocialMediaAccount";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import {useAppContext} from "../../../common/components/AppProvider";
-import men_img from "../../../../images/men.png";
+import default_user_icon from "../../../../images/default_user_icon.svg"
 import calendar_img from "../../../../images/calender_img.svg"
 import ProfileVisitChart from "../../../react_chart/views/Profile_visit_chart";
 import no_page_select_bg from "../../../../images/no_page_select_bg.svg"
 import no_data_available from "../../../../images/no_data_available.png"
+import {select} from "@syncfusion/ej2-react-schedule";
 
 const Insight = () => {
     const dispatch = useDispatch();
     const token = getToken();
     const {sidebar} = useAppContext();
-
-    const [profileVisitQuery,setProfileVisitQuery] = useState(null);
 
     const getAllByCustomerIdData = useSelector(state => state.socialAccount.getAllByCustomerIdReducer);
     const getProfileInfoReducer = useSelector(state => state.insight.getProfileInfoReducer);
@@ -46,16 +52,17 @@ const Insight = () => {
     const getPostDataWithInsightsData = useSelector((state) => state.insight.getPostDataWithInsightsReducer);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+
     const [connectedFacebookPages, setConnectedFacebookPages] = useState(null);
     const [connectedInstagramPages, setConnectedInstagramPages] = useState(null);
     const [connectedLinkedinPages, setConnectedLinkedinPages] = useState(null);
     const [connectedPinterestBoards, setConnectedPinterestBoards] = useState(null);
+
+
     const [selectedPage, setSelectedPage] = useState(null);
     const [selectedPeriodForReachAndEngagement, setSelectedPeriodForReachAndEngagement] = useState(7);
-    const [selectedPeriodForDemographics, setSelectedPeriodForDemographics] = useState("lifetime");
-    const [selectedPeriodForGraph, setSelectedPeriodForGraph] = useState(7);
-    const [selectedPageForGraph, setSelectedPageForGraph] = useState(null);
-    const [selectedInsightSection, setSelectedInsightSection] = useState("Demographics");
+    const [selectedDaysForProfileVisitGraph, setSelectedDaysForProfileVisitGraph] = useState(null);
+
 
 
     const [insightsCacheData, setInsightCacheData] = useState({
@@ -63,24 +70,10 @@ const Insight = () => {
         getPostDataWithInsightsDataCache: []
     });
 
-    console.log("selectedPage===>", selectedPage);
-    console.log("getProfileInfoReducer===>", getProfileInfoReducer);
-    console.log("getProfileVisitsInsightsInfoReducerData===>", getProfileVisitsInsightsInfoReducerData);
-    console.log("getDemographicsInsightData===>", getDemographicsInsightData);
-
     const handleSelectedPeriodForReachAndEngagement = (e) => {
         e.preventDefault();
         setSelectedPeriodForReachAndEngagement(parseInt(e.target.value))
     }
-
-    // const handleSelectedPeriodForDemographics = (e) => {
-    //     e.preventDefault();
-    //     setSelectedPeriodForDemographics(e.target.value)
-    // }
-    // const handleSelectedGraphPeriod = (e) => {
-    //     e.preventDefault();
-    //     setSelectedPeriodForGraph(parseInt(e.target.value))
-    // }
 
 
     useEffect(() => {
@@ -88,6 +81,7 @@ const Insight = () => {
             token: token
         }))
     }, [])
+
     useEffect(() => {
         if (!getAllByCustomerIdData?.loading && getAllByCustomerIdData?.data !== null && getAllByCustomerIdData?.data !== undefined && getAllByCustomerIdData?.data?.length > 0) {
             const socialAccountData = Object.groupBy(getAllByCustomerIdData?.data, ({provider}) => provider)
@@ -99,42 +93,15 @@ const Insight = () => {
 
     }, [getAllByCustomerIdData])
 
-
     const handleSelectPage = (socialMediaType, page) => {
+        setSelectedDaysForProfileVisitGraph(null)
         setSelectedPage({...page, socialMediaType: socialMediaType})
-        if (selectedPageForGraph === null || selectedPageForGraph?.socialMediaType !== socialMediaType) {
-            setSelectedPageForGraph({...page, socialMediaType: socialMediaType})
-        }
-        if (socialMediaType === "PINTEREST" || socialMediaType === "LINKEDIN") {
-            const button = document.getElementById('uncontrolled-tab-example-tab-Overview');
-            if (button) {
-                button.click();
-            }
-            // setSelectedInsightSection("Overview")
-        }
     }
 
-    // const handleGraphPageChange = (pageId, socialMediaType) => {
-    //     let selectedPage;
-    //     switch (socialMediaType) {
-    //         case "FACEBOOK": {
-    //             selectedPage = connectedFacebookPages?.find(page => page?.id === pageId)
-    //             break;
-    //         }
-    //         case "INSTAGRAM": {
-    //             selectedPage = connectedInstagramPages?.find(page => page?.id === pageId)
-    //             break;
-    //         }
-    //         case "LINKEDIN": {
-    //             selectedPage = connectedLinkedinPages?.find(page => page?.id === pageId)
-    //             break;
-    //         }
-    //     }
-    //     setSelectedPageForGraph({...selectedPage, socialMediaType: socialMediaType})
-    // }
 
     useEffect(() => {
         if (selectedPage !== null && selectedPage !== undefined) {
+            setSelectedDaysForProfileVisitGraph(7);
             setInsightCacheData({
                 getPostByPageIdAndPostStatusDataCache: {},
                 getPostDataWithInsightsDataCache: []
@@ -156,6 +123,30 @@ const Insight = () => {
             }));
         }
     }, [selectedPage])
+
+
+    useEffect(() => {
+        if (selectedPage !== null && selectedPage !== undefined) {
+            dispatch(getProfileInsightsInfo({
+                token: token,
+                socialMediaType: selectedPage?.socialMediaType,
+                pageAccessToken: selectedPage?.access_token,
+                pageId: selectedPage?.pageId
+            }))
+        }
+    }, [selectedPage])
+
+    useEffect(() => {
+        if (selectedPeriodForReachAndEngagement && selectedPage) {
+            dispatch(getAccountReachedAndAccountEngaged({
+                token: token,
+                socialMediaType: selectedPage?.socialMediaType,
+                pageAccessToken: selectedPage?.access_token,
+                pageId: selectedPage?.pageId,
+                period: selectedPeriodForReachAndEngagement
+            }))
+        }
+    }, [selectedPeriodForReachAndEngagement, selectedPage])
 
     useEffect(() => {
         if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
@@ -201,84 +192,36 @@ const Insight = () => {
         }
     }, [getPostDataWithInsightsData]);
 
-
     useEffect(() => {
-        console.log("selectedPage",selectedPage)
-        console.log("selectedInsightSection",selectedInsightSection)
-        if (selectedPage !== null && selectedPage !== undefined && selectedInsightSection === "Demographics") {
-            dispatch(getProfileInsightsInfo({
-                token: token,
-                socialMediaType: selectedPage?.socialMediaType,
-                pageAccessToken: selectedPage?.access_token,
-                pageId: selectedPage?.pageId
-            }))
-
-
-            if(profileVisitQuery!==null && profileVisitQuery.days){
-                let query={
-                    token: token,
-                    pages: [selectedPageForGraph],
-                    pageId: selectedPageForGraph?.pageId,
-                    socialMediaType: selectedPageForGraph?.socialMediaType,
-                    query: createSocialMediaProfileViewInsightsQuery({days:profileVisitQuery.days || 7,access_token:selectedPageForGraph.access_token},selectedPageForGraph?.socialMediaType)
-                }
-                dispatch(getProfileVisitsInsightsInfo(query))
-            }
-        }
-    }, [selectedPage, selectedInsightSection])
-
-
-    useEffect(() => {
-        if (selectedPeriodForReachAndEngagement && selectedPage && selectedInsightSection === "Overview") {
-            dispatch(getAccountReachedAndAccountEngaged({
-                token: token,
+        if (selectedPage !== undefined && selectedPage !== null) {
+            dispatch(getDemographicsInsight({
                 socialMediaType: selectedPage?.socialMediaType,
                 pageAccessToken: selectedPage?.access_token,
                 pageId: selectedPage?.pageId,
-                period: selectedPeriodForReachAndEngagement
             }))
         }
-    }, [selectedPeriodForReachAndEngagement, selectedPage, selectedInsightSection])
+    }, [selectedPage])
 
 
     useEffect(() => {
-        if (selectedPeriodForGraph && selectedPage && selectedInsightSection === "Overview") {
-            dispatch(getSocialMediaGraphByProviderTypeAction({
+        if (selectedPage !== null && selectedPage !== undefined && selectedDaysForProfileVisitGraph !== null && selectedDaysForProfileVisitGraph !== undefined) {
+            let query = {
                 token: token,
-                pages: [selectedPageForGraph],
-                socialMediaType: selectedPageForGraph?.socialMediaType,
-                query: getQueryForGraphData(selectedPage?.socialMediaType, selectedPeriodForGraph + 2)
-            }))
+                pages: [selectedPage],
+                pageId: selectedPage?.pageId,
+                socialMediaType: selectedPage?.socialMediaType,
+                query: createSocialMediaProfileViewInsightsQuery({
+                    days: selectedDaysForProfileVisitGraph,
+                    access_token: selectedPage.access_token
+                }, selectedPage?.socialMediaType)
+            }
+            dispatch(getProfileVisitsInsightsInfo(query))
         }
-    }, [selectedPeriodForGraph, selectedPageForGraph, selectedInsightSection])
+    }, [selectedDaysForProfileVisitGraph])
 
-    // useEffect(() => {
-    //     if (selectedPeriodForDemographics && selectedPage && selectedInsightSection === "Demographics") {
-    //         dispatch(getDemographicsInsight({
-    //             socialMediaType: selectedPage?.socialMediaType,
-    //             pageAccessToken: selectedPage?.access_token,
-    //             pageId: selectedPage?.pageId,
-    //             period: selectedPeriodForDemographics
-    //         }))
-    //     }
-    // }, [selectedPeriodForDemographics, selectedPage, selectedInsightSection])
-    //
-
-    const handleQueryParamChange = (obj) => {
-        let query={
-            token: token,
-            pages: [selectedPageForGraph],
-            pageId: selectedPageForGraph?.pageId,
-            socialMediaType: selectedPageForGraph?.socialMediaType,
-            query: createSocialMediaProfileViewInsightsQuery({days:obj.days || 7,access_token:selectedPageForGraph.access_token},selectedPageForGraph?.socialMediaType)
-        }
-        dispatch(getProfileVisitsInsightsInfo(query))
-        setProfileVisitQuery(obj || null)
-    }
 
     return (
         <section>
-            {/*<SideBar/>*/}
             <div className={`insight_wrapper ${sidebar ? "cmn_container" : "cmn_Padding"}`}>
                 <div className="cmn_outer">
                     <div className="insight_outer  cmn_wrapper_outer white_bg_color cmn_height_outer">
@@ -500,56 +443,66 @@ const Insight = () => {
                                                         <div className="user_profile_card_outer cmn_shadow">
 
                                                             <div className="user_profile_card_wrapper text-center mt-3">
-                                                                <img src={selectedPage?.imageUrl || men_img}/>
-                                                                <h3 className="cmn_text_style pt-4">{selectedPage.name || selectedPage?.socialMediaType}</h3>
+                                                                {
+                                                                    getProfileInfoReducer.loading ?
+                                                                        <i
+                                                                            style={{fontSize: "60px"}}
+                                                                            className="fa fa-spinner fa-spin"/> :
+                                                                        <img
+                                                                            src={getProfileInfoReducer?.data?.imageUrl || default_user_icon}/>
+                                                                }
+                                                                <h3 className="cmn_text_style pt-4">{ getProfileInfoReducer?.data?.name }</h3>
                                                                 <h6 className="cmn_text pt-2">
-                                                                    In publishing and graphic design, Lorem ipsum is a
-                                                                    placeholder text commonly used{" "}
+                                                                    {
+                                                                        getProfileInfoReducer?.data?.about || ""
+                                                                    }
                                                                 </h6>
                                                             </div>
 
-                                                            <ul className="d-flex mt-4 user_info_list">
-                                                                <li>
-                                                                    <h3 className="cmn_text">Post</h3>
-                                                                    <h4 className="">{getProfileInfoReducer.loading ?
-                                                                        <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.total_posts || "N/A"}</h4>
-                                                                </li>
-                                                                <li>
-                                                                    <h3 className="cmn_text">Followers</h3>
-                                                                    <h4>{getProfileInfoReducer.loading ?
-                                                                        <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.followers_count || "N/A"}</h4>
-                                                                </li>
-                                                                <li>
-                                                                    <h3 className="cmn_text">Following</h3>
-                                                                    <h4>{getProfileInfoReducer.loading ?
-                                                                        <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.following_count || "N/A"}</h4>
-                                                                </li>
-                                                            </ul>
+                                                            {
+                                                                selectedPage?.socialMediaType === "FACEBOOK" &&
+                                                                <ul className="d-flex mt-4 user_info_list">
+                                                                    <li>
+                                                                        <h3 className="cmn_text">Likes</h3>
+                                                                        <h4>{getProfileInfoReducer.loading ?
+                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.likes}</h4>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h3 className="cmn_text">Followers</h3>
+                                                                        <h4>{getProfileInfoReducer.loading ?
+                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.followers}</h4>
+                                                                    </li>
+                                                                </ul>
+                                                            }
+                                                            {
+                                                                selectedPage?.socialMediaType !== "FACEBOOK" &&
+                                                                <ul className="d-flex mt-4 user_info_list">
+                                                                    <li>
+                                                                        <h3 className="cmn_text">Post</h3>
+                                                                        <h4 className="">{getProfileInfoReducer.loading ?
+                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.total_posts}</h4>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h3 className="cmn_text">Followers</h3>
+                                                                        <h4>{getProfileInfoReducer.loading ?
+                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.followers}</h4>
+                                                                    </li>
+                                                                    <li>
+                                                                        <h3 className="cmn_text">Following</h3>
+                                                                        <h4>{getProfileInfoReducer.loading ?
+                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.following}</h4>
+                                                                    </li>
+                                                                </ul>
+                                                            }
                                                         </div>
                                                     </div>
                                                     <div className="col-lg-8 col-md-12 col-sm-12">
                                                         <div className="page_title_header mb-0 Profile_visit_container">
                                                             <div className="page_title_container ps-0">
                                                                 <div className="page_title_dropdown">
-
-                                                                    {/*<Dropdown className="Profile_visit_dropdown">*/}
-                                                                    {/*    <Dropdown.Toggle variant="success"*/}
-                                                                    {/*                     id="dropdown-basic">*/}
-                                                                    {/*        Profile Visit*/}
-                                                                    {/*    </Dropdown.Toggle>*/}
-
-                                                                    {/*    <Dropdown.Menu>*/}
-                                                                    {/*        <Dropdown.Item>*/}
-                                                                    {/*            Action*/}
-                                                                    {/*        </Dropdown.Item>*/}
-                                                                    {/*        <Dropdown.Item>*/}
-                                                                    {/*            Another action*/}
-                                                                    {/*        </Dropdown.Item>*/}
-                                                                    {/*        <Dropdown.Item>*/}
-                                                                    {/*            Something else*/}
-                                                                    {/*        </Dropdown.Item>*/}
-                                                                    {/*    </Dropdown.Menu>*/}
-                                                                    {/*</Dropdown>*/}
+                                                                    <div className={"profile-visit-text ms-4"}>Profile
+                                                                        Visit
+                                                                    </div>
                                                                 </div>
                                                                 <div className="days_outer">
 
@@ -558,12 +511,14 @@ const Insight = () => {
                                                                             <img src={calendar_img} alt=""
                                                                                  className="me-2" height="20px"
                                                                                  width="20px"/>
-                                                                            {profileVisitQuery?.label || "Select Period"}
+                                                                            {`Last ${selectedDaysForProfileVisitGraph} days`}
                                                                         </Dropdown.Toggle>
                                                                         <Dropdown.Menu>
-                                                                            {selectGraphDaysOptions.map(c=>(
+                                                                            {selectGraphDaysOptions.map(c => (
                                                                                 <Dropdown.Item
-                                                                                    onClick={() => handleQueryParamChange(c)}>
+                                                                                    onClick={() => {
+                                                                                        setSelectedDaysForProfileVisitGraph(c.days);
+                                                                                    }}>
                                                                                     {c.label}
                                                                                 </Dropdown.Item>
                                                                             ))}
@@ -574,13 +529,15 @@ const Insight = () => {
                                                             </div>
 
                                                             <div className="profile_visit_graph_outer mt-2">
-                                                                {(selectedPage.socialMediaType==='LINKEDIN' || selectedPage.socialMediaType==="PINTEREST" )
+                                                                {(selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(getProfileVisitsInsightsInfoReducerData?.data) && getProfileVisitsInsightsInfoReducerData?.data?.length === 0))
                                                                     ?
                                                                     <div className={"no_data_available text-center"}>
-                                                                        <img src={no_data_available} alt={"coming soon!"}/>
+                                                                        <img src={no_data_available}
+                                                                             alt={"coming soon!"}/>
                                                                     </div>
                                                                     :
-                                                                <ProfileVisitChart graphData={getProfileVisitsInsightsInfoReducerData}/>
+                                                                    <ProfileVisitChart
+                                                                        graphData={getProfileVisitsInsightsInfoReducerData}/>
                                                                 }
                                                             </div>
 
@@ -591,75 +548,75 @@ const Insight = () => {
                                                     <div className="col-lg-4 col-md-12 col-sm-12">
                                                         <div className="cmn_shadow visitors_container">
                                                             <div className="d-flex cmn_border visitors_outer">
-                                                                <h3>Visitors</h3>
+                                                                <h3>Followers</h3>
 
                                                             </div>
-                                                            {(selectedPage.socialMediaType==='LINKEDIN' || selectedPage.socialMediaType==="PINTEREST" || selectedPage.socialMediaType==='INSTAGRAM' || selectedPage.socialMediaType==='FACEBOOK' )
+                                                            {( getDemographicsInsightData?.data?.country===null || selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST"  )
                                                                 ?
                                                                 <div className={"no_data_available text-center"}>
                                                                     <img src={no_data_available} alt={"coming soon!"}/>
                                                                 </div>
                                                                 :
-                                                                <DonutChart donutData={getDemographicsInsightData}/>}
+                                                                <DonutChart chartData={getDemographicsInsightData}/>}
                                                         </div>
                                                     </div>
-                                                    <div className="col-lg-8 col-md-12 col-sm-12">
-                                                        <div className="cmn_shadow visitors_container">
-                                                            <div className="d-flex cmn_border visitors_outer">
-                                                                <h3>Demographics</h3>
-                                                            </div>
-                                                            {(selectedPage.socialMediaType==='LINKEDIN' || selectedPage.socialMediaType==="PINTEREST"   || selectedPage.socialMediaType==='INSTAGRAM' || selectedPage.socialMediaType==='FACEBOOK')
-                                                                ?
-                                                                <div className={"no_data_available text-center"}>
-                                                                <img src={no_data_available} alt={"coming soon!"}/>
+                                                    {
+                                                        false && <div className="col-lg-8 col-md-12 col-sm-12">
+                                                            <div className="cmn_shadow visitors_container">
+                                                                <div className="d-flex cmn_border visitors_outer">
+                                                                    <h3>Demographics</h3>
                                                                 </div>
-                                                                :
-                                                                <HorizontalBarChart
-                                                                    demographicData={getDemographicsInsightData}/>}
+                                                                {(selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST" || selectedPage.socialMediaType === 'INSTAGRAM' || selectedPage.socialMediaType === 'FACEBOOK')
+                                                                    ?
+                                                                    <div className={"no_data_available text-center"}>
+                                                                        <img src={no_data_available} alt={"coming soon!"}/>
+                                                                    </div>
+                                                                    :
+                                                                    <HorizontalBarChart
+                                                                        demographicData={getDemographicsInsightData}/>}
+                                                            </div>
                                                         </div>
-                                                    </div>
-
+                                                    }
+                                                    <div className={"mb-4"}></div>
                                                 </div>
                                                 {/* profile visit section end */}
 
 
                                                 {/* tabs  */}
 
-                                                <div className="content_outer">
-                                                    <div className="Social_media_platform Content_Container_box">
-                                                        {
-                                                            selectedPage?.socialMediaType === "FACEBOOK" &&
-                                                            <i className={`fa-brands fa-facebook  `}
-                                                               style={{color: "#0866ff", fontSize: "20px"}}/>
-                                                        }
-                                                        {
-                                                            selectedPage?.socialMediaType === "INSTAGRAM" &&
-                                                            <img src={instagram_img} className="  "/>
-                                                        }
-                                                        {
-                                                            selectedPage?.socialMediaType === "LINKEDIN" &&
-                                                            <img src={linkedin_img} className="  "/>
-                                                        }
-                                                        <h3>{selectedPage?.name}</h3>
-                                                    </div>
-                                                </div>
+                                                {/*<div className="content_outer">*/}
+                                                {/*    <div className="Social_media_platform Content_Container_box">*/}
+                                                {/*        {*/}
+                                                {/*            selectedPage?.socialMediaType === "FACEBOOK" &&*/}
+                                                {/*            <i className={`fa-brands fa-facebook  `}*/}
+                                                {/*               style={{color: "#0866ff", fontSize: "20px"}}/>*/}
+                                                {/*        }*/}
+                                                {/*        {*/}
+                                                {/*            selectedPage?.socialMediaType === "INSTAGRAM" &&*/}
+                                                {/*            <img src={instagram_img} className="  "/>*/}
+                                                {/*        }*/}
+                                                {/*        {*/}
+                                                {/*            selectedPage?.socialMediaType === "LINKEDIN" &&*/}
+                                                {/*            <img src={linkedin_img} className="  "/>*/}
+                                                {/*        }*/}
+                                                {/*        <h3>{selectedPage?.name}</h3>*/}
+                                                {/*    </div>*/}
+                                                {/*</div>*/}
 
 
                                                 <div className="overview_tabs_outer">
                                                     <div className="days_outer reach-engagement-select">
 
                                                         <button className="overview_btn">Overview</button>
-                                                        {
-                                                            selectedInsightSection === "Overview" &&
-                                                            <select className=" days_option box_shadow"
-                                                                    value={selectedPeriodForReachAndEngagement}
-                                                                    onChange={handleSelectedPeriodForReachAndEngagement}>
-                                                                <option value={7}>Last 7 days</option>
-                                                                days_outer reach-engagement-select
-                                                                <option value={15}>Last 15 days</option>
-                                                                <option value={28}>Last 28 days</option>
-                                                            </select>
-                                                        }
+
+                                                        <select className=" days_option box_shadow"
+                                                                value={selectedPeriodForReachAndEngagement}
+                                                                onChange={handleSelectedPeriodForReachAndEngagement}>
+                                                            <option value={7}>Last 7 days</option>
+                                                            <option value={15}>Last 15 days</option>
+                                                            <option value={28}>Last 28 days</option>
+                                                        </select>
+
 
                                                         {/*{*/}
                                                         {/*    selectedInsightSection === "Demographics" &&*/}
@@ -810,7 +767,7 @@ const Insight = () => {
                                                                 {
                                                                     getProfileInfoReducer?.loading ?
                                                                         <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : (getProfileInfoReducer?.data?.followers_count === null || getProfileInfoReducer?.data?.followers_count === undefined) ? "N/A" : getProfileInfoReducer?.data?.followers_count
+                                                                    </span> : (getProfileInfoReducer?.data?.followers === null || getProfileInfoReducer?.data?.followers === undefined) ? "N/A" : getProfileInfoReducer?.data?.followers
                                                                 }
                                                             </h4>
                                                         </div>
@@ -1295,8 +1252,8 @@ const Insight = () => {
                                                     {/*</Tabs>*/}
                                                 </div>
 
-                                                <button className="overview_btn mt-2 "
-                                                        style={{display: 'inline-block'}}>Stack
+                                                <button className="overview_btn mt-4 "
+                                                        style={{display: 'inline-block'}}> Posts stacks
                                                 </button>
                                                 {/* slider  */}
                                                 <Carousel selectedPage={selectedPage} cacheData={insightsCacheData}/>
