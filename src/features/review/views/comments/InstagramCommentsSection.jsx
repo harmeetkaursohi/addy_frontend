@@ -135,7 +135,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                     <div className="user_card">
                                         <div className="user_image">
                                             <img
-                                                src={postData?.page?.pageId === comment?.from?.id ? comment?.user?.profile_picture_url : default_user_icon}
+                                                src={postData?.page?.pageId === comment?.from?.id ? comment?.user?.profile_picture_url  || default_user_icon: default_user_icon}
                                                 alt=""/>
                                         </div>
                                         <div className="user">
@@ -219,7 +219,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                                             <div className="user_card">
                                                                                 <div className="user_image">
                                                                                     <img
-                                                                                        src={postData?.page?.pageId === childComment?.from?.id ? postData?.page?.imageUrl : default_user_icon}
+                                                                                        src={postData?.page?.pageId === childComment?.from?.id ? postData?.page?.imageUrl || default_user_icon : default_user_icon}
                                                                                         alt=""/>
                                                                                 </div>
                                                                                 <div className="user">

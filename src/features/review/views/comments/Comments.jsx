@@ -21,6 +21,7 @@ import {Dropdown} from "react-bootstrap";
 import Skeleton from "../../../loader/skeletonEffect/Skeleton";
 import {RotatingLines} from "react-loader-spinner";
 import CommentText from "./CommentText";
+import default_user_icon from "../../../../images/default_user_icon.svg";
 
 const Comments = ({postData, isDirty, setDirty}) => {
     const dispatch = useDispatch();
@@ -179,7 +180,7 @@ const Comments = ({postData, isDirty, setDirty}) => {
                                 </div> :
                                 <div className="user_card">
                                     <div className="user_image">
-                                        <img src={comment?.from?.picture?.data?.url} alt=""/>
+                                        <img src={comment?.from?.picture?.data?.url || default_user_icon} alt=""/>
                                     </div>
                                     <div className="user">
                                         {
@@ -378,7 +379,7 @@ const Comments = ({postData, isDirty, setDirty}) => {
                                                                         <div className="user_card">
                                                                             <div className="user_image">
                                                                                 <img
-                                                                                    src={childComment?.from?.picture?.data?.url}
+                                                                                    src={childComment?.from?.picture?.data?.url || default_user_icon}
                                                                                     alt=""/>
                                                                             </div>
                                                                             <div className="user">

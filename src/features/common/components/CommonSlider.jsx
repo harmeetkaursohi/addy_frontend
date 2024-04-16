@@ -66,8 +66,6 @@ const CommonSlider = ({
                                         className='post_img'
                                         url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
                                         controls={true}
-                                        // playing={true}
-                                        // muted={true}
                                     />
                                 </div>
                             ))
@@ -105,8 +103,6 @@ const CommonSlider = ({
                                 className=''
                                 url={`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + files[0].sourceURL}
                                 controls={true}
-                                // playing={true}
-                                // muted={true}
                             />
                         }
 
@@ -116,7 +112,7 @@ const CommonSlider = ({
 
                                 return (<div key={index}>
 
-                                    {file?.mediaType === "IMAGE" || showThumbnail ?
+                                    {file?.mediaType === "IMAGE" || showThumbnail  || !file.sourceURL?
                                         <div className={className ? className : "post_image_outerwrapper"}>
                                             <img
                                                 src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
@@ -124,13 +120,10 @@ const CommonSlider = ({
                                         :
 
                                         <ReactPlayer
-
                                             width={"100%"}
                                             className={className ? className : 'video_player_outer'}
-                                            url={isPublished ? file.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
+                                            url={isPublished ? file.sourceURL || file?.imageURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
                                             controls={true}
-                                            // playing={true}
-                                            // muted={true}
                                         />
 
                                     }

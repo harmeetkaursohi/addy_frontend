@@ -313,7 +313,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                             <div className="user_card">
                                                 <div className="user_image">
                                                     <img
-                                                        src={commentorsProfile?.profilePicUrl}
+                                                        src={commentorsProfile?.profilePicUrl || default_user_icon}
                                                         alt=""/>
                                                 </div>
                                                 <div className="user">
@@ -561,7 +561,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                                     <div className="user_card">
                                                                                         <div className="user_image">
                                                                                             <img
-                                                                                                src={childCommentorsProfile?.profilePicUrl}
+                                                                                                src={childCommentorsProfile?.profilePicUrl || default_user_icon}
                                                                                                 alt=""/>
                                                                                         </div>
                                                                                         <div className="user">

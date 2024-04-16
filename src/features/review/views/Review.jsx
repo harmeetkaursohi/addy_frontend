@@ -352,7 +352,7 @@ const Review = () => {
                                                                                 <video
                                                                                     style={{objectFit: "fill"}}
                                                                                     className="bg_img"
-                                                                                    src={post?.attachments[0]?.sourceURL}
+                                                                                    src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
                                                                                 ></video>
                                                                             ) : (
                                                                                 <img
