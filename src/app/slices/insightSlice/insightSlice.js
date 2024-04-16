@@ -1,7 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {
     getPostDataWithInsights,
-    getTotalFollowers,
+    getProfileInsightsInfo,
+    getProfileVisitsInsightsInfo,
     getAccountReachedAndAccountEngaged,
     getDemographicsInsight
 } from "../../actions/InsightActions/insightAction";
@@ -10,9 +11,10 @@ const insightSlice = createSlice({
     name: 'insight',
     initialState: {
         getPostDataWithInsightsReducer: {loading: false},
-        getTotalFollowersReducer: {loading: false},
+        getProfileInfoReducer: {loading: false},
         getAccountReachedAndAccountEngagedReducer: {loading: false},
         getDemographicsInsightReducer: {loading: false},
+        getProfileVisitsInsightsInfoReducer:{loading:false}
     },
     extraReducers: {
         // Get Facebook Post Data With Insights
@@ -26,15 +28,26 @@ const insightSlice = createSlice({
             state.getPostDataWithInsightsReducer = {loading: false}
         },
 
+
         // Get Total Followers
-        [getTotalFollowers.pending]: (state) => {
-            state.getTotalFollowersReducer = {loading: true}
+        [getProfileInsightsInfo.pending]: (state) => {
+            state.getProfileInfoReducer = {loading: true}
         },
-        [getTotalFollowers.fulfilled]: (state, action) => {
-            state.getTotalFollowersReducer = {loading: false, data: action.payload}
+        [getProfileInsightsInfo.fulfilled]: (state, action) => {
+            state.getProfileInfoReducer = {loading: false, data: action.payload}
         },
-        [getTotalFollowers.rejected]: (state) => {
-            state.getTotalFollowersReducer = {loading: false}
+        [getProfileInsightsInfo.rejected]: (state) => {
+            state.getProfileInfoReducer = {loading: false}
+        },
+
+        [getProfileVisitsInsightsInfo.pending]: (state) => {
+            state.getProfileVisitsInsightsInfoReducer = {loading: true}
+        },
+        [getProfileVisitsInsightsInfo.fulfilled]: (state, action) => {
+            state.getProfileVisitsInsightsInfoReducer = {loading: false, data: action.payload}
+        },
+        [getProfileVisitsInsightsInfo.rejected]: (state) => {
+            state.getProfileVisitsInsightsInfoReducer = {loading: false}
         },
 
         // Get Account Reached And Account Engaged

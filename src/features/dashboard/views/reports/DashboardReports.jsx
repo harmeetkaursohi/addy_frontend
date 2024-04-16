@@ -250,7 +250,7 @@ export const DashboardReports = () => {
 
                                         <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                          className="social_dropdowns"
-                                                         disabled={getAllConnectedSocialAccountData?.laoding || reportSectionData?.loading || reportGraphSectionData?.loading}>
+                                                         disabled={getAllConnectedSocialAccountData?.loading || reportSectionData?.loading || reportGraphSectionData?.loading}>
                                             <img
                                                 src={selectedPage?.imageUrl ? selectedPage?.imageUrl : default_user_icon}
                                                 className="me-3 dropdown-page-logo"
