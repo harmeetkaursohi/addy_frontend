@@ -69,86 +69,84 @@
 // export default HorizontalBarChart;
 
 
-
 // BarChartComponent.js
-import React  from 'react';
+import React from 'react';
 import "./Chart.css"
-import { BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
 const data = [
-  {
-    name: '12-17',
-    Male: 4000,
-    Female: 2400,
-    amt: 2400,
-  },
-  {
-    name: '18-24',
-    Male: 3000,
-    Female: 1398,
-    amt: 2210,
-  },
-  {
-    name: '25-31',
-    Male: 2000,
-    Female: 9800,
-    amt: 2290,
-  },
-  {
-    name: '35-44',
-    Male: 2780,
-    Female: 3908,
-    amt: 2000,
-  },
-  {
-    name: '45-54',
-    Male: 1890,
-    Female: 4800,
-    amt: 2181,
-  },
-  {
-    name: '55-64',
-    Male: 2390,
-    Female: 3800,
-    amt: 2500,
-  },
-  {
-    name: '64+',
-    Male: 3490,
-    Female: 4300,
-    amt: 2100,
-  },
+    {
+        name: '12-17',
+        Male: 4000,
+        Female: 2400,
+        amt: 2400,
+    },
+    {
+        name: '18-24',
+        Male: 3000,
+        Female: 1398,
+        amt: 2210,
+    },
+    {
+        name: '25-31',
+        Male: 2000,
+        Female: 9800,
+        amt: 2290,
+    },
+    {
+        name: '35-44',
+        Male: 2780,
+        Female: 3908,
+        amt: 2000,
+    },
+    {
+        name: '45-54',
+        Male: 1890,
+        Female: 4800,
+        amt: 2181,
+    },
+    {
+        name: '55-64',
+        Male: 2390,
+        Female: 3800,
+        amt: 2500,
+    },
+    {
+        name: '64+',
+        Male: 3490,
+        Female: 4300,
+        amt: 2100,
+    },
 ];
 
 
-
 const HorizontalBarChart = () => {
-  return (
-  
+    return (
+
         <ResponsiveContainer width="100%" height={300}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <BarChart
-            width={500}
-            height={300}
-            data={data}
-            margin={{
-              top: 20,
-              right: 20,
-              left: 5,
-              bottom: 20,
-            }}
-          >
-            
-            <XAxis dataKey="name"  tick={{ fill: '#263238' ,fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
-            <YAxis tick={{ fill: '#263238' ,fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'  }}/>
-            <Tooltip  cursor={{fill: 'none'}}/>
-            <Legend layout="vertical" align="right" verticalAlign="middle"/>
-            <Bar dataKey="Male" fill="#90D1F6"  barSize={20}/>
-            <Bar dataKey="Female" fill="#E05905" barSize={20}/>
-          </BarChart>
+            <CartesianGrid strokeDasharray="3 3"/>
+            <BarChart
+                width={500}
+                height={300}
+                data={data}
+                margin={{
+                    top: 20,
+                    right: 20,
+                    left: 5,
+                    bottom: 20,
+                }}
+            >
+
+                <XAxis dataKey="name" tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
+                <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
+                <Tooltip cursor={{fill: 'none'}}/>
+                <Legend layout="vertical" align="right" verticalAlign="middle"/>
+                <Bar dataKey="Male" fill="#90D1F6" barSize={20}/>
+                <Bar dataKey="Female" fill="#E05905" barSize={20}/>
+            </BarChart>
         </ResponsiveContainer>
-    
-  )
+
+    )
 }
 
 export default HorizontalBarChart

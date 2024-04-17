@@ -1,7 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
 import {showErrorToast, showSuccessToast, showWarningToast} from "../../../features/common/components/Toast.jsx";
-import {getFacebookConnectedPageIdsReport} from "../../../services/facebookService";
 import {baseAxios, isErrorInInstagramMention} from "../../../utils/commonUtils";
 import {CouldNotPostComment, SocialAccountProvider, UpdateCommentFailedMsg} from "../../../utils/contantData";
 

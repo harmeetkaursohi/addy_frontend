@@ -28,4 +28,3 @@ const SocialMediaProviderBadge = ({provider}) => {
 };
 
 export default SocialMediaProviderBadge;
-//

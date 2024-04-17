@@ -3,19 +3,17 @@ const CommentText = ({comment, className = "", socialMediaType, usernames = [], 
     const showTextHandler = () => {
         if (comment.length <= 190) {
             return;
-          }
-            setShowText(!showText)
-        
+        }
+        setShowText(!showText)
     }
-    
     if (socialMediaType === "INSTAGRAM") {
         const words = comment.split(' ');
-      
+
         return words.map((word, index) => {
             if (word.startsWith('@') || word.startsWith('#')) {
-                return (<span className={className}  key={index}  onClick={showTextHandler}>{word}{' '}</span>);
+                return (<span className={className} key={index} onClick={showTextHandler}>{word}{' '}</span>);
             }
-            return <span  onClick={showTextHandler} key={index}>{word} </span>;
+            return <span onClick={showTextHandler} key={index}>{word} </span>;
         });
     } else if (socialMediaType === "FACEBOOK" || socialMediaType === "LINKEDIN") {
         let pattern;

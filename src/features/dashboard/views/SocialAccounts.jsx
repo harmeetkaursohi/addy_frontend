@@ -133,11 +133,6 @@ const SocialAccounts = ({}) => {
                 return getFormattedLinkedinObject(pageId, linkedinPages[pageId]);
             })
             setCurrentConnectedLinkedinPages(currentConnectedLinkedinPages || null)
-            // if (currentConnectedLinkedinPages.length === 0) {
-            //     setCurrentConnectedLinkedinPages(null)
-            // } else {
-            //
-            // }
         }
     }, [connectedPagesData?.facebookConnectedPages]);
 

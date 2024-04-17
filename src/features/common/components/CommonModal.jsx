@@ -55,8 +55,6 @@ const CommonModal = ({
                         <Modal.Title className="commonmodal_header">
                             <div className='facebook_title'>
                                 <h2 className='cmn_text_style mb-3'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
-                                {/*<p className='user_contents'>You have Personal Plan, you can add only one page.</p>*/}
-                                {/*<button className='cmn_blue_bg cmn_white_text upgrade_paln_btn'>Upgrade Plan</button>*/}
                             </div>
                         </Modal.Title>
                     </Modal.Header>
@@ -98,7 +96,6 @@ const CommonModal = ({
                                                 <div className='connect_btn_outer 1'>
                                                     <button
                                                         disabled={facebookPageConnectData?.loading}
-                                                        // className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : (currentConnectedPages.length > 0 ? 'disabled-button' : 'default-button')}`}
                                                         className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : 'disconected_btn'}`}
                                                         onClick={(e) => {
                                                             !facebookPageConnectData?.loading && setMediaPageData(data);

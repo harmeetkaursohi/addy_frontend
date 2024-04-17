@@ -1,10 +1,10 @@
-// BarChartComponent.js
 import React, {useEffect, useState} from 'react';
 import {BarChart, Bar, XAxis, PieChart, Cell, Pie, YAxis, Tooltip, Legend, ResponsiveContainer} from 'recharts';
-const LinkedInStaffCountRangeChart = ({graphData})=>{
+
+const LinkedInStaffCountRangeChart = ({graphData}) => {
     const [data, setData] = useState([]);
     const totalValue = data.reduce((total, entry) => total + entry.organicFollowerCounts, 0);
-    const customTooltipContent = ({ label, payload }) => {
+    const customTooltipContent = ({label, payload}) => {
         if (payload && payload.length > 0) {
             const currentData = payload[0];
             return (
@@ -42,7 +42,7 @@ const LinkedInStaffCountRangeChart = ({graphData})=>{
                 <XAxis type="number" domain={[0, 100]} tickFormatter={value => `${value}%`} textAnchor={"start"}
                        position="right" angle={0}/>
                 <YAxis dataKey="label" type="category"/>
-                <Tooltip content={customTooltipContent} />
+                <Tooltip content={customTooltipContent}/>
                 <Legend/>
                 <Bar dataKey="value" fill="#F07C33"/>
             </BarChart>
@@ -54,7 +54,7 @@ const LinkedInIndustryAudienceChart = ({graphData}) => {
     const [data, setData] = useState([]);
     const COLORS = ['#F07C33', '#ff7fb7', '#ce3662'];
     useEffect(() => {
-        if (graphData !== null && graphData !== undefined) {            
+        if (graphData !== null && graphData !== undefined) {
             setData(graphData)
         }
     }, [graphData])
@@ -86,7 +86,7 @@ const LinkedInIndustryAudienceChart = ({graphData}) => {
                         {
                             data?.map((cur, index) => {
                                 const total = data[0]?.value + data[1]?.value + data[2]?.value
-                                return <li className={"legend-list-item"} key={"industry"+index}>
+                                return <li className={"legend-list-item"} key={"industry" + index}>
                                     <div style={{color: COLORS[index]}}>{cur?.name}-</div>
                                     <div className={"pie-percentage"}>{((cur?.value / total) * 100)?.toFixed(2)} %</div>
                                 </li>

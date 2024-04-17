@@ -14,7 +14,7 @@ function ForgotPassword() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const forgotPasswordData=useSelector(state => state.user.forgotPasswordReducer)
+    const forgotPasswordData = useSelector(state => state.user.forgotPasswordReducer)
 
     useEffect(() => {
         document.title = "Forgot Password"
@@ -77,19 +77,21 @@ function ForgotPassword() {
                                                 />
                                                 {formik.touched.email && formik.errors.email ? (
                                                     <p className="error_message">{formik.errors.email}</p>
-                                                ) : null}                                                
+                                                ) : null}
                                                 <button type="submit"
                                                         disabled={forgotPasswordData?.loading}
-                                                        className={' login_btn '+(forgotPasswordData?.loading?"opacity-50":"")}>{jsondata.forgotpassword}
+                                                        className={' login_btn ' + (forgotPasswordData?.loading ? "opacity-50" : "")}>{jsondata.forgotpassword}
                                                     {
-                                                        forgotPasswordData?.loading && <span className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines width={30} strokeColor={"white"}></RotatingLines></span>
+                                                        forgotPasswordData?.loading && <span
+                                                            className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines
+                                                            width={30} strokeColor={"white"}></RotatingLines></span>
                                                     }
                                                 </button>
                                             </div>
 
                                         </div>
                                     </form>
-                                    <h3 >
+                                    <h3>
                                         Back to
                                         <span className='gap'>&nbsp;</span>
                                         <Link to="/login">

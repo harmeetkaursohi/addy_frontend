@@ -48,7 +48,6 @@ const Insight = () => {
     const getAccountReachedAndAccountEngagedData = useSelector(state => state.insight.getAccountReachedAndAccountEngagedReducer);
     const getDemographicsInsightData = useSelector(state => state.insight.getDemographicsInsightReducer);
     const getPostByPageIdAndPostStatusData = useSelector(state => state.post.getPostByPageIdAndPostStatusReducer);
-    const reportGraphSectionData = useSelector(state => state.socialAccount.getSocialMediaGraphByProviderTypeReducer);
     const getPostDataWithInsightsData = useSelector((state) => state.insight.getPostDataWithInsightsReducer);
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
@@ -62,7 +61,6 @@ const Insight = () => {
     const [selectedPage, setSelectedPage] = useState(null);
     const [selectedPeriodForReachAndEngagement, setSelectedPeriodForReachAndEngagement] = useState(7);
     const [selectedDaysForProfileVisitGraph, setSelectedDaysForProfileVisitGraph] = useState(null);
-
 
 
     const [insightsCacheData, setInsightCacheData] = useState({
@@ -422,16 +420,6 @@ const Insight = () => {
                                         (selectedPage === null || selectedPage === undefined) ?
                                             <div className={"select-page-outer"}>
                                                 <img src={no_page_select_bg} className="" alt=""/>
-                                                {/* <img src={up_arrow} className={"me-2 arrow-up-image"}></img>
-                                            <div className={"select-page-text-outer ms-2"}>
-                                                <div className={"no-account-txt text-center mb-3"}>No Account is
-                                                    Selected yet
-                                                </div>
-                                                <div className={"select-account-txt"}>Please select page from these
-                                                    platforms to
-                                                    check insights.
-                                                </div>
-                                            </div> */}
 
                                             </div>
 
@@ -451,7 +439,7 @@ const Insight = () => {
                                                                         <img
                                                                             src={getProfileInfoReducer?.data?.imageUrl || default_user_icon}/>
                                                                 }
-                                                                <h3 className="cmn_text_style pt-4">{ getProfileInfoReducer?.data?.name }</h3>
+                                                                <h3 className="cmn_text_style pt-4">{getProfileInfoReducer?.data?.name}</h3>
                                                                 <h6 className="cmn_text pt-2">
                                                                     {
                                                                         getProfileInfoReducer?.data?.about || ""
@@ -551,7 +539,7 @@ const Insight = () => {
                                                                 <h3>Followers</h3>
 
                                                             </div>
-                                                            {( getDemographicsInsightData?.data?.country===null || selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST"  )
+                                                            {(getDemographicsInsightData?.data?.country === null || selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST")
                                                                 ?
                                                                 <div className={"no_data_available text-center"}>
                                                                     <img src={no_data_available} alt={"coming soon!"}/>
@@ -582,28 +570,6 @@ const Insight = () => {
                                                 {/* profile visit section end */}
 
 
-                                                {/* tabs  */}
-
-                                                {/*<div className="content_outer">*/}
-                                                {/*    <div className="Social_media_platform Content_Container_box">*/}
-                                                {/*        {*/}
-                                                {/*            selectedPage?.socialMediaType === "FACEBOOK" &&*/}
-                                                {/*            <i className={`fa-brands fa-facebook  `}*/}
-                                                {/*               style={{color: "#0866ff", fontSize: "20px"}}/>*/}
-                                                {/*        }*/}
-                                                {/*        {*/}
-                                                {/*            selectedPage?.socialMediaType === "INSTAGRAM" &&*/}
-                                                {/*            <img src={instagram_img} className="  "/>*/}
-                                                {/*        }*/}
-                                                {/*        {*/}
-                                                {/*            selectedPage?.socialMediaType === "LINKEDIN" &&*/}
-                                                {/*            <img src={linkedin_img} className="  "/>*/}
-                                                {/*        }*/}
-                                                {/*        <h3>{selectedPage?.name}</h3>*/}
-                                                {/*    </div>*/}
-                                                {/*</div>*/}
-
-
                                                 <div className="overview_tabs_outer">
                                                     <div className="days_outer reach-engagement-select">
 
@@ -616,39 +582,7 @@ const Insight = () => {
                                                             <option value={15}>Last 15 days</option>
                                                             <option value={28}>Last 28 days</option>
                                                         </select>
-
-
-                                                        {/*{*/}
-                                                        {/*    selectedInsightSection === "Demographics" &&*/}
-                                                        {/*    <select disabled={selectedPage?.socialMediaType === "FACEBOOK"}*/}
-                                                        {/*            className=" days_option box_shadow"*/}
-                                                        {/*            value={selectedPeriodForDemographics}*/}
-                                                        {/*            onChange={handleSelectedPeriodForDemographics}>*/}
-                                                        {/*        {*/}
-                                                        {/*            selectedPage?.socialMediaType === "FACEBOOK" &&*/}
-                                                        {/*            <option value={""}>Lifetime</option>*/}
-                                                        {/*        }*/}
-                                                        {/*        {*/}
-                                                        {/*            selectedPage?.socialMediaType === "INSTAGRAM" && <>*/}
-                                                        {/*                <option value={"last_14_days"}>Last 14 days</option>*/}
-                                                        {/*                <option value={"last_30_days"}>Last 30 days</option>*/}
-                                                        {/*                <option value={"last_90_days"}>Last 90 days</option>*/}
-                                                        {/*            </>*/}
-                                                        {/*        }*/}
-
-                                                        {/*    </select>*/}
-                                                        {/*}*/}
-
                                                     </div>
-
-                                                    {/*<Tabs*/}
-                                                    {/*    onSelect={(eventKey) => {*/}
-                                                    {/*        setSelectedInsightSection(eventKey)*/}
-                                                    {/*    }}*/}
-                                                    {/*    defaultActiveKey="Overview"*/}
-                                                    {/*    id="uncontrolled-tab-example"*/}
-                                                    {/*    className="overview_tabs mt-4"*/}
-                                                    {/*>*/}
 
 
                                                     {!getAccountReachedAndAccountEngagedData?.loading &&
@@ -672,29 +606,6 @@ const Insight = () => {
                                                             }
                                                         </>
                                                     }
-
-                                                    {/*{*/}
-                                                    {/*    !getAccountReachedAndAccountEngagedData?.loading &&*/}
-                                                    {/*    <>*/}
-                                                    {/*        {*/}
-                                                    {/*            getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data < getAccountReachedAndAccountEngagedData?.data?.reach?.presentData ?*/}
-                                                    {/*                < h3 className="overview_text">*/}
-                                                    {/*                    You reached{" "}*/}
-                                                    {/*                    <span*/}
-                                                    {/*                        className="hightlighted_text color-growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2)}% </span>more*/}
-                                                    {/*                    accounts compared*/}
-                                                    {/*                    to {getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.dateRange}*/}
-                                                    {/*                </h3> :*/}
-                                                    {/*                <h3 className="overview_text">*/}
-                                                    {/*                    This indicates a decline of <span*/}
-                                                    {/*                    className="hightlighted_text">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2))}% </span> in*/}
-                                                    {/*                    the number of*/}
-                                                    {/*                    accounts reached compared to the period*/}
-                                                    {/*                    of {getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.dateRange}.*/}
-                                                    {/*                </h3>*/}
-                                                    {/*        }*/}
-                                                    {/*    </>*/}
-                                                    {/*}*/}
 
 
                                                     <div className="account_reach_overview_wrapper">
@@ -773,483 +684,6 @@ const Insight = () => {
                                                         </div>
                                                     </div>
 
-                                                    {/* account reach graph */}
-                                                    {/*<div className="account_reach_graph_outer">*/}
-                                                    {/*    <h3 className="cmn_text_style fw-bold">Audience Growth</h3>*/}
-                                                    {/*    <div className="page_title_header">*/}
-                                                    {/*        <div className="page_title_container">*/}
-                                                    {/*            <div className="page_title_dropdown">*/}
-                                                    {/*                {*/}
-                                                    {/*                    selectedPage?.socialMediaType === "PINTEREST" &&*/}
-                                                    {/*                    <div>*/}
-                                                    {/*                        {*/}
-                                                    {/*                            getAllByCustomerIdData?.data?.find(socialMediaAccount => socialMediaAccount?.provider === "PINTEREST")?.name*/}
-                                                    {/*                        }*/}
-                                                    {/*                    </div>*/}
-
-                                                    {/*                }*/}
-                                                    {/*                {*/}
-                                                    {/*                    selectedPage?.socialMediaType === "FACEBOOK" &&*/}
-                                                    {/*                    <select*/}
-                                                    {/*                        className="page_title_options cmn_headings"*/}
-                                                    {/*                        value={selectedPageForGraph?.id}*/}
-                                                    {/*                        onChange={(e) => {*/}
-                                                    {/*                            handleGraphPageChange(e.target.value, "FACEBOOK")*/}
-                                                    {/*                        }}>*/}
-                                                    {/*                        {*/}
-                                                    {/*                            connectedFacebookPages?.map((page, index) => {*/}
-                                                    {/*                                return <option key={index}*/}
-                                                    {/*                                               value={page?.id}>{page.name}</option>*/}
-                                                    {/*                            })*/}
-                                                    {/*                        }*/}
-                                                    {/*                    </select>*/}
-
-                                                    {/*                }*/}
-                                                    {/*                {*/}
-                                                    {/*                    selectedPage?.socialMediaType === "INSTAGRAM" &&*/}
-                                                    {/*                    <select*/}
-                                                    {/*                        className="page_title_options cmn_headings"*/}
-                                                    {/*                        value={selectedPageForGraph?.id}*/}
-                                                    {/*                        onChange={(e) => {*/}
-                                                    {/*                            handleGraphPageChange(e.target.value, "INSTAGRAM")*/}
-                                                    {/*                        }}>*/}
-                                                    {/*                        {*/}
-                                                    {/*                            connectedInstagramPages?.map((page, index) => {*/}
-                                                    {/*                                return <option key={index}*/}
-                                                    {/*                                               value={page?.id}>{page.name}</option>*/}
-                                                    {/*                            })*/}
-                                                    {/*                        }*/}
-                                                    {/*                    </select>*/}
-
-                                                    {/*                }*/}
-                                                    {/*                {*/}
-                                                    {/*                    selectedPage?.socialMediaType === "LINKEDIN" &&*/}
-                                                    {/*                    <select*/}
-                                                    {/*                        className="page_title_options cmn_headings"*/}
-                                                    {/*                        value={selectedPageForGraph?.id}*/}
-                                                    {/*                        onChange={(e) => {*/}
-                                                    {/*                            handleGraphPageChange(e.target.value, "LINKEDIN")*/}
-                                                    {/*                        }}>*/}
-                                                    {/*                        {*/}
-                                                    {/*                            connectedLinkedinPages?.map((page, index) => {*/}
-                                                    {/*                                return <option key={index}*/}
-                                                    {/*                                               value={page?.id}>{page.name}</option>*/}
-                                                    {/*                            })*/}
-                                                    {/*                        }*/}
-                                                    {/*                    </select>*/}
-
-                                                    {/*                }*/}
-
-
-                                                    {/*                <h3 className="cmn_white_text instagram_overview_heading">*/}
-                                                    {/*                    {selectedPage?.socialMediaType} Overview*/}
-                                                    {/*                </h3>*/}
-                                                    {/*            </div>*/}
-                                                    {/*            <div className="days_outer">*/}
-                                                    {/*                <select className=" days_option box_shadow"*/}
-                                                    {/*                        value={selectedPeriodForGraph}*/}
-                                                    {/*                        onChange={handleSelectedGraphPeriod}>*/}
-                                                    {/*                    <option value={7}>Last 7 days</option>*/}
-                                                    {/*                    <option value={15}>Last 15 days</option>*/}
-                                                    {/*                    <option value={28}>Last 28 days</option>*/}
-                                                    {/*                </select>*/}
-                                                    {/*            </div>*/}
-                                                    {/*        </div>*/}
-                                                    {/*        <Chart*/}
-                                                    {/*            selectedPage={selectedPage}*/}
-                                                    {/*            isLoading={reportGraphSectionData?.loading}*/}
-                                                    {/*            graphData={reportGraphSectionData?.data}/>*/}
-                                                    {/*        <div className="account_info mt-2">*/}
-                                                    {/*            {*/}
-                                                    {/*                reportGraphSectionData?.data?.Accounts_Reached !== undefined &&*/}
-                                                    {/*                <div className="account_group">*/}
-                                                    {/*                    <div*/}
-                                                    {/*                        className="account_reached cmn_chart_btn"></div>*/}
-                                                    {/*                    <h4 className="cmn_headings">Accounts*/}
-                                                    {/*                        Reached</h4>*/}
-                                                    {/*                </div>*/}
-                                                    {/*            }*/}
-                                                    {/*            {*/}
-                                                    {/*                reportGraphSectionData?.data?.Followers !== undefined &&*/}
-                                                    {/*                <div className="account_group">*/}
-                                                    {/*                    <div*/}
-                                                    {/*                        className="total_follower cmn_chart_btn"></div>*/}
-                                                    {/*                    <h4 className="cmn_headings">Total*/}
-                                                    {/*                        Followers</h4>*/}
-                                                    {/*                </div>*/}
-                                                    {/*            }*/}
-
-
-                                                    {/*        </div>*/}
-                                                    {/*    </div>*/}
-                                                    {/*</div>*/}
-
-
-                                                    {/* overview tab */}
-
-                                                    {/*<Tab eventKey="Overview" title="Overview">*/}
-                                                    {/*    {*/}
-
-                                                    {/*    !getAccountReachedAndAccountEngagedData?.loading &&*/}
-                                                    {/*    <>*/}
-                                                    {/*        {*/}
-                                                    {/*            getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data < getAccountReachedAndAccountEngagedData?.data?.reach?.presentData ?*/}
-                                                    {/*                < h3 className="overview_text">*/}
-                                                    {/*                    You reached{" "}*/}
-                                                    {/*                    <span*/}
-                                                    {/*                        className="hightlighted_text color-growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2)}% </span>more*/}
-                                                    {/*                    accounts compared*/}
-                                                    {/*                    to {getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.dateRange}*/}
-                                                    {/*                </h3> :*/}
-                                                    {/*                <h3 className="overview_text">*/}
-                                                    {/*                    This indicates a decline of <span*/}
-                                                    {/*                    className="hightlighted_text">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2))}% </span> in*/}
-                                                    {/*                    the number of*/}
-                                                    {/*                    accounts reached compared to the period*/}
-                                                    {/*                    of {getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.dateRange}.*/}
-                                                    {/*                </h3>*/}
-                                                    {/*        }*/}
-                                                    {/*    </>*/}
-                                                    {/*}*/}
-
-
-                                                    {/*<div className="account_reach_overview_wrapper">*/}
-                                                    {/*    <div className="account_reach_overview_outer">*/}
-                                                    {/*        <h5 className="cmn_text_style">Accounts Reached</h5>*/}
-
-                                                    {/*        <h4 className="cmn_text_style">*/}
-                                                    {/*            {*/}
-                                                    {/*                getAccountReachedAndAccountEngagedData?.loading ?*/}
-                                                    {/*                    <span><i className="fa fa-spinner fa-spin"/>*/}
-                                                    {/*            </span> : getAccountReachedAndAccountEngagedData?.data?.reach?.presentData*/}
-                                                    {/*            }*/}
-
-                                                    {/*            {*/}
-                                                    {/*                !getAccountReachedAndAccountEngagedData?.loading && <>*/}
-                                                    {/*                    {*/}
-                                                    {/*                        getAccountReachedAndAccountEngagedData?.data?.reach?.presentData >= getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data ?*/}
-                                                    {/*                            <>*/}
-                                                    {/*                                <FiArrowUpRight*/}
-                                                    {/*                                    className="top_Arrow"/>*/}
-                                                    {/*                                <span*/}
-                                                    {/*                                    className="hightlighted_text color-growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2)}%</span>*/}
-                                                    {/*                            </>*/}
-                                                    {/*                            :*/}
-                                                    {/*                            <>*/}
-                                                    {/*                                <FiArrowDownRight*/}
-                                                    {/*                                    className="top_Arrow"/>*/}
-                                                    {/*                                <span*/}
-                                                    {/*                                    className="hightlighted_text">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2))}%</span>*/}
-                                                    {/*                            </>*/}
-                                                    {/*                    }*/}
-                                                    {/*                </>*/}
-                                                    {/*            }*/}
-                                                    {/*        </h4>*/}
-                                                    {/*    </div>*/}
-                                                    {/*    <div className="account_reach_overview_outer">*/}
-                                                    {/*        <h5 className="cmn_text_style">Accounts Engaged</h5>*/}
-
-                                                    {/*        <h4 className="cmn_text_style">*/}
-                                                    {/*            {*/}
-                                                    {/*                getAccountReachedAndAccountEngagedData?.loading ?*/}
-                                                    {/*                    <span><i className="fa fa-spinner fa-spin"/>*/}
-                                                    {/*            </span> : getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData*/}
-                                                    {/*            }*/}
-
-                                                    {/*            {*/}
-                                                    {/*                !getAccountReachedAndAccountEngagedData?.loading && <>*/}
-                                                    {/*                    {*/}
-                                                    {/*                        getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData >= getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data ?*/}
-                                                    {/*                            <>*/}
-                                                    {/*                                <FiArrowUpRight*/}
-                                                    {/*                                    className="top_Arrow"/>*/}
-                                                    {/*                                <span*/}
-                                                    {/*                                    className="hightlighted_text color-growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData, 2)}%</span>*/}
-                                                    {/*                            </>*/}
-                                                    {/*                            :*/}
-                                                    {/*                            <>*/}
-                                                    {/*                                <FiArrowDownRight*/}
-                                                    {/*                                    className="top_Arrow"/>*/}
-                                                    {/*                                <span*/}
-                                                    {/*                                    className="hightlighted_text">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData, 2))}%</span>*/}
-                                                    {/*                            </>*/}
-                                                    {/*                    }*/}
-                                                    {/*                </>*/}
-                                                    {/*            }*/}
-                                                    {/*        </h4>*/}
-                                                    {/*    </div>*/}
-                                                    {/*    <div className="account_reach_overview_outer">*/}
-                                                    {/*        <h5 className="cmn_text_style">Total Followers</h5>*/}
-
-                                                    {/*        <h4 className="cmn_text_style">*/}
-                                                    {/*            {*/}
-                                                    {/*                getTotalFollowersData?.loading ?*/}
-                                                    {/*                    <span><i className="fa fa-spinner fa-spin"/>*/}
-                                                    {/*            </span> : (getTotalFollowersData?.data?.followers_count === null || getTotalFollowersData?.data?.followers_count === undefined) ? "N/A" : getTotalFollowersData?.data?.followers_count*/}
-                                                    {/*            }*/}
-                                                    {/*        </h4>*/}
-                                                    {/*    </div>*/}
-                                                    {/*</div>*/}
-
-                                                    {/*/!* account reach graph *!/*/}
-                                                    {/*<div className="account_reach_graph_outer">*/}
-                                                    {/*    <h3 className="cmn_text_style fw-bold">Audience Growth</h3>*/}
-                                                    {/*    <div className="page_title_header">*/}
-                                                    {/*        <div className="page_title_container">*/}
-                                                    {/*            <div className="page_title_dropdown">*/}
-                                                    {/*                {*/}
-                                                    {/*                    selectedPage?.socialMediaType === "PINTEREST" &&*/}
-                                                    {/*                    <div>*/}
-                                                    {/*                        {*/}
-                                                    {/*                            getAllByCustomerIdData?.data?.find(socialMediaAccount => socialMediaAccount?.provider === "PINTEREST")?.name*/}
-                                                    {/*                        }*/}
-                                                    {/*                    </div>*/}
-
-                                                    {/*                }*/}
-                                                    {/*                {*/}
-                                                    {/*                    selectedPage?.socialMediaType === "FACEBOOK" &&*/}
-                                                    {/*                    <select*/}
-                                                    {/*                        className="page_title_options cmn_headings"*/}
-                                                    {/*                        value={selectedPageForGraph?.id}*/}
-                                                    {/*                        onChange={(e) => {*/}
-                                                    {/*                            handleGraphPageChange(e.target.value, "FACEBOOK")*/}
-                                                    {/*                        }}>*/}
-                                                    {/*                        {*/}
-                                                    {/*                            connectedFacebookPages?.map((page, index) => {*/}
-                                                    {/*                                return <option key={index}*/}
-                                                    {/*                                               value={page?.id}>{page.name}</option>*/}
-                                                    {/*                            })*/}
-                                                    {/*                        }*/}
-                                                    {/*                    </select>*/}
-
-                                                    {/*                }*/}
-                                                    {/*                {*/}
-                                                    {/*                    selectedPage?.socialMediaType === "INSTAGRAM" &&*/}
-                                                    {/*                    <select*/}
-                                                    {/*                        className="page_title_options cmn_headings"*/}
-                                                    {/*                        value={selectedPageForGraph?.id}*/}
-                                                    {/*                        onChange={(e) => {*/}
-                                                    {/*                            handleGraphPageChange(e.target.value, "INSTAGRAM")*/}
-                                                    {/*                        }}>*/}
-                                                    {/*                        {*/}
-                                                    {/*                            connectedInstagramPages?.map((page, index) => {*/}
-                                                    {/*                                return <option key={index}*/}
-                                                    {/*                                               value={page?.id}>{page.name}</option>*/}
-                                                    {/*                            })*/}
-                                                    {/*                        }*/}
-                                                    {/*                    </select>*/}
-
-                                                    {/*                }*/}
-                                                    {/*                {*/}
-                                                    {/*                    selectedPage?.socialMediaType === "LINKEDIN" &&*/}
-                                                    {/*                    <select*/}
-                                                    {/*                        className="page_title_options cmn_headings"*/}
-                                                    {/*                        value={selectedPageForGraph?.id}*/}
-                                                    {/*                        onChange={(e) => {*/}
-                                                    {/*                            handleGraphPageChange(e.target.value, "LINKEDIN")*/}
-                                                    {/*                        }}>*/}
-                                                    {/*                        {*/}
-                                                    {/*                            connectedLinkedinPages?.map((page, index) => {*/}
-                                                    {/*                                return <option key={index}*/}
-                                                    {/*                                               value={page?.id}>{page.name}</option>*/}
-                                                    {/*                            })*/}
-                                                    {/*                        }*/}
-                                                    {/*                    </select>*/}
-
-                                                    {/*                }*/}
-
-
-                                                    {/*                <h3 className="cmn_white_text instagram_overview_heading">*/}
-                                                    {/*                    {selectedPage?.socialMediaType} Overview*/}
-                                                    {/*                </h3>*/}
-                                                    {/*            </div>*/}
-                                                    {/*            <div className="days_outer">*/}
-                                                    {/*                <select className=" days_option box_shadow"*/}
-                                                    {/*                        value={selectedPeriodForGraph}*/}
-                                                    {/*                        onChange={handleSelectedGraphPeriod}>*/}
-                                                    {/*                    <option value={7}>Last 7 days</option>*/}
-                                                    {/*                    <option value={15}>Last 15 days</option>*/}
-                                                    {/*                    <option value={28}>Last 28 days</option>*/}
-                                                    {/*                </select>*/}
-                                                    {/*            </div>*/}
-                                                    {/*        </div>*/}
-                                                    {/*        <Chart*/}
-                                                    {/*            selectedPage={selectedPage}*/}
-                                                    {/*            isLoading={reportGraphSectionData?.loading}*/}
-                                                    {/*            graphData={reportGraphSectionData?.data}/>*/}
-                                                    {/*        <div className="account_info mt-2">*/}
-                                                    {/*            {*/}
-                                                    {/*                reportGraphSectionData?.data?.Accounts_Reached !== undefined &&*/}
-                                                    {/*                <div className="account_group">*/}
-                                                    {/*                    <div*/}
-                                                    {/*                        className="account_reached cmn_chart_btn"></div>*/}
-                                                    {/*                    <h4 className="cmn_headings">Accounts*/}
-                                                    {/*                        Reached</h4>*/}
-                                                    {/*                </div>*/}
-                                                    {/*            }*/}
-                                                    {/*            {*/}
-                                                    {/*                reportGraphSectionData?.data?.Followers !== undefined &&*/}
-                                                    {/*                <div className="account_group">*/}
-                                                    {/*                    <div*/}
-                                                    {/*                        className="total_follower cmn_chart_btn"></div>*/}
-                                                    {/*                    <h4 className="cmn_headings">Total*/}
-                                                    {/*                        Followers</h4>*/}
-                                                    {/*                </div>*/}
-                                                    {/*            }*/}
-
-
-                                                    {/*        </div>*/}
-                                                    {/*    </div>*/}
-                                                    {/*</div>*/}
-                                                    {/*</Tab>*/}
-                                                    {/* Demographics tabs */}
-                                                    {/*{(selectedPage?.socialMediaType !== "PINTEREST" && selectedPage?.socialMediaType !== "LINKEDIN") ? (*/}
-                                                    {/*    <Tab eventKey="Demographics" title="Demographics">*/}
-                                                    {/*        <h2 className="cmn_headings Review_Heading">Review your*/}
-                                                    {/*            audience*/}
-                                                    {/*            demographics as*/}
-                                                    {/*            of*/}
-                                                    {/*            the last day of the reporting period.</h2>*/}
-                                                    {/*        <div className="row">*/}
-                                                    {/*            /!* audience by age *!/*/}
-                                                    {/*            <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">*/}
-
-                                                    {/*                <div*/}
-                                                    {/*                    className={"Donuts_container cmn_insight_wrapper_style " + (getDemographicsInsightData?.data?.age !== null ? "cmn_height" : "")}>*/}
-                                                    {/*                    <h3 className="cmn_text_style">Audience by*/}
-                                                    {/*                        Age</h3>*/}
-
-                                                    {/*                    {*/}
-                                                    {/*                        getDemographicsInsightData?.loading ?*/}
-                                                    {/*                            <div*/}
-                                                    {/*                                className="text-center insights-loader cmn_height">*/}
-                                                    {/*                                <RotatingLines*/}
-                                                    {/*                                    strokeColor="#F07C33"*/}
-                                                    {/*                                    strokeWidth="5"*/}
-                                                    {/*                                    animationDuration="0.75"*/}
-                                                    {/*                                    width="96"*/}
-                                                    {/*                                    visible={true}*/}
-                                                    {/*                                />*/}
-                                                    {/*                            </div> :*/}
-                                                    {/*                            getDemographicsInsightData?.data?.age ?*/}
-                                                    {/*                                <HorizontalBarChart*/}
-                                                    {/*                                    graphData={getDemographicsInsightData?.data?.age}/> :*/}
-                                                    {/*                                <DemographicDatNotAvailable*/}
-                                                    {/*                                    message={"Demographic data isn't available for age"}/>*/}
-                                                    {/*                    }*/}
-
-                                                    {/*                </div>*/}
-
-
-                                                    {/*                /!* audience top countries *!/*/}
-                                                    {/*                <div*/}
-                                                    {/*                    className="Donuts_container cmn_insight_wrapper_style ">*/}
-                                                    {/*                    <h3 className="cmn_text_style">Audience Top*/}
-                                                    {/*                        Countries</h3>*/}
-
-                                                    {/*                    {*/}
-                                                    {/*                        getDemographicsInsightData?.loading ?*/}
-                                                    {/*                            <div*/}
-                                                    {/*                                className="text-center insights-loader mt-5">*/}
-                                                    {/*                                <RotatingLines*/}
-                                                    {/*                                    strokeColor="#F07C33"*/}
-                                                    {/*                                    strokeWidth="5"*/}
-                                                    {/*                                    animationDuration="0.75"*/}
-                                                    {/*                                    width="96"*/}
-                                                    {/*                                    visible={true}*/}
-                                                    {/*                                />*/}
-                                                    {/*                            </div> :*/}
-                                                    {/*                            getDemographicsInsightData?.data?.country ?*/}
-                                                    {/*                                <ul className="top_city_list scroll-y">*/}
-                                                    {/*                                    {getDemographicsInsightData?.data?.country?.map((country) => {*/}
-                                                    {/*                                        const countryInfo = Country.getCountryByCode(country?.country_code);*/}
-                                                    {/*                                        return (*/}
-                                                    {/*                                            <li>*/}
-                                                    {/*                                                <h4>{countryInfo?.flag + " " + countryInfo?.name} </h4>*/}
-                                                    {/*                                                <h4>{country?.value}</h4>*/}
-                                                    {/*                                            </li>*/}
-                                                    {/*                                        );*/}
-                                                    {/*                                    })*/}
-                                                    {/*                                    } </ul> :*/}
-                                                    {/*                                <DemographicDatNotAvailable*/}
-                                                    {/*                                    message={"Demographic data isn't available for country"}/>*/}
-                                                    {/*                    }*/}
-
-
-                                                    {/*                </div>*/}
-                                                    {/*            </div>*/}
-
-                                                    {/*            /!* audience by gender *!/*/}
-                                                    {/*            <div className="col-xl-6 col-lg-6 xol-md-12 col-sm-12">*/}
-                                                    {/*                <div>*/}
-                                                    {/*                    <div*/}
-                                                    {/*                        className="Donuts_container cmn_insight_wrapper_style">*/}
-                                                    {/*                        <h3 className="cmn_text_style">Audience by*/}
-                                                    {/*                            Gender</h3>*/}
-                                                    {/*                        {*/}
-                                                    {/*                            getDemographicsInsightData?.loading ?*/}
-                                                    {/*                                <div*/}
-                                                    {/*                                    className="text-center insights-loader cmn_height ">*/}
-                                                    {/*                                    <RotatingLines*/}
-                                                    {/*                                        strokeColor="#F07C33"*/}
-                                                    {/*                                        strokeWidth="5"*/}
-                                                    {/*                                        animationDuration="0.75"*/}
-                                                    {/*                                        width="96"*/}
-                                                    {/*                                        visible={true}*/}
-                                                    {/*                                    />*/}
-                                                    {/*                                </div> :*/}
-                                                    {/*                                getDemographicsInsightData?.data?.gender ?*/}
-                                                    {/*                                    <DonutChart*/}
-                                                    {/*                                        graphData={getDemographicsInsightData?.data?.gender}/> :*/}
-                                                    {/*                                    <DemographicDatNotAvailable*/}
-                                                    {/*                                        message={"Demographic data isn't available for gender"}/>*/}
-                                                    {/*                        }*/}
-
-                                                    {/*                    </div>*/}
-
-                                                    {/*                </div>*/}
-
-                                                    {/*                /!* audience top cities *!/*/}
-                                                    {/*                <div*/}
-                                                    {/*                    className="Donuts_container cmn_insight_wrapper_style ">*/}
-                                                    {/*                    <h3 className="cmn_text_style">Audience Top*/}
-                                                    {/*                        Cities</h3>*/}
-
-                                                    {/*                    {*/}
-                                                    {/*                        getDemographicsInsightData?.loading ?*/}
-                                                    {/*                            <div*/}
-                                                    {/*                                className="text-center insights-loader mt-5">*/}
-                                                    {/*                                <RotatingLines*/}
-                                                    {/*                                    strokeColor="#F07C33"*/}
-                                                    {/*                                    strokeWidth="5"*/}
-                                                    {/*                                    animationDuration="0.75"*/}
-                                                    {/*                                    width="96"*/}
-                                                    {/*                                    visible={true}*/}
-                                                    {/*                                />*/}
-                                                    {/*                            </div> :*/}
-                                                    {/*                            getDemographicsInsightData?.data?.city ?*/}
-
-                                                    {/*                                <ul className="top_city_list scroll-y">*/}
-                                                    {/*                                    {*/}
-                                                    {/*                                        getDemographicsInsightData?.data?.city?.map(city => {*/}
-                                                    {/*                                            return (*/}
-                                                    {/*                                                <li>*/}
-                                                    {/*                                                    <h4>{city?.city_name}</h4>*/}
-                                                    {/*                                                    <h4>{city?.value}</h4>*/}
-                                                    {/*                                                </li>*/}
-                                                    {/*                                            );*/}
-                                                    {/*                                        })*/}
-                                                    {/*                                    }*/}
-                                                    {/*                                </ul> :*/}
-                                                    {/*                                <DemographicDatNotAvailable*/}
-                                                    {/*                                    message={"Demographic data isn't available for city"}/>*/}
-                                                    {/*                    }*/}
-                                                    {/*                </div>*/}
-                                                    {/*            </div>*/}
-
-                                                    {/*        </div>*/}
-                                                    {/*    </Tab>) : (<></>)}*/}
-                                                    {/*</Tabs>*/}
                                                 </div>
 
                                                 <button className="overview_btn mt-4 "

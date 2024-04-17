@@ -941,15 +941,6 @@ const UpdatePost = () => {
                                                         e.preventDefault();
                                                         resetForm(e);
                                                     }}>{jsondata.reset}</button>
-
-                                                    {/* <GenericButtonWithLoader label={jsondata.publishnow}
-                                                                             onClick={(e) => {
-                                                                                 setReference("Published")
-                                                                                 handlePostSubmit(e);
-                                                                             }}
-                                                                             isDisabled={false}
-                                                                             className={"publish_btn cmn_bg_btn loading"}
-                                                                             isLoading={reference === "Published" && loadingUpdatePost}/> */}
                                                 </div>
                                             </div>
 

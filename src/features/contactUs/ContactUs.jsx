@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from "react";
-import SideBar from "../sidebar/views/Layout";
 import {useFormik} from "formik";
 import "./Contact.css";
 import {CiLocationOn} from "react-icons/ci";
 import { PiPhoneCall } from "react-icons/pi";
-
 import {FaRegEnvelope} from "react-icons/fa";
 import {validationSchemas} from "../../utils/commonUtils";
 import {contactUsFormActions} from "../../app/actions/webActions/webActions";
