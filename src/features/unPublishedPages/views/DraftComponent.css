@@ -52,7 +52,7 @@
 /*/ width /*/
 
 .draft-heading h4.posted-on-txt{
-    min-width: 130px;
+    min-width: 113px;
     font-size: 18px;
     color: black;
     font-weight: 500;
@@ -174,7 +174,7 @@ h3.caption {
     height: 40px;
     overflow-y: scroll;
     line-height: 21px;
-    color: #585858;
+    color: #5F6D7E;
     font-size: 16px;
     font-weight: 600;
     font-family: 'Nunito';
@@ -231,7 +231,9 @@ button.outline_btn {
     width: 100%;
     max-width: 100%;
 }
-
+.draft_button_outer{
+    flex-wrap: wrap;
+}
 
 .post_card_inner_content{
     height: 100px;
@@ -333,15 +335,12 @@ button.outline_btn {
         height: auto;
     }
 }
-
-@media screen and (max-width:1279px) and (min-width:992px){
-    .draft_button_outer {
-        flex-wrap: wrap;
-    }
-    
-
-    
+@media screen and (min-width:1024px) and (max-width:1279px){
+.upcomingPostBtn_Outer {
+    flex-wrap: wrap;
 }
+}
+
 @media screen and (min-width:992px) {
  
 .mt-4.upcomingPostBtn_Outer button {
@@ -364,8 +363,8 @@ button.outline_btn.schedule_btn{
     
    
     .draft-heading h4.posted-on-txt {
-        min-width: 102px;
-        font-size: 19px;
+        min-width: 81px;
+        font-size: 15px;
     }
     .draft-heading{
         gap: 14px;
@@ -389,10 +388,7 @@ button.outline_btn.schedule_btn{
     .draft_button_outer .cmn_bg_btn {
         padding: 10px;
     }
-    div.draft_button_outer{
-        display: flex !important;
-        flex-wrap: wrap;
-    }
+   
     h2.acc_not_connected_heading {
         font-size: 16px;
     }
@@ -406,6 +402,7 @@ button.outline_btn.schedule_btn{
     .draft_component_outer .dropdown{
         top: 22px;
     }
+   
 }
 @media screen and (max-width:767px) {
     button.outline_btn.schedule_btn{

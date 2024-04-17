@@ -56,7 +56,7 @@ const Login = () => {
 
     return (
         <>
-            <section className='Container'>
+            <section>
                 <div className="login_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12 ">

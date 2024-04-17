@@ -60,7 +60,7 @@ export const ParentDraftComponent = ({setDraftPost, reference = ""}) => {
                                 sortByKey(drafts, "createdAt").map((curDraftObject, key) => {
                                     return (deletedAndPublishedPostIds?.deletedPostIds?.includes(curDraftObject?.id) || deletedAndPublishedPostIds?.publishedPostIds?.includes(curDraftObject?.id)) ? <></> :
                                         <div
-                                            className={sidebar ? "col-lg-6 col-md-6 col-sm-12" : "col-lg-6 col-md-12 col-sm-12"}
+                                            className={sidebar ? "col-lg-4 col-md-6 col-sm-12" : "col-lg-4 col-md-12 col-sm-12"}
                                             key={key + "curDraftObject"}>
                                             {
                                                 <DraftComponent batchIdData={curDraftObject}

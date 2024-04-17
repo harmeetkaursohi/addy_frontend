@@ -53,7 +53,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
 
     return (
         <>
-            <section className='Container'>
+            <section>
 
                 <div className="login_wrapper">
                     <div className="row">

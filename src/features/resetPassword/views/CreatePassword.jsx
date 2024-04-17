@@ -50,7 +50,7 @@ const CreatePassword = () => {
         }
     });
 
-    return (<section className='Container'>
+    return (<section>
             <div className="login_wrapper">
                 <div className="row">
                     <div className="col-lg-6 col-md-12 col-sm-12 ">
@@ -59,7 +59,7 @@ const CreatePassword = () => {
 
                                 <div className='reach_user_outer'>
                                     <img src={frame} className='w-100'/>
-                                  
+                                    <h2 className='mt-5'>{jsondata.connect_audience_title}</h2>
                                 </div>
                             </div>
 
