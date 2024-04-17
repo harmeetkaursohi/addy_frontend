@@ -1,4 +1,3 @@
-import SideBar from "../sidebar/views/Layout";
 import React, {useEffect, useState} from "react";
 import "./privacy.css";
 import {useAppContext} from "../common/components/AppProvider";
@@ -33,29 +32,29 @@ const PrivacyComponent = () => {
             return "";
         }
 
-  
-  };
-  return (
-    <>
-      {/*<SideBar />*/}
-      <div className={`cmn_container  ${sidebar?" " :"cmn_Padding"}`}>
-        <div className=" cmn_outer">
-          <div className="cmn_wrapper_outer privacy_policy_container ">
-            <h2 className="cmn_title">Privacy Policy</h2>
-            <h6 className="cmn_small_heading">Your Privacy Matters. Our Commitment to Protecting Your Personal Information.</h6>
-            <div className="privacy_wrapper">
-              <iframe
-                title="Embedded Content"
-                srcDoc={iframeContent}
-                width="100%"
-                height="2115px"
-              />
+
+    };
+    return (
+        <>
+            <div className={`cmn_container  ${sidebar ? " " : "cmn_Padding"}`}>
+                <div className=" cmn_outer">
+                    <div className="cmn_wrapper_outer privacy_policy_container ">
+                        <h2 className="cmn_title">Privacy Policy</h2>
+                        <h6 className="cmn_small_heading">Your Privacy Matters. Our Commitment to Protecting Your
+                            Personal Information.</h6>
+                        <div className="privacy_wrapper">
+                            <iframe
+                                title="Embedded Content"
+                                srcDoc={iframeContent}
+                                width="100%"
+                                height="2115px"
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+        </>
+    );
 };
 
 export default PrivacyComponent;

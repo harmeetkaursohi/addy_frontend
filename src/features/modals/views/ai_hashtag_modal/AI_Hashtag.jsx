@@ -76,7 +76,6 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
     }
 
 
-    console.log("selectedTags--->", selectedTags);
     const addOrRemoveHashTag = (e, type, currentValue) => {
         e.preventDefault();
         if (aiGeneratedHashTag !== null && Array.isArray(aiGeneratedHashTag) && aiGeneratedHashTag.length > 0) {

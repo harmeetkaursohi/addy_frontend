@@ -25,7 +25,6 @@ const CommonShowMorePlannerModal = ({
                                         commonShowMorePlannerModal = null,
                                         setCommonShowMorePlannerModal = null,
                                         plannerPosts,
-                                        setPlannerPosts,
                                         eventDate,
                                         baseSearchQuery
                                     }) => {
@@ -33,7 +32,6 @@ const CommonShowMorePlannerModal = ({
     const dispatch = useDispatch();
     const token = getToken();
     const getAllPlannerPostsDataLoading = useSelector(state => state.post.getAllPlannerPostReducer.loading);
-    const deletePostByBatchIdData = useSelector(state => state.post.deletePostByBatchIdReducer);
     const deletePostFromPageData = useSelector(state => state.post.deletePostFromPageReducer);
     const [deleteBatchIdRef, setDeleteBatchIdRef] = useState(null);
     const [deletedPostsIds, setDeletedPostsIds] = useState([]);
@@ -125,13 +123,6 @@ const CommonShowMorePlannerModal = ({
     }
     const handleClose = () => setCommonShowMorePlannerModal(false);
 
-    function extractNumbers(inputString) {
-        // Use a regular expression to find all sequences of digits
-        const numbers = inputString.match(/\d+/g);
-
-        // Convert the matched substrings to numbers
-        return numbers ? numbers.map(Number) : [];
-    }
 
     return (
         <>

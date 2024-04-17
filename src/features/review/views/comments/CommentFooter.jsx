@@ -14,7 +14,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {RotatingLines} from "react-loader-spinner";
 import {getToken} from "../../../../app/auth/auth";
-import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 
 const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
 

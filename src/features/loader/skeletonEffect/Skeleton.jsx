@@ -1,5 +1,5 @@
 const Skeleton = () => {
-    return <div className="skeleton">rrrtt errrrrrrrrrrr
+    return <div className="skeleton">
     </div>;
 }
 export default Skeleton

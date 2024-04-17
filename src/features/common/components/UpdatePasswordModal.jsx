@@ -2,12 +2,12 @@ import Modal from "react-bootstrap/Modal";
 import React, {useState} from "react";
 import './common.css'
 import {useFormik} from "formik";
-import {formatMessage, getInitialLetterCap, validationSchemas} from "../../../utils/commonUtils";
+import {formatMessage,  validationSchemas} from "../../../utils/commonUtils";
 import {useDispatch, useSelector} from "react-redux";
 import {updatePassword} from "../../../app/actions/userActions/userActions";
 import {getToken} from "../../../app/auth/auth";
 import {showSuccessToast} from "./Toast";
-import {NoBusinessAccountFound, UpdatedSuccessfully} from "../../../utils/contantData";
+import { UpdatedSuccessfully} from "../../../utils/contantData";
 import "./common.css"
 
 const UpdatePasswordModal = ({showModal, setShowModal}) => {

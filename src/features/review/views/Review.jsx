@@ -1,9 +1,5 @@
-import SideBar from "../../sidebar/views/Layout";
 import "./Review.css";
 import jsondata from "../../../locales/data/initialdata.json";
-import linkedin_img from "../../../images/men.png";
-import Slider from "react-slick";
-
 import {
     ErrorFetchingPost,
     PostAlreadyDeleted,
@@ -21,7 +17,6 @@ import {
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
 import CommonLoader from "../../common/components/CommonLoader";
-import {FaArrowCircleRight} from "react-icons/fa";
 import {useDispatch, useSelector} from "react-redux";
 import {
     deletePostFromPage,
@@ -472,152 +467,6 @@ const Review = () => {
                                                 </ul>
                                             )}
                                         </div>
-                                        {/* <div className="post_review_wrapper  table-responsive">
-                                            <table className={"review_data"}>
-
-                                                <thead className="position-sticky" style={{top: "0"}}>
-
-                                                <tr>
-                                                    <th>{jsondata.post}</th>
-                                                    <th>{jsondata.socialmedia}</th>
-                                                    <th>{jsondata.likes}</th>
-                                                    <th>{jsondata.comments}</th>
-                                                    <th>{jsondata.share}/{jsondata.save}</th>
-                                                    <th>{jsondata.action}</th>
-                                                </tr>
-
-                                                </thead>
-
-                                                <tbody className="position-relative">
-
-
-                                                {
-
-                                                    (!isLoading && results !== null && results?.length === 0) ?
-                                                        <tr>
-
-                                                            <td className="W-100 text-center" style={{background:"white"}} colSpan={6}>
-                                                                <div
-                                                                    className={"no-post-review acc_not_connected_heading"}>Oops!
-                                                                    It seems there are no posts to display at the
-                                                                    moment.
-                                                                </div>
-                                                            </td>
-
-                                                        </tr> :
-                                                        results?.map((post, index) => {
-                                                            return removedPosts?.some(removedPost => removedPost?.postId === post.id && removedPost?.pageId === post.page.pageId) ?
-                                                                <></> :
-                                                                (post.errorInfo === undefined || post.errorInfo === null) ?
-                                                                    <tr
-                                                                        key={index}
-                                                                        ref={index === results?.length - 1 ? lastPostRef : null}>
-                                                                        <td>
-                                                                            {post?.attachments[0]?.imageURL===null && post?.attachments[0]?.mediaType==="VIDEO"? 
-                                                                            <video style={{objectFit:"fill"}} className="bg_img" src={post?.attachments[0]?.sourceURL}></video>
-                                                                            :<img
-                                                                                src={post?.attachments[0]?.imageURL || noImageAvailable}
-                                                                                className="bg_img"/>
-                                                                            }
-                                                                        </td>
-                                                                        <td>
-                                                                            <div
-                                                                                className={"d-flex align-items-center"}>
-                                                                                <img className={"me-2 review-post-icon"}
-                                                                                     src={computeImageURL(post?.socialMediaType)}/>
-                                                                                <span>{post?.page?.name}</span>
-                                                                            </div>
-
-
-                                                                        </td>
-                                                                        <td>{post?.likes} Likes</td>
-                                                                        <td>{post?.comments} Comments</td>
-                                                                        <td>{post?.shares} {post?.socialMediaType === "PINTEREST" ? "Save" : "Share"} </td>
-                                                                        <td>
-
-                                                                            <div
-                                                                                className={"view-post-txt cursor-pointer"}
-                                                                                onClick={(e) => {
-                                                                                    setPostData(post);
-                                                                                    setDirty({
-                                                                                        ...isDirty,
-                                                                                        index: index,
-                                                                                        socialMediaType: post?.socialMediaType
-                                                                                    })
-                                                                                    setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal)
-                                                                                }}
-                                                                            >
-                                                                                <span>View</span> <FaArrowCircleRight
-                                                                                style={{color: "#F07C33"}}/>
-
-                                                                            </div>
-                                                                        </td>
-                                                                    </tr>
-                                                                    :
-
-                                                                    <tr
-                                                                        key={index}
-                                                                        ref={index === results?.length - 1 ? lastPostRef : null}
-                                                                    >
-                                                                        <td className={"disabled-table-grid"}>
-                                                                            <img
-                                                                                src={noImageAvailable}
-                                                                                className="bg_img"/>
-                                                                        </td>
-                                                                        <td className={"disabled-table-grid"}>
-                                                                            <div
-                                                                                className={"d-flex align-items-center"}>
-                                                                                <img className={"me-2 review-post-icon"}
-                                                                                     src={computeImageURL(post?.socialMediaType)}/>
-                                                                                <span>{post?.page?.name}</span>
-                                                                            </div>
-
-
-                                                                        </td>
-                                                                        <td className={"disabled-table-grid"}>
-                                                                            {concatenateString(post.message, 20)}
-                                                                        </td>
-
-                                                                        <td className={"disabled-table-grid "}
-                                                                            colSpan={post.errorInfo.isDeletedFromSocialMedia ? 2 : 3}>
-                                                                            {
-                                                                                post.errorInfo.isDeletedFromSocialMedia ?
-                                                                                    <div
-                                                                                        className={"review-errorMessage d-flex"}>
-                                                                                        {PostAlreadyDeleted}
-
-                                                                                    </div>
-                                                                                    :
-                                                                                    <div
-                                                                                        className={"review-errorMessage "}>{ErrorFetchingPost}
-                                                                                    </div>
-                                                                            }
-                                                                        </td>
-                                                                        {
-                                                                            post.errorInfo.isDeletedFromSocialMedia &&
-                                                                            <td className={"disabled-table-grid "}>
-                                                                                <MdDelete
-                                                                                    onClick={() => {
-                                                                                        !isLoading && setDeletePostPageInfo(post)
-                                                                                    }}
-                                                                                    className={"ms-2 cursor-pointer font-size-20"}
-                                                                                    title={"Delete From Addy"}/>
-                                                                            </td>
-                                                                        }
-
-                                                                    </tr>
-                                                        })
-
-
-                                                }
-
-
-                                                </tbody>
-
-                                            </table>
-
-
-                                        </div> */}
 
 
                                         {

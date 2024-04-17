@@ -1,7 +1,6 @@
 import default_user_icon from "../../../images/default_user_icon.svg";
 import ellipse_img from "../../../images/ellipse.svg";
 import CommonSlider from "./CommonSlider";
-import {IoMdHeartEmpty} from "react-icons/io";
 import React, { useState } from "react";
 import CommentText from "../../review/views/comments/CommentText";
 import like_img from "../../../images/like.svg"
@@ -59,10 +58,6 @@ const[showContent,setShowContent]=useState(false)
                </div>
 
                     </div>
-                   {/* {
-                    caption.length!==0 ?<h6 className='status create_post_text ps-4 pb-2'>just now
-                    <img src={ellipse_img} className="ms-1" /> </h6>:""
-                   } */}
                      
                 
             </div>

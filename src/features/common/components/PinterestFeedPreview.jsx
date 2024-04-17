@@ -1,7 +1,6 @@
 import {FiArrowUpRight} from "react-icons/fi";
 import {CgSoftwareUpload} from "react-icons/cg";
 import {BsThreeDots} from "react-icons/bs";
-import noImageAvailable from "../../../images/no_img_posted.png"
 import default_user_icon from "../../../images/default_user_icon.svg"
 import CommonSlider from "./CommonSlider";
 

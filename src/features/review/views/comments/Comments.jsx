@@ -163,10 +163,6 @@ const Comments = ({postData, isDirty, setDirty}) => {
 
 
     return (
-        // getCommentsOnPostActionData?.loading ?
-        //     <CommonLoader/>
-        //
-        //     :
         getCommentsOnPostActionData?.data?.data?.length === 0
             ? <div className={"no-cmnt-txt"}>No comments yet!</div> :
 

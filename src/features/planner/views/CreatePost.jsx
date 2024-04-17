@@ -369,7 +369,7 @@ const CreatePost = () => {
         if (cropImgUrl) {
             const updatedFiles = [...files];
             updatedFiles[editImgIndex] = {
-                file:   blobToFile(fileSize,imgFile?.fileName,imgFile?.file?.type),
+                file: blobToFile(fileSize, imgFile?.fileName, imgFile?.file?.type),
                 url: cropImgUrl,
                 fileName: imgFile?.fileName,
                 mediaType: imgFile?.mediaType
@@ -815,25 +815,11 @@ const CreatePost = () => {
                                                                                          setReference("Scheduled")
                                                                                          handleSchedulePost(e);
                                                                                      }}
-                                                                //  isDisabled={false}
                                                                                      isDisabled={loadingCreateFacebookPost && reference !== "Scheduled"} // Disable if not null and not "Scheduled"
-
                                                                                      className={"cmn_bg_btn schedule_btn loading"}
                                                                                      isLoading={reference === "Scheduled" && loadingCreateFacebookPost}
 
                                                             />
-
-                                                            {/* <GenericButtonWithLoader label={jsondata.saveasdraft}
-                                                                                     onClick={(e) => {
-                                                                                         setReference("Draft")
-                                                                                         handleDraftPost(e);
-                                                                                     }}
-                                                                //  isDisabled={false}
-                                                                                     isDisabled={loadingCreateFacebookPost && reference !== "Draft"} // Disable if not null and not "Scheduled"
-
-                                                                                     className={"save_btn cmn_bg_btn loading"}
-
-                                                                                     isLoading={reference === "Draft" && loadingCreateFacebookPost}/> */}
                                                         </div>
                                                     </div>
 
@@ -948,22 +934,19 @@ const CreatePost = () => {
 
                                 {/* draft and publish now section  */}
                                 <div className='draft_publish_outer cmn_outer'>
-                                    <GenericButtonWithLoader label={jsondata.saveasdraft} onClick={(e) => {
-                                        setReference("Draft")
-                                        handleDraftPost(e);
-                                    }}
-                                        //  isDisabled={false}
+                                    <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                             onClick={(e) => {
+                                                                 setReference("Draft")
+                                                                 handleDraftPost(e);
+                                                             }}
                                                              isDisabled={loadingCreateFacebookPost && reference !== "Draft"} // Disable if not null and not "Scheduled"
-
                                                              className={"save_btn cmn_bg_btn loading"}
-
                                                              isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
                                     <GenericButtonWithLoader label={jsondata.publishnow}
                                                              onClick={(e) => {
                                                                  setReference("Published")
                                                                  handlePostSubmit(e);
                                                              }}
-                                        //  isDisabled={false}
                                                              isDisabled={loadingCreateFacebookPost && reference !== "Published"}
                                                              className={"publish_btn cmn_bg_btn loading"}
                                                              isLoading={reference === "Published" && loadingCreateFacebookPost}/>

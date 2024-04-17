@@ -4,7 +4,6 @@ import {
     computeAndReturnSummedDateValues,
     generateUnixTimestampFor
 } from "../utils/commonUtils";
-import {useSelector} from "react-redux";
 import {SocialAccountProvider} from "../utils/contantData";
 
 export const getInstagramConnectedPageIdsReport = async (page) => {
@@ -14,8 +13,6 @@ export const getInstagramConnectedPageIdsReport = async (page) => {
         Post_Activity: {lifeTime: 0, month: 0},
     };
     if (page) {
-
-        // for (const curPage of listOfPages) {
 
         const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`;
         const pageId = page?.pageId;
@@ -55,65 +52,11 @@ export const getInstagramConnectedPageIdsReport = async (page) => {
             });
 
 
-        //Post activities lifetime
+        //Post activities
         initialObject.Post_Activity =await getInstagramAccountEngagementData(baseUrl, pageId,accessToken);
 
-        // await baseAxios.get(await computeInsightURL(pageId, "page_engaged_users", accessToken, true))
-        //     .then((response) => {
-        //         const lifeTimeCount = response.data?.data.find(item => item.period === "total_over_range")?.values[0]?.value || 0;
-        //         initialObject.Post_Activity.lifeTime += lifeTimeCount;
-        //     })
-        //     .catch((error) => {
-        //         initialObject.Post_Activity.lifeTime += 0;
-        //         console.error('Error:', error);
-        //     });
-
-
-        //last 1 month
-        // const engagementLastMonthUrlPath = `${baseUrl}/${pageId}/insights?metric=accounts_engaged&period=day&metric_type=total_value&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
-        //
-        // await baseAxios.get(engagementLastMonthUrlPath)
-        //     .then((response) => {
-        //         const data = response?.data?.data
-        //         if (data?.length > 0) {
-        //             const accountEngagementData = data[0]?.total_value?.value
-        //             initialObject.Post_Activity.month += accountEngagementData;
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         initialObject.Post_Activity.month += 0;
-        //         console.error('Error:', error);
-        //     });
-
-
-        //Page reach 90 days
-
-
+        //Page reach
         initialObject.Accounts_Reached =await getInstagramReachData(baseUrl, pageId,accessToken);
-        // await baseAxios.get(await computeInsightURL(pageId, "page_impressions", accessToken, true))
-        //     .then((response) => {
-        //         const lifeTimeCount = response.data?.data.find(item => item.period === "total_over_range")?.values[0]?.value || 0;
-        //         initialObject.Accounts_Reached.lifeTime += lifeTimeCount;
-        //     })
-        //     .catch((error) => {
-        //         initialObject.Accounts_Reached.lifeTime += 0;
-        //         console.error('Error:', error);
-        //     });
-
-
-        //reach reach 1 month
-        // const reachOneMonthUrlPath = `${baseUrl}/${pageId}/insights?metric=reach&period=days_28&access_token=${accessToken}`;
-        // await baseAxios.get(reachOneMonthUrlPath)
-        //     .then((response) => {
-        //         const monthlyReachData = response?.data?.data
-        //         if (monthlyReachData) {
-        //             initialObject.Accounts_Reached.month += monthlyReachData[0]?.values[0]?.value
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         initialObject.Accounts_Reached.month += 0;
-        //         console.error('Error:', error);
-        //     });
     }
 
 

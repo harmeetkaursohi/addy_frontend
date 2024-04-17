@@ -2,7 +2,6 @@ import {useState, useEffect} from 'react'
 import {getPostsPageAction} from "../../../app/actions/postActions/postActions";
 import {useDispatch} from "react-redux";
 import {getToken} from "../../../app/auth/auth";
-import {SomethingWentWrong} from "../../../utils/contantData";
 
 const usePosts = (searchQuery) => {
     const [results, setResults] = useState(null)

@@ -1,44 +1,47 @@
-import SideBar from "../sidebar/views/Layout";
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import './faq.css'
-import { list  } from "../../app/actions/webActions/webActions";
-import { useDispatch, useSelector } from "react-redux";
-import { resetReducers } from "../../app/actions/commonActions/commonActions";
-import { useAppContext } from "../common/components/AppProvider";
+import {list} from "../../app/actions/webActions/webActions";
+import {useDispatch, useSelector} from "react-redux";
+import {resetReducers} from "../../app/actions/commonActions/commonActions";
+import {useAppContext} from "../common/components/AppProvider";
+
 const FaqComponent = () => {
     const dispatch = useDispatch();
-    const faqList = useSelector(state => state.web.listReducer);        
+    const faqList = useSelector(state => state.web.listReducer);
     const [items, setItems] = useState([]);
-    const [page, setPage] = useState(1);    
-    const [search, setSearch] = useState("");    
+    const [page, setPage] = useState(1);
+    const [search, setSearch] = useState("");
     const [searchLoading, setSearchLoading] = useState(false);
-    useEffect(() => {        
+    useEffect(() => {
         handleLoadMore();
-        return ()=>{ dispatch(resetReducers({sliceNames: ["listReducer"]})) }
+        return () => {
+            dispatch(resetReducers({sliceNames: ["listReducer"]}))
+        }
     }, [search]);
     useEffect(() => {
-        if(faqList.data){
-            page === 1 ? setItems(faqList.data) : setItems((prevItems) => ([...prevItems,...faqList.data]))
-            if(faqList.data.length && faqList.hasNextPage) setPage(prevPage => prevPage + 1);
+        if (faqList.data) {
+            page === 1 ? setItems(faqList.data) : setItems((prevItems) => ([...prevItems, ...faqList.data]))
+            if (faqList.data.length && faqList.hasNextPage) setPage(prevPage => prevPage + 1);
         }
         setSearchLoading(false)
     }, [faqList]);
     const handleLoadMore = () => {
-        dispatch(list({page,search}));
+        dispatch(list({page, search}));
     }
-    const{sidebar}=useAppContext()
+    const {sidebar} = useAppContext()
 
     return (
         <>
-            {/*<SideBar/>*/}
-            <div className={`cmn_container faq_section  ${sidebar?"":"cmn_Padding" }`}>
-           
-                    <div className="cmn_outer">
-                        <div className="white_bg_color cmn_height_outer" >
+            <div className={`cmn_container faq_section  ${sidebar ? "" : "cmn_Padding"}`}>
+
+                <div className="cmn_outer">
+                    <div className="white_bg_color cmn_height_outer">
                         <div className="faq_wrapper">
-                            <h2 className="text-center mt-5">Frequently Asked Questions <br></br>  Hello, how can we help you ?</h2>
-                            <p className="pt-2 text-center">Check out some of these frequently asked questions about the AddyAds.</p>
+                            <h2 className="text-center mt-5">Frequently Asked Questions <br></br> Hello, how can we help
+                                you ?</h2>
+                            <p className="pt-2 text-center">Check out some of these frequently asked questions about the
+                                AddyAds.</p>
                             <form method="post" onSubmit={function (e) {
                                 e.preventDefault();
                                 setPage(1);
@@ -62,25 +65,27 @@ const FaqComponent = () => {
                             </form>
                             <div className="accordian_wrapper">
                                 {items.length ? <Accordion defaultActiveKey="0">
-                                    {items.map(function(v,i){
+                                    {items.map(function (v, i) {
                                         return (<Accordion.Item eventKey={i} key={i}>
                                             <Accordion.Header>{v.title.rendered}</Accordion.Header>
                                             <Accordion.Body>
-                                                <div dangerouslySetInnerHTML={{ __html: v.content.rendered }} />
+                                                <div dangerouslySetInnerHTML={{__html: v.content.rendered}}/>
                                             </Accordion.Body>
-                                            </Accordion.Item>)
-                                        })
+                                        </Accordion.Item>)
+                                    })
                                     }
                                 </Accordion> : (<div>FAQ's not found.</div>)}
                                 <div className="load-more-faqs-container">
-                                    {(items.length && faqList.hasNextPage) || (faqList.loading && !faqList.hasNextPage) ? <button type="button" className="load-more-faqs-btn" onClick={handleLoadMore} disabled={faqList.loading}> {faqList.loading ? 'Loading...': 'Load More'}</button> : ""}
+                                    {(items.length && faqList.hasNextPage) || (faqList.loading && !faqList.hasNextPage) ?
+                                        <button type="button" className="load-more-faqs-btn" onClick={handleLoadMore}
+                                                disabled={faqList.loading}> {faqList.loading ? 'Loading...' : 'Load More'}</button> : ""}
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
 
-                        </div>
                     </div>
-                
+                </div>
+
             </div>
         </>
     )

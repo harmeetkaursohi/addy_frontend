@@ -3,7 +3,7 @@ import {showErrorToast} from "../../../features/common/components/Toast";
 import {
     baseAxios,
     extractParameterFromUrl,
-    generateUnixTimestampFor, getCustomDateEarlierUnixDateTime,
+    generateUnixTimestampFor,
     getDatesForPinterest,
     getFormattedAccountReachAndEngagementData,
     getFormattedDemographicData, getFormattedInsightProfileInfo, getFormattedInsightsForProfileViews,
@@ -180,7 +180,7 @@ export const getAccountReachedAndAccountEngaged = createAsyncThunk('insight/getA
             })
         }
         case "FACEBOOK": {
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?metric=page_impressions,page_post_engagements&period=day&since=${generateUnixTimestampFor(data?.period * 2)}&until=${generateUnixTimestampFor("now")}&access_token=${data?.pageAccessToken}`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?metric=page_impressions_unique,page_post_engagements&period=day&since=${generateUnixTimestampFor(data?.period * 2)}&until=${generateUnixTimestampFor("now")}&access_token=${data?.pageAccessToken}`;
             return await baseAxios.get(apiUrl).then(res => {
                 return getFormattedAccountReachAndEngagementData(res.data?.data, data?.socialMediaType);
             }).catch(error => {
@@ -223,11 +223,11 @@ export const getDemographicsInsight = createAsyncThunk('insight/getDemographicsI
             })
 
         }
-        case "LINKEDIN": {
-            return await getLinkedInDemographicData(data, thunkAPI).then((res) => {
-                return res;
-            })
-        }
+        // case "LINKEDIN": {
+        //     return await getLinkedInDemographicData(data, thunkAPI).then((res) => {
+        //         return res;
+        //     })
+        // }
     }
 });
 
@@ -333,7 +333,6 @@ const getFacebookDemographicData = async (data, thunkAPI) => {
             // age: getFormattedDemographicData(demographicData, "AGE", "FACEBOOK")
         }
     }).catch(error => {
-        // showErrorToast(error.response.data.error.message);
         return thunkAPI.rejectWithValue(error.response);
     });
     return formattedApiResponse;
@@ -362,7 +361,6 @@ const getLinkedInDemographicData = async (data, thunkAPI) => {
             industry: getFormattedDemographicData(demographicData, "industry", "LINKEDIN"),
         }
     }).catch(error => {
-        // showErrorToast(error.response.data.error.message);
         return thunkAPI.rejectWithValue(error.response);
     });
 

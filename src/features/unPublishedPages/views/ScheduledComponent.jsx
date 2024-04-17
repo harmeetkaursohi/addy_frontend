@@ -3,7 +3,6 @@ import GenericButtonWithLoader from "../../common/components/GenericButtonWithLo
 import {
     computeImageURL,
     handleSeparateCaptionHashtag,
-    sortByKey
 } from "../../../utils/commonUtils";
 import {formatDate} from "@fullcalendar/core";
 import CommonSlider from "../../common/components/CommonSlider";
@@ -20,8 +19,6 @@ import noPostScheduled from "../../../images/no_post_scheduled.svg";
 import CommonLoader from "../../common/components/CommonLoader";
 import Swal from "sweetalert2";
 import {useAppContext} from '../../common/components/AppProvider';
-import men from "../../../images/men.png"
-import {BiPolygon} from "react-icons/bi";
 
 const ScheduledComponent = ({scheduledData}) => {
     const {sidebar} = useAppContext()

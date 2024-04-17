@@ -1,5 +1,4 @@
 import polygon_img from "../../../../images/polygon.svg";
-import jsondata from "../../../../locales/data/initialdata.json";
 
 export const DashBoardReportLoader = () => {
 
@@ -16,7 +15,6 @@ export const DashBoardReportLoader = () => {
                             <img src={polygon_img} className="polygon_img"/>
                             <i className="fa fa-spinner fa-spin"/>
                         </button>
-                        {/* <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6> */}
                     </div>
                 </div>
             </div>
@@ -45,7 +43,6 @@ export const DashBoardReportLoader = () => {
                             <img src={polygon_img} className="polygon_img"/>
                             <i className="fa fa-spinner fa-spin"/>
                         </button>
-                        {/* <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6> */}
                     </div>
                 </div>
             </div>

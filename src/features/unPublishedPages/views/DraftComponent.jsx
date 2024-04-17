@@ -1,6 +1,6 @@
 import './DraftComponent.css'
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
-import {computeImageURL, handleSeparateCaptionHashtag, redirectToURL} from "../../../utils/commonUtils";
+import {computeImageURL, handleSeparateCaptionHashtag} from "../../../utils/commonUtils";
 import {formatDate} from "@fullcalendar/core";
 import CommonSlider from "../../common/components/CommonSlider";
 import {useNavigate} from "react-router-dom";
@@ -162,14 +162,12 @@ const DraftComponent = ({
                                              isLoading={batchIdData?.id === postToPublish && publishedPostData?.loading}
                                              onClick={handlePublishedPost}
                                              isDisabled={labels !== "Post Now" && deletePostByBatchIdData?.loading}
-                        //  isDisabled={false}
                     />
                     <GenericButtonWithLoader className={"outline_btn  loading"} label={"Schedule Post"}
                                              onClick={() => {
                                                  setLabels("Schedule Post")
                                                  navigate("/post/" + batchIdData?.id)
                                              }}
-                        //  isDisabled={false}
                                              isDisabled={labels !== "Schedule Post" && deletePostByBatchIdData?.loading || publishedPostData?.loading}
                     />
 
@@ -180,7 +178,6 @@ const DraftComponent = ({
                                              id={batchIdData?.id}
                                              contentText={"Deleting..."}
                                              isDisabled={labels !== "Delete Post" && publishedPostData?.loading}
-                        // isDisabled={false}
                     />
                 </div>
 

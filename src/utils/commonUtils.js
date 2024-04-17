@@ -927,13 +927,15 @@ export const getInitialLetterCap = (word) => {
 
 }
 export const generateUnixTimestampFor = (daysAgo) => {
-    const currentDate = new Date();
+    let currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
     if (isNullOrEmpty(daysAgo.toString())) {
         return "";
     }
     if (daysAgo === "now") {
         return Math.floor(currentDate.getTime() / 1000);
     } else {
+
         const daysAgoDate = new Date(currentDate);
         daysAgoDate.setDate(currentDate.getDate() - daysAgo);
         return Math.floor(daysAgoDate.getTime() / 1000);
@@ -1046,7 +1048,7 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
     switch (socialMediaType) {
         case "FACEBOOK": {
             const engagement = data?.filter(data => data?.name === "page_post_engagements")[0]?.values
-            const reach = data?.filter(data => data?.name === "page_impressions")[0]?.values
+            const reach = data?.filter(data => data?.name === "page_impressions_unique")[0]?.values
             const totalEngagementForPreviousDate = engagement.slice(0, (engagement?.length) / 2);
             const totalEngagementForPresentDate = engagement.slice((engagement?.length) / 2)
             const totalReachForPreviousDate = reach.slice(0, (reach?.length) / 2);
@@ -2655,8 +2657,8 @@ export const createSocialMediaProfileViewInsightsQuery = (queryObject,socialMedi
             return {
                 period: "day",
                 access_token:queryObject.access_token,
-                since:getCustomDateEarlierUnixDateTime(queryObject.days +1),
-                until:getCustomDateEarlierUnixDateTime(1),
+                since:generateUnixTimestampFor(queryObject.days +1),
+                until:generateUnixTimestampFor(1),
             }
         }
         case "INSTAGRAM": {

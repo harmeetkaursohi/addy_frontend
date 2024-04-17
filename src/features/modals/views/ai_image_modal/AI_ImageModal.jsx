@@ -32,7 +32,7 @@ const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, se
     useEffect(() => {
         if (generateAIImageData?.data !== null && generateAIImageData?.data !== undefined) {
             let images = generateAIImageData?.data?.data?.map((imageUrl, index) => {
-                return base64StringToFile(imageUrl?.b64_json, imageName + index + new Date().getTime()+".jpg" , "image/jpeg");
+                return base64StringToFile(imageUrl?.b64_json, imageName + index + new Date().getTime() + ".jpg", "image/jpeg");
             })
             const dimensionPromises = images?.map((file) => checkDimensions(file));
 
@@ -91,11 +91,12 @@ const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, se
                                             className={'generate_btn cmn_white_text' + (isNullOrEmpty(imageName) ? " opacity-50 " : "")}>
                                         {
                                             generateAIImageData?.loading ?
-                                                <div className={"loading_txt"}><Loader className={"me-2 ai_caption_loading_btn"}/> Loading
+                                                <div className={"loading_txt"}><Loader
+                                                    className={"me-2 ai_caption_loading_btn"}/> Loading
                                                 </div> :
-                                                (generateAIImageData?.data===null ||generateAIImageData?.data===undefined)?
+                                                (generateAIImageData?.data === null || generateAIImageData?.data === undefined) ?
 
-                                                "Generate":"Regenerate"
+                                                    "Generate" : "Regenerate"
 
                                         }
                                     </button>

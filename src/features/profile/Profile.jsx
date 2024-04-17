@@ -15,8 +15,6 @@ import {Industries, SignupSource, UpdatedSuccessfully} from "../../utils/contant
 import {showSuccessToast} from "../common/components/Toast";
 import CommonLoader from "../common/components/CommonLoader";
 import {FaCamera} from "react-icons/fa";
-import {RiCloseFill} from "react-icons/ri";
-import {MdEdit} from "react-icons/md";
 import CropImageModal from "../common/components/CropImageModal";
 import {useAppContext} from "../common/components/AppProvider";
 
@@ -631,22 +629,6 @@ const Profile = () => {
 
 
                                                         </div>
-
-                                                        {/* <div className="text-center">
-                                                            {edit ?
-                                                                <button
-                                                                    className={"cmn_btn_color btn_style " + (edit ? "" : "opacity-50")}>
-                                                                    Update
-                                                                    {
-                                                                        updateCustomerData?.loading &&
-                                                                        <span
-                                                                            className={"spinner-border spinner-border-sm ms-2 "}
-                                                                            role="status"
-                                                                            aria-hidden="true"></span>
-                                                                    }
-                                                                </button> : ""
-                                                            }
-                                                        </div> */}
                                                     </div>
 
 

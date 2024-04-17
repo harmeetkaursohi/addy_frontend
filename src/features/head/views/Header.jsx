@@ -1,8 +1,6 @@
-import search_icon from "../../../images/search_icon.svg"
 import jsondata from "../../../locales/data/initialdata.json"
 import './Header.css'
-import {Link, useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
+import { useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import Loader from "../../loader/Loader";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
@@ -41,12 +39,6 @@ const Header = ({userData, setShowConnectAccountModal}) => {
                                         <h6>{typeof userData?.fullName !== "undefined" ? `Curious to explore? Welcome  to your all-in Dashboard and discover more!` :
                                             <SkeletonEffect count={1}></SkeletonEffect>}</h6>
                                     </div>
-                               
-                           
-                                    {/*<div className="search_outer flex-grow-1">*/}
-                                    {/*    <img src={search_icon} className="search_icon"/>*/}
-                                    {/*    <input type="text" className="form-control search_input" placeholder="Search"/>*/}
-                                    {/*</div>*/}
 
                                     
                                     <div className="create_Ad_outer">
