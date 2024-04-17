@@ -118,8 +118,6 @@ const ScheduledComponent = ({scheduledData}) => {
                             scheduledPosts && Array.isArray(scheduledPosts) && scheduledPosts.map((curBatch, index) => (
 
 
-                                // <div className={scheduledPosts.length===1 ? "col-lg-12" : scheduledPosts.length===2 ? "col-lg-6" :"col-lg-4"}>
-
                                 <div className={sidebar ? "col-lg-6 col-md-6 col-sm-12 " : "col-lg-6 col-md-12 col-sm-12 "}
                                      key={index}>
                                     <div className="draft-outer ">
@@ -128,17 +126,6 @@ const ScheduledComponent = ({scheduledData}) => {
 
                                         <div className="post-image-outer">
 
-                                            {/*{curBatch?.attachments.length !== 0 &&*/}
-                                            {/*    <div>*/}
-                                            {/*        <div className='upcoming_post_header_outer cmn_upcoing_post_header'>*/}
-                                            {/*            <img src={men} height="20px" width="20px"/>*/}
-                                            {/*            <h3>John doe</h3>*/}
-                                            {/*        </div>*/}
-                                            {/*        <div className='Tommorrow_header cmn_upcoing_post_header'>*/}
-                                            {/*            <BiPolygon/>*/}
-                                            {/*            <span>Tommorrow</span>*/}
-                                            {/*        </div>*/}
-                                            {/*    </div>}*/}
                                             {curBatch?.attachments &&
                                                 <CommonSlider files={curBatch?.attachments} selectedFileType={null}
                                                               caption={null}

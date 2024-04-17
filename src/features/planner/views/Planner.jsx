@@ -791,6 +791,7 @@ const Planner = () => {
                 postStatus: ["PUBLISHED", "SCHEDULED"],
                 batchIds: batchIdList,
                 plannerCardDate: targetDate,
+                socialMediaTypes:baseSearchQuery?.socialMediaTypes || [],
                 period: "DAY"
             }))
         }));

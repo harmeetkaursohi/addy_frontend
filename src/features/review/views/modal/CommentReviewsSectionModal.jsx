@@ -66,17 +66,6 @@ const CommentReviewsSectionModal = ({
                             </div>
                             <Col lg="6"  md="12" sm="12" className="p-0">
                                 <div className='comment_review_wrapper'>
-                                    {/* <div className="comment_header d-flex gap-2">
-                                        <Link to={""} className="flex-grow-1 d-flex align-item-center">
-                                            <span onClick={() => {
-                                                setOpenCommentReviewsSectionModal(false)
-                                            }}><i className="fa fa-chevron-left me-2 "></i> Back</span>
-
-                                            <img className={"me-2 ms-2 social-media-icon-cmnt"}
-                                                 src={computeImageURL(postData?.socialMediaType)}/>
-                                    
-                                        </Link>
-                                    </div> */}
                                   
                                     <CommonSlider files={postData?.attachments}
                                                   selectedFileType={null}
