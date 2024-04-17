@@ -503,7 +503,7 @@ ul.post_outer_list li h4 {
     padding-bottom: 10px;
 }
 
-td.fc-day.fc-day-mon.fc-day-today.fc-daygrid-day a#fc-dom-18 {
+/* .fc .fc-daygrid-day.fc-day-today a{
     background: #E05905 !important ;    
     border-radius: 20px !important;
     height: 34px !important;
@@ -512,7 +512,7 @@ td.fc-day.fc-day-mon.fc-day-today.fc-daygrid-day a#fc-dom-18 {
     text-align: center !important;
     padding: 0px !important;
     margin: 10px 5px 0px 0px !important;
-}
+} */
 .custom1{
     background-color: red;
 }
