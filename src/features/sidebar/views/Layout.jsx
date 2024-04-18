@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Link, useLocation, useNavigate, useParams} from "react-router-dom";
+import React, {useEffect} from "react";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import addy_crop_logo from "../../../images/cropLogo.png";
 import addy_logo from "../../../images/addy_logo.svg";
 import "./Layout.css";
@@ -10,7 +10,6 @@ import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
 import {getAllConnectedSocialAccountAction} from "../../../app/actions/socialAccountActions/socialAccountActions";
 import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
-import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
 import {useAppContext} from "../../common/components/AppProvider.jsx";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import {FaBars} from "react-icons/fa";
@@ -207,7 +206,7 @@ const Layout = () => {
                                     {sidebar ? (
                                         <OverlayTrigger
                                             placement="right"
-                                            delay={{ show: 200, hide: 200 }} 
+                                            delay={{ show: 400, hide: 300 }} 
                                             overlay={
                                                 <Tooltip id="button-tooltip" className="ms-4">
                                                     {item.name}

@@ -335,11 +335,7 @@ button.outline_btn {
         height: auto;
     }
 }
-@media screen and (min-width:1024px) and (max-width:1279px){
-.upcomingPostBtn_Outer {
-    flex-wrap: wrap;
-}
-}
+
 
 @media screen and (min-width:992px) {
  

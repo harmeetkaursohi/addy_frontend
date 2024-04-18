@@ -577,7 +577,7 @@ const Planner = () => {
                                                         Media</h3>
                                                     <span className={"mr-4 mt-2"}><input type={"checkbox"}
                                                                                          checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
-                                                                                         onClick={(e) => handleSocialMediaFilters("all")}/></span>
+                                                                                         onChange={(e) => handleSocialMediaFilters("all")}/></span>
 
                                                 </div>
 

@@ -502,8 +502,10 @@ const Insight = () => {
                                                                             {`Last ${selectedDaysForProfileVisitGraph} days`}
                                                                         </Dropdown.Toggle>
                                                                         <Dropdown.Menu>
-                                                                            {selectGraphDaysOptions.map(c => (
+                                                                            {selectGraphDaysOptions.map((c,i)=> (
+                                                                             
                                                                                 <Dropdown.Item
+                                                                                key={i}
                                                                                     onClick={() => {
                                                                                         setSelectedDaysForProfileVisitGraph(c.days);
                                                                                     }}>

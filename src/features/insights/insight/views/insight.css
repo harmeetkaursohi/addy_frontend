@@ -475,6 +475,10 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
         width: 208px;
     }
+    .user_profile_card_wrapper img {
+    height: 70px;
+    width: 70px;
+    }
     .visitors_container{
         min-height: unset;
     }

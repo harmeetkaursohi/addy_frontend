@@ -445,14 +445,15 @@ line-height: 20px;
   .connected_heading{
     font-size: 22px;
   }
+  .cmn_wrapper_outer {
+    padding: 0px 15px 30px;
+  }
 }
 @media screen and (max-width:1024px){
   .connected_heading{
     font-size: 19px;
   }
-  .cmn_wrapper_outer {
-    padding: 0px 20px 30px;
-  }
+  
   .cmn_outer {
     padding: 14px;
   }

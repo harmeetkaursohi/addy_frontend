@@ -679,12 +679,14 @@ width: 100%;
     .performing_post_heading {
         font-size: 17px;
     }
+    
+    
+}
+@media screen and (max-width:1279px){
     .followers_outer {
         flex-wrap: wrap;
     }
-    
 }
-
 @media screen and (max-width: 1024px) {
     .social_media_content{
         flex-wrap: wrap;
@@ -892,7 +894,7 @@ width: 100%;
 }
 
 span.\39 0-day-txt {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     color: #524f4f;
     opacity: .8;
