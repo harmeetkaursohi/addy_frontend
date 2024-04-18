@@ -12,7 +12,6 @@ import {
     PinterestImageLimitation,
     SelectAtleastOnePage,
     SocialAccountProvider,
-    SomethingWentWrong,
     SomethingWentWrongTryLater,
     VideoFormatNotSupported
 } from "./contantData.js";
@@ -554,16 +553,20 @@ export const calculatePercentageGrowth = async (data) => {
 }
 
 
-export function getCustomDateEarlierUnixDateTime(dateToElapse) {
-    if (dateToElapse === 0) {
-        return Math.floor(new Date().getTime() / 1000);
-    }
+export const generateUnixTimestampFor = (daysAgo) => {
     let currentDate = new Date();
-    let unixValue = new Date(currentDate.getTime() - (dateToElapse * 24 * 60 * 60 * 1000)).getTime() / 1000;
+    currentDate.setHours(0, 0, 0, 0);
+    if (isNullOrEmpty(daysAgo.toString())) {
+        return "";
+    }
+    if (daysAgo === "now") {
+        return Math.floor(currentDate.getTime() / 1000);
+    } else {
 
-    return Math.floor(unixValue);
-
-
+        const daysAgoDate = new Date(currentDate);
+        daysAgoDate.setDate(currentDate.getDate() - daysAgo);
+        return Math.floor(daysAgoDate.getTime() / 1000);
+    }
 }
 
 export const convertToHashtag = (str) => {
@@ -754,7 +757,7 @@ export async function urlToFile(imageUrl, fileNameWithExtension, mediaType) {
         const fileExtension = (mediaType === "IMAGE") ? `image/${fileNameWithExtension.split(".")[1]}` : `video/${fileNameWithExtension.split(".")[1]}`;
 
         // const file = new File([blob], fileNameWithExtension, {type: fileExtension});
-        const file = blobToFile(blob,fileNameWithExtension,fileExtension);
+        const file = blobToFile(blob, fileNameWithExtension, fileExtension);
         return file;
     } catch (error) {
         console.error("Error converting URL to File:", error);
@@ -762,7 +765,7 @@ export async function urlToFile(imageUrl, fileNameWithExtension, mediaType) {
     }
 }
 
-export const blobToFile=(blob, fileName, fileType)=>{
+export const blobToFile = (blob, fileName, fileType) => {
     return new File([blob], fileName, {type: fileType});
 }
 
@@ -781,7 +784,7 @@ export const base64StringToFile = (base64String, fileName, fileType) => {
 
 
         // return new File([blob], fileName, {type: fileType});
-        return blobToFile(blob,fileName,fileType);
+        return blobToFile(blob, fileName, fileType);
     } catch (error) {
         console.error("Error converting base64 to File:", error);
         return null;
@@ -926,28 +929,13 @@ export const getInitialLetterCap = (word) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
 
 }
-export const generateUnixTimestampFor = (daysAgo) => {
-    let currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    if (isNullOrEmpty(daysAgo.toString())) {
-        return "";
-    }
-    if (daysAgo === "now") {
-        return Math.floor(currentDate.getTime() / 1000);
-    } else {
-
-        const daysAgoDate = new Date(currentDate);
-        daysAgoDate.setDate(currentDate.getDate() - daysAgo);
-        return Math.floor(daysAgoDate.getTime() / 1000);
-    }
-}
 
 export const getQueryForGraphData = (socialMediaType, selectedGraphDays) => {
     switch (socialMediaType) {
         case "FACEBOOK": {
             return {
-                createdFrom: getCustomDateEarlierUnixDateTime(selectedGraphDays),
-                createdTo: getCustomDateEarlierUnixDateTime(1)
+                createdFrom: generateUnixTimestampFor(selectedGraphDays),
+                createdTo: generateUnixTimestampFor(1)
             }
         }
         case "INSTAGRAM": {
@@ -2175,7 +2163,7 @@ export const getFileFromAttachmentSource = (attachment) => {
         const fileName = attachment?.fileName;
         const fileType = 'application/octet-stream';
         // const file = new File([blob], fileName, {type: fileType});
-        const file = blobToFile(blob,fileName,fileType);
+        const file = blobToFile(blob, fileName, fileType);
 
         const reader = new FileReader();
         reader.onload = (event) => {
@@ -2419,17 +2407,17 @@ export const getImageAspectRatio = (imageUrl) => {
     return img.naturalWidth / img.naturalHeight;
 };
 
-export const isImageValid = (imageUrl,socialMediaType) => {
-    if(imageUrl===null || imageUrl===undefined){
+export const isImageValid = (imageUrl, socialMediaType) => {
+    if (imageUrl === null || imageUrl === undefined) {
         return true
     }
-    switch(socialMediaType){
+    switch (socialMediaType) {
         case "FACEBOOK":
         case "INSTAGRAM":
         case "LINKEDIN": {
-           return fetch(imageUrl).then(res=>{
-               return res.ok
-           })
+            return fetch(imageUrl).then(res => {
+                return res.ok
+            })
         }
         case "PINTEREST": {
             const img = new Image();
@@ -2474,7 +2462,6 @@ export const getImageHeightAndWidth = (imageUrl) => {
     while (!img.complete) {
         // This loop will keep running until the image is loaded
     }
-
     return {
         height: img.naturalHeight,
         width: img.naturalWidth
@@ -2574,7 +2561,7 @@ export const getUpdatedNameAndImageUrlForConnectedPages = (page, data) => {
             const linkedinPageList = Object?.keys(data.linkedin?.data?.results || {})?.map((key) => {
                 return {id: getLinkedInUrnId(key, "organization"), ...data.linkedin?.data?.results[key]}
             })?.filter(c => c.id === page.pageId)
-            updatedName=linkedinPageList?.[0]?.localizedName || page?.name
+            updatedName = linkedinPageList?.[0]?.localizedName || page?.name
             if (linkedinPageList?.[0]?.hasOwnProperty("logoV2")) {
                 const elements = linkedinPageList[0]?.logoV2["original~"]?.elements;
                 updatedImageUrl = elements[elements.length - 1]?.identifiers[0]?.identifier;
@@ -2591,12 +2578,13 @@ export const getUpdatedNameAndImageUrlForConnectedPages = (page, data) => {
     }
     return {
         ...page,
-        isPageUpdated: (page?.name!==updatedName || page?.imageUrl !== updatedImageUrl || !isImageValid(page?.imageUrl,page?.socialMediaType)),
+        isPageUpdated: (page?.name !== updatedName || page?.imageUrl !== updatedImageUrl || !isImageValid(page?.imageUrl, page?.socialMediaType)),
         imageUrl: updatedImageUrl,
-        name:updatedName
+        name: updatedName
     }
 
 };
+
 export function convertTimestampToDate(timestamp) {
     const date = new Date(timestamp);
     const year = date.getFullYear();
@@ -2604,41 +2592,42 @@ export function convertTimestampToDate(timestamp) {
     const day = String(date.getDate()).padStart(2, '0'); // Add leading zero if needed
     return `${year}-${month}-${day}`;
 }
-export const getFormattedInsightProfileInfo = (data,socialMediaType) => {
+
+export const getFormattedInsightProfileInfo = (data, socialMediaType) => {
     let response;
     switch (socialMediaType) {
         case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
             response = {
-                id:data?.id,
-                name:data?.name,
-                followers:data?.followers_count,
-                likes:data?.fan_count,
-                about:data?.about,
-                imageUrl:data?.picture?.data?.url
+                id: data?.id,
+                name: data?.name,
+                followers: data?.followers_count,
+                likes: data?.fan_count,
+                about: data?.about,
+                imageUrl: data?.picture?.data?.url
             }
             break;
         }
-        case SocialAccountProvider.INSTAGRAM.toUpperCase() :{
+        case SocialAccountProvider.INSTAGRAM.toUpperCase() : {
             response = {
-                id:data?.id,
-                name:data?.name,
-                followers:data?.followers_count,
-                following:data?.follows_count,
-                about:data?.biography,
-                total_posts:data?.media_count,
-                imageUrl:data?.profile_picture_url
+                id: data?.id,
+                name: data?.name,
+                followers: data?.followers_count,
+                following: data?.follows_count,
+                about: data?.biography,
+                total_posts: data?.media_count,
+                imageUrl: data?.profile_picture_url
             }
             break;
         }
         case SocialAccountProvider.PINTEREST?.toUpperCase(): {
             response = {
-                id:data?.id,
-                name:data?.business_name,
-                followers:data?.follower_count,
-                following:data?.following_count,
-                about:data?.about,
-                total_posts:data?.pin_count,
-                imageUrl:data?.profile_image
+                id: data?.id,
+                name: data?.business_name,
+                followers: data?.follower_count,
+                following: data?.following_count,
+                about: data?.about,
+                total_posts: data?.pin_count,
+                imageUrl: data?.profile_image
             }
             break;
         }
@@ -2651,23 +2640,23 @@ export const getFormattedInsightProfileInfo = (data,socialMediaType) => {
     }
     return response;
 }
-export const createSocialMediaProfileViewInsightsQuery = (queryObject,socialMediaType) => {
+export const createSocialMediaProfileViewInsightsQuery = (queryObject, socialMediaType) => {
     switch (socialMediaType) {
         case "FACEBOOK": {
             return {
                 period: "day",
-                access_token:queryObject.access_token,
-                since:generateUnixTimestampFor(queryObject.days +1),
-                until:generateUnixTimestampFor(1),
+                access_token: queryObject.access_token,
+                since: generateUnixTimestampFor(queryObject.days + 1),
+                until: generateUnixTimestampFor(1),
             }
         }
         case "INSTAGRAM": {
             return {
                 period: "day",
-                access_token:queryObject.access_token,
-                since:generateUnixTimestampFor(queryObject.days),
-                until:generateUnixTimestampFor("now"),
-                metric:"profile_views"
+                access_token: queryObject.access_token,
+                since: generateUnixTimestampFor(queryObject.days),
+                until: generateUnixTimestampFor("now"),
+                metric: "profile_views"
             }
         }
         case "PINTEREST": {
@@ -2681,14 +2670,16 @@ export const createSocialMediaProfileViewInsightsQuery = (queryObject,socialMedi
     }
 
 }
+
 export function objectToQueryString(obj) {
     return Object.keys(obj).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`).join('&');
 }
-export const getFormattedInsightsForProfileViews = (data,socialMediaType) => {
+
+export const getFormattedInsightsForProfileViews = (data, socialMediaType) => {
     switch (socialMediaType) {
         case SocialAccountProvider.FACEBOOK?.toUpperCase():
-        case SocialAccountProvider.INSTAGRAM?.toUpperCase():{
-            return Array.isArray(data.data) && data.data.length>0 ? data.data[0].values || []:[];
+        case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
+            return Array.isArray(data.data) && data.data.length > 0 ? data.data[0].values || [] : [];
         }
         case SocialAccountProvider.PINTEREST?.toUpperCase(): {
             break;

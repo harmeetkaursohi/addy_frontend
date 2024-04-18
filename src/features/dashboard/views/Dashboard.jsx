@@ -9,6 +9,7 @@ import SocialAccounts from "./SocialAccounts";
 import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
 import { useAppContext } from "../../common/components/AppProvider.jsx";
+import {generateUnixTimestampFor} from "../../../utils/commonUtils";
 
 const Dashboard = () => {
     const { sidebar } = useAppContext();
@@ -20,8 +21,6 @@ const Dashboard = () => {
     const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
     const userData = useSelector(state => state.user.userInfoReducer.data);
     const getAllPostsByCriteriaData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
-
-
 
     useEffect(() => {
         document.title = 'Dashboard';

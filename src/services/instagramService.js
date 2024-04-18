@@ -52,55 +52,34 @@ export const getInstagramConnectedPageIdsReport = async (page) => {
             });
 
 
-        //Post activities
-        initialObject.Post_Activity =await getInstagramAccountEngagementData(baseUrl, pageId,accessToken);
-
-        //Page reach
-        initialObject.Accounts_Reached =await getInstagramReachData(baseUrl, pageId,accessToken);
+        //Post activities Page reach
+        let accounts_Reached = {lifeTime: 0, month: 0};
+        let post_Activity = {lifeTime: 0, month: 0};
+        let Url = `${baseUrl}/${pageId}/insights?metric=accounts_engaged,reach&metric_type=total_value&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
+        for (let i = 0; i < 3; i++) {
+            await baseAxios.get(Url)
+                .then((response) => {
+                    const reachData = response?.data?.data?.filter(data => data?.name === "reach")[0]
+                    const activityData = response?.data?.data?.filter(data => data?.name === "accounts_engaged")[0]
+                    Url = response?.data?.paging?.previous
+                    accounts_Reached.lifeTime += reachData?.total_value?.value || 0
+                    post_Activity.lifeTime += activityData?.total_value?.value || 0
+                    if (i === 0) {
+                        accounts_Reached.month += reachData?.total_value?.value || 0
+                        post_Activity.month += activityData?.total_value?.value || 0
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+        initialObject.Accounts_Reached = accounts_Reached
+        initialObject.Post_Activity = post_Activity
     }
 
 
     return initialObject;
 };
-
-const getInstagramReachData = async (baseUrl, pageId,accessToken) => {
-    let accounts_Reached= {lifeTime: 0, month: 0};
-    let Url = `${baseUrl}/${pageId}/insights?metric=reach&metric_type=total_value&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
-    for (let i = 0; i < 3; i++) {
-        await baseAxios.get(Url)
-            .then((response) => {
-                const reachData = response?.data?.data[0]
-                Url=response?.data?.paging?.previous
-                accounts_Reached.lifeTime += reachData?.total_value?.value || 0
-                if(i===0){
-                    accounts_Reached.month += reachData?.total_value?.value || 0
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    }
-    return accounts_Reached;
-}
-const getInstagramAccountEngagementData = async (baseUrl, pageId,accessToken) => {
-    let post_Activity= {lifeTime: 0, month: 0};
-    let Url = `${baseUrl}/${pageId}/insights?metric=accounts_engaged&metric_type=total_value&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
-    for (let i = 0; i < 3; i++) {
-        await baseAxios.get(Url)
-            .then((response) => {
-                const engagementData = response?.data?.data[0]
-                Url=response?.data?.paging?.previous
-                post_Activity.lifeTime += engagementData?.total_value?.value || 0
-                if(i===0){
-                    post_Activity.month += engagementData?.total_value?.value || 0
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    }
-    return post_Activity;
-}
 
 
 export const getDashBoardInstagramGraphReport = async (page, query) => {
@@ -119,8 +98,8 @@ export const getDashBoardInstagramGraphReport = async (page, query) => {
         const pageId = page?.pageId;
         const accessToken = page?.access_token;
 
-            //Page reach by provided date
-        const graphDataApiUrl=`${baseUrl}/${pageId}/insights?metric=impressions,follower_count&metric_type=time_series&period=day&since=${query?.createdFrom}&until=${query?.createdTo}&access_token=${accessToken}`;
+        //Page reach by provided date
+        const graphDataApiUrl = `${baseUrl}/${pageId}/insights?metric=reach,follower_count&metric_type=time_series&period=day&since=${query?.createdFrom}&until=${query?.createdTo}&access_token=${accessToken}`;
 
 
         await baseAxios.get(graphDataApiUrl).then((response) => {
@@ -132,8 +111,8 @@ export const getDashBoardInstagramGraphReport = async (page, query) => {
             console.error('Error:', error);
         });
     }
-    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount,SocialAccountProvider.INSTAGRAM?.toUpperCase()));
-    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount,SocialAccountProvider.INSTAGRAM?.toUpperCase()));
+    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount, SocialAccountProvider.INSTAGRAM?.toUpperCase()));
+    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount, SocialAccountProvider.INSTAGRAM?.toUpperCase()));
 
     return initialObject;
 };
