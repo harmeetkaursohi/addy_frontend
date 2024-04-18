@@ -73,7 +73,11 @@ export const DashboardReports = () => {
             });
             setConnectedPagesToSelectedSocialMediaAccount(connectedPagesToSelectedSocialMediaAccount)
             if (!isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount)) {
-                selectedSocialMediaAccount?.provider === "PINTEREST" ? setSelectedPage(selectedSocialMediaAccount) : setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
+                if (selectedSocialMediaAccount?.provider === "PINTEREST") {
+                    (selectedPage === null || selectedPage.id !== selectedSocialMediaAccount?.id) && setSelectedPage(selectedSocialMediaAccount)
+                } else {
+                    (selectedPage === null || selectedPage.id !== connectedPagesToSelectedSocialMediaAccount[0]?.id) && setSelectedPage(connectedPagesToSelectedSocialMediaAccount[0])
+                }
             } else {
                 setSelectedPage(null)
             }
@@ -361,12 +365,16 @@ export const DashboardReports = () => {
                                                     Object.keys(reportSectionData?.data).map((curKey, index) => (
 
                                                         <div className="followers_wrapper " key={index}>
-
                                                             <h5>{curKey.replace(/_/g, ' ')}
                                                                 {
-                                                                    ["INSTAGRAM", "PINTEREST", "FACEBOOK"].includes(reportSelectedAccountType) &&
+                                                                    ["INSTAGRAM", "PINTEREST"].includes(reportSelectedAccountType) &&
                                                                     <span
-                                                                        className={"90-day-txt"}> {curKey === 'Post_Activity' && reportSelectedAccountType === "FACEBOOK" ? '(90 days)' : reportSelectedAccountType !== "FACEBOOK" ? '(90 days)' : ''}  </span>
+                                                                        className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 90 days)' : ''}  </span>
+                                                                }
+                                                                {
+                                                                    ["FACEBOOK"].includes(reportSelectedAccountType) &&
+                                                                    <span
+                                                                        className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 2 years)' : ''}  </span>
                                                                 }
 
                                                             </h5>
