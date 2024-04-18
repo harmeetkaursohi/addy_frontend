@@ -623,10 +623,9 @@ button.ai_btn {
 .like_comment_outer {
     display: flex;
     justify-content: space-between;
-    padding: 14px 23px;
+    padding: 14px 0px;
     border-top: 1px solid #dad6d6;
     border-bottom: 1px solid #dad6d6;
-    /* margin: 5px 10px 10px; */
     align-items: center;
    
 }
@@ -885,7 +884,12 @@ button.loading {
     height: 100%;
    
 }
-
+.CommonFeedPreview_container{
+    height: 958px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
 @media screen and (min-width:2000px){
     .post_preview_outer{
         padding: 3rem 15rem;
@@ -1008,6 +1012,10 @@ button.loading {
         text-align: center;
         padding-top: 10px;
     }
+    .CommonFeedPreview_container{
+        height: unset;
+        overflow: unset;
+    }
     .post_preview_outer {
         padding: 3rem;
     }
@@ -1026,6 +1034,9 @@ button.loading {
     .post_preview_outer {
         display: block;
         padding: 20px;
+    }
+    h3.Post_Preview_heading {
+        font-size: 24px;
     }
     .schedule_date_outer{
         display: block;

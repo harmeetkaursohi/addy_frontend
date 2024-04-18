@@ -8,7 +8,6 @@
 
 .notifications_outer {
     display: flex;
-    align-items: center;
     justify-content: space-between;
 }
 
@@ -18,7 +17,7 @@
     padding: 20px;
     border: 2px solid transparent;
     border-radius: 15px;
-    margin-top: 7px;
+    margin-top: 15px;
     box-shadow: 0px 5px 16px 0px rgba(8, 15, 52, 0.06);
 
 }
@@ -75,6 +74,8 @@ span.error-detail {
     display: inline-block;
     font-size: 13px;
     font-family: 'Nunito', sans-serif;
+    color: #5F6D7E;
+    font-weight: 500;
 }
 
 .show-notification-details:hover, .clear-all-notifications:hover, .load-more-notification-btn:hover {
@@ -97,11 +98,18 @@ span.error-detail {
     width: 20px;
     height: 20px;
 }
+.notification_message_outer p{
+    color: #2E3646;
+    font-weight: 600;
 
+}
 
 @media screen and (max-width: 991px) {
     .notification_header {
         flex-wrap: wrap;
+    }
+    .notification_message_outer{
+        width: 50%;
     }
 }
 
@@ -109,6 +117,9 @@ span.error-detail {
     .notification_header {
         display: block;
         padding-top: 36px;
+    }
+    .notification_message_outer{
+        width: 100%;
     }
     .notification_wrapper a.dropdown-item {
         font-size: 12px;

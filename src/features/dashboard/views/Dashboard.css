@@ -300,6 +300,7 @@ element.style {
     border-top: 1px solid #D1D9E2;
     padding:20px;
     background-color: #F8F9FB;
+    gap: 12px;
 
 }
 .upcoming_post_heading{
@@ -726,10 +727,7 @@ width: 100%;
     .page_title_header{
         margin: 0px;
     }
-    .upcomingPostBtn_Outer{
-        margin-bottom: 20px;
-   
-    }
+    
 }
 
 @media screen and (max-width: 767px) {

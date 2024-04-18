@@ -87,6 +87,7 @@ button.edit_profile_btn {
     font-size: 16px;
     background: #F07C33;
     height: 35px;
+    min-width: 110px;
 }
 .profile_cancel_btn{
     color: #2E3646;
@@ -95,6 +96,7 @@ button.edit_profile_btn {
     font-weight: 700;
     padding: 4px 20px;
     height: 35px;
+    min-width: 110px;
 }
 .edit_content input {
   
@@ -251,6 +253,12 @@ button.edit_profile_btn {
  @media screen and (max-width:767px){
     .editprofile_outer {
         padding: 20px 16px;
+    }
+    button.edit_profile_btn {
+        min-width: unset;
+    }
+    .profile_cancel_btn{
+        min-width: unset;
     }
     .edit_profile_contaniner{
         flex-wrap: wrap;

@@ -354,7 +354,7 @@ const NotificationComponent = ({notification, deletedNotifications, setDeletedNo
             {
                 notification?.id === notificationToDelete?.id ?
                     <SkeletonEffect count={1}></SkeletonEffect> : <>
-                        <div>
+                        <div className="notification_message_outer">
                             <p
                                 className={(notification?.isSeen ? "" : "unseen_notifications")}>{
                                 notification?.message
@@ -385,7 +385,7 @@ const NotificationComponent = ({notification, deletedNotifications, setDeletedNo
                                 className={"notification-creation-date"}>{getCommentCreationTime(notification.createdAt)}</div>
                         </div>
                         <div>
-                            <Dropdown>
+                            <Dropdown className="notification_edit_button">
                                 <Dropdown.Toggle
                                     className={"comment-edit-del-button"}
                                     variant="success"

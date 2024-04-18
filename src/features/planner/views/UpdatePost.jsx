@@ -953,7 +953,7 @@ const UpdatePost = () => {
                                         <div className='cmn_outer create_post_container'>
                                             <div className='post_preview_outer'>
                                                 <h3 className='Post_Preview_heading'>Post Preview</h3>
-
+                                               <div className='CommonFeedPreview_container'>
                                                 {
                                                     allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
 
@@ -977,6 +977,7 @@ const UpdatePost = () => {
                                                         )
                                                     })
                                                 }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

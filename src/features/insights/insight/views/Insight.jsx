@@ -686,7 +686,7 @@ const Insight = () => {
 
                                                 </div>
 
-                                                <button className="overview_btn mt-4 "
+                                                <button className="overview_btn mt-5 "
                                                         style={{display: 'inline-block'}}> Posts stacks
                                                 </button>
                                                 {/* slider  */}

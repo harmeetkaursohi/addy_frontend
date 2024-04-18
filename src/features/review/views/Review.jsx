@@ -1,12 +1,6 @@
 import "./Review.css";
 import jsondata from "../../../locales/data/initialdata.json";
-import {
-    ErrorFetchingPost,
-    PostAlreadyDeleted,
-    SocialAccountProvider,
-    SomethingWentWrong,
-    UpdatedSuccessfully,
-} from "../../../utils/contantData";
+import {ErrorFetchingPost, PostAlreadyDeleted, SocialAccountProvider} from "../../../utils/contantData";
 import {useCallback, useEffect, useRef, useState} from "react";
 import usePosts from "../../common/hooks/usePosts";
 import {
@@ -240,6 +234,7 @@ const Review = () => {
                                                         ...baseSearchQuery,
                                                         pageNum: 0,
                                                         pageIds: val?.map((cur) => cur?.value),
+                                                        offSet: 0
                                                     });
                                                 }}
                                             />
@@ -269,6 +264,7 @@ const Review = () => {
                                                         pageNum: 0,
                                                         socialMediaType: val?.value?.toUpperCase(),
                                                         pageIds: [],
+                                                        offSet: 0
                                                     });
                                                 }}
                                             />
