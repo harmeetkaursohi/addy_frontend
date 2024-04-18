@@ -115,7 +115,7 @@ const ScheduledComponent = ({scheduledData}) => {
                             scheduledPosts && Array.isArray(scheduledPosts) && scheduledPosts.map((curBatch, index) => (
 
 
-                                <div className={sidebar ? "col-lg-6 col-md-6 col-sm-12 " : "col-lg-6 col-md-12 col-sm-12 "}
+                                <div className={sidebar ? "col-lg-4 col-md-6 col-sm-12 " : "col-lg-6 col-md-12 col-sm-12 "}
                                      key={index}>
                                     <div className="draft-outer ">
 

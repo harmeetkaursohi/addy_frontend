@@ -100,10 +100,15 @@ span.error-detail {
 }
 .notification_message_outer p{
     color: #2E3646;
-    font-weight: 600;
+    font-weight: 500;
+    font-size: 15px;
 
 }
-
+@media screen and (min-width:1600px){
+    .notification_edit_button .dropdown-menu.show {
+        transform: translate(-50%, 29px) !important;
+    }
+}
 @media screen and (max-width: 991px) {
     .notification_header {
         flex-wrap: wrap;

@@ -122,7 +122,7 @@ const ContactUs = () => {
                             <div className="col-md-12 col-lg-6 Contact_us_Outer">
                                 <form onSubmit={formik.handleSubmit} id="contactForm">
                                     <div className=" contact_content">
-                                        <div className="d-flex gap-3">
+                                        <div className="user-name-outer d-flex gap-3">
                                             <div className="flex-grow-1">
                                                 <input
                                                     className="form-control"

@@ -58,7 +58,7 @@ const CropImageModal = ({imageUrl, showModal, setShowModal, UploadCroppedImage, 
                     </Modal.Body>
                     <Modal.Footer className='crop-image-footer'>                    
                     <div className="confirm_btn ">
-                        <button className="cmn_btn_color cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
+                        <button className=" cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
                         <button type="button" className="cmn_btn_color cmn_connect_btn connect_btn yes_btn"
                                 onClick={UploadCroppedImage}> Save
                         </button>
