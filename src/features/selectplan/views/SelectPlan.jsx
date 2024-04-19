@@ -5,12 +5,14 @@ import euro_img from '../../../images/euro.png'
 import check_img from '../../../images/check.png'
 import arrow_img from '../../../images/Arrow_1.svg'
 import white_check_img from '../../../images/white_check.png'
+import { useAppContext } from '../../common/components/AppProvider'
 
 const SelectPlan = () => {
+    const {sidebar}=useAppContext()
     return (
         <>
-            <section className="Container">
-                <div className="selectplan_container">
+            <section className={sidebar?"cmn_container":"cmn_Padding"}>
+                <div className="cmn_outer">
                     <div className='back_outer'>
                     <img src={previousArrow_img}/>
                     <h2 className='back_heading ps-2'>Back</h2>

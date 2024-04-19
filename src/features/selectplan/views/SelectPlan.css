@@ -17,11 +17,7 @@ font-weight: 500;
 line-height: 40px;
 letter-spacing: -0.64px;
 }
-.selectplan_container{
-    padding: 20px 60px 70px;
-    height:100%
 
-}
 .Personal_wrapper h3{
 color: #4D4D4D;
 text-align: center;
@@ -132,10 +128,6 @@ padding: 16px 124px;
     }
 }
 @media screen and (max-width:767px){
-    .selectplan_container {
-        padding: 20px 20px 40px;
-    }
-    
     .selectplan_heading.mt-5 {
         width: 100%;
     }

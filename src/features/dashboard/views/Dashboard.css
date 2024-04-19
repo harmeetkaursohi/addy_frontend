@@ -727,7 +727,7 @@ width: 100%;
         margin-top: 10px;
     }
     .page_title_header{
-        margin: 0px;
+        margin-top: 20px;
     }
     
 }
@@ -743,9 +743,7 @@ width: 100%;
         font-size: 13px;
 
     }
-    .followers_outer{
-        padding: 21px 0px;
-    }
+    
     select.page_title_options {
         font-size: 14px;
     }

@@ -384,10 +384,14 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
 
 }
 .Profile_visit_container{
-    margin-top:20px;
     min-height:100%
 
 
+}
+img.no_data_available_img {
+    width: 100%;
+    height: 350px;
+    object-fit: contain;
 }
 .visitors_outer{
     background: #F8F9FB;
@@ -475,9 +479,15 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
         width: 208px;
     }
+    .profile-visit-text{
+        font-size: 16px;
+    }
     .user_profile_card_wrapper img {
     height: 70px;
     width: 70px;
+    }
+    .visitors_outer h3 {
+        font-size: 16px;
     }
     .visitors_container{
         min-height: unset;
@@ -557,9 +567,7 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     .Social_media_platform {
         margin-top: 4px;
     }
-    .no_data_available.text-center img {
-        width: 100%;
-    }
+
     .overview_btn {
         font-size: 16px;
     }

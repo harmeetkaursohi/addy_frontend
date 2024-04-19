@@ -902,11 +902,26 @@ button.loading {
         padding: 3rem 5rem;
     }
     .Container{
-        width: 78%;
+        width: 74%;
+        margin: auto;
+    }
+    .width_class {
+        width: 91%;
         margin: auto;
     }
     
 }
+@media screen and (min-width: 1600px) and (max-width: 1899px) {
+   
+        .Container {
+            width: 84%;
+            margin: auto;
+        }
+        .width_class {
+            width: 93%;
+            margin: auto;
+        }
+    }
 
 @media (max-width: 1440px) {
     .fb_likes h3 {

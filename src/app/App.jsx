@@ -8,7 +8,6 @@ import Dashboard from '../features/dashboard/views/Dashboard.jsx'
 import Planner from '../features/planner/views/Planner.jsx'
 import Review from '../features/review/views/Review.jsx'
 import Gallery from '../features/gallary/views/Gallery.jsx'
-import AI_ImageModal from '../features/modals/views/ai_image_modal/AI_ImageModal.jsx'
 import CommentPage from '../features/commentPage/views/CommentPage.jsx'
 import AddressForm from '../features/signup/views/tabs/AddressInfo.jsx'
 import {ToastContainer} from 'react-toastify';
@@ -32,10 +31,7 @@ import Insight from "../features/insights/insight/views/Insight";
 import Profile from '../features/profile/Profile.jsx'
 import { AppProvider } from '../features/common/components/AppProvider.jsx'
 import Notification from "../features/notification/Notification";
-import InstagramPostModal from "../features/common/components/InstagramPostModal.jsx"
-import PinterestPostModal from '../features/common/components/PinterestPostModal.jsx'
-import FacebookPostModal from "../features/common/components/FacebookPostModal.jsx"
-import LinkedinPostModal from "../features/common/components/LinkedinPostModal.jsx"
+
 
 
 const App = () => {
@@ -60,7 +56,6 @@ const App = () => {
                         <Route path="/post/:id" element={<UpdatePost/>}/>
                         <Route path="/review" element={<Review/>}/>
                         <Route path="/gallery" element={<Gallery/>}/>
-                        <Route path="/image" element={<AI_ImageModal/>}/>
                         <Route path="/comment" element={<CommentPage/>}/>
                         <Route path="/address" element={<AddressForm/>}/>
                         <Route path="/draft" element={<Draft/>}/>
@@ -71,10 +66,7 @@ const App = () => {
                         <Route path="/contact" element={<ContactUs/>}/>
                         <Route path="/profile" element={<Profile/>}/>
                         <Route path="/notification" element={<Notification/>}/>
-                        <Route path="/insta" element={<InstagramPostModal/>}/>
-                        <Route path="/pin" element={<PinterestPostModal/>}/>
-                        <Route path="/fb" element={<FacebookPostModal/>}/>
-                        <Route path="/li" element={<LinkedinPostModal/>}/>
+                    
                     </Route>
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/" element={<Login/>}/>

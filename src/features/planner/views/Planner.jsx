@@ -527,7 +527,7 @@ const Planner = () => {
                                                     {getAllConnectedSocialAccountData?.loading ||
                                                     connectedPagesData?.loading ? (
                                                         <span
-                                                            className=" create_post_btn cmn_white_text cursor-pointer">
+                                                            className=" create_post_btn cmn_white_text cursor-pointer text-center">
                             <Loader className="create-post-loader"/>
                           </span>
                                                     ) : (

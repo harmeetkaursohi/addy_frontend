@@ -522,7 +522,7 @@ const Insight = () => {
                                                                 {(selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(getProfileVisitsInsightsInfoReducerData?.data) && getProfileVisitsInsightsInfoReducerData?.data?.length === 0))
                                                                     ?
                                                                     <div className={"no_data_available text-center"}>
-                                                                        <img src={no_data_available}
+                                                                        <img  className ="no_data_available_img  " src={no_data_available}
                                                                              alt={"coming soon!"}/>
                                                                     </div>
                                                                     :
@@ -544,7 +544,7 @@ const Insight = () => {
                                                             {(getDemographicsInsightData?.data?.country === null || selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST")
                                                                 ?
                                                                 <div className={"no_data_available text-center"}>
-                                                                    <img src={no_data_available} alt={"coming soon!"}/>
+                                                                    <img  className="no_data_available_img" src={no_data_available} alt={"coming soon!"}/>
                                                                 </div>
                                                                 :
                                                                 <DonutChart chartData={getDemographicsInsightData}/>}
@@ -559,7 +559,7 @@ const Insight = () => {
                                                                 {(selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST" || selectedPage.socialMediaType === 'INSTAGRAM' || selectedPage.socialMediaType === 'FACEBOOK')
                                                                     ?
                                                                     <div className={"no_data_available text-center"}>
-                                                                        <img src={no_data_available} alt={"coming soon!"}/>
+                                                                        <img  className="no_data_available_img" src={no_data_available} alt={"coming soon!"}/>
                                                                     </div>
                                                                     :
                                                                     <HorizontalBarChart
