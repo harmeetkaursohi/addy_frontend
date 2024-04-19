@@ -9,7 +9,6 @@ import SocialAccounts from "./SocialAccounts";
 import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
 import { useAppContext } from "../../common/components/AppProvider.jsx";
-import {generateUnixTimestampFor} from "../../../utils/commonUtils";
 
 const Dashboard = () => {
     const { sidebar } = useAppContext();

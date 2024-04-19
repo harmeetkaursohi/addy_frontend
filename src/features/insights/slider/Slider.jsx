@@ -17,11 +17,11 @@ import {FaGreaterThan, FaLessThan} from "react-icons/fa";
 import {getPostByPageIdAndPostStatus} from "../../../app/actions/postActions/postActions";
 import {getToken} from "../../../app/auth/auth";
 import {ErrorFetchingPost, PostAlreadyDeleted, SocialAccountProvider} from "../../../utils/contantData";
-import { useAppContext } from "../../common/components/AppProvider";
+import {useAppContext} from "../../common/components/AppProvider";
 
 
 const Carousel = ({selectedPage, cacheData}) => {
-   
+
     return (
         <div className="slider_outer_container content_outer">
             <DisplayPosts selectedPage={selectedPage} insightsCache={cacheData}/>
@@ -33,7 +33,7 @@ export default Carousel;
 const DisplayPosts = ({selectedPage, insightsCache}) => {
     const dispatch = useDispatch();
 
-    const { sidebar, show_sidebar } = useAppContext();
+    const {sidebar, show_sidebar} = useAppContext();
 
     const token = getToken();
     const getPostDataWithInsightsData = useSelector(state => state.insight.getPostDataWithInsightsReducer);
@@ -107,15 +107,17 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                         <div className="row">
                             {
 
-                                Object.keys(getPostDataWithInsightsData?.data)?.map(
+                                Object.keys(getPostDataWithInsightsData?.data)?.length > 0 && Object.keys(getPostDataWithInsightsData?.data || {})?.map(
                                     (key, index) => {
                                         const formattedData = getFormattedPostDataForSlider(
-                                            getPostDataWithInsightsData?.data[key],
+                                            getPostDataWithInsightsData?.data?.[key],
                                             selectedPage?.socialMediaType
                                         );
                                         const deletedPostData = formattedData?.hasError ? getPostByPageIdAndPostStatusData?.data?.data[selectedPage?.pageId]?.filter(post => post?.postPageInfos[0]?.socialMediaPostId === formattedData?.id)[0] : {}
                                         return formattedData?.hasError ?
-                                            <div className={sidebar ? "col-lg-4 col-md-6 col-sm-12":"col-lg-4 col-md-12 col-sm-12"}  key={key + "slide"}>
+                                            <div
+                                                className={sidebar ? "col-lg-4 col-md-6 col-sm-12" : "col-lg-4 col-md-12 col-sm-12"}
+                                                key={key + "slide"}>
                                                 <Card className="card_body_content deleted-post-from-socialMedia">
                                                     <Card.Body className="p-0">
                                                         <div className="caresoul_inner_content_outer">
@@ -157,7 +159,9 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                                     </Card.Body>
                                                 </Card>
                                             </div> :
-                                            <div className={sidebar ? "col-lg-4 col-md-6 col-sm-12":"col-lg-4 col-md-12 col-sm-12"}   key={key + "slide"}>
+                                            <div
+                                                className={sidebar ? "col-lg-4 col-md-6 col-sm-12" : "col-lg-4 col-md-12 col-sm-12"}
+                                                key={key + "slide"}>
                                                 <Card className="card_body_content">
                                                     <Card.Body className="p-0">
                                                         <div className="caresoul_inner_content_outer">
