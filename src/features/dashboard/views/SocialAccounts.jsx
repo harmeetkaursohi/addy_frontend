@@ -68,7 +68,7 @@ const SocialAccounts = ({}) => {
 
     useEffect(() => {
 
-        if (enabledSocialMedia?.isFaceBookEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) {
+        if (enabledSocialMedia?.isFacebookEnabled && !getAllConnectedSocialAccountData?.loading && getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) {
             let faceBookSocialAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === 'FACEBOOK');
             dispatch(getAllFacebookPages({
                 providerId: faceBookSocialAccount?.providerId,
@@ -172,7 +172,7 @@ const SocialAccounts = ({}) => {
 
     useEffect(() => {
 
-        if (enabledSocialMedia?.isFaceBookEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+        if (enabledSocialMedia?.isFacebookEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
             const connectedFacebookSocialAccount = getAllConnectedSocialAccountData?.data?.filter(socialAccount => socialAccount?.provider === "FACEBOOK")[0]
             const connectedFacebookPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedFacebookSocialAccount?.id)
             const currentConnectedFaceBookPages = getAllFacebookPagesData?.facebookPageList?.filter(page =>
@@ -332,7 +332,7 @@ const SocialAccounts = ({}) => {
 
                 {/*facebook connect starts */}
                 {
-                    enabledSocialMedia?.isFaceBookEnabled &&
+                    enabledSocialMedia?.isFacebookEnabled &&
                     <>
                         {
                             getAllConnectedSocialAccountData?.loading ?
@@ -946,7 +946,7 @@ const SocialAccounts = ({}) => {
                 {/* end pinterest connect */}
 
             </div>
-            {enabledSocialMedia?.isFaceBookEnabled && showFacebookModal &&
+            {enabledSocialMedia?.isFacebookEnabled && showFacebookModal &&
                 <ConnectPagesModal showModal={showFacebookModal} setShowModal={setShowFacebookModal}
                                    allPagesList={getAllFacebookPagesData?.facebookPageList || []}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}

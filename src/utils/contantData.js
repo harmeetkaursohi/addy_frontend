@@ -6,7 +6,7 @@ export const enabledSocialMedia = {
 }
 
 export const SocialAccountProvider = Object.freeze({
-    ...(enabledSocialMedia.isFaceBookEnabled && {FACEBOOK: "facebook"}),
+    ...(enabledSocialMedia.isFacebookEnabled && {FACEBOOK: "facebook"}),
     ...(enabledSocialMedia.isInstagramEnabled && {INSTAGRAM: "instagram"}),
     ...(enabledSocialMedia.isLinkedinEnabled && {LINKEDIN: "linkedin"}),
     ...(enabledSocialMedia.isPinterestEnabled && {PINTEREST: "pinterest"}),
