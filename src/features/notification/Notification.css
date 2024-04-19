@@ -104,6 +104,9 @@ span.error-detail {
     font-size: 15px;
 
 }
+.notification_edit_button .btn:focus-visible{
+    box-shadow:unset !important
+}
 @media screen and (min-width:1600px){
     .notification_edit_button .dropdown-menu.show {
         transform: translate(-50%, 29px) !important;
@@ -112,6 +115,9 @@ span.error-detail {
 @media screen and (max-width: 991px) {
     .notification_header {
         flex-wrap: wrap;
+    }
+    .notifications_layout {
+        padding: 12px;
     }
     .notification_message_outer{
         width: 50%;

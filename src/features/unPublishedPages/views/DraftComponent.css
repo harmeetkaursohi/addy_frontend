@@ -328,6 +328,11 @@ button.outline_btn {
         height: 500px;
     }
 }
+@media screen and (min-width:1800px){
+    .draft_button_outer{
+        flex-wrap: unset;
+    }
+}
 @media screen and (min-width:1600px) {
     .no-draft-img {
         max-width: 650px !important;

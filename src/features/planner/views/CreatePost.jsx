@@ -894,7 +894,7 @@ const CreatePost = () => {
                                         </div>
                                     </div>
                                     {
-                                        showPreview &&
+                                        showPreview && files.length>0 &&
                                         <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
                                             <div className='cmn_outer create_post_container'>
                                                 <div className='post_preview_outer'>

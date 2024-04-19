@@ -266,6 +266,12 @@ gap: 16px;
         line-height: 30px;
     }
  }
+ @media screen and (min-width:1600px){
+    .RxCross2_icon {
+        right: -37px;
+        top: -21px;
+    }
+ }
  @media screen and (max-width:1440px){
     .RxCross2_icon {
         right: -37px;

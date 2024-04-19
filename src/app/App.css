@@ -463,6 +463,9 @@ line-height: 20px;
     font-size: 16px;
     margin-top: 20px;
 }
+.cmn_text_style {
+  font-size: 17px;
+}
 }
 @media screen  and (max-width:767px) {
   .comment_container {

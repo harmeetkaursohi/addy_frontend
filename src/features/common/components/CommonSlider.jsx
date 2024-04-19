@@ -63,7 +63,7 @@ const CommonSlider = ({
                                     <ReactPlayer
                                         height={height?height:"250px"}
                                         width={"100%"}
-                                        className='post_img'
+                                        className='video_player_outer'
                                         url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
                                         controls={true}
                                     />
