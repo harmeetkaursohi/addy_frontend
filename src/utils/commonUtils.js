@@ -2017,8 +2017,8 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                         break;
                     }
                     if (files[0]?.mediaType === "VIDEO") {
-                        if (files.some(file => (file?.file?.size / 1048576) > 200)) {
-                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "pinterest"]));
+                        if (files.some(file => (file?.file?.size / 1048576) > 50)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "50 mb", "video", "pinterest"]));
                             shouldBreak = true;
                             break;
                         }
@@ -2054,8 +2054,8 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                             shouldBreak = true;
                             break;
                         }
-                        if (files.some(file => (file?.file?.size / 1048576) > 200)) {
-                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
+                        if (files.some(file => (file?.file?.size / 1048576) > 50)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "50 mb", "video", "linkedin"]));
                             shouldBreak = true;
                             break;
                         }
@@ -2099,8 +2099,8 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                         }
                     }
                     if (files[0]?.mediaType === "VIDEO") {
-                        if (files.some(file => (file?.file?.size / 1073741824) > 1)) {
-                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "1 gb", "video", "instagram"]));
+                        if (files.some(file => (file?.file?.size / 1048576) > 50)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "50 mb", "video", "instagram"]));
                             shouldBreak = true;
                             break;
                         }
@@ -2123,8 +2123,8 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                         break;
                     }
                     if (files[0]?.mediaType === "VIDEO") {
-                        if (files.some(file => (file?.file?.size / 1073741824) > 10)) {
-                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "10 gb", "video", "facebook"]));
+                        if (files.some(file => (file?.file?.size / 1048576) > 50)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "50 mb", "video", "facebook"]));
                             shouldBreak = true;
                             break;
                         }
@@ -2262,8 +2262,8 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                         break;
                     }
                     if (files[0]?.mediaType === "VIDEO") {
-                        if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1048576) > 200) || oldAttachments?.some(attachment => (attachment?.fileSize / 1048576) > 200)) {
-                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "pinterest"]));
+                        if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1048576) > 50) || oldAttachments?.some(attachment => (attachment?.fileSize / 1048576) > 200)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "50 mb", "video", "pinterest"]));
                             shouldBreak = true;
                             break;
                         }
@@ -2304,8 +2304,8 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                             shouldBreak = true;
                             break;
                         }
-                        if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1048576) > 200) || oldAttachments.some(attachment => (attachment?.fileSize / 1048576) > 200)) {
-                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "200 mb", "video", "linkedin"]));
+                        if (newlyAddedAttachments.some(attachment => (attachment?.file?.size / 1048576) > 50) || oldAttachments.some(attachment => (attachment?.fileSize / 1048576) > 200)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "50 mb", "video", "linkedin"]));
                             shouldBreak = true;
                             break;
                         }
@@ -2350,8 +2350,8 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                         }
                     }
                     if (files[0]?.mediaType === "VIDEO") {
-                        if (files.some(file => (file?.file?.size / 1073741824) > 1)) {
-                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "1 gb", "video", "instagram"]));
+                        if (files.some(file => (file?.file?.size / 1048576) > 50)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "50 mb", "video", "instagram"]));
                             shouldBreak = true;
                             break;
                         }
@@ -2375,8 +2375,8 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                         break;
                     }
                     if (files[0]?.mediaType === "VIDEO") {
-                        if (allAttachments.some(file => (file?.file?.size / 1073741824) > 10)) {
-                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "10 gb", "video", "facebook"]));
+                        if (allAttachments.some(file => (file?.file?.size / 1048576) > 50)) {
+                            showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "50 mb", "video", "facebook"]));
                             shouldBreak = true;
                             break;
                         }

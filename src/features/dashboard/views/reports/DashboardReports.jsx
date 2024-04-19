@@ -11,7 +11,7 @@ import {
     getInitialLetterCap, getPagesDataFromSocialMedia, getQueryForGraphData, isNullOrEmpty,
     socialMediaAccountHasConnectedPages
 } from "../../../../utils/commonUtils";
-import {SocialAccountProvider} from "../../../../utils/contantData";
+import {SocialAccountProvider, enabledSocialMedia} from "../../../../utils/contantData";
 import jsondata from "../../../../locales/data/initialdata.json";
 import polygon_img from "../../../../images/polygon.svg";
 import {useEffect, useState} from "react";
@@ -52,7 +52,10 @@ export const DashboardReports = () => {
             //  In case any account is disconnected and it was selected on reports section selectedSocialMediaAccount will be null so set 1st account selected
             if (selectedSocialMediaAccount === null || selectedSocialMediaAccount === undefined) {
                 if (connectedPagesReducer?.facebookConnectedPages?.length > 0) {
-                    selectedSocialMediaAccount = getAllConnectedSocialAccountData?.data?.find(accountData => accountData?.id === connectedPagesReducer?.facebookConnectedPages[0].socialMediaAccountId)
+                    const enabledSocialMediaAccounts=getAllConnectedSocialAccountData?.data?.filter(accountData=>enabledSocialMedia["is" + getInitialLetterCap(accountData.provider.toLowerCase()) + "Enabled"])
+                    const enabledSocialMediaAccountIds=enabledSocialMediaAccounts?.map(account=>account.id)
+                    const enabledPages=connectedPagesReducer?.facebookConnectedPages?.filter(page=>enabledSocialMediaAccountIds.includes(page.socialMediaAccountId))
+                    selectedSocialMediaAccount = enabledSocialMediaAccounts?.find(accountData => accountData?.id === enabledPages[0].socialMediaAccountId)
                 }
                 setReportSelectedAccountType(selectedSocialMediaAccount?.provider || "")
             }

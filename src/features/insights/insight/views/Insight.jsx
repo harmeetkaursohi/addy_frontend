@@ -235,7 +235,7 @@ const Insight = () => {
 
                                     <div className="social_media_dropdown">
                                         {
-                                            enabledSocialMedia.isFaceBookEnabled &&
+                                            enabledSocialMedia.isFacebookEnabled &&
                                             <Dropdown className="chooseplatfrom_dropdown_btn">
                                                 <Dropdown.Toggle
                                                     variant="success"

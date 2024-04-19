@@ -1,12 +1,12 @@
 export const enabledSocialMedia = {
-    isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
+    isFacebookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
     isInstagramEnabled: `${import.meta.env.VITE_APP_ENABLE_INSTAGRAM}` === "true",
     isLinkedinEnabled: `${import.meta.env.VITE_APP_ENABLE_LINKEDIN}` === "true",
     isPinterestEnabled: `${import.meta.env.VITE_APP_ENABLE_PINTEREST}` === "true",
 }
 
 export const SocialAccountProvider = Object.freeze({
-    ...(enabledSocialMedia.isFaceBookEnabled && {FACEBOOK: "facebook"}),
+    ...(enabledSocialMedia.isFacebookEnabled && {FACEBOOK: "facebook"}),
     ...(enabledSocialMedia.isInstagramEnabled && {INSTAGRAM: "instagram"}),
     ...(enabledSocialMedia.isLinkedinEnabled && {LINKEDIN: "linkedin"}),
     ...(enabledSocialMedia.isPinterestEnabled && {PINTEREST: "pinterest"}),

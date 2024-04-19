@@ -115,7 +115,7 @@ const UpdatePost = () => {
                 const filteredSocialMediaData = socialAccounts.filter((account) => {
                     switch (account.provider) {
                         case "FACEBOOK":
-                            return enabledSocialMedia?.isFaceBookEnabled;
+                            return enabledSocialMedia?.isFacebookEnabled;
                         case "INSTAGRAM":
                             return enabledSocialMedia?.isInstagramEnabled;
                         case "LINKEDIN":
