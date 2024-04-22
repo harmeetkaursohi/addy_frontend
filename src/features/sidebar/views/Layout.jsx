@@ -124,7 +124,8 @@ const Layout = () => {
 
             customClass: {
                 confirmButton: 'confirmButton',
-                cancelButton: 'cancelButton'
+                cancelButton: 'cancelButton',
+                popup:"animated-popup"
             }
         }).then((result) => {
             if (result.isConfirmed) {

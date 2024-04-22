@@ -208,7 +208,7 @@ const Review = () => {
                                 <div className="review_heading flex-grow-1">
                                     <h2 className="cmn_text_heading">{jsondata.likecomment}</h2>
                                     <h6 className="cmn_small_heading ">
-                                        Here you find all the Posts you have posted.
+                                      {jsondata.review_post_heading}
                                     </h6>
                                 </div>
                                 {getAllConnectedSocialAccountData?.data?.length > 0 &&

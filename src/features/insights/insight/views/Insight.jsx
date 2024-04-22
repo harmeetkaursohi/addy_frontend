@@ -7,6 +7,7 @@ import DonutChart from "../../DonutsChart";
 import HorizontalBarChart from "../../horizontalbar";
 import Carousel from "../../slider/Slider";
 import {useDispatch, useSelector} from "react-redux";
+import jsondata from "../../../../locales/data/initialdata.json"
 import {
     getAllByCustomerIdAction,
 } from "../../../../app/actions/socialAccountActions/socialAccountActions";
@@ -224,8 +225,7 @@ const Insight = () => {
                 <div className="cmn_outer">
                     <div className="insight_outer  cmn_wrapper_outer white_bg_color cmn_height_outer">
                         <h2 className="insight_heading cmn_text_style">Insights</h2>
-                        <h6 className="cmn_small_heading"> Assess post performance and audience engagement across
-                            multiple social media platforms.</h6>
+                        <h6 className="cmn_small_heading">{jsondata.insight_heading}</h6>
                         {
                             (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
                                 <CommonLoader></CommonLoader> :

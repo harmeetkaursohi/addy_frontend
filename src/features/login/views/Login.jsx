@@ -82,7 +82,7 @@ const Login = () => {
                                             <img src={addyads_img} height="90px" width="238px"/>
                                         </div>
                                         <h2>{jsondata.welcomeBack}</h2>
-                                        <p>Welcome back! Please enter your details</p>
+                                        <p>{jsondata.welcome_back_heading}</p>
                                     </div>
                                     <div className='login_form'>
                                         <form onSubmit={formik.handleSubmit}>

@@ -203,7 +203,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                                         {/**Start Country Fields */}
                                         <div className='form-group'>
-                                            <label htmlFor="country">Country<span>*</span> </label>
+                                            <label htmlFor="country">{jsondata.country}<span>*</span> </label>
                                             <select
                                                 id="country"
                                                 name="country"
@@ -212,7 +212,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                 value={formik.values.country}
                                                 className="form-control mt-1 cmn_select_box"
                                             >
-                                                <option value="">Select Country</option>
+                                                <option value="">{jsondata.select_country}</option>
                                                 {countries?.map((country) => (
                                                     <option key={country.name} value={country.name}>
                                                         {country.name}
@@ -233,7 +233,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                                             <div className='col-lg-6'>
                                                 <div className='form-group'>
-                                                    <label htmlFor="state">State<span>*</span> </label>
+                                                    <label htmlFor="state">{jsondata.state}<span>*</span> </label>
                                                     <select
                                                         id="state"
                                                         name="state"
@@ -242,7 +242,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                         value={formik.values.state}
                                                         className="form-control mt-1 cmn_select_box"
                                                     >
-                                                        <option value="">Select State</option>
+                                                        <option value="">{jsondata.select_state}</option>
                                                         {states?.map((state) => (
                                                             <option key={state.name} value={state.name}>
                                                                 {state.name}
@@ -260,7 +260,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                             {/** Start City Fields */}
                                             <div className='col-lg-6'>
                                                 <div className='form-group'>
-                                                    <label>City </label>
+                                                    <label>{jsondata.city} </label>
                                                     <input onChange={formik.handleChange}
                                                            onBlur={formik.handleBlur}
                                                            value={formik.values.city} name="city" id="city"
@@ -277,7 +277,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                                             <div className='col-lg-6'>
                                                 <div className='form-group'>
-                                                    <label htmlFor="city">County<span>*</span></label>
+                                                    <label htmlFor="city">{jsondata.county}<span>*</span></label>
                                                     <select
                                                         id="county"
                                                         name="county"
@@ -286,7 +286,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                         value={formik.values.county}
                                                         className="form-control mt-1 cmn_select_box"
                                                     >
-                                                        <option value="">Select County</option>
+                                                        <option value="">{jsondata.select_county}</option>
                                                         {cities?.map((city, index) => (
                                                             <option key={index} value={city.isoCode}>
                                                                 {city.name}
