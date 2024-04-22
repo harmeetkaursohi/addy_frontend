@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./privacy.css";
 import {useAppContext} from "../common/components/AppProvider";
-
+import jsondata from "../../locales/data/initialdata.json"
 const PrivacyComponent = () => {
     const [iframeContent, setIframeContent] = useState("");
     const {sidebar} = useAppContext()
@@ -39,9 +39,8 @@ const PrivacyComponent = () => {
             <div className={`cmn_container  ${sidebar ? " " : "cmn_Padding"}`}>
                 <div className=" cmn_outer">
                     <div className="cmn_wrapper_outer privacy_policy_container ">
-                        <h2 className="cmn_title">Privacy Policy</h2>
-                        <h6 className="cmn_small_heading">Your Privacy Matters. Our Commitment to Protecting Your
-                            Personal Information.</h6>
+                        <h2 className="cmn_title">{jsondata.privacy_policy}</h2>
+                        <h6 className="cmn_small_heading">{jsondata.privacy_policy_heading}</h6>
                         <div className="privacy_wrapper">
                             <iframe
                                 title="Embedded Content"

@@ -5,7 +5,7 @@ import {list} from "../../app/actions/webActions/webActions";
 import {useDispatch, useSelector} from "react-redux";
 import {resetReducers} from "../../app/actions/commonActions/commonActions";
 import {useAppContext} from "../common/components/AppProvider";
-
+import jsondata from "../../locales/data/initialdata.json"
 const FaqComponent = () => {
     const dispatch = useDispatch();
     const faqList = useSelector(state => state.web.listReducer);
@@ -38,10 +38,8 @@ const FaqComponent = () => {
                 <div className="cmn_outer">
                     <div className="white_bg_color cmn_height_outer">
                         <div className="faq_wrapper">
-                            <h2 className="text-center mt-5">Frequently Asked Questions <br></br> Hello, how can we help
-                                you ?</h2>
-                            <p className="pt-2 text-center">Check out some of these frequently asked questions about the
-                                AddyAds.</p>
+                            <h2 className="text-center mt-5">{jsondata.faq_heading}<br></br> {jsondata.how_can_we_help_you_text}</h2>
+                            <p className="pt-2 text-center">{jsondata.faq_title}</p>
                             <form method="post" onSubmit={function (e) {
                                 e.preventDefault();
                                 setPage(1);

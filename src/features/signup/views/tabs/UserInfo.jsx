@@ -76,15 +76,15 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                     <div className="addy_img">
                                         <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                         </div>
-                                        <h2>CREATE ACCOUNT</h2>
-                                        <p>Please enter your details</p>
+                                        <h2>{jsondata.create_account}</h2>
+                                        <p>{jsondata.enter_details_heading}</p>
                                     </div>
                                     <div className='login_form'>
 
                                         <form onSubmit={formik.handleSubmit}>
 
                                             <div className='form-group'>
-                                                <label>First Name <span>*</span> </label>
+                                                <label>{jsondata.firstname} <span>*</span> </label>
 
                                                 <input
                                                     name="firstName"
@@ -102,7 +102,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
 
                                             </div>
                                             <div className='form-group'>
-                                                <label>Last Name <span>*</span> </label>
+                                                <label>{jsondata.lastname} <span>*</span> </label>
 
                                                 <input
                                                     name="lastName"
@@ -172,7 +172,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                         value={formik.values.industry}
 
                                                     >
-                                                        <option value="">Select Industry</option>
+                                                        <option value="">{jsondata.select_industry}</option>
                                                         {Object.keys(Industries)?.map((key,index) => (
                                                             <option key={index} value={Industries[key]}>
                                                                 {Industries[key]}

@@ -12,7 +12,7 @@ import {showErrorToast, showSuccessToast} from "../common/components/Toast";
 import {useNavigate} from 'react-router'
 import Loader from "../loader/Loader";
 import {useAppContext} from "../common/components/AppProvider";
-
+import jsondata from "../../locales/data/initialdata.json"
 const ContactUs = () => {
     const [isSmallScreen, setIsSmallScreen] = useState(false);
     const navigate = useNavigate()
@@ -90,30 +90,29 @@ const ContactUs = () => {
             <div className={`cmn_container faq_section  ${sidebar ? "" : "cmn_Padding"}`}>
                 <div className="cmn_outer">
                     <div className="cmn_wrapper_outer  white_bg_color cmn_height_outer">
-                        <h2 className="dm-sans-font pt-5 pb-5">Contact Us</h2>
+                        <h2 className="dm-sans-font pt-5 pb-5">{jsondata.sidebarContent.contact}</h2>
                         <div className="row">
                             <div className="col-md-12 col-lg-6 Contact_us_Outer">
                                 <div className="contact_content ">
-                                    <h3>Let's talk with us</h3>
+                                    <h3>{jsondata.lets_talk_text}</h3>
                                     <p>
-                                        Questions, comments, or suggestions? Simply fill in the form
-                                        and we’ll be in touch shortly.
+                                      {jsondata.contact_us_heading}
                                     </p>
                                     <ul>
                                         <li>
                                             <CiLocationOn size={22}/>
                                             <span>
-                        1055 Arthur ave Elk Groot, 67. <br/>
-                        New Palmas South Carolina.
+                        {jsondata.contact_address} <br/>
+                       {jsondata.contact_us_address}
                       </span>
                                         </li>
                                         <li>
                                         <PiPhoneCall className="PiPhoneCall"/>
-                                            <a href="tel:+1 234 678 9108 99">+1 234 678 9108 99</a>
+                                            <a href="tel:+1 234 678 9108 99">{jsondata.contact_number}</a>
                                         </li>
                                         <li>
                                             <FaRegEnvelope/>
-                                            <a href="mailto:Contact@addy.com">Contact@addy.com</a>
+                                            <a href="mailto:Contact@addy.com">{jsondata.contact_email}</a>
                                         </li>
                                     </ul>
                                 </div>

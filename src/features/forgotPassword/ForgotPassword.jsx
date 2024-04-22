@@ -57,7 +57,7 @@ function ForgotPassword() {
                                     <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                     </div>
                                     <h2>{jsondata.forgotPassword.forgotPassword}</h2>
-                                    <p>Enter register email address</p>
+                                    <p>{jsondata.register_email_heading}</p>
 
                                 </div>
                                 <div className='login_form'>

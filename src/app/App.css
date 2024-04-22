@@ -393,6 +393,11 @@ line-height: 20px;
   font-size: 17px;
   color: #292929;
 }
+
+.animated-popup{
+  transition: all 2s ease 
+
+}
 @keyframes fadeInLeft {
   0% {
      opacity: 0.2;

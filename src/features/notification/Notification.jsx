@@ -17,6 +17,7 @@ import {getCommentCreationTime} from "../../utils/commonUtils";
 import {Dropdown} from "react-bootstrap";
 import {PiDotsThreeVerticalBold} from "react-icons/pi";
 import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
+import jsondata from "../../locales/data/initialdata.json"
 import {
     resetNotificationEventData,
     unseenNotificationsCountData
@@ -194,11 +195,10 @@ const Notification = () => {
                     
                         <div className="notification_wrapper cmn_wrapper_outer white_bg_color cmn_height_outer">
                             <div className="notification_header align-items-center gap-3">
-                                <h2 className="cmn_text_heading">Notifications</h2>
+                                <h2 className="cmn_text_heading">{jsondata.notification}</h2>
 
                             </div>
-                            <h6 className={"cmn_small_heading "}>All notifications will be directed here for your ease
-                                of access.</h6>
+                            <h6 className={"cmn_small_heading "}>{jsondata.notification_heading}</h6>
                             {
                                 (
                                     ((searchNotificationData?.data?.data && searchNotificationData?.data?.data?.length > 0) || (unseenNotificationsData?.data && unseenNotificationsData?.data?.length > 0) || (notificationEventData?.data?.length > 0))
@@ -229,8 +229,7 @@ const Notification = () => {
                                                 ) &&
                                                 <h4
                                                     className={"no-notifications-text text-center mt-4"}><FaBell
-                                                    className={"me-1 mb-1"}/> No notifications to
-                                                    display. Check back later for updates!
+                                                    className={"me-1 mb-1"}/> {jsondata.no_notification_text}
                                                 </h4>
                                             }
                                             {
