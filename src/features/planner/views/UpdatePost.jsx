@@ -495,7 +495,7 @@ const UpdatePost = () => {
                                         <form onSubmit={null}>
                                             {/* add media */}
                                             <div
-                                                className={`media_outer ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
+                                                className={`media_outer dashed_border  ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
                                                 <div
                                                     className={showPreview ? "" : 'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
 
@@ -612,7 +612,7 @@ const UpdatePost = () => {
 
                                                     {
                                                         disableImage === false && <>
-                                                            <h2 className='cmn_heading'>{jsondata.OR}</h2>
+                                                            <h2 className='cmn_heading or_heading'>{jsondata.OR}</h2>
                                                             <div className="ai_outer_btn">
                                                                 <button
                                                                     className={`ai_btn cmn_white_text mt-2`}

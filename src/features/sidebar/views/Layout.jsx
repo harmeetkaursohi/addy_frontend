@@ -141,7 +141,7 @@ const Layout = () => {
 
                 <div
                     className={
-                        sidebar ? "sidebar_content sidebar_wrapper" : "animation sidebar_wrapper"
+                        sidebar ? "sidebar_content sidebar_wrapper" : " sidebar_wrapper"
                     }
                 >
 

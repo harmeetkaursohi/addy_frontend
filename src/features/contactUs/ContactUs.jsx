@@ -99,7 +99,7 @@ const ContactUs = () => {
                                       {jsondata.contact_us_heading}
                                     </p>
                                     <ul>
-                                        <li>
+                                        <li className="pt-4">
                                             <CiLocationOn size={22}/>
                                             <span>
                         {jsondata.contact_address} <br/>

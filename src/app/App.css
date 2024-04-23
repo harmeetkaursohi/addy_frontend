@@ -405,6 +405,166 @@ line-height: 20px;
   transition: all 2s ease 
 
 }
+
+img.post_img {
+  height: 300px;
+  object-fit: contain;
+  object-position: center;
+}
+.planner_header_outer {
+  display: flex;
+  justify-content: space-between;
+  
+}
+.planner_outer {
+  padding: 24px;
+
+ 
+}
+span.highlight {
+
+  color: #00A3FF;
+}
+button#dropdown-basic {
+  border-radius: 10px;
+  border: 1px solid #F3F7FD;
+  /* background: #F4F4F4; */
+  background-color: #F4F4F4 !important;
+  color: #5F6D7E;
+  font-family: "Nunito";
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: -0.02px;
+  padding: 10px;
+  min-width: 191px;
+  padding-right: 35px;
+  position: relative;
+  box-shadow: 2px 2px 2px 0px #f5f4f4;
+}
+
+button#dropdown-basic::after {
+  content: url("../../../images/down_arrow.svg");
+  position: absolute;
+  /*height: 50px;*/
+  border: unset;
+  right: 11px;
+}
+.create_post_btn {
+  border: none;
+  padding: 10px 21px;
+  border-radius: 6px;
+  background: #E05905;
+}
+.fc .fc-button-primary:not(:disabled).fc-button-active:focus,
+.fc .fc-button-primary:not(:disabled):active:focus {
+    box-shadow: unset
+}
+.fc .fc-button-primary {
+  color: #5F6D7E;
+  background-color: transparent;
+  border: none;
+}
+.fc .fc-button-primary:hover {
+  background-color: unset;
+  border-color: unset;
+  color: unset;
+}
+.fc .fc-daygrid-day.fc-day-today {
+  /* background: #AAE0FF; */
+  background-color: unset !important;
+}
+.calendar-container .fc-view-harness.fc-view-harness-active {
+  height: 100% !important;
+
+}
+.CalenderOuter_Wrapper.fc .fc-view-harness{
+  margin-top: 16px;
+}
+button.fc--button.fc-button.fc-button-primary {
+  display: none;
+}
+.calender_outer_wrapper .fc-dayGridMonth-view.fc-view.fc-daygrid {
+  background: transparent !important;
+  border: transparent;
+}
+.calender_outer_wrapper table tbody {
+  background: #fff;
+
+}
+
+.calender_outer_wrapper .fc-theme-standard th, .calender_outer_wrapper table tbody tr td[role="presentation"] {
+  border: transparent;
+}
+
+.calender_outer_wrapper table tbody tr td {
+  outline: 1px solid #ddd;
+  border: transparent;
+  height: 100px;
+}
+.fc .fc-button:focus {
+  box-shadow: unset;
+  outline: unset;
+}
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background-color: transparent;
+    border-color: transparent;
+    color: #5F6D7E;
+}
+.fc .fc-toolbar-title {
+  color: #292929;
+  font-family: "Nunito";
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.16px;
+}
+input[type=checkbox] {
+  box-sizing: border-box;
+  padding: 0;
+  accent-color: #048709;
+}
+.page_title_container {
+  display: flex;
+  padding: 16px 20px;
+  justify-content: space-between;
+  border-bottom: 1px solid #D1D9E2;
+  background-color: #F8F9FB;
+  align-items: center;
+
+}
+.page_title_header {
+  margin: 30px 0px;
+  border-radius: 22px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.10);
+}
+.fc-h-event {
+  background-color: unset;
+  border: unset
+
+}
+.or_heading{
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: #525254;
+}
+/* CSS to hide the calendar's body and other elements */
+.calendar-container.hidden .fc-view, /* Hide the calendar view */
+.calendar-container.hidden .fc-toolbar.fc-header-toolbar .fc-center, /* Hide the center part of the toolbar */
+.calendar-container.hidden .fc-toolbar.fc-header-toolbar .fc-right, /* Hide the right part of the toolbar */
+.calendar-container.hidden .fc-dayGridMonth-view {
+    display: none;
+}
 @keyframes fadeInLeft {
   0% {
      opacity: 0.2;
@@ -415,21 +575,42 @@ line-height: 20px;
      transform: translateX(0);
   }
 }   
+@media screen and (min-width:2560px) {
+  img.post_img {
+      height: 500px;
+      min-height: 100%;
+  }
+}
 
 @media screen and (max-width: 2560px) {
   div.cmn_loader_outer {
     min-height: calc(100vh - 166px) !important;
   }
 }
+
+
 @media screen and (min-width:1900px) {
   .cmn_wrapper_outer {
     width: 100%;
     max-width: 78%;
     margin: auto;
   }
+  .planner_outer {
+    width: 100%;
+    max-width: 78%;
+    margin: auto;
 }
+}
+
+
+
 @media screen and (min-width:1600px) and (max-width:1899px){
   .cmn_wrapper_outer {
+  width: 100%;
+  max-width: 84%;
+  margin: auto;
+}
+.planner_outer {
   width: 100%;
   max-width: 84%;
   margin: auto;
@@ -461,11 +642,28 @@ line-height: 20px;
     padding: 0px 15px 30px;
   }
 }
+@media screen and (min-width:1024px){
+  .CalenderOuter_Wrapper .fc .fc-scroller-harness{
+      overflow: unset !important;
+  }
+  
+  .CalenderOuter_Wrapper .fc-scroller.fc-scroller-liquid-absolute {
+      overflow: unset !important;
+  }
+  .CalenderOuter_Wrapper .fc .fc-scroller{
+      overflow: unset !important;
+  }
+}
 @media screen and (max-width:1024px){
   .connected_heading{
     font-size: 19px;
   }
-  
+  .planner_outer {
+    padding: 20px;
+  }
+  button#dropdown-basic {
+    min-width: 180px;
+}
   .cmn_outer {
     padding: 14px;
   }
@@ -475,14 +673,46 @@ line-height: 20px;
     font-size: 16px;
     margin-top: 20px;
 }
+.fc .fc-col-header-cell-cushion {
+  font-size: 11px;
+}
+.planner_outer {
+  padding: 24px 20px;
+}
+.planner_header_outer {
+  display: block;
+}
 .cmn_text_style {
   font-size: 17px;
+}
+.page_title_header{
+  margin-top: 20px;
 }
 }
 @media screen  and (max-width:767px) {
   .comment_container {
       padding-left: 62px;
   }
+  .fc .fc-toolbar-title {
+    font-size: 11px;
+
+}
+.page_title_container {
+  display: block;
+  padding: 10px;
+}
+
+.fc .fc-col-header-cell-cushion {
+  font-size: 9px;
+}
+  .planner_outer {
+    padding: 15px;
+}
+  button#dropdown-basic{
+    font-size: 13px;
+
+}
+ 
   .inter_font {
     font-size: 14px;
   }

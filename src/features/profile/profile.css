@@ -7,6 +7,7 @@
     height: 100px;
     width: 100px;
     border-radius: 50%;
+    border: 2px solid #E05905;
 }
 .update-pic-loading{
     position: absolute;
@@ -108,8 +109,11 @@ button.edit_profile_btn {
 
 .edit_content input.form-control::placeholder {
     color: #263238;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 18px;
+}
+.edit_content .form-control:focus{
+    box-shadow: unset !important;
 }
 .change_profile_outer.cmn_box_shadow.white_bg_color input {
     background: white;
@@ -160,7 +164,7 @@ button.edit_profile_btn {
 }
 .profile_information_container h5 {
     font-size: 19px;
-    font-weight: 400;
+    font-weight: 500;
     font-family: "Nunito";
     color: #263238;
 }
