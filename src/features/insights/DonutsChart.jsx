@@ -4,7 +4,8 @@ import "./Chart.css"
 import {RotatingLines} from "react-loader-spinner";
 import {Country} from 'country-state-city';
 
-const DonutsChart = ({chartData = null}) => {
+const DonutsChart = ({chartData = null, socialMediaType}) => {
+
     const COLORS = ['#E05905', '#62C2F9', '#00A3FF'];
     const [data, setData] = useState([
         {name: 'India', value: 70},
@@ -12,36 +13,45 @@ const DonutsChart = ({chartData = null}) => {
         {name: 'Others', value: 18},]
     );
 
-
     useEffect(() => {
-        if (chartData?.data?.country !== null && chartData?.data?.country !== undefined) {
-            const formattedData = getFormattedData([...chartData?.data?.country])
-            setData([
-                    {
-                        name: Country.getCountryByCode(formattedData.highest.country_code).name,
-                        value: formattedData.highest.value
-                    },
-                    {
-                        name: Country.getCountryByCode(formattedData.secondHighest.country_code).name,
-                        value: formattedData.secondHighest.value
-                    },
-                    {
-                        name: 'Others',
-                        value: formattedData.rest
-                    },
-                ]
-            )
-        }
-    }, [chartData])
+        if (chartData?.data?.country !== null && chartData?.data?.country !== undefined && socialMediaType !== null && socialMediaType !== undefined) {
+            switch (socialMediaType) {
+                case "FACEBOOK":
+                case "INSTAGRAM": {
+                    let sortedData = [...chartData?.data?.country].sort((a, b) => b.value - a.value);
+                    setData([
+                        {
+                            name: Country.getCountryByCode(sortedData[0].country_code).name,
+                            value: sortedData[0].value
+                        },
+                        {
+                            name: Country.getCountryByCode(sortedData[1].country_code).name,
+                            value: sortedData[1].value
+                        },
+                        {
+                            name: 'Others',
+                            value: sortedData.slice(2).reduce((total, {value}) => total + value, 0)
+                        },]
+                    )
+                    break;
+                }
+                case "LINKEDIN":{
+                    const groupedData = [...chartData?.data?.country].reduce((acc, obj) => {
+                        const key = obj.country_name;
+                        acc[key] = (acc[key] || 0) + obj.value;
+                        return acc;
+                    }, {});
+                    const output = Object.entries(groupedData).map(([name, value]) => ({
+                        name,
+                        value
+                    }));
+                    setData(output)
+                    break;
+                }
+            }
 
-    const getFormattedData = (data) => {
-        let sortedData = data.sort((a, b) => b.value - a.value);
-        return {
-            highest: sortedData[0],
-            secondHighest: sortedData[1],
-            rest: sortedData.slice(2).reduce((total, {value}) => total + value, 0)
-        };
-    }
+        }
+    }, [chartData, socialMediaType])
 
     const renderCustomizedLabel = ({cx, cy, midAngle, innerRadius, outerRadius, percent, index}) => {
         const radius = innerRadius + (outerRadius - innerRadius) * 0.5;

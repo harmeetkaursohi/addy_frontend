@@ -94,6 +94,7 @@ const Insight = () => {
 
     const handleSelectPage = (socialMediaType, page) => {
         setSelectedDaysForProfileVisitGraph(null)
+        dispatch(resetReducers({sliceNames: ["getDemographicsInsightReducer"]}))
         setSelectedPage({...page, socialMediaType: socialMediaType})
     }
 
@@ -211,7 +212,8 @@ const Insight = () => {
                 socialMediaType: selectedPage?.socialMediaType,
                 query: createSocialMediaProfileViewInsightsQuery({
                     days: selectedDaysForProfileVisitGraph,
-                    access_token: selectedPage.access_token
+                    access_token: selectedPage.access_token,
+                    pageId:selectedPage?.pageId
                 }, selectedPage?.socialMediaType)
             }
             dispatch(getProfileVisitsInsightsInfo(query))
@@ -541,13 +543,13 @@ const Insight = () => {
                                                                 <h3>Followers</h3>
 
                                                             </div>
-                                                            {(getDemographicsInsightData?.data?.country === null || selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST")
+                                                            {(getDemographicsInsightData?.data?.country === null ||  selectedPage.socialMediaType === "PINTEREST")
                                                                 ?
                                                                 <div className={"no_data_available text-center"}>
                                                                     <img  className="no_data_available_img" src={no_data_available} alt={"coming soon!"}/>
                                                                 </div>
                                                                 :
-                                                                <DonutChart chartData={getDemographicsInsightData}/>}
+                                                                <DonutChart chartData={getDemographicsInsightData} socialMediaType={selectedPage?.socialMediaType}/>}
                                                         </div>
                                                     </div>
                                                     {
