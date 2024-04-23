@@ -118,6 +118,15 @@ h2.cmn_title {
     .contact_content ul li a{
         font-size: 16px;
     }
+    .Contact_us_Outer {
+        padding: 0px 10px 0px 20px !important;
+    }
+    #contactForm {
+        padding: 0px 6px 0px 0px;
+    }
+    .contact_us_heading{
+        padding-left: 14px;
+    }
 }
 @media screen and (max-width: 991px){
     .contact_content{
