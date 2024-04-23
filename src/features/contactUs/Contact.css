@@ -101,6 +101,12 @@ h2.cmn_title {
 .contact_content textarea{
     margin-top: 15px;
 }
+.sendMessageBtn{
+    border: none;
+    color: white;
+    padding: 10px;
+    width: 100%;
+  }
 @media screen and (max-width: 1299px){
     h2.cmn_title{
         font-size: 30px;
@@ -141,6 +147,9 @@ h2.cmn_title {
 @media screen and (max-width: 767px){
     h2.cmn_title{
         font-size: 24px;
+    }
+    .sendMessageBtn{
+        padding: 6px 10px;
     }
     
     .contact_content h3 {

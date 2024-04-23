@@ -27,17 +27,19 @@
     border-radius: 10px;
     border: 1px solid #F3F7FD;
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 17px;
     font-style: normal;
     font-weight: 700;
     line-height: 20px;
     letter-spacing: -0.02px;
     padding: 10px;
-    padding-right: 35px;
+
     position: relative;
 }
-
+#edit_dropdown_wrapper.dropdown-toggle::after{
+    display: none !important;
+}
 .notification-creation-date {
     font-size: 11px;
     opacity: .7;
@@ -109,7 +111,7 @@ span.error-detail {
 }
 @media screen and (min-width:1600px){
     .notification_edit_button .dropdown-menu.show {
-        transform: translate(-50%, 29px) !important;
+        transform: translate(-77%, 29px) !important;
     }
 }
 @media screen and (max-width: 991px) {

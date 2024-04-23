@@ -292,7 +292,7 @@ const Profile = () => {
                                                             <div className="col-lg-6 col-md-12 col-sm-12">
                                                                 <div className="form-group">
                                                                     <label>
-                                                                        Firstname <span className="astrick">*</span>
+                                                                        First name <span className="astrick">*</span>
                                                                     </label>
                                                                     <input
                                                                         defaultValue={formik.values.firstName}
@@ -367,7 +367,7 @@ const Profile = () => {
                                                             <div className="col-lg-6 col-md-12 col-sm-12">
                                                                 <div className="form-group">
                                                                     <label>
-                                                                        Lastname <span className="astrick">*</span>
+                                                                        Last name <span className="astrick">*</span>
                                                                     </label>
                                                                     <input
                                                                         defaultValue={formik.values.lastName}

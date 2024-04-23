@@ -559,7 +559,7 @@ const CreatePost = () => {
 
                                                         {
                                                             disableImage === false && <>
-                                                                <h2 className='cmn_heading'>{jsondata.OR}</h2>
+                                                                <h2 className='cmn_heading or_heading'>{jsondata.OR}</h2>
                                                                 <div className="ai_outer_btn">
                                                                     <button
                                                                         className={`ai_btn cmn_white_text mt-2`}
