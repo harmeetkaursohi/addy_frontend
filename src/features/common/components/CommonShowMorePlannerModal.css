@@ -60,12 +60,6 @@
     white-space: nowrap;
 }
 
-.plan_grid_navigations {
-    min-width: 80px;
-}
-
-
-
 .plan_grid_navigations button {
     border-radius: 9px;
     border: 1px solid #D7D7D7;
@@ -75,10 +69,11 @@
     width: 32px;
     height: 32px;
     text-align: center;
+    /*display: flex;*/
 }
 
 .plan_grid_navigations button:first-child {
-    margin-right: 16px;
+    margin-right: 10px;
 }
 
 .plan_grid_navigations button:last-child {
@@ -135,10 +130,10 @@ img.plan_social_img {
 .world_icon{
     font-size: 20px;
     color: #939292;
-  
+
 }
 .fb_cmt_icon{
-    transform: scale(-1,1); 
+    transform: scale(-1,1);
 }
 .more_plans h2 {
     color: #000;

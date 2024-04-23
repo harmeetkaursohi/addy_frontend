@@ -1570,11 +1570,19 @@ export const getFormattedDemographicData = (data, key, socialMediaType) => {
             return formattedData
         }
         case SocialAccountProvider.LINKEDIN.toUpperCase(): {
-            let formattedData = data?.data[key]
-            if (key === "industry" || key === "seniority" || key === "function") {
-                Object.keys(formattedData).map(function (v) {
-                    formattedData[v] = {name: formattedData[v].label, value: formattedData[v].organicFollowerCounts}
-                })
+            let formattedData;
+            const keyData= data?.elements?.filter(data=>data.hasOwnProperty(key))
+            if (keyData?.length===0) {
+                formattedData= null;
+            }else{
+                if(key==="followerCountsByGeoCountry"){
+                    formattedData= keyData[0]?.followerCountsByGeoCountry?.map(data=> {
+                        return {
+                            country_name:data?.geo,
+                            value:data?.followerCounts?.organicFollowerCount + data?.followerCounts?.paidFollowerCount
+                        }
+                    });
+                }
             }
             return formattedData
         }
@@ -2659,12 +2667,19 @@ export const createSocialMediaProfileViewInsightsQuery = (queryObject, socialMed
                 metric: "profile_views"
             }
         }
+        case "LINKEDIN": {
+            return {
+                q: "organization",
+                organizationId: queryObject.pageId,
+                startDate: generateUnixTimestampFor(queryObject.days)*1000,
+                endDate: generateUnixTimestampFor("now")*1000,
+                fields: "timeRange,totalPageStatistics:(views:(allPageViews))",
+                timeGranularityType: "DAY"
+            }
+        }
         case "PINTEREST": {
             return {}
 
-        }
-        case "LINKEDIN": {
-            return {}
         }
 
     }
@@ -2681,12 +2696,14 @@ export const getFormattedInsightsForProfileViews = (data, socialMediaType) => {
         case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
             return Array.isArray(data.data) && data.data.length > 0 ? data.data[0].values || [] : [];
         }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            console.log("data===>",data)
+            return [];
+        }
         case SocialAccountProvider.PINTEREST?.toUpperCase(): {
             break;
         }
-        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
-            break;
-        }
+
     }
     return {};
 }

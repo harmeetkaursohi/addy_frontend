@@ -223,11 +223,11 @@ export const getDemographicsInsight = createAsyncThunk('insight/getDemographicsI
             })
 
         }
-        // case "LINKEDIN": {
-        //     return await getLinkedInDemographicData(data, thunkAPI).then((res) => {
-        //         return res;
-        //     })
-        // }
+        case "LINKEDIN": {
+            return await getLinkedInDemographicData(data, thunkAPI).then((res) => {
+                return res;
+            })
+        }
     }
 });
 
@@ -339,32 +339,16 @@ const getFacebookDemographicData = async (data, thunkAPI) => {
 }
 const getLinkedInDemographicData = async (data, thunkAPI) => {
     let formattedApiResponse = {
-        staffCountRange: null,
-        function: null,
-        associationType: null,
-        seniority: null,
-        geoCountry: null,
-        geo: null,
-        industry: null,
+        country: null,
     }
-    const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationalEntityFollowerStatistics/${data?.pageId}?pageAccessToken=${data?.pageAccessToken}`;
-    await baseAxios.get(apiUrl, setAuthenticationHeader(getToken())).then(demographicData => {
-        demographicData = demographicData.data
+    await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationalEntityFollowerStatistics?q=organizationalEntity&organizationId=${data?.pageId}&fields=followerCountsByGeoCountry`, setAuthenticationHeader(getToken())).then(demographicData => {
         formattedApiResponse = {
             ...formattedApiResponse,
-            staffCountRange: getFormattedDemographicData(demographicData, "staffCountRange", "LINKEDIN"),
-            function: getFormattedDemographicData(demographicData, "function", "LINKEDIN"),
-            associationType: getFormattedDemographicData(demographicData, "associationType", "LINKEDIN"),
-            seniority: getFormattedDemographicData(demographicData, "seniority", "LINKEDIN"),
-            geoCountry: getFormattedDemographicData(demographicData, "geoCountry", "LINKEDIN"),
-            geo: getFormattedDemographicData(demographicData, "geo", "LINKEDIN"),
-            industry: getFormattedDemographicData(demographicData, "industry", "LINKEDIN"),
+            country: getFormattedDemographicData(demographicData.data, "followerCountsByGeoCountry", "LINKEDIN"),
         }
     }).catch(error => {
         return thunkAPI.rejectWithValue(error.response);
     });
-
-
     return formattedApiResponse;
 }
 
@@ -384,6 +368,15 @@ export const getProfileVisitsInsightsInfo = createAsyncThunk('insight/getProfile
             const profile_view_url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?` + objectToQueryString(data.query);
             return await baseAxios.get(profile_view_url).then(res => {
                 return getFormattedInsightsForProfileViews(res.data || {}, "INSTAGRAM");
+            }).catch(error => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.response);
+            });
+        }
+        case "LINKEDIN": {
+            const profile_view_url = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationPageStatistics?`+objectToQueryString(data.query);
+            return await baseAxios.get(profile_view_url,setAuthenticationHeader(getToken())).then(res => {
+                return getFormattedInsightsForProfileViews(res.data || [], "LINKEDIN");
             }).catch(error => {
                 showErrorToast(error.response.data.error.message);
                 return thunkAPI.rejectWithValue(error.response);

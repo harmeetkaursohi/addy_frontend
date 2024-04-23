@@ -164,12 +164,12 @@ const CommonShowMorePlannerModal = ({
                                                             }
                                                         </div>
                                                         <div className="plan_grid_content">
-                                                            <div className="plan_content_header">
+                                                            <div className="plan_content_header justify-start ">
 
                                                                 {/*tags map grid starts here*/}
                                                                 <div className="plans_tags_wrapper ">
 
-                                                                    <div className="d-flex page_tags">
+                                                                    <div className="d-flex page_tags position-absolute">
                                                                         {
                                                                             plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
                                                                             plannerPost?.postPages.map((curPage, index) => {
@@ -231,7 +231,7 @@ const CommonShowMorePlannerModal = ({
                                                                     </div>
 
                                                                 </div>
-                                                                <div className="plan_grid_navigations ">
+                                                                <div className="plan_grid_navigations d-flex mt-2">
                                                                     <button
                                                                         className={isPlannerPostEditable("EDIT", plannerPost) ? "" : "disable_more_plans_grid"}
                                                                         disabled={!isPlannerPostEditable("EDIT", plannerPost)}
