@@ -517,14 +517,14 @@ export const computeAndReturnSummedDateValues = (data, socialMediaType) => {
             if (data[0]?.hasOwnProperty("followerGains")) {
                 return data?.map(element => {
                     return {
-                        endDate: convertUnixTimestampToDateTime(element?.timeRange?.end / 1000)?.date,
+                        endDate: convertUnixTimestampToDateTime(element?.timeRange?.start / 1000)?.date,
                         count: element?.followerGains?.organicFollowerGain + element?.followerGains?.paidFollowerGain
                     }
                 })
             } else {
                 return data?.map(element => {
                     return {
-                        endDate: convertUnixTimestampToDateTime(element?.timeRange?.end / 1000)?.date,
+                        endDate: convertUnixTimestampToDateTime(element?.timeRange?.start / 1000)?.date,
                         count: element?.totalShareStatistics?.impressionCount
                     }
                 })
@@ -2697,8 +2697,7 @@ export const getFormattedInsightsForProfileViews = (data, socialMediaType) => {
             return Array.isArray(data.data) && data.data.length > 0 ? data.data[0].values || [] : [];
         }
         case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
-            console.log("data===>",data)
-            return [];
+            return Array.isArray(data?.elements) && data?.elements?.length > 0 ? data?.elements || [] : [];
         }
         case SocialAccountProvider.PINTEREST?.toUpperCase(): {
             break;

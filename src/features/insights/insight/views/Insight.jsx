@@ -96,6 +96,8 @@ const Insight = () => {
         setSelectedDaysForProfileVisitGraph(null)
         dispatch(resetReducers({sliceNames: ["getDemographicsInsightReducer"]}))
         setSelectedPage({...page, socialMediaType: socialMediaType})
+        dispatch(resetReducers({sliceNames: ["getPostDataWithInsightsReducer"]}))
+
     }
 
 
@@ -111,7 +113,6 @@ const Insight = () => {
 
     useEffect(() => {
         if (selectedPage !== null && selectedPage !== undefined) {
-            dispatch(resetReducers({sliceNames: ["getPostDataWithInsightsReducer"]}))
             dispatch(getPostByPageIdAndPostStatus({
                 token: token,
                 requestBody: {
@@ -521,7 +522,7 @@ const Insight = () => {
                                                             </div>
 
                                                             <div className="profile_visit_graph_outer mt-2">
-                                                                {(selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(getProfileVisitsInsightsInfoReducerData?.data) && getProfileVisitsInsightsInfoReducerData?.data?.length === 0))
+                                                                {( selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(getProfileVisitsInsightsInfoReducerData?.data) && getProfileVisitsInsightsInfoReducerData?.data?.length === 0))
                                                                     ?
                                                                     <div className={"no_data_available text-center"}>
                                                                         <img  className ="no_data_available_img  " src={no_data_available}
@@ -529,7 +530,7 @@ const Insight = () => {
                                                                     </div>
                                                                     :
                                                                     <ProfileVisitChart
-                                                                        graphData={getProfileVisitsInsightsInfoReducerData}/>
+                                                                        graphData={getProfileVisitsInsightsInfoReducerData}  socialMediaType={selectedPage?.socialMediaType}/>
                                                                 }
                                                             </div>
 

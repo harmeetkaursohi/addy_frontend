@@ -376,7 +376,7 @@ export const getProfileVisitsInsightsInfo = createAsyncThunk('insight/getProfile
         case "LINKEDIN": {
             const profile_view_url = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationPageStatistics?`+objectToQueryString(data.query);
             return await baseAxios.get(profile_view_url,setAuthenticationHeader(getToken())).then(res => {
-                return getFormattedInsightsForProfileViews(res.data || [], "LINKEDIN");
+                return getFormattedInsightsForProfileViews(res.data || {}, "LINKEDIN");
             }).catch(error => {
                 showErrorToast(error.response.data.error.message);
                 return thunkAPI.rejectWithValue(error.response);

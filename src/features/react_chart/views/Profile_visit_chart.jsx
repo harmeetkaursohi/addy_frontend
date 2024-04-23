@@ -3,17 +3,32 @@ import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContain
 import {convertTimestampToDate} from "../../../utils/commonUtils";
 import {RotatingLines} from "react-loader-spinner";
 
-const ProfileVisitChart = ({graphData}) => {
+const ProfileVisitChart = ({graphData,socialMediaType}) => {
     const [data, setData] = useState([{day: 'Mon', uv: 4000}, {day: 'Tue', uv: 3000}, {day: 'Wed', uv: 2000}, {day: 'Thur', uv: 2780}, {day: 'Fri', uv: 1890}, {day: 'Sat', uv: 2390}, {day: 'Sun', uv: 3490},])
 
     useEffect(() => {
-        if (graphData.data && !graphData.loading && Array.isArray(graphData.data)) {
-            const dataSet = Array.isArray(graphData.data) && graphData.data.map((c => {
-                return {day: convertTimestampToDate(c?.end_time || new Date()), uv: c.value}
-            }))
-            setData(dataSet);
+        if (graphData.data && !graphData.loading && Array.isArray(graphData.data) && socialMediaType!==null && socialMediaType!==undefined) {
+            switch(socialMediaType){
+                case "FACEBOOK":
+                case "INSTAGRAM":{
+                    const dataSet = graphData.data.map((c => {
+                        return {day: convertTimestampToDate(c?.end_time || new Date()), uv: c.value}
+                    }))
+                    setData(dataSet);
+                    break;
+                }
+                case "LINKEDIN":{
+                    const dataSet = graphData.data.map((c => {
+                        return {day: convertTimestampToDate(c?.timeRange?.start || new Date()), uv: c?.totalPageStatistics?.views?.allPageViews?.pageViews}
+                    }))
+                    setData(dataSet);
+                    break;
+                }
+            }
+
         }
-    }, [graphData]);
+    }, [graphData,socialMediaType]);
+
 
     const CustomTooltip = ({active, payload, label}) => {
         if (active && payload && payload.length) {
