@@ -90,7 +90,7 @@ const ContactUs = () => {
             <div className={`cmn_container faq_section  ${sidebar ? "" : "cmn_Padding"}`}>
                 <div className="cmn_outer">
                     <div className="cmn_wrapper_outer  white_bg_color cmn_height_outer">
-                        <h2 className="dm-sans-font pt-5 pb-5">{jsondata.sidebarContent.contact}</h2>
+                        <h2 className="dm-sans-font pt-5 pb-5 contact_us_heading">{jsondata.sidebarContent.contact}</h2>
                         <div className="row">
                             <div className="col-md-12 col-lg-6 Contact_us_Outer">
                                 <div className="contact_content ">
@@ -99,7 +99,7 @@ const ContactUs = () => {
                                       {jsondata.contact_us_heading}
                                     </p>
                                     <ul>
-                                        <li>
+                                        <li className="pt-4">
                                             <CiLocationOn size={22}/>
                                             <span>
                         {jsondata.contact_address} <br/>
@@ -118,7 +118,7 @@ const ContactUs = () => {
                                 </div>
                             </div>
 
-                            <div className="col-md-12 col-lg-6 Contact_us_Outer">
+                            <div className="col-md-12 col-lg-6 Contact_us_form_Outer">
                                 <form onSubmit={formik.handleSubmit} id="contactForm">
                                     <div className=" contact_content">
                                         <div className="user-name-outer d-flex gap-3">

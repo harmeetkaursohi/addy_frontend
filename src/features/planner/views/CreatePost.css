@@ -192,6 +192,7 @@ white-space: nowrap;
     margin-right: 5px;
     border-radius: 3px;
     font-size: 12px;
+    
 
 }
 
@@ -211,7 +212,10 @@ white-space: nowrap;
     background: #FFF;
     padding: 7px;
     margin-left: 10px;
-    justify-content: space-between;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
 
 }
 
@@ -708,11 +712,7 @@ html {
     cursor: pointer;
 }
 
-input[type=checkbox] {
-    box-sizing: border-box;
-    padding: 0;
-    accent-color: #048709;
-}
+
 .preview_btn{
     border: 1px solid transparent;
     background: #f07c32;
@@ -890,6 +890,10 @@ button.loading {
     overflow-x: hidden;
     scrollbar-width: none;
 }
+.create_post_content {
+    padding: 20px;
+}
+
 @media screen and (min-width:2000px){
     .post_preview_outer{
         padding: 3rem 15rem;
@@ -981,8 +985,12 @@ button.loading {
     .preview_wrapper{
         padding: 20px;
     }
-    
-
+    .media_outer{
+     padding: 17px;
+    }
+    .create_post_content{
+        padding: 15px;
+    }
     .width_class{
         width: 100%;
     }
@@ -1132,10 +1140,6 @@ button.loading {
     .fb_likes h3 {
         font-size: 12px;
     }
-
-    
-  
-
     .caption_header {
         display: block;
     }

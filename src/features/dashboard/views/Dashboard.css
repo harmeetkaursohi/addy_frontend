@@ -104,32 +104,8 @@ button.DisConnectBtn {
 }
 
 
-button#dropdown-basic {
-    border-radius: 10px;
-    border: 1px solid #F3F7FD;
-    /* background: #F4F4F4; */
-    background-color: #F4F4F4 !important;
-    color: #5F6D7E;
-    font-family: "Nunito";
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: -0.02px;
-    padding: 10px;
-    min-width: 191px;
-    padding-right: 35px;
-    position: relative;
-    box-shadow: 2px 2px 2px 0px #f5f4f4;
-}
 
-button#dropdown-basic::after {
-    content: url("../../../images/down_arrow.svg");
-    position: absolute;
-    /*height: 50px;*/
-    border: unset;
-    right: 11px;
-}
+
 
 .followers_outer {
  
@@ -346,13 +322,7 @@ element.style {
     padding: 15px;
 }
 
-.page_title_header {
-    margin: 30px 0px;
-    border-radius: 22px;
-    overflow: hidden;
-    background-color: white;
-    box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.10);
-}
+
 
 button.facebook_connect > div > div {
     display: none !important;
@@ -405,15 +375,7 @@ button.facebook_connect {
     width: 100%;
 }
 
-.page_title_container {
-    display: flex;
-    padding: 16px 20px;
-    justify-content: space-between;
-    border-bottom: 1px solid #D1D9E2;
-    background-color: #F8F9FB;
-    align-items: center;
 
-}
 
 .dropdown_days {
     font-size: 16px;
@@ -695,9 +657,7 @@ width: 100%;
     .social_media_wrapper {
         padding: 16px;
     }
-    button#dropdown-basic {
-        min-width: 180px;
-    }
+   
     .followers_wrapper {
         margin-top: 15px;
     }
@@ -726,9 +686,7 @@ width: 100%;
     .social_media_wrapper {
         margin-top: 10px;
     }
-    .page_title_header{
-        margin-top: 20px;
-    }
+    
     
 }
 
@@ -739,10 +697,7 @@ width: 100%;
     .followers_wrapper  h5{
         font-size: 14px;
     }
-    button#dropdown-basic{
-        font-size: 13px;
-
-    }
+    
     
     select.page_title_options {
         font-size: 14px;
@@ -803,11 +758,7 @@ width: 100%;
     }
 
     /*  */
-    .page_title_container {
-        display: block;
-        padding: 10px;
-    }
-
+   
     .account_info {
         display: block;
         padding: 13px 5px;

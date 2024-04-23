@@ -225,7 +225,7 @@ const Planner = () => {
                     <button className="createPost_btn crate_btn ms-0 p-0 w-100 planner_view_more_btn"
                             onClick={(e) => handleShowMorePostModal(event)}
                     >
-
+                     
                         {
                             (event?._def?.extendedProps?.showMoreContent > 0) &&
                             "+ " + event?._def?.extendedProps?.showMoreContent

@@ -134,7 +134,9 @@ button.instagram_dropdown {
     height: 21px;
     width: 21px;
 }
-
+.insight_outer .dropdown-item{
+    background-color: transparent !important;
+}
 .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
     /* width: 100%; */
     width: 297px;

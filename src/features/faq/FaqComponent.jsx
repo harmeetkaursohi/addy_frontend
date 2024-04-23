@@ -36,7 +36,7 @@ const FaqComponent = () => {
             <div className={`cmn_container faq_section  ${sidebar ? "" : "cmn_Padding"}`}>
 
                 <div className="cmn_outer">
-                    <div className="white_bg_color cmn_height_outer">
+                    <div className="white_bg_color cmn_height_outer faq_container">
                         <div className="faq_wrapper">
                             <h2 className="text-center mt-5">{jsondata.faq_heading}<br></br> {jsondata.how_can_we_help_you_text}</h2>
                             <p className="pt-2 text-center">{jsondata.faq_title}</p>

@@ -1,11 +1,5 @@
-.planner_header_outer {
-    display: flex;
-    justify-content: space-between;
-    
-}
-.CalenderOuter_Wrapper.fc .fc-view-harness{
-    margin-top: 16px;
-}
+
+
 .CalenderOuter_Wrapper{
     padding-top: 0px;
     background: white;
@@ -20,23 +14,14 @@ button.planner_view_more_btn {
     color: black;
 }
 
-.create_post_btn {
-    border: none;
-    padding: 10px 21px;
-    border-radius: 6px;
-    background: #E05905;
-}
+
 .current-date{
     background-color: red;
 }
 .planner_tag_container{
     position: relative;
 }
-.planner_outer {
-    padding: 24px;
 
-   
-}
 
 /* .calendar_card {
     background: #F4F8FE;
@@ -102,10 +87,7 @@ button.planner_view_more_btn {
     color: unset;
 }
 
-.fc .fc-button:focus {
-    box-shadow: unset;
-    outline: unset;
-}
+
 
 .planner_header h6 {
     color: #5F6D7E;
@@ -140,23 +122,9 @@ border: 1px solid #C3C3C3;
 background-color: white;
 padding: 9px 25px;
 } */
-.fc .fc-button-primary:not(:disabled).fc-button-active:focus,
-.fc .fc-button-primary:not(:disabled):active:focus {
-    box-shadow: unset
-}
 
-.fc .fc-button-primary:not(:disabled).fc-button-active,
-.fc .fc-button-primary:not(:disabled):active {
-    background-color: transparent;
-    border-color: transparent;
-    color: #5F6D7E;
-}
 
-.fc .fc-button-primary {
-    color: #5F6D7E;
-    background-color: transparent;
-    border: none;
-}
+
 
 .fc-header-toolbar.fc-toolbar {
     padding: 18px 0px;
@@ -165,21 +133,9 @@ padding: 9px 25px;
 .create_post_btn_Wrapper{
     display: flex;
 }
-.fc .fc-toolbar-title {
-    color: #292929;
-    font-family: "Nunito";
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 38px;
-    letter-spacing: -0.16px;
-}
 
-.fc .fc-button-primary:hover {
-    background-color: unset;
-    border-color: unset;
-    color: unset;
-}
+
+
 
 .cmn_event_box {
     width: 24px;
@@ -263,10 +219,7 @@ button.fc-customText-button.fc-button.fc-button-primary {
     letter-spacing: -0.016px;
 }
 
-.fc .fc-daygrid-day.fc-day-today {
-    /* background: #AAE0FF; */
-    background-color: unset !important;
-}
+
 
 
 .custom_event {
@@ -286,11 +239,7 @@ button.fc-customText-button.fc-button.fc-button-primary {
     opacity: 0.3;
 }
 
-.fc-h-event {
-    background-color: unset;
-    border: unset
 
-}
 
 .custom_event img {
     height: 14px;
@@ -306,9 +255,7 @@ button.fc-customText-button.fc-button.fc-button-primary {
     line-height: normal;
 }
 
-button.fc--button.fc-button.fc-button-primary {
-    display: none;
-}
+
 
 .fc-dayGridMonth-view.fc-view.fc-daygrid {
     background: white !important;
@@ -346,25 +293,8 @@ button.fc--button.fc-button.fc-button-primary {
 
 }
 
-.calender_outer_wrapper table tbody {
-    background: #fff;
 
-}
 
-.calender_outer_wrapper .fc-theme-standard th, .calender_outer_wrapper table tbody tr td[role="presentation"] {
-    border: transparent;
-}
-
-.calender_outer_wrapper table tbody tr td {
-    outline: 1px solid #ddd;
-    border: transparent;
-    height: 100px;
-}
-
-.calender_outer_wrapper .fc-dayGridMonth-view.fc-view.fc-daygrid {
-    background: transparent !important;
-    border: transparent;
-}
 
 
 
@@ -376,24 +306,24 @@ button.fc--button.fc-button.fc-button-primary {
     opacity: 0.1;
 }
 
-/* CSS to hide the calendar's body and other elements */
-.calendar-container.hidden .fc-view, /* Hide the calendar view */
-.calendar-container.hidden .fc-toolbar.fc-header-toolbar .fc-center, /* Hide the center part of the toolbar */
-.calendar-container.hidden .fc-toolbar.fc-header-toolbar .fc-right, /* Hide the right part of the toolbar */
-.calendar-container.hidden .fc-dayGridMonth-view {
-    display: none;
-}
 
-/*Full Calender Set Height*/
-.calendar-container .fc-view-harness.fc-view-harness-active {
-    height: 100% !important;
- 
-}
+
+
+
 .CalenderOuter_Wrapper  .fc-view-harness.fc-view-harness-active  {
     margin-top: 20px !important;
 }
 .calendar-container td {
     height: 10px;
+}
+button.planner_view_more_btn {
+    color: black;
+    border: none;
+    background: transparent;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Nunito';
 }
 div.fc .fc-daygrid-day-frame {
 
@@ -409,10 +339,7 @@ a.fc-daygrid-dot-event:hover {
     height: 34px;
 }
 
-.fc .fc-toolbar.fc-header-toolbar {
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-}
+
 .create_post_btn_Wrapper .draft_btn{
     min-width: unset;
     padding: 6px;
@@ -472,24 +399,7 @@ ul.post_outer_list li h4 {
     color:#292929;
     
 }
-.CalenderOuter_Wrapper .fc .fc-toolbar.fc-header-toolbar {
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-    padding-top: 0px;
-    justify-content: center;
-}
-.CalenderOuter_Wrapper .fc .fc-button .fc-icon{
-    color: #B94D09;
-}
-.CalenderOuter_Wrapper table.fc-scrollgrid-sync-table {
-    width: 100% !important;
-}
-.CalenderOuter_Wrapper .fc-daygrid-body.fc-daygrid-body-unbalanced{
-    width: 100% !important;
-}
-.CalenderOuter_Wrapper .fc-scroller {
-    overflow: unset;
-}
+
 /* .cal_Div.w-100.test {
     border-left: 4px solid #098FB9;
     border-top-right-radius: 15px;
@@ -516,35 +426,8 @@ ul.post_outer_list li h4 {
 .custom1{
     background-color: red;
 }
- @media screen and (min-width:1900px){
-    
-    .planner_outer {
-        width: 100%;
-        max-width: 78%;
-        margin: auto;
-    }
- }
-@media screen and (min-width:1600px) and (max-width:1899px){
-    
-    .planner_outer {
-        width: 100%;
-        max-width: 84%;
-        margin: auto;
-    }
-    
-}
-@media screen and (min-width:1024px){
-    .CalenderOuter_Wrapper .fc .fc-scroller-harness{
-        overflow: unset !important;
-    }
-    
-    .CalenderOuter_Wrapper .fc-scroller.fc-scroller-liquid-absolute {
-        overflow: unset !important;
-    }
-    .CalenderOuter_Wrapper .fc .fc-scroller{
-        overflow: unset !important;
-    }
-}
+
+
 @media screen and (max-width:1280px){
     .create_post_btn_Wrapper{
         flex-wrap: wrap;
@@ -569,9 +452,7 @@ ul.post_outer_list li h4 {
       }
 }
 @media screen and (max-width:1024px) {
-  .planner_outer {
-    padding: 20px;
-  }
+ 
   
   .custom_event{
     justify-content: unset;
@@ -598,9 +479,7 @@ ul.schdeuled_post_list li h4{
 }
 }
 @media screen and (max-width: 991px) {
-    .planner_header_outer {
-        display: block;
-    }
+   
     .calendar_card {
     height: 60px;
     overflow: scroll;
@@ -630,16 +509,12 @@ ul.schdeuled_post_list li h4{
     .event_group h5 {
         font-size: 13px;
     }
-    .planner_outer {
-        padding: 24px 20px;
-    }
+   
 
     .event_group {
         border-right: unset;
     }
-    .fc .fc-col-header-cell-cushion {
-        font-size: 11px;
-    }
+    
     .planner_header h2 {
         font-size: 24px;
     }
@@ -649,18 +524,14 @@ ul.schdeuled_post_list li h4{
     .planner_header h6 {
         font-size: 14px;
     }
-    .fc .fc-col-header-cell-cushion {
-        font-size: 9px;
-    }
+    
     .planner_header h2 {
         font-size: 22px;
     }
     .card-body.post_card{
         padding: 0px 12px 12px;
     }
-    .planner_outer {
-        padding: 15px;
-    }
+   
     .events_wrapper {
         display: block;
 
@@ -690,10 +561,6 @@ ul.schdeuled_post_list li h4{
     }
 
 
-    .fc .fc-toolbar-title {
-        font-size: 11px;
-
-    }
 
     .filter_options {
         position: unset;

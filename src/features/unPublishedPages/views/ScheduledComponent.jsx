@@ -142,6 +142,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                             <h3 className={" upcoming_post_content mb-0"}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
                                              </div>
 
+                                             <h6 className='upcoming_post_heading'>Hashtags: </h6>
 
                                             <div className={'mb-2 hash_tags_outer_container'}>
                                                 <span

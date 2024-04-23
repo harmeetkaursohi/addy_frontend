@@ -29,12 +29,6 @@
     width: 110px
 }
 
-img.post_img {
-    height: 300px;
-    object-fit: contain;
-    object-position: center;
-}
-
 ul.slick-dots {
     bottom: 18px;
 
@@ -47,11 +41,5 @@ ul.slick-dots li.slick-active button:before {
 ul.slick-dots li button:before {
     opacity: 1;
     color: #a69b9b;
-}
-@media screen and (min-width:2560px) {
-    img.post_img {
-        height: 500px;
-        min-height: 100%;
-    }
 }
 
