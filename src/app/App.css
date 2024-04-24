@@ -463,12 +463,13 @@ button#dropdown-basic {
 }
 
 button#dropdown-basic::after {
-  content: url("../../../images/down_arrow.svg");
-  position: absolute;
-  /*height: 50px;*/
+  content: url("../images/down_arrow.svg") ;
+  position: absolute ;
+
   border: unset;
   right: 11px;
 }
+
 .create_post_btn {
   border: none;
   padding: 10px 21px;
