@@ -1,16 +1,11 @@
-.login_outer {
-    width: 70%;
 
-}
 .cursor_pointer{
     cursor: pointer;
 }
 .bg_color {
     background: #1E1E1E;
 }
-.bg_light_orange {
-    background: #fff6f2;;
-}
+
 
 
 .social_login_outer {
@@ -75,21 +70,9 @@
 background-color: white;
 }
 
-.login_wrapper {
-    min-height: 100vh;
-    width: 100%;
-    overflow: hidden;
-}
 
-.addy_img h2 {
-    color: #202020;
-    text-align: center;
-    font-size: 34px;
-    font-weight: 800;
-    line-height: 40px;
-    letter-spacing: -0.8px;
-    margin-top: 25px;
-}
+
+
 
 .logo_outer img {
     width: 160px;
@@ -103,26 +86,10 @@ background-color: white;
     box-shadow: unset !important;
 }
 
-.addy_img p {
-    color: #636364;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 21px; 
-    margin-top: 6px;
-    margin-bottom: 0px;
-}
 
-.reach_user_outer h2 {
-    color: #0F1734;
-    font-size: 19px;
-    font-weight: 600;
-    line-height: 30px;
-    letter-spacing: -0.22px;
-}
-.reach_user_outer img{
-    height: 450px;
-}
+
+
+
 
 
 .logo_outer {
@@ -130,14 +97,7 @@ background-color: white;
     justify-content: center;
 }
 
-.form-group label {
-    color: #181818;
-    font-size: 17px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 20px;
-    
-}
+
 
 .sign_up {
     color: #F07C33;
@@ -162,22 +122,7 @@ background-color: white;
 
 }
 
-.login_btn {
-    background-color: #F07C33;
-    color: #FFF;
-    font-family: "Nunito";
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 24px;
-    border: none;
-    width: 100%;
-    padding: 10px 0px;
-    border-radius: 10px;
-    margin-top: 25px;
-    height: 48px;
 
-}
 
 .login_google_btn {
     background-color: white;
@@ -187,25 +132,11 @@ background-color: white;
 }
 
 
-.form-group input.form-control::placeholder {
-    color: #636364;
-    font-family: "Nunito";
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 22px;
-    letter-spacing: -0.015px;
-}
 
 
 
-.form-group {
-    margin-top: 10px;
-}
-.form-group input{
-    border-radius: 11px !important;
 
-}
+
 .cmn_heading {
     color: #5F6D7E;
     text-align: center;
@@ -219,13 +150,7 @@ background-color: white;
 
 }
 
-.addy_container {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
+
 .gr_previous_outer{
     height: 40px;
     width: 40px;
@@ -251,31 +176,9 @@ background-color: white;
         margin-bottom:20px !important
     }
  }
-@media screen and (min-width:1499px){
-    .reach_user_outer img {
-        height: 550px;
-    }
-}
-@media screen and  (max-width: 1440px) {
-   
-    .login_btn {
-        height: 44px;
-        font-size: 17px;
-    }
-}
-@media screen and (max-width:1280px){
-    .addy_img h2{
-        font-size: 25px;
-        margin-top: 20px;
-    }
-    .reach_user_outer img {
-        height: 350px;
-    }
-    .reach_user_outer h2{
-        font-size: 16px;
-    }
-    
-}
+
+
+
 @media screen and(max-width:1024px) {
     .or_text::before{
         right: 6px;
@@ -285,39 +188,22 @@ background-color: white;
     }
 }
 @media screen and (max-width:991px){
-    .addy_container {
-        margin: 0px 0px 30px;
-    }
+    
     .gr_previous_outer {
         margin-left: 20px;
     }
     
 }
 @media screen and (max-width: 767px) {
-    .addy_img h2 {
-        font-size: 25px;
-    }
-
-    .addy_img p {
-        font-size: 14px;
-    }
-
-    .login_outer {
-        padding: 20px;
-        width: 85%;
     
-    }
+
+    
 
     .addy_outer {
         padding: 20px;
     }
 
-    button.login_btn {
-        padding: 9px;
-        font-size: 16px;
-        height: 42px;
     
-    }
 
 
     .cmn_heading {
@@ -328,12 +214,8 @@ background-color: white;
         font-size: 15px;
     }
 
-    .reach_user_outer h2 {
-        font-size: 14px;
-    }
-    .reach_user_outer img{
-        height: 100%;
-    }
+    
+   
     
 
     .logo_outer img {
