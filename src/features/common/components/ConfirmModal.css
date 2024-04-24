@@ -3,12 +3,7 @@
     padding: 30px 0px;
 }
 
-.confirm_btn {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
+
 
 .alert_modal_body div.modal-content {
     border-radius: 10px;
@@ -23,11 +18,7 @@
     font-weight: 500;
 }
 
-.confirm_btn button {
-    border-radius: 5px;
-    height: 40px;
-    width: 110px
-}
+
 
 ul.slick-dots {
     bottom: 18px;

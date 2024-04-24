@@ -151,6 +151,9 @@ h2.cmn_title {
     .sendMessageBtn{
         padding: 6px 10px;
     }
+    .Contact_us_Outer {
+        padding: 0 10px 0 10px !important;
+    }
     
     .contact_content h3 {
         font-size: 20px;

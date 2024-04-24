@@ -89,13 +89,7 @@ button.planner_view_more_btn {
 
 
 
-.planner_header h6 {
-    color: #5F6D7E;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: -0.016px;
-}
+
 
 .planner_header h2 {
     color: #2E3646;
@@ -423,11 +417,13 @@ ul.post_outer_list li h4 {
     padding: 0px !important;
     margin: 10px 5px 0px 0px !important;
 } */
-.custom1{
-    background-color: red;
+
+
+.cal_Div.w-100.test {
+    overflow: scroll;
+    height: 61px;
+    scrollbar-width: none;
 }
-
-
 @media screen and (max-width:1280px){
     .create_post_btn_Wrapper{
         flex-wrap: wrap;
@@ -451,16 +447,21 @@ ul.post_outer_list li h4 {
         font-size: 16px;
       }
 }
+@media screen and (max-width:1199px){
+    .custom_event{
+        justify-content: unset;
+        flex-wrap: wrap;
+        padding:6px 4px;
+        margin-top: 4px;
+    
+    }
+}
 @media screen and (max-width:1024px) {
  
-  
   .custom_event{
-    justify-content: unset;
     flex-wrap: wrap;
-    padding:6px 4px;
-    margin-top: 4px;
-
-}
+  }
+ 
 .cal_Div.w-100.test {
     height: 50px;
     overflow: scroll;
@@ -503,9 +504,7 @@ ul.schdeuled_post_list li h4{
     .planner_create_post {
         margin-top: 20px;
     }
-    .draft_createPost_outer{
-        margin-top: 10px;
-    }
+    
     .event_group h5 {
         font-size: 13px;
     }
@@ -521,10 +520,15 @@ ul.schdeuled_post_list li h4{
 }
 
 @media screen and (max-width: 767px) {
-    .planner_header h6 {
-        font-size: 14px;
+    .fc .fc-daygrid-day-number{
+        padding: 4px 1px !important;
     }
-    
+    .create_post_btn_Wrapper .create_post_btn {
+        padding: 7px;
+    }
+    .create_post_btn_Wrapper .draft_btn {
+        padding: 7px;
+    }
     .planner_header h2 {
         font-size: 22px;
     }

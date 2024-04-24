@@ -51,7 +51,7 @@ const Dashboard = () => {
                 </div>
                 {/* upcoming post */}
                 <div className="cmn_outer pt-0">
-                    <div className="cmn_wrapper_outer white_bg_color cmn_height_outer">
+                    <div className="cmn_wrapper_outer white_bg_color ">
                     <ScheduledComponent scheduledData={getAllPostsByCriteriaData}/>
                     </div>
                 </div>

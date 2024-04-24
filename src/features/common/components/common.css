@@ -306,7 +306,11 @@ gap: 16px;
         font-size: 12px;
     }
 }
-
+@media screen and (max-width:991px){
+    .not_connect_heading {
+        font-size: 23px;
+    }
+}
 @media screen and (max-width:767px) {
     .linkedin_dropdown{
         display: none;
@@ -365,7 +369,7 @@ gap: 16px;
     line-height: 22px;
    }
    .video_player_outer{
-    height: unset !important;
+    height: 100% !important;
    }
     
 }

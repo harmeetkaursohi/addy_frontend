@@ -129,7 +129,12 @@ button.instagram_dropdown {
     line-height: 20px;
 
 }
-
+.insight_inner_content img.post_img {
+    height: 300px;
+    object-fit: cover;
+    width: 100%;
+    object-position: center;
+}
 .Social_media_platform img {
     height: 21px;
     width: 21px;

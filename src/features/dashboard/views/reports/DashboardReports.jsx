@@ -134,7 +134,7 @@ export const DashboardReports = () => {
 
 
                 {getAllConnectedSocialAccountData?.loading || connectedPagesReducer?.loading || facebookPageListReducer?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading ?
-                    <div className="cmn_background p-5 text-center ">
+                    <div className="cmn_background p-5 text-center account_not_connect_imcontainer ">
                         <CommonLoader classname={"cmn_loader_outer"}/>
                     </div> :
 
@@ -142,7 +142,7 @@ export const DashboardReports = () => {
 
                         ?
 
-                        <div className="cmn_background p-5 text-center ">
+                        <div className="cmn_background p-5 text-center account_not_connect_imcontainer">
                             <img src={noAccountData} alt="" className="img-fluid"/>
                         </div>
 

@@ -131,6 +131,9 @@ span.error-detail {
         display: block;
         padding-top: 36px;
     }
+    .clear-all-notifications {
+        margin-top: 7px;
+    }
     .notification_message_outer{
         width: 100%;
     }

@@ -124,20 +124,8 @@ const Planner = () => {
         const dateString = eventStartDate;
         const date = new Date(dateString);
         const dayOfMonth = date.getDate();
-
-        let currentDateElements = document.querySelectorAll(".fc .fc-daygrid-day.fc-day-today");
-        let currentDayOfMonth = new Date().getDate()
-
-        currentDateElements.forEach(data => {
-            if (dayOfMonth !== currentDayOfMonth) {
-                data.style.setProperty('background-color', '#AAE0FF', 'important');
-
-            } else {
-
-                data.style.setProperty('background-color', '', 'important');
-
-            }
-        });
+         
+       
 
         let backgroundColor
         let border
@@ -490,10 +478,17 @@ const Planner = () => {
                                                 }}
                                                 dayCellContent={(arg) => {
                                                     const cellDate = arg.date;
+
+                                                    const dateString = cellDate;
+                                                    const date = new Date(dateString);
+                                                    const dayOfMonth = date.getDate();
+                                                    let currentDayOfMonth = new Date().getDate()
+
+                                                    
                                                     if (cellDate !== null) {
                                                         return (
-                                                            <div className="calendar_card1">
-                                                                {arg?.dayNumberText}
+                                                            <div className={currentDayOfMonth!==dayOfMonth?"calendar_card1":"current_date_outer"}>
+                                                               <h3> {arg?.dayNumberText}</h3>
                                                             </div>
                                                         );
                                                     }
