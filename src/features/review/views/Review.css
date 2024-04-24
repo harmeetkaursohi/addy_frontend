@@ -111,10 +111,7 @@ img.acc_not_connected_img {
     display: grid;
     place-content: center;
 }
-.review-post-icon{
-    height:27px;
-    width: 27px;
-}
+
 .no-cmnt-outer {
     display: flex;
     align-items: center;
@@ -407,10 +404,7 @@ p.disable-reply-comment {
     .no-post-review{
         font-size: 16px;
     }
-    .review-post-icon {
-        height: 20px;
-        width: 20px;
-    }
+    
    
 }
 
