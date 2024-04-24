@@ -324,6 +324,7 @@ p.disable-reply-comment {
 }
 .review_likes_list {
     gap: 34px;
+    margin-top: 20px;
 }
 .not_available_content_outer{
     display: flex;

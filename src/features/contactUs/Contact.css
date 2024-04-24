@@ -106,6 +106,7 @@ h2.cmn_title {
     color: white;
     padding: 10px;
     width: 100%;
+    border-radius: 6px;
   }
 @media screen and (max-width: 1299px){
     h2.cmn_title{
