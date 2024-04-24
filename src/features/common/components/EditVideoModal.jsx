@@ -307,7 +307,7 @@ const EditVideoModal = ({
                             onClick={handleClose}> Cancel
                     </button>
                     <button disabled={videoTrimmedUrl.length === 0} onClick={saveHandler} type="button"
-                            className={`ms-3 connect_btn ${videoTrimmedUrl.length === 0 ? "disabled-button" : "cmn_btn_color cmn_connect_btn  "}`}
+                            className={`ms-3 disconnect_btn ${videoTrimmedUrl.length === 0 ? "disabled-button" : "cmn_btn_color cmn_connect_btn  "}`}
                     > Save
                     </button>
                 </div>

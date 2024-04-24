@@ -386,6 +386,16 @@ svg.comment-edit-del-icon {
         object-fit: unset;
         height: unset;
     }
+    .reply-emoji-picker-outer {
+        right: 10px;
+        left: 0px;
+    }
+    .comment_review_wrapper{
+        height: 100%;
+    }
+    .comment_review_outer{
+        height: 100% !important;
+    }
     .md_cancel_outer{
         position: unset;
     }

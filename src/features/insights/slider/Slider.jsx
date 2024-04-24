@@ -23,7 +23,7 @@ import {useAppContext} from "../../common/components/AppProvider";
 const Carousel = ({selectedPage, cacheData}) => {
 
     return (
-        <div className="slider_outer_container content_outer">
+        <div className="slider_outer_container ">
             <DisplayPosts selectedPage={selectedPage} insightsCache={cacheData}/>
         </div>
     );

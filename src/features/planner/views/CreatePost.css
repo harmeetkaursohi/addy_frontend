@@ -1136,6 +1136,7 @@ button.loading {
     }
     .media_outer{
         padding: 10px;
+        border-radius: 12px;
     }
     .fb_likes h3 {
         font-size: 12px;

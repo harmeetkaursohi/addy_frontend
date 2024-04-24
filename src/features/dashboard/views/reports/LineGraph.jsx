@@ -27,10 +27,27 @@ export const LineGraph = ({reportData}) => {
     const [labels, setLabels] = useState(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
     const [dataSet, setDataSet] = useState([],)
     const [data, setData] = useState({labels, datasets: dataSet});
+  
+    const [aspectRatio, setAspectRatio] = useState(true);
 
+    useEffect(() => {
+      const handleResize = () => {
+        if(window.innerWidth <= 767){
+            setAspectRatio(false)
+        }
+       
+      };
+  
+      window.addEventListener('resize', handleResize);
+  
+      handleResize();
 
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
     const options = {
         responsive: true,
+        maintainAspectRatio: aspectRatio,
         plugins: {
             legend: {
                 position: 'bottom',

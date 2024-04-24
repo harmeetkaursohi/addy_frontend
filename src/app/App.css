@@ -58,6 +58,14 @@ ul {
   background-color: #fff6f2;
   transition: all ease-in 0.7s;
 }
+.tooltip-inner {
+  background-color: #ee7817 !important; 
+  color: #fff; 
+  border: 1px solid #ee7817; 
+}
+.tooltip-arrow::before {
+  border-right-color: #ee7817 !important; 
+}
 .cmn_height_outer{
   height: 100%;
   min-height: 100vh;
@@ -405,7 +413,17 @@ line-height: 20px;
   transition: all 2s ease 
 
 }
-
+.confirm_btn {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.confirm_btn button {
+  border-radius: 5px;
+  height: 40px;
+  width: 110px
+}
 img.post_img {
   height: 300px;
   object-fit: contain;
@@ -474,6 +492,25 @@ button#dropdown-basic::after {
 .fc .fc-daygrid-day.fc-day-today {
   /* background: #AAE0FF; */
   background-color: unset !important;
+}
+.calendar_card1 h3 {
+  font-size: 16px;
+}
+.current_date_outer {
+  color: white;
+  background: #E05905;
+  border-radius: 20px;
+  height: 29px;
+  width: 30px;
+  text-align: center;
+  margin: 0px 3px;
+}
+.current_date_outer h3{
+  font-size: 14px;
+    transform: translate(0px, 7px);
+}
+div#button-tooltip {
+  margin-left: 6px !important;
 }
 .calendar-container .fc-view-harness.fc-view-harness-active {
   height: 100% !important;
@@ -565,6 +602,54 @@ input[type=checkbox] {
 .calendar-container.hidden .fc-dayGridMonth-view {
     display: none;
 }
+.connection-error-close-btn {
+  border: 1px solid rgb(240, 124, 51);
+  border-radius: 5px;
+  box-shadow: unset;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0px 10px;
+  height: 39px;
+  background: rgb(240, 124, 51);
+  min-width: 108px;
+}
+img.acc_not_connected_img.mt-0 {
+  width: 100%;
+  height: 350px;
+}
+.planner_header h6 {
+  color: #5F6D7E;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.016px;
+}
+.cmn_connect_btn {
+  font-family: "Nunito";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.014px;
+  padding: 7px 14px
+}
+.disconnect_btn {
+  border-radius: 5px;
+  border: 1px solid #D1D9E2;
+  background: #E6E9EC;
+  color: #393939;
+  min-width: 111px;
+  height: 39px;
+}
+.connect_btn {
+  border-radius: 5px;
+  border: none;
+  color: #F8F9FB;
+  min-width: 111px;
+  height: 39px;
+}
 @keyframes fadeInLeft {
   0% {
      opacity: 0.2;
@@ -599,6 +684,10 @@ input[type=checkbox] {
     width: 100%;
     max-width: 78%;
     margin: auto;
+}
+img.acc_not_connected_img.mt-0 {
+  height: 500px;
+  width: 100%;
 }
 }
 
@@ -638,6 +727,12 @@ input[type=checkbox] {
   .connected_heading{
     font-size: 22px;
   }
+  .disconnect_btn {
+    margin-top: 10px;
+ }
+ .connect_btn {
+  margin-top: 10px;
+}
   .cmn_wrapper_outer {
     padding: 0px 15px 30px;
   }
@@ -673,6 +768,10 @@ input[type=checkbox] {
     font-size: 16px;
     margin-top: 20px;
 }
+.cmn_text_heading{
+  font-size: 22px;
+}
+
 .fc .fc-col-header-cell-cushion {
   font-size: 11px;
 }
@@ -693,9 +792,32 @@ input[type=checkbox] {
   .comment_container {
       padding-left: 62px;
   }
+  .connect_btn, .disconnect_btn {
+    margin-top: 15px;
+}
+
+  .cmn_small_heading {
+    font-size: 14px;
+}
+  .planner_header h6 {
+    font-size: 14px;
+}
   .fc .fc-toolbar-title {
     font-size: 11px;
 
+}
+img.acc_not_connected_img.mt-0 {
+  width: 100%;
+  height: unset;
+}
+.current_date_outer{
+margin: 0px;
+height: 20px;
+width: 20px;
+}
+.current_date_outer h3 {
+  transform: translate(0px, 4px);
+  font-size: 13px;
 }
 .page_title_container {
   display: block;

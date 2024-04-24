@@ -182,14 +182,7 @@ button.edit_profile_btn {
 .ImSpinner_icon{
     font-size: 20px;
 }
-.tooltip-inner {
-    background-color: #ee7817 !important; 
-    color: #fff; 
-    border: 1px solid #ee7817; 
-  }
-  .tooltip-arrow::before {
-    border-right-color: #ee7817 !important; 
-  }
+
 
   .custom-tooltip .tooltip-arrow::before {
     border-right-color: transparent !important; 

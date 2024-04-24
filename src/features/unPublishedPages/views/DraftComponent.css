@@ -413,6 +413,9 @@ button.outline_btn.schedule_btn{
         margin-top: 10px;
 
     }
+    .draft_createPost_outer{
+        margin-top: 10px;
+    }
     .draft_createPost_outer button{
     font-size: 14px;
     padding: 10px 5px;
