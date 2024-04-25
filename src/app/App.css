@@ -688,6 +688,13 @@ img.acc_not_connected_img.mt-0 {
   letter-spacing: -0.014px;
   padding: 7px 14px
 }
+.login_form h3 {
+  margin-top: 20px;
+  font-weight: 700;
+  color: #A0A0A0;
+  font-size: 18px;
+  text-align: center;
+}
 .disconnect_btn {
   border-radius: 5px;
   border: 1px solid #D1D9E2;
@@ -763,10 +770,30 @@ img.acc_not_connected_img.mt-0 {
   height: 48px;
 
 }
+.logo_outer img {
+  width: 160px;
+  height: unset;
+}
+.logo_outer {
+  display: flex;
+  justify-content: center;
+}
+.addy_outer {
+  padding: 0px 95px 20px;
+  width: 100%;
+
+}
 .login_wrapper {
   min-height: 100vh;
   width: 100%;
   overflow: hidden;
+}
+.sign_up {
+  color: #F07C33;
+  font-size: 18px;
+  font-weight: 700;
+
+ 
 }
 @keyframes fadeInLeft {
   0% {
@@ -836,6 +863,9 @@ img.acc_not_connected_img.mt-0 {
     margin: auto;
    
   }
+  .login_form h3{
+    margin-bottom:20px !important
+}
   .login_outer.bg_white_cream {
     padding: 20px;
 }
@@ -943,6 +973,16 @@ img.acc_not_connected_img.mt-0 {
   .comment_container {
       padding-left: 62px;
   }
+  .addy_container{
+    min-height: unset;
+  }
+  .reach_user_outer h2{
+    margin-top: 20px !important;
+  }
+  .sign_up {
+    font-size: 15px;
+}
+
   .addy_img h2 {
     font-size: 25px;
 }
@@ -1047,4 +1087,13 @@ button.swal2-cancel.cancelButton.swal2-styled.swal2-default-outline{
 h2#swal2-title {
 font-size: 19px;
 }
+
+.addy_outer {
+  padding: 20px;
+}
+.logo_outer img {
+  height: 45px;
+  width: 129px;
+}
+
 }
