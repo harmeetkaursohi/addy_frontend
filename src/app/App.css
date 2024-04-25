@@ -412,6 +412,9 @@ line-height: 20px;
   font-size: 17px;
   color: #292929;
 }
+.cursor-pointer{
+  cursor: pointer;
+}
 .dropdown_btn .dropdown-item.disabled, .dropdown-item:disabled {
 
   pointer-events: none !important;
