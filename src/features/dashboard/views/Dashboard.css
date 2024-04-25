@@ -450,9 +450,7 @@ div.upcomingPostBtn_Outer button{
 .No_Upcoming_Outer img{
     width: 400px;
 }
-div.noDraftPosts_outer {    
-    background-color:#fff;
-}
+
 
 .postdata_container{
     height: 40px;
@@ -736,6 +734,9 @@ width: 100%;
     .connectDisconnect_btn_outer {
         flex-wrap: wrap;
     }
+    .no_acc_container{
+        padding: 20px !important;
+    }
 
     button.DisConnectBtn {
         width: 115px !important;
@@ -746,9 +747,7 @@ width: 100%;
         width: 115px !important;
         height: 35px !important;
     }
-    div.noDraftPosts_outer {
-        padding: 20px !important;
-    }
+   
     div.cmn_background {
         min-height: 100%;
         padding: 14px !important;
@@ -776,10 +775,7 @@ width: 100%;
     color: purple !important;
     font-size: 24px ;
 }
-.pinterest-icon {
-    color: #e60023 !important;
-    font-size: 24px ;
-}
+
 .btn-with-fixed-width {
     /*min-width: 120px; !* Adjust this value to your desired maximum width *!*/
     /*overflow: hidden;*/

@@ -282,7 +282,7 @@ div.sidebar_item_outers {
 
     ul.sidebar_item li:last-child{
     bottom: 0;
-    position: absolute;
+    position: fixed;
     margin-bottom: 10px;
     }
 

@@ -130,7 +130,11 @@ button.fc-timeGridDay-button.fc-button.fc-button-primary {
 }
 .upcoming_post_outer .draft-outer .post_image_outerwrapper img{
 width: 100%;
-object-fit: cover;  
+object-fit: cover; 
+height: 100%; 
+}
+.draft_container img.post_img {
+    height: 270px;
 }
 .posted-on-txt {
     font-size: 21px;
@@ -326,6 +330,9 @@ button.outline_btn {
 .post-image-outer{
     position: relative;
 }
+.upcoming_post_outer .video_player_outer {
+    height: 196px !important;
+}
 @media screen and (min-width:2560px){
     div.draft-outer .post_image_outerwrapper {
         height: 500px;
@@ -344,7 +351,11 @@ button.outline_btn {
     }
 }
 
-
+@media screen and (min-width:1499px){
+    .upcoming_post_outer .video_player_outer {
+        height: 350px !important;
+    }
+}
 @media screen and (min-width:992px) {
  
 .mt-4.upcomingPostBtn_Outer button {
@@ -413,6 +424,7 @@ button.outline_btn.schedule_btn{
         margin-top: 10px;
 
     }
+   
     .draft_createPost_outer{
         margin-top: 10px;
     }

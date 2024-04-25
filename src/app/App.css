@@ -605,8 +605,33 @@ input[type=checkbox] {
   align-items: center;
 
 }
+div:where(.swal2-container) button:where(.swal2-styled).swal2-default-outline:focus{
+  box-shadow: unset !important;
+}
+.pinterest-icon {
+  color: #e60023 !important;
+  font-size: 24px ;
+}
+button.swal2-cancel.swal2-styled.swal2-default-outline {
+  border: 1px solid #D1D9E2 !important;
+  background: #E6E9EC !important;
+  color: #393939 !important;
+}
+div.noDraftPosts_outer {    
+  background-color:#fff;
+}
+.fc-daygrid-body.fc-daygrid-body-unbalanced, .fc-daygrid-body.fc-daygrid-body-unbalanced table {
+  width: 100% !important;
+}
+table.fc-col-header {
+  width: 100% !important;
+}
+.calendar-container  .fc-view-harness.fc-view-harness-active {
+  height: 100% !important;
+
+}
 .page_title_header {
-  margin: 30px 0px;
+  margin: 18px 0px;
   border-radius: 22px;
   overflow: hidden;
   background-color: white;
@@ -849,6 +874,12 @@ img.acc_not_connected_img.mt-0 {
   .cmn_wrapper_outer {
     padding: 0px 15px 30px;
   }
+  div#swal2-html-container {
+    font-size: 18px;
+  }
+  h2#swal2-title {
+    font-size: 25px;
+  }
 }
 @media screen and (min-width:1024px){
   .CalenderOuter_Wrapper .fc .fc-scroller-harness{
@@ -857,6 +888,7 @@ img.acc_not_connected_img.mt-0 {
   
   .CalenderOuter_Wrapper .fc-scroller.fc-scroller-liquid-absolute {
       overflow: unset !important;
+      position: unset;
   }
   .CalenderOuter_Wrapper .fc .fc-scroller{
       overflow: unset !important;
@@ -997,5 +1029,22 @@ div#swal2-html-container {
 .cmn_Padding{
   padding-left: 60px;
 }
+button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline {
+  padding: 7px 23px;
+  font-size: 14px;
 
+}
+div.noDraftPosts_outer {
+  padding: 20px !important;
+}
+div:where(.swal2-container) img:where(.swal2-image){
+  height: 200px;
+}
+button.swal2-cancel.cancelButton.swal2-styled.swal2-default-outline{
+  font-size: 14px;
+  padding: 6px 23px;
+}
+h2#swal2-title {
+font-size: 19px;
+}
 }

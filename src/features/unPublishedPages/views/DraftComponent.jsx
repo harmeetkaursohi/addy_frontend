@@ -107,7 +107,7 @@ const DraftComponent = ({
 
     return (<>
 
-        <div className="draft-outer mb-3">
+        <div className="draft-outer draft_container mb-3">
 
             <div className={"draft-heading"}>
                 <h4 className={"posted-on-txt"}>Posted On : </h4>
