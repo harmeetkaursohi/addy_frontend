@@ -51,11 +51,7 @@
     padding-top: 5px;
 }
 
-.addy_outer {
-    padding: 0px 95px 20px;
-    width: 100%;
 
-}
 
 .error_message {
     color: red;
@@ -74,10 +70,7 @@ background-color: white;
 
 
 
-.logo_outer img {
-    width: 160px;
-    height: unset;
-}
+
 
 .form-control:focus {
     background-color: var(--bs-body-bg);
@@ -92,20 +85,11 @@ background-color: white;
 
 
 
-.logo_outer {
-    display: flex;
-    justify-content: center;
-}
 
 
 
-.sign_up {
-    color: #F07C33;
-    font-size: 18px;
-    font-weight: 700;
 
-   
-}
+
 
 .check_box_outer {
     display: flex;
@@ -161,21 +145,11 @@ background-color: white;
     margin-top: 25px;
     color: #3E3E3E;
 }
-.login_form h3 {
-    margin-top: 20px;
-    font-weight: 700;
-    color: #A0A0A0;
-    font-size: 18px;
-    text-align: center;
-}
+
 .login_form {
     margin-top: 30px;
 }
- @media screen and (min-width:1499px){
-    .login_form h3{
-        margin-bottom:20px !important
-    }
- }
+
 
 
 
@@ -199,10 +173,6 @@ background-color: white;
 
     
 
-    .addy_outer {
-        padding: 20px;
-    }
-
     
 
 
@@ -210,16 +180,10 @@ background-color: white;
         font-size: 15px;
     }
 
-    .sign_up {
-        font-size: 15px;
-    }
-
+   
     
    
     
 
-    .logo_outer img {
-        height: 45px;
-        width: 129px;
-    }
+    
 }
