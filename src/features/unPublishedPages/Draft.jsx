@@ -22,13 +22,10 @@ const Draft = () => {
         plannerCardDate: new Date(),
         period: "MONTH",
     });
+    const [apiTrigger, setApiTrigger] = useState(null);
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false);
-    const connectedPagesData = useSelector(
-        (state) => state.facebook.getFacebookConnectedPagesReducer
-    );
-    const getAllConnectedSocialAccountData = useSelector(
-        (state) => state.socialAccount.getAllConnectedSocialAccountReducer
-    );
+    const connectedPagesData = useSelector((state) => state.facebook.getFacebookConnectedPagesReducer);
+    const getAllConnectedSocialAccountData = useSelector((state) => state.socialAccount.getAllConnectedSocialAccountReducer);
 
     useEffect(() => {
         dispatch(
@@ -37,7 +34,7 @@ const Draft = () => {
                 query: {...baseSearchQuery},
             })
         );
-    }, [baseSearchQuery]);
+    }, [baseSearchQuery,apiTrigger]);
 
     const calendarRef = useRef(null);
 
@@ -152,7 +149,7 @@ const Draft = () => {
                                 </div>
                             </div>
 
-                            <ParentDraftComponent reference={"DRAFT"}/>
+                            <ParentDraftComponent reference={"DRAFT"} setApiTrigger={setApiTrigger}/>
                         </div>
                     </div>
                 </div>

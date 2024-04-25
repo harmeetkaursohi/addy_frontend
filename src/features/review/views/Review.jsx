@@ -54,18 +54,10 @@ const Review = () => {
     const dispatch = useDispatch();
     const [removedPosts, setRemovedPosts] = useState([]);
     const [deletePostPageInfo, setDeletePostPageInfo] = useState(null);
-    const postPageInfoData = useSelector(
-        (state) => state.post.getPostPageInfoReducer.data
-    );
-    const getPostsPageData = useSelector(
-        (state) => state.post.getPostsPageReducer
-    );
-    const getAllConnectedSocialAccountData = useSelector(
-        (state) => state.socialAccount.getAllConnectedSocialAccountReducer
-    );
-    const connectedPagesData = useSelector(
-        (state) => state.facebook.getFacebookConnectedPagesReducer
-    );
+    const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
+    const getPostsPageData = useSelector((state) => state.post.getPostsPageReducer);
+    const getAllConnectedSocialAccountData = useSelector((state) => state.socialAccount.getAllConnectedSocialAccountReducer);
+    const connectedPagesData = useSelector((state) => state.facebook.getFacebookConnectedPagesReducer);
 
     useEffect(() => {
         if (deletePostPageInfo !== null && deletePostPageInfo !== undefined) {
@@ -97,23 +89,14 @@ const Review = () => {
     }, []);
 
     useEffect(() => {
-        if (
-            getAllConnectedSocialAccountData?.data?.length > 0 &&
-            connectedPagesData?.facebookConnectedPages?.length > 0
-        ) {
+        if (getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
             setBaseSearchQuery({...baseSearchQuery, offSet: 0});
         }
     }, [getAllConnectedSocialAccountData, connectedPagesData]);
 
     useEffect(() => {
-        if (
-            getAllConnectedSocialAccountData?.data?.length > 0 &&
-            connectedPagesData?.facebookConnectedPages?.length > 0
-        ) {
-            if (
-                baseSearchQuery?.socialMediaType === null ||
-                baseSearchQuery?.socialMediaType === undefined
-            ) {
+        if (getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
+            if (baseSearchQuery?.socialMediaType === null || baseSearchQuery?.socialMediaType === undefined) {
                 setPageDropdown(connectedPagesData?.facebookConnectedPages);
             } else {
                 setPageDropdown(
@@ -199,7 +182,6 @@ const Review = () => {
     return (
         <>
             <section>
-                {/*<SideBar />*/}
                 <div className={sidebar ? "comment_container" : "cmn_Padding"}>
 
                     <div className="cmn_outer">
@@ -219,11 +201,7 @@ const Review = () => {
                                                 isMulti
                                                 value={selectedDropdownOptions?.pages}
                                                 isDisabled={getPostsPageData?.loading}
-                                                options={createOptionListForSelectTag(
-                                                    pageDropdown,
-                                                    "name",
-                                                    "pageId"
-                                                )}
+                                                options={createOptionListForSelectTag(pageDropdown, "name", "pageId")}
                                                 onChange={(val) => {
                                                     setSelectedDropDownOptions({
                                                         ...selectedDropdownOptions,
@@ -241,15 +219,7 @@ const Review = () => {
 
                                             <Select
                                                 className={"review-social-media-dropdown"}
-                                                options={createOptionListForSelectTag(
-                                                    SocialAccountProvider,
-                                                    null,
-                                                    null,
-                                                  [  {
-                                                        label: "All",
-                                                        value: null,
-                                                    }]
-                                                )}
+                                                options={createOptionListForSelectTag(SocialAccountProvider, null, null, [  {label: "All", value: null,}])}
                                                 value={selectedDropdownOptions?.socialMediaType}
                                                 isDisabled={getPostsPageData?.loading}
                                                 onChange={(val) => {
