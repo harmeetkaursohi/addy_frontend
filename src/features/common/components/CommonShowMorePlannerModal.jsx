@@ -18,6 +18,7 @@ import {showErrorToast, showSuccessToast} from "./Toast";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import Swal from "sweetalert2";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
+import default_user_icon from "../../../images/default_user_icon.svg"
 import {RiDeleteBin7Line} from "react-icons/ri";
 
 
@@ -190,7 +191,7 @@ const CommonShowMorePlannerModal = ({
                                                                                                             className="plan_tag_img position-relative">
                                                                                                             <img
                                                                                                                 className="plan_image"
-                                                                                                                src={curPage?.imageURL}
+                                                                                                                src={curPage?.imageURL ||default_user_icon}
                                                                                                                 alt="fb"/>
                                                                                                             <img
                                                                                                                 className="plan_social_img"

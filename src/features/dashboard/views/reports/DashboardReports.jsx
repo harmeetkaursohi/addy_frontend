@@ -55,7 +55,7 @@ export const DashboardReports = () => {
                     const enabledSocialMediaAccounts=getAllConnectedSocialAccountData?.data?.filter(accountData=>enabledSocialMedia["is" + getInitialLetterCap(accountData.provider.toLowerCase()) + "Enabled"])
                     const enabledSocialMediaAccountIds=enabledSocialMediaAccounts?.map(account=>account.id)
                     const enabledPages=connectedPagesReducer?.facebookConnectedPages?.filter(page=>enabledSocialMediaAccountIds.includes(page.socialMediaAccountId))
-                    selectedSocialMediaAccount = enabledSocialMediaAccounts?.find(accountData => accountData?.id === enabledPages[0].socialMediaAccountId)
+                    selectedSocialMediaAccount = enabledSocialMediaAccounts?.find(accountData => accountData?.id === enabledPages?.[0]?.socialMediaAccountId)
                 }
                 setReportSelectedAccountType(selectedSocialMediaAccount?.provider || "")
             }

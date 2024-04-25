@@ -22,6 +22,7 @@ const DraftComponent = ({
                             reference = "",
                             deletedAndPublishedPostIds,
                             setDeletedAndPublishedPostIds,
+                            setApiTrigger
                         }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -40,15 +41,19 @@ const DraftComponent = ({
         dispatch(publishedPostAction({postId: batchIdData?.id, token: token}))
             .then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
+                    const allSuccess=response?.payload?.every(post=>post.success)
+                    const allFailed=response?.payload?.every(post=>!post.success)
                     setBatchToDelete(null);
                     if (reference === "PLANNER") {
                         setDrafts !== null && setDrafts([]);
                         setDraftPost !== null && setDraftPost(false)
-                    } else {
+                    } else if(allSuccess) {
                         setDeletedAndPublishedPostIds({
                             ...deletedAndPublishedPostIds,
                             publishedPostIds: [...deletedAndPublishedPostIds?.publishedPostIds, batchIdData?.id]
                         })
+                    }else if(!allSuccess && ! allFailed){
+                        setApiTrigger(new Date().getMilliseconds());
                     }
                 }
             }).catch((error) => {

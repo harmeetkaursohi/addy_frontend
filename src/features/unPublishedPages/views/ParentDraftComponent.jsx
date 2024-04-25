@@ -7,7 +7,7 @@ import noDraftPosts from "../../../images/no_draft_posts.png";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../common/components/AppProvider";
 
-export const ParentDraftComponent = ({setDraftPost, reference = ""}) => {
+export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger}) => {
     const {sidebar} = useAppContext()
     const [drafts, setDrafts] = useState(null);
     const [deletedAndPublishedPostIds, setDeletedAndPublishedPostIds] = useState({
@@ -68,6 +68,7 @@ export const ParentDraftComponent = ({setDraftPost, reference = ""}) => {
                                                                 setDrafts={setDrafts} reference={reference}
                                                                 deletedAndPublishedPostIds={deletedAndPublishedPostIds}
                                                                 setDeletedAndPublishedPostIds={setDeletedAndPublishedPostIds}
+                                                                setApiTrigger={setApiTrigger}
                                                 />
                                             }
                                         </div>
