@@ -33,4 +33,15 @@ ul.slick-dots li button:before {
     opacity: 1;
     color: #a69b9b;
 }
+@media screen and (max-width:1280px){
 
+    .confirm_container h2 {
+        font-size: 32px;
+    }
+}
+
+@media screen and (max-width:991px){
+    .confirm_container h2{
+        font-size: 28px;
+    }
+}
