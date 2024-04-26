@@ -24,6 +24,7 @@ const CommentReviewsSectionModal = ({
                                         isOpenCommentReviewsSectionModal,
                                         setOpenCommentReviewsSectionModal,
                                         postData,
+                                        setPostData,
                                         postPageInfoData,
                                         isDirty,
                                         setDirty,
@@ -48,6 +49,7 @@ const CommentReviewsSectionModal = ({
             dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
             dispatch(resetReducers({sliceNames: ["replyCommentOnPostActionReducer"]}))
             dispatch(resetReducers({sliceNames: ["updateCommentsOnPostActionReducer"]}))
+            setPostData(null);
             // isResetData(true);
         }
     }, [])

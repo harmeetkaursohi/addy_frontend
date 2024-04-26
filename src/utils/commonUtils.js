@@ -1092,7 +1092,7 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
             return formattedData;
         }
         case "PINTEREST": {
-            const readyData = data?.all?.daily_metrics?.filter(insightsData => insightsData?.data_status === "READY");
+            const readyData = data?.all?.daily_metrics?.filter(insightsData => insightsData?.data_status !== "PROCESSING");
             const totalDays = Math.floor(readyData?.length);
             const previousData = readyData?.slice(0, totalDays / 2);
             const presentData = readyData?.slice((totalDays / 2) * -1);
@@ -1101,16 +1101,16 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
             const summedPresentData = filterAndSumPinterestUserAnalyticsDataFor(presentData, presentData?.length, ["IMPRESSION", "ENGAGEMENT"]);
             formattedData = {
                 engagement: {
-                    presentData: summedPresentData?.ENGAGEMENT,
+                    presentData: summedPresentData?.ENGAGEMENT||0,
                     previousData: {
-                        data: summedPreviousData?.ENGAGEMENT,
+                        data: summedPreviousData?.ENGAGEMENT||0,
                         dateRange: dateRange
                     }
                 },
                 reach: {
-                    presentData: summedPresentData?.IMPRESSION,
+                    presentData: summedPresentData?.IMPRESSION||0,
                     previousData: {
-                        data: summedPreviousData?.IMPRESSION,
+                        data: summedPreviousData?.IMPRESSION||0,
                         dateRange: dateRange
                     }
                 }
@@ -1571,15 +1571,15 @@ export const getFormattedDemographicData = (data, key, socialMediaType) => {
         }
         case SocialAccountProvider.LINKEDIN.toUpperCase(): {
             let formattedData;
-            const keyData= data?.elements?.filter(data=>data.hasOwnProperty(key))
-            if (keyData?.length===0) {
-                formattedData= null;
-            }else{
-                if(key==="followerCountsByGeoCountry"){
-                    formattedData= keyData[0]?.followerCountsByGeoCountry?.map(data=> {
+            const keyData = data?.elements?.filter(data => data.hasOwnProperty(key))
+            if (keyData?.length === 0) {
+                formattedData = null;
+            } else {
+                if (key === "followerCountsByGeoCountry") {
+                    formattedData = keyData[0]?.followerCountsByGeoCountry?.map(data => {
                         return {
-                            country_name:data?.geo,
-                            value:data?.followerCounts?.organicFollowerCount + data?.followerCounts?.paidFollowerCount
+                            country_name: data?.geo,
+                            value: data?.followerCounts?.organicFollowerCount + data?.followerCounts?.paidFollowerCount
                         }
                     });
                 }
@@ -1657,7 +1657,6 @@ export const filterAndSumPinterestUserAnalyticsDataFor = (data = null, days = nu
                 }
             }
         }
-
     }
     return response;
 }
@@ -2671,8 +2670,8 @@ export const createSocialMediaProfileViewInsightsQuery = (queryObject, socialMed
             return {
                 q: "organization",
                 organizationId: queryObject.pageId,
-                startDate: generateUnixTimestampFor(queryObject.days)*1000,
-                endDate: generateUnixTimestampFor("now")*1000,
+                startDate: generateUnixTimestampFor(queryObject.days) * 1000,
+                endDate: generateUnixTimestampFor("now") * 1000,
                 fields: "timeRange,totalPageStatistics:(views:(allPageViews))",
                 timeGranularityType: "DAY"
             }

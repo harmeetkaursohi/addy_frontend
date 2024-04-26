@@ -23,14 +23,12 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
     const [like, setLike] = useState(false);
     const likePostReducerData = useSelector(state => state.post.likePostReducer)
     const disLikePostReducerData = useSelector(state => state.post.dislikePostReducer)
-    const [baseQueryForGetPostPageInfoAction, setBaseQueryForGetPostPageInfoAction] = useState(
-        {
-            token: token,
-            postIds: null,
-            pageAccessToken: null,
-            socialMediaType: null
-        }
-    );
+    const [baseQueryForGetPostPageInfoAction, setBaseQueryForGetPostPageInfoAction] = useState({
+        token: token,
+        postIds: null,
+        pageAccessToken: null,
+        socialMediaType: null
+    });
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const addCommentOnPostActionData = useSelector(state => state.post.addCommentOnPostActionReducer)
     const [commonFooterDataObject, setCommonFooterDataObject] = useState({
@@ -71,6 +69,7 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                         total_saves: data?.pin_metrics?.all_time?.save || 0,
                         can_comment: false
                     })
+                    break;
                 }
                 case "LINKEDIN": {
                     setCommonFooterDataObject({
@@ -79,6 +78,7 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                         total_shares: postData?.shares,
                         can_comment: postPageData?.commentsSummary?.commentsState === "OPEN"
                     })
+                    break;
                 }
                 default: {
 
@@ -183,11 +183,11 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
             if (response.meta.requestStatus === "fulfilled") {
                 setDirty({
                     ...isDirty,
-                    isDirty:true,
-                    action:{
-                        type:"POST",
-                        on:"COMMENT",
-                        commentLevel:"FIRST",
+                    isDirty: true,
+                    action: {
+                        type: "POST",
+                        on: "COMMENT",
+                        commentLevel: "FIRST",
                     }
                 })
                 setComment("")
@@ -200,7 +200,6 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
             }
         });
     }
-
 
 
     return (

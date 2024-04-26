@@ -18,7 +18,6 @@ import {
 } from "../../../app/actions/postActions/postActions";
 import {getToken} from "../../../app/auth/auth";
 import {RotatingLines} from "react-loader-spinner";
-import {useNavigate} from "react-router-dom";
 import Select from "react-select";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../common/components/AppProvider";
@@ -45,7 +44,6 @@ const Review = () => {
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] =
         useState(false);
     const [postData, setPostData] = useState(null);
-    const navigate = useNavigate();
     const [pageDropdown, setPageDropdown] = useState([]);
     const [selectedDropdownOptions, setSelectedDropDownOptions] = useState({
         socialMediaType: {label: "All", value: null},
@@ -110,7 +108,7 @@ const Review = () => {
     }, [getAllConnectedSocialAccountData, connectedPagesData, baseSearchQuery]);
 
     useEffect(() => {
-        if (postData && postData !== undefined) {
+        if (postData) {
             const requestBody = {
                 token: token,
                 postIds: [postData?.id],
@@ -123,10 +121,7 @@ const Review = () => {
 
     useEffect(() => {
         if (isDirty?.isDirty) {
-            if (
-                isDirty?.action?.on === "COMMENT" &&
-                isDirty?.action?.type === "POST"
-            ) {
+            if (isDirty?.action?.on === "COMMENT" && isDirty?.action?.type === "POST") {
                 let updatedResults = [...results];
                 let updatedObject = updatedResults[isDirty?.index];
                 updatedObject = {
@@ -136,10 +131,7 @@ const Review = () => {
                 updatedResults[isDirty?.index] = updatedObject;
                 setResults([...updatedResults]);
             }
-            if (
-                isDirty?.action?.on === "COMMENT" &&
-                isDirty?.action?.type === "DELETE"
-            ) {
+            if (isDirty?.action?.on === "COMMENT" && isDirty?.action?.type === "DELETE") {
                 let updatedResults = [...results];
                 let updatedObject = updatedResults[isDirty?.index];
                 updatedObject = {
@@ -190,7 +182,7 @@ const Review = () => {
                                 <div className="review_heading flex-grow-1">
                                     <h2 className="cmn_text_heading">{jsondata.likecomment}</h2>
                                     <h6 className="cmn_small_heading ">
-                                      {jsondata.review_post_heading}
+                                        {jsondata.review_post_heading}
                                     </h6>
                                 </div>
                                 {getAllConnectedSocialAccountData?.data?.length > 0 &&
@@ -219,7 +211,10 @@ const Review = () => {
 
                                             <Select
                                                 className={"review-social-media-dropdown"}
-                                                options={createOptionListForSelectTag(SocialAccountProvider, null, null, [  {label: "All", value: null,}])}
+                                                options={createOptionListForSelectTag(SocialAccountProvider, null, null, [{
+                                                    label: "All",
+                                                    value: null,
+                                                }])}
                                                 value={selectedDropdownOptions?.socialMediaType}
                                                 isDisabled={getPostsPageData?.loading}
                                                 onChange={(val) => {
@@ -271,164 +266,143 @@ const Review = () => {
                                             ) : (
                                                 <ul className="review_list">
                                                     {results?.map((post, index) => {
-                                                        return removedPosts?.some(
-                                                            (removedPost) =>
-                                                                removedPost?.postId === post.id &&
-                                                                removedPost?.pageId === post.page.pageId
-                                                        ) ? (
+                                                        return removedPosts?.some((removedPost) => removedPost?.postId === post.id && removedPost?.pageId === post.page.pageId) ?
                                                             <></>
-                                                        ) : post.errorInfo === undefined ||
-                                                        post.errorInfo === null ? (
-                                                            <div
-                                                                key={index}
-                                                                ref={
-                                                                    index === results?.length - 1
-                                                                        ? lastPostRef
-                                                                        : null
-                                                                }
-                                                            >
-                                                                <li>
-                                                                    <div
-                                                                        className="d-flex gap-3 review_list_items_outer align-items-center">
+                                                            : post.errorInfo === undefined || post.errorInfo === null ? (
+                                                                <div
+                                                                    key={index}
+                                                                    ref={index === results?.length - 1 ? lastPostRef : null}
+                                                                >
+                                                                    <li>
                                                                         <div
-                                                                            className="cursor-pointer"
-                                                                            style={{position: "relative"}}
-                                                                            onClick={(e) => {
-                                                                                setPostData(post);
-                                                                                setDirty({
-                                                                                    ...isDirty,
-                                                                                    index: index,
-                                                                                    socialMediaType:
-                                                                                    post?.socialMediaType,
-                                                                                });
-                                                                                setOpenCommentReviewsSectionModal(
-                                                                                    !isOpenCommentReviewsSectionModal
-                                                                                );
-                                                                            }}
-                                                                        >
-                                                                            {post?.attachments[0]?.imageURL ===
-                                                                            null &&
-                                                                            post?.attachments[0]?.mediaType ===
-                                                                            "VIDEO" ? (
-                                                                                <video
-                                                                                    style={{objectFit: "fill"}}
-                                                                                    className="bg_img"
-                                                                                    src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
-                                                                                ></video>
-                                                                            ) : (
-                                                                                <img
-                                                                                    src={
-                                                                                        post?.attachments[0]?.imageURL ||
-                                                                                        noImageAvailable
-                                                                                    }
-                                                                                    className="bg_img"
-                                                                                />
-                                                                            )}
+                                                                            className="d-flex gap-3 review_list_items_outer align-items-center">
+                                                                            <div
+                                                                                className="cursor-pointer"
+                                                                                style={{position: "relative"}}
+                                                                                onClick={(e) => {
+                                                                                    setPostData(post);
+                                                                                    setDirty({
+                                                                                        ...isDirty,
+                                                                                        index: index,
+                                                                                        socialMediaType: post?.socialMediaType,
+                                                                                    });
+                                                                                    setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal);
+                                                                                }}
+                                                                            >
+                                                                                {post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
+                                                                                    <video
+                                                                                        style={{objectFit: "fill"}}
+                                                                                        className="bg_img"
+                                                                                        src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
+                                                                                    ></video>
+                                                                                    :
+                                                                                    <img
+                                                                                        src={
+                                                                                            post?.attachments[0]?.imageURL ||
+                                                                                            noImageAvailable
+                                                                                        }
+                                                                                        className="bg_img"
+                                                                                    />
+                                                                                }
+                                                                                <div
+                                                                                    className="review_social_media_outer">
+                                                                                    <img
+                                                                                        src={computeImageURL(
+                                                                                            post?.socialMediaType
+                                                                                        )}
+                                                                                    />
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div className="review_content">
+                                                                                <p className="nunito_font">
+                                                                                    {post?.page?.name}{" "}
+                                                                                </p>
+                                                                                <div
+                                                                                    className="d-flex  review_likes_list">
+                                                                                    <h3 className="nunito_font">
+                                                                                        {post?.likes} Likes
+                                                                                    </h3>
+                                                                                    <h3 className="nunito_font">
+                                                                                        {post?.comments} Comments
+                                                                                    </h3>
+                                                                                    <h3 className="nunito_font">
+                                                                                        {post?.shares}{" "}{post?.socialMediaType === "PINTEREST" ? "Save" : "Share"}
+                                                                                    </h3>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <h5 className="nunito_font"> {getCommentCreationTime(post?.feedPostDate)}</h5>
+                                                                    </li>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="not_available_content_outer"
+                                                                     key={index}
+                                                                     ref={index === results?.length - 1 ? lastPostRef : null}>
+                                                                    <div
+                                                                        className="d-flex align-items-center gap-3 not_available_content_wrapper">
+                                                                        <div className={"disabled-table-grid"}
+                                                                             style={{position: "relative"}}>
+                                                                            <img
+                                                                                src={noImageAvailable}
+                                                                                className="bg_img"
+                                                                            />
                                                                             <div className="review_social_media_outer">
                                                                                 <img
+                                                                                    className={"me-2 review-post-icon"}
                                                                                     src={computeImageURL(
                                                                                         post?.socialMediaType
                                                                                     )}
                                                                                 />
                                                                             </div>
                                                                         </div>
+                                                                        <div className={"disabled-table-grid"}>
 
-                                                                        <div className="review_content">
-                                                                            <p className="nunito_font">
-                                                                                {post?.page?.name}{" "}
-                                                                            </p>
-                                                                            <div className="d-flex  review_likes_list">
-                                                                                <h3 className="nunito_font">
-                                                                                    {post?.likes} Likes
-                                                                                </h3>
-                                                                                <h3 className="nunito_font">
-                                                                                    {post?.comments} Comments
-                                                                                </h3>
-                                                                                <h3 className="nunito_font">
-                                                                                    {post?.shares}{" "}
-                                                                                    {post?.socialMediaType === "PINTEREST"
-                                                                                        ? "Save"
-                                                                                        : "Share"}
-                                                                                </h3>
+                                                                            <p className="nunito_font">{post?.page?.name}</p>
+                                                                            <h3 className="nunito_font"> {concatenateString(post.message, 20)}</h3>
+
+                                                                        </div>
+
+                                                                    </div>
+
+
+                                                                    <div
+                                                                        className={"disabled-table-grid "}
+                                                                        colSpan={
+                                                                            post.errorInfo.isDeletedFromSocialMedia
+                                                                                ? 2
+                                                                                : 3
+                                                                        }
+                                                                    >
+                                                                        {post.errorInfo.isDeletedFromSocialMedia ? (
+                                                                            <div
+                                                                                className={"review-errorMessage d-flex"}
+                                                                            >
+                                                                                {PostAlreadyDeleted}
                                                                             </div>
-                                                                        </div>
+                                                                        ) : (
+                                                                            <div className={"review-errorMessage "}>
+                                                                                {ErrorFetchingPost}
+                                                                            </div>
+                                                                        )}
                                                                     </div>
-
-                                                                    <h5 className="nunito_font"> {getCommentCreationTime(post?.feedPostDate)}</h5>
-                                                                </li>
-                                                            </div>
-                                                        ) : (
-                                                            <div className="not_available_content_outer"
-                                                                 key={index}
-                                                                 ref={
-                                                                     index === results?.length - 1
-                                                                         ? lastPostRef
-                                                                         : null
-                                                                 }
-                                                            >
-                                                                <div
-                                                                    className="d-flex align-items-center gap-3 not_available_content_wrapper">
-                                                                    <div className={"disabled-table-grid"}
-                                                                         style={{position: "relative"}}>
-                                                                        <img
-                                                                            src={noImageAvailable}
-                                                                            className="bg_img"
-                                                                        />
-                                                                        <div className="review_social_media_outer">
-                                                                            <img
-                                                                                className={"me-2 review-post-icon"}
-                                                                                src={computeImageURL(
-                                                                                    post?.socialMediaType
-                                                                                )}
+                                                                    {post.errorInfo.isDeletedFromSocialMedia && (
+                                                                        <div className={"disabled-table-grid "}>
+                                                                            <MdDelete
+                                                                                onClick={() => {
+                                                                                    !isLoading &&
+                                                                                    setDeletePostPageInfo(post);
+                                                                                }}
+                                                                                className={
+                                                                                    "ms-2 cursor-pointer font-size-20"
+                                                                                }
+                                                                                title={"Delete From Addy"}
                                                                             />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className={"disabled-table-grid"}>
-
-                                                                        <p className="nunito_font">{post?.page?.name}</p>
-                                                                        <h3 className="nunito_font"> {concatenateString(post.message, 20)}</h3>
-
-                                                                    </div>
-
-                                                                </div>
-
-
-                                                                <div
-                                                                    className={"disabled-table-grid "}
-                                                                    colSpan={
-                                                                        post.errorInfo.isDeletedFromSocialMedia
-                                                                            ? 2
-                                                                            : 3
-                                                                    }
-                                                                >
-                                                                    {post.errorInfo.isDeletedFromSocialMedia ? (
-                                                                        <div
-                                                                            className={"review-errorMessage d-flex"}
-                                                                        >
-                                                                            {PostAlreadyDeleted}
-                                                                        </div>
-                                                                    ) : (
-                                                                        <div className={"review-errorMessage "}>
-                                                                            {ErrorFetchingPost}
                                                                         </div>
                                                                     )}
                                                                 </div>
-                                                                {post.errorInfo.isDeletedFromSocialMedia && (
-                                                                    <div className={"disabled-table-grid "}>
-                                                                        <MdDelete
-                                                                            onClick={() => {
-                                                                                !isLoading &&
-                                                                                setDeletePostPageInfo(post);
-                                                                            }}
-                                                                            className={
-                                                                                "ms-2 cursor-pointer font-size-20"
-                                                                            }
-                                                                            title={"Delete From Addy"}
-                                                                        />
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        );
+                                                            );
                                                     })}
                                                 </ul>
                                             )}
@@ -466,10 +440,9 @@ const Review = () => {
                 {isOpenCommentReviewsSectionModal && (
                     <CommentReviewsSectionModal
                         isOpenCommentReviewsSectionModal={isOpenCommentReviewsSectionModal}
-                        setOpenCommentReviewsSectionModal={
-                            setOpenCommentReviewsSectionModal
-                        }
+                        setOpenCommentReviewsSectionModal={setOpenCommentReviewsSectionModal}
                         postData={postData}
+                        setPostData={setPostData}
                         postPageInfoData={postPageInfoData}
                         setDirty={setDirty}
                         isDirty={isDirty}
