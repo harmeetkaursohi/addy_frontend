@@ -38,28 +38,23 @@ const Comments = ({postData, isDirty, setDirty}) => {
         message: ""
     })
     const [updateComment, setUpdateComment] = useState({})
-
     const [baseQuery, setBaseQuery] = useState({
         socialMediaType: postData?.socialMediaType,
         pageAccessToken: postData?.page?.access_token,
     })
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
     useEffect(() => {
         handleGetComments(postData?.id)
     }, [])
+
     const handleGetComments = (objectId) => {
         const requestBody = {
             ...baseQuery,
             id: objectId,
         }
-
-
-        dispatch(getCommentsOnPostAction(requestBody))
-
-
-            .then(response => {
+        dispatch(getCommentsOnPostAction(requestBody)).then(response => {
                 if (response.meta.requestStatus === "fulfilled") {
-
                     setShowReplyBox([])
                     // !isGetChildComments && setShowReplyComments(new Array(response.payload.length).fill(false))
                     // showReplyBox.length === 0 && setShowReplyComments(new Array(response.payload.length).fill(false))
@@ -99,7 +94,6 @@ const Comments = ({postData, isDirty, setDirty}) => {
             postId: commentId,
             pageAccessToken: postData?.page?.access_token
         }
-
         dispatch(dislikePostAction(requestBody)).then((response) => {
             if (response.meta.requestStatus === "fulfilled") {
                 handleGetComments(postData?.id)
@@ -116,13 +110,10 @@ const Comments = ({postData, isDirty, setDirty}) => {
 
     useEffect(() => {
         if (commentToDeleteId) {
-
             const requestBody = {
                 ...baseQuery,
                 id: commentToDeleteId,
             }
-
-
             dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
                 setCommentToDeleteId(null)
                 if (response.meta.requestStatus === "fulfilled") {
@@ -145,6 +136,7 @@ const Comments = ({postData, isDirty, setDirty}) => {
             })
         }
     }, [commentToDeleteId])
+
     const handleUpdateComment = () => {
         const requestBody = {
             ...baseQuery,
@@ -160,6 +152,7 @@ const Comments = ({postData, isDirty, setDirty}) => {
             }
         })
     }
+    console.log("isDirty====>",isDirty)
 
 
     return (
@@ -410,6 +403,13 @@ const Comments = ({postData, isDirty, setDirty}) => {
                                                                                                                 href="#/action-2"
                                                                                                                 onClick={() => {
                                                                                                                     setCommentToDeleteId(childComment?.id)
+                                                                                                                    setDirty({
+                                                                                                                        ...isDirty,
+                                                                                                                        action: {
+                                                                                                                            ...isDirty?.action,
+                                                                                                                            reduceCommentCount: 0,
+                                                                                                                        }
+                                                                                                                    })
                                                                                                                 }}>Delete</Dropdown.Item>
                                                                                                         }
                                                                                                     </Dropdown.Menu>

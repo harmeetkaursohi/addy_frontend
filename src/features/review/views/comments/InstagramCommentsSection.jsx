@@ -50,7 +50,6 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
             dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
                 setCommentToDelete(null)
                 if (response.meta.requestStatus === "fulfilled") {
-
                     setDirty({
                         ...isDirty,
                         isDirty: true,
@@ -60,8 +59,6 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                             on: "COMMENT"
                         }
                     })
-
-
                     const getPostPageRequestBody = {
                         ...baseQuery,
                         postIds: [postData?.id]

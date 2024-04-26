@@ -1329,10 +1329,10 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
                 }
             }
             formattedData = {
-                total_like: data?.shareStatistics?.totalShareStatistics?.likeCount,
-                total_comment: data?.shareStatistics?.totalShareStatistics?.commentCount,
-                total_share: data?.shareStatistics?.totalShareStatistics?.shareCount,
-                account_reach: data?.shareStatistics?.totalShareStatistics?.impressionCount,
+                total_like: data?.shareStatistics?.totalShareStatistics?.likeCount || 0,
+                total_comment: data?.shareStatistics?.totalShareStatistics?.commentCount|| 0,
+                total_share: data?.shareStatistics?.totalShareStatistics?.shareCount|| 0,
+                account_reach: data?.shareStatistics?.totalShareStatistics?.impressionCount|| 0,
                 creation_time: data?.postInfo?.createdAt,
                 attachments: getAttachmentsData(data, socialMediaType),
             }
