@@ -12,10 +12,10 @@
     padding: 0px;
     justify-content: center;
 }
-.planner_outer .fc-icon-chevron-left::before {
+.planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-left::before {
     color: #B94D09;
 }
-.planner_outer .fc-icon-chevron-right::before{
+.planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-right::before{
     color: #B94D09; 
 }
 
