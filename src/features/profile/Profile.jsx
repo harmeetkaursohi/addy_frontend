@@ -86,6 +86,7 @@ const Profile = () => {
         },
         validationSchema: isAddressRequired ? validationSchemas.editProfileInfoWithAddressRequired : validationSchemas.editProfileInfo,
         onSubmit: (values) => {
+            console.log("values===>",values)
             dispatch(updateCustomer({
                 token: token,
                 data: {
@@ -197,7 +198,7 @@ const Profile = () => {
                              <div>
                                 <button onClick={()=>{setEdit(false)}} className="profile_cancel_btn">Cancel</button>
                               
-                                 <button
+                                 <button type={"submit"}
                                                                     className={"edit_profile_btn ms-3 " + (edit ? "" : "opacity-50")}>
                                                                     Save
                                                                     {
@@ -632,7 +633,7 @@ const Profile = () => {
                                                     </div>
 
 
-                                              
+
                                             </div>
                                         </div>
 

@@ -899,7 +899,7 @@ export const isNullOrEmpty = (value) => {
     if (Array.isArray(value)) {
         return value.length === 0;
     }
-    return value === null || value === undefined || value?.trim() === ""
+    return value === null || value === undefined || value?.toString().trim() === ""
 }
 export const isReplyCommentEmpty = (replyComment) => {
     if (replyComment === null || replyComment === undefined || replyComment === "") {

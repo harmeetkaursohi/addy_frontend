@@ -60,12 +60,6 @@
     white-space: nowrap;
 }
 
-.plan_grid_navigations {
-    min-width: 80px;
-}
-
-
-
 .plan_grid_navigations button {
     border-radius: 9px;
     border: 1px solid #D7D7D7;
@@ -75,10 +69,11 @@
     width: 32px;
     height: 32px;
     text-align: center;
+    display: flex;
 }
 
 .plan_grid_navigations button:first-child {
-    margin-right: 16px;
+    margin-right: 10px;
 }
 
 .plan_grid_navigations button:last-child {

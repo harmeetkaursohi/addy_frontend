@@ -190,7 +190,7 @@ const Planner = () => {
                  style={{
                      backgroundColor: backgroundColor,
                      borderLeft: border,
-                     pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"
+                     pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : ""
                  }}>
 
                 <div className="w-100 p-0 calendar_card">
@@ -207,18 +207,6 @@ const Planner = () => {
                         </div>
                     }
 
-
-                    {/*{event?._def?.extendedProps?.childCardContent?.map((c, index) => {*/}
-                    {/*    return (*/}
-
-                    {/*        <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}*/}
-                    {/*             onClick={(e) => {*/}
-                    {/*             }}>*/}
-                    {/*            <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>*/}
-                    {/*            /!*<h3>{c.title}</h3>*!/*/}
-                    {/*        </div>*/}
-                    {/*    )*/}
-                    {/*})}*/}
                 </div>
                 {
                     !getAllPostsForPlannerData?.loading && !getPlannerPostCountReportData?.loading &&
@@ -276,6 +264,7 @@ const Planner = () => {
     }
 
     const handleShowMorePostModal = (event) => {
+        console.log("event==>",event)
         const startDate = event.start;
         const targetDate = dateFormat(startDate);
 
@@ -402,39 +391,6 @@ const Planner = () => {
 
 
                             <div className='calender_outer_wrapper'>
-
-                                {/* {
-                                isDraftPost === false &&
-                                <div className="custom-header">
-                                    <select className=" filter_options cmn_text_style box_shadow"
-                                            value={baseSearchQuery?.socialMediaType}
-                                            onChange={(e) => {
-                                                const decodeJwt = decodeJwtToken(token);
-                                                const calendarApi = calendarRef.current.getApi();
-                                                const view = calendarApi.view;
-                                                const startDate = view.currentStart;
-                                                const endDate = view.currentEnd;
-                                                setBaseSearchQuery({
-                                                    ...baseSearchQuery,
-                                                    customerId: decodeJwt.customerId,
-                                                    creationDateRange: {
-                                                        startDate: startDate,
-                                                        endDate: endDate
-                                                    },
-                                                    socialMediaType: e.target.value === "All" ? null : e.target.value
-                                                });
-                                            }}>
-                                        <option value={"All"}>All</option>
-                                        {Object.keys(SocialAccountProvider).map((cur, index) => {
-                                            return (
-                                                <option key={index} value={cur}
-                                                        disabled={getAllConnectedSocialAccountData?.data?.filter(c => c.provider === cur).length === 0}>{SocialAccountProvider[cur].charAt(0).toUpperCase() + SocialAccountProvider[cur].slice(1)}</option>)
-                                        })}
-                                    </select>
-
-
-                                </div>
-                            } */}
                                 {/* new code planner */}
                                 <div className="row mt-5">
                                     <div className="col-lg-9 col-md-12 col-sm-12">

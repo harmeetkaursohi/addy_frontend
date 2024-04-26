@@ -36,6 +36,7 @@ import InstagramPostModal from "../features/common/components/InstagramPostModal
 import PinterestPostModal from '../features/common/components/PinterestPostModal.jsx'
 import FacebookPostModal from "../features/common/components/FacebookPostModal.jsx"
 import LinkedinPostModal from "../features/common/components/LinkedinPostModal.jsx"
+import ChatApp from "../features/chat/ChatApp";
 
 
 const App = () => {
@@ -51,6 +52,7 @@ const App = () => {
             <BrowserRouter>
                 <Routes>
                     <Route element={<PrivateRoute/>}>
+                        <Route path="/chat" element={<ChatApp />}/>
                         <Route path="/plan" element={<SelectPlan/>}/>
                         <Route path="/payment" element={<BillingForm/>}/>
                         {/*<Route path="/sidebar" element={<SideBar/>}/>*/}

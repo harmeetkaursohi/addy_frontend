@@ -19,7 +19,13 @@ export default defineConfig({
         react(),
         // customHeadersMiddleware()
     ],
-   
+    define: {
+        'process.env': process.env,
+        global: 'window',
+        'Buffer': false,
+        '__dirname': false,
+        '__filename': false
+    },
 
     server: {
         port: Number(PORT || 5143),
