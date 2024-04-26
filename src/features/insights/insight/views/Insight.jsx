@@ -539,7 +539,7 @@ const Insight = () => {
                                                 </div>
                                                 <div className="row mt-4 mb-4">
                                                     <div className="col-lg-4 col-md-12 col-sm-12">
-                                                        <div className="cmn_shadow visitors_container">
+                                                        <div className="cmn_shadow  insight_followers_outer visitors_container">
                                                             <div className="d-flex cmn_border visitors_outer">
                                                                 <h3>Followers</h3>
 
@@ -554,8 +554,8 @@ const Insight = () => {
                                                         </div>
                                                     </div>
                                                     {
-                                                        false && <div className="col-lg-8 col-md-12 col-sm-12">
-                                                            <div className="cmn_shadow visitors_container">
+                                                        true && <div className="col-lg-8 col-md-12 col-sm-12">
+                                                            <div className="cmn_shadow visitors_container insight_demographic_outer">
                                                                 <div className="d-flex cmn_border visitors_outer">
                                                                     <h3>Demographics</h3>
                                                                 </div>

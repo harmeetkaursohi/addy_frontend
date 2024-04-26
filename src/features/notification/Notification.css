@@ -124,6 +124,9 @@ span.error-detail {
     .notification_message_outer{
         width: 50%;
     }
+    .no-notifications-text {
+        font-size: 18px;
+    }
 }
 
 @media screen and (max-width: 767px) {
@@ -133,6 +136,11 @@ span.error-detail {
     }
     .clear-all-notifications {
         margin-top: 7px;
+    }
+    .no-notifications-text {
+        font-size: 14px;
+        line-height: 24px;
+
     }
     .notification_message_outer{
         width: 100%;

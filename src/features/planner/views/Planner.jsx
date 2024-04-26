@@ -567,10 +567,10 @@ const Planner = () => {
 
 
                                             <div className="planner_post_track_outer">
-                                                <div className={"d-flex"}>
-                                                    <h3 className="planner_create_post_heading pb-2 flex-grow-1">Social
+                                                <div className={"d-flex pb-2 align-items-center"}>
+                                                    <h3 className="planner_create_post_heading  flex-grow-1">Social
                                                         Media</h3>
-                                                    <span className={"mr-4 mt-2"}><input type={"checkbox"}
+                                                    <span className={"mr-4"}><input type={"checkbox"}
                                                                                          checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
                                                                                          onChange={(e) => handleSocialMediaFilters("all")}/></span>
 

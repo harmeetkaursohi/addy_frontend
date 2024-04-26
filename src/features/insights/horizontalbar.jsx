@@ -70,7 +70,7 @@
 
 
 // BarChartComponent.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./Chart.css"
 import {BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
@@ -120,7 +120,26 @@ const data = [
 ];
 
 
+
 const HorizontalBarChart = () => {
+    const [align,setAlign]=useState(false)
+
+useEffect(()=>{
+    const handleResize=()=>{
+    if(window.innerWidth<=767){
+        setAlign(true)
+    }else{
+        setAlign(false)
+    }
+    }
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return () => {
+        window.removeEventListener('resize', handleResize);
+    };
+},[])
     return (
 
         <ResponsiveContainer width="100%" height={300}>
@@ -140,7 +159,7 @@ const HorizontalBarChart = () => {
                 <XAxis dataKey="name" tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
                 <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
                 <Tooltip cursor={{fill: 'none'}}/>
-                <Legend layout="vertical" align="right" verticalAlign="middle"/>
+                <Legend layout="vertical" align={align? "bottom" :"right"} verticalAlign={align?"bottom":"middle"}/>
                 <Bar dataKey="Male" fill="#90D1F6" barSize={20}/>
                 <Bar dataKey="Female" fill="#E05905" barSize={20}/>
             </BarChart>

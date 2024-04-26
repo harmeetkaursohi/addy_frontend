@@ -132,7 +132,7 @@ const ContactUs = () => {
                                                     placeholder="First Name"
                                                 />
                                                 {formik.touched.first_name && formik.errors.first_name ? (
-                                                    <p className="error_message">
+                                                    <p className="error_message error_outer">
                                                         {formik.errors.first_name}
                                                     </p>
                                                 ) : null}
@@ -148,7 +148,7 @@ const ContactUs = () => {
                                                     placeholder="Last Name"
                                                 />
                                                 {formik.touched.last_name && formik.errors.last_name ? (
-                                                    <p className="error_message">
+                                                    <p className="error_message error_outer">
                                                         {formik.errors.last_name}
                                                     </p>
                                                 ) : null}
@@ -168,7 +168,7 @@ const ContactUs = () => {
                                         />
                                         {formik.touched.email_address &&
                                         formik.errors.email_address ? (
-                                            <p className="error_message">
+                                            <p className="error_message error_outer">
                                                 {formik.errors.email_address}
                                             </p>
                                         ) : null}
@@ -185,7 +185,7 @@ const ContactUs = () => {
                                         />
                                         {formik.touched.phone_number &&
                                         formik.errors.phone_number ? (
-                                            <p className="error_message">
+                                            <p className="error_message error_outer">
                                                 {formik.errors.phone_number}
                                             </p>
                                         ) : null}
@@ -201,7 +201,7 @@ const ContactUs = () => {
                                             value={formik.values.message}
                                         ></textarea>
                                         {formik.touched.message && formik.errors.message ? (
-                                            <p className="error_message">{formik.errors.message}</p>
+                                            <p className="error_message error_outer">{formik.errors.message}</p>
                                         ) : null}
 
 
@@ -222,7 +222,7 @@ const ContactUs = () => {
                                         />
                                         {formik.touched["g-recaptcha-response"] &&
                                         formik.errors["g-recaptcha-response"] ? (
-                                            <p className="error_message">
+                                            <p className="error_message error_outer">
                                                 {formik.errors["g-recaptcha-response"]}
                                             </p>
                                         ) : null}

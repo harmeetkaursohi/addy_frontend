@@ -38,6 +38,7 @@ const CreatePassword = () => {
     const formik = useFormik({
         initialValues: {
             password: "",
+            confirmPassword:"",
             customerId: userId,
             customerToken: token
         },
