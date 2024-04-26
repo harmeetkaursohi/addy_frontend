@@ -404,7 +404,9 @@ p.disable-reply-comment {
     .no-post-review{
         font-size: 16px;
     }
-    
+    .no_post_review_outer{
+        height: unset;
+    }
    
 }
 
@@ -413,6 +415,7 @@ p.disable-reply-comment {
         display: block;
         padding-top: 36px;
     }
+    
     .review_content h3 {
         font-size: 13px;
     }

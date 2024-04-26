@@ -108,6 +108,9 @@ h2.cmn_title {
     width: 100%;
     border-radius: 6px;
   }
+  .error_outer{
+    font-size: 14px;
+  }
 @media screen and (max-width: 1299px){
     h2.cmn_title{
         font-size: 30px;
@@ -133,6 +136,14 @@ h2.cmn_title {
     }
     .contact_us_heading{
         padding-left: 14px;
+    }
+    p.error_message.error_outer {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width:1024px){
+    p.error_message.error_outer {
+        font-size: 13px;
     }
 }
 @media screen and (max-width: 991px){

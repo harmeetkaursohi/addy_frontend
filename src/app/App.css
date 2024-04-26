@@ -229,7 +229,14 @@ input::-webkit-inner-spin-button {
   cursor: default;
   margin-top: 10px;
 }
-
+.login_form .form-group select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("../images/down_arrow.svg") !important; /* Specify path to your arrow image */
+  background-repeat: no-repeat;
+  background-position: calc(100% - 9px) center;
+}
 .skeleton::after {
   position: absolute;
   top: 0;
@@ -795,6 +802,20 @@ img.acc_not_connected_img.mt-0 {
 
  
 }
+.createPost_outer .insta_dropdown_btn button#instagram {
+  max-height: 100px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.fc-daygrid-body.fc-daygrid-body-unbalanced, .fc-daygrid-body.fc-daygrid-body-unbalanced table, table.fc-col-header {
+  height: 100% !important;
+}
+.error_message {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-top: 5px !important;
+}
 @keyframes fadeInLeft {
   0% {
      opacity: 0.2;
@@ -874,7 +895,14 @@ img.acc_not_connected_img.mt-0 {
     }
 }
 @media screen and  (max-width: 1440px) {
-   
+  .login_form h3{
+    font-size:16px ;
+ 
+}
+.sign_up{
+  font-size: 16px;
+}
+
   .login_btn {
       height: 44px;
       font-size: 17px;

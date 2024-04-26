@@ -8,6 +8,16 @@
     padding: 20px;
 
 }
+.planner_outer .fc-header-toolbar.fc-toolbar{
+    padding: 0px;
+    justify-content: center;
+}
+.planner_outer .fc-icon-chevron-left::before {
+    color: #B94D09;
+}
+.planner_outer .fc-icon-chevron-right::before{
+    color: #B94D09; 
+}
 
 
 button.planner_view_more_btn {
@@ -364,6 +374,11 @@ color: #292929;
 ul.schdeuled_post_list li {
     display: flex;
     justify-content: space-between;
+    border-top: 1px solid #F4F4F4;
+    padding: 20px 0px;
+}
+ul.schdeuled_post_list li:last-child{
+    padding-bottom: 0px;
 }
 
 ul.schdeuled_post_list li h4 {
@@ -378,14 +393,11 @@ ul.schdeuled_post_list h3 {
     color: black;
 }
 
-ul.schdeuled_post_list li {
-    border-top: 1px solid #F4F4F4;
-    padding: 20px 0px;
-}
+
 .planner_post_track_outer {
     border-radius: 14px;
     box-shadow: 2px 2px 12px #e7dcdc;
-    padding: 20px 12px 0px;
+    padding: 20px 12px;
     margin-top: 34px;
 }
 ul.post_outer_list li h4 {

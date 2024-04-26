@@ -31,7 +31,10 @@
     border-radius: 20px;
     padding-bottom: 30px;
 }
-
+.insight_followers_outer ul.recharts-default-legend {
+    display: flex;
+    justify-content: space-around;
+}
 .select-account-txt {
     color: #000;
     font-family: "Nunito";
@@ -601,6 +604,12 @@ img.no_data_available_img {
     .select-page-outer img {
         height: 100%;
       
+    }
+    .insight_followers_outer ul.recharts-default-legend {
+        margin: 0px 0px 0px 14px !important;
+    }
+    .insight_demographic_outer ul.recharts-default-legend {
+        margin: 0px 0px 0px 14px !important;
     }
     ul.user_info_list{
         display: block !important;

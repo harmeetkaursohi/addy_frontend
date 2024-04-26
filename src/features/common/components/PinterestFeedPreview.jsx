@@ -32,7 +32,7 @@ const mediatype=files.map((data)=>data.mediaType)
 
                         </div>
                         <button className='save_button z-index-2'>Save</button>
-                        <CommonSlider height="300px" files={files} selectedFileType={selectedFileType} caption={""} hashTag={""} ></CommonSlider>
+                        <CommonSlider className={"pintereset_postpreview_container"} height="300px" files={files} selectedFileType={selectedFileType} caption={""} hashTag={""} ></CommonSlider>
                         {/* <img src={noImageAvailable} width="100%"/> */}
                         <div className='img_footer'>
                             <div className="FiArrowUpRight">
