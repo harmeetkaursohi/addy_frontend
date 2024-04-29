@@ -1,12 +1,12 @@
 import jsondata from "../../../locales/data/initialdata.json";
 import {LoginSocialFacebook, LoginSocialLinkedin, LoginSocialPinterest} from "reactjs-social-login";
 import {
-    computeAndSocialAccountJSON,
-     getFormattedLinkedinObject,
+    computeAndSocialAccountJSON, formatMessage,
+    getFormattedLinkedinObject,
     getInitialLetterCap, getLinkedInUrnId,
 
 } from "../../../utils/commonUtils";
-import {Linkedin_URN_Id_Types} from "../../../utils/contantData";
+import {DisconnectAccountWarning, Linkedin_URN_Id_Types} from "../../../utils/contantData";
 import {FacebookLoginButton, LinkedInLoginButton} from "react-social-login-buttons";
 import fb_img from "../../../images/fb.svg";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
@@ -237,7 +237,7 @@ const SocialAccounts = ({}) => {
         Swal.fire({
             icon: 'warning',
             title: `Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account`,
-            text: `Are you sure you want to disconnect your ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} account?`,
+            text: formatMessage(DisconnectAccountWarning,[getInitialLetterCap(SocialAccountProvider[socialMediaType])]),
             showCancelButton: true,
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',

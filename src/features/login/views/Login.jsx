@@ -156,7 +156,7 @@ const Login = () => {
                                                 
                                                  {/*======= login with  facebook =======*/}
                                                 <a className=''
-                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
+                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&config_id=${import.meta.env.VITE_APP_FACEBOOK_OAUTH_LOGIN_CONFIG_ID}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
                                                     <div className="google_img_outer">
                                                         <img src={fbImg}/>
                                                     </div>

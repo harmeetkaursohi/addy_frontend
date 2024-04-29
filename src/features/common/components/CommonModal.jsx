@@ -4,7 +4,7 @@ import "./CommonModal.css"
 import {useDispatch, useSelector} from "react-redux";
 import {getToken} from "../../../app/auth/auth.js";
 import ConfirmModal from "./ConfirmModal.jsx";
-import {SocialAccountProvider} from "../../../utils/contantData.js";
+import {DisconnectPageWarning, SocialAccountProvider} from "../../../utils/contantData.js";
 import { pageConnectAction} from "../../../utils/commonUtils.js";
 import default_user_icon from "../../../images/default_user_icon.svg"
 
@@ -130,7 +130,7 @@ const CommonModal = ({
                     showConfirmModal={showConfirmModal}
                     icon={currentConnectedPages?.includes(mediaPageData?.id) ? "warning" : "success"}
                     title={"Are you sure ?"}
-                    confirmMessage={currentConnectedPages?.includes(mediaPageData?.id) ? `You want to dis-connect from ${socialMediaType} page ?` : `You want to connect from ${socialMediaType} page ?`}
+                    confirmMessage={currentConnectedPages?.includes(mediaPageData?.id) ? DisconnectPageWarning : `You want to connect ${socialMediaType} page ?`}
                 />}
         </>
     );
