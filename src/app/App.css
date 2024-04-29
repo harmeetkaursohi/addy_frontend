@@ -816,6 +816,17 @@ img.acc_not_connected_img.mt-0 {
   margin-bottom: 0px;
   margin-top: 5px !important;
 }
+ul.slick-dots li.slick-active button:before  {
+  color: #ff5c00 !important;
+}
+ul.slick-dots {
+  bottom: 18px;
+
+}
+ul.slick-dots li button:before {
+  opacity: 1;
+  color: #a69b9b;
+}
 @keyframes fadeInLeft {
   0% {
      opacity: 0.2;
