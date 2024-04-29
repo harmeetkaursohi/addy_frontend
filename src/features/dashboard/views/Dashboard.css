@@ -602,7 +602,9 @@ width: 100%;
     .performing_post_heading {
         font-size: 17px;
     }
-    
+    .postdata_wrapper h5 {
+        font-size: 19px;
+    }
     
 }
 @media screen and (max-width:1279px){
@@ -633,6 +635,12 @@ width: 100%;
     .dropdown_btn_Outer_container{
         flex-wrap: wrap;
     }
+    .Performing_Post_container h3 {
+        font-size: 20px;
+    }
+    .overview_heading {
+        font-size: 16px;
+    }
 }
 
 @media screen and (max-width: 991px) {
@@ -654,6 +662,15 @@ width: 100%;
 @media screen and (max-width: 767px) {
     .monthly_growth {
         display: block;
+    }
+    .overview_heading{
+        font-size: 15px;
+    }
+    .postdata_wrapper h5 {
+        font-size: 17px;
+    }
+    .Performing_Post_container h3 {
+        font-size: 17px;
     }
     .followers_wrapper  h5{
         font-size: 14px;

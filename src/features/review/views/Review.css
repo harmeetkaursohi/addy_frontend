@@ -392,9 +392,6 @@ p.disable-reply-comment {
     .review_list_items_outer{
         flex-wrap: wrap;
     }
-    .review_list li h5 {
-        font-size: 14px;
-    }
     .review_content h3 {
         font-size: 14px;
     }

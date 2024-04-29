@@ -178,6 +178,9 @@ gap: 16px;
    font-size: 2.1rem;
 
 }
+.coment_view_carousal video{
+    object-fit: fill;
+}
 .pintereset_postpreview_container{
     margin-bottom: 0px ;
 }
