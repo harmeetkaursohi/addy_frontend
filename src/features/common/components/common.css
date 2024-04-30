@@ -27,6 +27,7 @@
 .warning_modal_container .modal-content {
     box-shadow: 1px 1px 4px 0px #f1efef;
     border: none;
+    border-radius: 13px;
 }
 .warning_outer h4 {
     font-size: 14px;
