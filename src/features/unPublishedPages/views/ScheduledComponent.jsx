@@ -115,7 +115,7 @@ const ScheduledComponent = ({scheduledData}) => {
                             scheduledPosts && Array.isArray(scheduledPosts) && scheduledPosts.map((curBatch, index) => (
 
 
-                                <div className={sidebar ? "col-lg-4 col-md-6 col-sm-12 " : "col-lg-6 col-md-12 col-sm-12 "}
+                                <div className={sidebar ? "col-lg-4 col-md-6 col-sm-12 " : "col-lg-4 col-md-12 col-sm-12 "}
                                      key={index}>
                                     <div className="draft-outer ">
 
@@ -139,7 +139,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                              
                                              <div>
                                               <h6 className='upcoming_post_heading'>Post Captions</h6>
-                                            <h3 className={" upcoming_post_content mb-0"}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
+                                            <h3 className={" upcoming_post_content mb-2"}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
                                              </div>
 
                                              <h6 className='upcoming_post_heading'>Hashtags: </h6>

@@ -40,7 +40,7 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
 
     return (
 
-        <div className={"row mt-5"}>
+        <div className={"row draft_container_wrapper"}>
             {
                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading || getAllDraftPostsByCustomerAndPeriodData.loading) ?
                     <CommonLoader classname={"cmn_loader_outer"}/> :

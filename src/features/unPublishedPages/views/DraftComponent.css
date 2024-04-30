@@ -333,6 +333,9 @@ button.outline_btn {
 .upcoming_post_outer .video_player_outer {
     height: 196px !important;
 }
+.draft_container_wrapper {
+    margin-top: 36px;
+}
 @media screen and (min-width:2560px){
     div.draft-outer .post_image_outerwrapper {
         height: 500px;
@@ -373,6 +376,34 @@ button.outline_btn {
 button.outline_btn.schedule_btn{
     padding: 9px;
 }
+}
+@media screen and (max-width:1280px){
+    .draft-heading {
+        padding: 15px;
+    }
+    .upcoming_post_content {
+        font-size: 14px;
+
+    }
+    .draft_container img.post_img {
+        height: 240px;
+    }
+    .draft_container .video_player_outer{
+        height: 240px !important;
+
+    }
+    .draft_container .post_image_outerwrapper{
+        height: 240px;
+    }
+    .draft_container_wrapper {
+        margin-top: 20px;
+    }
+    .draft_button_outer{
+        margin-top: 15px !important;
+    }
+    .draft_container .card-body.post_card {
+        padding: 0px 15px 15px;;
+    }
 }
 @media screen and (max-width:1024px) {
     

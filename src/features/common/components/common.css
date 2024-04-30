@@ -10,6 +10,37 @@
     padding: 10px 0px;
 
 }
+.fb_icon{
+    color: #1282cb;
+    font-size: 18px;
+    margin-right: 2px;
+    vertical-align: middle;
+}
+.warning_modal_container .modal-header {
+    border-bottom: unset;
+    padding-bottom: 0px;
+}
+.warning_outer h3{
+    font-weight: 700;
+    font-size: 22px;
+}
+.warning_modal_container .modal-content {
+    box-shadow: 1px 1px 4px 0px #f1efef;
+    border: none;
+    border-radius: 13px;
+}
+.warning_outer h4 {
+    font-size: 14px;
+    line-height: 22px;
+    padding: 18px 0px;
+}
+.warning_img{
+    height: 50px;
+    width: 50px;
+}
+.warning_outer{
+    text-align: center;
+}
 .video_player_outer {
     height: 270px !important;
 

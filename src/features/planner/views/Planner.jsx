@@ -461,6 +461,8 @@ const Planner = () => {
                                                         );
                                                     }
                                                 }}
+                                                fixedWeekCount={true}
+                                                showNonCurrentDates={false}
                                             />
                                         </div>
                                     </div>

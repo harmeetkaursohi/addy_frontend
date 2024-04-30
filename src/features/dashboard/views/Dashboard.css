@@ -269,6 +269,7 @@ element.style {
     color: black;
     font-size: 12px;
     font-weight: 500;
+    margin-bottom: 7px !important;
 }
 .upcomingPostBtn_Outer button.post_now.cmn_bg_btn, button.outline_btn.schedule_btn{
     max-width: 202px;
@@ -616,7 +617,9 @@ width: 100%;
     .social_media_content{
         flex-wrap: wrap;
         }
-    
+        .upcomingPostBtn_Outer{
+            flex-wrap: wrap;
+        }
     .social_media_wrapper {
         padding: 16px;
     }

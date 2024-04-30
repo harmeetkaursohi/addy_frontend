@@ -41,7 +41,7 @@ const Oauth2RedirectComponent = lazy(() => import('../features/authentication/Oa
 const NotFound = lazy(() => import('../features/common/components/NotFound'));
 const BillingForm = lazy(() => import('../features/billingInfo/views/BillingForm.jsx'));
 const SelectPlan = lazy(() => import('../features/selectplan/views/SelectPlan.jsx'));
-
+import WarningModal from "../features/common/components/WarningModal.jsx"
 const App = () => {
     const PrivateRoute = () => {
         const token = getToken();
@@ -81,6 +81,8 @@ const App = () => {
                                 <Route path="/pin" element={<PinterestPostModal/>}/>
                                 <Route path="/fb" element={<FacebookPostModal/>}/>
                                 <Route path="/li" element={<LinkedinPostModal/>}/>
+                                <Route path="/WarningModal" element={<WarningModal/>}/>
+                                
                             </Route>
                             <Route path="/login" element={<Login/>}/>
                             <Route path="/" element={<Login/>}/>
