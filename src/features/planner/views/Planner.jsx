@@ -4,7 +4,7 @@ import './Planner.css'
 import instagram_img from '../../../images/instagram.png'
 import linkedin from '../../../images/linkedin.svg'
 import jsondata from '../../../locales/data/initialdata.json'
-import { useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {
@@ -124,45 +124,24 @@ const Planner = () => {
         const dateString = eventStartDate;
         const date = new Date(dateString);
         const dayOfMonth = date.getDate();
-         
-       
+
 
         let backgroundColor
         let border
         let textColor
-        if (dayOfMonth === 1 || dayOfMonth === 28
-            || dayOfMonth === 21 || dayOfMonth === 17 ||
-            dayOfMonth === 13 || dayOfMonth === 5 ||
-            dayOfMonth === 9) {
+        if (dayOfMonth === 1 || dayOfMonth === 28 || dayOfMonth === 21 || dayOfMonth === 17 || dayOfMonth === 13 || dayOfMonth === 5 || dayOfMonth === 9) {
             backgroundColor = '#fce5d6';
             border = "4px solid #B94D09";
             textColor = "#782E00"
 
-
-        } else if (dayOfMonth === 8
-            || dayOfMonth === 30 ||
-            dayOfMonth === 25 ||
-            dayOfMonth === 22 ||
-            dayOfMonth === 18 ||
-            dayOfMonth === 6
-            || dayOfMonth === 14
-            || dayOfMonth === 26 ||
-            dayOfMonth === 3) {
+        } else if (dayOfMonth === 8 || dayOfMonth === 30 || dayOfMonth === 25 || dayOfMonth === 22 || dayOfMonth === 18 || dayOfMonth === 6 || dayOfMonth === 14 || dayOfMonth === 26 || dayOfMonth === 3) {
             backgroundColor = '#defcd6';
             border = "4px solid #56B909";
             textColor = "#023E01"
-        } else if (dayOfMonth === 27 ||
-            dayOfMonth === 4 ||
-            dayOfMonth === 23
-            || dayOfMonth === 19
-            || dayOfMonth === 12
-            || dayOfMonth === 15
-            || dayOfMonth === 10 ||
-            dayOfMonth === 31) {
+        } else if (dayOfMonth === 27 || dayOfMonth === 4 || dayOfMonth === 23 || dayOfMonth === 19 || dayOfMonth === 12 || dayOfMonth === 15 || dayOfMonth === 10 || dayOfMonth === 31) {
             backgroundColor = '#d6f3fc';
             border = "4px solid  #098FB9";
             textColor = "#033C48"
-
 
         } else {
             backgroundColor = '#fcd6d6';
@@ -170,6 +149,7 @@ const Planner = () => {
             textColor = "#780000"
 
         }
+
 
         let classname = event?._def?.extendedProps?.batchId
         const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
@@ -213,7 +193,7 @@ const Planner = () => {
                     <button className="createPost_btn crate_btn ms-0 p-0 w-100 planner_view_more_btn"
                             onClick={(e) => handleShowMorePostModal(event)}
                     >
-                     
+
                         {
                             (event?._def?.extendedProps?.showMoreContent > 0) &&
                             "+ " + event?._def?.extendedProps?.showMoreContent
@@ -296,7 +276,7 @@ const Planner = () => {
                 postStatus: ["PUBLISHED", "SCHEDULED"],
                 batchIds: batchIdList,
                 plannerCardDate: targetDate,
-                socialMediaTypes:baseSearchQuery?.socialMediaTypes || [],
+                socialMediaTypes: baseSearchQuery?.socialMediaTypes || [],
                 period: "DAY"
             }))
         }));
@@ -376,7 +356,6 @@ const Planner = () => {
     return (
         <>
             <section>
-                {/*<SideBar/>*/}
                 <div className={sidebar ? 'cmn_container' : "cmn_Padding"}>
                     <div className='cmn_outer'>
                         <div className='planner_outer white_bg_color cmn_height_outer'>
@@ -431,10 +410,8 @@ const Planner = () => {
                                                 isDraftPost
                                                     ? "calendar-container hidden"
                                                     : "CalenderOuter_Wrapper"
-                                            }`}
-                                        >
+                                            }`}>
                                             <FullCalendar
-
                                                 ref={calendarRef}
                                                 plugins={[dayGridPlugin]}
                                                 initialView="dayGridMonth"
@@ -449,18 +426,12 @@ const Planner = () => {
                                                 }}
                                                 headerToolbar={
                                                     isDraftPost &&
-                                                    (getAllConnectedSocialAccountData?.loading ||
-                                                        getAllConnectedSocialAccountData?.data?.length ===
-                                                        0 ||
-                                                        connectedPagesData?.loading ||
-                                                        connectedPagesData?.facebookConnectedPages
-                                                            ?.length === 0)
-                                                        ? {
+                                                    (getAllConnectedSocialAccountData?.loading || getAllConnectedSocialAccountData?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0) ?
+                                                        {
                                                             left: "  ",
                                                             center: "",
                                                             right: "",
-                                                        }
-                                                        : {
+                                                        } : {
                                                             left: "  prev",
                                                             center: "title",
                                                             right: "next,timeGridDay,",
@@ -468,27 +439,24 @@ const Planner = () => {
                                                 }
                                                 customButtons={{
                                                     prev: {
-                                                        text: "Custom Prev",
+                                                        text: "Prev",
                                                         click: () => customHeaderClick("Prev"),
                                                     },
                                                     next: {
-                                                        text: "Custom Next",
+                                                        text: "Next",
                                                         click: () => customHeaderClick("Next"),
                                                     },
                                                 }}
                                                 dayCellContent={(arg) => {
-                                                    const cellDate = arg.date;
-
-                                                    const dateString = cellDate;
-                                                    const date = new Date(dateString);
-                                                    const dayOfMonth = date.getDate();
-                                                    let currentDayOfMonth = new Date().getDate()
-
-                                                    
+                                                    const calenderDate = arg.date;
+                                                    const dateString = calenderDate;
+                                                    const cellDate = new Date(dateString);
+                                                    const currentDate = new Date()
                                                     if (cellDate !== null) {
                                                         return (
-                                                            <div className={currentDayOfMonth!==dayOfMonth?"calendar_card1":"current_date_outer"}>
-                                                               <h3> {arg?.dayNumberText}</h3>
+                                                            <div
+                                                                className={(currentDate.getDate() === cellDate.getDate() && currentDate.getMonth() === cellDate.getMonth() && currentDate.getFullYear() === cellDate.getFullYear()) ? " current_date_outer" : " calendar_card1"}>
+                                                                <h3> {arg?.dayNumberText}</h3>
                                                             </div>
                                                         );
                                                     }
@@ -571,8 +539,8 @@ const Planner = () => {
                                                     <h3 className="planner_create_post_heading  flex-grow-1">Social
                                                         Media</h3>
                                                     <span className={"mr-4"}><input type={"checkbox"}
-                                                                                         checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
-                                                                                         onChange={(e) => handleSocialMediaFilters("all")}/></span>
+                                                                                    checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
+                                                                                    onChange={(e) => handleSocialMediaFilters("all")}/></span>
 
                                                 </div>
 

@@ -41,8 +41,7 @@ const Review = () => {
     } = usePosts(baseSearchQuery);
 
     const token = getToken();
-    const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] =
-        useState(false);
+    const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
     const [pageDropdown, setPageDropdown] = useState([]);
     const [selectedDropdownOptions, setSelectedDropDownOptions] = useState({
@@ -98,10 +97,7 @@ const Review = () => {
                 setPageDropdown(connectedPagesData?.facebookConnectedPages);
             } else {
                 setPageDropdown(
-                    getAllConnectedSocialAccountData?.data?.filter(
-                        (socialMediaAccount) =>
-                            socialMediaAccount?.provider === baseSearchQuery?.socialMediaType
-                    )[0]?.pageAccessToken
+                    getAllConnectedSocialAccountData?.data?.filter((socialMediaAccount) => socialMediaAccount?.provider === baseSearchQuery?.socialMediaType)[0]?.pageAccessToken
                 );
             }
         }
@@ -163,14 +159,6 @@ const Review = () => {
         },
         [isLoading, hasNextPage, removedPosts]
     );
-    const settings = {
-        arrows: false,
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
-    }
     return (
         <>
             <section>

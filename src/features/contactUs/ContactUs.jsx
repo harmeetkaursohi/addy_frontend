@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useFormik} from "formik";
 import "./Contact.css";
 import {CiLocationOn} from "react-icons/ci";
-import { PiPhoneCall } from "react-icons/pi";
+import {PiPhoneCall} from "react-icons/pi";
 import {FaRegEnvelope} from "react-icons/fa";
 import {validationSchemas} from "../../utils/commonUtils";
 import {contactUsFormActions} from "../../app/actions/webActions/webActions";
@@ -13,12 +13,13 @@ import {useNavigate} from 'react-router'
 import Loader from "../loader/Loader";
 import {useAppContext} from "../common/components/AppProvider";
 import jsondata from "../../locales/data/initialdata.json"
+
 const ContactUs = () => {
     const [isSmallScreen, setIsSmallScreen] = useState(false);
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const {sidebar} = useAppContext()
-
+    const recaptchaRef = useRef();
     const contactUsFormReducer = useSelector((state) => state.web.contactUsFormReducer);
     const [formData, setFormData] = useState({
         first_name: "",
@@ -53,9 +54,6 @@ const ContactUs = () => {
                 if (res?.status) {
                     resetForm()
                     showSuccessToast(res?.message);
-                    setTimeout(() => {
-                        navigate(0)
-                    }, 3000);
                 } else if (res?.status === false) {
                     if (res?.errors && Object.keys(res?.errors).length) {
                         const key = Object.keys(res?.errors)[0]
@@ -63,11 +61,9 @@ const ContactUs = () => {
                     } else {
                         resetForm()
                         showErrorToast(res?.message);
-                        setTimeout(() => {
-                            navigate(0)
-                        }, 3000);
                     }
                 }
+                recaptchaRef.current.reset();
             });
 
         },
@@ -81,7 +77,6 @@ const ContactUs = () => {
 
         window.addEventListener('resize', handleResize);
         handleResize();
-
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
@@ -96,18 +91,18 @@ const ContactUs = () => {
                                 <div className="contact_content ">
                                     <h3>{jsondata.lets_talk_text}</h3>
                                     <p>
-                                      {jsondata.contact_us_heading}
+                                        {jsondata.contact_us_heading}
                                     </p>
                                     <ul>
                                         <li className="pt-4">
                                             <CiLocationOn size={22}/>
                                             <span>
                         {jsondata.contact_address} <br/>
-                       {jsondata.contact_us_address}
+                                                {jsondata.contact_us_address}
                       </span>
                                         </li>
                                         <li>
-                                        <PiPhoneCall className="PiPhoneCall"/>
+                                            <PiPhoneCall className="PiPhoneCall"/>
                                             <a href="tel:+1 234 678 9108 99">{jsondata.contact_number}</a>
                                         </li>
                                         <li>
@@ -206,13 +201,11 @@ const ContactUs = () => {
 
 
                                         <ReCAPTCHA
-                                            sitekey={
-                                                import.meta.env.VITE_APP_ASTR_RECAPTCHA_SITE_KEY
-                                            }
+                                            ref={recaptchaRef}
+                                            sitekey={import.meta.env.VITE_APP_ASTR_RECAPTCHA_SITE_KEY}
                                             onChange={(value) => {
                                                 formik.setFieldValue("g-recaptcha-response", value);
                                             }}
-
                                             style={{
                                                 transform: isSmallScreen ? 'scale(0.6)' : "scale(0.9)",
                                                 transformOrigin: isSmallScreen ? '0 0' : "0",
@@ -220,8 +213,7 @@ const ContactUs = () => {
                                                 marginTop: "13px",
                                             }}
                                         />
-                                        {formik.touched["g-recaptcha-response"] &&
-                                        formik.errors["g-recaptcha-response"] ? (
+                                        {formik.touched["g-recaptcha-response"] && formik.errors["g-recaptcha-response"] ? (
                                             <p className="error_message error_outer">
                                                 {formik.errors["g-recaptcha-response"]}
                                             </p>

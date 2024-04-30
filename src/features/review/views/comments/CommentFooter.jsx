@@ -315,23 +315,32 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                                     d="M11 15.4C9.372 15.4 7.975 14.509 7.205 13.2H5.368C6.248 15.455 8.437 17.05 11 17.05C13.563 17.05 15.752 15.455 16.632 13.2H14.795C14.025 14.509 12.628 15.4 11 15.4ZM10.989 0C4.917 0 0 4.928 0 11C0 17.072 4.917 22 10.989 22C17.072 22 22 17.072 22 11C22 4.928 17.072 0 10.989 0ZM11 19.8C6.138 19.8 2.2 15.862 2.2 11C2.2 6.138 6.138 2.2 11 2.2C15.862 2.2 19.8 6.138 19.8 11C19.8 15.862 15.862 19.8 11 19.8Z"
                                     fill="#323232"/>
                             </svg>
-                            <input value={comment} type="text"
-                                   className={addCommentOnPostActionData?.loading && comment ? "form-control opacity-50" : "form-control"}
-                                   onClick={() => {
-                                       setShowEmojiPicker(false)
-                                   }}
-                                   onChange={(e) => {
-                                       setShowEmojiPicker(false)
-                                       e.preventDefault();
-                                       setComment(e.target.value);
-                                   }} placeholder="Add comment..."/>
-                            <button className={isNullOrEmpty(comment) ? "opacity-50" : ""}
-                                    disabled={addCommentOnPostActionData?.loading || isNullOrEmpty(comment)}
-                                    onClick={(e) => {
-                                        setShowEmojiPicker(false)
-                                        !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
-                                    }}>Post
-                            </button>
+                                <input value={comment} type="text"
+                                       className={addCommentOnPostActionData?.loading && comment ? "form-control opacity-50" : "form-control"}
+                                       onClick={() => {
+                                           setShowEmojiPicker(false)
+                                       }}
+                                       onChange={(e) => {
+                                           setShowEmojiPicker(false)
+                                           e.preventDefault();
+                                           setComment(e.target.value);
+                                       }} placeholder="Add comment..."
+                                       onKeyPress={(event)=>{
+                                           if (event.key === 'Enter') {
+                                               const element = document.getElementById('post-cmnt-btn');
+                                               if (element) {
+                                                   element.click();
+                                               }
+                                           }
+                                       }}
+                                />
+                                <button id={"post-cmnt-btn"} className={isNullOrEmpty(comment) ? "opacity-50" : ""}
+                                        disabled={addCommentOnPostActionData?.loading || isNullOrEmpty(comment)}
+                                        onClick={(e) => {
+                                            setShowEmojiPicker(false)
+                                            !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
+                                        }}>Post
+                                </button>
                         </>
                         : <>
                             <svg className="opacity-50" xmlns="http://www.w3.org/2000/svg"
