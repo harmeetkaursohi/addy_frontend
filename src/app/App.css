@@ -686,6 +686,10 @@ img.acc_not_connected_img.mt-0 {
   line-height: 24px;
   letter-spacing: -0.016px;
 }
+.fallback_loader_outer {
+  width: calc(100% - 280px);
+  margin-left: auto;
+}
 .cmn_connect_btn {
   font-family: "Nunito";
   font-size: 14px;

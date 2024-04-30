@@ -386,7 +386,7 @@ export const computeAndReturnPlannerEvent = (currentObject) => {
 export const isPostDatesOnSameDayOrInFuture = (postDate, currentDate) => {
     const d1 = new Date(postDate);
     const d2 = new Date(currentDate);
-    return d1.getUTCDate() >= d2.getUTCDate() && d1.getUTCMonth() >= d2.getUTCMonth() && d1.getUTCFullYear() >= d2.getUTCFullYear();
+    return ((d1.getUTCDate() >= d2.getUTCDate() && d1.getUTCMonth() >= d2.getUTCMonth() && d1.getUTCFullYear() >= d2.getUTCFullYear()) || d1.getTime() >=d2.getTime())
 
 }
 

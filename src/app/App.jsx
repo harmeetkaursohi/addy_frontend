@@ -7,6 +7,7 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {Suspense, lazy} from 'react';
 import './App.css'
+import {unProtectedUrls} from "../utils/contantData";
 
 
 const Dashboard = lazy(() => import('../features/dashboard/views/Dashboard.jsx'));
@@ -44,14 +45,17 @@ import WarningModal from "../features/common/components/WarningModal.jsx"
 const App = () => {
     const PrivateRoute = () => {
         const token = getToken();
-        return token ? <> <SideBar/><Outlet/></> : <Navigate to="/login"/>;
+        return token ? <Outlet/> : <Navigate to="/login"/>;
     }
 
     return (
         <>
             <AppProvider>
                 <BrowserRouter>
-                    <Suspense fallback={<CommonLoader></CommonLoader>}>
+                    {
+                        getToken() && !unProtectedUrls.includes(window.location.pathname) ?<SideBar/> :<></>
+                    }
+                    <Suspense fallback={<CommonLoader classname={"fallback_loader_outer"}/>}>
                         <Routes>
                             <Route element={<PrivateRoute/>}>
                                 <Route path="/plan" element={<SelectPlan/>}/>
