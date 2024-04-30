@@ -33,7 +33,9 @@ const DraftComponent = ({
     const [batchToDelete, setBatchToDelete] = useState(null);
     const [postToPublish, setPostToPublish] = useState(null);
     const [labels, setLabels] = useState("")
-
+    const[showCaption,setShowCaption]=useState(false)
+    const[showHastag,setShowHashtag]=useState(false)
+    
     const handlePublishedPost = (e) => {
         setLabels("Post Now")
         e.preventDefault();
@@ -104,7 +106,7 @@ const DraftComponent = ({
 
 
     }
-
+  
     return (<>
 
         <div className="draft-outer draft_container mb-3">
@@ -141,16 +143,16 @@ const DraftComponent = ({
             <div className="card-body post_card">
 
 
-                <div className={"mt-3"}>
+                <div>
                     <span className={"post_caption"}>Post Caption:</span>
-                    <h3 className={"caption upcoming_post_content"}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
+                    <h3 onClick={()=>{setShowCaption(!showCaption)}} className={`caption ${showCaption?"upcoming_post_content":"cmn_text_overflow"}`}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
                 </div>
 
-                <div className={""}>
+                <div className={"mt-2"}>
                     <h5>Hashtags: </h5>
-                    <div className=' mb-2 hash_tags_outer_container'>
+                    <div className={`mb-2 cursor-pointer ${showHastag?"hash_tags_outer_container":"cmn_text_overflow"}` }>
                         <span
-                            className={"hash_tags "}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
+                            className={"hash_tags "} onClick={()=>{setShowHashtag(!showHastag)}}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
                     </div>
 
                 </div>

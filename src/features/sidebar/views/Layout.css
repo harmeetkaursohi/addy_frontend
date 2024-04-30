@@ -9,6 +9,10 @@
     scrollbar-width: none;
     background-color: white;
 }
+img.addy_logo {
+    height: 40px;
+    object-fit: cover;
+}
 .animation{
     transition: all 0.7s ease-in;
 }
@@ -285,7 +289,32 @@ div.sidebar_item_outers {
     position: fixed;
     margin-bottom: 10px;
     }
-
+@media screen and (max-width:1280px) {
+    .user_info_outer {
+        margin: 5px 5px 0px;
+    }
+    .user_info_outer h3 {
+        font-size: 15px;
+    }
+    div.sidebar_item_outers {
+        padding: 4px 16px;
+    }
+    .sidebar_inner_content {
+        padding: 12px 17px;
+    }
+    .sidebar_item_outers h6 {
+        font-size: 15px;
+    }
+    div.sidebar_item_outers{
+        margin: 0px;
+    }
+    .sidebar_item li {
+        margin: 3px 6px 0px;
+    }
+    ul.sidebar_item {
+        margin-top: 0px !important;
+    }
+}
 @media screen and (max-width: 767px) {
     /* div.sidebar_item_outers {
         padding: 11px 16px;

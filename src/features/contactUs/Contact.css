@@ -135,7 +135,7 @@ h2.cmn_title {
         padding: 0px 6px 0px 0px;
     }
     .contact_us_heading{
-        padding-left: 14px;
+        padding:20px 0px 20px 14px !important;
     }
     p.error_message.error_outer {
         font-size: 14px;

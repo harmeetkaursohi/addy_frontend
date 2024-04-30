@@ -540,6 +540,17 @@ button#dropdown-basic::after {
   text-align: center;
   margin: 0px 3px;
 }
+.cmn_text_overflow{
+  text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.common_height{
+  height: 40px;
+  overflow-y: scroll;
+  line-height: 21px;
+}
 .current_date_outer h3{
   font-size: 14px;
     transform: translate(0px, 7px);
