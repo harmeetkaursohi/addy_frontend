@@ -28,10 +28,6 @@ const PrivacyComponent = lazy(() => import('../features/privacy/PrivacyComponent
 const ContactUs = lazy(() => import('../features/contactUs/ContactUs'));
 const Profile = lazy(() => import('../features/profile/Profile.jsx'));
 const Notification = lazy(() => import('../features/notification/Notification'));
-const InstagramPostModal = lazy(() => import('../features/common/components/InstagramPostModal.jsx'));
-const PinterestPostModal = lazy(() => import('../features/common/components/PinterestPostModal.jsx'));
-const FacebookPostModal = lazy(() => import('../features/common/components/FacebookPostModal.jsx'));
-const LinkedinPostModal = lazy(() => import('../features/common/components/LinkedinPostModal.jsx'));
 const Login = lazy(() => import('../features/login/views/Login'));
 const Signup = lazy(() => import('../features/signup/views/Signup'));
 const CreatePassword = lazy(() => import('../features/resetPassword/views/CreatePassword'));
@@ -41,7 +37,7 @@ const Oauth2RedirectComponent = lazy(() => import('../features/authentication/Oa
 const NotFound = lazy(() => import('../features/common/components/NotFound'));
 const BillingForm = lazy(() => import('../features/billingInfo/views/BillingForm.jsx'));
 const SelectPlan = lazy(() => import('../features/selectplan/views/SelectPlan.jsx'));
-import WarningModal from "../features/common/components/WarningModal.jsx"
+
 const App = () => {
     const PrivateRoute = () => {
         const token = getToken();
@@ -55,7 +51,7 @@ const App = () => {
                     {
                         getToken() && !unProtectedUrls.includes(window.location.pathname) ?<SideBar/> :<></>
                     }
-                    <Suspense fallback={<CommonLoader classname={"fallback_loader_outer"}/>}>
+                    <Suspense fallback={<CommonLoader classname={!unProtectedUrls.includes(window.location.pathname)?"fallback_loader_outer":""}/>}>
                         <Routes>
                             <Route element={<PrivateRoute/>}>
                                 <Route path="/plan" element={<SelectPlan/>}/>
@@ -77,11 +73,8 @@ const App = () => {
                                 <Route path="/contact" element={<ContactUs/>}/>
                                 <Route path="/profile" element={<Profile/>}/>
                                 <Route path="/notification" element={<Notification/>}/>
-                                <Route path="/insta" element={<InstagramPostModal/>}/>
-                                <Route path="/pin" element={<PinterestPostModal/>}/>
-                                <Route path="/fb" element={<FacebookPostModal/>}/>
-                                <Route path="/li" element={<LinkedinPostModal/>}/>
-                                <Route path="/WarningModal" element={<WarningModal/>}/>
+                                
+                             
                                 
                             </Route>
                             <Route path="/login" element={<Login/>}/>
