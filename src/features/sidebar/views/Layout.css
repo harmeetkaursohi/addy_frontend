@@ -29,12 +29,16 @@ img.addy_logo {
     color: white;
     background: #f07c33;
     border-radius: 20px;
-    height: 16px;
-    width: 16px;
+    height: 14px;
+    width: 14px;
     text-align: center;
     padding: 2px;
     position: absolute;
-    left: 33px;
+    left: 29px;
+    right: 0px;
+    top: 5px;
+    bottom: 0;
+    font-size: 10px;
 }
 
 .userimg{
@@ -263,6 +267,9 @@ i.bar_icon {
         display: flex;
         padding: 10px 16px;
 }
+.sidebar_item_outer{
+    position: relative;
+}
 div.sidebar_item_outers {
         padding: 6px 20px;
         gap: 21px;
@@ -321,17 +328,11 @@ div.sidebar_item_outers {
     }
 }
 @media screen and (max-width: 767px) {
-    /* div.sidebar_item_outers {
-        padding: 11px 16px;
-        gap: 20px;
-    } */
-    /* .sidebar_inner_content {
-        padding: 16px 13px;
-        gap: 17px;
-    } */
-    /* .sidebar_content {
-        width: 59px;
-    } */
+   
+
+    .notification-count-sidebar {
+        top: 0px;
+    }
     .sidebar_item li{
     margin-top: 8px;
     }
