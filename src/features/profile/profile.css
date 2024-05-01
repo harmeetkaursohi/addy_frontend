@@ -244,6 +244,10 @@ button.edit_profile_btn {
     .edit_content select.form-control.cmn_select_box.mt-1 {
         font-size: 16px;
     }
+    .user_pic {
+        height: 85px;
+        width: 85px;
+    }
 }
 @media screen and (max-width:991px) {
     .profile_information_container h5 {

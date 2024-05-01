@@ -31,7 +31,12 @@ const ScheduledComponent = ({scheduledData}) => {
 
     const [scheduledPosts, setScheduledPosts] = useState([]);
     const [deleteIdRef, setDeleteIdRef] = useState(null);
-
+      
+    const [showCaption, setShowCaption] = useState(false);
+    const [showHashTag, setShowHashTag] = useState(false);
+    
+    const[showCaptionIndex,setCaptionIndex]=useState()
+    const[showHashTagIndex,setHashTagIndex]=useState()
     useEffect(() => {
         scheduledData?.data && setScheduledPosts(Object.values(scheduledData?.data));
 
@@ -84,6 +89,15 @@ const ScheduledComponent = ({scheduledData}) => {
     }
 
 
+const captionHandler=(index)=>{
+setCaptionIndex(index)
+setShowCaption(!showCaption)
+}
+
+const hashTagHandler=(index)=>{
+    setHashTagIndex(index)
+    setShowHashTag(!showHashTag)
+}
     return (
         <>
 
@@ -139,12 +153,12 @@ const ScheduledComponent = ({scheduledData}) => {
                                              
                                              <div>
                                               <h6 className='upcoming_post_heading'>Post Captions</h6>
-                                            <h3 className={" upcoming_post_content mb-2"}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
+                                            <h3 onClick={handleSeparateCaptionHashtag(curBatch?.message)?.caption.length>50 ? ()=>{captionHandler(index)}:""} className={` mb-2 caption  ${showCaptionIndex ===index && showCaption ? "upcoming_post_content":"cmn_text_overflow cursor-pointer"}`}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
                                              </div>
 
                                              <h6 className='upcoming_post_heading'>Hashtags: </h6>
 
-                                            <div className={'mb-2 hash_tags_outer_container'}>
+                                            <div  onClick={handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length>50 ? ()=>{hashTagHandler(index)}:""}className={`mb-2  ${showHashTagIndex ===index && showHashTag? "hash_tags_outer_container":"cmn_text_overflow cursor-pointer"}`}>
                                                 <span
                                                     className={"hash_tags "}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
                                             </div>

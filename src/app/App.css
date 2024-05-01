@@ -972,7 +972,7 @@ img.acc_not_connected_img.mt-0 {
   
   .CalenderOuter_Wrapper .fc-scroller.fc-scroller-liquid-absolute {
       overflow: unset !important;
-      position: unset;
+    
   }
   .CalenderOuter_Wrapper .fc .fc-scroller{
       overflow: unset !important;

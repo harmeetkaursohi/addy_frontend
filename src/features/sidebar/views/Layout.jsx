@@ -154,16 +154,8 @@ const Layout = () => {
                     </div>
                     <div className="user_profile_outer">
                         <Link to="/dashboard">
-                            {sidebar ? (
-                                <img
-                                    src={addy_crop_logo}
-                                    height="45px"
-                                    width="45px"
-                                    className="mt-4"
-                                />
-                            ) : (
-                                <img src={addy_logo} className="addy_logo"/>
-                            )}
+                                <img src={addy_logo} className={`addy_logo ${sidebar?"cropped_logo_outer":""}`}/>
+                           
                         </Link>
 
 
@@ -189,7 +181,7 @@ const Layout = () => {
 
 
                     </div>
-                    <ul className={sidebar ? "sidebar_item Sidebar_containerbox mt-3" : "sidebar_item mt-3"}>
+                    <ul className={sidebar ? "sidebar_item Sidebar_containerbox mt-3" : "sidebar_item "}>
                         {SidebarMenuItems &&
                             SidebarMenuItems?.map((item, index) => (
                                 <li

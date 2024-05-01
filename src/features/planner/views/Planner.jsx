@@ -358,7 +358,7 @@ const Planner = () => {
             <section>
                 <div className={sidebar ? 'cmn_container' : "cmn_Padding"}>
                     <div className='cmn_outer'>
-                        <div className='planner_outer white_bg_color cmn_height_outer'>
+                        <div className='planner_outer planner_container white_bg_color cmn_height_outer'>
                             <div className='planner_header_outer'>
                                 <div className='planner_header'>
                                     <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
@@ -461,7 +461,7 @@ const Planner = () => {
                                                         );
                                                     }
                                                 }}
-                                                fixedWeekCount={true}
+                                                fixedWeekCount={false}
                                                 showNonCurrentDates={false}
                                             />
                                         </div>

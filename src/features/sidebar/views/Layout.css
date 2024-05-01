@@ -10,8 +10,12 @@
     background-color: white;
 }
 img.addy_logo {
-    height: 40px;
+    height: 45px;
     object-fit: cover;
+}
+.cropped_logo_outer{
+    width: 154px;
+    margin: 14px 7px 0px;
 }
 .animation{
     transition: all 0.7s ease-in;
@@ -86,7 +90,6 @@ i.bar_icon {
 }
 
 .sidebar_item li {
-     margin: 10px 6px 0px;
     cursor: pointer;
 
 }
@@ -150,14 +153,14 @@ a.active {
 }
 
 .Sidebar_containerbox li {
-    margin: 0px;
+    margin: 4px 0px;
 }
 
 .sidebar_inner_content {
  
     background: #FCF2EC;
     padding: 12px 19px;
-    gap: 17px;
+    gap: 10px;
     display: flex;
     align-items: center;
     color: #2A2D37;
@@ -219,9 +222,9 @@ border-radius: 20px;
     align-items: center;
     gap: 10px;
     cursor: pointer;
-    padding: 12px 25px;
+    padding: 12px 16px;
     width: 100%;
-    margin: 25px 5px 0px;
+    margin: 15px 5px 0px;
     border-radius: 9px;
 }
 .user_info_outer img {
@@ -261,9 +264,9 @@ i.bar_icon {
         padding: 10px 16px;
 }
 div.sidebar_item_outers {
-        padding: 4px 20px;
+        padding: 6px 20px;
         gap: 21px;
-        margin: 10px 0px 0px;
+
         display: flex;
         gap: 10px;
         flex-grow: 1;
@@ -283,6 +286,9 @@ div.sidebar_item_outers {
 .sidebar_inner_content svg path{
         stroke: #E05905;
 }
+.sidebar_item{
+    margin-top: 10px;
+}
 
     ul.sidebar_item li:last-child{
     bottom: 0;
@@ -291,7 +297,8 @@ div.sidebar_item_outers {
     }
 @media screen and (max-width:1280px) {
     .user_info_outer {
-        margin: 5px 5px 0px;
+        margin: 15px 5px 0px;
+        
     }
     .user_info_outer h3 {
         font-size: 15px;
@@ -300,14 +307,12 @@ div.sidebar_item_outers {
         padding: 4px 16px;
     }
     .sidebar_inner_content {
-        padding: 12px 17px;
+        padding: 12px 15px;
     }
     .sidebar_item_outers h6 {
         font-size: 15px;
     }
-    div.sidebar_item_outers{
-        margin: 0px;
-    }
+   
     .sidebar_item li {
         margin: 3px 6px 0px;
     }
