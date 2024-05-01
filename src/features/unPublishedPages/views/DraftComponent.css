@@ -392,14 +392,14 @@ button.outline_btn.schedule_btn{
         height: 240px !important;
 
     }
-    .draft_container .post_image_outerwrapper{
+    .draft_container.draft-outer .post_image_outerwrapper{
         height: 240px;
     }
     .draft_container_wrapper {
         margin-top: 20px;
     }
     .draft_button_outer{
-        margin-top: 15px !important;
+        margin-top: 10px !important;
     }
     .draft_container .card-body.post_card {
         padding: 0px 15px 15px;;
