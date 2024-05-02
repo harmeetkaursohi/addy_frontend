@@ -544,6 +544,7 @@ button#dropdown-basic::after {
   text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    width: 260px;
 }
 
 .common_height{
@@ -956,13 +957,19 @@ img.acc_not_connected_img.mt-0 {
   margin-top: 10px;
 }
   .cmn_wrapper_outer {
-    padding: 0px 15px 30px;
+    padding: 0px 24px 30px;
   }
   div#swal2-html-container {
     font-size: 18px;
   }
   h2#swal2-title {
     font-size: 25px;
+  }
+  .animated-popup img{
+    margin-bottom: 0px ;
+  }
+  .animated-popup h2{
+    padding-top: 12px ;
   }
 }
 @media screen and (min-width:1024px){
@@ -990,6 +997,12 @@ img.acc_not_connected_img.mt-0 {
 }
   .cmn_outer {
     padding: 14px;
+  }
+  .cmn_wrapper_outer {
+    padding: 0px 15px 30px;
+  }
+  .cmn_text_overflow{
+    width: 100%;
   }
 }
 @media screen and (max-width:991px) {
@@ -1019,26 +1032,42 @@ img.acc_not_connected_img.mt-0 {
 .cmn_text_style {
   font-size: 17px;
 }
+.cmn_text_overflow{
+  width: 260px;
+}
 .page_title_header{
   margin-top: 20px;
+}
+.addy_container{
+  min-height: unset;
+}
+.reach_user_outer h2{
+  margin-top: 20px !important;
 }
 }
 @media screen  and (max-width:767px) {
   .comment_container {
       padding-left: 62px;
   }
-  .addy_container{
-    min-height: unset;
+  .fallback_loader_outer{
+    width: calc( 100% - 59px);
+   
   }
-  .reach_user_outer h2{
-    margin-top: 20px !important;
+  .cmn_text_overflow{
+    width: 100%;
   }
+  
+  .form-group label {
+    font-size: 14px;
+  }
+  
+  
   .sign_up {
     font-size: 15px;
 }
 
   .addy_img h2 {
-    font-size: 25px;
+    font-size: 23px;
 }
 button.login_btn {
   padding: 9px;

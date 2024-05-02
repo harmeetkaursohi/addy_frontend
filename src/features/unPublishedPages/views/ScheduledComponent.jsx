@@ -153,12 +153,12 @@ const hashTagHandler=(index)=>{
                                              
                                              <div>
                                               <h6 className='upcoming_post_heading'>Post Captions</h6>
-                                            <h3 onClick={handleSeparateCaptionHashtag(curBatch?.message)?.caption.length>50 ? ()=>{captionHandler(index)}:""} className={` mb-2 caption  ${showCaptionIndex ===index && showCaption ? "upcoming_post_content":"cmn_text_overflow cursor-pointer"}`}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
+                                            <h3 onClick={handleSeparateCaptionHashtag(curBatch?.message)?.caption.length>40 ? ()=>{captionHandler(index)}:""} className={` mb-2 caption ${handleSeparateCaptionHashtag(curBatch?.message)?.caption.length>40?"cursor-pointer":""} ${showCaptionIndex ===index && showCaption ? "upcoming_post_content":"cmn_text_overflow"}`}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
                                              </div>
 
                                              <h6 className='upcoming_post_heading'>Hashtags: </h6>
 
-                                            <div  onClick={handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length>50 ? ()=>{hashTagHandler(index)}:""}className={`mb-2  ${showHashTagIndex ===index && showHashTag? "hash_tags_outer_container":"cmn_text_overflow cursor-pointer"}`}>
+                                            <div  onClick={handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length>40 ? ()=>{hashTagHandler(index)}:""}className={`mb-2 ${handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length>40?"cursor-pointer":""} ${showHashTagIndex ===index && showHashTag? "hash_tags_outer_container":"cmn_text_overflow"}`}>
                                                 <span
                                                     className={"hash_tags "}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
                                             </div>

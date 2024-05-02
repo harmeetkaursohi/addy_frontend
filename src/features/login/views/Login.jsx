@@ -10,7 +10,7 @@ import {loginUser} from "../../../app/actions/userActions/userActions.js";
 import {validationSchemas} from "../../../utils/commonUtils.js";
 import React, {useEffect, useState} from "react";
 import {showErrorToast} from "../../common/components/Toast";
-import Frame from "../../../images/login_bg.svg";
+import Frame from "../../../images/login_bg_img.svg";
 import {RotatingLines} from "react-loader-spinner";
 import {SomethingWentWrong} from "../../../utils/contantData";
 
