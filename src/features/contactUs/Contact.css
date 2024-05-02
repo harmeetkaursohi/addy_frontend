@@ -128,12 +128,12 @@ h2.cmn_title {
     .contact_content ul li a{
         font-size: 16px;
     }
-    .Contact_us_Outer {
+    /* .Contact_us_Outer {
         padding: 0px 10px 0px 20px !important;
-    }
-    #contactForm {
+    } */
+    /* #contactForm {
         padding: 0px 6px 0px 0px;
-    }
+    } */
     .contact_us_heading{
         padding:20px 0px 20px 14px !important;
     }
@@ -154,6 +154,12 @@ h2.cmn_title {
     }
     .contact_content ul li:first-child{
         margin-top: 10px;
+    }
+    #contactForm{
+        padding: 0px;
+    }
+    .Contact_us_Outer{
+        padding: 0px  12px !important;
     }
 }
 @media screen and (max-width: 767px){

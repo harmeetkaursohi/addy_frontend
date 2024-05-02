@@ -51,7 +51,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                                         <h6 className={"text-center mb-4 NotConncted_text"}>Currently, there are no active connections at
                                             the
                                             moment. Please connect
-                                            an account before attempting to create a post..</h6> :
+                                            an account before attempting to create a post.</h6> :
                                         <>
                                             {
                                                 connectedPagesData?.facebookConnectedPages !== undefined && connectedPagesData?.facebookConnectedPages?.length === 0 ?

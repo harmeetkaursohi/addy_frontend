@@ -176,6 +176,7 @@ element.style {
     align-items: center;
     gap: 5px;
     font-size: 13px;
+    cursor: auto;
 }
 
 .monthly_growth {
@@ -315,7 +316,7 @@ button.facebook_connect > div > div:last-child {
 }
 
 button.facebook_connect {
-    min-width: 98px;
+    min-width: 98px !important;
     text-align: center;
     height: 35px !important;
     margin: 0px !important;

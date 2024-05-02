@@ -448,6 +448,9 @@ button.outline_btn.schedule_btn{
     .draft_component_outer .dropdown{
         top: 22px;
     }
+    .upcomingPostBtn_Outer{
+        flex-wrap: unset;
+    }
    
 }
 @media screen and (max-width:767px) {
@@ -498,7 +501,7 @@ button.outline_btn.schedule_btn{
         font-size: 12px;
     }
     h3.caption{
-        font-size: 12px;
+        font-size: 14px;
     }
    
 }
