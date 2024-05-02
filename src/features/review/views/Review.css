@@ -48,6 +48,18 @@ td.disabled-table-grid {
 .load-more-cmnt-txt:hover{
     background: rgb(0 0 0 / 8%);
 }
+.load-more-replies-txt {
+    font-weight: 300;
+    opacity: .9;
+    font-size: 12px;
+    display: inline-block;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin-left: 90px;
+}
+.load-more-replies-txt:hover{
+    background: rgb(0 0 0 / 8%);
+}
 img.acc_not_connected_img {
     height: 350px;
     margin-top: 60px;
@@ -115,6 +127,9 @@ img.acc_not_connected_img {
 .no-cmnt-outer {
     display: flex;
     align-items: center;
+}
+.h-20{
+    height: 20px;
 }
 .animated-icon{
     animation-name: popUp;

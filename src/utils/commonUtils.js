@@ -386,7 +386,7 @@ export const computeAndReturnPlannerEvent = (currentObject) => {
 export const isPostDatesOnSameDayOrInFuture = (postDate, currentDate) => {
     const d1 = new Date(postDate);
     const d2 = new Date(currentDate);
-    return ((d1.getUTCDate() >= d2.getUTCDate() && d1.getUTCMonth() >= d2.getUTCMonth() && d1.getUTCFullYear() >= d2.getUTCFullYear()) || d1.getTime() >=d2.getTime())
+    return ((d1.getUTCDate() >= d2.getUTCDate() && d1.getUTCMonth() >= d2.getUTCMonth() && d1.getUTCFullYear() >= d2.getUTCFullYear()) || d1.getTime() >= d2.getTime())
 
 }
 
@@ -919,7 +919,7 @@ export const getInstagramBusinessAccounts = (accountsData) => {
     })
 }
 export const isErrorInInstagramMention = (socialMediaType, error) => {
-    return socialMediaType === "INSTAGRAM" && error?.response?.data?.error?.code === 20 && error?.response?.data?.error?.error_subcode === 1772179
+    return error?.response?.data?.error?.code === 20 && error?.response?.data?.error?.error_subcode === 1772179
 
 }
 export const getInitialLetterCap = (word) => {
@@ -1101,16 +1101,16 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
             const summedPresentData = filterAndSumPinterestUserAnalyticsDataFor(presentData, presentData?.length, ["IMPRESSION", "ENGAGEMENT"]);
             formattedData = {
                 engagement: {
-                    presentData: summedPresentData?.ENGAGEMENT||0,
+                    presentData: summedPresentData?.ENGAGEMENT || 0,
                     previousData: {
-                        data: summedPreviousData?.ENGAGEMENT||0,
+                        data: summedPreviousData?.ENGAGEMENT || 0,
                         dateRange: dateRange
                     }
                 },
                 reach: {
-                    presentData: summedPresentData?.IMPRESSION||0,
+                    presentData: summedPresentData?.IMPRESSION || 0,
                     previousData: {
-                        data: summedPreviousData?.IMPRESSION||0,
+                        data: summedPreviousData?.IMPRESSION || 0,
                         dateRange: dateRange
                     }
                 }
@@ -1330,9 +1330,9 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
             }
             formattedData = {
                 total_like: data?.shareStatistics?.totalShareStatistics?.likeCount || 0,
-                total_comment: data?.shareStatistics?.totalShareStatistics?.commentCount|| 0,
-                total_share: data?.shareStatistics?.totalShareStatistics?.shareCount|| 0,
-                account_reach: data?.shareStatistics?.totalShareStatistics?.impressionCount|| 0,
+                total_comment: data?.shareStatistics?.totalShareStatistics?.commentCount || 0,
+                total_share: data?.shareStatistics?.totalShareStatistics?.shareCount || 0,
+                account_reach: data?.shareStatistics?.totalShareStatistics?.impressionCount || 0,
                 creation_time: data?.postInfo?.createdAt,
                 attachments: getAttachmentsData(data, socialMediaType),
             }
@@ -1867,7 +1867,7 @@ export const createOptionListForSelectTag = (data = null, label, value, addition
     return list
 }
 
-export const getValueOrDefault = (value, defaultValue) => {
+export const getValueOrDefault = (value=null, defaultValue) => {
     if (isNullOrEmpty(value)) {
         return defaultValue
     }
@@ -2686,7 +2686,15 @@ export const createSocialMediaProfileViewInsightsQuery = (queryObject, socialMed
 }
 
 export function objectToQueryString(obj) {
-    return Object.keys(obj).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`).join('&');
+     return Object.keys(obj)
+        .map(key => {
+            if (obj[key] !== null && obj[key] !== undefined) {
+                return `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;
+            }
+            return null;
+        })
+        .filter(param => param !== null)
+        .join('&');
 }
 
 export const getFormattedInsightsForProfileViews = (data, socialMediaType) => {
@@ -2704,4 +2712,12 @@ export const getFormattedInsightsForProfileViews = (data, socialMediaType) => {
 
     }
     return {};
+}
+
+export const countCommonElementsFromArray=(sourceArray=[],comparisonArray=[])=>{
+    if(sourceArray.length===0 ||comparisonArray.length===0 ){
+        return 0
+    }
+    const commonElements = comparisonArray.filter(value => sourceArray.includes(value));
+    return commonElements.length;
 }

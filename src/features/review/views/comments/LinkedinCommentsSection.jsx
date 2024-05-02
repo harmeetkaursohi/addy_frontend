@@ -299,7 +299,6 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                 <>
                     {
                         linkedinComments?.elements?.map((comment, index) => {
-                            console.log("comment==>", comment)
                             const commentorsProfile = extractCommentersProfileDataForLinkedin(comment)
                             return (
 

@@ -1,19 +1,26 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
 import {showErrorToast, showSuccessToast, showWarningToast} from "../../../features/common/components/Toast.jsx";
-import {baseAxios, isErrorInInstagramMention} from "../../../utils/commonUtils";
+import {baseAxios, isErrorInInstagramMention, objectToQueryString} from "../../../utils/commonUtils";
 import {CouldNotPostComment, SocialAccountProvider, UpdateCommentFailedMsg} from "../../../utils/contantData";
 
 export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
 
-        case "FACEBOOK":
-        case  "INSTAGRAM": {
+        case "FACEBOOK":{
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?&access_token=${data?.pageAccessToken}`;
             return baseAxios.post(apiUrl, data?.data).then((response) => {
                 return response.data;
             }).catch((error) => {
-                showErrorToast(isErrorInInstagramMention(data?.socialMediaType, error) ? CouldNotPostComment : error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.message);
+            });
+        }
+        case  "INSTAGRAM": {
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?&access_token=${data?.pageAccessToken}&fields=id,text,timestamp,like_count,from{id,username},user{id,profile_picture_url},replies`;
+            return baseAxios.post(apiUrl, data?.data).then((response) => {
+                return response.data;
+            }).catch((error) => {
+                showErrorToast(isErrorInInstagramMention( error) ? CouldNotPostComment : error.response.data.error.message);
                 return thunkAPI.rejectWithValue(error.message);
             });
         }
@@ -40,14 +47,13 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
 export const replyCommentOnPostAction = createAsyncThunk('post/replyCommentOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
         case  "INSTAGRAM": {
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/replies?access_token=${data?.pageAccessToken}`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/replies?access_token=${data?.pageAccessToken}&fields=id,text,timestamp,like_count,from{id,username},user{id,profile_picture_url},parent_id`;
             return baseAxios.post(apiUrl, data?.data).then((response) => {
-                return response.data.data;
+                return response.data;
             }).catch((error) => {
-                showErrorToast(isErrorInInstagramMention(data?.socialMediaType, error) ? CouldNotPostComment : error.response.data.error.message);
+                showErrorToast(isErrorInInstagramMention( error) ? CouldNotPostComment : error.response.data.error.message);
                 return thunkAPI.rejectWithValue(error.message);
             });
-            break;
         }
         case  "LINKEDIN": {
             const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comment`;
@@ -64,7 +70,6 @@ export const replyCommentOnPostAction = createAsyncThunk('post/replyCommentOnPos
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.message);
             });
-            break;
         }
         default : {
         }
@@ -84,7 +89,18 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
             });
         }
         case  "INSTAGRAM": {
-            break;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?${objectToQueryString({
+                access_token:data?.pageAccessToken,
+                limit:data?.limit,
+                fields:"id,text,timestamp,like_count,from{id,username},user{profile_picture_url},replies{id}",
+                after:data?.next
+            })}`;
+            return baseAxios.get(apiUrl, null).then((response) => {
+                return response?.data
+            }).catch((error) => {
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.message);
+            });
         }
         case  "LINKEDIN": {
             const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comments/${data?.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
@@ -102,6 +118,20 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
 
 export const getRepliesOnComment = createAsyncThunk('post/getRepliesOnComment', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
+        case  "INSTAGRAM": {
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/replies?${objectToQueryString({
+                access_token:data?.pageAccessToken,
+                limit:data?.limit,
+                fields:"id,text,timestamp,like_count,from{id,username},user{profile_picture_url},parent_id",
+                after:data?.next
+            })}`;
+            return baseAxios.get(apiUrl, null).then((response) => {
+                return response?.data
+            }).catch((error) => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.message);
+            });
+        }
         case  "LINKEDIN": {
             const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comments/${data?.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
             return baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then((response) => {
@@ -218,17 +248,15 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
             });
-            break;
         }
         case  "INSTAGRAM": {
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.postIds[0]}?access_token=${data?.pageAccessToken}&fields=id,caption,is_comment_enabled,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url},comments{id,text,timestamp,like_count,from,user{profile_picture_url},replies{id,text,from,timestamp,like_count,parent_id}}`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.postIds[0]}?access_token=${data?.pageAccessToken}&fields=id,caption,is_comment_enabled,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
             return await baseAxios.get(apiUrl).then(res => {
                 return res.data;
             }).catch(error => {
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
             });
-            break;
         }
         case  "PINTEREST": {
             const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/pin-insights?ids=${data?.postIds[0]}`;
@@ -238,7 +266,6 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
             });
-            break;
         }
         case  "LINKEDIN": {
             const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/socialActions/${data?.postIds[0]}`;
@@ -248,7 +275,6 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
             });
-            break;
         }
         default : {
 
