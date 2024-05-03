@@ -395,11 +395,10 @@ select.page_title_options {
     width: 100%;
     padding: 0px;
 }
-img.acc-not-connected-error-svg.mt-1 {
-    height: 238px;
-    width: 100%;
-}
 
+.Account_not_connect_wrapper div.modal-content {
+    border-radius: 10px;
+}
 img.connection-error-svg {
     height: 200px;
     width: 220px;
@@ -720,9 +719,7 @@ width: 100%;
         font-size: 13px;
         line-height: 21px;
     }
-    img.acc-not-connected-error-svg.mt-1 {
-        height: 209px;
-    }
+ 
     .social_media_outer{
         display: block;
     }

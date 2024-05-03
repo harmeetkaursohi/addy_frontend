@@ -1,6 +1,5 @@
 import React, {useEffect} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import addy_crop_logo from "../../../images/cropLogo.png";
 import addy_logo from "../../../images/addylogoo.png";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
@@ -18,7 +17,7 @@ import default_user_icon from '../../../images/default_user_icon.svg'
 import logout_img from '../../../images/log-out.svg'
 import {subscribeNotifications} from "../../../services/addyService";
 
-import logout_bg from "../../../images/logout_bg.svg"
+import logout_image from "../../../images/logout_img.svg"
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect.jsx";
 import {
     getUpdatedNameAndImageUrlForConnectedPages,
@@ -114,12 +113,12 @@ const Layout = () => {
     const LogOut = () => {
         Swal.fire({
             title: `Logout`,
-            imageUrl: logout_bg,
+            imageUrl: logout_image,
             text: `Are you sure you want to logout?`,
             showCancelButton: true,
             cancelButtonText: "Cancel",
             confirmButtonText: "Log out",
-            confirmButtonColor: "#E05905",
+            confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
 
             customClass: {

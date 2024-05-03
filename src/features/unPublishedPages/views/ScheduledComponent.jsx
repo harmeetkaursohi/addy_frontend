@@ -19,7 +19,7 @@ import noPostScheduled from "../../../images/no_post_scheduled.svg";
 import CommonLoader from "../../common/components/CommonLoader";
 import Swal from "sweetalert2";
 import {useAppContext} from '../../common/components/AppProvider';
-
+import delete_img from "../../../images/trash_img.svg"
 const ScheduledComponent = ({scheduledData}) => {
     const {sidebar} = useAppContext()
 
@@ -45,12 +45,12 @@ const ScheduledComponent = ({scheduledData}) => {
     const handleDeletePost = (e) => {
         e.preventDefault();
         Swal.fire({
-            icon: 'warning',
+            imageUrl: delete_img,
             title: `Delete Post`,
             text: `Are you sure you want to delete this post?`,
             showCancelButton: true,
-            confirmButtonText: 'Delete',
             cancelButtonText: 'Cancel',
+            confirmButtonText: 'Delete',
             confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
             customClass: {

@@ -80,9 +80,9 @@
     transform: rotate(91deg);
 }
 .not_connect_heading{
-    font-size: 26px;
+    font-size: 28px;
     color: #263238;
-    font-weight: 600;
+    font-weight: 800;
     font-family: "Nunito";
 }
 
@@ -334,6 +334,9 @@ gap: 16px;
     right: -37px;
     top: -22px;
     }
+    .not_connect_heading {
+        font-size: 24px;
+    }
 }
 @media screen and (max-width:1024px) {
     .linkedin_likes{
@@ -348,9 +351,7 @@ gap: 16px;
     }
 }
 @media screen and (max-width:991px){
-    .not_connect_heading {
-        font-size: 23px;
-    }
+    
 }
 @media screen and (max-width:767px) {
     .linkedin_dropdown{

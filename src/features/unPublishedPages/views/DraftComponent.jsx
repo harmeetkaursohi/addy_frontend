@@ -13,8 +13,8 @@ import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {getToken} from "../../../app/auth/auth";
 import {useState} from "react";
 import Swal from 'sweetalert2';
-
-
+import delete_img from "../../../images/trash_img.svg"
+import {RxCross2} from "react-icons/rx"
 const DraftComponent = ({
                             batchIdData,
                             setDraftPost = null,
@@ -70,12 +70,12 @@ const DraftComponent = ({
         e.preventDefault();
         setBatchToDelete(batchIdData?.id)
         Swal.fire({
-            icon: 'warning',
+            imageUrl:delete_img,
             title: `Delete Post`,
             text: `Are you sure you want to delete this draft post?`,
             showCancelButton: true,
-            confirmButtonText: 'Delete',
             cancelButtonText: 'Cancel',
+            confirmButtonText: 'Delete',
             confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
             customClass: {
