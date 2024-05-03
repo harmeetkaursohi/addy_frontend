@@ -24,7 +24,7 @@ import {
 } from "../../app/slices/notificationSlice/notificationSlice";
 import {resetReducers} from "../../app/actions/commonActions/commonActions";
 import Swal from "sweetalert2";
-
+import notification_img from "../../images/notification_img.svg"
 const Notification = () => {
 
     const dispatch = useDispatch();
@@ -165,7 +165,7 @@ const Notification = () => {
     const handleClearAllNotifications = (e) => {
         e.preventDefault();
         Swal.fire({
-            icon: 'warning',
+            imageUrl: notification_img,
             title: `Clear Notifications`,
             text: `Are you sure you want to clear notifications?`,
             showCancelButton: true,

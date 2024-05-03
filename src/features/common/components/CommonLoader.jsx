@@ -1,8 +1,12 @@
 import {RotatingLines} from "react-loader-spinner";
-// cmn_loader_outer
+import { useAppContext } from "./AppProvider";
+
 const CommonLoader = ({classname}) => {
+    const {sidebar}=useAppContext()
+   
+  
     return (
-        <div className={` d-flex justify-content-center align-items-center min-vh-100 ${classname}`}>
+        <div className={` ${sidebar && classname==="fallback_loader_outer" ? "":classname} d-flex justify-content-center align-items-center min-vh-100 `}>
             <div className="text-center">
                 <RotatingLines
                     strokeColor="#F07C33"

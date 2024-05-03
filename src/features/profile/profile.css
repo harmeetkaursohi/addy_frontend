@@ -72,7 +72,7 @@ isolation: unset !important;
     font-weight: 400;
     font-size: 18px;
     font-family: "Nunito";
-    margin-top: 20px;
+    margin-top: 16px;
 }
 .edit_profile_contaniner{
     display: flex;
@@ -100,11 +100,15 @@ button.edit_profile_btn {
     min-width: 110px;
 }
 .edit_content input {
-  
+    border: 1px solid #A1BAC9;
     color: #263238;
     font-weight: 500;
     font-size: 18px;
+    border-radius: 6px !important;
 
+}
+.edit_content .form-control:disabled{
+    background-color: #F8FAFD !important;
 }
 
 .edit_content input.form-control::placeholder {
@@ -156,18 +160,11 @@ button.edit_profile_btn {
     color: white;
     text-align: center;
     padding-top: 4px;
-    transform: translate(67px, -31px);
+    transform: translate(41px, -31px);
     
 }
-.profile_information_container h4 {
-    font-size: 26px;
-}
-.profile_information_container h5 {
-    font-size: 19px;
-    font-weight: 500;
-    font-family: "Nunito";
-    color: #263238;
-}
+
+
 .cmn_box_shadow{
     box-shadow: 4px 3px 10px #e5e2e2;
     padding: 15px;
@@ -193,7 +190,7 @@ button.edit_profile_btn {
     color: #263238;
     font-weight: 500;
     font-size: 18px;
-   
+   border:1px solid #A1BAC9
 }
  
   
@@ -205,11 +202,16 @@ button.edit_profile_btn {
     background: white;
     color: #e97011;
 }
-.change_profile_outer {
-    background: #F8FAFD;
-    border: 1px solid #D9D9D9;
-    padding: 20px;
-    border-radius: 10px;
+
+.profile_cmn_radius {
+    border-radius: 17px;
+}
+.edit_content .profile_info_container .form-group label {
+   margin-top:10px
+
+}
+.edit_content .profile_info_container .form-group label:first-child {
+    margin-top: 8px;
 }
 @media screen and (min-width:1499px) {
     .editprofile_outer{
@@ -226,12 +228,8 @@ button.edit_profile_btn {
     .edit_content h3 {
         font-size: 20px;
     }
-    .profile_information_container  h4{
-        font-size: 21px;
-    }
-    .profile_information_container h5 {
-        font-size: 17px;
-    }
+    
+   
     .edit_content .form-group label {
         font-size: 16px;
     }
@@ -248,13 +246,19 @@ button.edit_profile_btn {
         height: 85px;
         width: 85px;
     }
-}
-@media screen and (max-width:991px) {
-    .profile_information_container h5 {
-        font-size: 16px;
+    .changeProfile_label {
+    height: 25px;
+    width: 25px;
+    font-size: 14px;
+    padding-top: 1px;
+    transform: translate(33px, -31px);
     }
-    .profile_information_container h4 {
-        font-size: 20px;
+}
+
+@media screen and (max-width:991px) {
+   
+    .address_info_container {
+        margin-top: 20px;
     }
     .edit_content h3 {
         font-size: 22px;
@@ -271,15 +275,25 @@ button.edit_profile_btn {
     .editprofile_outer {
         padding: 20px 16px;
     }
+    .address_info_container{
+        padding: 12px !important;
+    }
+    .profile_info_container{
+        padding: 12px !important;  
+    }
     button.edit_profile_btn {
         min-width: unset;
+        padding: 4px 12px;
+        font-size: 14px;
+        height: 33px
+    }
+    .edit_profile_contaniner h3{
+        font-size: 18px;
     }
     .profile_Wrapper {
         gap: 27px !important;
     }
-    .change_profile_outer{
-    padding: 10px;
-    }
+   
     .profile_cancel_btn{
         min-width: unset;
     }
@@ -303,23 +317,18 @@ button.edit_profile_btn {
     .edit_content h3 {
         font-size: 16px;
     }
-    .profile_information_container h5 {
-        font-size: 13px;
-    }
+   
    .profile_Wrapper{
     flex-wrap: wrap;
     gap: 27px !important;
    }
     .changeProfile_label{
-        transform: unset;
+        transform: translate(23px, -25px);
         font-size: 13px;
         height: 23px;
         width: 23px;
         padding-top: 0px;
-        position: absolute;
-        left: 44px;
-        right: auto;
-        top: 33px;
+     
 }
 .edit_content input {
     font-size: 12px;
@@ -328,6 +337,7 @@ button.edit_profile_btn {
     
     .edit_content .form-group label {
         font-size: 14px;
+        margin-top: 10px;
     }
     h3.user_name_heading {
         margin-top: 12px;

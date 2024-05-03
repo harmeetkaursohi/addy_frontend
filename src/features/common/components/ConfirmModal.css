@@ -1,21 +1,32 @@
 .confirmWrapper {
     text-align: center;
-    padding: 30px 0px;
+    /* padding: 30px 0px; */
 }
 
-
-
+.yes_btn{
+    font-size: 16px;
+    border: none;
+    color: white;
+    font-weight: 700;
+}
+.success_img{
+    height: 120px;
+    width: 100%;
+}
 .alert_modal_body div.modal-content {
     border-radius: 20px;
 }
 
 .confirm_text {
-    padding-top: 20px;
+    padding-top: 7px;
+    color: #263238;
+    font-weight: 600;
+    font-size: 20px;
 }
 
 .confirm_container h2 {
-    font-size: 36px;
-    font-weight: 500;
+    font-size: 28px;
+    font-weight: 800;
 }
 
 
@@ -24,12 +35,29 @@
 @media screen and (max-width:1280px){
 
     .confirm_container h2 {
-        font-size: 32px;
+        font-size: 24px;
+    }
+    .confirm_text{
+        font-size: 18px;
     }
 }
 
 @media screen and (max-width:991px){
     .confirm_container h2{
         font-size: 28px;
+    }
+}
+@media screen and (max-width:767px){
+    .confirm_text {
+        font-size: 15px;
+    }
+    .confirm_container h2 {
+        font-size: 24px;
+    }
+    .confirm_btn button {
+        height: 37px;
+    }
+    .success_img {
+        height: 90px;
     }
 }

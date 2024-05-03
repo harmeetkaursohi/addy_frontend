@@ -343,8 +343,31 @@ div:where(.swal2-container).swal2-center>.swal2-popup {
 .cmn_border{
   border-bottom: 1px solid #D9D9D9;
 }
+.gray_border{
+  border: 1px solid #D9D9D9;
+}
+.pop_up_cross_icon_outer svg{
+  font-size: 26px;
+  color: #F07C33;
+}
+.Account_not_connect_wrapper .modal-header .btn-close{
+  display: none;
+}
 .cmn_shadow{
   box-shadow: 2px 0px 8px #e5e2e2;
+}
+.popup_text{
+  color: #263238;
+  font-weight: 600;
+  font-size: 20px;
+}
+.cmn_modal_cancelbtn{
+    border: 1px solid #263238;
+    background-color: white;
+    color: #263238;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "Nunito";
 }
 h2#swal2-title {
  
@@ -357,18 +380,23 @@ button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline:focus {
   box-shadow: unset !important;
 }
 div#swal2-html-container {
-  font-size: 20px;
+  font-size: 19px;
   color: #263238;
-    font-family: "Nunito";
-    font-weight: 600;
-
+  font-family: "Nunito";
+  font-weight: 600;
+  margin: 0px;
+  padding: 7px 14px 0px;;
+  line-height: 28px;
+}
+img.swal2-image {
+  height: 140px;
 }
 div:where(.swal2-container) div:where(.swal2-actions){
   gap: 15px;
 }
 button.swal2-cancel.cancelButton.swal2-styled.swal2-default-outline{
   border: 1px solid #263238 !important;
-  border-radius: 20px;
+  border-radius: 7px;
   background: initial;
   background-color: white !important;
   color: #263238 !important;
@@ -377,7 +405,7 @@ button.swal2-cancel.cancelButton.swal2-styled.swal2-default-outline{
  
 }
 button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline {
-  border-radius: 20px;
+  border-radius: 7px;
   padding: 8px 30px;
 }
 
@@ -632,9 +660,19 @@ div:where(.swal2-container) button:where(.swal2-styled).swal2-default-outline:fo
   font-size: 24px ;
 }
 button.swal2-cancel.swal2-styled.swal2-default-outline {
-  border: 1px solid #D1D9E2 !important;
-  background: #E6E9EC !important;
-  color: #393939 !important;
+  border: 1px solid #263238 !important;
+  background: white !important;
+  color: #263238 !important;
+  padding: 6px 25px;
+  font-size: 16px;
+}
+button.swal2-confirm.custom-confirm-button-class.swal2-styled.swal2-default-outline {
+  padding: 6px 25px;
+  min-width: 108px;
+}
+.alert_modal_body .modal-body {
+  padding-bottom: 25px;
+
 }
 div.noDraftPosts_outer {    
   background-color:#fff;
@@ -701,7 +739,9 @@ img.acc_not_connected_img.mt-0 {
 .fallback_loader_outer {
   width: calc(100% - 280px);
   margin-left: auto;
+
 }
+
 .cmn_connect_btn {
   font-family: "Nunito";
   font-size: 14px;
@@ -842,6 +882,23 @@ ul.slick-dots {
 ul.slick-dots li button:before {
   opacity: 1;
   color: #a69b9b;
+}
+.Account_not_connect_wrapper .modal-header{
+  border-bottom: unset;
+  margin:  0px !important;
+    padding: 0px 15px !important;
+
+}
+img.acc-not-connected-error-svg {
+  height: 150px;
+  width: 100%;
+}
+.Account_not_connect_wrapper .modal-body{
+  padding: 0px 0px 24px!important;
+}
+button.swal2-confirm.YesButton.swal2-styled.swal2-default-outline {
+  min-width: 102px;
+  padding: 7px 19px;
 }
 @keyframes fadeInLeft {
   0% {
@@ -1049,9 +1106,15 @@ img.acc_not_connected_img.mt-0 {
   .comment_container {
       padding-left: 62px;
   }
+  img.swal2-image {
+    height: 110px;
+}
   .fallback_loader_outer{
-    width: calc( 100% - 59px);
-   
+    width: calc( 100% - 59px); 
+  }
+  .cmn_loader_outer{
+    width: calc( 100% - 59px); 
+    margin-left: auto;
   }
   .cmn_text_overflow{
     width: 100%;
@@ -1147,7 +1210,8 @@ width: 20px;
   padding: 0px 13px 30px;
 }
 div#swal2-html-container {
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 22px;
 }
 .cmn_Padding{
   padding-left: 60px;
@@ -1168,7 +1232,7 @@ button.swal2-cancel.cancelButton.swal2-styled.swal2-default-outline{
   padding: 6px 23px;
 }
 h2#swal2-title {
-font-size: 19px;
+font-size: 17px;
 }
 
 .addy_outer {

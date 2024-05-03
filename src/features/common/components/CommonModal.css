@@ -115,7 +115,10 @@ font-size: 20px;
     cursor: not-allowed;
 }
 
-
+.facebook_content_outer h6{
+    font-size: 18px;
+    line-height: 25px;
+}
 .modal_inner_content.disconnect_wrapper .users_profile,
 .modal_inner_content.disconnect_wrapper
 h2.cmn_text_style,
@@ -149,7 +152,11 @@ button, .modal_inner_content.disconnect_wrapper
         font-size: 17px;
     }
 }
-
+@media (max-width: 1280px) {
+    .facebook_content_outer h6 {
+        font-size: 16px;
+    }
+}
 @media (max-width: 991px) {
     .users_profile img {
         height: 50px;
@@ -190,6 +197,11 @@ margin-top: 12px;
     .user_contents{
         font-size: 14px;
     }
+    .facebook_content_outer h6 {
+        font-size: 13px;
+        line-height: 19px;
+        padding: 0px 14px;
+    }
 }
 
 @media (max-width: 567px) {
@@ -200,8 +212,5 @@ margin-top: 12px;
     .facebook_content_outer {
         padding: 0px;
     }
-    .facebook_content_outer h6 {
-        font-size: 13px;
-        line-height: 19px;
-    }
+    
 }

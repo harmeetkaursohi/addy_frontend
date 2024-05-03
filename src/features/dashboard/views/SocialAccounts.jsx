@@ -32,6 +32,9 @@ import {
 } from "../../../utils/contantData";
 import AccountAlreadyConnectedWarningModal from "./AccountAlreadyConnectedWarningModal";
 import {SomethingWentWrong, enabledSocialMedia} from "../../../utils/contantData";
+import cancel_img from "../../../images/cancel_img.svg"
+import success_img from "../../../images/right_img.svg"
+import Warning_image from "../../../images/cancel_img.svg"
 
 const SocialAccounts = ({}) => {
 
@@ -235,7 +238,7 @@ const SocialAccounts = ({}) => {
 
     const disConnectSocialMediaAccountToCustomer = (socialMediaType) => {
         Swal.fire({
-            icon: 'warning',
+            imageUrl: success_img,
             title: `Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account`,
             text: formatMessage(DisconnectAccountWarning,[getInitialLetterCap(SocialAccountProvider[socialMediaType])]),
             showCancelButton: true,
@@ -243,6 +246,9 @@ const SocialAccounts = ({}) => {
             cancelButtonText: 'Cancel',
             confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
+            customClass: {
+                confirmButton: 'YesButton',
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 if (socialMediaType === "INSTAGRAM") {
@@ -273,7 +279,7 @@ const SocialAccounts = ({}) => {
                         query: {limit: 6, period:"MONTH",sort:"feedPostDate",sortOrder:"asc", postStatus: ["SCHEDULED"]}
                     }));
                     Swal.fire({
-                        icon: 'success',
+                        imageUrl:Warning_image,
                         title: `${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account Disconnected`,
                         text: `Your ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} account has been disconnected successfully.`,
                         showConfirmButton: true,
@@ -292,7 +298,7 @@ const SocialAccounts = ({}) => {
                 Swal.fire({
                     title: 'Cancelled',
                     text: `Your ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} account is still connected.`,
-                    icon: 'info',
+                    imageUrl: cancel_img,
                     showConfirmButton: false,
                     showCancelButton: true,
                     cancelButtonColor: '#E6E9EC'
