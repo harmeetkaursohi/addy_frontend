@@ -1159,6 +1159,11 @@ img.acc_not_connected_img.mt-0 {
   .comment_container {
       padding-left: 62px;
   }
+  .loader_outer_box {
+    width: calc(100% - 58px);
+    margin-left: auto;
+  
+  }
   button.swal2-confirm.YesButton.swal2-styled.swal2-default-outline {
     font-size: 14px;
   }
