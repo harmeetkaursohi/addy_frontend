@@ -120,7 +120,7 @@ const Layout = () => {
             confirmButtonText: "Log out",
             confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
-
+            reverseButtons: true ,
             customClass: {
                 confirmButton: 'confirmButton',
                 cancelButton: 'cancelButton',

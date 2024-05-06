@@ -26,7 +26,7 @@ const ConfirmModal = ({
                 <Modal show={showConfirmModal} onHide={handleClose} className={"alert_modal_body"}>
 
                     <Modal.Body>
-                    <div className='pop_up_cross_icon_outer text-end' onClick={(e) => {
+                    <div className='pop_up_cross_icon_outer text-end cursor-pointer' onClick={(e) => {
                                             handleClose()
                                         }}><RxCross2 className="pop_up_cross_icon"/></div>
                         <div className='confirmWrapper'>

@@ -1,19 +1,7 @@
-.generate_btn{
-    position: absolute;
-    left: auto;
-    right: 8px;
-    top: 6px;
-    border-radius: 5px;
-    background: #97A1AD;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: normal;
-    border: none;
-    padding: 8px 16px;
 
-}
 .selectedImg {
     border: 2px solid #F07C33;
+    border-radius: 7px;
 }
 .generate_image_wrapper_box {
     padding: 15px 20px;
@@ -25,17 +13,16 @@
     margin-top: 41px;
     gap: 14px;
     display: flex;
+    flex-wrap: wrap;
 }
 .ai_genarted_img{
-    height: 126px;
-    width: 126px;;
+    height: 132px;
+    width: 132px;;
 }
 .generate_image_outer{
     position: relative;
 }
-.generate_image_outer input{
-    padding: 12px 17px;
-}
+
 .generate_image_outer input::placeholder{
 color: #5F6D7E;
 font-family: "Nunito";
@@ -44,19 +31,24 @@ font-style: italic;
 font-weight: 500;
 line-height: normal;
 }
-
+.checkmarkcircle{
+    color: rgb(240, 124, 51);
+    position: absolute;
+    left: auto;
+    right: 7px;
+    top: 4px;
+    font-size: 20px;
+}
 
 @media screen and (max-width:767px){
     .generate_image_wrapper_box {
-        padding: 0px;
+        padding: 10px 0px;
     }
     .ai_images_outer{
-        display: block;
+        gap: 10px;
         margin-top: 20px;
     }
-    .ai_images_outer img{
-        margin: 10px;
-    }
+   
     button.generate_btn {
         margin-top: 20px;
         position: unset;
@@ -65,5 +57,9 @@ line-height: normal;
     }
     .generate_image_outer input {
         padding: 11px 7px;
+    }
+    .ai_genarted_img {
+        height: 124px;
+        width: 124px;
     }
 }

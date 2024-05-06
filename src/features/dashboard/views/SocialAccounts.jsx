@@ -35,7 +35,7 @@ import {SomethingWentWrong, enabledSocialMedia} from "../../../utils/contantData
 import cancel_img from "../../../images/cancel_img.svg"
 import success_img from "../../../images/right_img.svg"
 import Warning_image from "../../../images/cancel_img.svg"
-
+import crossIcon from "../../../images/cross_img.svg"
 const SocialAccounts = ({}) => {
 
     const dispatch = useDispatch();
@@ -245,6 +245,7 @@ const SocialAccounts = ({}) => {
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
             confirmButtonColor: "#F07C33",
+            reverseButtons:true,
             cancelButtonColor: "#E6E9EC",
             customClass: {
                 confirmButton: 'YesButton',
@@ -289,9 +290,14 @@ const SocialAccounts = ({}) => {
                 }).catch((error) => {
                     console.error('Error disconnecting Facebook account:', error);
                     Swal.fire({
-                        icon: 'error',
+                        imageUrl: crossIcon,
                         title: 'Error',
+                        confirmButtonColor: '#F07C33',
                         text: `An error occurred while disconnecting your ${getInitialLetterCap(SocialAccountProvider[socialMediaType])}  account. Please try again later.`,
+                        customClass: {
+                            confirmButton: 'confirmButton',
+                            
+                        }
                     });
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {

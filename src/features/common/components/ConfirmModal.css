@@ -51,6 +51,9 @@
     .confirm_text {
         font-size: 15px;
     }
+    .yes_btn{
+        font-size: 14px;
+      }
     .confirm_container h2 {
         font-size: 24px;
     }

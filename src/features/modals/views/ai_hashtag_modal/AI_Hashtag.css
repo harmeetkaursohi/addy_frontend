@@ -1,7 +1,5 @@
 
 .hashtag_btn {
-border-radius: 20px;
-height: 38px;
 padding: 10px 22px 9px 22px;
 font-family: "Nunito";
 font-size: 14px;
@@ -9,17 +7,36 @@ font-style: italic;
 font-weight: 500;
 line-height: normal;
 border: none;
-margin: 10px;
+/* margin: 10px; */
 }
 .selected_hashtag_btn{
-color: #FFF;
-background: #00A3FF;
+    box-shadow: 3px 3px 10px rgb(245 215 204) !important;
+
 
 }
-.unselected_hashtag_btn{
-background: #F4F7FC;
-color: black;
+.hashtag_list{
+    border: 1px solid #D2D2D2;
+    padding: 13px 20px !important;
 }
+.hashtag_list li{
+    color: #263238;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+}
+.hashtag_content{
+    flex-grow: 1;
+    box-shadow: 2px 2px 15px #f1eaea;
+    padding: 10px;
+    display: flex;
+    gap: 13px;
+    border-radius: 6px;
+}
+.hashtag_list li h3 {
+    font-size: 19px;
+}
+
 
 
 .selected_hashtag_outer{

@@ -5,6 +5,7 @@ import Cropper from 'react-easy-crop'
 import { getCroppedImg } from '../../../utils/commonUtils';
 import "./common.css"
 import { FaMinus, FaPlus } from 'react-icons/fa';
+import { RxCross2 } from 'react-icons/rx';
 
 const CropImageModal = ({imageUrl, showModal, setShowModal, UploadCroppedImage, getBlob }) => {
     const handleClose = () => setShowModal(false);                   
@@ -28,14 +29,14 @@ const CropImageModal = ({imageUrl, showModal, setShowModal, UploadCroppedImage, 
     return (
         <>        
                 <Modal className='facebook_modal_outer' size="lg" show={showModal} onHide={handleClose} backdrop="static">
-                    <Modal.Header closeButton>
-                        <Modal.Title className="CropImageModal_header">
-                            <div className='facebook_title'>
-                                <h2 className='cmn_text_style'>Choose profile picture</h2>
-                            </div>
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className='crop-image-parent'>                    
+                    
+                    <Modal.Body className='crop-image-parent'>
+                    <div className='pop_up_cross_icon_outer text-end cursor-pointer pt-2' onClick={() => {
+                                            handleClose()
+                                        }}><RxCross2 className="pop_up_cross_icon"/></div>   
+                     <div className='facebook_title pb-3'>
+                                <h2 className='cmn_heading_class'>Choose profile picture</h2>
+                        </div> 
                         <div className='crop-image-container crop-container'>                                                          
                             <Cropper
                             image={imageUrl}
@@ -58,8 +59,8 @@ const CropImageModal = ({imageUrl, showModal, setShowModal, UploadCroppedImage, 
                     </Modal.Body>
                     <Modal.Footer className='crop-image-footer'>                    
                     <div className="confirm_btn ">
-                        <button className=" cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel</button>
-                        <button type="button" className="cmn_btn_color cmn_connect_btn connect_btn yes_btn"
+                        <button className="cmn_modal_cancelbtn" onClick={handleClose}> Cancel</button>
+                        <button type="button" className="cmn_btn_color cmn_connect_btn connect_btn yes_btn mt-0"
                                 onClick={UploadCroppedImage}> Save
                         </button>
                     </div>

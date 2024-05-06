@@ -10,6 +10,7 @@ import {MdOutlinePhoto} from "react-icons/md";
 import {useState} from 'react';
 import {useRef} from 'react';
 import "./common.css"
+import { RxCross2 } from 'react-icons/rx';
 
 const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFileSize, setCropImgUrl}) => {
 
@@ -143,10 +144,15 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
 
 
             <Modal show={showEditImageModal} onHide={handleClose} backdrop="static">
-                <Modal.Header closeButton>
-                    <Modal.Title>Edit picture</Modal.Title>
-                </Modal.Header>
-                <Modal.Body className='text-center'>
+               
+                <Modal.Body >
+                  <div className='pop_up_cross_icon_outer text-end cursor-pointer' onClick={(e) => {
+                                            handleClose()
+                                        }}><RxCross2 className="pop_up_cross_icon"/></div>
+                    <h3 className='cmn_heading_class text-center pb-3'>Edit picture</h3>
+
+                    
+                    <div className='text-center'>
                     {
                         (file?.attachmentSource || file.url) &&
                         <ReactCrop
@@ -170,11 +176,13 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
 
                     </ul>
 
+                    </div>
+
                 </Modal.Body>
                 <Modal.Footer>
 
 
-                    <button className=" cmn_connect_btn disconnect_btn" onClick={handleClose}> Cancel
+                    <button className="cmn_modal_cancelbtn me-3 cmn_btn_padding" onClick={handleClose}> Cancel
                     </button>
                     <button type="button" disabled={crop?.unit === "%"} onClick={saveHandler}
                             className={`cmn_btn_color cmn_connect_btn connect_btn yes_btn ${crop?.unit === "%" ? "disabled-button" : ""}`}
