@@ -53,6 +53,7 @@ const ScheduledComponent = ({scheduledData}) => {
             confirmButtonText: 'Delete',
             confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
+            reverseButtons:true,
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
                 cancelButton: 'custom-cancel-button-class'

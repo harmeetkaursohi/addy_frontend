@@ -20,7 +20,14 @@
 }
 
 .facebook_content_outer {
-    padding: 0px 30px;
+    padding: 0px 10px;
+}
+.facebook_content_outer button{
+    padding: 5px 22px;
+    border-radius: 6px;
+}
+.acc_already_connect_wrapper .modal-header {
+    border-bottom: unset;
 }
 
 .user_contents {
@@ -42,7 +49,9 @@
 div.modal-content {
     border-radius: 30px;
 }
-
+.acc_already_connect_wrapper .modal-content{
+    border-radius: 15px;
+}
 .facebook_title {
     text-align: center;
 }
@@ -118,6 +127,8 @@ font-size: 20px;
 .facebook_content_outer h6{
     font-size: 18px;
     line-height: 25px;
+    color: #263238;
+    font-weight: 600;
 }
 .modal_inner_content.disconnect_wrapper .users_profile,
 .modal_inner_content.disconnect_wrapper
@@ -200,7 +211,7 @@ margin-top: 12px;
     .facebook_content_outer h6 {
         font-size: 13px;
         line-height: 19px;
-        padding: 0px 14px;
+        padding: 0px 14 px;
     }
 }
 

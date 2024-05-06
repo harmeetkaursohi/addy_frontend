@@ -29,6 +29,13 @@
     border: none;
     border-radius: 13px;
 }
+.update_pass_model_content img {
+    height: 130px;
+    width: 100%;
+}
+.update_pass_model_wrapper .modal-header {
+    border-bottom: unset;
+}
 .warning_outer h4 {
     font-size: 14px;
     line-height: 22px;
@@ -70,10 +77,11 @@
     transform: scale(-1, 1);
 }
 .update-password-btn {
-    margin-right: 5px;
+    font-size: 16px;
 }
 .close-update-password-btn {
-    margin-left: 5px ;
+    padding: 6px 22px;
+    border-radius: 6px;
 }
 .repost__icon{
     font-size: 22px;
@@ -289,12 +297,19 @@ gap: 16px;
     background-color:  #ADAAAA;
     
 }
+.cmn_btn_padding{
+    padding: 6px 32px;
+    border-radius: 6px;
+}
 .pinterest_post_heading{
     line-height: 20px;
     margin-top: 13px;
 }
 .editVideo_cancel_btn{
     color: white;
+}
+.connect_not_btn{
+    font-size: 16px;
 }
 @media screen and (min-width:2560px)
 {
@@ -323,7 +338,9 @@ gap: 16px;
     .linkedin_likes h3{
         font-size: 13px;
     }
-    
+    .reactEasyCrop_Container {
+        height: 400px;
+    }
     .aspect_ratio_outer li svg{
         font-size: 32px;
     }
@@ -351,7 +368,9 @@ gap: 16px;
     }
 }
 @media screen and (max-width:991px){
-    
+    .update_pass_model_content img{
+        height: 110px;
+    }
 }
 @media screen and (max-width:767px) {
     .linkedin_dropdown{
@@ -423,8 +442,6 @@ gap: 16px;
     .update-password-btn {
         margin-bottom: 10px;
     }
-    .close-update-password-btn {
-        margin-left: 0px ;
-    }
+  
 
 }

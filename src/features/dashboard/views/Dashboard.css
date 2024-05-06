@@ -400,10 +400,10 @@ select.page_title_options {
     border-radius: 10px;
 }
 img.connection-error-svg {
-    height: 200px;
-    width: 220px;
+    height: 130px;
+    width: 100%;
     margin-bottom: 20px;
-    margin-top: -30px;
+
 
 }
 

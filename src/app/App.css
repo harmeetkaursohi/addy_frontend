@@ -146,7 +146,13 @@ a {
   background-color: #f07c33;
   border-radius: 6px;
 }
-
+.generate_ai_container .modal-content{
+border-radius: 12px;
+}
+.generate_image_outer input{
+  padding: 12px 17px;
+  border: 1px solid #263238;
+}
 .cmn_text_heading {
   color: #2e3646;
   font-size: 28px;
@@ -361,6 +367,12 @@ div:where(.swal2-container).swal2-center>.swal2-popup {
   font-weight: 600;
   font-size: 20px;
 }
+.cmn_heading_class{
+  color: #263238;
+  font-size: 28px;
+  font-weight: 700;
+
+}
 .cmn_modal_cancelbtn{
     border: 1px solid #263238;
     background-color: white;
@@ -457,11 +469,29 @@ line-height: 20px;
   border-top: 1px solid #cdc4c4 !important;
 
 }
-
-.animated-popup{
-  transition: all 2s ease 
+.generate_btn{
+  position: absolute;
+  left: auto;
+  right: 8px;
+  top: 6px;
+  border-radius: 5px;
+  background: #F07C33;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+  padding: 8px 16px;
 
 }
+.animated-popup{
+   transition-behavior: normal;
+    transition-duration: 0.15s;
+    transition-timing-function: linear;
+    transition-delay: 0s;
+
+
+}
+
 .confirm_btn {
   margin-top: 30px;
   display: flex;
@@ -900,6 +930,23 @@ button.swal2-confirm.YesButton.swal2-styled.swal2-default-outline {
   min-width: 102px;
   padding: 7px 19px;
 }
+button.swal2-close{
+  display: block !important;
+  color: #F07C33;
+}
+button.swal2-close:hover{
+  color: #F07C33 !important;
+}
+button:focus:not(:focus-visible) {
+  outline: none !important;
+}
+div:where(.swal2-container) button:where(.swal2-close):focus{
+  box-shadow: unset !important;
+}
+.Common_btn{
+  padding: 6px 26px;
+  border-radius: 6px;
+}
 @keyframes fadeInLeft {
   0% {
      opacity: 0.2;
@@ -997,6 +1044,9 @@ img.acc_not_connected_img.mt-0 {
   .connected_heading{
     font-size: 22px;
   }
+  .cmn_heading_class {
+    font-size: 25px;
+  }
   .addy_img h2{
     font-size: 25px;
     margin-top: 20px;
@@ -1067,6 +1117,9 @@ img.acc_not_connected_img.mt-0 {
     font-size: 16px;
     margin-top: 20px;
 }
+.cmn_heading_class {
+  font-size: 20px;
+}
 .addy_container {
   margin: 0px 0px 30px;
 }
@@ -1105,6 +1158,16 @@ img.acc_not_connected_img.mt-0 {
 @media screen  and (max-width:767px) {
   .comment_container {
       padding-left: 62px;
+  }
+  button.swal2-confirm.YesButton.swal2-styled.swal2-default-outline {
+    font-size: 14px;
+  }
+  .cmn_modal_cancelbtn {
+    font-size: 14px;
+  }
+  
+  button.swal2-cancel.swal2-styled.swal2-default-outline{
+    font-size: 14px;
   }
   img.swal2-image {
     height: 110px;

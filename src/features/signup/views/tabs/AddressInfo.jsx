@@ -11,6 +11,8 @@ import {signUpUser} from "../../../../app/actions/userActions/userActions";
 import {showErrorToast} from "../../../common/components/Toast";
 import Swal from "sweetalert2";
 import Frame from "../../../../images/signup_bg.svg";
+import success_img from "../../../../images/right_img.svg";
+
 import {GrPrevious} from "react-icons/gr";
 
 const AddressInfo = ({formData, setFormData, setShowTab}) => {
@@ -58,7 +60,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
             })).then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
                     Swal.fire({
-                        icon: 'success',
+                        imageUrl: success_img,
                         title: 'Registration Successful',
                         html: `
                              <p>Your registration is complete, and we've sent a confirmation email to your email address</p>

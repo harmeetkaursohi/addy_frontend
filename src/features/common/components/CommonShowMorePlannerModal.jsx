@@ -68,6 +68,7 @@ const CommonShowMorePlannerModal = ({
                 showCancelButton: true,
                 confirmButtonText: 'Delete',
                 cancelButtonText: 'Cancel',
+                reverseButtons:true,
                 confirmButtonColor: "#F07C33",
                 cancelButtonColor: "#E6E9EC",
                 customClass: {

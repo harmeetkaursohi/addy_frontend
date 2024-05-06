@@ -9,7 +9,8 @@ import {getToken} from "../../../app/auth/auth";
 import {showSuccessToast} from "./Toast";
 import { UpdatedSuccessfully} from "../../../utils/contantData";
 import "./common.css"
-
+import lock_img from "../../../images/lock_img.svg"
+import { RxCross2 } from "react-icons/rx";
 const UpdatePasswordModal = ({showModal, setShowModal}) => {
 
     const updatePasswordData = useSelector(state => state.user.updatePasswordReducer);
@@ -51,16 +52,18 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="md" show={showModal} onHide={handleClose}>
-                    <Modal.Header closeButton className="mb-1">
-                        <Modal.Title className="commonmodal_header">
-                            <div className='facebook_title'>
-                                Update Password
-                            </div>
-                        </Modal.Title>
-                    </Modal.Header>
+                <Modal size="md" show={showModal} onHide={handleClose} className="update_pass_model_wrapper">
+                
                     <Modal.Body className="pt-0">
-                        <div className='px-2'>
+                    <div className='pop_up_cross_icon_outer text-end pt-3 cursor-pointer' onClick={(e) => {
+                                            handleClose()
+                                        }}><RxCross2 className="pop_up_cross_icon"/></div>
+
+                        <div className='px-2 update_pass_model_content'>
+                        <img src={lock_img} className="lock_img"/>
+                            <h3 className='cmn_heading_class text-center mt-2'>
+                                Update Password
+                            </h3>
                             <form onSubmit={formik.handleSubmit}>
                                 <div className="form-group">
                                     <label className="">
@@ -156,6 +159,10 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                     }
                                 </div>
                                 <div className='update-password-btn-outer text-center  mt-4'>
+                                <button onClick={handleClose}
+                                            disabled={updatePasswordData?.loading}
+                                            className={"close-update-password-btn me-4 cmn_modal_cancelbtn "}>Cancel
+                                    </button>
                                     <button type={"submit"}
                                             disabled={updatePasswordData?.loading}
 
@@ -168,10 +175,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                         }
 
                                     </button>
-                                    <button onClick={handleClose}
-                                            disabled={updatePasswordData?.loading}
-                                            className={"close-update-password-btn cancel_button connection-error-close-btn "}>Cancel
-                                    </button>
+                                    
                                 </div>
                             </form>
 
