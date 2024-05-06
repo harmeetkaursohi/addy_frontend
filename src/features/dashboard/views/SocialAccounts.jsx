@@ -342,7 +342,7 @@ const SocialAccounts = ({}) => {
                     <>
                         {
                             getAllConnectedSocialAccountData?.loading ?
-                                <SkeletonEffect count={1}></SkeletonEffect> :
+                                <SkeletonEffect count={1}/> :
                                 getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'FACEBOOK').length === 0 ?
 
                                     <div className="social_media_outer">
@@ -359,6 +359,7 @@ const SocialAccounts = ({}) => {
                                             isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
                                             appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                             redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
+                                            auth_type={'reauthenticate'}
                                             onResolve={(response) => {
                                                 setFacebookDropDown(true)
                                                 setInstagramDropDown(false)
@@ -366,10 +367,12 @@ const SocialAccounts = ({}) => {
                                                 setLinkedinDropDown(false)
                                                 connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.FACEBOOK), SocialAccountProvider.FACEBOOK)
                                             }}
+                                            scope={`${import.meta.env.VITE_APP_FACEBOOK_SCOPE}`}
                                             onReject={(error) => {
                                                 console.log("error", error)
-
-                                            }}>
+                                            }}
+                                            response_type={"code"}
+                                        >
 
                                             <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
                                                                  icon={() => null} preventActiveStyles={true}
@@ -524,6 +527,7 @@ const SocialAccounts = ({}) => {
                                                 setLinkedinDropDown(false)
                                                 connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.INSTAGRAM), SocialAccountProvider.INSTAGRAM)
                                             }}
+                                            scope={`${import.meta.env.VITE_APP_INSTAGRAM_SCOPE}`}
                                             onReject={(error) => {
                                             }}>
 
