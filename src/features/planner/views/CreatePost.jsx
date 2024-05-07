@@ -477,7 +477,7 @@ const CreatePost = () => {
 
                                                                             </div>
                                                                             {
-                                                                                // file?.mediaType === "IMAGE" &&
+                                                                                file?.mediaType === "IMAGE" &&
                                                                                 <button
                                                                                     className="edit_upload delete_upload me-2"
                                                                                     onClick={(e) => {

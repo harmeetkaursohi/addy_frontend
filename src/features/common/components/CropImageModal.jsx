@@ -28,7 +28,7 @@ const CropImageModal = ({imageUrl, showModal, setShowModal, UploadCroppedImage, 
 
     return (
         <>        
-                <Modal className='facebook_modal_outer' size="lg" show={showModal} onHide={handleClose} backdrop="static">
+                <Modal className='facebook_modal_outer crop_img_container' size="lg" show={showModal} onHide={handleClose} backdrop="static">
                     
                     <Modal.Body className='crop-image-parent'>
                     <div className='pop_up_cross_icon_outer text-end cursor-pointer pt-2' onClick={() => {

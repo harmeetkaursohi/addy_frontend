@@ -51,7 +51,7 @@ const App = () => {
                     {
                         getToken() && !unProtectedUrls.includes(window.location.pathname) ?<SideBar/> :<></>
                     }
-                    <Suspense fallback={<CommonLoader classname={!unProtectedUrls.includes(window.location.pathname)?"fallback_loader_outer":""}/>}>
+                    <Suspense fallback={<CommonLoader classname={!unProtectedUrls.includes(window.location.pathname)?"fallback_loader_outer":"auth_loader_outer"}/>}>
                         <Routes>
                             <Route element={<PrivateRoute/>}>
                                 <Route path="/plan" element={<SelectPlan/>}/>

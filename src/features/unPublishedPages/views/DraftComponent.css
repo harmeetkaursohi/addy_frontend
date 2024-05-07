@@ -330,6 +330,16 @@ button.outline_btn {
 .post-image-outer{
     position: relative;
 }
+.no_acc_connect_heading{
+    font-size: 22px;
+    color:#1C1F21;
+    line-height: 20px;
+    font-weight: 700;
+}
+.no_acc_connect_img{
+    height: 400px;
+    width: 100%;
+}
 .upcoming_post_outer .video_player_outer {
     height: 196px !important;
 }
@@ -344,6 +354,9 @@ button.outline_btn {
 @media screen and (min-width:1800px){
     .draft_button_outer{
         flex-wrap: unset;
+    }
+    .no_acc_connect_img{
+        height: 500px;
     }
 }
 @media screen and (min-width:1600px) {
@@ -366,6 +379,7 @@ button.outline_btn {
     width: 100%;
     padding: 10px ;
 }
+
 .draft_button_outer button {
     padding: 9px;
     flex-grow: 1;
@@ -424,6 +438,10 @@ button.outline_btn.schedule_btn{
     button.outline_btn.schedule_btn{
         margin-top: 0px;
     }
+    .no_acc_connect_img{
+        height: 300px;
+    
+    }
     .draft_component_outer .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr{
         margin-top: 20px;
     }
@@ -451,12 +469,20 @@ button.outline_btn.schedule_btn{
     .upcomingPostBtn_Outer{
         flex-wrap: unset;
     }
-   
+    .no_acc_connect_heading {
+        font-size: 19px;
+    }
 }
 @media screen and (max-width:767px) {
     button.outline_btn.schedule_btn{
         margin-top: 10px;
 
+    }
+    .no_acc_connect_heading {
+        font-size: 16px;
+    }
+    .no_acc_connect_img{
+        height: 100%;
     }
    
     .draft_createPost_outer{

@@ -10,7 +10,7 @@ import {Country, State, City} from 'country-state-city';
 import {signUpUser} from "../../../../app/actions/userActions/userActions";
 import {showErrorToast} from "../../../common/components/Toast";
 import Swal from "sweetalert2";
-import Frame from "../../../../images/signup_bg.svg";
+import Frame from "../../../../images/signupFrame.svg";
 import success_img from "../../../../images/right_img.svg";
 
 import {GrPrevious} from "react-icons/gr";
@@ -156,7 +156,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                 <div className='login_outer'>
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-5 '>{jsondata.connect_audience_title}</h2>
+                                        <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
                                     </div>
                                 </div>
 
@@ -164,7 +164,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                         </div>
                         <div className="col-lg-6 col-md-12 col-sm-12">
-                            <div className="gr_previous_outer"
+                            <div className="gr_previous_outer cursor-pointer"
                                  onClick={(e) =>
                                      !signUpReducer?.loading && handlePreviousTab(e)}><GrPrevious/>
                             </div>
