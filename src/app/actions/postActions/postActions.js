@@ -8,7 +8,7 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
     switch (data?.socialMediaType) {
 
         case "FACEBOOK":{
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?&access_token=${data?.pageAccessToken}`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,created_time,attachment,comment_count,can_comment,message_tags`;
             return baseAxios.post(apiUrl, data?.data).then((response) => {
                 return response.data;
             }).catch((error) => {
@@ -46,6 +46,14 @@ export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAct
 
 export const replyCommentOnPostAction = createAsyncThunk('post/replyCommentOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
+        case "FACEBOOK":{
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent{id},created_time,attachment,comment_count,can_comment,message_tags`;
+            return baseAxios.post(apiUrl, data?.data).then((response) => {
+                return response.data;
+            }).catch((error) => {
+                return thunkAPI.rejectWithValue(error.message);
+            });
+        }
         case  "INSTAGRAM": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/replies?access_token=${data?.pageAccessToken}&fields=id,text,timestamp,like_count,from{id,username},user{id,profile_picture_url},parent_id`;
             return baseAxios.post(apiUrl, data?.data).then((response) => {
@@ -80,7 +88,13 @@ export const replyCommentOnPostAction = createAsyncThunk('post/replyCommentOnPos
 export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
         case "FACEBOOK": {
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?access_token=${data?.pageAccessToken}&order=reverse_chronological&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags,comments{id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags}`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?${objectToQueryString({
+                access_token:data?.pageAccessToken,
+                order:"reverse_chronological",
+                limit:data?.limit,
+                fields:"id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags",
+                after:data?.next
+            })}`;
             return baseAxios.get(apiUrl, null).then((response) => {
                 return response?.data
             }).catch((error) => {
@@ -103,7 +117,7 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
             });
         }
         case  "LINKEDIN": {
-            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comments/${data?.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comments/${"urn:li:share:7193505496551579648"}?pageSize=${data?.pageSize}&start=${data?.start}`;
             return baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then((response) => {
                 return response?.data
             }).catch((error) => {
@@ -118,6 +132,21 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
 
 export const getRepliesOnComment = createAsyncThunk('post/getRepliesOnComment', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
+        case "FACEBOOK":{
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/comments?${objectToQueryString({
+                access_token:data?.pageAccessToken,
+                order:"chronological",
+                limit:data?.limit,
+                fields:"id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent{id},to,created_time,attachment,comment_count,can_comment,message_tags",
+                after:data?.next
+            })}`;
+            return baseAxios.get(apiUrl, null).then((response) => {
+                return response?.data
+            }).catch((error) => {
+                showErrorToast(error.response.data.error.message);
+                return thunkAPI.rejectWithValue(error.message);
+            });
+        }
         case  "INSTAGRAM": {
             const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}/replies?${objectToQueryString({
                 access_token:data?.pageAccessToken,
@@ -158,7 +187,6 @@ export const deleteCommentsOnPostAction = createAsyncThunk('post/deleteCommentsO
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.message);
             });
-            break;
         }
         case  "LINKEDIN": {
             const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comment?commentId=${data?.commentId}&parentObjectUrn=${data?.parentObjectUrn}&orgId=${data?.orgId}`;
@@ -168,7 +196,6 @@ export const deleteCommentsOnPostAction = createAsyncThunk('post/deleteCommentsO
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.message);
             });
-            break;
         }
         default : {
 
@@ -178,7 +205,7 @@ export const deleteCommentsOnPostAction = createAsyncThunk('post/deleteCommentsO
 export const updateCommentsOnPostAction = createAsyncThunk('post/updateCommentsOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
         case "FACEBOOK": {
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}?access_token=${data?.pageAccessToken}`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.id}?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,created_time,attachment,comment_count,can_comment,message_tags`;
             return baseAxios.post(apiUrl, data?.data).then((response) => {
                 return response.data;
             }).catch((error) => {
@@ -188,7 +215,7 @@ export const updateCommentsOnPostAction = createAsyncThunk('post/updateCommentsO
 
         }
         case  "INSTAGRAM": {
-
+            break;
         }
         case  "LINKEDIN": {
             const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comment/${data?.commentId}`;
@@ -203,7 +230,6 @@ export const updateCommentsOnPostAction = createAsyncThunk('post/updateCommentsO
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.message);
             });
-            break;
         }
         default : {
 
@@ -238,10 +264,9 @@ export const likePostAction = createAsyncThunk('post/likePostAction', async (dat
 
 export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
-
         case "FACEBOOK": {
             const postIds = data.postIds.map(id => id).join(',');
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,attachments,created_time,is_published,likes.summary(true),comments.summary(true),shares`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,attachments,created_time,is_published,likes.summary(true).limit(2),comments.summary(true).limit(1){id},shares`;
             return await baseAxios.get(apiUrl).then(res => {
                 return res.data;
             }).catch(error => {

@@ -42,6 +42,7 @@ const CommentReviewsSectionModal = ({
 
 
 
+
     useEffect(() => {
         return () => {
             dispatch(resetReducers({sliceNames: ["getPostPageInfoReducer"]}))
@@ -107,7 +108,7 @@ const CommentReviewsSectionModal = ({
 
 
                                         {
-                                            postData?.socialMediaType === "FACEBOOK" && <Comments  isDirty={isDirty} setDirty={setDirty} postData={postData} />
+                                            postData?.socialMediaType === "FACEBOOK" && <Comments  isDirty={isDirty} setDirty={setDirty} postData={postData} postPageData={postPageData}/>
                                         }
 
                                         {

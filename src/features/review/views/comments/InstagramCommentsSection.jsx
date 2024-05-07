@@ -64,6 +64,76 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
     }, [postData, postPageData])
 
     useEffect(() => {
+        if (getInstagramComments !== null) {
+            setGetInstagramComments(null);
+            dispatch(getCommentsOnPostAction({
+                ...baseQuery,
+                id: postPageData?.id,
+                limit: 6,
+                next: instagramComments?.nextCursor
+            }))
+            //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
+            dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
+        }
+    }, [getInstagramComments])
+
+    useEffect(() => {
+        if (getCommentsOnPostActionData?.data !== undefined && !getCommentsOnPostActionData?.loading) {
+            const cursorToNextData = getCommentsOnPostActionData.data?.paging?.cursors?.after === undefined ? null : getCommentsOnPostActionData.data?.paging?.cursors?.after
+            if (instagramComments?.data === null) {
+                setInstagramComments({
+                    data: getCommentsOnPostActionData?.data?.data,
+                    nextCursor: cursorToNextData
+                })
+            } else {
+                const updatedComments = [...instagramComments?.data, ...getCommentsOnPostActionData?.data?.data]
+                // const commentsWithoutDuplicates = removeDuplicatesObjectsFromArray(updatedComments, "id")
+                setInstagramComments({
+                    data: updatedComments,
+                    nextCursor: cursorToNextData
+                })
+            }
+            dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
+        }
+    }, [getCommentsOnPostActionData])
+
+    useEffect(() => {
+        if (getReplies !== null && ((getReplyForComment?.reference === "SHOW_MORE_REPLIES" && getReplyForComment?.comment?.replyData === undefined) || (getReplyForComment?.reference === "LOAD_MORE"))) {
+            setGetReplies(null);
+            dispatch(getRepliesOnComment({
+                ...baseQuery,
+                id: getReplyForComment?.comment?.id,
+                limit: 6,
+                next: getReplyForComment?.comment?.replyData?.nextCursor === undefined ? null : getReplyForComment?.comment?.replyData?.nextCursor
+            }))
+        }
+    }, [getReplies])
+
+    useEffect(() => {
+        if (getRepliesOnCommentData?.data !== undefined && !getRepliesOnCommentData?.loading && getReplyForComment !== null && Object.keys(getReplyForComment)?.length > 0) {
+            const cursorToNext = getRepliesOnCommentData?.data?.paging?.cursors?.after === undefined ? null : getRepliesOnCommentData?.data?.paging?.cursors?.after
+            let previousData = getValueOrDefault(getReplyForComment?.comment?.replyData?.data, []);
+            let updatedComments =removeDuplicatesObjectsFromArray( [...previousData, ...getRepliesOnCommentData?.data?.data], "id")
+            const updatedComment = {
+                ...getReplyForComment?.comment,
+                replyData: {
+                    ...getReplyForComment?.comment?.replyData,
+                    nextCursor: cursorToNext,
+                    data: updatedComments
+                }
+            }
+            let updatedInstagramComments = [...instagramComments?.data]
+            updatedInstagramComments[getReplyForComment?.index] = updatedComment
+            setInstagramComments({
+                ...instagramComments,
+                data: [...updatedInstagramComments]
+            })
+            setGetReplyForComment({})
+            dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
+        }
+    }, [getRepliesOnCommentData])
+
+    useEffect(() => {
         if (addCommentOnPostData?.data !== undefined) {
             //Add Comment on the top of array
             let newComment = addCommentOnPostData?.data;
@@ -104,76 +174,6 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
             dispatch(resetReducers({sliceNames: ["replyCommentOnPostActionReducer"]}))
         }
     }, [replyCommentOnPostData])
-
-    useEffect(() => {
-        if (getReplies !== null && ((getReplyForComment?.reference === "SHOW_MORE_REPLIES" && getReplyForComment?.comment?.replyData === undefined) || (getReplyForComment?.reference === "LOAD_MORE"))) {
-            setGetReplies(null);
-            dispatch(getRepliesOnComment({
-                ...baseQuery,
-                id: getReplyForComment?.comment?.id,
-                limit: 6,
-                next: getReplyForComment?.comment?.replyData?.nextCursor === undefined ? null : getReplyForComment?.comment?.replyData?.nextCursor
-            }))
-        }
-    }, [getReplies])
-
-    useEffect(() => {
-        if (getRepliesOnCommentData?.data !== undefined && !getRepliesOnCommentData?.loading && getReplyForComment !== null && Object.keys(getReplyForComment)?.length > 0) {
-            const cursorToNext = getRepliesOnCommentData?.data?.paging?.cursors?.after === undefined ? null : getRepliesOnCommentData?.data?.paging?.cursors?.after
-            let previousData = getValueOrDefault(getReplyForComment?.comment?.replyData?.data, []);
-            let updatedComments =removeDuplicatesObjectsFromArray( [...previousData, ...getRepliesOnCommentData?.data?.data], "id")
-            const updatedComment = {
-                ...getReplyForComment?.comment,
-                replyData: {
-                    ...getReplyForComment?.comment?.replyData,
-                    nextCursor: cursorToNext,
-                    data: updatedComments
-                }
-            }
-            let updatedInstagramComments = [...instagramComments?.data]
-            updatedInstagramComments[getReplyForComment?.index] = updatedComment
-            setInstagramComments({
-                ...instagramComments,
-                data: [...updatedInstagramComments]
-            })
-            setGetReplyForComment({})
-            dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
-        }
-    }, [getRepliesOnCommentData])
-
-    useEffect(() => {
-        if (getInstagramComments !== null) {
-            setGetInstagramComments(null);
-            dispatch(getCommentsOnPostAction({
-                ...baseQuery,
-                id: postPageData?.id,
-                limit: 6,
-                next: instagramComments?.nextCursor
-            }))
-            //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
-            dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
-        }
-    }, [getInstagramComments])
-
-    useEffect(() => {
-        if (getCommentsOnPostActionData?.data !== undefined && !getCommentsOnPostActionData?.loading) {
-            const cursorToNextData = getCommentsOnPostActionData.data?.paging?.cursors?.after === undefined ? null : getCommentsOnPostActionData.data?.paging?.cursors?.after
-            if (instagramComments?.data === null) {
-                setInstagramComments({
-                    data: getCommentsOnPostActionData?.data?.data,
-                    nextCursor: cursorToNextData
-                })
-            } else {
-                const updatedComments = [...instagramComments?.data, ...getCommentsOnPostActionData?.data?.data]
-                // const commentsWithoutDuplicates = removeDuplicatesObjectsFromArray(updatedComments, "id")
-                setInstagramComments({
-                    data: updatedComments,
-                    nextCursor: cursorToNextData
-                })
-            }
-            dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
-        }
-    }, [getCommentsOnPostActionData])
 
     useEffect(() => {
         if (commentToDelete) {
@@ -236,11 +236,10 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                     parentId: null,
                     message: ""
                 })
-                const getPostPageRequestBody = {
+                dispatch(getPostPageInfoAction({
                     ...baseQuery,
                     postIds: [postData?.id]
-                }
-                dispatch(getPostPageInfoAction(getPostPageRequestBody));
+                }));
             }
         })
     }

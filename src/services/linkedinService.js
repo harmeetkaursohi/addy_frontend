@@ -52,11 +52,11 @@ export const getLinkedinAccountReport = async (page, token) => {
                 const linkedinOrgStatistics = response.data;
                 if (linkedinOrgStatistics) {
                     initialObject.Accounts_Reached.lifeTime = linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.impressionCount;
-                    initialObject.Post_Activity.lifeTime = linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.impressionCount*linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.engagement;
+                    initialObject.Post_Activity.lifeTime = Math.round(linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.impressionCount*linkedinOrgStatistics?.all_time?.elements[0]?.totalShareStatistics?.engagement);
                     const impressionCountMonthly=linkedinOrgStatistics?.timeBound?.elements.reduce((sum, element) => sum + element.totalShareStatistics.impressionCount, 0);
                     const engagementMonthly=linkedinOrgStatistics?.timeBound?.elements.reduce((sum, element) => sum + (element.totalShareStatistics.impressionCount* element.totalShareStatistics.engagement), 0);
                     initialObject.Accounts_Reached.month = impressionCountMonthly;
-                    initialObject.Post_Activity.month = engagementMonthly;
+                    initialObject.Post_Activity.month = Math.round(engagementMonthly);
                 }
             })
             .catch((error) => {
@@ -93,6 +93,7 @@ export const getDashBoardLinkedinGraphReport = async (page, query, token) => {
             console.error('Error:', error);
         });
     }
+
     initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount,SocialAccountProvider.LINKEDIN?.toUpperCase()));
     initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount,SocialAccountProvider.LINKEDIN?.toUpperCase()));
     return initialObject;

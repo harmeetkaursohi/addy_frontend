@@ -391,7 +391,7 @@ const SocialAccounts = ({}) => {
 
                                     <div className=" cmn_drop_down dropdown">
                                         <div className="dropdown_header">
-                                            <div className="social_media_outer">
+                                            <div className="social_media_outer cursor-pointer">
                                                 <div className="social_media_content"
                                                      onClick={() => setFacebookDropDown(!facebookDropDown)}
                                                 >
@@ -509,7 +509,7 @@ const SocialAccounts = ({}) => {
                     <>
                         {
                             getAllConnectedSocialAccountData?.loading ?
-                                <SkeletonEffect count={1}></SkeletonEffect> :
+                                <SkeletonEffect count={1}/> :
                                 getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'INSTAGRAM').length === 0 ?
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
@@ -545,7 +545,7 @@ const SocialAccounts = ({}) => {
 
                                     <div className=" cmn_drop_down dropdown">
                                         <div className="dropdown_header">
-                                            <div className="social_media_outer">
+                                            <div className="social_media_outer cursor-pointer">
                                                 <div className="social_media_content"
                                                      onClick={() => setInstagramDropDown(!instagramDropDown)}>
                                                     <i className="fa-brands fa-instagram insta-icon"/>
@@ -663,7 +663,7 @@ const SocialAccounts = ({}) => {
                     <>
                         {
                             getAllConnectedSocialAccountData?.loading ?
-                                <SkeletonEffect count={1}></SkeletonEffect> :
+                                <SkeletonEffect count={1}/> :
                                 getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'LINKEDIN').length === 0 ?
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
@@ -700,7 +700,7 @@ const SocialAccounts = ({}) => {
 
                                     <div className=" cmn_drop_down dropdown">
                                         <div className="dropdown_header">
-                                            <div className="social_media_outer">
+                                            <div className="social_media_outer cursor-pointer">
                                                 <div className="social_media_content"
                                                      onClick={() => setLinkedinDropDown(!linkedinDropDown)}>
                                                     <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
@@ -818,7 +818,7 @@ const SocialAccounts = ({}) => {
                     <>
                         {
                             getAllConnectedSocialAccountData?.loading ?
-                                <SkeletonEffect count={1}></SkeletonEffect> :
+                                <SkeletonEffect count={1}/> :
                                 getAllConnectedSocialAccountData?.data?.filter(c => c.provider === 'PINTEREST').length === 0 ?
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
@@ -853,7 +853,7 @@ const SocialAccounts = ({}) => {
 
                                     <div className=" cmn_drop_down dropdown">
                                         <div className="dropdown_header">
-                                            <div className="social_media_outer">
+                                            <div className="social_media_outer cursor-pointer">
                                                 <div className="social_media_content"
                                                      onClick={() => setPinterestDropDown(!pinterestDropDown)}>
                                                     <i className="fa-brands fa-pinterest pinterest-icon"/>

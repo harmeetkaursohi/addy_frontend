@@ -179,7 +179,6 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
         }
 
         dispatch(addCommentOnPostAction(requestBody)).then(response => {
-
             if (response.meta.requestStatus === "fulfilled") {
                 setDirty({
                     ...isDirty,
@@ -191,10 +190,6 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                     }
                 })
                 setComment("")
-
-                if (postData?.socialMediaType === "FACEBOOK") {
-                    dispatch(getCommentsOnPostAction(requestBody))
-                }
                 dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction))
 
             }

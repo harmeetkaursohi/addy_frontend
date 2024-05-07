@@ -703,7 +703,6 @@ export const getUpdateCommentMessage = (commentToUpdate, socialMediaType) => {
                 })
             }
             return updatedMessage
-            break;
         }
         case "LINKEDIN": {
             let updatedMessage = {
@@ -733,7 +732,6 @@ export const getUpdateCommentMessage = (commentToUpdate, socialMediaType) => {
                 }
             }
             return updatedMessage
-            break;
         }
         default: {
 

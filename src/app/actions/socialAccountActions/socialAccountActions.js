@@ -69,7 +69,6 @@ export const getSocialMediaReportByProviderTypeAction = createAsyncThunk('social
                   showErrorToast(error.response.data.message);
                   return thunkAPI.rejectWithValue(error.response);
               })
-            break;
         }
         case  "INSTAGRAM": {
             return await  getInstagramConnectedPageIdsReport(data?.pages[0]).then((res)=>{
@@ -78,9 +77,6 @@ export const getSocialMediaReportByProviderTypeAction = createAsyncThunk('social
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
             })
-
-             break;
-
         }
         case  "LINKEDIN": {
             return await  getLinkedinAccountReport(data?.pages[0],data?.token).then((res)=>{
