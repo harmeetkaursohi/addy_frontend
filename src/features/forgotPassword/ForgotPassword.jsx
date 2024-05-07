@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux"
 import {forgotPassword} from '../../app/actions/userActions/userActions';
 import {Link, useNavigate} from 'react-router-dom';
 import addyads_img from "../../images/addylogo.png";
-import Frame from "../../images/forgot_pass_bg.svg";
+import Frame from "../../images/forgotPassFrame.svg";
 import {RotatingLines} from "react-loader-spinner";
 
 

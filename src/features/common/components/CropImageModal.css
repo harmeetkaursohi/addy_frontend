@@ -14,3 +14,7 @@
     right: unset;
     bottom: unset;
 }
+.crop_img_container .modal-content {
+    border-radius: 12px;
+}
+

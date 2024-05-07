@@ -47,7 +47,7 @@
 }
 
 div.modal-content {
-    border-radius: 30px;
+    border-radius: 12px;
 }
 .acc_already_connect_wrapper .modal-content{
     border-radius: 15px;
@@ -191,6 +191,7 @@ button, .modal_inner_content.disconnect_wrapper
     
     .modal_inner_content {
         padding-bottom: 15px;
+        align-items: start;
     }
  .users_name h2{
 font-size: 12px;
@@ -211,7 +212,7 @@ margin-top: 12px;
     .facebook_content_outer h6 {
         font-size: 13px;
         line-height: 19px;
-        padding: 0px 14 px;
+        padding: 0px 14px;
     }
 }
 

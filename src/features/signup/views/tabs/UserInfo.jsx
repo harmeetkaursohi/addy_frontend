@@ -1,4 +1,4 @@
-import Frame from "../../../../images/signup_bg.svg"
+import Frame from "../../../../images/signupFrame.svg"
 import addyads_img from "../../../../images/addylogo.png";
 import {Link} from "react-router-dom"
 import jsondata from "../../../../locales/data/initialdata.json";
@@ -63,7 +63,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
 
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-5'>{jsondata.connect_audience_title}</h2>
+                                        <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
                                     </div>
                                 </div>
 
