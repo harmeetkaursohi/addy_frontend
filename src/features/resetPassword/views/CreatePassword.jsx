@@ -5,7 +5,7 @@ import {useFormik} from 'formik';
 import {validationSchemas} from '../../../utils/commonUtils';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import frame from "../../../images/chanage_pass_bg.svg";
+import frame from "../../../images/createpassFrame.svg";
 import addyads_img from "../../../images/addylogo.png";
 import {createPassword} from "../../../app/actions/userActions/userActions.js";
 
@@ -60,7 +60,7 @@ const CreatePassword = () => {
 
                                 <div className='reach_user_outer'>
                                     <img src={frame} className='w-100'/>
-                                    <h2 className='mt-5'>{jsondata.connect_audience_title}</h2>
+                                    <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
                                 </div>
                             </div>
 

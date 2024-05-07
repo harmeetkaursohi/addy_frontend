@@ -20,6 +20,7 @@ import CommonLoader from "../../common/components/CommonLoader";
 import Swal from "sweetalert2";
 import {useAppContext} from '../../common/components/AppProvider';
 import delete_img from "../../../images/trash_img.svg"
+import noAccountData from "../../../images/no_connected_acc_img.svg"
 const ScheduledComponent = ({scheduledData}) => {
     const {sidebar} = useAppContext()
 
@@ -99,6 +100,8 @@ const hashTagHandler=(index)=>{
     setHashTagIndex(index)
     setShowHashTag(!showHashTag)
 }
+const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+
     return (
         <>
 
@@ -113,7 +116,13 @@ const hashTagHandler=(index)=>{
                     <div className="">
                         <h2>{jsondata.upcomingpost}</h2>
                     </div>
+                    {(getAllConnectedSocialAccountData?.data === null || (Array.isArray(getAllConnectedSocialAccountData?.data) && getAllConnectedSocialAccountData?.data.filter(c => c.provider !== "GOOGLE").length === 0)) ?
 
+
+                    <div className="text-center ">
+    <img src={noAccountData} alt="" className="no_acc_connect_img"/>
+    <h3 className="no_acc_connect_heading pt-4">No account is connected</h3>
+                     </div>:
                     <div className={"row m-0"}>
 
 
@@ -210,9 +219,10 @@ const hashTagHandler=(index)=>{
                                 </div>
 
                             ))}
+                    
 
-                    </div>
-
+                    </div>}
+               
 
                 </div>
 

@@ -7,6 +7,7 @@ import ConfirmModal from "./ConfirmModal.jsx";
 import {DisconnectPageWarning, SocialAccountProvider} from "../../../utils/contantData.js";
 import { pageConnectAction} from "../../../utils/commonUtils.js";
 import default_user_icon from "../../../images/default_user_icon.svg"
+import { RxCross2 } from 'react-icons/rx';
 
 
 const CommonModal = ({
@@ -50,15 +51,18 @@ const CommonModal = ({
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="lg" show={showModal} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title className="commonmodal_header">
-                            <div className='facebook_title'>
-                                <h2 className='cmn_text_style mb-3'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
-                            </div>
-                        </Modal.Title>
-                    </Modal.Header>
+                <Modal size="lg" show={showModal} onHide={handleClose} className='choose_page_outer'>
+        
                     <Modal.Body className='pt-0'>
+                    <div className='d-flex align-items-center pt-3 pb-3'>
+                    <div className='facebook_title flex-grow-1'>
+                                <h2 className='cmn_text_style'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
+                    </div>
+                    <div className='pop_up_cross_icon_outer  cursor-pointer' onClick={(e) => {
+                                            handleClose()
+                                        }}><RxCross2 className="pop_up_cross_icon"/></div>
+                    
+                    </div>
                         <div className='facebook_content_outer'>
                             <div className=''>
                                 {Array.isArray(allPagesList) && allPagesList.length > 0 ? allPagesList?.map((data, index) => {

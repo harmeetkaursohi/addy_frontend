@@ -5,6 +5,7 @@ import 'nouislider/distribute/nouislider.css';
 import axios from 'axios';
 
 import "./common.css"
+import { RxCross2 } from 'react-icons/rx';
 
 let ffmpeg;
 
@@ -255,14 +256,14 @@ const EditVideoModal = ({
     return (
         <Modal className='facebook_modal_outer' size="md" show={showEditVideoModal} onHide={handleClose}
                backdrop="static">
-            <Modal.Header closeButton>
-                <Modal.Title className="CropImageModal_header">
-                    <div className='facebook_title'>
-                        <h2 className='cmn_text_style'>Edit video</h2>
-                    </div>
-                </Modal.Title>
-            </Modal.Header>
             <Modal.Body className='crop-image-parent container'>
+
+            <div className='pop_up_cross_icon_outer text-end cursor-pointer pt-2' onClick={() => {
+                                            handleClose()
+                                        }}><RxCross2 className="pop_up_cross_icon"/></div> 
+                                        <div className='facebook_title'>
+                        <h2 className='cmn_heading_class pb-2'>Edit Video</h2>
+                    </div>  
                 <div className='crop-image-container video-element-container'>
                     <video className='w-100' src={videoSrc} ref={videoRef} onTimeUpdate={handlePauseVideo}>
                         <source src={videoSrc} type={videoFileValue.type}/>
@@ -303,11 +304,11 @@ const EditVideoModal = ({
             </Modal.Body>
             <Modal.Footer>
                 <div className="editvideobtn_outer ">
-                    <button className="cmn_btn_color cmn_connect_btn disconnect_btn editVideo_cancel_btn"
+                    <button className="cmn_modal_cancelbtn editVideo_cancel_btn"
                             onClick={handleClose}> Cancel
                     </button>
                     <button disabled={videoTrimmedUrl.length === 0} onClick={saveHandler} type="button"
-                            className={`ms-3 disconnect_btn ${videoTrimmedUrl.length === 0 ? "disabled-button" : "cmn_btn_color cmn_connect_btn  "}`}
+                            className={`ms-3 disconnect_btn ${videoTrimmedUrl.length === 0 ? "disabled-button" : "editSave_btn cmn_btn_color cmn_connect_btn  "}`}
                     > Save
                     </button>
                 </div>
