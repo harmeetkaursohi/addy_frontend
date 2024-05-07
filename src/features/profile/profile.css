@@ -213,6 +213,9 @@ button.edit_profile_btn {
 .edit_content .profile_info_container .form-group label:first-child {
     margin-top: 8px;
 }
+.profile_info_container {
+    min-height: 100%;
+}
 @media screen and (min-width:1499px) {
     .editprofile_outer{
         width: 78%;

@@ -64,7 +64,7 @@ const CommonModal = ({
                     
                     </div>
                         <div className='facebook_content_outer'>
-                            <div className=''>
+                            <div className='choose_page_container'>
                                 {Array.isArray(allPagesList) && allPagesList.length > 0 ? allPagesList?.map((data, index) => {
                                         return (
                                             <div key={index}

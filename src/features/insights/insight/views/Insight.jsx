@@ -35,7 +35,7 @@ import default_user_icon from "../../../../images/default_user_icon.svg"
 import calendar_img from "../../../../images/calender_img.svg"
 import ProfileVisitChart from "../../../react_chart/views/Profile_visit_chart";
 import no_page_select_bg from "../../../../images/no_page_select_bg.svg"
-import no_data_available from "../../../../images/no_data_available.png"
+import no_data_available from "../../../../images/no_data_available.svg"
 import {select} from "@syncfusion/ej2-react-schedule";
 
 const Insight = () => {
