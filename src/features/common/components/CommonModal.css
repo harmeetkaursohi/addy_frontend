@@ -139,6 +139,11 @@ button, .modal_inner_content.disconnect_wrapper
     position: relative;
     opacity: 0.41;
 }
+.choose_page_container{
+    max-height: 400px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+}
 
 /*media QUERY*/
 @media (max-width: 1699px) {

@@ -1,4 +1,4 @@
-
+/* 
 .hashtag_btn {
 padding: 10px 22px 9px 22px;
 font-family: "Nunito";
@@ -7,7 +7,7 @@ font-style: italic;
 font-weight: 500;
 line-height: normal;
 border: none;
-/* margin: 10px; */
+
 }
 .selected_hashtag_btn{
     box-shadow: 3px 3px 10px rgb(245 215 204) !important;
@@ -65,4 +65,56 @@ border: 1px solid #C3C3C3;
     padding: 10px;
     border-radius: 10px;
     text-align: center;
-}
+} */
+
+.hashtag_btn {
+    border-radius: 20px;
+    height: 38px;
+    padding: 10px 22px 9px 22px;
+    font-family: "Nunito";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: normal;
+    border: none;
+    margin: 10px;
+    }
+    .selected_hashtag_btn{
+    color: #FFF;
+    background: #00A3FF;
+    
+    }
+    .unselected_hashtag_btn{
+    background: #F4F7FC;
+    color: black;
+    }
+    
+    
+    .selected_hashtag_outer{
+    border-radius: 8px;
+    border: 1px solid #C3C3C3;
+        max-height: 160px;
+        overflow: auto;
+    }
+    .regenerate_btn_outer{
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
+    
+     @media screen and (max-width:767px){
+        .regenerate_btn_outer {
+           gap: 10px;   
+        }
+        
+     }
+    
+    .hashtag_btn_outer{
+        max-height: 160px;
+        overflow: auto;
+        color: #d4d4d4;
+        border: 1px solid #d3d7d9;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+    }

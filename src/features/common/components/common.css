@@ -78,6 +78,8 @@
 }
 .update-password-btn {
     font-size: 16px;
+    min-width: 99px;
+    height: 37px;
 }
 .close-update-password-btn {
     padding: 6px 22px;
@@ -385,6 +387,10 @@ gap: 16px;
     }
     .pinterest_post_heading{
         font-size: 14px;
+    }
+    .update-password-btn{
+        font-size: 14px;
+        min-width: 94px;
     }
     .post_modal_like_outer{
         display: block;

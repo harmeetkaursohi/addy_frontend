@@ -153,6 +153,9 @@ border-radius: 12px;
   padding: 12px 17px;
   border: 1px solid #263238;
 }
+.generate_image_outer .form-control:focus{
+  box-shadow:  unset !important;
+}
 .cmn_text_heading {
   color: #2e3646;
   font-size: 28px;
