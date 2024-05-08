@@ -3,7 +3,7 @@
     align-items: center;
 }
 li.selectedCaption{
-  box-shadow: 3px 3px 10px rgb(245 215 204) !important;
+  box-shadow: 3px 1px 8px rgb(245 215 204) !important
 }
 .captions_lists{
     max-height:200px;
@@ -23,9 +23,9 @@ ul.captions_lists li input {
 }
 .captions_lists li{
     border-radius: 7px;
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
-    padding: 10px 17px;
-    margin-top: 10px;
+    box-shadow: 3px 1px 10px rgba(0, 0, 0, 0.05);
+    padding: 12px 17px;
+    margin: 10px 5px;
     color: #263238;
     font-family: "Nunito";
     font-size: 18px;

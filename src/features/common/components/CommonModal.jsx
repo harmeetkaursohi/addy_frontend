@@ -54,7 +54,7 @@ const CommonModal = ({
                 <Modal size="lg" show={showModal} onHide={handleClose} className='choose_page_outer'>
         
                     <Modal.Body className='pt-0'>
-                    <div className='d-flex align-items-center pt-3 pb-3'>
+                    <div className='d-flex  pt-3 pb-3'>
                     <div className='facebook_title flex-grow-1'>
                                 <h2 className='cmn_text_style'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
                     </div>

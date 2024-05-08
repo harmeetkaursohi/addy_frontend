@@ -688,8 +688,8 @@ const UpdatePost = () => {
                                                                                 {
                                                                                     socialAccount && socialAccount?.pageAccessToken.length > 0 &&
                                                                                     <div
-                                                                                        className='instagram_outer facebook_outer '
-                                                                                        key={index}>
+                                                                                    className={`instagram_outer ${socialAccount.provider=="FACEBOOK"?"facebook_outer":socialAccount.provider=="LINKEDIN"?"linkedin_outer":socialAccount.provider=="PINTEREST"?"pinterest_outer":""}`}
+                                                                                    key={index}>
                                                                                         <div
                                                                                             className="checkbox-button_outer">
 
@@ -717,7 +717,7 @@ const UpdatePost = () => {
                                                                                                 <div
                                                                                                     className="instagramPages unselectedpages"
                                                                                                     key={index}
-                                                                                                    style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : ""}}
+                                                                                                    style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : "",border:selectedOptions.includes(page.pageId) === true ? "1px solid #048709" : ""}}
                                                                                                     onClick={(e) =>
                                                                                                         handleCheckboxChange({
                                                                                                             group: socialAccount?.provider,
