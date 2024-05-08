@@ -5,7 +5,12 @@
     align-items: center;
     cursor: pointer;
 }
-
+.linkedin_outer{
+    background: #dee6f1 !important;
+}
+.pinterest_outer{
+    background: #f3d1d1 !important;
+}
 .instagram_outer {
     background: rgba(254, 127, 31, 0.10);
     padding: 26px 28px;
