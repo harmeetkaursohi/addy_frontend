@@ -1,43 +1,35 @@
 /* 
-.hashtag_btn {
-padding: 10px 22px 9px 22px;
-font-family: "Nunito";
-font-size: 14px;
-font-style: italic;
-font-weight: 500;
-line-height: normal;
-border: none;
-
-}
 .selected_hashtag_btn{
     box-shadow: 3px 3px 10px rgb(245 215 204) !important;
 
-
+}
+.hashtag_content input{
+    accent-color: #ff5e00;
 }
 .hashtag_list{
     border: 1px solid #D2D2D2;
-    padding: 13px 20px !important;
+    padding: 15px !important;
 }
 .hashtag_list li{
     color: #263238;
     display: flex;
-    gap: 10px;
+    gap: 20px;
     align-items: center;
 
 }
 .hashtag_content{
     flex-grow: 1;
-    box-shadow: 2px 2px 15px #f1eaea;
-    padding: 10px;
+    box-shadow: 3px 3px 10px #efe6e6;
+    padding: 12px;
+    border-radius: 7px;
     display: flex;
-    gap: 13px;
-    border-radius: 6px;
+    gap: 10px;
+    width: 100%;
 }
+
 .hashtag_list li h3 {
-    font-size: 19px;
+    font-size: 17px;
 }
-
-
 
 .selected_hashtag_outer{
 border-radius: 8px;
@@ -54,18 +46,16 @@ border: 1px solid #C3C3C3;
     .regenerate_btn_outer {
        gap: 10px;   
     }
+    .hashtag_list li{
+        display: block;
+    }
+    .hashtag_content{
+        margin-top: 10px;
+    }
     
  }
+ */
 
-.hashtag_btn_outer{
-    max-height: 160px;
-    overflow: auto;
-    color: #d4d4d4;
-    border: 1px solid #d3d7d9;
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-} */
 
 .hashtag_btn {
     border-radius: 20px;

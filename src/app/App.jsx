@@ -17,9 +17,7 @@ const CommonLoader = lazy(() => import('../features/common/components/CommonLoad
 const CreatePost = lazy(() => import('../features/planner/views/CreatePost'));
 const UpdatePost = lazy(() => import('../features/planner/views/UpdatePost'));
 const Review = lazy(() => import('../features/review/views/Review.jsx'));
-const Gallery = lazy(() => import('../features/gallary/views/Gallery.jsx'));
 const AI_ImageModal = lazy(() => import('../features/modals/views/ai_image_modal/AI_ImageModal.jsx'));
-const CommentPage = lazy(() => import('../features/commentPage/views/CommentPage.jsx'));
 const AddressForm = lazy(() => import('../features/signup/views/tabs/AddressInfo.jsx'));
 const Draft = lazy(() => import('../features/unPublishedPages/Draft'));
 const Insight = lazy(() => import('../features/insights/insight/views/Insight'));
@@ -62,9 +60,7 @@ const App = () => {
                                 <Route path="/planner/post" element={<CreatePost/>}/>
                                 <Route path="/post/:id" element={<UpdatePost/>}/>
                                 <Route path="/review" element={<Review/>}/>
-                                <Route path="/gallery" element={<Gallery/>}/>
                                 <Route path="/image" element={<AI_ImageModal/>}/>
-                                <Route path="/comment" element={<CommentPage/>}/>
                                 <Route path="/address" element={<AddressForm/>}/>
                                 <Route path="/draft" element={<Draft/>}/>
                                 <Route path="/insights" element={<Insight/>}/>
