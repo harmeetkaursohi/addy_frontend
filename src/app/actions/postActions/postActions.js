@@ -117,7 +117,7 @@ export const getCommentsOnPostAction = createAsyncThunk('post/getCommentsOnPostA
             });
         }
         case  "LINKEDIN": {
-            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comments/${"urn:li:share:7193505496551579648"}?pageSize=${data?.pageSize}&start=${data?.start}`;
+            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/comments/${data.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
             return baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then((response) => {
                 return response?.data
             }).catch((error) => {
