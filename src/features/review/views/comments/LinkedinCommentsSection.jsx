@@ -53,24 +53,33 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
     const [showReplyBox, setShowReplyBox] = useState([])
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
+    useEffect(()=>{
+        if(postData && postPageData && postPageData?.commentsSummary?.totalFirstLevelComments>0 && (linkedinComments?.elements===undefined || linkedinComments?.elements===null)){
+            setGetLinkedinComments(new Date().getMilliseconds())
+        }
+    },[postData, postPageData])
+
     useEffect(() => {
-        dispatch(getCommentsOnPostAction({
-            ...baseQuery,
-            id: postData?.id,
-            pageSize: 3,
-            start: startFrom
-        })).then(response => {
-            if (response.meta.requestStatus === "fulfilled") {
-                setShowReplyBox([])
-                if (response?.payload?.paging?.links?.filter(link => link.rel === "next")?.length === 0) {
-                    setStartFrom(null);
-                } else {
-                    setStartFrom(parseInt(extractParameterFromUrl(`${import.meta.env.VITE_APP_LINKEDIN_BASE_URL}` + response?.payload.paging?.links?.filter(link => link.rel === "next")[0]?.href, "start")))
+        if(getLinkedinComments!==null){
+            setGetLinkedinComments(null);
+            dispatch(getCommentsOnPostAction({
+                ...baseQuery,
+                id: postData?.id,
+                pageSize: 3,
+                start: startFrom
+            })).then(response => {
+                if (response.meta.requestStatus === "fulfilled") {
+                    setShowReplyBox([])
+                    if (response?.payload?.paging?.links?.filter(link => link.rel === "next")?.length === 0) {
+                        setStartFrom(null);
+                    } else {
+                        setStartFrom(parseInt(extractParameterFromUrl(`${import.meta.env.VITE_APP_LINKEDIN_BASE_URL}` + response?.payload.paging?.links?.filter(link => link.rel === "next")[0]?.href, "start")))
+                    }
                 }
-            }
-        })
-        //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
-        dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
+            })
+            //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
+            dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
+        }
     }, [getLinkedinComments])
 
 
