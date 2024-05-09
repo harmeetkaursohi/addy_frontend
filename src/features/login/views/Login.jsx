@@ -151,22 +151,23 @@ const Login = () => {
 
                                                
                                                 <div className='social_login_outer'>
-                                               
 
                                                 
                                                  {/*======= login with  facebook =======*/}
-                                                <a className=''
-                                                   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
-                                                    <div className="google_img_outer">
-                                                        <img src={fbImg}/>
-                                                    </div>
-                                                </a>
+                                                {/*<a className=''*/}
+                                                {/*   href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/facebook?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>*/}
+                                                {/*    <div className="google_img_outer">*/}
+                                                {/*        <img src={fbImg}/>*/}
+                                                {/*    </div>*/}
+                                                {/*</a>*/}
+
                                                  {/*======= login with  google =======*/}
                                                 <a className=''
                                                    href={`${import.meta.env.VITE_APP_OAUTH2_BASE_URL}/google?timeZone=${Intl.DateTimeFormat().resolvedOptions().timeZone}&redirect_uri=${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/auth-redirect`}>
                                                     <div className="google_img_outer">
                                                         <img src={google_img}/>
                                                     </div>
+                                                    Sign in with Google
                                                 </a>
                                                 </div>
 
