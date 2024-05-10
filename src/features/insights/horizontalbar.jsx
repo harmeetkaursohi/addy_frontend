@@ -76,46 +76,46 @@ import {BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
 
 const data = [
     {
-        name: '12-17',
-        Male: 4000,
-        Female: 2400,
-        amt: 2400,
+        name: '21, april',
+        Reaction: 4000,
+        Comment: 2400,
+        Share: 2400,
     },
     {
-        name: '18-24',
-        Male: 3000,
-        Female: 1398,
-        amt: 2210,
+        name: '22, april',
+        Reaction: 3000,
+        Comment: 1398,
+        Share: 2210,
     },
     {
-        name: '25-31',
-        Male: 2000,
-        Female: 9800,
-        amt: 2290,
+        name: '23, april',
+        Reaction: 2000,
+        Comment: 9800,
+        Share: 2290,
     },
     {
-        name: '35-44',
-        Male: 2780,
-        Female: 3908,
-        amt: 2000,
+        name: '24, april',
+        Reaction: 2780,
+        Comment: 3908,
+        Share: 2000,
     },
     {
-        name: '45-54',
-        Male: 1890,
-        Female: 4800,
-        amt: 2181,
+        name: '25, april',
+        Reaction: 1890,
+        Comment: 4800,
+        Share: 2181,
     },
     {
-        name: '55-64',
-        Male: 2390,
-        Female: 3800,
-        amt: 2500,
+        name: '26, april',
+        Reaction: 2390,
+        Comment: 3800,
+        Share: 2500,
     },
     {
-        name: '64+',
-        Male: 3490,
-        Female: 4300,
-        amt: 2100,
+        name: '27, april',
+        Reaction: 3490,
+        Comment: 4300,
+        Share: 2100,
     },
 ];
 
@@ -159,9 +159,12 @@ useEffect(()=>{
                 <XAxis dataKey="name" tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
                 <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
                 <Tooltip cursor={{fill: 'none'}}/>
-                <Legend layout="vertical" align={align? "bottom" :"right"} verticalAlign={align?"bottom":"middle"}/>
-                <Bar dataKey="Male" fill="#90D1F6" barSize={20}/>
-                <Bar dataKey="Female" fill="#E05905" barSize={20}/>
+                <Legend layout="horizontal" align={"left"} verticalAlign={"top"}/>
+
+                {/* <Legend layout="vertical" align={align? "bottom" :"right"} verticalAlign={align?"bottom":"middle"}/> */}
+                <Bar dataKey="Reaction" fill="#E05905" barSize={20}/>
+                <Bar dataKey="Comment" fill=" #90D1F6" barSize={20}/>
+                <Bar dataKey="Share" fill="#00A3FF" barSize={20}/>
             </BarChart>
         </ResponsiveContainer>
 
