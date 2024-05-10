@@ -37,6 +37,10 @@ import ProfileVisitChart from "../../../react_chart/views/Profile_visit_chart";
 import no_page_select_bg from "../../../../images/no_page_select_bg.svg"
 import no_data_available from "../../../../images/no_data_available.svg"
 import {select} from "@syncfusion/ej2-react-schedule";
+import cmt_icon from "../../../../images/cmt_icon.svg"
+import user_icon from "../../../../images/user_icon.svg"
+import bar_icon from "../../../../images/bar_icon.svg"
+import heart_icon from "../../../../images/heart_icon.svg"
 
 const Insight = () => {
     const dispatch = useDispatch();
@@ -573,12 +577,11 @@ const Insight = () => {
                                                     <div className={"mb-4"}></div>
                                                 </div>
                                                 {/* profile visit section end */}
-
-
-                                                <div className="overview_tabs_outer">
+                                                 
+                                                <div className="overview_tabs_outer cmn_insight_box_shadow">
                                                     <div className="days_outer reach-engagement-select">
 
-                                                        <button className="overview_btn">Overview</button>
+                                                        <h3 className="overview_title">Overview</h3>
 
                                                         <select className=" days_option box_shadow"
                                                                 value={selectedPeriodForReachAndEngagement}
@@ -597,7 +600,7 @@ const Insight = () => {
                                                                     < h3 className="overview_text">
                                                                         You reached{" "}
                                                                         <span
-                                                                            className="hightlighted_text color-growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2)}% </span>more
+                                                                            className="hightlighted_text color-growth ">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2)}% </span>more
                                                                         accounts compared
                                                                         to {getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.dateRange}
                                                                     </h3> :
@@ -612,19 +615,28 @@ const Insight = () => {
                                                         </>
                                                     }
 
-
+                                                 {/* Accounts Reached */}
                                                     <div className="account_reach_overview_wrapper">
-                                                        <div className="account_reach_overview_outer">
-                                                            <h5 className="cmn_text_style">Accounts Reached</h5>
+                                                        <div className="account_reach_overview_outer light_blue">
+                                                            <div className="cmt_icon_outer">
+                                                            <img src={bar_icon}/>
 
+                                                            </div>
                                                             <h4 className="cmn_text_style">
                                                                 {
                                                                     getAccountReachedAndAccountEngagedData?.loading ?
                                                                         <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : getAccountReachedAndAccountEngagedData?.data?.reach?.presentData
+                                                                    </span> : 
+                                                                     getAccountReachedAndAccountEngagedData?.data?.reach?.presentData
+                                                                   
                                                                 }
 
-                                                                {
+                                                               
+                                                            </h4>
+
+                                                            <h5 className="cmn_text_style">Accounts Reached</h5>
+                                                            <div className="mt-3">
+                                                            {
                                                                     !getAccountReachedAndAccountEngagedData?.loading && <>
                                                                         {
                                                                             getAccountReachedAndAccountEngagedData?.data?.reach?.presentData >= getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data ?
@@ -632,22 +644,29 @@ const Insight = () => {
                                                                                     <FiArrowUpRight
                                                                                         className="top_Arrow"/>
                                                                                     <span
-                                                                                        className="hightlighted_text color-growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2)}%</span>
+                                                                                        className="hightlighted_text color-growth post_growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2)}%</span>
                                                                                 </>
                                                                                 :
                                                                                 <>
                                                                                     <FiArrowDownRight
                                                                                         className="top_Arrow"/>
                                                                                     <span
-                                                                                        className="hightlighted_text">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2))}%</span>
+                                                                                        className="hightlighted_text post_growth">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2))}%</span>
                                                                                 </>
                                                                         }
                                                                     </>
                                                                 }
-                                                            </h4>
+
+                                                            </div>
+                                                           
                                                         </div>
-                                                        <div className="account_reach_overview_outer">
-                                                            <h5 className="cmn_text_style">Accounts Engaged</h5>
+                                                           {/* acccount Engaged */}
+                                                        <div className="account_reach_overview_outer light_orange">
+                                                        <div className="cmt_icon_outer">
+                                                            <img src={user_icon}/>
+
+                                                            </div>
+                                                          
 
                                                             <h4 className="cmn_text_style">
                                                                 {
@@ -656,29 +675,38 @@ const Insight = () => {
                                                                     </span> : getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData
                                                                 }
 
-                                                                {!getAccountReachedAndAccountEngagedData?.loading && <>
+                                                                
+                                                            </h4>
+                                                            <h5 className="cmn_text_style">Accounts Engaged</h5>
+                                                            <div className="mt-3">
+                                                            {!getAccountReachedAndAccountEngagedData?.loading && <>
                                                                     {
                                                                         getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData >= getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data ?
                                                                             <>
                                                                                 <FiArrowUpRight
                                                                                     className="top_Arrow"/>
                                                                                 <span
-                                                                                    className="hightlighted_text color-growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData, 2)}%</span>
+                                                                                    className="hightlighted_text color-growth post_growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData, 2)}%</span>
                                                                             </>
                                                                             :
                                                                             <>
                                                                                 <FiArrowDownRight
                                                                                     className="top_Arrow"/>
                                                                                 <span
-                                                                                    className="hightlighted_text">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData, 2))}%</span>
+                                                                                    className="hightlighted_text post_growth">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData, 2))}%</span>
                                                                             </>
                                                                     }
                                                                 </>
                                                                 }
-                                                            </h4>
+
+                                                            </div>
+                                                            
                                                         </div>
-                                                        <div className="account_reach_overview_outer">
-                                                            <h5 className="cmn_text_style">Total Followers</h5>
+                                                           {/* acccount followers */}
+                                                        <div className="account_reach_overview_outer light_purple">
+                                                            <div className="cmt_icon_outer">
+                                                                <img src={cmt_icon}/>
+                                                            </div>
                                                             <h4 className="cmn_text_style">
                                                                 {
                                                                     getProfileInfoReducer?.loading ?
@@ -686,12 +714,53 @@ const Insight = () => {
                                                                     </span> : (getProfileInfoReducer?.data?.followers === null || getProfileInfoReducer?.data?.followers === undefined) ? "N/A" : getProfileInfoReducer?.data?.followers
                                                                 }
                                                             </h4>
+                                                            <h5 className="cmn_text_style">Total Followers</h5>
                                                         </div>
+
+                                                        {/* acccount likes */}
+                                                        <div className="account_reach_overview_outer light_green">
+                                                           
+                                                            <div className="cmt_icon_outer">
+                                                               <img src={heart_icon}/>
+                                                            </div>
+                                                            <h4 className="cmn_text_style">
+                                                                {
+                                                                    getProfileInfoReducer?.loading ?
+                                                                        <span><i className="fa fa-spinner fa-spin"/>
+                                                                    </span> : (getProfileInfoReducer?.data?.likes === null || getProfileInfoReducer?.data?.likes === undefined) ? "N/A" : getProfileInfoReducer?.data?.likes
+                                                                }
+                                                            </h4>
+                                                            <h5 className="cmn_text_style">Accounts likes</h5>
+                                                        </div>
+
                                                     </div>
 
                                                 </div>
 
-                                                <button className="overview_btn mt-5 "
+                                                 {/* {interaction section start here} */}
+                                                 {false && 
+                                                 <div className="interaction_wrapper cmn_insight_box_shadow mt-5">
+                                                <div className="days_outer reach-engagement-select interaction_outer">
+
+                                                        <h3 className="overview_title">Interactions</h3>
+
+                                                        <select className=" days_option box_shadow"  >
+                                                            <option value={7}>Last 7 days</option>
+                                                            <option value={15}>Last 15 days</option>
+                                                            <option value={28}>Last 28 days</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="interaction_graph_outer">
+                                               <HorizontalBarChart/>
+
+                                                    </div>
+
+                                                </div>
+                                                 }
+                                                 {/* {interaction section end here} */}
+
+
+                                                <button className=" post_stack mt-5 "
                                                         style={{display: 'inline-block'}}> Posts stacks
                                                 </button>
                                                 {/* slider  */}
