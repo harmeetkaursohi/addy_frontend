@@ -24,6 +24,7 @@ import {getPostByPageIdAndPostStatus} from "../../../../app/actions/postActions/
 import {
     calculatePercentageGrowthFor, createSocialMediaProfileViewInsightsQuery,
     fetchCssForInsightPageListOption,
+    generateUnixTimestampFor,
 } from "../../../../utils/commonUtils";
 import {enabledSocialMedia, selectGraphDaysOptions, SocialAccountProvider} from "../../../../utils/contantData";
 import Loader from "../../../loader/Loader";
@@ -41,6 +42,7 @@ import cmt_icon from "../../../../images/cmt_icon.svg"
 import user_icon from "../../../../images/user_icon.svg"
 import bar_icon from "../../../../images/bar_icon.svg"
 import heart_icon from "../../../../images/heart_icon.svg"
+import PinterestGraph from "../../../react_chart/views/PinterestGraph";
 
 const Insight = () => {
     const dispatch = useDispatch();
@@ -225,6 +227,63 @@ const Insight = () => {
         }
     }, [selectedDaysForProfileVisitGraph])
 
+    // new graph code starts here
+
+    const[postInteractiondata,setPostInteractiondata]=useState()
+
+    const[postEngageVal,setPostEngagementVal]=useState("day")
+
+    const setlectPostEngagehandler=(e)=>{
+        setPostEngagementVal(e.target.value)
+    }
+    
+    const now = new Date();
+    // const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    // const lastWeek = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000); 
+    // const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+   
+    // // Format dates in ISO format (YYYY-MM-DD)
+    // const last7DaysISO = last7Days.toISOString().split('T')[0];
+    // const lastWeekISO = lastWeek.toISOString().split('T')[0];
+    // const lastMonthISO = lastMonth.toISOString().split('T')[0];
+
+
+
+
+    useEffect(() => {
+        let url
+        if(selectedPage!==null || selectedPage?.socialMediaType==="FACEBOOK"|| selectedPage?.socialMediaType==="INSTAGRAM"){
+            if(postEngageVal==="day"){
+
+            url=  `https://graph.facebook.com/v17.0/${selectedPage?.pageId}/insights/page_post_engagements?access_token=${selectedPage?.access_token}&since=${generateUnixTimestampFor(7)}&until=${now.toISOString().split('T')[0]}&period=${postEngageVal}`
+            }else if(postEngageVal==="week"){
+            url=  `https://graph.facebook.com/v17.0/${selectedPage?.pageId}/insights/page_post_engagements?access_token=${selectedPage?.access_token}&since=${generateUnixTimestampFor(15)}&until=${now.toISOString().split('T')[0]}&period=${postEngageVal}`
+
+            }else{
+            url=  `https://graph.facebook.com/v17.0/${selectedPage?.pageId}/insights/page_post_engagements?access_token=${selectedPage?.access_token}&since=${generateUnixTimestampFor(28)}&until=${now.toISOString().split('T')[0]}&period=${postEngageVal}`
+
+            }
+
+
+      fetch(url)
+             .then(response => response.json())
+             .then(data => {
+               setPostInteractiondata(data)
+               console.log(data,"data123")
+             
+             })
+             .catch(error => {
+               console.error('Error fetching comments:', error);
+             });
+       }
+       
+      }, [postEngageVal,selectedPage]);
+
+  
+     
+
+
+        
 
     return (
         <section>
@@ -435,6 +494,15 @@ const Insight = () => {
                                                 {/* profile visit section */}
                                                 <div className="row mt-4">
                                                     <div className="col-lg-4 col-md-12 col-sm-12">
+                                                        {/* visitors demographics section starts here */}
+                                                        {selectedPage.socialMediaType === 'LINKEDIN' ? 
+                                                        <div className="cmn_shadow visitors_container insight_demographic_outer">
+                                                                <div className="d-flex cmn_border visitors_outer">
+                                                                    <h3>Visitors Demographics</h3>
+                                                                </div>
+                                                               
+                                                                    <DonutChart/>
+                                                            </div>:
                                                         <div className="user_profile_card_outer cmn_shadow">
 
                                                             <div className="user_profile_card_wrapper text-center mt-3">
@@ -489,7 +557,8 @@ const Insight = () => {
                                                                     </li>
                                                                 </ul>
                                                             }
-                                                        </div>
+                                                        </div>}
+                                                        
                                                     </div>
                                                     <div className="col-lg-8 col-md-12 col-sm-12">
                                                         <div className="page_title_header mb-0 Profile_visit_container">
@@ -736,27 +805,68 @@ const Insight = () => {
                                                     </div>
 
                                                 </div>
+                                                
+                                                {/* pin click section starts here */}
+                                                {selectedPage?.socialMediaType==="PINTEREST" && 
+                                                <div className="row">
+                                                <div className="col-lg-8 col-sm-12 col-md-12">
+                                                <div className="page_title_header mb-0 Profile_visit_container">
+                                                            <div className="page_title_container ps-0">
+                                                                <div className="page_title_dropdown">
+                                                                    <div className={"profile-visit-text ms-4"}>Pin 
+                                                                       Click
+                                                                    </div>
+                                                                </div>
+                                                    
+                                                                <select className=" days_option box_shadow"
+                                                                >
+                                                            <option value={7}>Last 7 days</option>
+                                                            <option value={15}>Last 15 days</option>
+                                                            <option value={28}>Last 28 days</option>
+                                                        </select>
 
+                                                            
+                                                            </div>
+
+                                                            <div className="profile_visit_graph_outer mt-2">
+                                                                
+                                                                    <PinterestGraph />
+                                                               
+                                                            </div>
+
+                                                </div>
+
+                                                </div>
+                                                <div className="col-lg-4 col-md-12 col-sm-12">
+                                                <div className="cmn_shadow  insight_followers_outer visitors_container">
+                                                            <div className="d-flex cmn_border visitors_outer">
+                                                                <h3>Followers</h3>
+                                                            </div>
+                                                           
+                                                            <DonutChart/> 
+                                                </div>
+                                                  
+                                                </div>
+                                                </div>}
                                                  {/* {interaction section start here} */}
-                                                 {false && 
+                                           {selectedPage?.socialMediaType==="FACEBOOK" || selectedPage?.socialMediaType==="INSTAGRAM"|| selectedPage?.socialMediaType==="LINKEDIN" ?
                                                  <div className="interaction_wrapper cmn_insight_box_shadow mt-5">
                                                 <div className="days_outer reach-engagement-select interaction_outer">
 
                                                         <h3 className="overview_title">Interactions</h3>
 
-                                                        <select className=" days_option box_shadow"  >
-                                                            <option value={7}>Last 7 days</option>
-                                                            <option value={15}>Last 15 days</option>
-                                                            <option value={28}>Last 28 days</option>
+                                                        <select className=" days_option box_shadow" onChange={setlectPostEngagehandler} >
+                                                            <option value={"day"}>Last 7 days</option>
+                                                            <option value={"week"}>Last 15 days</option>
+                                                            <option value={"days_28"}>Last 28 days</option>
                                                         </select>
                                                     </div>
                                                     <div className="interaction_graph_outer">
-                                               <HorizontalBarChart/>
-
+                                               <HorizontalBarChart postInteractiondata={postInteractiondata} />
                                                     </div>
 
                                                 </div>
-                                                 }
+                                                :"" }
                                                  {/* {interaction section end here} */}
 
 

@@ -121,8 +121,31 @@ const data = [
 
 
 
-const HorizontalBarChart = () => {
+const HorizontalBarChart = ({postInteractiondata}) => {
     const [align,setAlign]=useState(false)
+
+const convertDate =(date)=>{
+    const month = date.toLocaleString('default', { month: 'short' });
+    const day = date.getDate();
+    const year = date.getFullYear();
+    
+    const formattedDate = `${month} ${day} ${year}`
+    return formattedDate
+}
+  const engagementData = postInteractiondata?.data?.map((data)=>{
+    return(
+        data?.values?.map(entry => ({
+
+                date: convertDate(new Date(entry.end_time)) , 
+                POSTENGAGED: entry.value 
+              }))
+            
+      
+    )
+
+  });
+
+
 
 useEffect(()=>{
     const handleResize=()=>{
@@ -147,7 +170,7 @@ useEffect(()=>{
             <BarChart
                 width={500}
                 height={300}
-                data={data}
+                data={engagementData!==undefined && engagementData[0]}
                 margin={{
                     top: 20,
                     right: 20,
@@ -155,16 +178,19 @@ useEffect(()=>{
                     bottom: 20,
                 }}
             >
-
-                <XAxis dataKey="name" tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
+              
+               
+                <XAxis dataKey="date" tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
                 <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
                 <Tooltip cursor={{fill: 'none'}}/>
                 <Legend layout="horizontal" align={"left"} verticalAlign={"top"}/>
 
                 {/* <Legend layout="vertical" align={align? "bottom" :"right"} verticalAlign={align?"bottom":"middle"}/> */}
-                <Bar dataKey="Reaction" fill="#E05905" barSize={20}/>
-                <Bar dataKey="Comment" fill=" #90D1F6" barSize={20}/>
-                <Bar dataKey="Share" fill="#00A3FF" barSize={20}/>
+                <Bar dataKey="POSTENGAGED" fill="#E05905" barSize={20}/>
+               
+            
+                {/* <Bar dataKey="Comment" fill=" #90D1F6" barSize={20}/>
+                <Bar dataKey="Share" fill="#00A3FF" barSize={20}/> */}
             </BarChart>
         </ResponsiveContainer>
 
