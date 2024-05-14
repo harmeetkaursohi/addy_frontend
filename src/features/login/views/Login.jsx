@@ -40,7 +40,8 @@ const Login = () => {
             dispatch(loginUser({values})).then((response) => {
                 setIsLoading(false)
                 if (response.meta.requestStatus === "fulfilled") {
-                    navigate("/dashboard")
+                    window.location.href="/dashboard"
+                    // navigate("/dashboard")
                 }
             }).catch((error) => {
                 setIsLoading(false)
