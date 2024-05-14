@@ -11,20 +11,24 @@ import jsondata from "../../../../locales/data/initialdata.json"
 import {
     getAllByCustomerIdAction,
 } from "../../../../app/actions/socialAccountActions/socialAccountActions";
-import {getToken} from "../../../../app/auth/auth";
+import {getToken, setAuthenticationHeader} from "../../../../app/auth/auth";
 import linkedin_img from "../../../../images/linkedin.svg"
 import {
+    facebookPostEngage,
     getAccountReachedAndAccountEngaged,
     getDemographicsInsight,
     getPostDataWithInsights,
     getProfileInsightsInfo,
-    getProfileVisitsInsightsInfo
+    getProfileVisitsInsightsInfo,
+    pinterestPostEngage
 } from "../../../../app/actions/InsightActions/insightAction";
 import {getPostByPageIdAndPostStatus} from "../../../../app/actions/postActions/postActions";
 import {
     calculatePercentageGrowthFor, createSocialMediaProfileViewInsightsQuery,
     fetchCssForInsightPageListOption,
     generateUnixTimestampFor,
+    getDatesForPinterest,
+  
 } from "../../../../utils/commonUtils";
 import {enabledSocialMedia, selectGraphDaysOptions, SocialAccountProvider} from "../../../../utils/contantData";
 import Loader from "../../../loader/Loader";
@@ -68,7 +72,6 @@ const Insight = () => {
     const [selectedPage, setSelectedPage] = useState(null);
     const [selectedPeriodForReachAndEngagement, setSelectedPeriodForReachAndEngagement] = useState(7);
     const [selectedDaysForProfileVisitGraph, setSelectedDaysForProfileVisitGraph] = useState(null);
-
 
     const [insightsCacheData, setInsightCacheData] = useState({
         getPostByPageIdAndPostStatusDataCache: {},
@@ -229,61 +232,63 @@ const Insight = () => {
 
     // new graph code starts here
 
-    const[postInteractiondata,setPostInteractiondata]=useState()
 
-    const[postEngageVal,setPostEngagementVal]=useState("day")
-
+    const[postEngageVal,setPostEngagementVal]=useState(7)
+    const[pinterestDayGraph,setPinterestDayGraph]=useState(9)
+console.log(postEngageVal,"postEngageVal")
     const setlectPostEngagehandler=(e)=>{
-        setPostEngagementVal(e.target.value)
+            setPostEngagementVal(e.target.value)
     }
     
-    const now = new Date();
-    // const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    // const lastWeek = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000); 
-    // const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
-   
-    // // Format dates in ISO format (YYYY-MM-DD)
-    // const last7DaysISO = last7Days.toISOString().split('T')[0];
-    // const lastWeekISO = lastWeek.toISOString().split('T')[0];
-    // const lastMonthISO = lastMonth.toISOString().split('T')[0];
+const now = new Date();
+
+
+const selectPinterestDayHandler=(e)=>{
+    setPinterestDayGraph(e.target.value)
+}
+
+useEffect(()=>{
+ 
+let data
+if(selectedPage?.socialMediaType==="PINTEREST"){
+    data={socialMediaType:selectedPage?.socialMediaType,token:token,
+        day:pinterestDayGraph}
+}
+else if(selectedPage?.socialMediaType==="FACEBOOK"){
+    data={socialMediaType:selectedPage?.socialMediaType,token:selectedPage?.access_token,
+        since:postEngageVal,until:now.toISOString().split('T')[0],pageId:selectedPage?.pageId}
+}
 
 
 
+dispatch(facebookPostEngage(data))
 
-    useEffect(() => {
-        let url
-        if(selectedPage!==null || selectedPage?.socialMediaType==="FACEBOOK"|| selectedPage?.socialMediaType==="INSTAGRAM"){
-            if(postEngageVal==="day"){
-
-            url=  `https://graph.facebook.com/v17.0/${selectedPage?.pageId}/insights/page_post_engagements?access_token=${selectedPage?.access_token}&since=${generateUnixTimestampFor(7)}&until=${now.toISOString().split('T')[0]}&period=${postEngageVal}`
-            }else if(postEngageVal==="week"){
-            url=  `https://graph.facebook.com/v17.0/${selectedPage?.pageId}/insights/page_post_engagements?access_token=${selectedPage?.access_token}&since=${generateUnixTimestampFor(15)}&until=${now.toISOString().split('T')[0]}&period=${postEngageVal}`
-
-            }else{
-            url=  `https://graph.facebook.com/v17.0/${selectedPage?.pageId}/insights/page_post_engagements?access_token=${selectedPage?.access_token}&since=${generateUnixTimestampFor(28)}&until=${now.toISOString().split('T')[0]}&period=${postEngageVal}`
-
-            }
-
-
-      fetch(url)
-             .then(response => response.json())
-             .then(data => {
-               setPostInteractiondata(data)
-               console.log(data,"data123")
-             
-             })
-             .catch(error => {
-               console.error('Error fetching comments:', error);
-             });
-       }
-       
-      }, [postEngageVal,selectedPage]);
-
+dispatch(pinterestPostEngage(data))
   
-     
 
 
-        
+
+},[selectedPage?.socialMediaType,pinterestDayGraph,postEngageVal,selectedPage.selectedPage?.pageId])
+
+
+const pinterestPostinsightdata=useSelector(state=>state.insight.getpinterestPostEngageReducer)
+const facebookPostinsightdata=useSelector(state=>state.insight.getfacebookPostEngageReducer)
+
+useEffect(()=>{
+setPinterestDayGraph(9)
+setPostEngagementVal(7)
+},[selectedPage])
+
+
+let filterPinterestgraphData = pinterestPostinsightdata?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY") || []
+
+// useEffect(()=>{
+//      fetch(`https://graph.instagram.com/v17.0/${selectedPage?.pageId}/insights?metric=engagement&access_token=${selectedPage?.access_token}`).then((res)=>{
+//         return res.json()
+//     }).then((res)=>console.log(res,"res56"));
+
+// },[])
+
 
     return (
         <section>
@@ -849,24 +854,33 @@ const Insight = () => {
                                                 </div>
                                                 </div>}
                                                  {/* {interaction section start here} */}
-                                           {selectedPage?.socialMediaType==="FACEBOOK" || selectedPage?.socialMediaType==="INSTAGRAM"|| selectedPage?.socialMediaType==="LINKEDIN" ?
                                                  <div className="interaction_wrapper cmn_insight_box_shadow mt-5">
                                                 <div className="days_outer reach-engagement-select interaction_outer">
 
                                                         <h3 className="overview_title">Interactions</h3>
+                                                        {
+                                                            selectedPage?.socialMediaType==="FACEBOOK"?
 
-                                                        <select className=" days_option box_shadow" onChange={setlectPostEngagehandler} >
-                                                            <option value={"day"}>Last 7 days</option>
-                                                            <option value={"week"}>Last 15 days</option>
-                                                            <option value={"days_28"}>Last 28 days</option>
-                                                        </select>
+                                                        <select value={postEngageVal} className=" days_option box_shadow" onChange={setlectPostEngagehandler} >
+                                                            <option value={7}>Last 7 days</option>
+                                                            <option value={15}>Last 15 days</option>
+                                                            <option value={28}>Last 28 days</option>
+                                                        </select>:
+                                                        <select value={pinterestDayGraph}  className=" days_option box_shadow" onChange={selectPinterestDayHandler} >
+                                                        <option value={9}>Last 7 days</option>
+                                                        <option value={17}>Last 15 days</option>
+                                                        <option value={30}>Last 28 days</option>
+                                                    </select>
+                                                        }
                                                     </div>
                                                     <div className="interaction_graph_outer">
-                                               <HorizontalBarChart postInteractiondata={postInteractiondata} />
-                                                    </div>
+                                                {facebookPostinsightdata?.loading || pinterestPostinsightdata?.loading ?<CommonLoader/>:
+                                                 <HorizontalBarChart socialMediaType={selectedPage?.socialMediaType} postInteractiondata={selectedPage?.socialMediaType==="PINTEREST"?filterPinterestgraphData:facebookPostinsightdata?.data?.data} />
+                                                    }
+                                                 </div>
 
                                                 </div>
-                                                :"" }
+                                               
                                                  {/* {interaction section end here} */}
 
 

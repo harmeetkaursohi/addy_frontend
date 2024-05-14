@@ -121,7 +121,8 @@ const data = [
 
 
 
-const HorizontalBarChart = ({postInteractiondata}) => {
+const HorizontalBarChart = ({postInteractiondata,socialMediaType}) => {
+
     const [align,setAlign]=useState(false)
 
 const convertDate =(date)=>{
@@ -132,19 +133,33 @@ const convertDate =(date)=>{
     const formattedDate = `${month} ${day} ${year}`
     return formattedDate
 }
-  const engagementData = postInteractiondata?.data?.map((data)=>{
-    return(
-        data?.values?.map(entry => ({
 
-                date: convertDate(new Date(entry.end_time)) , 
-                POSTENGAGED: entry.value 
+
+
+
+   const  engagementData =  postInteractiondata?.data?.map((data)=>{
+      return(
+          data?.values?.map(entry => ({
+  
+                  date: convertDate(new Date(entry.end_time)) , 
+                  POSTENGAGED: entry.value 
+                }))
+              
+        
+      )
+  
+    });
+
+
+
+     const pinterestPostEngageData=  postInteractiondata?.length>0 && postInteractiondata?.map(entry => ({
+
+                date: entry.date , 
+                POSTENGAGED: entry?.metrics?.ENGAGEMENT 
               }))
             
-      
-    )
 
-  });
-
+ 
 
 
 useEffect(()=>{
@@ -170,7 +185,9 @@ useEffect(()=>{
             <BarChart
                 width={500}
                 height={300}
-                data={engagementData!==undefined && engagementData[0]}
+
+         
+                data={engagementData!==undefined && socialMediaType==="FACEBOOK"? engagementData[0]:pinterestPostEngageData}
                 margin={{
                     top: 20,
                     right: 20,
@@ -185,12 +202,9 @@ useEffect(()=>{
                 <Tooltip cursor={{fill: 'none'}}/>
                 <Legend layout="horizontal" align={"left"} verticalAlign={"top"}/>
 
-                {/* <Legend layout="vertical" align={align? "bottom" :"right"} verticalAlign={align?"bottom":"middle"}/> */}
                 <Bar dataKey="POSTENGAGED" fill="#E05905" barSize={20}/>
                
             
-                {/* <Bar dataKey="Comment" fill=" #90D1F6" barSize={20}/>
-                <Bar dataKey="Share" fill="#00A3FF" barSize={20}/> */}
             </BarChart>
         </ResponsiveContainer>
 
