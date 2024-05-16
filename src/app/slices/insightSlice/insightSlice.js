@@ -7,7 +7,10 @@ import {
     getDemographicsInsight,
    
     pinterestPostEngage,
-    facebookPostEngage
+    facebookPostEngage,
+    linkedinPostEngage,
+    pinterestPinClick,
+    
 } from "../../actions/InsightActions/insightAction";
 
 const insightSlice = createSlice({
@@ -19,7 +22,9 @@ const insightSlice = createSlice({
         getDemographicsInsightReducer: {loading: false},
         getProfileVisitsInsightsInfoReducer:{loading:false},
         getpinterestPostEngageReducer:{loading:false},
-        getfacebookPostEngageReducer:{loading:false}
+        getfacebookPostEngageReducer:{loading:false},
+        getlinkedinPostEngageReducer:{loading:false},
+        getpinterestPinClickReducer:{loading:false}
   
     },
     extraReducers: {
@@ -98,7 +103,31 @@ const insightSlice = createSlice({
         [facebookPostEngage.rejected]: (state) => {
             state.getfacebookPostEngageReducer = {loading: false}
         },
+
+        // get linkedin post engage data 
         
+        [linkedinPostEngage.pending]: (state) => {
+            state.getlinkedinPostEngageReducer = {loading: true}
+        },
+        [linkedinPostEngage.fulfilled]: (state, action) => {
+            state.getlinkedinPostEngageReducer = {loading: false, data: action.payload}
+        },
+        [linkedinPostEngage.rejected]: (state) => {
+            state.getlinkedinPostEngageReducer = {loading: false}
+        },
+        
+        // get pinterest pin click data 
+
+        
+        [pinterestPinClick.pending]: (state) => {
+            state.getpinterestPinClickReducer = {loading: true}
+        },
+        [pinterestPinClick.fulfilled]: (state, action) => {
+            state.getpinterestPinClickReducer = {loading: false, data: action.payload}
+        },
+        [pinterestPinClick.rejected]: (state) => {
+            state.getpinterestPinClickReducer = {loading: false}
+        },
     }
 });
 

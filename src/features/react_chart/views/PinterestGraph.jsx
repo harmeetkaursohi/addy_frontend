@@ -1,20 +1,33 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
-const PinterestGraph = () => {
-    const [data, setData] = useState([{day: '21april', uv: 4000}, {day: '22april', uv: 3000}, {day: '23april', uv: 2000}, {day: '24april', uv: 2780}, {day: '25april', uv: 1890}, {day: '26april', uv: 2390}, {day: '27april', uv: 3490},])
+import {RotatingLines} from "react-loader-spinner";
+const PinterestGraph = ({graphData,loading}) => {
+    const pinterestgraphData=  graphData?.length>0 && graphData?.map(entry => ({
+
+      day: entry.date , 
+      PIN_CLICK: entry?.metrics?.PIN_CLICK 
+    }))
 
   return (
-    <ResponsiveContainer width="100%" height={270}>
-    <AreaChart data={data}>
+    loading ? 
+    <div className="d-flex justify-content-center profile-visit-graph ">
+                <RotatingLines
+                    strokeColor="#F07C33"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="70"
+                    visible={true}
+                />
+      </div>:
+        <ResponsiveContainer width="100%" height={270}>
+        <AreaChart data={pinterestgraphData}>
         <CartesianGrid strokeDasharray="3 3"/>
-        <XAxis dataKey="day"
-               tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
+        <Tooltip />
+        <XAxis dataKey="day" tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
         <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
-      
-  
-        <Area type="monotone" dataKey="uv" stroke="#F07D34" fill="#fdebe1"/>
-    </AreaChart>
-</ResponsiveContainer>
+        <Area type="monotone" dataKey="PIN_CLICK" stroke="#F07D34" fill="#fdebe1"/>
+        </AreaChart>
+        </ResponsiveContainer>
   )
 }
 

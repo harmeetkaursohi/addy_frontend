@@ -421,7 +421,48 @@ export const facebookPostEngage = createAsyncThunk("insight/facebookPostEngage",
       return await axios
         .get(apiurl,setAuthenticationHeader(data.token))
         .then((res) => {
-           console.log(res?.data?.data,"res89")
+           
+          return res;
+        })
+        .catch((error) => {
+          
+          return thunkAPI.rejectWithValue(error.response);
+        });
+    }
+  );
+
+
+//   linkedin post engage data 
+export const linkedinPostEngage = createAsyncThunk("insight/linkedinPostEngage",
+    async (data, thunkAPI) => { 
+
+        const apiurl=`${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/insight-graph/${data?.pageId}?q=organizationalEntity&startDate=${data?.since}&endDate=${data?.until}&timeGranularityType=DAY`;
+      return await axios
+        .get(apiurl,setAuthenticationHeader(data?.token))
+        .then((res) => {
+      
+          return res?.data?.elements;
+        })
+        .catch((error) => {
+          
+          return thunkAPI.rejectWithValue(error.response);
+        });
+    }
+  );
+
+
+//   pinterest pin click graph data
+
+
+
+export const pinterestPinClick = createAsyncThunk("insight/pinterestPinClick",
+    async (data, thunkAPI) => { 
+
+        let apiurl=`${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/user_account/analytics?start_date=${getDatesForPinterest(data?.day)}&end_date=${getDatesForPinterest("now")}`
+      return await axios
+        .get(apiurl,setAuthenticationHeader(data?.token))
+        .then((res) => {
+ 
           return res;
         })
         .catch((error) => {

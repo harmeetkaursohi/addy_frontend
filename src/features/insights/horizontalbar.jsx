@@ -70,7 +70,7 @@
 
 
 // BarChartComponent.js
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import "./Chart.css"
 import {BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
@@ -104,26 +104,14 @@ const data = [
         Reaction: 1890,
         Comment: 4800,
         Share: 2181,
-    },
-    {
-        name: '26, april',
-        Reaction: 2390,
-        Comment: 3800,
-        Share: 2500,
-    },
-    {
-        name: '27, april',
-        Reaction: 3490,
-        Comment: 4300,
-        Share: 2100,
-    },
+    }
+   
 ];
 
 
 
 const HorizontalBarChart = ({postInteractiondata,socialMediaType}) => {
 
-    const [align,setAlign]=useState(false)
 
 const convertDate =(date)=>{
     const month = date.toLocaleString('default', { month: 'short' });
@@ -142,42 +130,17 @@ const convertDate =(date)=>{
           data?.values?.map(entry => ({
   
                   date: convertDate(new Date(entry.end_time)) , 
-                  POSTENGAGED: entry.value 
-                }))
-              
-        
+                  POSTENGAGEDMENT: entry.value 
+                }))  
       )
-  
     });
-
-
 
      const pinterestPostEngageData=  postInteractiondata?.length>0 && postInteractiondata?.map(entry => ({
 
                 date: entry.date , 
-                POSTENGAGED: entry?.metrics?.ENGAGEMENT 
+                POSTENGAGEDMENT: entry?.metrics?.ENGAGEMENT 
               }))
-            
-
- 
-
-
-useEffect(()=>{
-    const handleResize=()=>{
-    if(window.innerWidth<=767){
-        setAlign(true)
-    }else{
-        setAlign(false)
-    }
-    }
-    window.addEventListener('resize', handleResize);
-
-    handleResize();
-
-    return () => {
-        window.removeEventListener('resize', handleResize);
-    };
-},[])
+                   
     return (
 
         <ResponsiveContainer width="100%" height={300}>
@@ -185,9 +148,9 @@ useEffect(()=>{
             <BarChart
                 width={500}
                 height={300}
-
-         
-                data={engagementData!==undefined && socialMediaType==="FACEBOOK"? engagementData[0]:pinterestPostEngageData}
+                data={engagementData!==undefined && socialMediaType==="FACEBOOK"? engagementData[0]:
+                socialMediaType==="LINKEDIN"?postInteractiondata:
+                pinterestPostEngageData}
                 margin={{
                     top: 20,
                     right: 20,
@@ -195,14 +158,11 @@ useEffect(()=>{
                     bottom: 20,
                 }}
             >
-              
-               
                 <XAxis dataKey="date" tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
                 <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
                 <Tooltip cursor={{fill: 'none'}}/>
                 <Legend layout="horizontal" align={"left"} verticalAlign={"top"}/>
-
-                <Bar dataKey="POSTENGAGED" fill="#E05905" barSize={20}/>
+                <Bar dataKey="POSTENGAGEDMENT" fill="#E05905" barSize={20}/>
                
             
             </BarChart>
