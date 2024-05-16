@@ -889,6 +889,7 @@ const linkedinGraphdata=linkedinPostinsightdata?.data?.map(entry => ({
                                                
                                                 </div>}
                                                  {/* {interaction section start here} */}
+                                                 {selectedPage?.socialMediaType!=="INSTAGRAM" && 
                                                  <div className="interaction_wrapper cmn_insight_box_shadow mt-5">
                                                 <div className="days_outer reach-engagement-select interaction_outer">
 
@@ -923,6 +924,7 @@ const linkedinGraphdata=linkedinPostinsightdata?.data?.map(entry => ({
                                                  </div>
 
                                                 </div>
+                                                }
                                                
                                                  {/* {interaction section end here} */}
 
