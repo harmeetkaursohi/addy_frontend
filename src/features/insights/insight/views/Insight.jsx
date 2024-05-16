@@ -11,19 +11,26 @@ import jsondata from "../../../../locales/data/initialdata.json"
 import {
     getAllByCustomerIdAction,
 } from "../../../../app/actions/socialAccountActions/socialAccountActions";
-import {getToken} from "../../../../app/auth/auth";
+import {getToken, setAuthenticationHeader} from "../../../../app/auth/auth";
 import linkedin_img from "../../../../images/linkedin.svg"
 import {
+    facebookPostEngage,
     getAccountReachedAndAccountEngaged,
     getDemographicsInsight,
     getPostDataWithInsights,
     getProfileInsightsInfo,
-    getProfileVisitsInsightsInfo
+    getProfileVisitsInsightsInfo,
+    linkedinPostEngage,
+    pinterestPinClick,
+    pinterestPostEngage
 } from "../../../../app/actions/InsightActions/insightAction";
 import {getPostByPageIdAndPostStatus} from "../../../../app/actions/postActions/postActions";
 import {
-    calculatePercentageGrowthFor, createSocialMediaProfileViewInsightsQuery,
+    calculatePercentageGrowthFor, convertUnixTimestampToDateTime, createSocialMediaProfileViewInsightsQuery,
     fetchCssForInsightPageListOption,
+    generateUnixTimestampFor,
+    getDatesForPinterest,
+  
 } from "../../../../utils/commonUtils";
 import {enabledSocialMedia, selectGraphDaysOptions, SocialAccountProvider} from "../../../../utils/contantData";
 import Loader from "../../../loader/Loader";
@@ -41,6 +48,8 @@ import cmt_icon from "../../../../images/cmt_icon.svg"
 import user_icon from "../../../../images/user_icon.svg"
 import bar_icon from "../../../../images/bar_icon.svg"
 import heart_icon from "../../../../images/heart_icon.svg"
+import PinterestGraph from "../../../react_chart/views/PinterestGraph";
+import { RotatingLines } from "react-loader-spinner";
 
 const Insight = () => {
     const dispatch = useDispatch();
@@ -66,7 +75,6 @@ const Insight = () => {
     const [selectedPage, setSelectedPage] = useState(null);
     const [selectedPeriodForReachAndEngagement, setSelectedPeriodForReachAndEngagement] = useState(7);
     const [selectedDaysForProfileVisitGraph, setSelectedDaysForProfileVisitGraph] = useState(null);
-
 
     const [insightsCacheData, setInsightCacheData] = useState({
         getPostByPageIdAndPostStatusDataCache: {},
@@ -225,6 +233,96 @@ const Insight = () => {
         }
     }, [selectedDaysForProfileVisitGraph])
 
+    // new post engagement code starts here
+    const[postEngageVal,setPostEngagementVal]=useState(7)
+    const[selectDayGraph,setSelectDayGraph]=useState(8)
+    const[day,setDay]=useState(9)
+
+    const setlectPostEngagehandler=(e)=>{
+            setPostEngagementVal(e.target.value)
+    }
+
+    
+const now = new Date();
+
+const selectDayHandler=(e)=>{
+    setSelectDayGraph(e.target.value)
+}
+
+const dayHandler=(e)=>{
+    setDay(e.target.value)
+}
+
+useEffect(()=>{
+ 
+let data
+
+if(selectedPage?.socialMediaType==="PINTEREST"){
+    data={socialMediaType:selectedPage?.socialMediaType,token:token,
+        day:selectDayGraph}
+}
+else if(selectedPage?.socialMediaType==="FACEBOOK"){
+    data={socialMediaType:selectedPage?.socialMediaType,token:selectedPage?.access_token,
+        since:postEngageVal,until:now.toISOString().split('T')[0],pageId:selectedPage?.pageId}
+}
+else if(selectedPage?.socialMediaType==="LINKEDIN"){
+    data={socialMediaType:selectedPage?.socialMediaType,token:token,
+        since:generateUnixTimestampFor(postEngageVal) * 1000,until:generateUnixTimestampFor("now") * 1000,pageId:selectedPage?.pageId}
+}
+
+    dispatch(facebookPostEngage(data))
+    
+    dispatch(pinterestPostEngage(data))
+
+    if(data!==undefined && selectedPage?.socialMediaType==="LINKEDIN"){
+    dispatch(linkedinPostEngage(data))
+    }
+      
+},[selectDayGraph,postEngageVal,selectedPage,selectedPage?.pageId])
+
+
+useEffect(()=>{
+
+let graphdata={token:token,day:day}
+dispatch(pinterestPinClick(graphdata))
+
+},[day])
+
+const pinterestPostinsightdata=useSelector(state=>state.insight.getpinterestPostEngageReducer)
+const facebookPostinsightdata=useSelector(state=>state.insight.getfacebookPostEngageReducer)
+const linkedinPostinsightdata=useSelector(state=>state.insight.getlinkedinPostEngageReducer)
+const getpinterestPinClickdata=useSelector(state=>state.insight.getpinterestPinClickReducer)
+
+console.log(facebookPostinsightdata,"facebookPostinsightdata")
+useEffect(()=>{
+setSelectDayGraph(8)
+setPostEngagementVal(7)
+},[selectedPage])
+
+
+let filterPinterestgraphData = pinterestPostinsightdata?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" ||dailyAnalyticData?.data_status==="BEFORE_BUSINESS_CREATED" ) || []
+let getPinClickGraphdata=getpinterestPinClickdata?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" ||dailyAnalyticData?.data_status==="BEFORE_BUSINESS_CREATED" ) || []
+
+const linkedinGraphdata=linkedinPostinsightdata?.data?.map(entry => ({
+
+    date: convertUnixTimestampToDateTime(entry?.timeRange?.start /1000)?.date , 
+    POSTENGAGEDMENT: entry?.totalShareStatistics?.engagement 
+  }))
+ 
+
+// useEffect(()=>{
+
+//     fetch(`https://graph.facebook.com/v19.0/${selectedPage?.pageId}/insights?metric=post_engagements&access_token=${selectedPage?.access_token}&since=${1622505600}&until=${1625097600}&period=day`)
+//     .then((res)=>{
+//         return res.json()
+//     }).then((res)=>console.log(res,"res111"))
+// },[selectedPage])
+
+// GET https://graph.instagram.com/{media-id}
+//   ?fields=comments_count,like_count,media_type,permalink,timestamp
+//   &access_token={access_token}
+// GET graph.facebook.com/{media-id}/insights
+//     ?metric=engagement,impressions,reach
 
     return (
         <section>
@@ -435,6 +533,23 @@ const Insight = () => {
                                                 {/* profile visit section */}
                                                 <div className="row mt-4">
                                                     <div className="col-lg-4 col-md-12 col-sm-12">
+                                                        {/* visitors demographics section starts here */}
+                                                            {selectedPage.socialMediaType === 'LINKEDIN' ? 
+                                                         <div className="cmn_shadow  insight_followers_outer visitors_container">
+                                                         <div className="d-flex cmn_border visitors_outer">
+                                                             <h3>Visitors Demographics</h3>
+
+                                                         </div>
+                                                         {(getDemographicsInsightData?.data?.country === null ||  selectedPage.socialMediaType === "PINTEREST")
+                                                             ?
+                                                             <div className={"no_data_available text-center"}>
+                                                                 <img  className="no_data_available_img" src={no_data_available} alt={"coming soon!"}/>
+                                                             </div>
+                                                             :
+                                                             <DonutChart chartData={getDemographicsInsightData} socialMediaType={selectedPage?.socialMediaType}/>}
+                                                     </div>
+                                                            
+                                                            :
                                                         <div className="user_profile_card_outer cmn_shadow">
 
                                                             <div className="user_profile_card_wrapper text-center mt-3">
@@ -489,7 +604,8 @@ const Insight = () => {
                                                                     </li>
                                                                 </ul>
                                                             }
-                                                        </div>
+                                                        </div>}
+                                                        
                                                     </div>
                                                     <div className="col-lg-8 col-md-12 col-sm-12">
                                                         <div className="page_title_header mb-0 Profile_visit_container">
@@ -542,6 +658,7 @@ const Insight = () => {
                                                     </div>
                                                 </div>
                                                 <div className="row mt-4 mb-4">
+                                                    {false &&
                                                     <div className="col-lg-4 col-md-12 col-sm-12">
                                                         <div className="cmn_shadow  insight_followers_outer visitors_container">
                                                             <div className="d-flex cmn_border visitors_outer">
@@ -557,8 +674,9 @@ const Insight = () => {
                                                                 <DonutChart chartData={getDemographicsInsightData} socialMediaType={selectedPage?.socialMediaType}/>}
                                                         </div>
                                                     </div>
+                                    }
                                                     {
-                                                        true && <div className="col-lg-8 col-md-12 col-sm-12">
+                                                        false && <div className="col-lg-8 col-md-12 col-sm-12">
                                                             <div className="cmn_shadow visitors_container insight_demographic_outer">
                                                                 <div className="d-flex cmn_border visitors_outer">
                                                                     <h3>Demographics</h3>
@@ -736,27 +854,78 @@ const Insight = () => {
                                                     </div>
 
                                                 </div>
+                                                
+                                                {/* pin click section starts here */}
+                                                {selectedPage?.socialMediaType==="PINTEREST" && 
+                                                <div className="row">
+                                                <div className="col-lg-12 col-sm-12 col-md-12">
+                                                <div className="page_title_header mb-0 Profile_visit_container">
+                                                            <div className="page_title_container ps-0">
+                                                                <div className="page_title_dropdown">
+                                                                    <div className={"profile-visit-text ms-4"}>Pin 
+                                                                       Click
+                                                                    </div>
+                                                                </div>
+                                                    
+                                                                <select value={day} onChange={dayHandler} className=" days_option box_shadow"
+                                                                >
+                                                            <option value={9}>Last 7 days</option>
+                                                            <option value={17}>Last 15 days</option>
+                                                            <option value={30}>Last 28 days</option>
+                                                        </select>
 
+                                                            
+                                                            </div>
+
+                                                            <div className="profile_visit_graph_outer mt-2">
+                                                               
+                                                                    <PinterestGraph graphData={getPinClickGraphdata} loading={getpinterestPinClickdata?.loading}/>
+                                                               
+                                                            </div>
+
+                                                </div>
+
+                                                </div>
+                                               
+                                                </div>}
                                                  {/* {interaction section start here} */}
-                                                 {false && 
+                                                 {selectedPage?.socialMediaType!=="INSTAGRAM" && 
                                                  <div className="interaction_wrapper cmn_insight_box_shadow mt-5">
                                                 <div className="days_outer reach-engagement-select interaction_outer">
 
                                                         <h3 className="overview_title">Interactions</h3>
+                                                        {
+                                                            selectedPage?.socialMediaType!=="PINTEREST"?
 
-                                                        <select className=" days_option box_shadow"  >
+                                                        <select value={postEngageVal} className=" days_option box_shadow" onChange={setlectPostEngagehandler} >
                                                             <option value={7}>Last 7 days</option>
                                                             <option value={15}>Last 15 days</option>
                                                             <option value={28}>Last 28 days</option>
-                                                        </select>
+                                                        </select>:
+                                                        <select value={selectDayGraph}  className=" days_option box_shadow" onChange={selectDayHandler} >
+                                                        <option value={8}>Last 7 days</option>
+                                                        <option value={16}>Last 15 days</option>
+                                                        <option value={29}>Last 28 days</option>
+                                                    </select>
+                                                        }
                                                     </div>
                                                     <div className="interaction_graph_outer">
-                                               <HorizontalBarChart/>
-
-                                                    </div>
+                                                {facebookPostinsightdata?.loading||linkedinPostinsightdata?.loading || pinterestPostinsightdata?.loading ?<div className="d-flex justify-content-center profile-visit-graph ">
+                    <RotatingLines
+                    strokeColor="#F07C33"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="70"
+                    visible={true}
+                    />
+            </div>:
+                                                 <HorizontalBarChart socialMediaType={selectedPage?.socialMediaType} postInteractiondata={selectedPage.socialMediaType==="LINKEDIN"?linkedinGraphdata:selectedPage?.socialMediaType==="PINTEREST"?filterPinterestgraphData:facebookPostinsightdata?.data?.data} />
+                                                    }
+                                                 </div>
 
                                                 </div>
-                                                 }
+                                                }
+                                               
                                                  {/* {interaction section end here} */}
 
 

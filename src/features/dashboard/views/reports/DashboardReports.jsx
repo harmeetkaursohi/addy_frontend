@@ -371,13 +371,21 @@ export const DashboardReports = () => {
                                                             <h5>{curKey.replace(/_/g, ' ')}
                                                                 {
                                                                     ["INSTAGRAM", "PINTEREST"].includes(reportSelectedAccountType) &&
+                                                                   
+                                                                    <>
+                                                                    <br/>
                                                                     <span
                                                                         className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 90 days)' : ''}  </span>
+                                                                    
+                                                                    </>
                                                                 }
                                                                 {
                                                                     ["FACEBOOK"].includes(reportSelectedAccountType) &&
+                                                                    <>
+                                                                    <br/>
                                                                     <span
                                                                         className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 2 years)' : ''}  </span>
+                                                                    </>
                                                                 }
 
                                                             </h5>

@@ -247,7 +247,7 @@ ul.overview_tabs.nav.nav-tabs {
 }
 
 .overview_tabs_outer {
-    margin-top: 16px;
+    margin-top: 50px;
 
    
 
@@ -581,6 +581,9 @@ img.no_data_available_img {
     img.no_data_available_img {
         margin-bottom: 20px;
         height: 160px;
+    }
+    .interaction_graph_outer{
+        padding: 0px 10px;
     }
     .user_profile_card_wrapper img {
     height: 70px;
