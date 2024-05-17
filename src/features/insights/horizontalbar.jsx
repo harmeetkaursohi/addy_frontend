@@ -130,7 +130,7 @@ const convertDate =(date)=>{
           data?.values?.map(entry => ({
   
                   date: convertDate(new Date(entry.end_time)) , 
-                  POSTENGAGEDMENT: entry.value 
+                  "POST ENGAGEDMENT": entry.value 
                 }))  
       )
     });
@@ -138,7 +138,7 @@ const convertDate =(date)=>{
      const pinterestPostEngageData=  postInteractiondata?.length>0 && postInteractiondata?.map(entry => ({
 
                 date: entry.date , 
-                POSTENGAGEDMENT: entry?.metrics?.ENGAGEMENT 
+                "POST ENGAGEDMENT": entry?.metrics?.ENGAGEMENT 
               }))
                    
     return (
@@ -162,7 +162,7 @@ const convertDate =(date)=>{
                 <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: 'bold', fontFamily: 'Nunito'}}/>
                 <Tooltip cursor={{fill: 'none'}}/>
                 <Legend layout="horizontal" align={"left"} verticalAlign={"top"}/>
-                <Bar dataKey="POSTENGAGEDMENT" fill="#E05905" barSize={20}/>
+                <Bar dataKey="POST ENGAGEDMENT" fill="#E05905" barSize={20}/>
                
             
             </BarChart>
