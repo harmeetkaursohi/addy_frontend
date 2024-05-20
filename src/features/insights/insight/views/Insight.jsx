@@ -14,15 +14,13 @@ import {
 import {getToken, setAuthenticationHeader} from "../../../../app/auth/auth";
 import linkedin_img from "../../../../images/linkedin.svg"
 import {
-    facebookPostEngage,
     getAccountReachedAndAccountEngaged,
     getDemographicsInsight,
     getPostDataWithInsights,
     getProfileInsightsInfo,
     getProfileVisitsInsightsInfo,
-    linkedinPostEngage,
     pinterestPinClick,
-    pinterestPostEngage
+    postEngagement
 } from "../../../../app/actions/InsightActions/insightAction";
 import {getPostByPageIdAndPostStatus} from "../../../../app/actions/postActions/postActions";
 import {
@@ -270,13 +268,7 @@ else if(selectedPage?.socialMediaType==="LINKEDIN"){
         since:generateUnixTimestampFor(postEngageVal) * 1000,until:generateUnixTimestampFor("now") * 1000,pageId:selectedPage?.pageId}
 }
 
-    dispatch(facebookPostEngage(data))
-    
-    dispatch(pinterestPostEngage(data))
-
-    if(data!==undefined && selectedPage?.socialMediaType==="LINKEDIN"){
-    dispatch(linkedinPostEngage(data))
-    }
+dispatch(postEngagement(data))
       
 },[selectDayGraph,postEngageVal,selectedPage,selectedPage?.pageId])
 
@@ -288,26 +280,31 @@ dispatch(pinterestPinClick(graphdata))
 
 },[day])
 
-const pinterestPostinsightdata=useSelector(state=>state.insight.getpinterestPostEngageReducer)
-const facebookPostinsightdata=useSelector(state=>state.insight.getfacebookPostEngageReducer)
-const linkedinPostinsightdata=useSelector(state=>state.insight.getlinkedinPostEngageReducer)
+
 const getpinterestPinClickdata=useSelector(state=>state.insight.getpinterestPinClickReducer)
 
-console.log(facebookPostinsightdata,"facebookPostinsightdata")
+const insightEngagementData=useSelector(state=>state?.insight?.getpostEngagementReducer)
+
+
 useEffect(()=>{
-setSelectDayGraph(8)
-setPostEngagementVal(7)
+dispatch(resetReducers({sliceNames: ["getpostEngagementReducer"]}))
 },[selectedPage])
 
 
-let filterPinterestgraphData = pinterestPostinsightdata?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" ||dailyAnalyticData?.data_status==="BEFORE_BUSINESS_CREATED" ) || []
+let filterPinterestgraphData = insightEngagementData?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" ||dailyAnalyticData?.data_status==="BEFORE_BUSINESS_CREATED" ) || []
 let getPinClickGraphdata=getpinterestPinClickdata?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" ||dailyAnalyticData?.data_status==="BEFORE_BUSINESS_CREATED" ) || []
 
-const linkedinGraphdata=linkedinPostinsightdata?.data?.map(entry => ({
+let linkedinGraphdata
+if(insightEngagementData?.data?.length>0){
 
-    date: convertUnixTimestampToDateTime(entry?.timeRange?.start /1000)?.date , 
-    POSTENGAGEDMENT: entry?.totalShareStatistics?.engagement 
-  }))
+    linkedinGraphdata=insightEngagementData?.data?.map(entry => ({
+    
+        date: convertUnixTimestampToDateTime(entry?.timeRange?.start /1000)?.date , 
+        "POST ENGAGEDMENT": entry?.totalShareStatistics?.engagement 
+      }))
+}
+
+
  
 
 // useEffect(()=>{
@@ -910,7 +907,7 @@ const linkedinGraphdata=linkedinPostinsightdata?.data?.map(entry => ({
                                                         }
                                                     </div>
                                                     <div className="interaction_graph_outer">
-                                                {facebookPostinsightdata?.loading||linkedinPostinsightdata?.loading || pinterestPostinsightdata?.loading ?<div className="d-flex justify-content-center profile-visit-graph ">
+                                                {insightEngagementData?.loading?<div className="d-flex justify-content-center profile-visit-graph ">
                     <RotatingLines
                     strokeColor="#F07C33"
                     strokeWidth="5"
@@ -919,7 +916,7 @@ const linkedinGraphdata=linkedinPostinsightdata?.data?.map(entry => ({
                     visible={true}
                     />
             </div>:
-                                                 <HorizontalBarChart socialMediaType={selectedPage?.socialMediaType} postInteractiondata={selectedPage.socialMediaType==="LINKEDIN"?linkedinGraphdata:selectedPage?.socialMediaType==="PINTEREST"?filterPinterestgraphData:facebookPostinsightdata?.data?.data} />
+                                                 <HorizontalBarChart socialMediaType={selectedPage?.socialMediaType} postInteractiondata={selectedPage.socialMediaType==="LINKEDIN"?linkedinGraphdata:selectedPage?.socialMediaType==="PINTEREST"?filterPinterestgraphData:insightEngagementData?.data?.data} />
                                                     }
                                                  </div>
 

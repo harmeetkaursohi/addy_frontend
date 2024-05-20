@@ -5,7 +5,7 @@ const PinterestGraph = ({graphData,loading}) => {
     const pinterestgraphData=  graphData?.length>0 && graphData?.map(entry => ({
 
       day: entry.date , 
-      PIN_CLICK: entry?.metrics?.PIN_CLICK 
+      "PIN CLICK": entry?.metrics?.PIN_CLICK 
     }))
 
   return (
@@ -25,7 +25,7 @@ const PinterestGraph = ({graphData,loading}) => {
         <Tooltip />
         <XAxis dataKey="day" tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
         <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
-        <Area type="monotone" dataKey="PIN_CLICK" stroke="#F07D34" fill="#fdebe1"/>
+        <Area type="monotone" dataKey="PIN CLICK" stroke="#F07D34" fill="#fdebe1"/>
         </AreaChart>
         </ResponsiveContainer>
   )

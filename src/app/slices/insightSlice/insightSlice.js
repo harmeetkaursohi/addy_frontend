@@ -5,11 +5,8 @@ import {
     getProfileVisitsInsightsInfo,
     getAccountReachedAndAccountEngaged,
     getDemographicsInsight,
-   
-    pinterestPostEngage,
-    facebookPostEngage,
-    linkedinPostEngage,
     pinterestPinClick,
+    postEngagement
     
 } from "../../actions/InsightActions/insightAction";
 
@@ -82,39 +79,8 @@ const insightSlice = createSlice({
         [getDemographicsInsight.rejected]: (state) => {
             state.getDemographicsInsightReducer = {loading: false}
         },
-        // pinterest post engaged data
-        [pinterestPostEngage.pending]: (state) => {
-            state.getpinterestPostEngageReducer = {loading: true}
-        },
-        [pinterestPostEngage.fulfilled]: (state, action) => {
-            state.getpinterestPostEngageReducer = {loading: false, data: action.payload}
-        },
-        [pinterestPostEngage.rejected]: (state) => {
-            state.getpinterestPostEngageReducer = {loading: false}
-        },
-
-        // facebook post engaged data
-        [facebookPostEngage.pending]: (state) => {
-            state.getfacebookPostEngageReducer = {loading: true}
-        },
-        [facebookPostEngage.fulfilled]: (state, action) => {
-            state.getfacebookPostEngageReducer = {loading: false, data: action.payload}
-        },
-        [facebookPostEngage.rejected]: (state) => {
-            state.getfacebookPostEngageReducer = {loading: false}
-        },
-
-        // get linkedin post engage data 
+      
         
-        [linkedinPostEngage.pending]: (state) => {
-            state.getlinkedinPostEngageReducer = {loading: true}
-        },
-        [linkedinPostEngage.fulfilled]: (state, action) => {
-            state.getlinkedinPostEngageReducer = {loading: false, data: action.payload}
-        },
-        [linkedinPostEngage.rejected]: (state) => {
-            state.getlinkedinPostEngageReducer = {loading: false}
-        },
         
         // get pinterest pin click data 
 
@@ -127,6 +93,17 @@ const insightSlice = createSlice({
         },
         [pinterestPinClick.rejected]: (state) => {
             state.getpinterestPinClickReducer = {loading: false}
+        },
+
+        // get all social platform insight engagement data 
+        [postEngagement.pending]: (state) => {
+            state.getpostEngagementReducer = {loading: true}
+        },
+        [postEngagement.fulfilled]: (state, action) => {
+            state.getpostEngagementReducer = {loading: false, data: action.payload}
+        },
+        [postEngagement.rejected]: (state) => {
+            state.getpostEngagementReducer = {loading: false}
         },
     }
 });
