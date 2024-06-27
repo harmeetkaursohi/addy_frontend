@@ -2721,3 +2721,16 @@ export const countCommonElementsFromArray=(sourceArray=[],comparisonArray=[])=>{
     const commonElements = comparisonArray.filter(value => sourceArray.includes(value));
     return commonElements.length;
 }
+
+export const groupBy=(sourceArray=[],key)=>{
+    let result={};
+    if(Array.isArray(sourceArray) ){
+        sourceArray?.forEach(data=>{
+            if (!result[data[key]]) {
+                result[data[key]] = [];
+            }
+            result[data[key]].push(data);
+        })
+    }
+    return result;
+}

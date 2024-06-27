@@ -27,7 +27,7 @@ import {
     calculatePercentageGrowthFor, convertUnixTimestampToDateTime, createSocialMediaProfileViewInsightsQuery,
     fetchCssForInsightPageListOption,
     generateUnixTimestampFor,
-    getDatesForPinterest,
+    getDatesForPinterest, groupBy,
 
 } from "../../../../utils/commonUtils";
 import {enabledSocialMedia, selectGraphDaysOptions, SocialAccountProvider} from "../../../../utils/contantData";
@@ -84,7 +84,6 @@ const Insight = () => {
         setSelectedPeriodForReachAndEngagement(parseInt(e.target.value))
     }
 
-    console.log("selectedPage===>", selectedPage)
 
     useEffect(() => {
         dispatch(getAllByCustomerIdAction({
@@ -94,7 +93,7 @@ const Insight = () => {
 
     useEffect(() => {
         if (!getAllByCustomerIdData?.loading && getAllByCustomerIdData?.data !== null && getAllByCustomerIdData?.data !== undefined && getAllByCustomerIdData?.data?.length > 0) {
-            const socialAccountData = Object.groupBy(getAllByCustomerIdData?.data, ({provider}) => provider)
+            const socialAccountData = groupBy(getAllByCustomerIdData?.data, "provider")
             socialAccountData["FACEBOOK"]?.length > 0 ? setConnectedFacebookPages(socialAccountData["FACEBOOK"][0]?.pageAccessToken) : setConnectedFacebookPages([])
             socialAccountData["INSTAGRAM"]?.length > 0 ? setConnectedInstagramPages(socialAccountData["INSTAGRAM"][0]?.pageAccessToken) : setConnectedInstagramPages([])
             socialAccountData["LINKEDIN"]?.length > 0 ? setConnectedLinkedinPages(socialAccountData["LINKEDIN"][0]?.pageAccessToken) : setConnectedLinkedinPages([])
@@ -283,7 +282,7 @@ const Insight = () => {
 
     useEffect(() => {
 
-        if(selectedPage?.socialMediaType==="PINTEREST"){
+        if(selectedPage!==null && selectedPage!==undefined && selectedPage?.socialMediaType==="PINTEREST"){
             let graphdata = {token: token, day: day}
             dispatch(pinterestPinClick(graphdata))
         }
