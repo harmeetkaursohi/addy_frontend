@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import AddressInfo from './tabs/AddressInfo';
 import UserInfo from './tabs/UserInfo';
+import "./Signup.css"
 import {SignupSource} from "../../../utils/contantData";
 
 const Signup = () => {
@@ -28,7 +29,8 @@ const Signup = () => {
             state: "",
             county: "",
             city: "",
-            pinCode: ""
+            pinCode: "",
+            isAgreedToTermsAndConditions: false
         }
     });
 

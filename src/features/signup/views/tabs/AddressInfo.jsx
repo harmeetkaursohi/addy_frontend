@@ -37,8 +37,8 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
             state: "",
             county: "",
             city: "",
-            pinCode: ""
-
+            pinCode: "",
+            isAgreedToTermsAndConditions:false
         },
         validationSchema: validationSchemas.address,
         onSubmit: (values) => {
@@ -139,6 +139,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
             }
             formik.setFieldValue("city", formData?.address?.city);
             formik.setFieldValue('county', formData?.address?.county);
+            formik.setFieldValue('isAgreedToTermsAndConditions', formData?.address?.isAgreedToTermsAndConditions);
         }
     }, [formData, countries]);
 
@@ -306,12 +307,35 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                     <label>{jsondata.pinCode}</label>
                                                     <input onChange={formik.handleChange}
                                                            onBlur={formik.handleBlur}
-                                                           onWheel={(e)=>{e.target.blur()}}
+                                                           onWheel={(e) => {
+                                                               e.target.blur()
+                                                           }}
                                                            value={formik.values.pinCode} name="pinCode"
                                                            className="form-control mt-1" type='number'
                                                            placeholder={jsondata.pinCode}/>
                                                 </div>
                                             </div>
+
+
+                                            <div className={"agree-terms-conditions-login mt-2 ms-1"}>
+                                                <input type={"checkbox"} className={"privacy-policy-checkbox me-2"}
+                                                       onChange={formik.handleChange}
+                                                       name={"isAgreedToTermsAndConditions"}
+                                                       onBlur={formik.handleBlur}
+                                                       value={formik.values.isAgreedToTermsAndConditions}/>
+                                                <span className={"agree-privacy-policy-txt"}>I agree to the <Link
+                                                    to={`${import.meta.env.VITE_APP_ADDY_WEB_PRIVACY_POLICY_URL}`}
+                                                    target={"_blank"}>Privacy Policy</Link> and <Link
+                                                    to={`${import.meta.env.VITE_APP_ADDY_WEB_TERMS_AND_CONDITIONS_URL}`}
+                                                    target={"_blank"}>Terms and conditions</Link>
+                                                </span>
+                                            </div>
+                                            {
+                                                formik.touched.isAgreedToTermsAndConditions && formik.errors.isAgreedToTermsAndConditions ?
+                                                    <p className="error_message">{formik.errors.isAgreedToTermsAndConditions}</p> : null
+                                            }
+
+
                                             <div className="mt-2">
                                                 <Button type={"Submit"} text={jsondata.signUp}
                                                         loading={signUpReducer?.loading}/>

@@ -33,7 +33,8 @@ export const validationSchemas = {
 
     login: yup.object().shape({
         username: yup.string().required('Username is required'),
-        password: yup.string().required('Password is required')
+        password: yup.string().required('Password is required'),
+        isAgreedToTermsAndConditions: yup.boolean().oneOf([true], 'You must agree to terms and conditions')
     }),
 
     register: yup.object().shape({
@@ -79,6 +80,7 @@ export const validationSchemas = {
         addressLine1: yup.string().required('AddressLine is required'),
         county: yup.string().required('County is required'),
         state: yup.string().required('State is required'),
+        isAgreedToTermsAndConditions: yup.boolean().oneOf([true], 'You must agree to terms and conditions')
     }),
 
     forgotPassword: yup.object().shape({
