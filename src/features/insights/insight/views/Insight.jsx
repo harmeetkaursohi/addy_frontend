@@ -28,7 +28,7 @@ import {
     fetchCssForInsightPageListOption,
     generateUnixTimestampFor,
     getDatesForPinterest,
-  
+
 } from "../../../../utils/commonUtils";
 import {enabledSocialMedia, selectGraphDaysOptions, SocialAccountProvider} from "../../../../utils/contantData";
 import Loader from "../../../loader/Loader";
@@ -47,7 +47,7 @@ import user_icon from "../../../../images/user_icon.svg"
 import bar_icon from "../../../../images/bar_icon.svg"
 import heart_icon from "../../../../images/heart_icon.svg"
 import PinterestGraph from "../../../react_chart/views/PinterestGraph";
-import { RotatingLines } from "react-loader-spinner";
+import {RotatingLines} from "react-loader-spinner";
 
 const Insight = () => {
     const dispatch = useDispatch();
@@ -84,6 +84,7 @@ const Insight = () => {
         setSelectedPeriodForReachAndEngagement(parseInt(e.target.value))
     }
 
+    console.log("selectedPage===>", selectedPage)
 
     useEffect(() => {
         dispatch(getAllByCustomerIdAction({
@@ -224,7 +225,7 @@ const Insight = () => {
                 query: createSocialMediaProfileViewInsightsQuery({
                     days: selectedDaysForProfileVisitGraph,
                     access_token: selectedPage.access_token,
-                    pageId:selectedPage?.pageId
+                    pageId: selectedPage?.pageId
                 }, selectedPage?.socialMediaType)
             }
             dispatch(getProfileVisitsInsightsInfo(query))
@@ -232,80 +233,87 @@ const Insight = () => {
     }, [selectedDaysForProfileVisitGraph])
 
     // new post engagement code starts here
-    const[postEngageVal,setPostEngagementVal]=useState(7)
-    const[selectDayGraph,setSelectDayGraph]=useState(8)
-    const[day,setDay]=useState(9)
+    const [postEngageVal, setPostEngagementVal] = useState(7)
+    const [selectDayGraph, setSelectDayGraph] = useState(8)
+    const [day, setDay] = useState(9)
 
-    const setlectPostEngagehandler=(e)=>{
-            setPostEngagementVal(e.target.value)
+    const setlectPostEngagehandler = (e) => {
+        setPostEngagementVal(e.target.value)
     }
 
-    
-const now = new Date();
 
-const selectDayHandler=(e)=>{
-    setSelectDayGraph(e.target.value)
-}
+    const now = new Date();
 
-const dayHandler=(e)=>{
-    setDay(e.target.value)
-}
+    const selectDayHandler = (e) => {
+        setSelectDayGraph(e.target.value)
+    }
 
-useEffect(()=>{
- 
-let data
+    const dayHandler = (e) => {
+        setDay(e.target.value)
+    }
 
-if(selectedPage?.socialMediaType==="PINTEREST"){
-    data={socialMediaType:selectedPage?.socialMediaType,token:token,
-        day:selectDayGraph}
-}
-else if(selectedPage?.socialMediaType==="FACEBOOK"){
-    data={socialMediaType:selectedPage?.socialMediaType,token:selectedPage?.access_token,
-        since:postEngageVal,until:now.toISOString().split('T')[0],pageId:selectedPage?.pageId}
-}
-else if(selectedPage?.socialMediaType==="LINKEDIN"){
-    data={socialMediaType:selectedPage?.socialMediaType,token:token,
-        since:generateUnixTimestampFor(postEngageVal) * 1000,until:generateUnixTimestampFor("now") * 1000,pageId:selectedPage?.pageId}
-}
+    useEffect(() => {
 
-dispatch(postEngagement(data))
-      
-},[selectDayGraph,postEngageVal,selectedPage,selectedPage?.pageId])
+        let data
 
+        if (selectedPage?.socialMediaType === "PINTEREST") {
+            data = {
+                socialMediaType: selectedPage?.socialMediaType, token: token,
+                day: selectDayGraph
+            }
+        } else if (selectedPage?.socialMediaType === "FACEBOOK") {
+            data = {
+                socialMediaType: selectedPage?.socialMediaType, token: selectedPage?.access_token,
+                since: postEngageVal, until: now.toISOString().split('T')[0], pageId: selectedPage?.pageId
+            }
+        } else if (selectedPage?.socialMediaType === "LINKEDIN") {
+            data = {
+                socialMediaType: selectedPage?.socialMediaType,
+                token: token,
+                since: generateUnixTimestampFor(postEngageVal) * 1000,
+                until: generateUnixTimestampFor("now") * 1000,
+                pageId: selectedPage?.pageId
+            }
+        }
 
-useEffect(()=>{
+        dispatch(postEngagement(data))
 
-let graphdata={token:token,day:day}
-dispatch(pinterestPinClick(graphdata))
-
-},[day])
-
-
-const getpinterestPinClickdata=useSelector(state=>state.insight.getpinterestPinClickReducer)
-
-const insightEngagementData=useSelector(state=>state?.insight?.getpostEngagementReducer)
+    }, [selectDayGraph, postEngageVal, selectedPage, selectedPage?.pageId])
 
 
-useEffect(()=>{
-dispatch(resetReducers({sliceNames: ["getpostEngagementReducer"]}))
-},[selectedPage])
+    useEffect(() => {
+
+        if(selectedPage?.socialMediaType==="PINTEREST"){
+            let graphdata = {token: token, day: day}
+            dispatch(pinterestPinClick(graphdata))
+        }
+
+    }, [day])
 
 
-let filterPinterestgraphData = insightEngagementData?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" ||dailyAnalyticData?.data_status==="BEFORE_BUSINESS_CREATED" ) || []
-let getPinClickGraphdata=getpinterestPinClickdata?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" ||dailyAnalyticData?.data_status==="BEFORE_BUSINESS_CREATED" ) || []
+    const getpinterestPinClickdata = useSelector(state => state.insight.getpinterestPinClickReducer)
 
-let linkedinGraphdata
-if(insightEngagementData?.data?.length>0){
-
-    linkedinGraphdata=insightEngagementData?.data?.map(entry => ({
-    
-        date: convertUnixTimestampToDateTime(entry?.timeRange?.start /1000)?.date , 
-        "POST ENGAGEDMENT": entry?.totalShareStatistics?.engagement 
-      }))
-}
+    const insightEngagementData = useSelector(state => state?.insight?.getpostEngagementReducer)
 
 
- 
+    useEffect(() => {
+        dispatch(resetReducers({sliceNames: ["getpostEngagementReducer"]}))
+    }, [selectedPage])
+
+
+    let filterPinterestgraphData = insightEngagementData?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" || dailyAnalyticData?.data_status === "BEFORE_BUSINESS_CREATED") || []
+    let getPinClickGraphdata = getpinterestPinClickdata?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" || dailyAnalyticData?.data_status === "BEFORE_BUSINESS_CREATED") || []
+
+    let linkedinGraphdata
+    if (insightEngagementData?.data?.length > 0) {
+
+        linkedinGraphdata = insightEngagementData?.data?.map(entry => ({
+
+            date: convertUnixTimestampToDateTime(entry?.timeRange?.start / 1000)?.date,
+            "POST ENGAGEDMENT": entry?.totalShareStatistics?.engagement
+        }))
+    }
+
 
 // useEffect(()=>{
 
@@ -531,78 +539,83 @@ if(insightEngagementData?.data?.length>0){
                                                 <div className="row mt-4">
                                                     <div className="col-lg-4 col-md-12 col-sm-12">
                                                         {/* visitors demographics section starts here */}
-                                                            {selectedPage.socialMediaType === 'LINKEDIN' ? 
-                                                         <div className="cmn_shadow  insight_followers_outer visitors_container">
-                                                         <div className="d-flex cmn_border visitors_outer">
-                                                             <h3>Visitors Demographics</h3>
+                                                        {selectedPage.socialMediaType === 'LINKEDIN' ?
+                                                            <div
+                                                                className="cmn_shadow  insight_followers_outer visitors_container">
+                                                                <div className="d-flex cmn_border visitors_outer">
+                                                                    <h3>Visitors Demographics</h3>
 
-                                                         </div>
-                                                         {(getDemographicsInsightData?.data?.country === null ||  selectedPage.socialMediaType === "PINTEREST")
-                                                             ?
-                                                             <div className={"no_data_available text-center"}>
-                                                                 <img  className="no_data_available_img" src={no_data_available} alt={"coming soon!"}/>
-                                                             </div>
-                                                             :
-                                                             <DonutChart chartData={getDemographicsInsightData} socialMediaType={selectedPage?.socialMediaType}/>}
-                                                     </div>
-                                                            
-                                                            :
-                                                        <div className="user_profile_card_outer cmn_shadow">
-
-                                                            <div className="user_profile_card_wrapper text-center mt-3">
-                                                                {
-                                                                    getProfileInfoReducer.loading ?
-                                                                        <i
-                                                                            style={{fontSize: "60px"}}
-                                                                            className="fa fa-spinner fa-spin"/> :
-                                                                        <img
-                                                                            src={getProfileInfoReducer?.data?.imageUrl || default_user_icon}/>
-                                                                }
-                                                                <h3 className="cmn_text_style pt-4">{getProfileInfoReducer?.data?.name}</h3>
-                                                                <h6 className="cmn_text pt-2">
-                                                                    {
-                                                                        getProfileInfoReducer?.data?.about || ""
-                                                                    }
-                                                                </h6>
+                                                                </div>
+                                                                {(getDemographicsInsightData?.data?.country === null || selectedPage.socialMediaType === "PINTEREST")
+                                                                    ?
+                                                                    <div className={"no_data_available text-center"}>
+                                                                        <img className="no_data_available_img"
+                                                                             src={no_data_available}
+                                                                             alt={"coming soon!"}/>
+                                                                    </div>
+                                                                    :
+                                                                    <DonutChart chartData={getDemographicsInsightData}
+                                                                                socialMediaType={selectedPage?.socialMediaType}/>}
                                                             </div>
 
-                                                            {
-                                                                selectedPage?.socialMediaType === "FACEBOOK" &&
-                                                                <ul className="d-flex mt-4 user_info_list">
-                                                                    <li>
-                                                                        <h3 className="cmn_text">Likes</h3>
-                                                                        <h4>{getProfileInfoReducer.loading ?
-                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.likes}</h4>
-                                                                    </li>
-                                                                    <li>
-                                                                        <h3 className="cmn_text">Followers</h3>
-                                                                        <h4>{getProfileInfoReducer.loading ?
-                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.followers}</h4>
-                                                                    </li>
-                                                                </ul>
-                                                            }
-                                                            {
-                                                                selectedPage?.socialMediaType !== "FACEBOOK" &&
-                                                                <ul className="d-flex mt-4 user_info_list">
-                                                                    <li>
-                                                                        <h3 className="cmn_text">Post</h3>
-                                                                        <h4 className="">{getProfileInfoReducer.loading ?
-                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.total_posts}</h4>
-                                                                    </li>
-                                                                    <li>
-                                                                        <h3 className="cmn_text">Followers</h3>
-                                                                        <h4>{getProfileInfoReducer.loading ?
-                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.followers}</h4>
-                                                                    </li>
-                                                                    <li>
-                                                                        <h3 className="cmn_text">Following</h3>
-                                                                        <h4>{getProfileInfoReducer.loading ?
-                                                                            <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.following}</h4>
-                                                                    </li>
-                                                                </ul>
-                                                            }
-                                                        </div>}
-                                                        
+                                                            :
+                                                            <div className="user_profile_card_outer cmn_shadow">
+
+                                                                <div
+                                                                    className="user_profile_card_wrapper text-center mt-3">
+                                                                    {
+                                                                        getProfileInfoReducer.loading ?
+                                                                            <i
+                                                                                style={{fontSize: "60px"}}
+                                                                                className="fa fa-spinner fa-spin"/> :
+                                                                            <img
+                                                                                src={getProfileInfoReducer?.data?.imageUrl || default_user_icon}/>
+                                                                    }
+                                                                    <h3 className="cmn_text_style pt-4">{getProfileInfoReducer?.data?.name}</h3>
+                                                                    <h6 className="cmn_text pt-2">
+                                                                        {
+                                                                            getProfileInfoReducer?.data?.about || ""
+                                                                        }
+                                                                    </h6>
+                                                                </div>
+
+                                                                {
+                                                                    selectedPage?.socialMediaType === "FACEBOOK" &&
+                                                                    <ul className="d-flex mt-4 user_info_list">
+                                                                        <li>
+                                                                            <h3 className="cmn_text">Likes</h3>
+                                                                            <h4>{getProfileInfoReducer.loading ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.likes}</h4>
+                                                                        </li>
+                                                                        <li>
+                                                                            <h3 className="cmn_text">Followers</h3>
+                                                                            <h4>{getProfileInfoReducer.loading ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.followers}</h4>
+                                                                        </li>
+                                                                    </ul>
+                                                                }
+                                                                {
+                                                                    selectedPage?.socialMediaType !== "FACEBOOK" &&
+                                                                    <ul className="d-flex mt-4 user_info_list">
+                                                                        <li>
+                                                                            <h3 className="cmn_text">Post</h3>
+                                                                            <h4 className="">{getProfileInfoReducer.loading ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.total_posts}</h4>
+                                                                        </li>
+                                                                        <li>
+                                                                            <h3 className="cmn_text">Followers</h3>
+                                                                            <h4>{getProfileInfoReducer.loading ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.followers}</h4>
+                                                                        </li>
+                                                                        <li>
+                                                                            <h3 className="cmn_text">Following</h3>
+                                                                            <h4>{getProfileInfoReducer.loading ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.following}</h4>
+                                                                        </li>
+                                                                    </ul>
+                                                                }
+                                                            </div>}
+
                                                     </div>
                                                     <div className="col-lg-8 col-md-12 col-sm-12">
                                                         <div className="page_title_header mb-0 Profile_visit_container">
@@ -622,10 +635,10 @@ if(insightEngagementData?.data?.length>0){
                                                                             {`Last ${selectedDaysForProfileVisitGraph} days`}
                                                                         </Dropdown.Toggle>
                                                                         <Dropdown.Menu>
-                                                                            {selectGraphDaysOptions.map((c,i)=> (
-                                                                             
+                                                                            {selectGraphDaysOptions.map((c, i) => (
+
                                                                                 <Dropdown.Item
-                                                                                key={i}
+                                                                                    key={i}
                                                                                     onClick={() => {
                                                                                         setSelectedDaysForProfileVisitGraph(c.days);
                                                                                     }}>
@@ -639,15 +652,17 @@ if(insightEngagementData?.data?.length>0){
                                                             </div>
 
                                                             <div className="profile_visit_graph_outer mt-2">
-                                                                {( selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(getProfileVisitsInsightsInfoReducerData?.data) && getProfileVisitsInsightsInfoReducerData?.data?.length === 0))
+                                                                {(selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(getProfileVisitsInsightsInfoReducerData?.data) && getProfileVisitsInsightsInfoReducerData?.data?.length === 0))
                                                                     ?
                                                                     <div className={"no_data_available text-center"}>
-                                                                        <img  className ="no_data_available_img  " src={no_data_available}
+                                                                        <img className="no_data_available_img  "
+                                                                             src={no_data_available}
                                                                              alt={"coming soon!"}/>
                                                                     </div>
                                                                     :
                                                                     <ProfileVisitChart
-                                                                        graphData={getProfileVisitsInsightsInfoReducerData}  socialMediaType={selectedPage?.socialMediaType}/>
+                                                                        graphData={getProfileVisitsInsightsInfoReducerData}
+                                                                        socialMediaType={selectedPage?.socialMediaType}/>
                                                                 }
                                                             </div>
 
@@ -656,32 +671,38 @@ if(insightEngagementData?.data?.length>0){
                                                 </div>
                                                 <div className="row mt-4 mb-4">
                                                     {false &&
-                                                    <div className="col-lg-4 col-md-12 col-sm-12">
-                                                        <div className="cmn_shadow  insight_followers_outer visitors_container">
-                                                            <div className="d-flex cmn_border visitors_outer">
-                                                                <h3>Followers</h3>
+                                                        <div className="col-lg-4 col-md-12 col-sm-12">
+                                                            <div
+                                                                className="cmn_shadow  insight_followers_outer visitors_container">
+                                                                <div className="d-flex cmn_border visitors_outer">
+                                                                    <h3>Followers</h3>
 
-                                                            </div>
-                                                            {(getDemographicsInsightData?.data?.country === null ||  selectedPage.socialMediaType === "PINTEREST")
-                                                                ?
-                                                                <div className={"no_data_available text-center"}>
-                                                                    <img  className="no_data_available_img" src={no_data_available} alt={"coming soon!"}/>
                                                                 </div>
-                                                                :
-                                                                <DonutChart chartData={getDemographicsInsightData} socialMediaType={selectedPage?.socialMediaType}/>}
+                                                                {(getDemographicsInsightData?.data?.country === null || selectedPage.socialMediaType === "PINTEREST")
+                                                                    ?
+                                                                    <div className={"no_data_available text-center"}>
+                                                                        <img className="no_data_available_img"
+                                                                             src={no_data_available}
+                                                                             alt={"coming soon!"}/>
+                                                                    </div>
+                                                                    :
+                                                                    <DonutChart chartData={getDemographicsInsightData}
+                                                                                socialMediaType={selectedPage?.socialMediaType}/>}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                    }
+                                                    }
                                                     {
                                                         false && <div className="col-lg-8 col-md-12 col-sm-12">
-                                                            <div className="cmn_shadow visitors_container insight_demographic_outer">
+                                                            <div
+                                                                className="cmn_shadow visitors_container insight_demographic_outer">
                                                                 <div className="d-flex cmn_border visitors_outer">
                                                                     <h3>Demographics</h3>
                                                                 </div>
                                                                 {(selectedPage.socialMediaType === 'LINKEDIN' || selectedPage.socialMediaType === "PINTEREST" || selectedPage.socialMediaType === 'INSTAGRAM' || selectedPage.socialMediaType === 'FACEBOOK')
                                                                     ?
                                                                     <div className={"no_data_available text-center"}>
-                                                                        <img  className="no_data_available_img" src={no_data_available} alt={"coming soon!"}/>
+                                                                        <img className="no_data_available_img"
+                                                                             src={no_data_available} alt={"coming soon!"}/>
                                                                     </div>
                                                                     :
                                                                     <HorizontalBarChart
@@ -692,7 +713,7 @@ if(insightEngagementData?.data?.length>0){
                                                     <div className={"mb-4"}></div>
                                                 </div>
                                                 {/* profile visit section end */}
-                                                 
+
                                                 <div className="overview_tabs_outer cmn_insight_box_shadow">
                                                     <div className="days_outer reach-engagement-select">
 
@@ -730,28 +751,28 @@ if(insightEngagementData?.data?.length>0){
                                                         </>
                                                     }
 
-                                                 {/* Accounts Reached */}
+                                                    {/* Accounts Reached */}
                                                     <div className="account_reach_overview_wrapper">
                                                         <div className="account_reach_overview_outer light_blue">
                                                             <div className="cmt_icon_outer">
-                                                            <img src={bar_icon}/>
+                                                                <img src={bar_icon}/>
 
                                                             </div>
                                                             <h4 className="cmn_text_style">
                                                                 {
                                                                     getAccountReachedAndAccountEngagedData?.loading ?
                                                                         <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : 
-                                                                     getAccountReachedAndAccountEngagedData?.data?.reach?.presentData
-                                                                   
+                                                                    </span> :
+                                                                        getAccountReachedAndAccountEngagedData?.data?.reach?.presentData
+
                                                                 }
 
-                                                               
+
                                                             </h4>
 
                                                             <h5 className="cmn_text_style">Accounts Reached</h5>
                                                             <div className="mt-3">
-                                                            {
+                                                                {
                                                                     !getAccountReachedAndAccountEngagedData?.loading && <>
                                                                         {
                                                                             getAccountReachedAndAccountEngagedData?.data?.reach?.presentData >= getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data ?
@@ -773,15 +794,15 @@ if(insightEngagementData?.data?.length>0){
                                                                 }
 
                                                             </div>
-                                                           
+
                                                         </div>
-                                                           {/* acccount Engaged */}
+                                                        {/* acccount Engaged */}
                                                         <div className="account_reach_overview_outer light_orange">
-                                                        <div className="cmt_icon_outer">
-                                                            <img src={user_icon}/>
+                                                            <div className="cmt_icon_outer">
+                                                                <img src={user_icon}/>
 
                                                             </div>
-                                                          
+
 
                                                             <h4 className="cmn_text_style">
                                                                 {
@@ -790,11 +811,11 @@ if(insightEngagementData?.data?.length>0){
                                                                     </span> : getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData
                                                                 }
 
-                                                                
+
                                                             </h4>
                                                             <h5 className="cmn_text_style">Accounts Engaged</h5>
                                                             <div className="mt-3">
-                                                            {!getAccountReachedAndAccountEngagedData?.loading && <>
+                                                                {!getAccountReachedAndAccountEngagedData?.loading && <>
                                                                     {
                                                                         getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData >= getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data ?
                                                                             <>
@@ -815,9 +836,9 @@ if(insightEngagementData?.data?.length>0){
                                                                 }
 
                                                             </div>
-                                                            
+
                                                         </div>
-                                                           {/* acccount followers */}
+                                                        {/* acccount followers */}
                                                         <div className="account_reach_overview_outer light_purple">
                                                             <div className="cmt_icon_outer">
                                                                 <img src={cmt_icon}/>
@@ -834,9 +855,9 @@ if(insightEngagementData?.data?.length>0){
 
                                                         {/* acccount likes */}
                                                         <div className="account_reach_overview_outer light_green">
-                                                           
+
                                                             <div className="cmt_icon_outer">
-                                                               <img src={heart_icon}/>
+                                                                <img src={heart_icon}/>
                                                             </div>
                                                             <h4 className="cmn_text_style">
                                                                 {
@@ -851,79 +872,90 @@ if(insightEngagementData?.data?.length>0){
                                                     </div>
 
                                                 </div>
-                                                
+
                                                 {/* pin click section starts here */}
-                                                {selectedPage?.socialMediaType==="PINTEREST" && 
-                                                <div className="row">
-                                                <div className="col-lg-12 col-sm-12 col-md-12">
-                                                <div className="page_title_header mb-0 Profile_visit_container">
-                                                            <div className="page_title_container ps-0">
-                                                                <div className="page_title_dropdown">
-                                                                    <div className={"profile-visit-text ms-4"}>Pin 
-                                                                       Click
+                                                {selectedPage?.socialMediaType === "PINTEREST" &&
+                                                    <div className="row">
+                                                        <div className="col-lg-12 col-sm-12 col-md-12">
+                                                            <div
+                                                                className="page_title_header mb-0 Profile_visit_container">
+                                                                <div className="page_title_container ps-0">
+                                                                    <div className="page_title_dropdown">
+                                                                        <div className={"profile-visit-text ms-4"}>Pin
+                                                                            Click
+                                                                        </div>
                                                                     </div>
+
+                                                                    <select value={day} onChange={dayHandler}
+                                                                            className=" days_option box_shadow"
+                                                                    >
+                                                                        <option value={9}>Last 7 days</option>
+                                                                        <option value={17}>Last 15 days</option>
+                                                                        <option value={30}>Last 28 days</option>
+                                                                    </select>
+
+
                                                                 </div>
-                                                    
-                                                                <select value={day} onChange={dayHandler} className=" days_option box_shadow"
-                                                                >
-                                                            <option value={9}>Last 7 days</option>
-                                                            <option value={17}>Last 15 days</option>
-                                                            <option value={30}>Last 28 days</option>
-                                                        </select>
 
-                                                            
+                                                                <div className="profile_visit_graph_outer mt-2">
+
+                                                                    <PinterestGraph graphData={getPinClickGraphdata}
+                                                                                    loading={getpinterestPinClickdata?.loading}/>
+
+                                                                </div>
+
                                                             </div>
 
-                                                            <div className="profile_visit_graph_outer mt-2">
-                                                               
-                                                                    <PinterestGraph graphData={getPinClickGraphdata} loading={getpinterestPinClickdata?.loading}/>
-                                                               
-                                                            </div>
+                                                        </div>
 
-                                                </div>
+                                                    </div>}
+                                                {/* {interaction section start here} */}
+                                                {selectedPage?.socialMediaType !== "INSTAGRAM" &&
+                                                    <div className="interaction_wrapper cmn_insight_box_shadow mt-5">
+                                                        <div
+                                                            className="days_outer reach-engagement-select interaction_outer">
 
-                                                </div>
-                                               
-                                                </div>}
-                                                 {/* {interaction section start here} */}
-                                                 {selectedPage?.socialMediaType!=="INSTAGRAM" && 
-                                                 <div className="interaction_wrapper cmn_insight_box_shadow mt-5">
-                                                <div className="days_outer reach-engagement-select interaction_outer">
+                                                            <h3 className="overview_title">Interactions</h3>
+                                                            {
+                                                                selectedPage?.socialMediaType !== "PINTEREST" ?
 
-                                                        <h3 className="overview_title">Interactions</h3>
-                                                        {
-                                                            selectedPage?.socialMediaType!=="PINTEREST"?
+                                                                    <select value={postEngageVal}
+                                                                            className=" days_option box_shadow"
+                                                                            onChange={setlectPostEngagehandler}>
+                                                                        <option value={7}>Last 7 days</option>
+                                                                        <option value={15}>Last 15 days</option>
+                                                                        <option value={28}>Last 28 days</option>
+                                                                    </select> :
+                                                                    <select value={selectDayGraph}
+                                                                            className=" days_option box_shadow"
+                                                                            onChange={selectDayHandler}>
+                                                                        <option value={8}>Last 7 days</option>
+                                                                        <option value={16}>Last 15 days</option>
+                                                                        <option value={29}>Last 28 days</option>
+                                                                    </select>
+                                                            }
+                                                        </div>
+                                                        <div className="interaction_graph_outer">
+                                                            {insightEngagementData?.loading ? <div
+                                                                    className="d-flex justify-content-center profile-visit-graph ">
+                                                                    <RotatingLines
+                                                                        strokeColor="#F07C33"
+                                                                        strokeWidth="5"
+                                                                        animationDuration="0.75"
+                                                                        width="70"
+                                                                        visible={true}
+                                                                    />
+                                                                </div> :
+                                                                <HorizontalBarChart
+                                                                    socialMediaType={selectedPage?.socialMediaType}
+                                                                    postInteractiondata={selectedPage.socialMediaType === "LINKEDIN" ? linkedinGraphdata : selectedPage?.socialMediaType === "PINTEREST" ? filterPinterestgraphData : insightEngagementData?.data?.data}/>
+                                                            }
+                                                        </div>
 
-                                                        <select value={postEngageVal} className=" days_option box_shadow" onChange={setlectPostEngagehandler} >
-                                                            <option value={7}>Last 7 days</option>
-                                                            <option value={15}>Last 15 days</option>
-                                                            <option value={28}>Last 28 days</option>
-                                                        </select>:
-                                                        <select value={selectDayGraph}  className=" days_option box_shadow" onChange={selectDayHandler} >
-                                                        <option value={8}>Last 7 days</option>
-                                                        <option value={16}>Last 15 days</option>
-                                                        <option value={29}>Last 28 days</option>
-                                                    </select>
-                                                        }
                                                     </div>
-                                                    <div className="interaction_graph_outer">
-                                                {insightEngagementData?.loading?<div className="d-flex justify-content-center profile-visit-graph ">
-                    <RotatingLines
-                    strokeColor="#F07C33"
-                    strokeWidth="5"
-                    animationDuration="0.75"
-                    width="70"
-                    visible={true}
-                    />
-            </div>:
-                                                 <HorizontalBarChart socialMediaType={selectedPage?.socialMediaType} postInteractiondata={selectedPage.socialMediaType==="LINKEDIN"?linkedinGraphdata:selectedPage?.socialMediaType==="PINTEREST"?filterPinterestgraphData:insightEngagementData?.data?.data} />
-                                                    }
-                                                 </div>
-
-                                                </div>
                                                 }
-                                               
-                                                 {/* {interaction section end here} */}
+
+                                                {/* {interaction section end here} */}
 
 
                                                 <button className=" post_stack mt-5 "
