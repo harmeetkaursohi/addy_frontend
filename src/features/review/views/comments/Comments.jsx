@@ -393,7 +393,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
                                                             <div className={"comment_message"}>
                                                                 <CommentText socialMediaType={"FACEBOOK"}
                                                                              comment={comment?.message}
-                                                                             className={"font-weight-bold cursor-pointer "}
+                                                                             className={""}
                                                                              usernames={comment?.message_tags?.filter(tags => tags?.type === "user")?.map(userTag => userTag?.name)}>
                                                                 </CommentText>
                                                             </div>
@@ -627,7 +627,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
                                                                                                         <CommentText
                                                                                                             socialMediaType={"FACEBOOK"}
                                                                                                             comment={childComment?.message}
-                                                                                                            className={"font-weight-bold cursor-pointer "}
+                                                                                                            className={" "}
                                                                                                             usernames={childComment?.message_tags?.filter(tags => tags?.type === "user")?.map(userTag => userTag?.name)}>
                                                                                                         </CommentText>
                                                                                                     </p>

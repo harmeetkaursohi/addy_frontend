@@ -380,7 +380,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
 
                                                                     <CommentText socialMediaType={"LINKEDIN"}
                                                                                  comment={comment?.message?.text}
-                                                                                 className={"font-weight-bold cursor-pointer "}
+                                                                                 className={""}
                                                                                  usernames={extractMentionedUsernamesFromLinkedinComments(comment?.message)}
                                                                     >
                                                                     </CommentText>
@@ -623,7 +623,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                                                             <CommentText
                                                                                                                 socialMediaType={"LINKEDIN"}
                                                                                                                 comment={childComment?.message?.text}
-                                                                                                                className={"font-weight-bold cursor-pointer "}
+                                                                                                                className={" "}
                                                                                                                 usernames={extractMentionedUsernamesFromLinkedinComments(childComment?.message)}>
                                                                                                             </CommentText>
                                                                                                         </p>
