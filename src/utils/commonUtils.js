@@ -365,7 +365,8 @@ export const isPlannerPostEditable = (btnReference, data = null) => {
         return false
     }
     if (btnReference === "DELETE") {
-        return ((new Date(data?.feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0) || (data?.postPages?.every(postPage => postPage?.errorInfo?.isDeletedFromSocialMedia));
+        // If The post has scheduled but is not in next 15 mins , if post is published and it should not be in progress for any page
+        return (data?.postStatus === "PUBLISHED" && !data?.postPages?.some(postPage => postPage?.postState === "IN_PROGRESS")) || (data?.postStatus === "SCHEDULED" && ((new Date(data?.feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0))
     }
     return (new Date(data?.feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0;
 }
@@ -1867,7 +1868,7 @@ export const createOptionListForSelectTag = (data = null, label, value, addition
     return list
 }
 
-export const getValueOrDefault = (value=null, defaultValue) => {
+export const getValueOrDefault = (value = null, defaultValue) => {
     if (isNullOrEmpty(value)) {
         return defaultValue
     }
@@ -2686,7 +2687,7 @@ export const createSocialMediaProfileViewInsightsQuery = (queryObject, socialMed
 }
 
 export function objectToQueryString(obj) {
-     return Object.keys(obj)
+    return Object.keys(obj)
         .map(key => {
             if (obj[key] !== null && obj[key] !== undefined) {
                 return `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;
@@ -2714,18 +2715,18 @@ export const getFormattedInsightsForProfileViews = (data, socialMediaType) => {
     return {};
 }
 
-export const countCommonElementsFromArray=(sourceArray=[],comparisonArray=[])=>{
-    if(sourceArray.length===0 ||comparisonArray.length===0 ){
+export const countCommonElementsFromArray = (sourceArray = [], comparisonArray = []) => {
+    if (sourceArray.length === 0 || comparisonArray.length === 0) {
         return 0
     }
     const commonElements = comparisonArray.filter(value => sourceArray.includes(value));
     return commonElements.length;
 }
 
-export const groupBy=(sourceArray=[],key)=>{
-    let result={};
-    if(Array.isArray(sourceArray) ){
-        sourceArray?.forEach(data=>{
+export const groupBy = (sourceArray = [], key) => {
+    let result = {};
+    if (Array.isArray(sourceArray)) {
+        sourceArray?.forEach(data => {
             if (!result[data[key]]) {
                 result[data[key]] = [];
             }
@@ -2733,4 +2734,20 @@ export const groupBy=(sourceArray=[],key)=>{
         })
     }
     return result;
+}
+
+export const handleApiResponse = (response = null, onSuccess = null, onFailure = null, onComplete = null) => {
+    if (onSuccess && response?.meta?.requestStatus === "fulfilled") {
+        onSuccess();
+    }
+    if (onFailure && response?.meta?.requestStatus === "rejected") {
+        onFailure();
+    }
+    if (onComplete) {
+        onComplete();
+    }
+}
+export const getStartOfDayUTC=(date)=>{
+    const newDate = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+    return newDate;
 }

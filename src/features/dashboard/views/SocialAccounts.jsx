@@ -1,5 +1,10 @@
 import jsondata from "../../../locales/data/initialdata.json";
-import {LoginSocialFacebook, LoginSocialLinkedin, LoginSocialPinterest} from "reactjs-social-login";
+import {
+    LoginSocialFacebook,
+    LoginSocialInstagram,
+    LoginSocialLinkedin,
+    LoginSocialPinterest
+} from "reactjs-social-login";
 import {
     computeAndSocialAccountJSON, formatMessage,
     getFormattedLinkedinObject,

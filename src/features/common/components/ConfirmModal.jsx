@@ -2,13 +2,16 @@ import Modal from 'react-bootstrap/Modal';
 import './ConfirmModal.css'
 import success_img from "../../../images/success_img.svg"
 import {RxCross2} from "react-icons/rx"
+import Loader from "../../loader/Loader"
+
 const ConfirmModal = ({
                           showConfirmModal = null,
                           setShowConfirmModal = null,
                           confirmModalAction = null,
                           icon = "",
                           title = "",
-                          confirmMessage = ""
+                          confirmMessage = "",
+                          isLoading = false
                       }) => {
 
     const handleClose = () => setShowConfirmModal(false);
@@ -26,11 +29,11 @@ const ConfirmModal = ({
                 <Modal show={showConfirmModal} onHide={handleClose} className={"alert_modal_body"} centered>
 
                     <Modal.Body>
-                    <div className='pop_up_cross_icon_outer text-end cursor-pointer' onClick={(e) => {
-                                            handleClose()
-                                        }}><RxCross2 className="pop_up_cross_icon"/></div>
+                        <div className='pop_up_cross_icon_outer text-end cursor-pointer' onClick={(e) => {
+                            handleClose()
+                        }}><RxCross2 className="pop_up_cross_icon"/></div>
                         <div className='confirmWrapper'>
-                       
+
 
                             {
                                 icon === "warning" && <img src={success_img} className='success_img'/>
@@ -58,6 +61,9 @@ const ConfirmModal = ({
                                             e.preventDefault();
                                             handleConfirmModel(e);
                                         }}>Yes
+                                    {
+                                        isLoading && <Loader className={"ms-2 h-16 w-16"}/>
+                                    }
                                 </button>
                             </div>
 

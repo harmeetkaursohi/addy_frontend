@@ -18,6 +18,7 @@ export const VideoFormatNotSupported = "Only {0} video format is supported for {
 export const PinterestImageLimitation = "Only single image can be posted on pinterest !"
 export const DisconnectAccountWarning = "Are you sure you want to disconnect? Doing so will remove all draft or scheduled posts for {0}. Are you still certain you want to disconnect?"
 export const DisconnectPageWarning = "Doing so will remove all draft or scheduled posts for this page. Are you still certain you want to disconnect?"
+export const FailedToDeletePostOn = "Failed to delete post on {0}"
 
 export const unProtectedUrls=["/login","/","/sign-up","/reset-password","/forgot-password","/auth-redirect"]
 

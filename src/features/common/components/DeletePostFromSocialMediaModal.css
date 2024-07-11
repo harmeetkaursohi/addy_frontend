@@ -1,0 +1,52 @@
+.delete-post-txt{
+    font-size: 28px;
+    font-weight: 800;
+    color: #263238;
+    line-height: 38px;
+    letter-spacing: -0.28px;
+    font-family: "Nunito", sans-serif;
+}
+.confirmation-txt{
+    padding-top: 7px;
+    color: #263238;
+    font-weight: 600;
+    font-size: 20px;
+}
+.page-select-checkbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border: 2px solid #F07C33;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+    background-color: #fff;
+}
+
+/* Style the checkbox when it's checked */
+.page-select-checkbox:checked {
+    background-color: #F07C33;
+    border: 2px solid #F07C33;
+}
+
+/* Create the tick mark */
+.page-select-checkbox:checked::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.service-unavailable-txt{
+    font-size: 13px;
+    /*opacity: .7;*/
+}
+.opacity-5{
+    opacity: .5;
+}

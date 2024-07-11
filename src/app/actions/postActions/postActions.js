@@ -593,6 +593,11 @@ export const getPostByPageIdAndPostStatus = createAsyncThunk('post/getPostByPage
     }
 });
 
-
-
-
+export const deletePostOnSocialMedia = createAsyncThunk('post/deletePostOnSocialMedia', async (data, thunkAPI) => {
+    return await baseAxios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/social-media/${data?.postId}?pageIds=${data?.pageIds?.join(",")}`,  setAuthenticationHeader(data.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+});

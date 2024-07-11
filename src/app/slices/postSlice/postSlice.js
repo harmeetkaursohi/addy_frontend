@@ -22,7 +22,7 @@ import {
     deleteCommentsOnPostAction,
     updateCommentsOnPostAction,
     getPostByPageIdAndPostStatus,
-    getRepliesOnComment, deletePostFromPage
+    getRepliesOnComment, deletePostFromPage, deletePostOnSocialMedia
 } from "../../actions/postActions/postActions.js";
 
 
@@ -53,6 +53,7 @@ const postSlice = createSlice({
         getPostByPageIdAndPostStatusReducer:{loading: false},
         getRepliesOnCommentReducer:{loading: false},
         deletePostFromPageReducer:{loading: false},
+        deletePostOnSocialMediaReducer:{loading: false},
     },
 
     reducers: {
@@ -319,6 +320,17 @@ const postSlice = createSlice({
         },
         [getPostByPageIdAndPostStatus.rejected]: (state) => {
             state.getPostByPageIdAndPostStatusReducer = {loading: false}
+        },
+        // Delete Post On Social Media
+
+        [deletePostOnSocialMedia.pending]: (state) => {
+            state.deletePostOnSocialMediaReducer = {loading: true}
+        },
+        [deletePostOnSocialMedia.fulfilled]: (state,action) => {
+            state.deletePostOnSocialMediaReducer = {loading: false,data: action.payload}
+        },
+        [deletePostOnSocialMedia.rejected]: (state) => {
+            state.deletePostOnSocialMediaReducer = {loading: false}
         },
 
 

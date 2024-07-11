@@ -1,7 +1,7 @@
 import Modal from 'react-bootstrap/Modal';
 import './CommonShowMorePlannerModal.css'
 import {
-    computeImageURL,
+    computeImageURL, formatMessage, handleApiResponse,
     handleSeparateCaptionHashtag,
     isPlannerPostEditable,
     sortByKey
@@ -10,9 +10,13 @@ import CommonSlider from "./CommonSlider";
 import CommonLoader from "./CommonLoader";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
-    deletePostByBatchIdAction, deletePostFromPage, getAllPostsForPlannerAction, getPlannerPostCountAction
+    deletePostByBatchIdAction,
+    deletePostFromPage,
+    deletePostOnSocialMedia,
+    getAllPostsForPlannerAction,
+    getPlannerPostCountAction
 } from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "./Toast";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
@@ -20,6 +24,9 @@ import Swal from "sweetalert2";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import default_user_icon from "../../../images/default_user_icon.svg"
 import {RiDeleteBin7Line} from "react-icons/ri";
+import DeletePostFromSocialMediaModal from "./DeletePostFromSocialMediaModal";
+import {FailedToDeletePostOn} from "../../../utils/contantData";
+import Skeleton from "../../loader/skeletonEffect/Skeleton";
 
 
 const CommonShowMorePlannerModal = ({
@@ -27,18 +34,55 @@ const CommonShowMorePlannerModal = ({
                                         setCommonShowMorePlannerModal = null,
                                         plannerPosts,
                                         eventDate,
-                                        baseSearchQuery
+                                        baseSearchQuery,
+                                        setBaseSearchQuery,
+                                        setGetUpdatedShowMorePlannerModalData
                                     }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = getToken();
     const getAllPlannerPostsDataLoading = useSelector(state => state.post.getAllPlannerPostReducer.loading);
+    const deletePostOnSocialMediaData = useSelector((state) => state.post.deletePostOnSocialMediaReducer);
     const deletePostFromPageData = useSelector(state => state.post.deletePostFromPageReducer);
+    const [showDeletePostFromSocialMediaModal, setShowDeletePostFromSocialMediaModal] = useState(false);
+    const [postToDeleteFromSocialMedia, setPostToDeleteFromSocialMedia] = useState(null);
+    const [selectedPagesToDeletePost, setSelectedPagesToDeletePost] = useState([]);
     const [deleteBatchIdRef, setDeleteBatchIdRef] = useState(null);
     const [deletedPostsIds, setDeletedPostsIds] = useState([]);
     const [removedPostPagesRef, setRemovedPostPagesRef] = useState(null);
     const [removedPostPages, setRemovedPostPages] = useState([]);
 
+    console.log("postToDeleteFromSocialMedia======>",postToDeleteFromSocialMedia)
+
+    useEffect(() => {
+        if (selectedPagesToDeletePost?.length > 0) {
+            setShowDeletePostFromSocialMediaModal(false)
+            dispatch(deletePostOnSocialMedia({
+                token: token,
+                postId: postToDeleteFromSocialMedia?.id,
+                pageIds: selectedPagesToDeletePost,
+            })).then((res) => {
+                const onSuccess = () => {
+                    const failedToDeleteOnPageIds = Object?.keys(res?.payload)?.filter(c => !res?.payload[c]?.isSuccess)
+                    const successfullyDeletedOnPageIds = Object?.keys(res?.payload)?.filter(c => res?.payload[c]?.isSuccess)
+                    if (failedToDeleteOnPageIds?.length > 0) {
+                        showErrorToast(formatMessage(FailedToDeletePostOn, [failedToDeleteOnPageIds?.map(cur => res?.payload[cur]?.pageName)?.join(",")]));
+                    }
+                    if (successfullyDeletedOnPageIds?.length>0) {
+                        setBaseSearchQuery({
+                            ...baseSearchQuery
+                        })
+                        setGetUpdatedShowMorePlannerModalData(true)
+                    }
+                }
+                const onComplete = () => {
+                    setSelectedPagesToDeletePost([])
+                    setPostToDeleteFromSocialMedia(null)
+                }
+                handleApiResponse(res, onSuccess, null, onComplete);
+            });
+        }
+    }, [selectedPagesToDeletePost])
     useEffect(() => {
         if (removedPostPagesRef !== null && removedPostPagesRef !== undefined) {
             dispatch(deletePostFromPage({
@@ -57,7 +101,6 @@ const CommonShowMorePlannerModal = ({
         }
     }, [removedPostPagesRef])
 
-
     const handleDeletePlannerPost = (e, postId) => {
         e.preventDefault();
         if (postId !== null) {
@@ -68,7 +111,7 @@ const CommonShowMorePlannerModal = ({
                 showCancelButton: true,
                 confirmButtonText: 'Delete',
                 cancelButtonText: 'Cancel',
-                reverseButtons:true,
+                reverseButtons: true,
                 confirmButtonColor: "#F07C33",
                 cancelButtonColor: "#E6E9EC",
                 customClass: {
@@ -80,21 +123,19 @@ const CommonShowMorePlannerModal = ({
                     setDeleteBatchIdRef(postId);
                     dispatch(deletePostByBatchIdAction({postId: postId, token: token}))
                         .then((response) => {
-                            if (response.meta.requestStatus === "fulfilled") {
+                            const onSuccess = () => {
                                 showSuccessToast("Posts has been deleted successfully");
                                 setDeletedPostsIds([...deletedPostsIds, postId])
-                                setDeleteBatchIdRef(null);
                                 if (plannerPosts?.length === deletedPostsIds?.length + 1) {
                                     getUpdatedPlannerData();
                                     setCommonShowMorePlannerModal(false);
                                 }
-
                             }
+                            const onComplete = () => {
+                                setDeleteBatchIdRef(null);
+                            }
+                            handleApiResponse(response, onSuccess, null, onComplete)
                         })
-                        .catch((error) => {
-                            setDeleteBatchIdRef(null);
-                            showErrorToast(error.response.data.message);
-                        });
                 }
             });
         }
@@ -145,17 +186,15 @@ const CommonShowMorePlannerModal = ({
                                 <div className={getAllPlannerPostsDataLoading ? "" : "more_plans_wrapper"}>
                                     {/*map starts here for gird*/}
                                     {
-                                        getAllPlannerPostsDataLoading ? (
-                                                <CommonLoader/>) :
+                                        getAllPlannerPostsDataLoading ? <CommonLoader/> :
                                             sortByKey(plannerPosts, "feedPostDate")?.map((plannerPost, index) => {
-
                                                 return deletedPostsIds.includes(plannerPost?.id) ? <></> :
-
                                                     <div
-                                                        className={"more_plans_grid mb-3 " + (deleteBatchIdRef === plannerPost?.id ? "disable_more_plans_grid" : "")}
+                                                        className={"more_plans_grid mb-3 " + ((deleteBatchIdRef === plannerPost?.id || (deletePostOnSocialMediaData?.loading && postToDeleteFromSocialMedia?.id===plannerPost?.id))  ? "disable_more_plans_grid" : "")}
                                                         key={index}>
                                                         <div className="plan_grid_img">
-                                                            {plannerPost?.attachments &&
+                                                            {
+                                                                plannerPost?.attachments &&
                                                                 <CommonSlider files={plannerPost?.attachments}
                                                                               selectedFileType={null} caption={null}
                                                                               hashTag={null}
@@ -176,9 +215,8 @@ const CommonShowMorePlannerModal = ({
                                                                             plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
                                                                             plannerPost?.postPages.map((curPage, index) => {
                                                                                 return removedPostPages?.some(removedPostPages => removedPostPages?.postId === plannerPost?.id && removedPostPages?.pageId === curPage?.pageId) ? <></> : (
-                                                                                    (removedPostPagesRef?.postId === plannerPost.id && removedPostPagesRef?.pageId === curPage?.pageId) ?
-                                                                                        <SkeletonEffect
-                                                                                            count={1}></SkeletonEffect>
+                                                                                    (removedPostPagesRef?.postId === plannerPost.id && removedPostPagesRef?.pageId === curPage?.pageId) || (selectedPagesToDeletePost?.includes(curPage?.pageId)) ?
+                                                                                        <SkeletonEffect className={"h-20px w-120px"} count={1}></SkeletonEffect>
                                                                                         : <div key={index}
                                                                                                className={"planner_tag_container"}>
                                                                                             {
@@ -192,7 +230,7 @@ const CommonShowMorePlannerModal = ({
                                                                                                             className="plan_tag_img position-relative">
                                                                                                             <img
                                                                                                                 className="plan_image"
-                                                                                                                src={curPage?.imageURL ||default_user_icon}
+                                                                                                                src={curPage?.imageURL || default_user_icon}
                                                                                                                 alt="fb"/>
                                                                                                             <img
                                                                                                                 className="plan_social_img"
@@ -248,7 +286,15 @@ const CommonShowMorePlannerModal = ({
                                                                         className={isPlannerPostEditable("DELETE", plannerPost) ? "" : "disable_more_plans_grid"}
                                                                         disabled={!isPlannerPostEditable("DELETE", plannerPost)}
                                                                         onClick={(e) => {
-                                                                            handleDeletePlannerPost(e, plannerPost?.id);
+                                                                            if (isPlannerPostEditable("DELETE", plannerPost)) {
+                                                                                if (plannerPost?.postStatus === "SCHEDULED" || plannerPost?.postPages?.every(postPage => postPage?.errorInfo?.isDeletedFromSocialMedia)) {
+                                                                                    handleDeletePlannerPost(e, plannerPost?.id);
+                                                                                } else {
+                                                                                    setPostToDeleteFromSocialMedia(plannerPost)
+                                                                                    setShowDeletePostFromSocialMediaModal(true)
+                                                                                }
+                                                                            }
+
                                                                         }}>
                                                                         <i className="fa fa-trash"
                                                                            aria-hidden="true"/>
@@ -281,6 +327,21 @@ const CommonShowMorePlannerModal = ({
                 </Modal>
 
             </div>
+            {
+                showDeletePostFromSocialMediaModal &&
+                <DeletePostFromSocialMediaModal
+                    show={showDeletePostFromSocialMediaModal}
+                    setShow={setShowDeletePostFromSocialMediaModal}
+                    pageList={postToDeleteFromSocialMedia?.postPages?.map(cur => {
+                        return {
+                            pageId: cur.pageId,
+                            pageName: cur?.pageName,
+                            socialMediaType: cur?.socialMediaType,
+                        }
+                    })}
+                    setSelectedPagesToDeletePost={setSelectedPagesToDeletePost}
+                />
+            }
         </>
     )
 }

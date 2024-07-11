@@ -18,7 +18,7 @@ import {
     isPostDatesOnSameDayOrInFuture,
     computeAndReturnPlannerEvent,
     dateFormat,
-    computeImageURL
+    computeImageURL,  getStartOfDayUTC
 } from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
@@ -47,6 +47,7 @@ const Planner = () => {
     const [eventDate, setEventDate] = useState(null);
     const [batchIds, setBatchIds] = useState([]);
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
+    const [getUpdatedShowMorePlannerModalData, setGetUpdatedShowMorePlannerModalData] = useState(false)
 
     const [events, setEvents] = useState([
         {title: 'Instagram post', start: new Date().getTime(), imageUrl: instagram_img},
@@ -92,13 +93,11 @@ const Planner = () => {
         }
     }, []);
 
-
     useEffect(() => {
         if (!getAllPostsForPlannerData.loading && getAllPostsForPlannerData?.data) {
             setEvents(computeAndReturnPlannerEvent(getAllPostsForPlannerData?.data));
         }
     }, [getAllPostsForPlannerData]);
-
 
     useEffect(() => {
         if (getAllPlannerPostsData?.data) {
@@ -116,7 +115,6 @@ const Planner = () => {
         }
     }
 
-
     // render event content
     const renderCalendarCards = ({event}) => {
 
@@ -124,8 +122,6 @@ const Planner = () => {
         const dateString = eventStartDate;
         const date = new Date(dateString);
         const dayOfMonth = date.getDate();
-
-
         let backgroundColor
         let border
         let textColor
@@ -133,7 +129,6 @@ const Planner = () => {
             backgroundColor = '#fce5d6';
             border = "4px solid #B94D09";
             textColor = "#782E00"
-
         } else if (dayOfMonth === 8 || dayOfMonth === 30 || dayOfMonth === 25 || dayOfMonth === 22 || dayOfMonth === 18 || dayOfMonth === 6 || dayOfMonth === 14 || dayOfMonth === 26 || dayOfMonth === 3) {
             backgroundColor = '#defcd6';
             border = "4px solid #56B909";
@@ -147,9 +142,7 @@ const Planner = () => {
             backgroundColor = '#fcd6d6';
             border = "4px solid #B90909";
             textColor = "#780000"
-
         }
-
 
         let classname = event?._def?.extendedProps?.batchId
         const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
@@ -162,7 +155,6 @@ const Planner = () => {
                  }}>
 
                 <div className="w-100 p-0 calendar_card">
-
                     {
                         postOnSocialMedia !== null &&
                         <div className={"custom_event"}
@@ -191,9 +183,7 @@ const Planner = () => {
                 {
                     !getAllPostsForPlannerData?.loading && !getPlannerPostCountReportData?.loading &&
                     <button className="createPost_btn crate_btn ms-0 p-0 w-100 planner_view_more_btn"
-                            onClick={(e) => handleShowMorePostModal(event)}
-                    >
-
+                            onClick={(e) => handleShowMorePostModal(event)}>
                         {
                             (event?._def?.extendedProps?.showMoreContent > 0) &&
                             "+ " + event?._def?.extendedProps?.showMoreContent
@@ -203,12 +193,10 @@ const Planner = () => {
             </div>)
     }
 
-
     const customDayHeaderContent = (args) => {
         let days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
         return days[args.date.getDay()];
     };
-
 
     const customHeaderClick = (eventType) => {
         if (eventType === "Prev") {
@@ -284,24 +272,28 @@ const Planner = () => {
         setShowMorePlannerModel(true);
     };
 
+    useEffect(()=>{
+        if(getUpdatedShowMorePlannerModalData){
+            setGetUpdatedShowMorePlannerModalData(false)
+            handleShowMorePostModal({
+                start:getStartOfDayUTC(new Date())
+            })
+        }
+    },[getUpdatedShowMorePlannerModalData])
 
     useEffect(() => {
-
         if (Object.keys(baseSearchQuery).length > 0) {
-
             if (isDraftPost) {
                 dispatch(getAllSocialMediaPostsByCriteria({
                     token: token,
                     query: {postStatus: ["DRAFT"], plannerCardDate: baseSearchQuery?.plannerCardDate, period: "MONTH"}
                 }));
             } else {
-
                 const decodeJwt = decodeJwtToken(token);
                 const calendarApi = calendarRef.current.getApi();
                 const view = calendarApi.view;
                 const startDate = view.currentStart;
                 const endDate = view.currentEnd;
-
                 const requestBody = {
                     token: token,
                     query: {
@@ -314,17 +306,13 @@ const Planner = () => {
                         }
                     }
                 }
-
                 dispatch(getAllPostsForPlannerAction(requestBody));
                 dispatch(getPlannerPostCountAction(requestBody));
             }
-
-
         }
     }, [baseSearchQuery, isDraftPost]);
 
     const handleSocialMediaFilters = (curKey) => {
-
         if (curKey === "all") {
             setBaseSearchQuery((prevSearchQuery) => {
                 const socialMediaTypes = baseSearchQuery.socialMediaTypes || [];
@@ -353,12 +341,14 @@ const Planner = () => {
         }
 
     }
+
     return (
         <>
             <section>
                 <div className={sidebar ? 'cmn_container' : "cmn_Padding"}>
                     <div className='cmn_outer'>
-                        <div className={`planner_outer  white_bg_color cmn_height_outer ${isDraftPost? "":"planner_container"}`}>
+                        <div
+                            className={`planner_outer  white_bg_color cmn_height_outer ${isDraftPost ? "" : "planner_container"}`}>
                             <div className='planner_header_outer'>
                                 <div className='planner_header'>
                                     <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
@@ -406,11 +396,7 @@ const Planner = () => {
                                 <div className="row mt-5">
                                     <div className="col-lg-9 col-md-12 col-sm-12">
                                         <div
-                                            className={`${
-                                                isDraftPost
-                                                    ? "calendar-container hidden"
-                                                    : "CalenderOuter_Wrapper"
-                                            }`}>
+                                            className={`${isDraftPost ? "calendar-container hidden" : "CalenderOuter_Wrapper"}`}>
                                             <FullCalendar
                                                 ref={calendarRef}
                                                 plugins={[dayGridPlugin]}
@@ -424,18 +410,16 @@ const Planner = () => {
                                                         return "calendar_card_disable";
                                                     }
                                                 }}
-                                                headerToolbar={
-                                                    isDraftPost &&
-                                                    (getAllConnectedSocialAccountData?.loading || getAllConnectedSocialAccountData?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0) ?
-                                                        {
-                                                            left: "  ",
-                                                            center: "",
-                                                            right: "",
-                                                        } : {
-                                                            left: "  prev",
-                                                            center: "title",
-                                                            right: "next,timeGridDay,",
-                                                        }
+                                                headerToolbar={isDraftPost && (getAllConnectedSocialAccountData?.loading || getAllConnectedSocialAccountData?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0) ?
+                                                    {
+                                                        left: "  ",
+                                                        center: "",
+                                                        right: "",
+                                                    } : {
+                                                        left: "  prev",
+                                                        center: "title",
+                                                        right: "next,timeGridDay,",
+                                                    }
                                                 }
                                                 customButtons={{
                                                     prev: {
@@ -467,11 +451,7 @@ const Planner = () => {
                                         </div>
                                     </div>
                                     <div className="col-lg-3 col-md-12 col-sm-12">
-                                        <div className={`${
-                                            isDraftPost
-                                                ? " d-none"
-                                                : "planner_create_post_container"
-                                        }`}>
+                                        <div className={isDraftPost ? "d-none" : "planner_create_post_container"}>
                                             <div className="planner_create_post">
                                                 <h3 className="planner_create_post_heading">Create a post </h3>
                                                 <p>
@@ -479,60 +459,57 @@ const Planner = () => {
                                                 </p>
                                                 <div className="create_post_btn_Wrapper mt-3">
                                                     <GenericButtonWithLoader
-                                                        label={
-                                                            isDraftPost
-                                                                ? jsondata.backToPlanner
-                                                                : jsondata.draftPost
-                                                        }
+                                                        label={isDraftPost ? jsondata.backToPlanner : jsondata.draftPost}
                                                         className={"draft_btn  cmn_white_text"}
                                                         isLoading={isLoading}
                                                         onClick={handleDraft}
                                                         isDisabled={false}
                                                     />
-                                                    {getAllConnectedSocialAccountData?.loading ||
-                                                    connectedPagesData?.loading ? (
-                                                        <span
-                                                            className=" create_post_btn cmn_white_text cursor-pointer text-center">
+                                                    {
+                                                        (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
+                                                            <span
+                                                                className=" create_post_btn cmn_white_text cursor-pointer text-center">
                             <Loader className="create-post-loader"/>
                           </span>
-                                                    ) : (
-                                                        <button
-                                                            onClick={handleCreatePost}
-                                                            className="cmn_btn_color create_post_btn cmn_white_text cursor-pointer"
-                                                        >
-                                                            {jsondata.createpost}
-                                                        </button>
-                                                    )}
+                                                            :
+                                                            <button onClick={handleCreatePost}
+                                                                    className="cmn_btn_color create_post_btn cmn_white_text cursor-pointer">
+                                                                {jsondata.createpost}
+                                                            </button>
+                                                    }
                                                 </div>
 
                                             </div>
                                             <div className="planner_post_track_outer">
                                                 <h3 className="planner_create_post_heading pb-2">Post Track</h3>
-                                                {isDraftPost === false && <ul className="schdeuled_post_list">
+                                                {
+                                                    isDraftPost === false && <ul className="schdeuled_post_list">
+                                                        {
+                                                            (getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data)) ? <></> : <>
+                                                                <li>
+                                                                    <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
+                                                                    <h3><Loader/></h3></li>
+                                                                <li>
+                                                                    <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
+                                                                    <h3><Loader/></h3></li>
+                                                                <li>
+                                                                    <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
+                                                                    <h3><Loader/></h3></li>
 
-                                                    {(getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data)) ? (<></>) : (<>
+                                                            </>
+                                                        }
+                                                        {
+                                                            getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data).map((key, index) => {
+                                                                return (
+                                                                    <li key={index}>
+                                                                        <h4>{key}</h4>
+                                                                        <h3>{getPlannerPostCountReportData.data[key]}</h3></li>
+                                                                )
+                                                            })
+                                                        }
 
-                                                        <li>
-                                                            <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
-                                                            <h3><Loader/></h3></li>
-                                                        <li>
-                                                            <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
-                                                            <h3><Loader/></h3></li>
-                                                        <li>
-                                                            <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
-                                                            <h3><Loader/></h3></li>
-
-                                                    </>)}
-                                                    {getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data).map((key, index) => {
-
-                                                        return (
-                                                            <li key={index}>
-                                                                <h4>{key}</h4>
-                                                                <h3>{getPlannerPostCountReportData.data[key]}</h3></li>
-                                                        )
-                                                    })}
-
-                                                </ul>}
+                                                    </ul>
+                                                }
                                             </div>
 
 
@@ -548,8 +525,8 @@ const Planner = () => {
 
                                                 <ul className="schdeuled_post_list post_outer_list">
 
-                                                    {Object.keys(SocialAccountProvider).map((curKey, ind) => {
-
+                                                    {
+                                                        Object.keys(SocialAccountProvider).map((curKey, ind) => {
                                                             return (
                                                                 <li key={ind}>
                                                                     <div className="d-flex gap-2 align-items-center ">
@@ -563,12 +540,10 @@ const Planner = () => {
                                                                         value={curKey}
                                                                         onChange={(e) => handleSocialMediaFilters(curKey)}
                                                                     />
-
-
                                                                 </li>
                                                             )
-                                                        }
-                                                    )}
+                                                        })
+                                                    }
 
                                                 </ul>
                                             </div>
@@ -593,6 +568,8 @@ const Planner = () => {
                                     plannerPosts={plannerPosts}
                                     eventDate={eventDate}
                                     baseSearchQuery={baseSearchQuery}
+                                    setBaseSearchQuery={setBaseSearchQuery}
+                                    setGetUpdatedShowMorePlannerModalData={setGetUpdatedShowMorePlannerModalData}
                                 />
                             }
 
