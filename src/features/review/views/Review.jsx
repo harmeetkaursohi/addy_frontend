@@ -269,7 +269,6 @@ const Review = () => {
                                     getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0 &&
                                     <>
                                         <div className="review_outer">
-
                                             {
                                                 !isLoading && results !== null && results?.length === 0 ?
                                                     <div>
