@@ -1,0 +1,154 @@
+
+
+.notification_header {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 22px;
+}
+
+.notifications_outer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.notifications_layout {
+
+    background: white;
+    padding: 20px;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    margin-top: 15px;
+    box-shadow: 0px 5px 16px 0px rgba(8, 15, 52, 0.06);
+
+}
+
+#edit_dropdown_wrapper {
+    background: transparent !important;
+    border-radius: 10px;
+    border: 1px solid #F3F7FD;
+    color: #5F6D7E;
+    font-family: "Nunito";
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: -0.02px;
+    padding: 10px;
+
+    position: relative;
+}
+#edit_dropdown_wrapper.dropdown-toggle::after{
+    display: none !important;
+}
+.notification-creation-date {
+    font-size: 11px;
+    opacity: .7;
+}
+
+.unseen_notifications {
+    font-weight: 650;
+}
+
+.clear-all-notifications, .load-more-notification-btn {
+    opacity: .8;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Nunito', sans-serif;
+}
+.clear-all-notifications{
+    display: flex;
+    flex-direction: row-reverse;
+}
+span.error-pagename {
+    font-weight: 500;
+}
+span.error-detail {
+    font-weight: 400;
+    line-height: 24px;
+    font-family: 'Nunito', sans-serif;
+    letter-spacing: -0.016px;
+}
+.no-notifications-text {
+    font-size: 20px;
+}
+
+.show-notification-details {
+    display: inline-block;
+    font-size: 13px;
+    font-family: 'Nunito', sans-serif;
+    color: #5F6D7E;
+    font-weight: 500;
+}
+
+.show-notification-details:hover, .clear-all-notifications:hover, .load-more-notification-btn:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+.load-more-not-btn-outer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0px 30px 0px;
+}
+
+.disable_btn {
+    pointer-events: none;
+}
+
+.load-more-notification-loader {
+    width: 20px;
+    height: 20px;
+}
+.notification_message_outer p{
+    color: #2E3646;
+    font-weight: 500;
+    font-size: 15px;
+
+}
+.notification_edit_button .btn:focus-visible{
+    box-shadow:unset !important
+}
+@media screen and (min-width:1600px){
+    .notification_edit_button .dropdown-menu.show {
+        transform: translate(-77%, 29px) !important;
+    }
+}
+@media screen and (max-width: 991px) {
+    .notification_header {
+        flex-wrap: wrap;
+    }
+    .notifications_layout {
+        padding: 12px;
+    }
+    .notification_message_outer{
+        width: 50%;
+    }
+    .no-notifications-text {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .notification_header {
+        display: block;
+        padding-top: 36px;
+    }
+    .clear-all-notifications {
+        margin-top: 7px;
+    }
+    .no-notifications-text {
+        font-size: 14px;
+        line-height: 24px;
+
+    }
+    .notification_message_outer{
+        width: 100%;
+    }
+    .notification_wrapper a.dropdown-item {
+        font-size: 12px;
+    }
+    .notifications_layout p {
+        font-size: 12px;
+    }
+}

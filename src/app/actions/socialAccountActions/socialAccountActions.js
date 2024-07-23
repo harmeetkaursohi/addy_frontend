@@ -11,6 +11,7 @@ import {
 } from "../../../services/instagramService";
 import {baseAxios, getInstagramBusinessAccounts} from "../../../utils/commonUtils";
 import {getDashBoardPinterestGraphReport, getPinterestAccountReport} from "../../../services/pinterestService";
+import {getDashBoardLinkedinGraphReport, getLinkedinAccountReport} from "../../../services/linkedinService";
 
 
 export const socialAccountConnectActions = createAsyncThunk('socialAccount/socialAccountConnectActions', async (data, thunkAPI) => {
@@ -47,6 +48,14 @@ export const getAllPinterestBoards = createAsyncThunk('socialAccount/getAllPinte
         return thunkAPI.rejectWithValue(error.response);
     });
 })
+export const getAllLinkedinPages = createAsyncThunk('socialAccount/getAllLinkedinPages', async (data, thunkAPI) => {
+    return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/linkedin/organizationAcls?q=${data?.q}&role=${data?.role}&state=${data?.state}`,setAuthenticationHeader(data?.token)).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        return thunkAPI.rejectWithValue(error.response);
+    });
+})
 
 
 export const getSocialMediaReportByProviderTypeAction = createAsyncThunk('socialAccount/getSocialMediaReportByProviderTypeAction', async (data, thunkAPI) => {
@@ -60,7 +69,6 @@ export const getSocialMediaReportByProviderTypeAction = createAsyncThunk('social
                   showErrorToast(error.response.data.message);
                   return thunkAPI.rejectWithValue(error.response);
               })
-            break;
         }
         case  "INSTAGRAM": {
             return await  getInstagramConnectedPageIdsReport(data?.pages[0]).then((res)=>{
@@ -69,12 +77,14 @@ export const getSocialMediaReportByProviderTypeAction = createAsyncThunk('social
                 showErrorToast(error.response.data.message);
                 return thunkAPI.rejectWithValue(error.response);
             })
-
-             break;
-
         }
         case  "LINKEDIN": {
-
+            return await  getLinkedinAccountReport(data?.pages[0],data?.token).then((res)=>{
+                return res;
+            }).catch(error=>{
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            })
         }
         case  "PINTEREST": {
             return await  getPinterestAccountReport(data?.pages[0],data?.token).then((res)=>{
@@ -124,6 +134,12 @@ export const getSocialMediaGraphByProviderTypeAction = createAsyncThunk('socialA
             })
         }
         case  "LINKEDIN": {
+            return await  getDashBoardLinkedinGraphReport(data?.pages[0] ,data?.query || {},data?.token).then((res)=>{
+                return res;
+            }).catch(error=>{
+                showErrorToast(error.response.data.message);
+                return thunkAPI.rejectWithValue(error.response);
+            })
 
         }
         default : {

@@ -1,0 +1,349 @@
+.editprofile_outer {
+    padding: 20px;
+  
+
+}
+.user_pic{
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 2px solid #E05905;
+}
+.update-pic-loading{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+}
+.change_password_btn{
+    flex-direction: row-reverse;
+}
+.user_pic_container{
+    position: relative;
+}
+.edit_content h3 {
+    font-size: 24px;
+}
+ul.mb-3.edit_tabs.nav.nav-tabs {
+     border-bottom: unset;
+    margin-left: 20px;
+ 
+}
+
+label.changeProfile_label.updateAccount_label {
+    background: #f07c33;
+    color: white;
+    border-radius: 7px;
+    padding: 6px 9px;
+    font-size: 21px;
+}
+.edit_tabs.nav-link:focus, .nav-link:hover {
+    color: #e97011 !important;
+}
+.astrick{
+    color: red;
+}
+.edit_tabs.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+border-color: unset !important;
+isolation: unset !important;
+}
+.edit_tabs .nav-link{
+    color:#e97011 !important;
+    margin-top: 20px;
+    border-radius: 10px;
+    border: unset !important;
+}
+.btn_style{
+    border: none;
+    color: white;
+    padding: 8px 28px;
+    margin-top: 20px;
+}
+.change_profile{
+    display: none;
+}
+.edit_label:hover {
+    color: #e97011;
+    background: white;
+    border: 1px solid #e97011;
+}
+.edit_content .form-group label {
+    color: #7C7C7C;
+    font-weight: 400;
+    font-size: 18px;
+    font-family: "Nunito";
+    margin-top: 16px;
+}
+.edit_profile_contaniner{
+    display: flex;
+    justify-content: space-between;
+}
+button.edit_profile_btn {
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-family: 'Nunito';
+    border-radius: 6px;
+    padding: 4px 20px;
+    font-size: 16px;
+    background: #F07C33;
+    height: 35px;
+    min-width: 110px;
+}
+.profile_cancel_btn{
+    color: #2E3646;
+    border: 1px solid #B0B0B0;
+    border-radius: 6px;
+    font-weight: 700;
+    padding: 4px 20px;
+    height: 35px;
+    min-width: 110px;
+}
+.edit_content input {
+    border: 1px solid #A1BAC9;
+    color: #263238;
+    font-weight: 500;
+    font-size: 18px;
+    border-radius: 6px !important;
+
+}
+.edit_content .form-control:disabled{
+    background-color: #F8FAFD !important;
+}
+
+.edit_content input.form-control::placeholder {
+    color: #263238;
+    font-weight: 600;
+    font-size: 18px;
+}
+.edit_content .form-control:focus{
+    box-shadow: unset !important;
+}
+.change_profile_outer.cmn_box_shadow.white_bg_color input {
+    background: white;
+    border: none;
+    color: #263238;
+    font-weight: 700;
+    font-size: 24px;
+    font-family: "Nunito";
+}
+.cmn_box_shadow.white_bg_color.mt-3.profile-information input {
+    background: white;
+    border: none;
+    padding: 0px;
+}
+
+.cmn_box_shadow.white_bg_color.mt-3.address-info input {
+    background: white;
+    border: none;
+    padding: 0px;
+}
+
+
+.edit_label{
+    background: #e97011;
+    cursor: pointer;
+    border-radius: 7px;
+    color: white;
+    font-size: 20px;
+    height: 35px;
+    width: 35px;
+    text-align: center;
+}
+.changeProfile_label{
+    cursor: pointer;
+    font-size: 16px;
+    background: #e97011;
+    border-radius: 30px;
+    height: 35px;
+    width: 35px;
+    color: white;
+    text-align: center;
+    padding-top: 4px;
+    transform: translate(41px, -31px);
+    
+}
+
+
+.cmn_box_shadow{
+    box-shadow: 4px 3px 10px #e5e2e2;
+    padding: 15px;
+    border-radius: 20px;
+}
+
+.user_name_heading{
+    color: #2E3646;
+    font-size: 20px;
+}
+
+.ImSpinner_icon{
+    font-size: 20px;
+}
+
+
+  .custom-tooltip .tooltip-arrow::before {
+    border-right-color: transparent !important; 
+    border-bottom-color: #ee7817 !important; 
+    border-left-color: transparent !important; 
+  }
+  .edit_content select.form-control.cmn_select_box.mt-1 {
+    color: #263238;
+    font-weight: 500;
+    font-size: 18px;
+   border:1px solid #A1BAC9
+}
+ 
+  
+  .cmn_select_box{
+    appearance: auto !important;
+    /* color: #9d9a9a !important; */
+  }
+  .changeProfile_label:hover {
+    background: white;
+    color: #e97011;
+}
+
+.profile_cmn_radius {
+    border-radius: 17px;
+}
+.edit_content .profile_info_container .form-group label {
+   margin-top:10px
+
+}
+.edit_content .profile_info_container .form-group label:first-child {
+    margin-top: 8px;
+}
+.profile_info_container {
+    min-height: 100%;
+}
+@media screen and (min-width:1499px) {
+    .editprofile_outer{
+        width: 78%;
+        margin: auto;
+    
+    }
+    .editprofile_outer {
+        width: 78%;
+        margin: auto;
+    }
+}
+@media screen and (max-width:1280px){
+    .edit_content h3 {
+        font-size: 20px;
+    }
+    
+   
+    .edit_content .form-group label {
+        font-size: 16px;
+    }
+    .edit_content input {
+        font-size: 16px;
+    }
+    .edit_content input.form-control::placeholder{
+        font-size: 16px;
+    }
+    .edit_content select.form-control.cmn_select_box.mt-1 {
+        font-size: 16px;
+    }
+    .user_pic {
+        height: 85px;
+        width: 85px;
+    }
+    .changeProfile_label {
+    height: 25px;
+    width: 25px;
+    font-size: 14px;
+    padding-top: 1px;
+    transform: translate(33px, -31px);
+    }
+}
+
+@media screen and (max-width:991px) {
+   
+    .address_info_container {
+        margin-top: 20px;
+    }
+    .edit_content h3 {
+        font-size: 22px;
+    }
+    .edit_content input {
+        font-size: 16px;
+    }
+    
+    .edit_content select.form-control.cmn_select_box.mt-1 {
+        font-size: 16px;
+    }
+}
+ @media screen and (max-width:767px){
+    .editprofile_outer {
+        padding: 20px 16px;
+    }
+    .address_info_container{
+        padding: 12px !important;
+    }
+    .profile_info_container{
+        padding: 12px !important;  
+    }
+    button.edit_profile_btn {
+        min-width: unset;
+        padding: 4px 12px;
+        font-size: 14px;
+        height: 33px
+    }
+    .edit_profile_contaniner h3{
+        font-size: 18px;
+    }
+    .profile_Wrapper {
+        gap: 27px !important;
+    }
+   
+    .profile_cancel_btn{
+        min-width: unset;
+    }
+    .edit_profile_contaniner{
+        flex-wrap: wrap;
+    }
+    .edit_content input.form-control::placeholder{
+        font-size: 12px !important;
+    }
+    .edit_content select.form-control.cmn_select_box.mt-1 {
+        font-size: 12px;
+    }
+    .update-pic-loading svg{
+        height: 25px;
+        width: 25px;
+    }
+    .user_pic {
+        height: 60px;
+        width: 60px;
+    }
+    .edit_content h3 {
+        font-size: 16px;
+    }
+   
+   .profile_Wrapper{
+    flex-wrap: wrap;
+    gap: 27px !important;
+   }
+    .changeProfile_label{
+        transform: translate(23px, -25px);
+        font-size: 13px;
+        height: 23px;
+        width: 23px;
+        padding-top: 0px;
+     
+}
+.edit_content input {
+    font-size: 12px;
+    border-radius: 5px !important;
+}
+    
+    .edit_content .form-group label {
+        font-size: 14px;
+        margin-top: 10px;
+    }
+    h3.user_name_heading {
+        margin-top: 12px;
+      
+    }
+ }

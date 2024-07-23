@@ -20,16 +20,23 @@
 }
 
 .facebook_content_outer {
-    padding: 0px 30px;
+    padding: 0px 10px;
+}
+.facebook_content_outer button{
+    padding: 5px 22px;
+    border-radius: 6px;
+}
+.acc_already_connect_wrapper .modal-header {
+    border-bottom: unset;
 }
 
 .user_contents {
     color: #000;
-    font-family: Nunito;
+    font-family: "Poppins";
     font-size: 16px;
     font-style: normal;
     font-weight: 300;
-    line-height: 20px; /* 142.857% */
+    line-height: 20px; 
     letter-spacing: -0.014px;
     margin-bottom: 0px;
 }
@@ -40,9 +47,11 @@
 }
 
 div.modal-content {
-    border-radius: 30px;
+    border-radius: 12px;
 }
-
+.acc_already_connect_wrapper .modal-content{
+    border-radius: 15px;
+}
 .facebook_title {
     text-align: center;
 }
@@ -101,18 +110,26 @@ div.commonmodal_header {
     background-color: orange;
     color: white;
 }
-
+.facebook_post_modal_outer svg{
+font-size: 20px;
+}
 .connected-button {
     background-color: #e24a4a;
     color: white;
 }
 
 .disabled-button {
-    background-color: gray;
+    background-color: #d1cece;
     color: white;
+    cursor: not-allowed;
 }
 
-/*26 sep*/
+.facebook_content_outer h6{
+    font-size: 18px;
+    line-height: 25px;
+    color: #263238;
+    font-weight: 600;
+}
 .modal_inner_content.disconnect_wrapper .users_profile,
 .modal_inner_content.disconnect_wrapper
 h2.cmn_text_style,
@@ -121,6 +138,11 @@ button, .modal_inner_content.disconnect_wrapper
 .users_name p {
     position: relative;
     opacity: 0.41;
+}
+.choose_page_container{
+    max-height: 400px;
+    overflow-y: scroll;
+    scrollbar-width: none;
 }
 
 /*media QUERY*/
@@ -146,7 +168,11 @@ button, .modal_inner_content.disconnect_wrapper
         font-size: 17px;
     }
 }
-
+@media (max-width: 1280px) {
+    .facebook_content_outer h6 {
+        font-size: 16px;
+    }
+}
 @media (max-width: 991px) {
     .users_profile img {
         height: 50px;
@@ -157,32 +183,51 @@ button, .modal_inner_content.disconnect_wrapper
         font-size: 16px;
         line-height: initial;
     }
+    .facebook_title h2 {
+        font-size: 18px;
+    }
+}
+
+
+@media screen and (max-width: 767px) {
+    .facebook_title {
+        width: 100%;
+    }
+    
+    .modal_inner_content {
+        padding-bottom: 15px;
+        align-items: start;
+    }
+ .users_name h2{
+font-size: 12px;
+margin-top: 12px;
+ }
+    .user_info_container {
+      display: block;
+        width: 100%;
+        
+    }
+    .facebook_title h2 {
+        font-size: 15px;
+        line-height: 21px;
+    }
+    .user_contents{
+        font-size: 14px;
+    }
+    .facebook_content_outer h6 {
+        font-size: 13px;
+        line-height: 19px;
+        padding: 0px 14px;
+    }
 }
 
 @media (max-width: 567px) {
     .modal_inner_content {
-        display: flex;
-        justify-content: space-between;
         gap: 0px;
     }
 
     .facebook_content_outer {
         padding: 0px;
     }
-}
-
-@media screen and (max-width: 767px) {
-    .facebook_title {
-        width: 100%;
-    }
-
-    .modal_inner_content {
-        flex-wrap: wrap;
-        padding-bottom: 15px;
-    }
-
-    .user_info_container {
-        flex-grow: 1;
-        width: 100%;
-    }
+    
 }

@@ -74,7 +74,9 @@ button.ConnectBtn {
     color: #038000;
     line-height: 20px;
     letter-spacing: -0.01px;
-    font-size: 10px;;
+    font-size: 10px;
+    font-family: "Nunito";
+    font-weight: 400;
 }
 
 
@@ -102,34 +104,11 @@ button.DisConnectBtn {
 }
 
 
-button#dropdown-basic {
-    border-radius: 10px;
-    border: 1px solid #F3F7FD;
-    background: #F4F4F4;
-    color: #5F6D7E;
-    color: #5F6D7E;
-    font-family: Nunito;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 20px;
-    letter-spacing: -0.02px;
-    padding: 10px;
-    min-width: 191px;
-    padding-right: 35px;
-    position: relative;
-}
 
-button#dropdown-basic::after {
-    content: url("../../../images/down_arrow.svg");
-    position: absolute;
-    /*height: 50px;*/
-    border: unset;
-    right: 11px;
-}
+
 
 .followers_outer {
-    padding: 21px 20px;
+ 
     display: flex;
     gap: 15px;
 }
@@ -139,19 +118,22 @@ button#dropdown-basic::after {
     overflow: hidden;
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.10);
     flex-grow: 1;
+    width: 100%;
 }
 
 .cmn_background {
-    border-radius: 22px;
+    border-radius: 12px;
     background: #FFF;
     min-height: 100%;
     box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68)
 }
 
 .upcoming_post_outer {
-    margin-top: 30px;
+    padding: 15px 0px;
 }
-
+.upcoming_post_outer .draft-outer .post_image_outerwrapper {
+    height: 196px;
+}
 
 element.style {
     display: flex;
@@ -165,10 +147,11 @@ element.style {
     color: #232934;
     font-size: 16px;
     font-weight: 700;
-    line-height: 24px;
+    line-height: 18px;
     letter-spacing: 0.024px;
     background: #F4F4F4;
     padding: 16px 20px;
+    font-family: "Nunito";
 }
 
 .followers_inner_content {
@@ -193,6 +176,7 @@ element.style {
     align-items: center;
     gap: 5px;
     font-size: 13px;
+    cursor: auto;
 }
 
 .monthly_growth {
@@ -213,6 +197,7 @@ element.style {
     font-weight: 700;
     line-height: 24px;
     letter-spacing: 0.024px;
+    font-family: "Nunito";
 }
 
 .social_media_account h6 {
@@ -224,27 +209,11 @@ element.style {
     text-decoration-line: underline;
 }
 
-.connect_btn {
-    border-radius: 5px;
-    border: none;
-    color: #F8F9FB;
-    min-width: 111px;
-    height: 39px;
-}
 
-.dropdown_btn {
-    padding-top: 15px;
-}
 
-.cmn_connect_btn {
-    font-family: Nunito;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 20px;
-    letter-spacing: -0.014px;
-    padding: 7px 14px
-}
+
+
+
 
 .social_media_wrapper {
     padding: 16px 20px;
@@ -257,24 +226,55 @@ element.style {
     padding: 16px 0px;
     margin-top: 12px;
     border-bottom: 1px solid #C6D2E0;
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
 
 .social_media_outer:first-child {
     border-bottom: unset;
 }
-
+.pagecount{
+    font-size: 13px;
+    color: red;
+    background: #f2ecec;
+    border-radius: 20px;
+    height: 16px;
+    width: 16px;
+    text-align: center;
+    padding-top: 0px;
+    position: absolute;
+    top: 1px;
+    left: 11px;
+}
 .social_media_content {
     display: flex;
     gap: 12px;
     align-items: center;
     width: 100%;
+    position: relative;
 }
 
 .social_media_content svg {
     margin-left: auto;
 }
+.upcomingPostBtn_Outer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #D1D9E2;
+    padding:20px;
+    background-color: #F8F9FB;
+    gap: 12px;
 
+}
+.upcoming_post_heading{
+    color: black;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 4px !important;
+}
+.upcomingPostBtn_Outer button.post_now.cmn_bg_btn, button.outline_btn.schedule_btn{
+    max-width: 202px;
+}
 .cmn_drop_down.dropdown svg {
     transform: rotate(-0deg);
 }
@@ -291,31 +291,19 @@ element.style {
     font-weight: 600;
     line-height: 22px;
     letter-spacing: -0.015px;
+    font-family: "Nunito";
 }
 
-.disconnect_btn {
-    border-radius: 5px;
-    border: 1px solid #D1D9E2;
-    background: #E6E9EC;
-    color: #393939;
-    min-width: 111px;
-    height: 39px;
-}
+
 
 .account_info {
     display: flex;
     justify-content: center;
     gap: 28px;
+    padding: 15px;
 }
 
-.page_title_header {
-    /* padding: 10px 20px; */
-    margin: 20px;
-    border-radius: 22px;
-    overflow: hidden;
-    background-color: white;
-    box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.10);
-}
+
 
 button.facebook_connect > div > div {
     display: none !important;
@@ -328,14 +316,13 @@ button.facebook_connect > div > div:last-child {
 }
 
 button.facebook_connect {
-    min-width: 98px;
+    min-width: 98px !important;
     text-align: center;
-    height: 39px !important;
+    height: 35px !important;
+    margin: 0px !important;
 }
 
-.account_info {
-    padding-bottom: 20px;
-}
+
 
 .account_reached {
     background: #05A2FB;
@@ -369,27 +356,24 @@ button.facebook_connect {
     width: 100%;
 }
 
-.page_title_container {
-    display: flex;
-    padding: 16px 20px;
-    justify-content: space-between;
-    border-bottom: 1px solid #D1D9E2;
-    background-color: #F8F9FB;
-    align-items: center;
 
-}
 
 .dropdown_days {
-    font-size: 10px;
+    font-size: 16px;
     background: white;
     border: none;
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-style: normal;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 24px;
     letter-spacing: 0.015px;
-    padding: 10px 9px 10px 20px;
+    padding: 10px;
+    min-width: 180px;
+    height: 45px;
+    border-radius: 10px;
+    border: 1px solid #F3F7FD;
+    box-shadow: 2px 2px 2px 0px #f5f4f4;
 }
 
 select.page_title_options {
@@ -411,15 +395,15 @@ select.page_title_options {
     width: 100%;
     padding: 0px;
 }
-img.acc-not-connected-error-svg.mt-1 {
-    height: 270px;
-}
 
+.Account_not_connect_wrapper div.modal-content {
+    border-radius: 10px;
+}
 img.connection-error-svg {
-    height: 200px;
-    width: 220px;
+    height: 130px;
+    width: 100%;
     margin-bottom: 20px;
-    margin-top: -30px;
+
 
 }
 
@@ -427,19 +411,7 @@ img.connection-error-svg {
     transform: rotate(180deg);
 }
 
-.connection-error-close-btn {
-    border: 1px solid rgb(240, 124, 51);
-    border-radius: 5px;
-    box-shadow: unset;
-    color: rgb(255, 255, 255);
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 0px 10px;
-    height: 39px;
-    background: rgb(240, 124, 51);
-    min-width: 108px;
-}
+
 
 .cmn_drop_down.show.dropdown .menu_items.dropdown-menu {
     position: relative !important;
@@ -454,52 +426,224 @@ img.connection-error-svg {
     font-size: 14px;
     color: gray;
 }
-
+.choose_platform_dropdown{
+    display: flex;
+    /*justify-content: space-between;*/
+    align-items: center;
+    gap:
+    20px;
+    cursor: pointer;
+}
 .connect-page-btn {
     color: #04a3ff;
     text-decoration: underline;
 }
+.linkedin-icon-color{
+    color: #004190;
+    font-size: 24px;
+}
+div.upcomingPostBtn_Outer button{
+    flex-grow: 1;
+    font-size: 14px;
+    font-weight: 600;
 
-@media screen and (max-width: 1280px) {
-    .social_media_outer {
-        display: block;
-    }
-
-    .createPost_btn {
-        margin-left: 9px;
-    }
-
-    .connect_btn {
-        margin-top: 10px;
-    }
-
-    .disconnect_btn {
-        margin-top: 10px;
-    }
+}
+.No_Upcoming_Outer img{
+    width: 400px;
 }
 
-@media screen and (max-width: 1024px) {
+
+.postdata_container{
+    height: 40px;
+    width: 40px;
+    background: #E05905;
+    border-radius: 40px;
+    color: white;
+    font-size: 20px;
+    text-align: center;
+    padding-top: 5px;
+}
+.postdata_wrapper{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    align-items: center;
+
+}
+.postdata_wrapper span{
+    color: #3C87E0;
+    font-size: 12px;
+    font-weight: 700;
+    padding-top: 15px;
+    font-family: "Nunito";
+}
+.performing_post_heading{
+    font-size: 20px;
+    color: black;
+    font-weight: 600;
+}
+.postdata_wrapper h5{
+    font-size: 22px;
+}
+.post_performing_list{
+    display: flex;
+   gap: 15px;
+   margin-top: 10px;
+   margin-bottom: 0px;
+}
+
+.post_performing_list li h4{
+    background: #F8F9FB;
+    border-bottom: 1px solid #D9D9D9;
+    padding: 11px;
+}
+.Performing_Post_container{
+    padding: 20px 0px 0px;
+}
+.Performing_Post_container  h3{
+    font-size: 22px;
+    font-weight: 700;
+    color: #2E3646;
+    line-height: 38px;
+}
+
+.post_performing_list h4{
+    color: #2E3646;
+}
+ul.post_performing_list li {
+flex-grow: 1;
+border-radius: 13px;
+width: 100%;
+ 
+}
+.overview_heading{
+    color: #4D4D4D;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 38px;
+}
+.HiMiniArrowUpRight{
+    height: 15px;
+    width: 15px;
+    border-radius: 20px;
+    background: #3C87E0;
+    color: white;
+    text-align: center;
+    font-size: 11px;
+}
+.HiMiniArrowUpRight svg{
+    vertical-align: middle;
+}
+.upcomingPostBtn_Outer .outline_btn {
+    border: 1px solid #D1D9E2;
+    background: #E6E9EC;
+    color: #2E3646;
+}
+.upcomingPostBtn_Outer .post_now {
+    background: #F07C33;
+}
+.custom_select_days{
+    padding-right: 20px; /* Adjust the padding to create space from the right side */
+  appearance: none; /* Hide the default arrow in modern browsers */
+  -webkit-appearance: none; /* Hide the default arrow in older versions of Safari */
+  -moz-appearance: none; /* Hide the default arrow in older versions of Firefox */
+  background-image: url("../../../images/down_arrow.svg"); /* Optionally, replace the arrow with a custom image */
+  background-repeat: no-repeat;
+  background-position:  right 10px center;
+  position: relative;
+}
+
+@media screen and (min-width:2560px){
     .followers_outer {
-        display: block;
+        gap: 40px;
+    }
+    .No_Upcoming_Outer img{
+        width: 37%;
+    }
+}
+ @media screen and (min-width:1499px){
+    .upcoming_post_outer .draft-outer .post_image_outerwrapper {
+        height: 350px;
+    }
+ }
+@media screen and (max-width: 1280px) {
+    .social_media_outer {
+      gap: 5px;
+    }
+    .upcomingPostBtn_Outer {
+        gap: 13px;
+    }
+    
+    .social_media_content h5 {
+        font-size: 13px;
+    }
+    .createPost_btn {
+        margin-left: 9px;
+        font-size: 12px;
     }
 
+    
+    .postActivity_InnerWrapper{
+        flex-wrap: wrap;
+    }
+   
+    button.facebook_connect {
+        min-width: 90px !important;
+        height: 33px !important;
+    }
+    
+}
+@media screen and (max-width:1280px){
+    .post_performing_list{
+        flex-wrap: wrap;
+    }
+    .post_performing_list h4{
+        font-size: 15px;
+    }
+    .performing_post_heading {
+        font-size: 17px;
+    }
+    .postdata_wrapper h5 {
+        font-size: 19px;
+    }
+    
+}
+@media screen and (max-width:1279px){
+    .followers_outer {
+        flex-wrap: wrap;
+    }
+}
+@media screen and (max-width: 1024px) {
+    .social_media_content{
+        flex-wrap: wrap;
+        }
+        .upcomingPostBtn_Outer{
+            flex-wrap: wrap;
+        }
+    .social_media_wrapper {
+        padding: 16px;
+    }
+   
     .followers_wrapper {
         margin-top: 15px;
     }
-
-    /* .social_media_outer{
-        display: block;
-    } */
-    /* .disconnect_btn{
-        margin-top: 10px;
+    .connectDisconnect_btn_outer {
+        gap: 14px;
     }
-    .connect_btn {
-        margin-top: 10px;
-    } */
+
+   
     .followers_wrapper h2 {
         font-size: 20px;
     }
-
+    .dropdown_btn_Outer_container{
+        flex-wrap: wrap;
+    }
+    .Performing_Post_container h3 {
+        font-size: 20px;
+    }
+    .overview_heading {
+        font-size: 16px;
+    }
 }
 
 @media screen and (max-width: 991px) {
@@ -514,13 +658,74 @@ img.connection-error-svg {
     .social_media_wrapper {
         margin-top: 10px;
     }
+    
+    
 }
 
 @media screen and (max-width: 767px) {
     .monthly_growth {
         display: block;
     }
-
+    .overview_heading{
+        font-size: 15px;
+    }
+    .postdata_wrapper h5 {
+        font-size: 17px;
+    }
+    .Performing_Post_container h3 {
+        font-size: 17px;
+    }
+    .followers_wrapper  h5{
+        font-size: 14px;
+    }
+    .account_not_connect_imcontainer{
+        margin: 0px 10px;
+    }
+    
+    select.page_title_options {
+        font-size: 14px;
+    }
+    .instagram_overview_heading {
+        font-size: 12px;
+    }
+    
+    .upcomingPostBtn_Outer .post_now{
+        margin-top: 10px;
+    }
+    .No_Upcoming_Outer h4{
+        font-size: 16px;
+    }
+    .No_Upcoming_Outer img{
+        width: 100%;
+    }
+    
+    img.dropdown-page-logo {
+        height: 20px;
+        width: 20px;
+    }
+    
+   
+    .social_media_content{
+        flex-wrap: wrap;
+    }
+    .connection-warning-text {
+        font-size: 18px;
+    
+    }
+    .noPostScheduled_img{
+        width: 100%;
+    }
+    .NotConncted_text {
+        font-size: 13px;
+        line-height: 21px;
+    }
+ 
+    .social_media_outer{
+        display: block;
+    }
+    button.facebook_connect{
+        margin-top: 10px !important;
+    }
     .monthly_growth h6 {
         padding-top: 10px;
     }
@@ -529,18 +734,15 @@ img.connection-error-svg {
         margin-top: 20px;
     }
 
-    .connect_btn, .disconnect_btn {
-        margin-top: 15px;
-    }
+    
 
     /*  */
-    .page_title_container {
-        display: block;
-    }
-
+   
     .account_info {
         display: block;
-        padding: 16px 20px;
+        padding: 13px 5px;
+        height: 260px;
+        width: 71vw ;
     }
 
     .user_profileInfo_wrapper {
@@ -549,6 +751,9 @@ img.connection-error-svg {
 
     .connectDisconnect_btn_outer {
         flex-wrap: wrap;
+    }
+    .no_acc_container{
+        padding: 20px !important;
     }
 
     button.DisConnectBtn {
@@ -560,31 +765,35 @@ img.connection-error-svg {
         width: 115px !important;
         height: 35px !important;
     }
-
+   
+    div.cmn_background {
+        min-height: 100%;
+        padding: 14px !important;
+       
+    }
+    .No_Upcoming_Posts_heading{
+        font-size: 14px;
+    }
+   .dashboardReport_outer{
+    padding: 0px !important;
+   }
 }
 
-/*.sidebar_item_outers {*/
-/*    padding: 0px 24px !important;*/
-/*}*/
 
-.sidebar_item {
-    margin-top: 24px !important;
-}
+
+
 
 .addy_logo {
     width: 160px;
     height: 100%;
-    margin-top: 15px;
+
 }
 
 .insta-icon {
     color: purple !important;
     font-size: 24px ;
 }
-.pinterest-icon {
-    color: #e60023 !important;
-    font-size: 24px ;
-}
+
 .btn-with-fixed-width {
     /*min-width: 120px; !* Adjust this value to your desired maximum width *!*/
     /*overflow: hidden;*/
@@ -595,7 +804,15 @@ img.connection-error-svg {
     min-width: 193px;
     width: 100%;
 }
-
+.dropdown_btn .dropdown-item{
+    padding: 9px 20px 15px;
+    border-bottom: 1px solid #ededed;
+    color: #5F6D7E !important;
+    font-weight: 500;
+}
+.dropdown_btn .dropdown-item:last-child{
+    border-bottom: unset;
+}
 .dropdown-page-logo {
     height: 27px;
     width: 27px;
@@ -603,7 +820,7 @@ img.connection-error-svg {
 }
 
 span.\39 0-day-txt {
-    font-size: 12px;
+    font-size: 10px;
     font-weight: 600;
     color: #524f4f;
     opacity: .8;

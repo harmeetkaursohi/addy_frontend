@@ -3,8 +3,8 @@ import {getPostsPageAction} from "../../../app/actions/postActions/postActions";
 import {useDispatch} from "react-redux";
 import {getToken} from "../../../app/auth/auth";
 
-const usePosts = (pageNum = 0, filter = null) => {
-    const [results, setResults] = useState([])
+const usePosts = (searchQuery) => {
+    const [results, setResults] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [isError, setIsError] = useState(false)
     const [error, setError] = useState({})
@@ -18,50 +18,41 @@ const usePosts = (pageNum = 0, filter = null) => {
         setIsError(false)
         setError({})
 
-        const controller = new AbortController()
-        const {signal} = controller
-
         const requestBody = {
-            options: {signal},
             postStatus: ["PUBLISHED"],
             token: token,
-            pageNumber: pageNum,
-            socialMediaType:filter
+            socialMediaType: searchQuery?.socialMediaType,
+            pageIds:searchQuery?.pageIds,
+            pageSize:searchQuery?.pageSize,
+            offSet:searchQuery?.offSet
         }
 
 
-        dispatch(getPostsPageAction(requestBody))
-            .then((response) => {
+        if (searchQuery?.offSet >= 0 && error) {
+            dispatch(getPostsPageAction(requestBody)).then((response) => {
                 if (response.meta.requestStatus === "fulfilled") {
-                    if (pageNum === 0) {
-                        if (filter) {
-                            setResults(response?.payload?.filter(data => data.socialMediaType === filter));
-                        } else {
-                            setResults(response?.payload);
-                        }
-                    } else if (pageNum > 1) {
-                        if (filter) {
-                            setResults((prev) => [...prev, ...response?.payload?.filter(data => data.socialMediaType === filter)]);
-                        } else {
-                            setResults((prev) => [...prev, ...response?.payload]);
-                        }
+                    if (response?.payload?.data === null) {
+                        setResults([]);
+                    } else if (searchQuery?.offSet === 0) {
+                        setResults(response?.payload?.data);
+                    } else if (searchQuery?.offSet > 0) {
+                        setResults((prev) => [...prev, ...response?.payload?.data]);
                     }
-                    setHasNextPage(Boolean(response?.payload.length));
-                    setIsLoading(false);
+                    setHasNextPage(response?.payload?.hasNext);
                 }
-            })
-            .catch((e) => {
+                if(response.meta.requestStatus === "rejected"){
+                    setIsError(true);
+                    setError({message: response?.payload?.data?.message})
+                }
                 setIsLoading(false);
-                if (signal.aborted) return;
-                setIsError(true);
-                setError({message: e.message});
-            });
+            })
+        }
 
-        return () => controller.abort()
 
-    }, [pageNum, filter])
+    }, [searchQuery])
 
     return {isLoading, isError, error, results, setResults, hasNextPage}
 }
 
 export default usePosts;
+

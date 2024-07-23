@@ -14,9 +14,49 @@ div.card_body_content{
     border-radius: 7px;
     border: 2px solid #F3F4F4;
     background: #FFF;
+    /* width: 33.3%; */
+}
+button.slider_btn {
+    border-radius: 12px;
+    border: 1px solid #E8E8E8;
+    background: #FFF;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
+    height: 35px;
+    width: 35px;
+    margin-left: 12px;
+}
+.deleted-post-info-outer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    height: 190px;
 }
 .caresoul_inner_content_outer {
     position: relative;
+}
+.deleted-post-from-socialMedia{
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.016px;
+    font-size: 17px;
+}
+.deleted-post-from-socialMedia {
+    min-height: 475px;
+}
+.deleted-post-caption{
+    font-family: "Nunito";
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.016px;
+    font-size: 17px;
+}
+.deleted-post-error-message{
+    color:red;
+    margin: 4px 2px 4px 2px;
 }
 .acountReach_content_container li h4{
     color: black;
@@ -41,7 +81,6 @@ div.card_body_content{
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
     height: 35px;
     width: 35px;
-    /*margin-top:2rem*/
 
 }
 .insights-post-date-outer {
@@ -52,7 +91,7 @@ div.card_body_content{
 }
 .post_date{
     color: #000;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 12px;
     font-style: normal;
     font-weight: 600;
@@ -74,13 +113,13 @@ div.card_body_content{
     margin-left: 12px;
 }
 .slider_outer_container button.slick-prev:before{
-    /* background-image: url('../../images/leftIcon.svg') ; */
+
     opacity: 1; 
      color: unset;
      content: url('../../../images/leftIcon.svg');
 }
 .slider_outer_container button.slick-next:before{
-    /* background-image: url('../../images/rightIcon.svg') ; */
+
     opacity: 1; 
      color: unset;
      content: url('../../../images/rightIcon.svg');
@@ -94,5 +133,36 @@ div.card_body_content{
     }
     .acountReach_content_container li h3{
         font-size: 15px;
+    }
+}
+
+
+@media screen and (max-width:991px) {
+    div.card_body_content{
+        width: 100%;
+    }
+    .insights-post-date-outer {
+        padding: 0px 12px;
+    }
+    .date_Time_container {
+        left: 6px;
+    }
+    .post_date{
+        line-height: 14px;
+    }
+}
+@media screen and (max-width:767px) {
+    .insights-post-date-outer {
+
+        padding: 10px;
+    }
+    .slider_outer_container {
+        padding-bottom: 28px;
+    }
+    .post_date{
+        font-size: 10px;
+    }
+    .insights-post-date-outer img{
+        margin-left: 0px !important;
     }
 }

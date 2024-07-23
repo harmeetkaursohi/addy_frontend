@@ -3,8 +3,7 @@
     align-items: center;
 }
 li.selectedCaption{
-    background: #00A3FF !important;
-    color:white !important;
+  box-shadow: 3px 1px 8px rgb(245 215 204) !important
 }
 .captions_lists{
     max-height:200px;
@@ -14,18 +13,24 @@ li.selectedCaption{
     margin-bottom: 20px;
 }
 
-
+.robot_img_outer img{
+    height: 130px;
+    width: 100%;
+}
+ul.captions_lists li input {
+    accent-color: #f16d1b;
+    margin-right: 10px;
+}
 .captions_lists li{
-    border-radius: 10px;
-    background: #F4F7FC;
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
-    padding: 10px 17px;
-    margin-top: 10px;
-    color: #5F6D7E;
+    border-radius: 7px;
+    box-shadow: 3px 1px 10px rgba(0, 0, 0, 0.05);
+    padding: 12px 17px;
+    margin: 10px 5px;
+    color: #263238;
     font-family: "Nunito";
     font-size: 18px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: 600;
     line-height: normal;
     }
     .caption_outer {
@@ -50,10 +55,8 @@ li.selectedCaption{
     }
     .regenerate_btn{
         border-radius: 6px;
-        background: #DAE5F1;
         width: 110px;
         height: 40px;
-        color: #5F6D7E;
         font-size: 14px;
     }
     @media screen and (max-width:767px){
@@ -65,12 +68,17 @@ li.selectedCaption{
         font-size: 14px;
         }
         .add_caption_btn {
-            width: 108px;
-            height: 39px;
+            width: 83px;
+           height: 36px;
+           font-size: 12px;
         }
         .regenerate_btn  {
-            width: 108px;
-            height: 39px;
+            width: 87px;
+            height: 34px;
+            font-size: 12px;
+        }
+        .ai_caption{
+            font-size: 16px;
         }
 
     }

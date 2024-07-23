@@ -25,15 +25,29 @@ ChartJS.register(
 export const LineGraph = ({reportData}) => {
 
     const [labels, setLabels] = useState(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
-
     const [dataSet, setDataSet] = useState([],)
-
-
     const [data, setData] = useState({labels, datasets: dataSet});
+  
+    const [aspectRatio, setAspectRatio] = useState(true);
 
+    useEffect(() => {
+      const handleResize = () => {
+        if(window.innerWidth <= 767){
+            setAspectRatio(false)
+        }
+       
+      };
+  
+      window.addEventListener('resize', handleResize);
+  
+      handleResize();
 
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
     const options = {
         responsive: true,
+        maintainAspectRatio: aspectRatio,
         plugins: {
             legend: {
                 position: 'bottom',
@@ -76,8 +90,8 @@ export const LineGraph = ({reportData}) => {
                 dataSets.push({
                         label: 'Followers',
                         data: reportData?.data.Followers.map((entry) => entry.percentageGrowth),
-                        borderColor: 'rgb(255, 99, 132)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgb(240, 124, 51)',
+                        backgroundColor: 'rgba(240, 124, 51, 0.5)',
                     }
                 )
             }
@@ -99,3 +113,72 @@ export const LineGraph = ({reportData}) => {
     )
 
 }
+
+// import { Line } from 'react-chartjs-2';
+
+// import {
+//         CategoryScale,
+//         Chart as ChartJS,
+    
+//         LinearScale,
+//         LineElement,
+//         PointElement,
+//         Title,
+//         Tooltip,
+//     } from 'chart.js';
+// ChartJS.register(
+//         CategoryScale,
+//         LinearScale,
+//         PointElement,
+//         LineElement,
+//         Title,
+//         Tooltip,
+      
+//     );
+    
+// const data = {
+//     labels: ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'],
+//     datasets: [
+//       {
+//         label: 'uv',
+//         data: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
+//         borderColor: '#00A3FF',
+//         fill: true,
+//       },
+     
+//     ],
+//   };
+//   export const   LineGraph = () => {  
+
+
+//     const options = {
+//         responsive: true,
+//         scales: {
+//             y: {
+//                 beginAtZero: true,
+//                 ticks: {
+//                     callback: function (value, index, values) {
+//                         return value + "%";
+//                     },
+//                 },
+//             },
+//         },
+//     };
+ 
+//         return (
+//             <Line data={data} options={options}/>
+        
+    
+//     )
+// }
+
+ 
+
+
+ 
+
+
+
+
+    
+

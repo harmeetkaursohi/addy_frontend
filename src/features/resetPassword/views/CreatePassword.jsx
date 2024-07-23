@@ -5,7 +5,7 @@ import {useFormik} from 'formik';
 import {validationSchemas} from '../../../utils/commonUtils';
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import girl_img from "../../../images/girl.png";
+import frame from "../../../images/createpassFrame.svg";
 import addyads_img from "../../../images/addylogo.png";
 import {createPassword} from "../../../app/actions/userActions/userActions.js";
 
@@ -38,6 +38,7 @@ const CreatePassword = () => {
     const formik = useFormik({
         initialValues: {
             password: "",
+            confirmPassword:"",
             customerId: userId,
             customerToken: token
         },
@@ -50,20 +51,16 @@ const CreatePassword = () => {
         }
     });
 
-    return (<section className='Container'>
+    return (<section>
             <div className="login_wrapper">
                 <div className="row">
                     <div className="col-lg-6 col-md-12 col-sm-12 ">
-                        <div className='addy_container bg_color'>
+                        <div className='addy_container bg_light_orange'>
                             <div className='login_outer'>
 
                                 <div className='reach_user_outer'>
-                                    <img src={girl_img} className='girl_img_width'/>
-                                    <h2 className='mt-5'>Reach your users with new tools. Reach your users with new
-                                        tools. Reach your users with new tools.</h2>
-                                    <p>Efficiently unleash cross-media information without cross-media value.
-                                        Quickly maximize.Efficiently unleash cross-media information without
-                                        cross-media value. Quickly maximize.Efficiently unleash cross-media.</p>
+                                    <img src={frame} className='w-100'/>
+                                    <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
                                 </div>
                             </div>
 
@@ -77,7 +74,8 @@ const CreatePassword = () => {
                                 <div className="addy_img">
                                     <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                     </div>
-                                    <h2 className='cmn_fontFamily'>{jsondata.createPassword.createPassword}</h2>
+                                    <h2 >{jsondata.createPassword.createPassword}</h2>
+                                    <p>{jsondata.enternewpass}</p>
 
                                 </div>
                                 <div className='login_form'>
@@ -140,7 +138,7 @@ const CreatePassword = () => {
 
                                         </div>
 
-                                        <button disabled={createPasswordReducer?.loading} className=' login_btn'>{jsondata.createPassword.createPassword}</button>
+                                        <button disabled={createPasswordReducer?.loading} className=' login_btn'>{jsondata.createPassword.createpasstext}</button>
 
                                     </form>
                                 </div>

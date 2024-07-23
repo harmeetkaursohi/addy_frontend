@@ -1,254 +1,1327 @@
-h2, p, h3, h4, h5, h6, label, ul {
-    font-family: 'Nunito', sans-serif;
-    font-style: normal;
+h2,
+p,
+h3,
+h4,
+h5,
+h6,
+label,
+ul {
+  font-family:"Nunito", sans-serif;
+  font-style: normal;
 }
 
-h2, h3, h4, h5, h6 {
-    margin-bottom: 0px !important;
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0px !important;
+}
+.dm-sans-font{
+font-weight: 700;
+color: #263238;
 }
 
 p {
-    margin: 0px;
+  margin: 0px !important;
 }
 
 .cmn_btn_color {
-    border-radius: 10px;
-    background: #F07C33;
+  border-radius: 10px;
+  background: #f07c33 !important;
 }
 
-.cmn_white_bg {
-    border: 1px solid #D1D9E2;
-    background: #E6E9EC;
-    border-radius: 5px;
+.LiaThumbsUpSolid{
+  fill: rgb(8, 102, 255);
 }
-.dropdown-item{
-    overflow: hidden;
-    text-overflow: ellipsis;
+.like_text_color{
+  color: rgb(8, 102, 255) !important;
+}
+.cmn_white_bg {
+  border: 1px solid #d1d9e2;
+  background: #e6e9ec;
+  border-radius: 5px;
+}
+.dropdown-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 ul {
-    list-style: none;
-    padding-left: 0px !important;
+  list-style: none;
+  padding-left: 0px !important;
 }
 
 .cmn_container {
-    padding-left: 280px;
-    width: 100%;
-    background-color: #F4F8FE;
-}
 
+  padding-left: 63px;
+  width: 100%;
+  background-color: #fff6f2;
+  transition: all ease-in 0.7s;
+}
+.tooltip-inner {
+  background-color: #ee7817 !important; 
+  color: #fff; 
+  border: 1px solid #ee7817; 
+}
+.tooltip-arrow::before {
+  border-right-color: #ee7817 !important; 
+}
+.cmn_height_outer{
+  height: 100%;
+  min-height: 100vh;
+}
+.cmn_Padding{
+  padding-left: 280px;
+  background-color: #fff6f2;
+  height: 100%;
+  /* min-height: 100vh; */
+}
 .comment_container {
-    padding-left: 280px;
-    width: 100%;
-    background-color: #FFF;
-}
 
+  padding-left: 63px;
+  width: 100%;
+  background-color: #fff6f2;
+}
+.cmn_outer{
+  padding: 20px;
+}
 .cmn_wrapper_outer {
-    padding: 0px 20px 30px;
+  padding: 0px 30px 30px;
 }
 
 .form-control {
-    border: 1px solid #5F6D7E;
+  border: 1px solid #5f6d7e;
 }
 
 .cmn_blue_bg {
-    border-radius: 5px;
-    background: #00A3FF;
-    border: none;
+  border-radius: 5px;
+  background: #00a3ff;
+  border: none;
 }
 
 .cmn_blue_border {
-    border-radius: 6px;
-    border: 1px solid #00A3FF;
-    background: #FFF;
+  border-radius: 6px;
+  border: 1px solid #00a3ff;
+  background: #fff;
+  padding:9px
 }
 
 .cmn_headings {
-    color: #5F6D7E;
-    font-family: 'Nunito';
-    font-size: 13px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 18px;
-    letter-spacing: -0.013px;
+  color: #5f6d7e;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.013px;
 }
 
 img.cmn_width {
-    width: 24px;
-    height: 23.854px;
+  width: 24px;
+  height: 23.854px;
 }
 
 a {
-    text-decoration: none !important;
+  text-decoration: none !important;
 }
 
 .cmn_white_text {
-    color: #FFF;
-    font-family: 'Nunito';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 20px;
-    letter-spacing: -0.014px;
+  color: #fff;
+  font-family: "Nunito";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.014px;
 }
 
 .cmn_bg_btn {
-    color: #FFF;
-    font-family: "Nunito";
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    padding: 10px 15px;
-    border: none;
-    background-color: #F07C33;
-    border-radius: 6px;
+  color: #fff;
+  font-family: "Nunito" ,sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  padding: 10px 15px;
+  border: none;
+  background-color: #f07c33;
+  border-radius: 6px;
 }
-
+.generate_ai_container .modal-content{
+border-radius: 12px;
+}
+.generate_image_outer input{
+  padding: 12px 17px;
+  border: 1px solid #263238;
+}
+.generate_image_outer .form-control:focus{
+  box-shadow:  unset !important;
+}
 .cmn_text_heading {
-    color: #2E3646;
-    font-size: 28px;
-    font-weight: 700;
-    line-height: 38px;
-    letter-spacing: -0.28px;
-
+  color: #2e3646;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.28px;
+  font-family: "Nunito",sans-serif;
 }
 
 .cmn_small_heading {
-    color: #5F6D7E;
     font-size: 16px;
     font-weight: 400;
+    font-family: 'Nunito',sans-serif;
     line-height: 24px;
-    letter-spacing: -0.016px;
+    color: #5F6D7E;
 }
 
 .box_shadow {
-    border-radius: 6px;
-    background: #FFF;
-    box-shadow: 0px 0px 8px 0px rgba(16, 24, 40, 0.05);
+  border-radius: 6px;
+  background: #fff;
+  box-shadow:3px 2px 8px 4px rgba(16, 24, 40, 0.05);
+  
 }
 
+
 textarea:focus-visible {
-    outline: unset;
-    border: 1px solid #00A3FF;
+  outline: unset;
+  border: 1px solid #00a3ff;
 }
 
 select:focus-visible {
-    outline: unset;
-    border: 1px solid #00A3FF;
+  outline: unset;
+  border: 1px solid #00a3ff;
 }
 
 :focus-visible {
-    outline: unset
+  outline: unset;
+}
+.active_bg_color{
+  background: #FCF2EC;
+
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .cmn_text_style {
-    color: #000;
-    font-family: "Nunito";
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 38px;
-    letter-spacing: -0.2px;
+  color: #000;
+  font-family: "Nunito",sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 38px;
+  letter-spacing: -0.2px;
 }
-.connection-warning-text{
-    font-size: 25px;
-    color:red;
+.cmn_text{
+  color: #737373;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
 }
-
+.connection-warning-text {
+  font-size: 25px;
+  color: red;
+}
 
 .skeleton {
-    position: relative;
-    /*width: max-content;*/
-    width: 100%;
-    overflow: hidden;
-    border-radius: 4px;
-    background-color: #d8dbde !important;
-    color: transparent !important;
-    border-color: #ccced1 !important;
-    user-select: none;
-    cursor: default;
-    margin-top: 10px;
+  position: relative;
+  /*width: max-content;*/
+  width: 100%;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: #d8dbde !important;
+  color: transparent !important;
+  border-color: #ccced1 !important;
+  user-select: none;
+  cursor: default;
+  margin-top: 10px;
 }
-
+.login_form .form-group select{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("../images/down_arrow.svg") !important; /* Specify path to your arrow image */
+  background-repeat: no-repeat;
+  background-position: calc(100% - 9px) center;
+}
 .skeleton::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    transform: translateX(-100%);
-    background-image: linear-gradient(90deg, rgba(252, 236, 236, 0) 0, rgb(117 113 113 / 20%) 20%, rgba(255, 255, 255, 0.5) 60%, rgba(0, 0, 0, 0));
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(252, 236, 236, 0) 0,
+    rgb(117 113 113 / 20%) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(0, 0, 0, 0)
+  );
 
-    animation: shimmer 2s infinite;
-    content: '';
+  animation: shimmer 2s infinite;
+  content: "";
 }
 
 .skeleton img {
-    opacity: 0;
+  opacity: 0;
 }
 
 h2.closeEyeIcon {
-    position: absolute;
-    font-size: 15px;
-    left: auto;
-    right: 12px;
-    top: 39px;
+  position: absolute;
+  font-size: 15px;
+  left: auto;
+  right: 10px;
+  top: 38px;
+  color: #C0C0C0;
 }
 
 h2.openEye {
-    font-size: 15px;
-    left: auto;
-    position: absolute;
-    right: 10px;
-    top: 38px;
+  font-size: 15px;
+  left: auto;
+  position: absolute;
+  right: 10px;
+  top: 38px;
+  color: #C0C0C0;
 }
 
+.form-group input.form-control::placeholder {
+  color: #636364;
+  font-family: "Nunito";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 22px;
+  letter-spacing: -0.015px;
+}
 .form-group {
-    position: relative;
+  position: relative;
+  margin-top: 10px;
+
 }
-.cursor_pointer{
-    cursor: pointer;
+.cursor_pointer {
+  cursor: pointer;
+}
+h2.acc_not_connected_heading {
+  font-size: 20px;
+  margin-top: 24px;
+}
+div:where(.swal2-container).swal2-center>.swal2-popup {
+  padding-bottom: 25px !important;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
 
-@keyframes shimmer {
-    100% {
-        transform: translateX(100%);
-    }
+
+
+.feed_preview_Caption_outer {
+  overflow-y: scroll;
+  height: 170px;
+  overflow-x: hidden;
+}
+.feed_preview_Caption_outer span{
+  font-size: 14px;
+}
+.feed_preview_Caption_outer h2{
+  font-size: 14px;
+}
+
+.Caption_outer {
+  text-overflow: ellipsis;
+   
+  cursor: pointer;
+  overflow: hidden;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  margin-bottom: 10px;
+}
+.white_bg_color{
+  background-color: white;
+  border-radius: 10px;
+}
+.nunito_font{
+  font-family: "Nunito",sans-serif;
+}
+.cmn_border{
+  border-bottom: 1px solid #D9D9D9;
+}
+.generate_image_outer input::placeholder {
+  color: #CBD0D5 !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+}
+.gray_border{
+  border: 1px solid #D9D9D9;
+}
+.pop_up_cross_icon_outer svg{
+  font-size: 26px;
+  color: #F07C33;
+}
+.Account_not_connect_wrapper .modal-header .btn-close{
+  display: none;
+}
+.cmn_shadow{
+  box-shadow: 2px 0px 8px #e5e2e2;
+}
+.popup_text{
+  color: #263238;
+  font-weight: 600;
+  font-size: 20px;
+}
+.cmn_heading_class{
+  color: #263238;
+  font-size: 28px;
+  font-weight: 700;
+
+}
+.cmn_modal_cancelbtn{
+    border: 1px solid #263238;
+    background-color: white;
+    color: #263238;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: "Nunito";
+}
+h2#swal2-title {
+ 
+  font-size: 28px;
+    color: #263238;
+    font-family: "Nunito";
+    font-weight: 800;
+}
+button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline:focus {
+  box-shadow: unset !important;
+}
+div#swal2-html-container {
+  font-size: 19px;
+  color: #263238;
+  font-family: "Nunito";
+  font-weight: 600;
+  margin: 0px;
+  padding: 7px 14px 0px;;
+  line-height: 28px;
+}
+img.swal2-image {
+  height: 140px;
+}
+div:where(.swal2-container) div:where(.swal2-actions){
+  gap: 15px;
+}
+button.swal2-cancel.cancelButton.swal2-styled.swal2-default-outline{
+  border: 1px solid #263238 !important;
+  border-radius: 7px;
+  background: initial;
+  background-color: white !important;
+  color: #263238 !important;
+  font-size: 16px;
+  padding: 6px 30px;
+ 
+}
+button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline {
+  border-radius: 7px;
+  padding: 8px 30px;
+}
+
+.blink{
+  animation: blinker 1s linear infinite;
+}
+.bg_Color{
+  background-color: white;
+  /* background-color: #f4f8fe; */
+}
+.connected_heading{
+  font-family: 'Nunito';
+    font-size: 26px;
+    font-weight: 600;
+    text-align: center;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+.animation{
+  animation-name: fadeInLeft;
+  animation-duration: 3s;
+}
+.Sidebar_containerbox li{
+  width: 60px !important;
+}
+
+.no_acc_title{
+font-family: "Nunito";
+font-weight: 700;
+font-size: 14px;
+line-height: 20px;
+}
+.inter_font{
+  font-family: "Nunito";
+  font-weight: 500;
+  font-size: 17px;
+  color: #292929;
+}
+.cursor-pointer{
+  cursor: pointer;
+}
+.dropdown_btn .dropdown-item.disabled, .dropdown-item:disabled {
+
+  pointer-events: none !important;
+  background-color: #efeded !important ;
+  border-top: 1px solid #cdc4c4 !important;
+
+}
+.generate_btn{
+  position: absolute;
+  left: auto;
+  right: 8px;
+  top: 6px;
+  border-radius: 5px;
+  background: #F07C33;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  border: none;
+  padding: 8px 16px;
+
+}
+.animated-popup.swal2-show{
+    transition-duration: 0.24s;
+    animation-name: customanimation !important;
+}
+
+@keyframes customanimation{
+  0%{
+    transform: translateY(-50px)
+  }
+  100%{
+    transform: translateY(0)
+  }
+  
+}
+
+.confirm_btn {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.confirm_btn button {
+  border-radius: 5px;
+  height: 40px;
+  width: 110px
+}
+img.post_img {
+  height: 300px;
+  object-fit: contain;
+  object-position: center;
+}
+.planner_header_outer {
+  display: flex;
+  justify-content: space-between;
+  
+}
+.planner_outer {
+  padding: 24px;
+
+ 
+}
+span.highlight {
+
+  color: #00A3FF;
+}
+button#dropdown-basic {
+  border-radius: 10px;
+  border: 1px solid #F3F7FD;
+  /* background: #F4F4F4; */
+  background-color: #F4F4F4 !important;
+  color: #5F6D7E;
+  font-family: "Nunito";
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: -0.02px;
+  padding: 10px;
+  min-width: 191px;
+  padding-right: 35px;
+  position: relative;
+  box-shadow: 2px 2px 2px 0px #f5f4f4;
+}
+
+button#dropdown-basic::after {
+  content: url("../images/down_arrow.svg") ;
+  position: absolute ;
+
+  border: unset;
+  right: 11px;
+}
+.reach_user_outer img{
+  height: 450px;
+}
+.reach_user_outer h2 {
+  color: #0F1734;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: -0.22px;
+}
+.review-post-icon{
+  height:27px;
+  width: 27px;
+}
+.create_post_btn {
+  border: none;
+  padding: 10px 21px;
+  border-radius: 6px;
+  background: #E05905;
+}
+.fc .fc-button-primary:not(:disabled).fc-button-active:focus,
+.fc .fc-button-primary:not(:disabled):active:focus {
+    box-shadow: unset
+}
+.fc .fc-button-primary {
+  color: #5F6D7E;
+  background-color: transparent;
+  border: none;
+}
+.fc .fc-button-primary:hover {
+  background-color: unset;
+  border-color: unset;
+  color: unset;
+}
+.fc .fc-daygrid-day.fc-day-today {
+  /* background: #AAE0FF; */
+  background-color: unset !important;
+}
+.calendar_card1 h3 {
+  font-size: 16px;
+}
+.current_date_outer {
+  color: white;
+  background: #E05905;
+  border-radius: 20px;
+  height: 29px;
+  width: 30px;
+  text-align: center;
+  margin: 0px 3px;
+}
+.cmn_text_overflow{
+  text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 260px;
+}
+
+.common_height{
+  height: 40px;
+  overflow-y: scroll;
+  line-height: 21px;
+}
+.current_date_outer h3{
+  font-size: 14px;
+    transform: translate(0px, 7px);
+}
+div#button-tooltip {
+  margin-left: 6px !important;
+}
+.calendar-container .fc-view-harness.fc-view-harness-active {
+  height: 100% !important;
+
+}
+.CalenderOuter_Wrapper.fc .fc-view-harness{
+  margin-top: 16px;
+}
+button.fc--button.fc-button.fc-button-primary {
+  display: none;
+}
+.calender_outer_wrapper .fc-dayGridMonth-view.fc-view.fc-daygrid {
+  background: transparent !important;
+  border: transparent;
+}
+.calender_outer_wrapper table tbody {
+  background: #fff;
+
+}
+
+.calender_outer_wrapper .fc-theme-standard th, .calender_outer_wrapper table tbody tr td[role="presentation"] {
+  border: transparent;
+}
+
+.calender_outer_wrapper table tbody tr td {
+  outline: 1px solid #ddd;
+  border: transparent;
+  height: 100px;
+}
+.fc .fc-button:focus {
+  box-shadow: unset;
+  outline: unset;
+}
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background-color: transparent;
+    border-color: transparent;
+    color: #5F6D7E;
+}
+.fc .fc-toolbar-title {
+  color: #292929;
+  font-family: "Nunito";
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.16px;
+}
+input[type=checkbox] {
+  box-sizing: border-box;
+  padding: 0;
+  accent-color: #048709;
+}
+.page_title_container {
+  display: flex;
+  padding: 16px 20px;
+  justify-content: space-between;
+  border-bottom: 1px solid #D1D9E2;
+  background-color: #F8F9FB;
+  align-items: center;
+
+}
+div:where(.swal2-container) button:where(.swal2-styled).swal2-default-outline:focus{
+  box-shadow: unset !important;
+}
+.pinterest-icon {
+  color: #e60023 !important;
+  font-size: 24px ;
+}
+button.swal2-cancel.swal2-styled.swal2-default-outline {
+  border: 1px solid #263238 !important;
+  background: white !important;
+  color: #263238 !important;
+  padding: 6px 25px;
+  font-size: 16px;
+}
+button.swal2-confirm.custom-confirm-button-class.swal2-styled.swal2-default-outline {
+  padding: 7px 25px;
+  min-width: 108px;
+}
+.alert_modal_body .modal-body {
+  padding-bottom: 25px;
+
+}
+div.noDraftPosts_outer {    
+  background-color:#fff;
+}
+.fc-daygrid-body.fc-daygrid-body-unbalanced, .fc-daygrid-body.fc-daygrid-body-unbalanced table {
+  width: 100% !important;
+}
+table.fc-col-header {
+  width: 100% !important;
+}
+.calendar-container  .fc-view-harness.fc-view-harness-active {
+  height: 100% !important;
+
+}
+.page_title_header {
+  margin: 18px 0px;
+  border-radius: 22px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0px 3px 9px 0px rgba(0, 0, 0, 0.10);
+}
+.fc-h-event {
+  background-color: unset;
+  border: unset
+
+}
+.or_heading{
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: #525254;
+}
+/* CSS to hide the calendar's body and other elements */
+.calendar-container.hidden .fc-view, /* Hide the calendar view */
+.calendar-container.hidden .fc-toolbar.fc-header-toolbar .fc-center, /* Hide the center part of the toolbar */
+.calendar-container.hidden .fc-toolbar.fc-header-toolbar .fc-right, /* Hide the right part of the toolbar */
+.calendar-container.hidden .fc-dayGridMonth-view {
+    display: none;
+}
+.connection-error-close-btn {
+  border: 1px solid rgb(240, 124, 51);
+  border-radius: 5px;
+  box-shadow: unset;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0px 10px;
+  height: 39px;
+  background: rgb(240, 124, 51);
+  min-width: 108px;
+}
+img.acc_not_connected_img.mt-0 {
+  width: 100%;
+  height: 350px;
+}
+.planner_header h6 {
+  color: #5F6D7E;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: -0.016px;
+}
+.fallback_loader_outer {
+  width: calc(100% - 280px);
+  margin-left: auto;
+
+}
+
+.cmn_connect_btn {
+  font-family: "Nunito";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.014px;
+  padding: 7px 14px
+}
+.login_form h3 {
+  margin-top: 20px;
+  font-weight: 700;
+  color: #A0A0A0;
+  font-size: 18px;
+  text-align: center;
+}
+.disconnect_btn {
+  border-radius: 5px;
+  border: 1px solid #D1D9E2;
+  background: #E6E9EC;
+  color: #393939;
+  min-width: 111px;
+  height: 39px;
+}
+.connect_btn {
+  border-radius: 5px;
+  border: none;
+  color: #F8F9FB;
+  min-width: 111px;
+  height: 39px;
+}
+.login_outer {
+  width: 70%;
+
+}
+.bg_light_orange {
+  background: #fff6f2;;
+}
+.addy_img h2 {
+  color: #202020;
+  text-align: center;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 40px;
+  letter-spacing: -0.8px;
+  margin-top: 25px;
+}
+.addy_img p {
+  color: #636364;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px; 
+  margin-top: 6px;
+  margin-bottom: 0px;
+}
+.addy_container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.form-group label {
+  color: #181818;
+  font-size: 17px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  
+}
+.form-group input{
+  border-radius: 11px !important;
+
+}
+.login_btn {
+  background-color: #F07C33;
+  color: #FFF;
+  font-family: "Nunito";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+  border: none;
+  width: 100%;
+  padding: 10px 0px;
+  border-radius: 10px;
+  margin-top: 25px;
+  height: 48px;
+
+}
+.logo_outer img {
+  width: 160px;
+  height: unset;
+}
+.logo_outer {
+  display: flex;
+  justify-content: center;
+}
+.addy_outer {
+  padding: 0px 95px 20px;
+  width: 100%;
+
+}
+.login_wrapper {
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+.sign_up {
+  color: #F07C33;
+  font-size: 18px;
+  font-weight: 700;
+
+ 
+}
+.createPost_outer .insta_dropdown_btn button#instagram {
+  max-height: 100px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.fc-daygrid-body.fc-daygrid-body-unbalanced, .fc-daygrid-body.fc-daygrid-body-unbalanced table, table.fc-col-header {
+  height: 100% !important;
+}
+.error_message {
+  color: red;
+  font-size: 12px;
+  margin-bottom: 0px;
+  margin-top: 5px !important;
+}
+ul.slick-dots li.slick-active button:before  {
+  color: #ff5c00 !important;
+}
+ul.slick-dots {
+  bottom: 18px;
+
+}
+ul.slick-dots li button:before {
+  opacity: 1;
+  color: #a69b9b;
+}
+.Account_not_connect_wrapper .modal-header{
+  border-bottom: unset;
+  margin:  0px !important;
+    padding: 0px 15px !important;
+
+}
+img.acc-not-connected-error-svg {
+  height: 150px;
+  width: 100%;
+}
+.Account_not_connect_wrapper .modal-body{
+  padding: 0px 0px 24px!important;
+}
+button.swal2-confirm.YesButton.swal2-styled.swal2-default-outline {
+  min-width: 102px;
+  padding: 7px 19px;
+}
+button.swal2-close{
+  display: block !important;
+  color: #F07C33;
+}
+button.swal2-close:hover{
+  color: #F07C33 !important;
+}
+button:focus:not(:focus-visible) {
+  outline: none !important;
+}
+div:where(.swal2-container) button:where(.swal2-close):focus{
+  box-shadow: unset !important;
+}
+.Common_btn{
+  padding: 6px 26px;
+  border-radius: 6px;
+}
+@keyframes fadeInLeft {
+  0% {
+     opacity: 0.2;
+     transform: translateX(-50px);
+  }
+  100% {
+     opacity: 1;
+     transform: translateX(0);
+  }
+}   
+@media screen and (min-width:2560px) {
+  img.post_img {
+      height: 500px;
+      min-height: 100%;
+  }
+}
+
+@media screen and (max-width: 2560px) {
+  div.cmn_loader_outer {
+    min-height: calc(100vh - 166px) !important;
+  }
+}
+
+
+@media screen and (min-width:1900px) {
+  .cmn_wrapper_outer {
+    width: 100%;
+    max-width: 78%;
+    margin: auto;
+  }
+  .planner_outer {
+    width: 100%;
+    max-width: 78%;
+    margin: auto;
+}
+img.acc_not_connected_img.mt-0 {
+  height: 500px;
+  width: 100%;
+}
+}
+
+
+
+@media screen and (min-width:1600px) and (max-width:1899px){
+  .cmn_wrapper_outer {
+  width: 100%;
+  max-width: 84%;
+  margin: auto;
+}
+.planner_outer {
+  width: 100%;
+  max-width: 84%;
+  margin: auto;
+}
+
+
+
 }
 
 @media (min-width: 1499px) {
-    div.addy_outer, div.login_outer {
-        padding: 0;
-        width: 100%;
-        max-width: 450px;
-        margin: auto;
+  div.addy_outer,
+  div.login_outer {
+    padding: 0;
+    width: 100%;
+    max-width: 450px;
+    margin: auto;
+   
+  }
+  .login_form h3{
+    margin-bottom:20px !important
+}
+  .login_outer.bg_white_cream {
+    padding: 20px;
+}
+ .reach_user_outer img {
+        height: 550px;
     }
+}
+@media screen and  (max-width: 1440px) {
+  .login_form h3{
+    font-size:16px ;
+ 
+}
+.sign_up{
+  font-size: 16px;
+}
+
+  .login_btn {
+      height: 44px;
+      font-size: 17px;
+  }
+}
+
+@media screen and (max-width:1280px){
+  .connected_heading{
+    font-size: 22px;
+  }
+  .cmn_heading_class {
+    font-size: 25px;
+  }
+  .addy_img h2{
+    font-size: 25px;
+    margin-top: 20px;
+}
+  .reach_user_outer img {
+    height: 350px;
+}
+.reach_user_outer h2{
+    font-size: 16px;
+}
+  .disconnect_btn {
+    margin-top: 10px;
+ }
+ .connect_btn {
+  margin-top: 10px;
+}
+  .cmn_wrapper_outer {
+    padding: 0px 24px 30px;
+  }
+  div#swal2-html-container {
+    font-size: 18px;
+  }
+  h2#swal2-title {
+    font-size: 25px;
+  }
+  .animated-popup img{
+    margin-bottom: 0px ;
+  }
+  .animated-popup h2{
+    padding-top: 12px ;
+  }
+}
+@media screen and (min-width:1024px){
+  .CalenderOuter_Wrapper .fc .fc-scroller-harness{
+      overflow: unset !important;
+  }
+  
+  .CalenderOuter_Wrapper .fc-scroller.fc-scroller-liquid-absolute {
+      overflow: unset !important;
+    
+  }
+  .CalenderOuter_Wrapper .fc .fc-scroller{
+      overflow: unset !important;
+  }
+}
+@media screen and (max-width:1024px){
+  .connected_heading{
+    font-size: 19px;
+  }
+  .planner_outer {
+    padding: 20px;
+  }
+  button#dropdown-basic {
+    min-width: 180px;
+}
+  .cmn_outer {
+    padding: 14px;
+  }
+  .cmn_wrapper_outer {
+    padding: 0px 15px 30px;
+  }
+  .cmn_text_overflow{
+    width: 100%;
+  }
+}
+@media screen and (max-width:991px) {
+  h2.acc_not_connected_heading {
+    font-size: 16px;
+    margin-top: 20px;
+}
+.cmn_heading_class {
+  font-size: 20px;
+}
+.addy_container {
+  margin: 0px 0px 30px;
+}
+.cmn_text_heading{
+  font-size: 22px;
+}
+.review-post-icon {
+  height: 20px;
+  width: 20px;
+}
+.fc .fc-col-header-cell-cushion {
+  font-size: 11px;
+}
+.planner_outer {
+  padding: 24px 20px;
+}
+.planner_header_outer {
+  display: block;
+}
+.cmn_text_style {
+  font-size: 17px;
+}
+.cmn_text_overflow{
+  width: 260px;
+}
+.page_title_header{
+  margin-top: 20px;
+}
+.addy_container{
+  min-height: unset;
+}
+.reach_user_outer h2{
+  margin-top: 20px !important;
+}
+}
+@media screen  and (max-width:767px) {
+  .comment_container {
+      padding-left: 62px;
+  }
+  .loader_outer_box {
+    width: calc(100% - 58px);
+    margin-left: auto;
+
+  
+  }
+  .auth_loader_outer{
+    width: 100%;
+  }
+  button.swal2-confirm.YesButton.swal2-styled.swal2-default-outline {
+    font-size: 14px;
+  }
+  .cmn_modal_cancelbtn {
+    font-size: 14px;
+  }
+  
+  button.swal2-cancel.swal2-styled.swal2-default-outline{
+    font-size: 14px;
+    padding: 7px 28px !important;
+  }
+  img.swal2-image {
+    height: 110px;
+}
+  .cmn_text_overflow{
+    width: 100%;
+  }
+  
+  .form-group label {
+    font-size: 14px;
+  }
+  
+  
+  .sign_up {
+    font-size: 15px;
+}
+
+  .addy_img h2 {
+    font-size: 23px;
+}
+button.login_btn {
+  padding: 9px;
+  font-size: 16px;
+  height: 42px;
 
 }
 
-/* new css======= */
-.feed_preview_Caption_outer{
-    overflow-y: scroll;
-    height: 170px;
-    overflow-x: hidden;
+.addy_img p {
+    font-size: 14px;
 }
-.Caption_outer{
-    text-overflow: ellipsis;
-    /* width: 394px; */
-    cursor: pointer;
-    overflow: hidden;
-    /* text-wrap: nowrap;  */
-    display: -webkit-box; 
-    -webkit-box-orient: vertical; 
-    -webkit-line-clamp: 3
+  .login_outer {
+    padding: 20px;
+    width: 85%;
 
 }
+.reach_user_outer h2 {
+  font-size: 14px;
+  line-height: 22px;
+}
+.reach_user_outer img{
+  height: 100%;
+}
+  .connect_btn, .disconnect_btn {
+    margin-top: 15px;
+}
 
+  .cmn_small_heading {
+    font-size: 14px;
+}
+  .planner_header h6 {
+    font-size: 14px;
+}
+  .fc .fc-toolbar-title {
+    font-size: 11px;
 
+}
+img.acc_not_connected_img.mt-0 {
+  width: 100%;
+  height: unset;
+}
+.current_date_outer{
+margin: 0px;
+height: 20px;
+width: 20px;
+}
+.current_date_outer h3 {
+  transform: translate(0px, 4px);
+  font-size: 13px;
+}
+.page_title_container {
+  display: block;
+  padding: 10px;
+}
 
+.fc .fc-col-header-cell-cushion {
+  font-size: 9px;
+}
+  .planner_outer {
+    padding: 15px;
+}
+  button#dropdown-basic{
+    font-size: 13px;
+
+}
+ 
+  .inter_font {
+    font-size: 14px;
+  }
+  .connected_heading{
+    font-size: 14px;
+  }
+  h2.acc_not_connected_heading {
+    font-size: 12px;
+    margin-top: 20px;
+}
+.cmn_wrapper_outer{
+  padding: 0px 13px 30px;
+}
+div#swal2-html-container {
+  font-size: 14px;
+  line-height: 22px;
+}
+.cmn_Padding{
+  padding-left: 60px;
+}
+button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline {
+  padding: 7px 23px;
+  font-size: 14px;
+
+}
+div.noDraftPosts_outer {
+  padding: 20px !important;
+}
+div:where(.swal2-container) img:where(.swal2-image){
+  height: 200px;
+}
+button.swal2-cancel.cancelButton.swal2-styled.swal2-default-outline{
+  font-size: 14px;
+  padding: 6px 23px;
+}
+h2#swal2-title {
+font-size: 17px;
+}
+
+.addy_outer {
+  padding: 20px;
+}
+.logo_outer img {
+  height: 45px;
+  width: 129px;
+}
+
+}

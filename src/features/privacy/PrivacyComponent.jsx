@@ -1,72 +1,59 @@
-import SideBar from "../sidebar/views/Layout";
 import React, {useEffect, useState} from "react";
-import './privacy.css'
-import {baseAxios} from "../../utils/commonUtils";
-
+import "./privacy.css";
+import {useAppContext} from "../common/components/AppProvider";
+import jsondata from "../../locales/data/initialdata.json"
 const PrivacyComponent = () => {
-    // const [content, setContent] = useState(null);
-    //
-    // useEffect(() => {
-    //     const element = document.getElementById('fetched-webpage');
-    //
-    //     if (element) {
-    //         const htmlContent = element.innerHTML;
-    //         const parser = new DOMParser();
-    //         const doc = parser.parseFromString(htmlContent, 'text/html');
-    //         const bodyContent = doc.body.innerHTML;
-    //
-    //         console.log("bodyContent",bodyContent)
-    //         console.log("doc",doc)
-    //         setContent(bodyContent);
-    //     }
-    // }, []);
-   return (
-       <>
-           <SideBar/>
-           <div className="cmn_container faq_section pt-5">
-               <div className="cmn_wrapper_outer">
-                   <div className="dashboard_outer">
-                       <h2 className="cmn_title">
-                            Privacy Policy
-                       </h2>
-                       {/*<div id={"fetched-webpage"} style={{display:"none"}}>*/}
-                       {/*    <iframe   src={"https://web.addyads.com/privacy-policy/"} width={"100%"} height={"100vh"}/>*/}
-                       {/*</div>*/}
+    const [iframeContent, setIframeContent] = useState("");
+    const {sidebar} = useAppContext()
+    const url = import.meta.env.VITE_APP_CMS_API_BASE_URL + "privacy-policy";
+    const divId = "privacy-policy-content";
+    useEffect(() => {
+        fetch(url)
+            .then((response) => response.json())
+            .then((html) => {
+                const divContent = extractDivContent(
+                    html.privacy_policy_content,
+                    divId
+                );
+                setIframeContent(divContent);
+            })
+            .catch((error) => console.error("Error fetching content:", error));
+    }, [url, divId]);
+    const extractDivContent = (html, divId) => {
+        const doc = new DOMParser().parseFromString(html, "text/html");
 
-                       {/*<div id="privacy-policies">*/}
-                       {/*    <div id=""  dangerouslySetInnerHTML={{ __html: content }} ></div>*/}
-                       {/*</div>*/}
-                       <div className="privacy_wrapper">
+        const specificDiv = doc.getElementById(divId);
+        if (specificDiv) {
 
-                           <p>Addy LLC Privacy Policy <br/>
-                               Effective Date: Jan 4, 2022 <br/>
-                               Our terms of service and privacy were updated on Jan 4, 2022, and are applicable to all our existing customers.
-                           </p>
-                           <h4>Introduction
-                           </h4>
-                           <p>
-                               Please read this policy and if you have any questions contact us.
-                               This privacy notice explains how Addy collects, uses, processes, discloses, retains, and protects personal information i) when we provide services to you; and ii) when we process personal information at your instruction that may be included as part of the Content which you view, upload, download or otherwise appears on our mobile applications(Android and iOS).
-                               When this privacy notice refers to “Addy”, “us”, “we” or “our”, it refers to Addy Inc.
+            specificDiv.style.fontFamily = 'Nunito sans-serif';
+            specificDiv.style.color = "#2E3646";
+            return specificDiv ? specificDiv.outerHTML : "";
+        } else {
+            return "";
+        }
 
-                           </p>
-                           <h4>
-                               Our Services
 
-                           </h4>
-                           <p>
-                               Addy offers a suite of social media management tools. Our mobile applications enable you to bring together your social media accounts for easy access and management. Addy helps its users manage posts; engaging audiences; scheduling and analyzing their results. When you link your existing social media accounts to your Addy account, you can choose to instantly collect, process, share and access Social Network content via your Addy account.
-                               Personal Information We Collect
-                               Personal information is information relating to an identified or identifiable natural person. An identifiable natural person is an individual that can be identified, directly or indirectly, be referenced to an identifier such as: a name, an identification number, specific location data, an online identifier, or other attributes specific to that natural person.
-                               Personal information does not include information that has been anonymized or aggregated in such a way that it can no longer be used to identify a specific natural person, whether on its own or in combination with other information.
-
-                           </p>
-                       </div>
-                   </div>
-               </div>
-           </div>
-       </>
-   )
-}
+    };
+    return (
+        <>
+            <div className={`cmn_container  ${sidebar ? " " : "cmn_Padding"}`}>
+                <div className=" cmn_outer">
+                    <div className="cmn_wrapper_outer privacy_policy_container ">
+                        <h2 className="cmn_title">{jsondata.privacy_policy}</h2>
+                        <h6 className="cmn_small_heading">{jsondata.privacy_policy_heading}</h6>
+                        <div className="privacy_wrapper">
+                            <iframe
+                                title="Embedded Content"
+                                srcDoc={iframeContent}
+                                width="100%"
+                                height="2115px"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+};
 
 export default PrivacyComponent;

@@ -1,24 +1,40 @@
 .select_platform_outer {
     display: flex;
     gap: 10px;
-    padding: 20px 28px 8px;
+    padding: 15px 28px;
     align-items: center;
+    cursor: pointer;
 }
-
+.linkedin_outer{
+    background: #dee6f1 !important;
+}
+.pinterest_outer{
+    background: #f3d1d1 !important;
+}
 .instagram_outer {
     background: rgba(254, 127, 31, 0.10);
     padding: 26px 28px;
 
 }
+.date_input , .time_input::-webkit-calendar-picker-indicator{
+    margin-top: 8px;
+}
+input.date_input::-webkit-calendar-picker-indicator{
+    margin-top: 8px;
+}
+
+.media_outer .cmn_heading {
+    margin-top: 5px;
+}
 .img_container {
     width: 300px;
-    /*height: 400px;*/
+    height: 400px;
     position: relative;
     border-radius: 15px;
     overflow: hidden;
 }
 .img_container img{
-    height: 100%;
+    height: 400px;
     object-fit: cover;
 }
 button.save_button {
@@ -29,7 +45,7 @@ button.save_button {
     position: absolute;
     left: auto;
     right: 10px;
-    margin-top: 10px;
+    margin-top: 18px;
     border:none
 }
 .img_footer_wrapper{
@@ -37,7 +53,7 @@ button.save_button {
     gap: 10px;
 }
 .pin-title {
-    color: white;
+    color: #212529;
     margin-top: 7px;
     font-size: 14px;
     margin-left: 13px;
@@ -52,11 +68,11 @@ white-space: nowrap;
     display: flex;
     align-items: center;
     bottom: 18px;
-    gap: 10px;
-    left: auto;
+
+    left: 0;
     right: 0px;
-    width: 100%;
-    justify-content: space-around;
+    margin: 0px 20px;
+    justify-content: space-evenly;
 }
 .z-index-2{
     z-index:2;
@@ -70,6 +86,7 @@ white-space: nowrap;
 .select_options_container select{
     border: none;
     background: transparent;
+    color: white;
 }
 .select_options_container select:focus-visible {
     outline-offset: 0px;
@@ -81,6 +98,7 @@ white-space: nowrap;
     background: white;
     border-radius: 30px;
     text-align: center;
+    cursor: pointer;
 }
 .FiArrowUpRight{
     margin-bottom: 0px;
@@ -89,18 +107,19 @@ white-space: nowrap;
     font-size: 14px;
     padding: 8px 17px;
     text-align: center;
-   align-items: center;
-    display: flex;
+ 
 }
 .preview_img_container{
     display: flex;
     justify-content: center;
 }
 .user_caption_heading{
-    width: 154px;
+    width: 126px;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
+    white-space: nowrap;
+    cursor: pointer;
 }
 .user_caption_wrapper{
     display:flex;
@@ -114,12 +133,9 @@ white-space: nowrap;
     border-radius: 20px;
 }
 .user_caption_wrapper h6{
-    color: white;
+    color: black;
 }
-.pinterest-icon {
-    color: #e60023;
-    fontSize: 24px;
-}
+
 
 .instagramPages .checkbox-button_outer img {
     height: 34px;
@@ -177,11 +193,14 @@ white-space: nowrap;
     height: 19px;
     margin-right: 5px;
     border-radius: 3px;
+    font-size: 12px;
+    
+
 }
 
 .tabs_grid .selected-option span {
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 10px;
     font-style: normal;
     font-weight: 500;
@@ -195,6 +214,11 @@ white-space: nowrap;
     background: #FFF;
     padding: 7px;
     margin-left: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
 }
 
 .selectedPages {
@@ -220,7 +244,7 @@ white-space: nowrap;
     width: 24px;
 }
 
-/*===========csss*/
+
 .social_list {
     border-bottom: 1px solid #d1d1d1;
     margin: 15px 20px 0px;
@@ -271,12 +295,15 @@ social_inner_content h6 {
 }
 
 .media_outer {
-    border-radius: 3px;
+    border-radius: 20px;
     background: #F4F7FC;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
     padding: 17px 24px;
+    margin-top: 30px;
 }
-
+.dashed_border{
+    border: 1px dashed  #C3C3C3;
+}
 .creare_post_heading {
     color: #000;
     font-size: 32px;
@@ -285,9 +312,7 @@ social_inner_content h6 {
     text-align: center;
 }
 
-.create_post_content {
-    padding: 30px 70px;
-}
+
 
 button#instagram {
     width: 100%;
@@ -315,6 +340,7 @@ button#instagram::after {
 /* ======= */
 .date_input::-webkit-calendar-picker-indicator {
     background: url('../../../images/calendar_today.svg') no-repeat;
+   
     /* position: absolute; */
     /* right: 0; 
     left: 10px; */
@@ -368,12 +394,18 @@ content: url("../../../images/down_arrow.svg");
     position: absolute;
 } */
 .date_time_outer {
-    width: 100%;
+    width: 50%;
 }
 
 .create_post_wrapper {
     width: 100%;
     overflow: hidden;
+    background-color: white;
+  
+}
+.width_class{
+    width: 80%;
+    margin: auto;
 }
 
 .create_post_label {
@@ -402,7 +434,7 @@ button.ai_btn {
     color: #525254;
     font-size: 14px;
     font-weight: 400;
-    line-height: normal;
+
 }
 
 .get_measage_heading {
@@ -443,9 +475,7 @@ button.ai_btn {
     font-size: 13px;
 }
 
-.media_outer {
-    margin-top: 30px;
-}
+
 
 .add_btn {
     border: none;
@@ -477,11 +507,10 @@ button.ai_btn {
 
 }
 
-createPost_outer select {
+.createPost_outer select {
     width: 100%;
     border-radius: 8px;
     border: 0.8px solid #C3C3C3;
-    /* background: #FFF; */
     padding: 7px 16px;
     margin-top: 14px;
 }
@@ -490,6 +519,7 @@ createPost_outer select {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
 
 }
 
@@ -507,18 +537,20 @@ createPost_outer select {
 
 .file_outer {
     display: flex;
-    gap: 20px;
+    /* gap: 20px; */
     justify-content: center;
     margin-top: 21px;
 }
 
 .add_media_outer {
     padding: 9px 25px;
+ 
 }
 
 .add_media_outer label {
     display: flex;
     gap: 10px;
+    cursor: pointer;
 }
 
 .file_outer input {
@@ -534,7 +566,7 @@ createPost_outer select {
 
 .schedule_date_outer {
     display: flex;
-    gap: 36px;
+    gap: 30px;
     margin-top: 30px;
 }
 
@@ -558,19 +590,19 @@ createPost_outer select {
 }
 
 .preview_wrapper {
-    border-radius: 3px;
+    border-radius: 30px;
     background: #FFF;
     box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.05);
-
+    padding: 30px;
 }
 
 .status {
-    color: #ADACAC;
-    font-size: 10px;
+    color: #898383;
+    font-weight: 700;
+    font-size: 12px;
 }
 
 .post_img {
-    /*width: 441px;*/
     width: 100%;
 
 }
@@ -578,7 +610,7 @@ createPost_outer select {
 .user_profile_info {
     display: flex;
     gap: 10px;
-    padding: 19px 12px 8px 12px;
+
 }
 
 .user_profile_info img {
@@ -590,12 +622,18 @@ createPost_outer select {
     font-size: 14px;
     margin-bottom: 10px;
 }
-
+.instagram_like svg {
+    height: 22px;
+    width: 22px;
+}
 .like_comment_outer {
     display: flex;
     justify-content: space-between;
-    padding: 14px 23px;
-    /*margin-top: 17px;*/
+    padding: 14px 0px;
+    border-top: 1px solid #dad6d6;
+    border-bottom: 1px solid #dad6d6;
+    align-items: center;
+   
 }
 
 .like_img {
@@ -603,19 +641,35 @@ createPost_outer select {
 }
 
 .post_preview_outer {
-
-    background: #1E1E1E;
+    animation-name: fadeInLeft;
+    animation-duration: 3s;
+    animation-timing-function: all ease 0.7s;
+    background: #F4F7FC;
     padding: 3em;
     height: 100%;
+    border-radius: 10px;
 }
-
+.post_preview_container {
+    margin-top: 30px !important;
+}
+.post_caption_outer{
+    display: flex;
+    gap: 30px;
+}
 .feed_preview {
     font-size: 22px;
     line-height: normal;
-    background-color: #1E1E1E;
+   color: #1E1E1E;
     padding-bottom: 16px;
 }
-
+h3.Post_Preview_heading {
+    color: #6B6B6B;
+    font-size: 24px;
+    font-weight: 600;
+}
+.media_inner_content{
+    display: flex;
+}
 .facebookFeedpreview_text {
     padding-top: 40px
 }
@@ -623,6 +677,8 @@ createPost_outer select {
 .fb_likes h3 {
     line-height: normal;
     font-weight: 500;
+    color: #696969;
+    font-size: 16px;
 }
 
 .fb_likes {
@@ -634,6 +690,7 @@ createPost_outer select {
 .fb_likes svg {
     height: 24px;
     width: 24px;
+    color: #696969;
 }
 
 .schedule_btn {
@@ -646,177 +703,45 @@ createPost_outer select {
     font-size: 9px;
 }
 
-@media (max-width: 1440px) {
-    .fb_likes h3 {
-        font-size: 16px;
-    }
 
-    .fb_likes svg {
-        height: 18px;
-        width: 18px;
-    }
-
-    .fb_likes {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-}
-
-@media (max-width: 1299px) {
-    .create_post_content {
-        padding: 30px 20px;
-    }
-
-    .fb_likes svg {
-        height: 16px;
-        width: 16px;
-    }
-
-    .fb_likes h3 {
-        font-size: 14px;
-    }
-
-    .post_preview_outer {
-        padding: 2em;
-    }
-
-
-}
-
-@media screen and (max-width: 1024px) {
-    .get_messages_outer {
-        display: block;
-    }
-
-    .post_img {
-        width: 100%
-    }
-
-    .add_media_outer {
-        padding: 9px 21px;
-    }
-
-    .feed_preview {
-        text-align: center;
-    }
-
-    .create_post_content {
-        padding: 30px 10px
-    }
-
-    .schedule_btn_outer {
-        display: block;
-    }
-
-    .add_btn {
-        margin-top: 10px;
-    }
-
-    .schedule_date_outer {
-        display: block;
-    }
-
-    .publish_post_outer {
-        display: block;
-    }
-
-    .cancel_publish_btn_outer {
-        margin-top: 13px;
-    }
-
-    .date_time_outer select {
-        width: 100%;
-    }
-
-    .date_time_outer {
-        margin-top: 20px;
-    }
-
-}
-
-@media screen and (max-width: 991px) {
-    .feed_preview {
-        text-align: center;
-        padding-top: 10px;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .post_preview_outer {
-        display: block;
-    }
-
-    .create_post_content {
-        padding: 30px 19px;
-    }
-
-    .caption_header {
-        display: block;
-    }
-
-    .ai_btn {
-        margin-top: 10px;
-    }
-
-    .textarea_outer {
-        margin-top: 13px;
-    }
-
-    .get_messages_outer {
-        display: block;
-    }
-
-    .add_btn {
-        margin-top: 10px;
-    }
-
-    .schedule_btn_outer {
-        display: block;
-    }
-
-    .file_outer {
-        display: block;
-    }
-
-    .add_media_outer {
-        margin-top: 20px;
-    }
-
-    .cmn_bg_btn {
-        padding: 10px;
-    }
-
-    .like_comment_outer img {
-        height: 20px;
-        width: 20px;
-    }
-
-    .publish_btn {
-        margin-top: 10px;
-    }
-
-    .like_img {
-        margin-right: 23px;
-
-    }
-}
 
 /**/
 html {
-    font-family: Arial;
+    font-family: "Nunito";
 }
 
 .checkbox-button {
     cursor: pointer;
 }
 
-input[type=checkbox] {
-    box-sizing: border-box;
-    padding: 0;
-}
 
+.preview_btn{
+    border: 1px solid transparent;
+    background: #f07c32;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 30px;
+    height: 30px;
+    width: 30px;
+
+}
+.black_bg_color{
+    background-color: #000;
+}
+.preview_btn svg{
+   transform:translate(1px, -2px);
+}
+.preview_btn:hover {
+    background: white;
+    color: #f07c32;
+    border: 1px solid #f07c32;
+}
+.preview_btn_outer{
+    display: flex;
+    justify-content: space-between;
+    background: #F1F1F1;
+
+}
 input {
     font-size: 1rem;
     line-height: 1.5;
@@ -866,9 +791,7 @@ input {
 }
 
 
-/*.checkbox-button__control {*/
-/*    transform: scale(0.75);*/
-/*}*/
+
 
 button.instagram_dropdown.dropdown-toggle.show::after {
     transform: rotate(-180deg);
@@ -886,9 +809,9 @@ button.instagram_dropdown.dropdown-toggle.show::after {
 }
 
 button.disabledButton {
-    background-color: gray; /* Change the background color to gray or any color you prefer */
-    color: white; /* Change the text color to white or any color you prefer */
-    cursor: not-allowed; /* Change the cursor to indicate that the button is disabled */
+    background-color: gray; 
+    color: white; 
+    cursor: not-allowed; 
 }
 
 button.delete_upload {
@@ -917,6 +840,7 @@ button.delete_upload {
     transition: ease all .3s;
     background: #fff;
     border-radius: 6px;
+    display: flex;
 
 }
 
@@ -938,6 +862,10 @@ button.delete_upload {
     overflow: auto;
     margin-top: 15px;
 }
+.delete_upload:hover{
+    background: #00A3FF;
+    color: white;
+}
 
 .drag_scroll .dragable_files:first-child {
     margin-top: 0;
@@ -949,5 +877,326 @@ button.loading {
     gap: 5px;
     justify-content: center;
 }
+.draft_publish_outer{
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+.create_post_container {
+    height: 100%;
+   
+}
+.CommonFeedPreview_container{
+    height: 958px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+.create_post_content {
+    padding: 20px;
+}
+
+@media screen and (min-width:2000px){
+    .post_preview_outer{
+        padding: 3rem 15rem;
+    }
+ 
+}
+
+@media screen and (min-width:1900px ) and (max-width:2560px){
+    .post_preview_outer{
+        padding: 3rem 5rem;
+    }
+    .Container{
+        width: 74%;
+        margin: auto;
+    }
+    .width_class {
+        width: 91%;
+        margin: auto;
+    }
+    
+}
+@media screen and (min-width: 1600px) and (max-width: 1899px) {
+   
+        .Container {
+            width: 84%;
+            margin: auto;
+        }
+        .width_class {
+            width: 93%;
+            margin: auto;
+        }
+    }
+
+@media (max-width: 1440px) {
+    .fb_likes h3 {
+        font-size: 16px;
+    }
+
+    .fb_likes svg {
+        height: 18px;
+        width: 18px;
+    }
+
+    .fb_likes {
+        gap: 10px;
+    }
+
+}
+
+@media (max-width: 1299px) {
 
 
+    .fb_likes svg {
+        height: 16px;
+        width: 16px;
+    }
+
+    .fb_likes h3 {
+        font-size: 14px;
+    }
+
+    .post_preview_outer {
+        padding: 2rem;
+    }
+   .feed_preview {
+    font-size: 18px;
+   }
+   h3.Post_Preview_heading{
+    font-size: 24px;
+   }
+
+}
+@media screen and (max-width:1100px) {
+    .post_preview_outer {
+        padding: 1rem;
+    }
+
+    .schedule_date_outer{
+     gap :10px
+    }
+    .width_class {
+        width: 90%;
+    }
+}
+@media screen and (max-width: 1024px) {
+    .get_messages_outer {
+        display: block;
+    }
+    .preview_wrapper{
+        padding: 20px;
+    }
+    .media_outer{
+     padding: 17px;
+    }
+    .create_post_content{
+        padding: 15px;
+    }
+    .width_class{
+        width: 100%;
+    }
+
+
+    .add_media_outer {
+        padding: 9px 21px;
+    }
+
+    .feed_preview {
+        text-align: center;
+    }
+
+
+    
+
+    .add_btn {
+        margin-top: 10px;
+    }
+
+   
+
+    .publish_post_outer {
+        flex-wrap: wrap;
+    }
+
+   
+
+    .date_time_outer select {
+        width: 100%;
+    }
+
+    .date_time_outer {
+        margin-top: 20px;
+    }
+    
+
+}
+
+@media screen and (max-width: 991px) {
+    .feed_preview {
+        text-align: center;
+        padding-top: 10px;
+    }
+    .CommonFeedPreview_container{
+        height: unset;
+        overflow: unset;
+    }
+    .post_preview_outer {
+        padding: 3rem;
+    }
+    .post_caption_outer{
+        display: block;
+    }
+    .creare_post_heading{
+        font-size: 25px;
+    }
+    .caption_header {
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .post_preview_outer {
+        display: block;
+        padding: 20px;
+    }
+    h3.Post_Preview_heading {
+        font-size: 24px;
+    }
+    .schedule_date_outer{
+        display: block;
+    }
+    .date_time_outer{
+        width: 100%;
+    }
+    .media_inner_content{
+        display: block;
+    }
+    .preview_btn {
+    padding: 0px;
+    font-size: 14px;
+    }
+    .select_platform_outer {
+        padding: 10px;
+    }
+    .file_outer {
+        gap: 10px;
+    }
+    .img_container{
+        width: 100%;
+    }
+    .preview_img_container{
+        display: block;
+    }
+    button.delete_upload {
+        padding: 3px 6px;
+
+    }
+    .delete_upload  svg{
+    font-size: 18px !important;
+    margin-bottom: 2px;
+    }
+    .img_footer{
+    margin: 0px;
+    gap: 8px;
+    left: 47%;
+    flex-wrap: wrap;
+    transform: translate(-58%, -10px);
+    }
+    .user_caption_heading {
+        width: 103px;
+    }
+    .instagram_outer{
+    padding: 15px 10px;
+    }
+    .add_media_outer label{
+        display: block;
+        font-size: 12px;
+        padding: 7px;
+    }
+    .darg_navs.file_outer .add_media_outer {
+        padding: 0px;
+    }
+    .add_media_outer label i {
+        margin-right: 7px;
+    }
+    button.save_button {
+        right: 40px;
+    }
+    .schedule_btn_wrapper{
+        justify-content: space-between;
+    }
+    .checkbox-button_outer h2 {
+        font-size: 12px;
+    }
+    .schedule_btn {
+        min-width: 97px;
+    }
+    .create_post_text {
+        font-size: 12px;
+
+    }
+    .media_outer{
+        padding: 10px;
+        border-radius: 12px;
+    }
+    .fb_likes h3 {
+        font-size: 12px;
+    }
+    .caption_header {
+        display: block;
+    }
+   
+.feed_preview {
+    font-size: 18px;
+}
+    .ai_btn {
+        margin-top: 10px;
+    }
+
+    .textarea_outer {
+        margin-top: 13px;
+    }
+
+    .get_messages_outer {
+        display: block;
+    }
+
+    .add_btn {
+        margin-top: 10px;
+    }
+
+    .add_media_outer {
+        margin-top: 20px;
+    }
+
+    .cmn_bg_btn {
+        padding: 10px;
+    }
+
+    .like_comment_outer img {
+        height: 20px;
+        width: 20px;
+    }
+
+    .like_img {
+        margin-right: 23px;
+
+    }
+    .cancel_publish_btn_outer{
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+    .fb_likes {
+        gap: 5px;
+        display: block;
+    }
+    .preview_wrapper {
+        border-radius: 15px;
+        padding: 10px;
+    
+    }
+    .like_comment_outer{
+        padding: 9px 5px
+    }
+}

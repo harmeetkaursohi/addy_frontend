@@ -6,7 +6,7 @@ import {
     socialAccountConnectActions,
     getAllByCustomerIdAction,
     getSocialMediaReportByProviderTypeAction,
-    getSocialMediaGraphByProviderTypeAction, getAllInstagramBusinessAccounts, getAllPinterestBoards
+    getSocialMediaGraphByProviderTypeAction, getAllInstagramBusinessAccounts, getAllPinterestBoards, getAllLinkedinPages
 } from "../../actions/socialAccountActions/socialAccountActions.js";
 
 
@@ -14,7 +14,7 @@ const socialAccountSlice = createSlice({
     name: 'socialAccount',
     initialState: {
         connectSocialAccountReducer: {loading: false},
-        getAllConnectedSocialAccountReducer: {loading: false},
+        getAllConnectedSocialAccountReducer: {loading: true},
         disconnectSocialAccountReducer: {loading: false},
         findSocialAccountByProviderAndCustomerIdReducer: {loading: false},
         getAllByCustomerIdReducer: {loading: false},
@@ -22,6 +22,7 @@ const socialAccountSlice = createSlice({
         getSocialMediaGraphByProviderTypeReducer: {loading: false},
         getAllInstagramBusinessAccountsReducer: {loading: false},
         getAllPinterestBoardsReducer: {loading: false},
+        getAllLinkedinPagesReducer: {loading: false},
 
     },
     reducers: {
@@ -57,12 +58,15 @@ const socialAccountSlice = createSlice({
 
         // social account connect
         [socialAccountConnectActions.pending]: (state) => {
+            state.getAllConnectedSocialAccountReducer = {loading: true}
             state.connectSocialAccountReducer = {loading: true}
         },
         [socialAccountConnectActions.fulfilled]: (state) => {
+            state.getAllConnectedSocialAccountReducer = {loading: false}
             state.connectSocialAccountReducer = {loading: false}
         },
         [socialAccountConnectActions.rejected]: (state) => {
+            state.getAllConnectedSocialAccountReducer = {loading: false}
             state.connectSocialAccountReducer = {loading: false}
         },
 
@@ -128,6 +132,17 @@ const socialAccountSlice = createSlice({
         },
         [getAllPinterestBoards.rejected]: (state) => {
             state.getAllPinterestBoardsReducer = {loading: false}
+        },
+
+        // Get All Linkedin Pages
+        [getAllLinkedinPages.pending]: (state) => {
+            state.getAllLinkedinPagesReducer = {loading: true}
+        },
+        [getAllLinkedinPages.fulfilled]: (state, action) => {
+            state.getAllLinkedinPagesReducer = {loading: false, data: action.payload}
+        },
+        [getAllLinkedinPages.rejected]: (state) => {
+            state.getAllLinkedinPagesReducer = {loading: false}
         },
 
     }

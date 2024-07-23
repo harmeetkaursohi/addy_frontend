@@ -1,20 +1,60 @@
-const enabledSocialMedia = {
-    isFaceBookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
+export const UpdateCommentFailedMsg = "Update Fail: User can only edit comments made from Addy."
+export const SomethingWentWrong = "Something went wrong!"
+export const SomethingWentWrongTryLater = "Something went wrong, Please try again later!"
+export const NoBusinessAccountFound = "No business account found for {0} to connect!"
+export const CouldNotPostComment = "Could not post comment!"
+export const UpdatedSuccessfully = "{0} updated successfully"
+export const PostAlreadyDeleted = "Looks like the post has been taken down"
+export const ErrorFetchingPost = "Something went wrong while fetching the post !"
+export const SelectAtleastOnePage = "Please Select atleast one page to post !"
+export const IsRequired = "{0} is required !"
+export const IsRequiredFor = "{0} is required for {1} !"
+export const OnlyImageOrVideoCanBePosted = "Image and Video cannot be posted together !"
+export const MultiMediaLimit = "More than {0} {1} cannot be posted !"
+export const MultiMediaSizeLimit = "{0} than {1} {2} cannot be uploaded for {3} !"
+export const InvalidAspectRatio = "Image aspect ratio must be within a 4:5 to 1.91:1 range for instagram  !"
+export const InvalidImageDimension = "Please upload an image smaller than 6,012 × 6,012 px. for linkedin  !"
+export const VideoFormatNotSupported = "Only {0} video format is supported for {1}  !"
+export const PinterestImageLimitation = "Only single image can be posted on pinterest !"
+export const DisconnectAccountWarning = "Are you sure you want to disconnect? Doing so will remove all draft or scheduled posts for {0}. Are you still certain you want to disconnect?"
+export const DisconnectPageWarning = "Doing so will remove all draft or scheduled posts for this page. Are you still certain you want to disconnect?"
+
+export const unProtectedUrls=["/login","/","/sign-up","/reset-password","/forgot-password","/auth-redirect"]
+
+export const enabledSocialMedia = {
+    isFacebookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
     isInstagramEnabled: `${import.meta.env.VITE_APP_ENABLE_INSTAGRAM}` === "true",
     isLinkedinEnabled: `${import.meta.env.VITE_APP_ENABLE_LINKEDIN}` === "true",
     isPinterestEnabled: `${import.meta.env.VITE_APP_ENABLE_PINTEREST}` === "true",
 }
 
 export const SocialAccountProvider = Object.freeze({
-    ...(enabledSocialMedia.isFaceBookEnabled && { FACEBOOK:"facebook" }),
-    ...(enabledSocialMedia.isInstagramEnabled && { INSTAGRAM: "instagram" }),
-    ...(enabledSocialMedia.isLinkedinEnabled && { LINKEDIN: "linkedin" }),
-    ...(enabledSocialMedia.isPinterestEnabled && { PINTEREST:"pinterest" }),
+    ...(enabledSocialMedia.isFacebookEnabled && {FACEBOOK: "facebook"}),
+    ...(enabledSocialMedia.isInstagramEnabled && {INSTAGRAM: "instagram"}),
+    ...(enabledSocialMedia.isLinkedinEnabled && {LINKEDIN: "linkedin"}),
+    ...(enabledSocialMedia.isPinterestEnabled && {PINTEREST: "pinterest"}),
 });
-export const UpdateCommentFailedMsg="Update Fail: User can only edit comments made from Addy."
-export const SomethingWentWrong="Something went wrong!"
-export const NoBusinessAccountFound="No business account found for {0} to connect!"
-export const CouldNotPostComment="Could not post comment!"
+
+export const SignupSource = Object.freeze({
+    FACEBOOK: "FACEBOOK",
+    GOOGLE: "GOOGLE",
+    ADDY: "ADDY",
+});
+
+export const Events = Object.freeze({
+    NOTIFICATION_EVENT: "NOTIFICATION",
+    UNSEEN_NOTIFICATIONS_COUNT_EVENT: "UNSEEN_NOTIFICATIONS_COUNT",
+});
+
+export const Linkedin_URN_Id_Types = Object.freeze({
+    ORGANIZATION: "organization",
+    DIGITAL_MEDIA_ASSET: "digitalmediaAsset",
+    PERSON: "person",
+    SHARE: "share",
+    UGC_POST: "ugcPost",
+    IMAGE: "image",
+    VIDEO: "video",
+});
 
 export const Industries = Object.freeze({
     ACCOUNTING: 'Accounting',
@@ -148,3 +188,6 @@ export const Industries = Object.freeze({
     WRITING_EDITING: 'Writing/Editing',
     OTHER: 'Other',
 });
+
+
+export const selectGraphDaysOptions= [{days:7,label:'last 7 days'},{days:15,label:'last 15 days'},{days:30,label:'last 30 days'}];

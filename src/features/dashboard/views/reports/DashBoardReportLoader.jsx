@@ -1,13 +1,12 @@
 import polygon_img from "../../../../images/polygon.svg";
-import jsondata from "../../../../locales/data/initialdata.json";
 
 export const DashBoardReportLoader = () => {
 
     return (
 
-        <div className="followers_outer ">
+        <div className="followers_outer mt-4">
 
-            <div className="followers_wrapper ">
+            <div className="followers_wrapper">
                 <h5>Followers</h5>
                 <div className="followers_inner_content">
                     <h2><i className="fa fa-spinner fa-spin"/></h2>
@@ -16,7 +15,6 @@ export const DashBoardReportLoader = () => {
                             <img src={polygon_img} className="polygon_img"/>
                             <i className="fa fa-spinner fa-spin"/>
                         </button>
-                        <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
                     </div>
                 </div>
             </div>
@@ -31,7 +29,7 @@ export const DashBoardReportLoader = () => {
                             <img src={polygon_img} className="polygon_img"/>
                             <i className="fa fa-spinner fa-spin"/>
                         </button>
-                        <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
+                        {/* <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6> */}
                     </div>
                 </div>
             </div>
@@ -45,7 +43,6 @@ export const DashBoardReportLoader = () => {
                             <img src={polygon_img} className="polygon_img"/>
                             <i className="fa fa-spinner fa-spin"/>
                         </button>
-                        <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
                     </div>
                 </div>
             </div>

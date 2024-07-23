@@ -1,6 +1,4 @@
-div.faq_section{
-    background: #fff;
-}
+
 
 .accordian_wrapper .accordion-item {
     border-radius: 18px;
@@ -25,6 +23,9 @@ div.faq_section{
     font-weight: 500;
 
 }
+.accordian_wrapper .accordion-item:last-child {
+    margin-bottom: 0px;
+}
 .accordian_wrapper .accordion-button:focus{
     border: unset;
     box-shadow: unset;
@@ -45,47 +46,90 @@ div.faq_section{
 }
 .faq_wrapper {
     margin: auto;
-    max-width: 796px;
+    max-width: 659px;
     width: 100%;
+    padding: 20px;
 }
 .faq_wrapper h2.accordion-header {
     margin-bottom: 0px !important;
 }
-.accordian_wrapper .accordion-button.collapsed::after {
-background-color: #fff;
+.faq_wrapper h2{
+    font-size: 27px;
+    font-weight: 700;
+    color: #333333;
+   
 }
-.accordian_wrapper .accordion-button::after {
-    box-shadow: 0px 0px 5px rgba(0,0,0,20%);
-    border-radius: 50%;
-    width: 30.43px;
-    height: 30.43px;
-    line-height: 30.43px;
-    text-align: center;
-    background-position: center;
-    background-size: 15px;
-    background-color: #F07C33;
+.faq_wrapper p{
+    color: #888888;
+    font-weight: 400;
+    font-size: 16px;
+
+}
+.faq_searchbar input::placeholder {
+    color: #888888;
+    font-weight: 400;
+    font-size: 16px;
+    font-family: "Nunito";
+}
+/* .accordian_wrapper .accordion-button.collapsed::after {
+background-color: #fff;
+background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='rgb(240, 105, 51)'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e")
+
+} */
+.accordion-button::after{
+    background-image: unset !important;
+}
+.accordian_wrapper .accordion-button.collapsed::before{
+    content: "+";
+    display: inline-block;
+    margin-right: 15px; 
+    font-size: 28px;    
+    transition: transform 0.3s ease;
+}
+
+
+.accordian_wrapper .accordion-button::before {
+    color: #F07C33;
 }
 .accordian_wrapper .accordion-button:not(.collapsed){
     background: transparent;
     color: #000;
     box-shadow: unset;
 }
-.accordian_wrapper .accordion-button:not(.collapsed)::after{
-    background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e")
+.accordian_wrapper .accordion-button:not(.collapsed)::before{
+    content: "-";
+    margin-right: 15px; 
+    background-repeat: no-repeat;
+    font-size: 47px;    
+    /* background-image:url("../../images/minus_icon.svg") */
 
 }
+.load-more-faqs-container{
+    text-align:center;
+}
+.load-more-faqs-btn{
+    border: none;
+    background: #f07c33;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 40px;
+}
 .faq_searchbar {
-    border-radius: 60px;
+    border-radius: 6px;
     border: 1px solid #EFF0F6;
-    background: var(--neutral-100, #FFF);
+    background:white;
     box-shadow: 0px 8px 25px 0px rgba(13, 10, 44, 0.06);
     display: flex;
-    padding: 10px;
-    max-width: 524.517px;
-    height: 68.137px;
+    padding: 4px 10px;
+    max-width: 524px;
+    height: 64px;
     width: 100%;
     margin: auto;
-    margin-bottom: 40px;
+    align-items: center;
+    margin-top: 25px;
 }
 
 .faq_searchbar input {
@@ -94,9 +138,143 @@ background-color: #fff;
     border: transparent;
 }
 
-.faq_searchbar .cmn_btn_color {border: transparent;display: flex;width: 133.888px;height: 48.13px;padding: 16px 32px 19px 32px;justify-content: center;align-items: center;gap: 8px;flex-shrink: 0;border-radius: 35px;color: #fff;font-weight: 600;}
+.faq_searchbar .cmn_btn_color {
+    border: transparent;
+    display: flex;
+    width: 133px;
+    height: 48px;
+    padding: 16px 32px 19px 32px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 600;
+}
 .accordian_wrapper {
     border-radius: 20px;
-    background: #F6F6F6;
+    background: #fff;
     padding: 70px 80px;
 }
+@media screen and (min-width: 1900px) {
+    .faq_container {
+            width: 78%;
+            margin: auto;
+    }
+    }
+@media screen and (min-width:1600px){
+    .faq_container{
+        width: 84%;
+        margin: auto;
+    }
+}
+@media screen and (max-width:1440px){
+    .accordian_wrapper{
+        padding: 50px 60px;
+    }
+    .accordian_wrapper .accordion-item {
+        padding: 6px;
+    }
+}
+@media screen and (max-width:1280px) {
+    .faq_wrapper p {
+        font-size: 15px;
+    }
+    .faq_wrapper h2 {
+       
+        font-size: 23px;
+    }
+    .accordian_wrapper .accordion-button {
+  
+        font-size: 17px;
+    }
+}
+
+ @media screen and (max-width:991px) {
+    .accordian_wrapper {
+        padding: 30px;
+    }
+    .faq_wrapper h2 {
+        font-size: 17px;
+    }
+
+    .load-more-faqs-btn{
+        margin-top: 20px;
+    }
+    .faq_searchbar .cmn_btn_color {
+        width: 120px;
+        height: 40px;
+        padding: 8px;
+    }
+    .accordian_wrapper .accordion-button {
+        font-size: 15px;
+        padding: 10px;
+    }
+    .accordian_wrapper .accordion-item {
+        padding: 8px;
+    }
+  
+    .accordian_wrapper .accordion-item:last-child {
+        margin-bottom: unset;
+    }
+ }
+  @media screen and (max-width:767px) {
+    .faq_wrapper h2 {
+        font-size: 14px;
+    }
+    .load-more-faqs-btn{
+        padding: 6px 15px;
+    }
+    .submit_Button_Wrapper{
+        display: flex;
+        justify-content: center;
+    }
+    
+    .faq_wrapper p {
+        font-size: 12px;
+        line-height: 20px;
+    }
+    
+    .accordian_wrapper .accordion-button {
+        font-size: 12px;
+       
+    }
+    .accordian_wrapper {
+        padding: 0px;
+    }
+    
+    .accordian_wrapper .accordion-body {
+       
+        padding: 11px;
+    }
+    .faq_searchbar {
+        border-radius: 10px;
+         border: unset; 
+        background: unset; 
+        box-shadow: unset;
+         display: block; 
+        padding: 10px; 
+        max-width: 100%; 
+        height: 100%;
+        margin-bottom: 18px;
+      
+  
+    }
+    .faq_searchbar .cmn_btn_color {
+        width: 107px;
+        height: 36px;
+        margin-top: 25px;
+        padding: 10px;
+        font-size: 14px;
+
+    }
+    .faq_searchbar input {
+        width: 100%;
+        padding: 9px;
+        font-size: 13px;
+        border: 1px solid rgb(233, 231, 231);
+        border-radius: 6px;
+        background-color: white;
+    }
+  }

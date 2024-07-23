@@ -1,10 +1,10 @@
 .post_content h4{
     color: #585858;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 24px; /* 150% */
+    line-height: 24px;
     letter-spacing: 0.024px;
     padding-top: 12px;
     }

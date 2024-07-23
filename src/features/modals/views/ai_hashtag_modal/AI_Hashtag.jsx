@@ -8,7 +8,8 @@ import {resetReducers} from "../../../../app/actions/commonActions/commonActions
 import {showInfoToast} from "../../../common/components/Toast";
 import {isNullOrEmpty} from "../../../../utils/commonUtils";
 import Loader from "../../../loader/Loader";
-
+import { RxCross2 } from 'react-icons/rx';
+import robot_img from "../../../../images/ai_robot.svg"
 
 const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, parentHashTag, setParentHashTag}) => {
 
@@ -76,7 +77,6 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
     }
 
 
-    console.log("selectedTags--->", selectedTags);
     const addOrRemoveHashTag = (e, type, currentValue) => {
         e.preventDefault();
         if (aiGeneratedHashTag !== null && Array.isArray(aiGeneratedHashTag) && aiGeneratedHashTag.length > 0) {
@@ -125,13 +125,18 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
     return (
         <>
             <div className='generate_ai_img_container'>
-                <Modal show={aiGenerateHashTagModal} onHide={handleClose}>
+                <Modal show={aiGenerateHashTagModal} onHide={handleClose} className='generate_ai_container'>
 
-                    <Modal.Header closeButton>
-                        <Modal.Title>Generate Hashtag with AI </Modal.Title>
-                    </Modal.Header>
+                    
+                    <Modal.Body className='pt-0'>
+                    <div className='pop_up_cross_icon_outer text-end cursor-pointer mt-2' onClick={() => {
+                                            handleClose()
+                                        }}><RxCross2 className="pop_up_cross_icon"/></div>
+                        <div className='robot_img_outer text-center'>
+                        <img src={robot_img}/>
+                        <h3 className='cmn_heading_class mt-4'>Generate Hashtag with AI </h3>
 
-                    <Modal.Body>
+                        </div>
                         <div className='generate_image_wrapper_box'>
                             <form>
                                 <div className='generate_image_outer'>
@@ -151,7 +156,7 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
                                                 handleHashTagSubmit(e)
                                             }}>
                                         {generateAIHashTagData?.loading ?
-                                            <div className={"loading_txt"}><Loader className={"me-2"}/> Loading
+                                            <div className={"loading_txt"}><Loader className={"me-2 ai_caption_loading_btn"}/> Loading
                                             </div> : aiGeneratedHashTag?.length === 0 ? "Generate" : "Regenerate"
                                         }
                                     </button>
@@ -195,6 +200,9 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
                                     }
 
                                     <div className='regenerate_btn_outer mt-4'>
+                                    <button className='regenerate_btn cmn_modal_cancelbtn'
+                                                onClick={(e) => addOrRemoveHashTag(e, "REMOVE_ALL")}>Remove All
+                                        </button>
                                         <button className='add_caption_btn cmn_bg_btn' id={"Add"}
                                                 onClick={(e) => addOrRemoveHashTag(e, "ADD_TO_PARENT")}
                                                 value={"ADD_TO_PARENT"}>Add
@@ -203,9 +211,7 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
                                                 onClick={(e) => addOrRemoveHashTag(e, "SELECT_ALL")}
                                                 value={"Add_all"}>Select All
                                         </button>
-                                        <button className='regenerate_btn cmn_bg_btn'
-                                                onClick={(e) => addOrRemoveHashTag(e, "REMOVE_ALL")}>Remove All
-                                        </button>
+                                        
                                     </div>
                                 </div>
                             </form>

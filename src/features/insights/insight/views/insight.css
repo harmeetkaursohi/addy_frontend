@@ -1,30 +1,43 @@
-.insight_wrapper {
-    background-color: #F4F8FE;
-}
+
 
 .insight_heading {
     padding-top: 26px;
     font-weight: 700;
     font-size: 30px;
+    color: #263238;
+    font-family: "Nunito";
 
 }
-
+.profile-visit-text{
+    color: #263238;
+    background-color: transparent;
+    box-shadow: unset;
+    font-family: 'Nunito';
+    font-weight: 700;
+    font-size: 20px;
+}
+.profile-visit-graph{
+    height: 270px;
+}
 .insight_inner_content {
     border-radius: 22px;
     background: #FFF;
-    padding: 20px;
-    margin-top: 20px;
+    margin-top: 35px;
 
 }
 
-.reach-engagement-select {
-    position: absolute;
-    right: 40px;
+.no-account-connected-insights-outer {
+    background: white;
+    border-radius: 20px;
+    padding-bottom: 30px;
 }
-
+.insight_followers_outer ul.recharts-default-legend {
+    display: flex;
+    justify-content: space-around;
+}
 .select-account-txt {
     color: #000;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 22px;
     font-style: normal;
     font-weight: 600;
@@ -34,7 +47,7 @@
 
 .no-account-txt {
     color: #000;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
@@ -54,7 +67,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    
+}
+.select-page-outer img{
+    width: 100%;
+    height: 400px;
+    margin-top: 50px;
 }
 
 .arrow-up-image {
@@ -73,17 +91,28 @@ select.days_option {
     border: 1px solid #E8E8E8;
     background: #FFF;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
-    padding: 6px 9px;
-    font-size: 17px;
+    padding: 6px 30px 6px 16px;
+    font-size: 20px;
+    font-weight: 600;
+    appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("../../../../images/down_arrow.svg") !important; /* Specify path to your arrow image */
+  background-repeat: no-repeat;
+  background-position: calc(100% - 9px) center;
 
+ 
 }
+
 
 button.instagram_dropdown::after {
     margin-left: 15px !important;
 }
-
+.account_reach_graph_outer .page_title_header {
+    margin: 0px;
+}
 button.instagram_dropdown {
-    font-size: 18px !important;
+    font-size: 17px !important;
     padding: 10px 23px 10px 0px !important;
 }
 
@@ -93,7 +122,7 @@ button.instagram_dropdown {
 
 .Choose_platform_title {
     color: #000;
-
+    font-family: "Nunito";
     font-size: 20px;
     font-style: normal;
     font-weight: 700;
@@ -112,12 +141,19 @@ button.instagram_dropdown {
     line-height: 20px;
 
 }
-
+.insight_inner_content img.post_img {
+    height: 300px;
+    object-fit: cover;
+    width: 100%;
+    object-position: center;
+}
 .Social_media_platform img {
     height: 21px;
     width: 21px;
 }
-
+.insight_outer .dropdown-item{
+    background-color: transparent !important;
+}
 .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
     /* width: 100%; */
     width: 297px;
@@ -128,7 +164,7 @@ button.instagram_dropdown {
 }
 
 ul.Social_media_wrapper {
-    margin: 2px 14px;
+    margin: 0px;
 }
 
 input.Social_media_platform_checkbox {
@@ -170,12 +206,13 @@ ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
     font-family: "Nunito";
     font-size: 16px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 26px;
+    padding :6px 21px
 }
 
 .hightlighted_text {
-    /*color: #F07C33;*/
+    color: #F07C33;
     font-size: 16px;
 }
 
@@ -184,18 +221,20 @@ ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
 }
 
 .color-growth {
-    color: green;
+    color:#02A426;
 }
 
 .overview_text {
-
+    line-height: 23px;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
-    padding-top: 20px;
+    padding: 20px 20px 0px;
     color: #4E4E4E;
 }
-
+.overview_title{
+    
+}
 .scroll-y {
     height: 200px;
     overflow-y: scroll;
@@ -208,17 +247,26 @@ ul.overview_tabs.nav.nav-tabs {
 }
 
 .overview_tabs_outer {
-    margin-top: 16px;
+    margin-top: 50px;
+
+   
+
 }
 
 .account_reach_overview_outer {
     border-radius: 7px;
-    border: 2px solid #F3F4F4;
+    box-shadow: 2px 2px 12px #d3dada;
     background: #FFF;
     padding: 10px 20px;
     width: 100%;
 }
-
+.post_growth{
+    font-size: 13px;
+    background: white;
+    padding: 4px;
+    border-radius: 4px;
+    font-weight: 600;
+}
 .pie-percentage {
     font-size: small;
     margin-top: 4px;
@@ -251,22 +299,53 @@ ul.overview_tabs.nav.nav-tabs {
 .account_reach_overview_outer h4 {
     font-weight: 700;
     font-size: 30px;
-    padding: 7px 0px 18px;
+    color: #263238;
+    padding: 5px 0px 0px;
 }
-
+.interaction_graph_outer{
+    padding: 0px 20px;
+}
+.interaction_graph_outer ul.recharts-default-legend {
+    margin-bottom: 20px !important;
+}
+.light_orange{
+    background-color: #FFE4D3;
+}
+.light_blue{
+    background-color: #E7F5FD;
+}
+.light_green{
+    background-color: #F4FFD3;
+}
+.light_purple{
+    background-color: #F9E7FD;
+}
+.cmt_icon_outer {
+    height: 32px;
+    width: 32px;
+    background: white;
+    text-align: center;
+    border-radius: 4px;
+    padding-top: 4px;
+}
 .account_reach_overview_outer h5 {
-    font-size: 16px;
+    font-size: 14px;
+    color: #263238;
+    font-weight: 300;
+    line-height: 22px;
 }
 
 .account_reach_overview_wrapper {
     display: flex;
     gap: 15px;
-    margin-top: 20px;
+ 
+    padding: 20px;
 
 }
 
 .top_Arrow {
     font-size: 18px;
+
 }
 
 .account_reach_graph_outer {
@@ -274,7 +353,7 @@ ul.overview_tabs.nav.nav-tabs {
 }
 
 .Donuts_container h3 {
-    font-size: 24px;
+    font-size: 22px;
 
 }
 
@@ -288,7 +367,9 @@ ul.overview_tabs.nav.nav-tabs {
 .Donuts_container {
     margin-top: 22px;
 }
-
+ul.top_city_list {
+    margin-bottom: 0px;
+}
 ul.top_city_list li {
     display: flex;
     justify-content: space-between;
@@ -315,24 +396,226 @@ h2.Review_Heading {
     min-height: 464px;
 }
 
-::-webkit-calendar-picker-indicator {
-    filter: invert(10%) sepia(100%) saturate(150%) hue-rotate(190deg) brightness(90%) contrast(85%);
+
+.noPageHeading{
+    padding: 8px 0px;
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 20px;
+}
+div.card_body_content {
+    margin-top: 20px;
+}
+.reach-engagement-select {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #D9D9D9;
+    background: #F8F9FB;
+    padding: 20px;
+    align-items: center;
 }
 
+.cmn_insight_box_shadow{
+    border-radius: 10px;
+    box-shadow: 2px 2px 12px #edebeb;
+}
+.overview_title{
+    color: #263238;
+    font-size: 20px;
+    font-weight: 700;
+}
+.post_stack{
+    border: 1px solid #F07C33 !important;
+    color: #263238;
+    font-size: 20px;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Nunito';
+    padding: 2px 17px;
+    background-color: white;
+}
+span.spinner-border.spinner-border-sm.loader.social-account-loader {
+    height: 15px;
+    width: 15px;
+}   
+.user_profile_card_wrapper img {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    border-radius: 60px;
+    border: 3px solid #E05905;
+}
+.user_profile_card_wrapper h3{
+    line-height: 20px;
+    font-weight: 700;
+}
+.user_profile_card_outer {
+    padding: 28px 28px 0px;
+    border-radius: 11px;
+    box-shadow: 2px 2px 8px #e5e2e2;
+    min-height: 100%;
+    margin-top: 20px;
+
+}
+.Profile_visit_container{
+    min-height:100%
+
+
+}
+img.no_data_available_img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-top: 20px;
+}
+.visitors_outer{
+    background: #F8F9FB;
+    padding: 20px;
+}
+.visitors_outer h3 {
+    font-size: 20px;
+    font-family: 'Nunito';
+    font-weight: 700;
+}
+.user_info_list{
+    justify-content: space-between;
+}
+.user_info_list li h4{
+    color:  #263238;
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 20px;
+    padding-top: 9px;
+    text-align: center;
+}
+
+.visitors_container {
+    border-radius: 20px;
+    overflow: hidden;
+    min-height: 100%;
+    margin-top: 20px;
+}
+.Profile_visit_dropdown button#dropdown-basic {
+    color: #263238;
+    background-color: transparent;
+    box-shadow: unset;
+    font-family: 'Nunito';
+    font-weight: 700;
+    font-size: 20px;
+}
+.profile_visit_graph_outer{
+    padding: 15px 10px 0px;
+}
+.days_dropdown button#dropdown-basic {
+    color: #263238;
+    font-size: 13px;
+    font-weight: 600;
+    background: #F3F3F3;
+    border: 1px solid #E8E8E8;
+    min-width: 110px;
+}
+@media screen and (min-width:2560px) {
+    .account_reach_overview_outer{
+        padding: 40px;
+    }
+    .account_reach_overview_wrapper {
+        gap: 30px;
+    }
+}
+ @media screen and (min-width:1499px){
+    .select-page-outer img{
+        height: 550px;
+    }
+    img.no_data_available_img {
+        height: 250px;
+
+    }
+ }
+@media screen and (max-width:1280px){
+    .social_media_dropdown {
+        flex-wrap: wrap;
+    }
+   
+    select.days_option {
+        font-size: 18px;
+    }
+    .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
+        width: 215px;
+    }
+}
 @media screen and (max-width: 1024px) {
     h2.Review_Heading {
         margin-top: 20px;
         font-size: 15px;
     }
-}
-
-@media screen and (max-width: 991px) {
-    .social_media_dropdown {
+    ul.user_info_list {
         flex-wrap: wrap;
     }
-
+   
+    
+    .demographic_data {
+        font-size: 14px;
+    }
+}
+@media screen and (min-width:992px) and (max-width:1100px){
+    ul.user_info_list{
+        display: block !important;
+    }
+    ul.user_info_list li{
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+@media screen and (max-width: 991px) {
+    .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
+        width: 208px;
+    }
+    .profile-visit-text{
+        font-size: 16px;
+    }
+    img.no_data_available_img {
+        margin-bottom: 20px;
+        height: 160px;
+    }
+    .interaction_graph_outer{
+        padding: 0px 10px;
+    }
+    .user_profile_card_wrapper img {
+    height: 70px;
+    width: 70px;
+    }
+    .visitors_outer h3 {
+        font-size: 16px;
+    }
+    .visitors_container{
+        min-height: unset;
+    }
+    .account_reach_overview_wrapper {
+        flex-wrap: wrap;
+    }
+    .Profile_visit_container{
+        min-height: unset;
+    }
+    .user_profile_card_outer{
+        min-height: unset;
+        padding: 28px;
+    }
+    ul.overview_tabs.nav.nav-tabs{
+        margin-top: 10px;
+    }
+    .noPageHeading{
+        font-size: 14px;
+       
+    }
+   
     .account_reach_overview_outer h5 {
         font-size: 12px;
+        line-height: 20px;
     }
 
     .account_reach_overview_outer {
@@ -371,15 +654,85 @@ h2.Review_Heading {
     .insight_heading {
         font-size: 25px;
     }
+    .select-account-txt{
+        font-size: 13px;
+    }
+    
+   
+
 }
 
 @media screen and (max-width: 767px) {
     .account_reach_overview_wrapper {
         display: block;
     }
-
-    .account_reach_overview_outer {
+    .select-page-outer img {
+        height: 100%;
+      
+    }
+    .insight_followers_outer ul.recharts-default-legend {
+        margin: 0px 0px 0px 14px !important;
+    }
+    .insight_demographic_outer ul.recharts-default-legend {
+        margin: 0px 0px 0px 14px !important;
+    }
+    ul.user_info_list{
+        display: block !important;
+    }
+    ul.user_info_list li{
         margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .Social_media_platform {
+        margin-top: 4px;
+    }
+
+    .post_stack {
+        font-size: 16px;
+    }
+    .days_dropdown.dropdown {
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+    .overview_tabs.nav-tabs .nav-link {
+        padding: 3px 11px;
+    }
+   
+    .reach-engagement-select {
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+   
+    .noPageHeading {
+        font-size: 12px;
+    }
+    .Donuts_container h3{
+        font-size: 15px;
+        line-height: 20px;
+    }
+    .Choose_platform_title {
+        font-size: 18px;
+    }
+    
+    
+    .arrow-up-image {
+        margin-bottom: 20px;
+        margin-top: 13px;
+    }
+    ul.Social_media_wrapper{
+        margin: 0px;
+    }
+    select.days_option{
+        font-size: 12px;
+        margin-top: 10px;
+    }
+    .account_reach_overview_outer {
+        margin-top: 15px;
+    }
+    i.facebook_ICON{
+        margin-right: 3px !important;
     }
 
     div.card_body_content {
@@ -389,5 +742,14 @@ h2.Review_Heading {
     h2.Review_Heading {
         margin-top: 20px;
         font-size: 12px;
+    }
+    .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show{
+        width: 100%;
+    }
+    .demographic_data {
+        font-size: 12px;
+        font-family:  'Nunito';
+        font-style: normal;
+        padding-top: 10px;
     }
 }

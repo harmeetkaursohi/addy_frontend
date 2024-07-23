@@ -6,13 +6,34 @@
 
 .privacy_wrapper {
     border-radius: 10px;
-    background: #F4F7FC;
-    padding: 2em;
+    background: #fff;
+
+    margin-top: 25px;
+}
+.privacy_policy_container {
+    background-color: white;
+    border-radius: 10px;
+    padding-top: 20px;
 }
 
-.privacy_wrapper p {
-    line-height: 28px;
+.edit_content.form-control:disabled{
+background-color: white !important;
 }
+
 .elementor.elementor-96 {
     display: none !important;
 }
+
+@media screen and (max-width:991px) {
+    .privacy_wrapper p {
+       
+        font-size: 14px;
+    }
+ }
+ @media screen and (max-width:767px) {
+    .privacy_wrapper p {
+        line-height: 25px;
+   
+    }
+   
+ }

@@ -1,16 +1,16 @@
 import {
     baseAxios,
     calculatePercentageGrowth,
-    computeAndReturnSummedDateValues,
+    computeAndReturnSummedDateValues, generateUnixTimestampFor, getFormattedAccountReachAndEngagementData,
 
 } from "../utils/commonUtils";
 import {showErrorToast} from "../features/common/components/Toast";
 import {SocialAccountProvider, SomethingWentWrong} from "../utils/contantData";
 
-export async function exchangeForLongLivedToken(shortLivedToken,socialMediaType) {
+export async function exchangeForLongLivedToken(shortLivedToken, socialMediaType) {
     const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/oauth/access_token`;
     const client_Id = import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID;
-    const client_secret =import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET;
+    const client_secret = import.meta.env.VITE_APP_FACEBOOK_CLIENT_SECRET;
 
     const params = {
         grant_type: 'fb_exchange_token',
@@ -32,11 +32,12 @@ export async function exchangeForLongLivedToken(shortLivedToken,socialMediaType)
         throw error;
     }
 }
+
 export async function getAllFacebookConnectedSocialMediaAccounts(accessToken) {
     const url = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/me/accounts?access_token=${accessToken}&fields=instagram_business_account{id,name,username,profile_picture_url},access_token,name,id`;
     try {
         const response = await baseAxios.get(url);
-        if (response.status === 200 ) {
+        if (response.status === 200) {
             return response.data.data;
         } else {
             throw new Error(SomethingWentWrong);
@@ -56,8 +57,8 @@ export const conventStringToArrayString = (captionData) => {
     });
 
     // Filter Empty Array Elements
-    return captionList?.filter(caption=>{
-        return caption!=="";
+    return captionList?.filter(caption => {
+        return caption !== "";
     });
 }
 
@@ -65,7 +66,7 @@ export const conventStringToArrayString = (captionData) => {
 export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
     let initialObject = {
-        Followers: {lifeTime: 0, month: 0},
+        Followers: {lifeTime: 0, month: "N/A"},
         Accounts_Reached: {lifeTime: 0, month: 0},
         Post_Activity: {lifeTime: 0, month: 0},
     };
@@ -81,78 +82,48 @@ export const getFacebookConnectedPageIdsReport = async (listOfPages) => {
 
             //total lifeTime followers
             await baseAxios.get(fullPathTotalFollowers)
-                .then((response) => {x
+                .then((response) => {
                     const pageData = response.data;
                     if (pageData) {
                         initialObject.Followers.lifeTime += pageData?.followers_count || 0;
                     }
                 })
                 .catch((error) => {
-                    console.log("---->error", error);
                     initialObject.Followers.lifeTime += 0;
                 });
 
             //last 1 month
-            await baseAxios.get(await computeInsightURL(pageId, "page_follows", accessToken, false))
-                .then((response) => {
-                    const lastMonthCount = response.data?.data.find(item => item.period === "month")?.values[0]?.value || 0;
-                    initialObject.Followers.month += lastMonthCount;
-                })
-                .catch((error) => {
-                    initialObject.Followers.month += 0;
-                    console.error('Error:', error);
-                });
+            // await baseAxios.get(await computeInsightURL(pageId, "page_follows", accessToken, false))
+            //     .then((response) => {
+            //         const lastMonthCount = response.data?.data.find(item => item.period === "month")?.values[0]?.value || 0;
+            //         initialObject.Followers.month += lastMonthCount;
+            //     })
+            //     .catch((error) => {
+            //         initialObject.Followers.month += 0;
+            //         console.error('Error:', error);
+            //     });
 
+            //Post Engagement and Impressions monthly
+            await baseAxios.get(`${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${pageId}/insights?metric=page_impressions_unique,page_post_engagements&period=total_over_range&date_preset=last_30d&access_token=${accessToken}`).then(res => {
+                initialObject.Accounts_Reached.month = res?.data?.data?.filter(data => data?.name === "page_impressions_unique")?.[0]?.values[0]?.value;
+                initialObject.Post_Activity.month = res?.data?.data?.filter(data => data?.name === "page_post_engagements")?.[0]?.values[0]?.value;
+            }).catch(error => {
+                initialObject.Accounts_Reached.month = "N/A"
+                initialObject.Post_Activity.month = "N/A"
+            });
 
-            //Post activities lifetime
-            await baseAxios.get(await computeInsightURL(pageId, "page_engaged_users", accessToken, true))
-                .then((response) => {
-                    const lifeTimeCount = response.data?.data.find(item => item.period === "total_over_range")?.values[0]?.value || 0;
-                    initialObject.Post_Activity.lifeTime += lifeTimeCount;
-                })
-                .catch((error) => {
-                    initialObject.Post_Activity.lifeTime += 0;
-                    console.error('Error:', error);
-                });
+            //Post Engagement and Impressions last 2 years
+            await baseAxios.get(`${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${pageId}/insights?metric=page_impressions_unique,page_post_engagements&period=total_over_range&date_preset=maximum&access_token=${accessToken}`).then(res => {
+                initialObject.Accounts_Reached.lifeTime = res?.data?.data?.filter(data => data?.name === "page_impressions_unique")?.[0]?.values[0]?.value;
+                initialObject.Post_Activity.lifeTime = res?.data?.data?.filter(data => data?.name === "page_post_engagements")?.[0]?.values[0]?.value
+            }).catch(error => {
+                initialObject.Accounts_Reached.lifeTime = "N/A"
+                initialObject.Post_Activity.lifeTime = "N/A"
+            });
 
-
-            //last 1 month
-            await baseAxios.get(await computeInsightURL(pageId, "page_engaged_users", accessToken, false))
-                .then((response) => {
-                    const lastMonthCount = response.data?.data.find(item => item.period === "month")?.values[0]?.value || 0;
-                    initialObject.Post_Activity.month += lastMonthCount;
-                })
-                .catch((error) => {
-                    initialObject.Post_Activity.month += 0;
-                    console.error('Error:', error);
-                });
-
-
-            //Page reach lifetime
-            await baseAxios.get(await computeInsightURL(pageId, "page_impressions", accessToken, true))
-                .then((response) => {
-
-                    const lifeTimeCount = response.data?.data.find(item => item.period === "total_over_range")?.values[0]?.value || 0;
-                    initialObject.Accounts_Reached.lifeTime += lifeTimeCount;
-                })
-                .catch((error) => {
-                    initialObject.Accounts_Reached.lifeTime += 0;
-                    console.error('Error:', error);
-                });
-
-
-            //reach reach 1 month
-            await baseAxios.get(await computeInsightURL(pageId, "page_impressions", accessToken, false))
-                .then((response) => {
-                    const lastMonthCount = response.data?.data.find(item => item.period === "month")?.values[0]?.value || 0;
-                    initialObject.Accounts_Reached.month += lastMonthCount;
-                })
-                .catch((error) => {
-                    initialObject.Accounts_Reached.month += 0;
-                    console.error('Error:', error);
-                });
         }
     }
+
     return initialObject;
 };
 
@@ -174,7 +145,7 @@ export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
             const accessToken = curPage?.access_token;
 
             //Page reach by provided date
-            await baseAxios.get(await computeInsightURL(pageId, "page_impressions,page_fan_adds", accessToken, false, {
+            await baseAxios.get(await computeInsightURL(pageId, "page_impressions_unique,page_fan_adds", accessToken, false, {
                 period: 'day', since: query?.createdFrom,
                 until: query?.createdTo
             })).then((response) => {
@@ -183,15 +154,15 @@ export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
                     followersReportCount?.push(...response.data?.data[1].values || [])
                 }
             }).catch((error) => {
-                    console.error('Error:', error);
-                });
+                console.error('Error:', error);
+            });
 
         }
     }
 
 
-    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount,SocialAccountProvider.FACEBOOK?.toUpperCase()));
-    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount,SocialAccountProvider.FACEBOOK?.toUpperCase()));
+    initialObject.Followers = await calculatePercentageGrowth(computeAndReturnSummedDateValues(followersReportCount, SocialAccountProvider.FACEBOOK?.toUpperCase()));
+    initialObject.Accounts_Reached = await calculatePercentageGrowth(computeAndReturnSummedDateValues(reachedReportCount, SocialAccountProvider.FACEBOOK?.toUpperCase()));
     return initialObject;
 };
 
@@ -226,3 +197,7 @@ const finalQueryParam = async (pageId, metric, pageAccessToken, isLifeTime = fal
 
 }
 
+export const getFacebookInsightForSinglePost = async (accessToken, postId) => {
+    const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${postId}?access_token=${accessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
+    return baseAxios.get(apiUrl);
+}

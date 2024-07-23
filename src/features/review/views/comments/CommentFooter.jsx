@@ -13,20 +13,22 @@ import {showErrorToast} from "../../../common/components/Toast";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {RotatingLines} from "react-loader-spinner";
+import {getToken} from "../../../../app/auth/auth";
 
-const CommentFooter = ({postData, postPageData}) => {
+const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
+
+    const token = getToken();
     const [comment, setComment] = useState("");
     const dispatch = useDispatch();
     const [like, setLike] = useState(false);
-    const likePostReducerData=useSelector(state => state.post.likePostReducer)
-    const disLikePostReducerData=useSelector(state => state.post.dislikePostReducer)
-    const [baseQueryForGetPostPageInfoAction, setBaseQueryForGetPostPageInfoAction] = useState(
-        {
-            postIds: null,
-            pageAccessToken: null,
-            socialMediaType: null
-        }
-    );
+    const likePostReducerData = useSelector(state => state.post.likePostReducer)
+    const disLikePostReducerData = useSelector(state => state.post.dislikePostReducer)
+    const [baseQueryForGetPostPageInfoAction, setBaseQueryForGetPostPageInfoAction] = useState({
+        token: token,
+        postIds: null,
+        pageAccessToken: null,
+        socialMediaType: null
+    });
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const addCommentOnPostActionData = useSelector(state => state.post.addCommentOnPostActionReducer)
     const [commonFooterDataObject, setCommonFooterDataObject] = useState({
@@ -60,16 +62,23 @@ const CommentFooter = ({postData, postPageData}) => {
                     break;
                 }
                 case "PINTEREST": {
-                    const data=postPageData[postData?.id];
+                    const data = postPageData[postData?.id];
                     setCommonFooterDataObject({
                         total_likes: data?.pin_metrics?.all_time?.reaction || 0,
                         total_comments: data?.pin_metrics?.all_time?.comment || 0,
-                        total_saves:data?.pin_metrics?.all_time?.save || 0,
+                        total_saves: data?.pin_metrics?.all_time?.save || 0,
                         can_comment: false
                     })
+                    break;
                 }
                 case "LINKEDIN": {
-
+                    setCommonFooterDataObject({
+                        total_likes: postPageData?.likesSummary?.totalLikes || 0,
+                        total_comments: postPageData?.commentsSummary?.totalFirstLevelComments || 0,
+                        total_shares: postData?.shares,
+                        can_comment: postPageData?.commentsSummary?.commentsState === "OPEN"
+                    })
+                    break;
                 }
                 default: {
 
@@ -89,6 +98,7 @@ const CommentFooter = ({postData, postPageData}) => {
     useEffect(() => {
         if (postData && postPageData) {
             setBaseQueryForGetPostPageInfoAction({
+                ...baseQueryForGetPostPageInfoAction,
                 postIds: [postData?.id],
                 pageAccessToken: postData?.page?.access_token,
                 socialMediaType: postData?.socialMediaType
@@ -155,6 +165,7 @@ const CommentFooter = ({postData, postPageData}) => {
         })
     }
     const handleAddCommentOnPost = (e) => {
+
         e.preventDefault();
         const requestBody = {
             socialMediaType: postData?.socialMediaType,
@@ -162,18 +173,30 @@ const CommentFooter = ({postData, postPageData}) => {
             data: {
                 message: comment
             },
+            token: token,
+            pageId: postData?.page?.pageId,
             pageAccessToken: postData?.page?.access_token,
         }
 
         dispatch(addCommentOnPostAction(requestBody)).then(response => {
             if (response.meta.requestStatus === "fulfilled") {
+                setDirty({
+                    ...isDirty,
+                    isDirty: true,
+                    action: {
+                        type: "POST",
+                        on: "COMMENT",
+                        commentLevel: "FIRST",
+                    }
+                })
                 setComment("")
-                dispatch(getCommentsOnPostAction(requestBody))
                 dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction))
 
             }
         });
     }
+
+
     return (
         <div className="comments_footer">
 
@@ -185,7 +208,7 @@ const CommentFooter = ({postData, postPageData}) => {
                     className={"far fa-comment me-1"}/>{commonFooterDataObject.total_comments}
                 </p>
                 {
-                    postData?.socialMediaType === "FACEBOOK" &&
+                    postData?.socialMediaType === "FACEBOOK" || postData?.socialMediaType === "LINKEDIN" &&
                     <p title={"Shares"}><TbShare3 className={""}/> {commonFooterDataObject.total_shares} </p>
                 }
                 {
@@ -221,20 +244,40 @@ const CommentFooter = ({postData, postPageData}) => {
 
             {/*    <li className="w-100"><i className="fa fa-comment me-2"/>Comment</li>*/}
             {/*</ul>*/}
+
             <p className="liked_by padding-x-20 ">
                 {
-                    postPageData?.likes?.summary?.total_count === 1 && <>
-                        Liked
-                        by <strong> {postPageData?.likes?.summary?.has_liked ? postData?.page?.name : postPageData?.likes?.data[0]?.name}</strong>
+                    postData?.socialMediaType === "FACEBOOK" && <>
+                        {
+                            commonFooterDataObject.total_likes === 1 && <>
+                                Liked
+                                by <strong> {postPageData?.likes?.summary?.has_liked ? postData?.page?.name : postPageData?.likes?.data[0]?.name}</strong>
+                            </>
+                        }
+                        {
+                            commonFooterDataObject.total_likes > 1 && <>
+                                Liked
+                                by <strong>{postPageData?.likes?.data[0]?.name}</strong> and <strong> {JSON.stringify(postPageData?.likes?.summary?.total_count - 1)} Others</strong>
+                            </>
+                        }
                     </>
                 }
                 {
-                    postPageData?.likes?.summary?.total_count > 1 && <>
-                        Liked
-                        by <strong>{postPageData?.likes?.data[0]?.name}</strong> and <strong> {JSON.stringify(postPageData?.likes?.summary?.total_count - 1)} Others</strong>
+                    postData?.socialMediaType === "LINKEDIN" && <>
+                        {
+                            commonFooterDataObject.total_likes === 1 && <>
+                                Liked
+                                by <strong> {postPageData?.likesSummary?.likedByCurrentUser ? postData?.page?.name : commonFooterDataObject.total_likes + " Other"}</strong>
+                            </>
+                        }
+                        {
+                            commonFooterDataObject.total_likes > 1 && <>
+                                Liked
+                                by {postPageData?.likesSummary?.likedByCurrentUser ? postData?.page?.name + " and " + (commonFooterDataObject.total_likes - 1) + (commonFooterDataObject?.total_likes - 1 === 1 ? " other" : " others") : commonFooterDataObject.total_likes + " others"}
+                            </>
+                        }
                     </>
                 }
-
 
             </p>
             <p className="comment_date padding-x-20">{getFormattedDate(postData?.feedPostDate)}</p>
@@ -267,24 +310,32 @@ const CommentFooter = ({postData, postPageData}) => {
                                     d="M11 15.4C9.372 15.4 7.975 14.509 7.205 13.2H5.368C6.248 15.455 8.437 17.05 11 17.05C13.563 17.05 15.752 15.455 16.632 13.2H14.795C14.025 14.509 12.628 15.4 11 15.4ZM10.989 0C4.917 0 0 4.928 0 11C0 17.072 4.917 22 10.989 22C17.072 22 22 17.072 22 11C22 4.928 17.072 0 10.989 0ZM11 19.8C6.138 19.8 2.2 15.862 2.2 11C2.2 6.138 6.138 2.2 11 2.2C15.862 2.2 19.8 6.138 19.8 11C19.8 15.862 15.862 19.8 11 19.8Z"
                                     fill="#323232"/>
                             </svg>
-                            <input value={comment} type="text"
-                                   className={addCommentOnPostActionData?.loading && comment ? "form-control opacity-50" : "form-control"}
-                                   onClick={() => {
-                                       setShowEmojiPicker(false)
-                                   }}
-                                   onChange={(e) => {
-                                       setShowEmojiPicker(false)
-                                       e.preventDefault();
-                                       setComment(e.target.value);
-                                   }} placeholder="Add comment..."/>
-                            <button className={isNullOrEmpty(comment) ? "opacity-50" : ""}
-                                    disabled={addCommentOnPostActionData?.loading || isNullOrEmpty(comment)}
-                                    onClick={(e) => {
-                                        setShowEmojiPicker(false)
-
-                                        !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
-                                    }}>Post
-                            </button>
+                                <input value={comment} type="text"
+                                       className={addCommentOnPostActionData?.loading && comment ? "form-control opacity-50" : "form-control"}
+                                       onClick={() => {
+                                           setShowEmojiPicker(false)
+                                       }}
+                                       onChange={(e) => {
+                                           setShowEmojiPicker(false)
+                                           e.preventDefault();
+                                           setComment(e.target.value);
+                                       }} placeholder="Add comment..."
+                                       onKeyPress={(event)=>{
+                                           if (event.key === 'Enter') {
+                                               const element = document.getElementById('post-cmnt-btn');
+                                               if (element) {
+                                                   element.click();
+                                               }
+                                           }
+                                       }}
+                                />
+                                <button id={"post-cmnt-btn"} className={isNullOrEmpty(comment) ? "opacity-50" : ""}
+                                        disabled={addCommentOnPostActionData?.loading || isNullOrEmpty(comment)}
+                                        onClick={(e) => {
+                                            setShowEmojiPicker(false)
+                                            !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
+                                        }}>Post
+                                </button>
                         </>
                         : <>
                             <svg className="opacity-50" xmlns="http://www.w3.org/2000/svg"

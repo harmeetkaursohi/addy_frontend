@@ -16,14 +16,19 @@ import Comments from "../comments/Comments";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommentFooter from "../comments/CommentFooter";
 import InstagramCommentsSection from "../comments/InstagramCommentsSection";
+import LinkedinCommentsSection from "../comments/LinkedinCommentsSection";
+import { MdCancel } from 'react-icons/md';
 
 
 const CommentReviewsSectionModal = ({
                                         isOpenCommentReviewsSectionModal,
                                         setOpenCommentReviewsSectionModal,
                                         postData,
-                                        isResetData,
-                                        postPageInfoData
+                                        setPostData,
+                                        postPageInfoData,
+                                        isDirty,
+                                        setDirty,
+                                        className
                                     }) => {
     const [postPageData, setPostPageData] = useState(null);
     const dispatch = useDispatch();
@@ -36,12 +41,20 @@ const CommentReviewsSectionModal = ({
     }, [postData, postPageInfoData])
 
 
+
+
     useEffect(() => {
         return () => {
             dispatch(resetReducers({sliceNames: ["getPostPageInfoReducer"]}))
-            isResetData(true);
+            dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
+            dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
+            dispatch(resetReducers({sliceNames: ["replyCommentOnPostActionReducer"]}))
+            dispatch(resetReducers({sliceNames: ["updateCommentsOnPostActionReducer"]}))
+            setPostData(null);
+            // isResetData(true);
         }
     }, [])
+
     return (
         <>
             <div className='comment_review_container'>
@@ -49,30 +62,26 @@ const CommentReviewsSectionModal = ({
 
                     <Modal.Body>
                         <Row className="m-0">
-                            <Col lg="6" className="p-0">
-                                <div className='comment_review_wrapper'>
-                                    <div className="comment_header d-flex gap-2">
-                                        <Link to={""} className="flex-grow-1 d-flex align-item-center">
-                                            <span onClick={() => {
+                            <div className='md_cancel_outer'>
+                            <MdCancel  onClick={() => {
                                                 setOpenCommentReviewsSectionModal(false)
-                                            }}><i className="fa fa-chevron-left me-2 "></i> Back</span>
-
-                                            <img className={"me-2 ms-2 social-media-icon-cmnt"}
-                                                 src={computeImageURL(postData?.socialMediaType)}/>
-                                            {/*<i className="fa-brands fa-facebook ms-2"></i>*/}
-                                        </Link>
-
-                                    </div>
+                                            }}/>
+                            </div>
+                            <Col lg="6"  md="12" sm="12" className="p-0">
+                                <div className='comment_review_wrapper'>
+                                  
                                     <CommonSlider files={postData?.attachments}
                                                   selectedFileType={null}
                                                   caption={null}
                                                   hashTag={null}
                                                   showThumbnail={false}
                                                   isPublished={true}
-                                                  viewSimilarToSocialMedia={false}/>
+                                                  viewSimilarToSocialMedia={false}
+                                                  className={className}/>
+                                                 
                                 </div>
                             </Col>
-                            <Col lg="6" className="p-0">
+                            <Col lg="6"  md="12" sm="12" className="p-0">
                                 <div className="comment_section">
                                     <div className="comments_messages pb-0">
                                         <div className="">
@@ -99,12 +108,16 @@ const CommentReviewsSectionModal = ({
 
 
                                         {
-                                            postData?.socialMediaType === "FACEBOOK" && <Comments postData={postData}/>
+                                            postData?.socialMediaType === "FACEBOOK" && <Comments  isDirty={isDirty} setDirty={setDirty} postData={postData} postPageData={postPageData}/>
                                         }
 
                                         {
                                             postData?.socialMediaType === "INSTAGRAM" &&
-                                            <InstagramCommentsSection postData={postData} postPageData={postPageData}/>
+                                            <InstagramCommentsSection  isDirty={isDirty} setDirty={setDirty} postData={postData} postPageData={postPageData}/>
+                                        }
+                                        {
+                                            postData?.socialMediaType === "LINKEDIN" &&
+                                            <LinkedinCommentsSection  isDirty={isDirty} setDirty={setDirty} postData={postData} postPageData={postPageData}/>
                                         }
                                         {
                                             postData?.socialMediaType === "PINTEREST" &&
@@ -124,7 +137,9 @@ const CommentReviewsSectionModal = ({
                                     </div>
 
                                     {/*</div>*/}
-                                    <CommentFooter postData={postData} postPageData={postPageData}/>
+                                    <CommentFooter
+                                        isDirty={isDirty} setDirty={setDirty}
+                                        postData={postData} postPageData={postPageData}  />
 
                                 </div>
 

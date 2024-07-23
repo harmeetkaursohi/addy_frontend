@@ -1,4 +1,4 @@
-import Frame from "../../../../images/Frame.svg"
+import Frame from "../../../../images/signupFrame.svg"
 import addyads_img from "../../../../images/addylogo.png";
 import {Link} from "react-router-dom"
 import jsondata from "../../../../locales/data/initialdata.json";
@@ -53,20 +53,17 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
 
     return (
         <>
-            <section className='Container'>
+            <section>
 
                 <div className="login_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12 ">
-                            <div className='addy_container bg_pastel_blue'>
-                                <div className='login_outer bg_white_cream'>
+                            <div className='addy_container bg_light_orange'>
+                                <div className='login_outer'>
 
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-5 text-dark'>Reach your users with new tools.</h2>
-                                        <p className={"text-dark mb-4"}>Efficiently unleash cross-media information without cross-media value.
-                                            Quickly maximize.Efficiently unleash cross-media information without
-                                            cross-media value. Quickly maximize.Efficiently unleash cross-media.</p>
+                                        <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
                                     </div>
                                 </div>
 
@@ -79,20 +76,21 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                     <div className="addy_img">
                                         <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                         </div>
-                                        <h2 className='cmn_fontFamily'>Create New Account</h2>
+                                        <h2>{jsondata.create_account}</h2>
+                                        <p>{jsondata.enter_details_heading}</p>
                                     </div>
                                     <div className='login_form'>
 
                                         <form onSubmit={formik.handleSubmit}>
 
                                             <div className='form-group'>
-                                                <label>First Name <span>*</span> </label>
+                                                <label>{jsondata.firstname} <span>*</span> </label>
 
                                                 <input
                                                     name="firstName"
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='First Name'
+                                                    placeholder='Enter your firstname'
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.firstName}
@@ -104,13 +102,13 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
 
                                             </div>
                                             <div className='form-group'>
-                                                <label>Last Name <span>*</span> </label>
+                                                <label>{jsondata.lastname} <span>*</span> </label>
 
                                                 <input
                                                     name="lastName"
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='Last Name'
+                                                    placeholder='Enter your lastname'
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.lastName}
@@ -130,7 +128,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                     name="username"
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='Username'
+                                                    placeholder='Enter your username'
                                                     onChange={(e)=>{
                                                         formik.handleChange({ target: { name: e.target.name, value: e.target.value.replace(/\s/g, '') } });
                                                     }}
@@ -150,7 +148,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                     name="email"
                                                     className="form-control mt-1"
                                                     type='email'
-                                                    placeholder='Email'
+                                                    placeholder='Enter your email'
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.email}
@@ -168,13 +166,13 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                     <label htmlFor="country">{jsondata.industry}</label>
                                                     <select
                                                         name="industry"
-                                                        className="form-control mt-1"
+                                                        className="form-control mt-1 cmn_select_box"
                                                         onChange={formik.handleChange} // Use the custom onChange handler
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.industry}
 
                                                     >
-                                                        <option value="">Select Industry</option>
+                                                        <option value="">{jsondata.select_industry}</option>
                                                         {Object.keys(Industries)?.map((key,index) => (
                                                             <option key={index} value={Industries[key]}>
                                                                 {Industries[key]}
@@ -190,7 +188,8 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                         name="contactNo"
                                                         className="form-control mt-1"
                                                         type='number'
-                                                        placeholder='Contact No'
+                                                        onWheel={(e)=>{e.target.blur()}}
+                                                        placeholder='Enter your contact no'
                                                         onChange={formik.handleChange}
                                                         onBlur={formik.handleBlur}
                                                         onKeyDown={blockInvalidChar}
@@ -201,7 +200,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                 <Button type={"Submit"} text={jsondata.next}/>
                                             </div>
                                         </form>
-                                        <h3 className='cmn_heading'>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/signup" : "/"}><span
+                                        <h3>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/sign-up" : "/"}><span
                                             className='sign_up'>{jsondata.login}</span></Link></h3>
                                     </div>
                                 </div>

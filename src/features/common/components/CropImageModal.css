@@ -1,0 +1,20 @@
+.facebook_modal_outer  .reactEasyCrop_Container {
+    position: relative;
+    top: unset;
+    border: unset;
+    left: unset;
+    right: unset;
+    bottom: unset;
+
+}
+.facebook_modal_outer  .reactEasyCrop_Contain{
+    position: relative;
+    top: unset;
+    left: unset;
+    right: unset;
+    bottom: unset;
+}
+.crop_img_container .modal-content {
+    border-radius: 12px;
+}
+

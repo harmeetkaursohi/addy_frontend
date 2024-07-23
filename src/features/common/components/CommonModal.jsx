@@ -4,9 +4,10 @@ import "./CommonModal.css"
 import {useDispatch, useSelector} from "react-redux";
 import {getToken} from "../../../app/auth/auth.js";
 import ConfirmModal from "./ConfirmModal.jsx";
-import {SocialAccountProvider} from "../../../utils/contantData.js";
+import {DisconnectPageWarning, SocialAccountProvider} from "../../../utils/contantData.js";
 import { pageConnectAction} from "../../../utils/commonUtils.js";
 import default_user_icon from "../../../images/default_user_icon.svg"
+import { RxCross2 } from 'react-icons/rx';
 
 
 const CommonModal = ({
@@ -25,6 +26,7 @@ const CommonModal = ({
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [mediaPageData, setMediaPageData] = useState(null);
     const [currentConnectedPages, setCurrentConnectedPages] = useState([]);
+    const [state, setState] = useState(false);
     const facebookPageConnectData = useSelector(state => state.facebook.facebookPageConnectReducer);
 
     useEffect(() => {
@@ -33,36 +35,36 @@ const CommonModal = ({
             const idsToRemove = currentConnectedPages.filter(id => !newIds.includes(id));
             const idsToAdd = newIds.filter(id => !currentConnectedPages.includes(id));
             const updatedIds = currentConnectedPages.filter(id => !idsToRemove.includes(id));
-
+            setState(false);
             //adding new ids
             updatedIds.push(...idsToAdd);
-
             setCurrentConnectedPages(updatedIds);
         }
+       
     }, [connectedPagesList]);
-
 
     const handleSubmit = () => {
         pageConnectAction(dispatch, token, mediaPageData, socialMediaAccountInfo)
+        setState(true);
     }
-
 
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="lg" show={showModal} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title className="commonmodal_header">
-                            <div className='facebook_title'>
+                <Modal size="lg" show={showModal} onHide={handleClose} className='choose_page_outer'>
+        
+                    <Modal.Body className='pt-0'>
+                    <div className='d-flex  pt-3 pb-3'>
+                    <div className='facebook_title flex-grow-1'>
                                 <h2 className='cmn_text_style'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
-                                <p className='user_contents'>You have Personal Plan, you can add only one page.</p>
-                                <button className='cmn_blue_bg cmn_white_text upgrade_paln_btn'>Upgrade Plan</button>
-                            </div>
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+                    </div>
+                    <div className='pop_up_cross_icon_outer  cursor-pointer' onClick={(e) => {
+                                            handleClose()
+                                        }}><RxCross2 className="pop_up_cross_icon"/></div>
+                    
+                    </div>
                         <div className='facebook_content_outer'>
-                            <div className=''>
+                            <div className='choose_page_container'>
                                 {Array.isArray(allPagesList) && allPagesList.length > 0 ? allPagesList?.map((data, index) => {
                                         return (
                                             <div key={index}
@@ -83,6 +85,10 @@ const CommonModal = ({
                                                             socialMediaType === SocialAccountProvider.PINTEREST &&
                                                             <img src={data.media?.image_cover_url || default_user_icon}/>
                                                         }
+                                                        {
+                                                            socialMediaType === SocialAccountProvider.LINKEDIN &&
+                                                            <img src={data?.logo_url || default_user_icon}/>
+                                                        }
 
                                                     </div>
                                                     <div className='users_name'>
@@ -90,19 +96,19 @@ const CommonModal = ({
                                                         {data.about && <p className="cmn_text_style mb-0">{data.about}</p>}
                                                     </div>
                                                 </div>
-
-                                                <div className='connect_btn_outer'>
+                                                
+                                                <div className='connect_btn_outer 1'>
                                                     <button
                                                         disabled={facebookPageConnectData?.loading}
-                                                        // className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : (currentConnectedPages.length > 0 ? 'disabled-button' : 'default-button')}`}
-                                                        className={`cmn_connect_btn connect_btn connect_btn default-button ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : ''}`}
+                                                        className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : 'disconected_btn'}`}
                                                         onClick={(e) => {
                                                             !facebookPageConnectData?.loading && setMediaPageData(data);
                                                             !facebookPageConnectData?.loading && setShowConfirmModal(true);
                                                         }}
 
                                                     >
-                                                        {currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"}{(facebookPageConnectData?.loading && data?.id===mediaPageData?.id) ?"ing...":""}
+                                                        {currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"}
+                                                        {(state && data?.id===mediaPageData?.id ) ?"ing...":""} 
                                                     </button>
                                                 </div>
 
@@ -128,7 +134,7 @@ const CommonModal = ({
                     showConfirmModal={showConfirmModal}
                     icon={currentConnectedPages?.includes(mediaPageData?.id) ? "warning" : "success"}
                     title={"Are you sure ?"}
-                    confirmMessage={currentConnectedPages?.includes(mediaPageData?.id) ? `You want to dis-connect from ${socialMediaType} page ?` : `You want to connect from ${socialMediaType} page ?`}
+                    confirmMessage={currentConnectedPages?.includes(mediaPageData?.id) ? DisconnectPageWarning : `You want to connect ${socialMediaType} page ?`}
                 />}
         </>
     );

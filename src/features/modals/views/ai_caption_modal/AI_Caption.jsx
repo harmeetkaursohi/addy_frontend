@@ -6,7 +6,8 @@ import {generateAICaptionAction} from "../../../../app/actions/postActions/postA
 import {conventStringToArrayString} from "../../../../services/facebookService.js";
 import {isNullOrEmpty} from "../../../../utils/commonUtils";
 import Loader from "../../../loader/Loader";
-
+import robot_img from "../../../../images/ai_robot.svg"
+import { RxCross2 } from 'react-icons/rx';
 
 const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addCaption}) => {
     const handleClose = () => setAIGenerateCaptionModal(false);
@@ -53,11 +54,17 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
     return (
         <>
             <div className='generate_ai_img_container'>
-                <Modal show={aiGenerateCaptionModal} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Generate Caption with AI </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
+                <Modal show={aiGenerateCaptionModal} onHide={handleClose} className='generate_ai_container'>
+                    
+                    <Modal.Body className='pt-0'>
+                    <div className='pop_up_cross_icon_outer text-end cursor-pointer mt-2' onClick={() => {
+                                            handleClose()
+                                        }}><RxCross2 className="pop_up_cross_icon"/></div>
+                        <div className='robot_img_outer text-center'>
+                        <img src={robot_img}/>
+                        <h3 className='cmn_heading_class mt-4'>Generate Caption with AI </h3>
+
+                        </div>
                         <div className='generate_image_wrapper_box'>
                             <form onSubmit={handleCaptionSubmit}>
                                 <div className='generate_image_outer'>
@@ -75,7 +82,7 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
                                             className={'generate_btn cmn_white_text ' + (isNullOrEmpty(caption) ? " opacity-50" : "")}>
                                         {
                                             generateAICaptionData?.loading ?
-                                                <div className={"loading_txt"}><Loader className={"me-2"}/> Loading
+                                                <div className={"loading_txt"}><Loader className={"me-2 ai_caption_loading_btn"}/> Loading
                                                 </div> : captionSuggestionList?.length === 0 ? "Generate" : "Regenerate"
                                         }
                                     </button>

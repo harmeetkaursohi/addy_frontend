@@ -1,49 +1,66 @@
 .confirmWrapper {
     text-align: center;
-    padding: 30px 0px;
+    /* padding: 30px 0px; */
 }
 
-.confirm_btn {
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+.yes_btn{
+    font-size: 16px;
+    border: none;
+    color: white;
+    font-weight: 700;
 }
-
+.success_img{
+    height: 120px;
+    width: 100%;
+}
 .alert_modal_body div.modal-content {
-    border-radius: 10px;
+    border-radius: 12px;
 }
 
 .confirm_text {
-    padding-top: 20px;
+    padding-top: 7px;
+    color: #263238;
+    font-weight: 600;
+    font-size: 20px;
 }
 
 .confirm_container h2 {
-    font-size: 36px;
-    font-weight: 500;
+    font-size: 28px;
+    font-weight: 800;
 }
 
-.confirm_btn button {
-    border-radius: 5px;
-    height: 40px;
-    width: 110px
+
+
+
+@media screen and (max-width:1280px){
+
+    .confirm_container h2 {
+        font-size: 24px;
+    }
+    .confirm_text{
+        font-size: 18px;
+    }
 }
 
-img.post_img {
-    height: 250px;
-    object-fit: cover;
-    object-position: center;
+@media screen and (max-width:991px){
+    .confirm_container h2{
+        font-size: 28px;
+    }
 }
-
-ul.slick-dots {
-    bottom: 18px;
-}
-
-ul.slick-dots li.slick-active button:before {
-    color: #ff5c00;
-}
-
-ul.slick-dots li button:before {
-    opacity: 1;
-    color: #fff;
+@media screen and (max-width:767px){
+    .confirm_text {
+        font-size: 15px;
+    }
+    .yes_btn{
+        font-size: 14px;
+      }
+    .confirm_container h2 {
+        font-size: 24px;
+    }
+    .confirm_btn button {
+        height: 37px;
+    }
+    .success_img {
+        height: 90px;
+    }
 }

@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react'
 import AddressInfo from './tabs/AddressInfo';
 import UserInfo from './tabs/UserInfo';
+import "./Signup.css"
+import {SignupSource} from "../../../utils/contantData";
 
 const Signup = () => {
 
     const [showTab, setShowTab] = useState(1);
 
     useEffect(() => {
-        document.title = 'Signup';
+        document.title = 'Sign up';
     }, []);
 
     const [formData, setFormData] = useState({
@@ -19,6 +21,7 @@ const Signup = () => {
         industry: "",
         isAccountNonLocked: false,
         isEnabled: false,
+        signupSource: SignupSource.ADDY,
         address: {
             addressLine1: "",
             addressLine2: "",
@@ -26,7 +29,8 @@ const Signup = () => {
             state: "",
             county: "",
             city: "",
-            pinCode: ""
+            pinCode: "",
+            isAgreedToTermsAndConditions: false
         }
     });
 
@@ -43,4 +47,4 @@ const Signup = () => {
     )
 }
 
-export default Signup;    
+export default Signup;

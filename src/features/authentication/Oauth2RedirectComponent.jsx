@@ -14,12 +14,12 @@ const Oauth2RedirectComponent = () => {
 
     const token = getUrlParameter('token');
     const error = getUrlParameter('error');
-
     useEffect(() => {
         if (token) {
             localStorage.setItem("token", token);
             window.location.href = "/dashboard"
         } else {
+            localStorage.setItem("errorInOAuth","true")
             window.location.href = "/login"
         }
     }, []);

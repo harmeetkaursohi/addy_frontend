@@ -3,17 +3,20 @@ import {
     loginUser,
     createPassword,
     signUpUser,
-    forgetPassword,
-    getUserInfo
+    forgotPassword,updateCustomer,
+    getUserInfo,updateProfilePic,updatePassword
 } from "../../actions/userActions/userActions.js";
 
 const userSlice = createSlice({
         name: 'user',
         initialState: {
             loginUserReducer: {loading: false},
+            updateCustomerReducer: {loading: false},
+            updatePasswordReducer: {loading: false},
+            updateProfilePicReducer: {loading: false},
             signUpReducer: {loading: false},
             createPasswordReducer: {loading: false},
-            forgetPasswordReducer: {loading: false},
+            forgotPasswordReducer: {loading: false},
             token: localStorage.getItem('token') || null,
             userInfoReducer: {loading: false},
         },
@@ -54,15 +57,15 @@ const userSlice = createSlice({
             [createPassword.rejected]: (state) => {
                 state.createPasswordReducer = {loading: false}
             },
-            // forget password
-            [forgetPassword.pending]: (state) => {
-                state.forgetPasswordReducer = {loading: true};
+            // forgot password
+            [forgotPassword.pending]: (state) => {
+                state.forgotPasswordReducer = {loading: true};
             },
-            [forgetPassword.fulfilled]: (state) => {
-                state.forgetPasswordReducer = {loading: false}
+            [forgotPassword.fulfilled]: (state) => {
+                state.forgotPasswordReducer = {loading: false}
             },
-            [forgetPassword.rejected]: (state) => {
-                state.forgetPasswordReducer = {loading: false}
+            [forgotPassword.rejected]: (state) => {
+                state.forgotPasswordReducer = {loading: false}
             },
             //user info
             [getUserInfo.pending]: (state) => {
@@ -73,7 +76,40 @@ const userSlice = createSlice({
             },
             [getUserInfo.rejected]: (state) => {
                 state.userInfoReducer = {loading: false}
-            }
+            },
+
+            //Update Profile Pic
+            [updateProfilePic.pending]: (state) => {
+                state.updateProfilePicReducer = {loading: true};
+            },
+            [updateProfilePic.fulfilled]: (state, action) => {
+                state.updateProfilePicReducer = {loading: false}
+            },
+            [updateProfilePic.rejected]: (state) => {
+                state.updateProfilePicReducer = {loading: false}
+            },
+
+            // Update Password
+            [updatePassword.pending]: (state) => {
+                state.updatePasswordReducer = {loading: true};
+            },
+            [updatePassword.fulfilled]: (state, action) => {
+                state.updatePasswordReducer = {loading: false}
+            },
+            [updatePassword.rejected]: (state) => {
+                state.updatePasswordReducer = {loading: false}
+            },
+
+            // Update Customer
+            [updateCustomer.pending]: (state) => {
+                state.updateCustomerReducer = {loading: true};
+            },
+            [updateCustomer.fulfilled]: (state, action) => {
+                state.updateCustomerReducer = {loading: false, data: action.payload}
+            },
+            [updateCustomer.rejected]: (state) => {
+                state.updateCustomerReducer = {loading: false}
+            },
         }
     });
 

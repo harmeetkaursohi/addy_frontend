@@ -4,11 +4,12 @@
     font-weight: 700;
     line-height: 38px;
     letter-spacing: -0.2px;
+    font-family: "Nunito";
 }
 
 .post_scheduled_content h4{
     color: #585858;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
@@ -17,9 +18,9 @@
     padding-top: 12px;
 }
 .no-draft-img{
-    height: 300px !important;
+    height: 300px;
 }
-
+ 
 
 .selected-option p{
 
@@ -51,23 +52,35 @@
 /*/ width /*/
 
 .draft-heading h4.posted-on-txt{
-    min-width: 130px;
+    min-width: 113px;
+    font-size: 18px;
+    color: black;
+    font-weight: 500;
+
+
 }
 .draft-heading {
     display: flex;
     align-items: center;
-    gap: 14px;
+
     padding: 20px;
-    /*flex-wrap: wrap;*/
-    /*position: relative;*/
+  
+}
+.upcoming_post_outer .draft-heading{
+    padding: 0px;
 }
 
 .draft-outer {
-    border-radius: 30px;
+    border-radius: 15px;
     margin-top: 15px;
     box-shadow: 1px 1px 5px #89858538;
     background: white;
+    overflow: hidden;
 
+}
+.draft-outer .post_image_outerwrapper img{
+    width: 100%;
+    object-fit: cover;
 }
 .page_tags::-webkit-scrollbar {
     width: 2px;
@@ -91,11 +104,7 @@
     border-top: 2px solid #D1D9E2;
 }
 
-.fc-toolbar-chunk:first-child {
-    background: white;
-    border-top-left-radius: 15px;
-    border-bottom-left-radius: 15px;
-}
+
 
 .fc-toolbar-chunk:last-child {
     background: white;
@@ -119,8 +128,15 @@ button.fc-timeGridDay-button.fc-button.fc-button-primary {
 .post-image {
     width: 100%;
 }
-
-posted-on-txt {
+.upcoming_post_outer .draft-outer .post_image_outerwrapper img{
+width: 100%;
+object-fit: cover; 
+height: 100%; 
+}
+.draft_container img.post_img {
+    height: 270px;
+}
+.posted-on-txt {
     font-size: 21px;
     font-weight: 500;
     color: #000000;
@@ -128,44 +144,52 @@ posted-on-txt {
 }
 
 .social-media-icon {
-    height: 18px;
-    width: 20px;
+    height: 22px;
+    width: 22px;
 }
 
 .social-media-page-name {
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 500;
+    padding: 5px 0px 0px 5px;
     font-family: 'Nunito', sans-serif;
 }
 
 .card-body.post_card {
-    padding: 0px 20px;
-    padding-bottom: 24px;
+    padding: 0px 20px 20px;
 }
 
 span.post_caption {
     color: #000;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
-    line-height: normal;
+  
 }
 
 h3.caption {
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 15px;
     font-style: normal;
     font-weight: 400;
-    line-height: normal;
-    margin-bottom: 10px !important;
+    margin-bottom: 10px ;
 
 }
+.upcoming_post_content{
+    height: 40px;
+    overflow-y: scroll;
+    line-height: 21px;
+    color: #5F6D7E;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Nunito';
 
+}
 .card-body.post_card h5 {
     color: #000;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
@@ -175,8 +199,8 @@ h3.caption {
 
 span.hash_tags {
     color: #5F6D7E;
-    font-family: Nunito;
-    font-size: 12px;
+    font-family: "Nunito";
+    font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -187,7 +211,7 @@ button.un_selected {
     border: 1px solid rgba(192, 57, 57, 0.27);
     background: rgba(255, 0, 0, 0.18);
     color: #5F6D7E;
-    font-family: Nunito;
+    font-family: "Nunito";
     font-size: 10px;
     font-style: normal;
     font-weight: 500;
@@ -199,16 +223,25 @@ button.post_now.cmn_bg_btn, button.outline_btn.schedule_btn {
     max-width: 192px;
     width: 100%;
 }
+button.post_now{
+    border:1px solid transparent
+}
 
-button.outline_btn.schedule_btn {
+button.outline_btn {
     border-radius: 6px;
     border: 1px solid #00A3FF;
     background: #FFF;
     padding: 10px 15px;
     font-size: 10px;
 }
+.draft_button_outer button.post_now {
+    width: 100%;
+    max-width: 100%;
+}
+.draft_button_outer{
+    flex-wrap: wrap;
+}
 
-/* new css */
 .post_card_inner_content{
     height: 100px;
     overflow-y: scroll;
@@ -220,10 +253,17 @@ button.outline_btn.schedule_btn {
 .post_card_inner_content::-webkit-scrollbar-track {
     background-color: transparent ;
 }
+.draft_button_outer button {
+    font-size: 13px;
+    font-family: "Nunito";
+    font-weight: 700;
+}
 .hash_tags_outer_container{
-    height: 67px;
-    overflow-x: hidden;
     overflow-y: scroll;
+    height: 47px;
+    line-height: 19px;
+
+
 }
 .hash_tags_outer_container::-webkit-scrollbar-thumb {
     background-color: transparent ;
@@ -232,26 +272,235 @@ button.outline_btn.schedule_btn {
 .hash_tags_outer_container::-webkit-scrollbar-track {
     background-color: transparent ;
 }
-@media screen and (max-width:1024px) {
-    button.outline_btn.schedule_btn{
-        margin-top: 10px;
+.draft_component_outer .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
+    background: white;
+    padding-top: 0px;
+    width: max-content;
+    border-radius: 10px;
+    box-shadow: 1px 1px 15px 0px #f9f0f0;
+}
+.draft_component_outer .dropdown {
+    position: absolute;
+    left: auto;
+    right: 10px;
+}
+
+.draft_component_outer button#dropdown-basic {
+    color: black;
+    padding: 14px 0px;
+    width: 100%;
+    min-width: 141px;
+    background-color: white !important;
+}
+.draft_component_outer .dropdown-menu.show {
+    display: block;
+    background: #ECECEC;
+    border: none;
+}
+.draft_component_outer a.dropdown-item {
+    border-bottom: 1px solid #DBDBDB;
+    padding: 10px;
+}
+.draft_component_outer a.dropdown-item:last-child{
+    border-bottom: unset;
+}
+.filters_outer{
+    padding: 10px;
+}
+
+.cmn_upcoing_post_header{
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    top: 20px;
+
+}
+
+.Tommorrow_header {
+    left: auto;
+    right: 10px;
+    background: #F07C33;
+    color: white;
+    border-radius: 5px;
+    padding: 2px 8px;
+    
+}
+.post-image-outer{
+    position: relative;
+}
+.no_acc_connect_heading{
+    font-size: 22px;
+    color:#1C1F21;
+    line-height: 20px;
+    font-weight: 700;
+}
+.no_acc_connect_img{
+    height: 400px;
+    width: 100%;
+}
+.upcoming_post_outer .video_player_outer {
+    height: 196px !important;
+}
+.draft_container_wrapper {
+    margin-top: 30px;
+}
+@media screen and (min-width:2560px){
+    div.draft-outer .post_image_outerwrapper {
+        height: 500px;
     }
-    div.draft_button_outer{
-        display: block !important;
+}
+@media screen and (min-width:1800px){
+    .draft_button_outer{
+        flex-wrap: unset;
+    }
+    .no_acc_connect_img{
+        height: 500px;
+    }
+}
+@media screen and (min-width:1600px) {
+    .no-draft-img {
+        max-width: 650px !important;
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media screen and (min-width:1499px){
+    .upcoming_post_outer .video_player_outer {
+        height: 350px !important;
+    }
+}
+@media screen and (min-width:992px) {
+ 
+.mt-4.upcomingPostBtn_Outer button {
+    min-width: 86px;
+    width: 100%;
+    padding: 10px ;
+}
+
+.draft_button_outer button {
+    padding: 9px;
+    flex-grow: 1;
+    min-width:87px;
+    width:100%
+    
+}
+button.outline_btn.schedule_btn{
+    padding: 9px;
+}
+}
+@media screen and (max-width:1280px){
+    .draft-heading {
+        padding: 10px 15px;
+    }
+    .upcoming_post_content {
+        font-size: 14px;
+
+    }
+    .draft_container img.post_img {
+        height: 240px;
+    }
+    .draft_container .video_player_outer{
+        height: 240px !important;
+
+    }
+    .draft_container.draft-outer .post_image_outerwrapper{
+        height: 240px;
+    }
+    .draft_container_wrapper {
+        margin-top: 12px;
+    }
+    .draft_button_outer{
+        margin-top: 10px !important;
+    }
+    .draft_container .card-body.post_card {
+        padding: 0px 15px 15px;;
+    }
+}
+@media screen and (max-width:1024px) {
+    
+   
+    .draft-heading h4.posted-on-txt {
+        min-width: 81px;
+        font-size: 15px;
+    }
+    .draft-heading{
+        gap: 14px;
+    }
+    
+    h2.acc_not_connected_heading {
+        font-size: 19px;
     }
 }
 @media screen and (max-width:991px) {
     button.outline_btn.schedule_btn{
         margin-top: 0px;
     }
-    div.draft_button_outer{
-        display: flex !important;
+    .no_acc_connect_img{
+        height: 300px;
+    
+    }
+    .draft_component_outer .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr{
+        margin-top: 20px;
+    }
+    button.outline_btn {
+        padding: 9px;
+        width: 100%;
+    }
+    .draft_button_outer .cmn_bg_btn {
+        padding: 10px;
+    }
+   
+    h2.acc_not_connected_heading {
+        font-size: 16px;
+    }
+    .card-body.post_card {
+        padding: 10px;
+    }
+    .draft-heading h4.posted-on-txt {
+        min-width: 83px;
+        font-size: 15px;
+    }
+    .draft_component_outer .dropdown{
+        top: 22px;
+    }
+    .upcomingPostBtn_Outer{
+        flex-wrap: unset;
+    }
+    .no_acc_connect_heading {
+        font-size: 19px;
     }
 }
 @media screen and (max-width:767px) {
     button.outline_btn.schedule_btn{
         margin-top: 10px;
 
+    }
+    .no_acc_connect_heading {
+        font-size: 16px;
+    }
+    .no_acc_connect_img{
+        height: 100%;
+    }
+   
+    .draft_createPost_outer{
+        margin-top: 10px;
+    }
+    .draft_createPost_outer button{
+    font-size: 14px;
+    padding: 10px 5px;
+    width: 134px !important;
+    }
+    .draft_component_outer .dropdown{
+        position: unset;
+    }
+    .upcomingPostBtn_Outer{
+        flex-wrap: wrap;
+    }
+    div.draft_button_outer button {
+        margin-top: 10px;
     }
     div.draft_button_outer{
         display: block !important;
@@ -260,4 +509,25 @@ button.outline_btn.schedule_btn {
     .draft-heading{
         display: block;
     }
+    .custom-confirm-button-class {
+        padding: 8px 21px !important;
+        font-size: 14px !important;
+    }
+    
+    .custom-cancel-button-class {
+        padding: 8px 21px !important;
+        font-size: 14px !important;
+    }
+   
+    .no-draft-img{
+        height: auto;
+        width: 100%;
+    }
+    h2.acc_not_connected_heading{
+        font-size: 12px;
+    }
+    h3.caption{
+        font-size: 14px;
+    }
+   
 }
