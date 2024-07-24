@@ -33,11 +33,6 @@ jobs:
         run: |
           sudo ssh -o StrictHostKeyChecking=no -i prod_private_key.pem ubuntu@${{ secrets.EC2_HOST }} "/var/www/html/Addy_Prod/frontend_cleanup.sh"
 
-      - name: Set up SSH key and permissions for frontend
-        run: |
-          echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" > prod_private_key.pem
-          chmod 600 prod_private_key.pem
-
       - name: Debugging - List current directory contents 2
         run: ls -al
 
