@@ -266,7 +266,7 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
     switch (data?.socialMediaType) {
         case "FACEBOOK": {
             const postIds = data.postIds.map(id => id).join(',');
-            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,attachments,created_time,is_published,likes.summary(true).limit(2),comments.summary(true).limit(1){id},shares`;
+            const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,attachments,created_time,is_published,likes.summary(true).limit(2),reactions.summary(true).limit(2),comments.summary(true).limit(1){id},shares`;
             return await baseAxios.get(apiUrl).then(res => {
                 return res.data;
             }).catch(error => {

@@ -49,6 +49,8 @@ const CreatePost = () => {
     const [pinDestinationUrl, setPinDestinationUrl] = useState("");
     const [scheduleDate, setScheduleDate] = useState("");
     const [scheduleTime, setScheduleTime] = useState("");
+    console.log("scheduleDate=====>",scheduleDate)
+    console.log("scheduleTime=====>",scheduleTime)
     const [boostPost, setBoostPost] = useState(false);
     const [socialAccountData, setSocialAccountData] = useState([]);
     const [files, setFiles] = useState([]);

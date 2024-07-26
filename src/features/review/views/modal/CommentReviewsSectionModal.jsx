@@ -51,7 +51,6 @@ const CommentReviewsSectionModal = ({
             dispatch(resetReducers({sliceNames: ["replyCommentOnPostActionReducer"]}))
             dispatch(resetReducers({sliceNames: ["updateCommentsOnPostActionReducer"]}))
             setPostData(null);
-            // isResetData(true);
         }
     }, [])
 

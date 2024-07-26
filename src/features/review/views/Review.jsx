@@ -309,7 +309,7 @@ const Review = () => {
                                                                                 <div
                                                                                     className="d-flex  review_likes_list">
                                                                                     <h3 className="nunito_font">
-                                                                                        {post?.likes} Likes
+                                                                                        {post?.likes} Likes {post?.socialMediaType === "FACEBOOK" ? "/ Reactions" : ""}
                                                                                     </h3>
                                                                                     <h3 className="nunito_font">
                                                                                         {post?.comments} Comments

@@ -45,7 +45,7 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
             switch (postData?.socialMediaType) {
                 case "FACEBOOK": {
                     setCommonFooterDataObject({
-                        total_likes: postPageData?.likes?.summary?.total_count || 0,
+                        total_likes: postPageData?.reactions?.summary?.total_count || 0,
                         total_comments: postPageData?.comments?.summary?.total_count || 0,
                         total_shares: postPageData?.shares?.count || 0,
                         can_comment: postPageData?.comments?.summary?.can_comment
@@ -250,14 +250,14 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                     postData?.socialMediaType === "FACEBOOK" && <>
                         {
                             commonFooterDataObject.total_likes === 1 && <>
-                                Liked
-                                by <strong> {postPageData?.likes?.summary?.has_liked ? postData?.page?.name : postPageData?.likes?.data[0]?.name}</strong>
+                                Liked / Reacted
+                                by <strong> {postPageData?.likes?.summary?.has_liked ? postData?.page?.name : postPageData?.reactions?.data[0]?.name}</strong>
                             </>
                         }
                         {
                             commonFooterDataObject.total_likes > 1 && <>
-                                Liked
-                                by <strong>{postPageData?.likes?.data[0]?.name}</strong> and <strong> {JSON.stringify(postPageData?.likes?.summary?.total_count - 1)} Others</strong>
+                                Liked / Reacted
+                                by <strong>{postPageData?.reactions?.data[0]?.name}</strong> and <strong> {JSON.stringify(postPageData?.reactions?.summary?.total_count - 1)} Others</strong>
                             </>
                         }
                     </>
