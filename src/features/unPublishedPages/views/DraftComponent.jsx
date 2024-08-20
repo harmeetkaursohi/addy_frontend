@@ -46,7 +46,7 @@ const DraftComponent = ({
                     const allSuccess=response?.payload?.every(post=>post.success)
                     const allFailed=response?.payload?.every(post=>!post.success)
                     setBatchToDelete(null);
-                    if (reference === "PLANNER") {
+                      if (reference === "PLANNER") {
                         setDrafts !== null && setDrafts([]);
                         setDraftPost !== null && setDraftPost(false)
                     } else if(allSuccess) {

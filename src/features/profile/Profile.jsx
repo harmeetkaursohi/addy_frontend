@@ -193,27 +193,27 @@ const Profile = () => {
                         <div className="cmn_outer">
                             <div className="edit_profile_contaniner">
                             <h3 className="dm-sans-font pb-3 pt-1"> My Profile</h3>
-                            {edit ?            
-                             <div>
-                                <button onClick={()=>{setEdit(false)}} className="profile_cancel_btn">Cancel</button>
-                              
-                                 <button
-                                                                    className={"edit_profile_btn ms-3 " + (edit ? "" : "opacity-50")}>
-                                                                    Save
-                                                                    {
-                                                                        updateCustomerData?.loading &&
-                                                                        <span
-                                                                            className={"spinner-border spinner-border-sm ms-2 "}
-                                                                            role="status"
-                                                                            aria-hidden="true"></span>
-                                                                    }
-                                </button>
-                             </div>:
-                             <button className="edit_profile_btn" onClick={()=>{setEdit(
-                                                         true
-                                                    )}}>Edit Profile</button>
-                                   
-                                               }
+                            {/*{edit ?*/}
+                            {/* <div>*/}
+                            {/*    <button onClick={()=>{setEdit(false)}} className="profile_cancel_btn">Cancel</button>*/}
+
+                            {/*     <button*/}
+                            {/*                                        className={"edit_profile_btn ms-3 " + (edit ? "" : "opacity-50")}>*/}
+                            {/*                                        Save*/}
+                            {/*                                        {*/}
+                            {/*                                            updateCustomerData?.loading &&*/}
+                            {/*                                            <span*/}
+                            {/*                                                className={"spinner-border spinner-border-sm ms-2 "}*/}
+                            {/*                                                role="status"*/}
+                            {/*                                                aria-hidden="true"></span>*/}
+                            {/*                                        }*/}
+                            {/*    </button>*/}
+                            {/* </div>:*/}
+                            {/* <button className="edit_profile_btn" onClick={()=>{setEdit(*/}
+                            {/*                             true*/}
+                            {/*                        )}}>Edit Profile</button>*/}
+
+                            {/*                   }*/}
                              </div>
 
                             {
@@ -233,411 +233,450 @@ const Profile = () => {
                                         }
 
 
-                                        <div className="editProfile_wrapper mt-3">
+                                        <div className="editProfile_wrapper">
                                             
 
                                             <div className="edit_content mt-4">
                                               
                                                     {/* personal information */}
                                                     <div
-                                                        className={` ${edit ? "" : "profile-information"}`}>
-                                                          
-                                                      
+                                                        className={"profile-information cmn_shadow gray_border"}>
 
-                                                        <div className="row">
-                                                            <div className="col-lg-6 col-sm-12 col-md-12">
-                                                                <div className="profile_info_container profile_cmn_radius  p-4 cmn_shadow gray_border">
-                                                                <h3 className="dm-sans-font">Personal Information</h3>
 
-                                                                <div className="change_profile_outer mt-3">
+                                                        <div className="">
+                                                            <div className={"edit_wrapper" }>
 
-                                                <div className="user_pic_container">
-                                                    {
-                                                        (userInfo?.loading || updateProfilePicData?.loading) &&
-                                                        <div className={"update-pic-loading"}>
-                                                            <RotatingLines
-                                                                strokeColor="#F07C33"
-                                                                strokeWidth="5"
-                                                                animationDuration="0.75"
-                                                                width="40"
-                                                                visible={true}
-                                                            />
-                                                        </div>
-                                                    }
-                                                    <div className="text-center profile_Wrapper">
-                                                        <img
-                                                            style={{opacity: (userInfo?.loading || updateProfilePicData?.loading) ? ".4" : "1"}}
-                                                            src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
-                                                            className='user_pic '/>
-                                                        
+                                                                <div className="profile_Wrapper">
+                                                                    <div>
+                                                                        <img
+                                                                            style={{opacity: (userInfo?.loading || updateProfilePicData?.loading) ? ".4" : "1"}}
+                                                                            src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
+                                                                            className='user_pic '/>
+                                                                        {
+                                                                            (userInfo?.loading || updateProfilePicData?.loading) &&
 
-                                                    </div>
 
-                                                    <div className="edit_label_container text-center">
-                                                        {
-                                                            edit ?
-                                                                <label className="changeProfile_label"
-                                                                       htmlFor="changeProfile">
-                                                                    <FaCamera/>
-                                                                </label> : ""
-                                                        }
-                                                        <input
-                                                            type="file"
-                                                            accept={"image/*"}
-                                                            id="changeProfile"
-                                                            className="change_profile"
-                                                            onChange={changeProfileHandler}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                                                <div className="form-group">
-                                                                    <label>
-                                                                        First name <span className="astrick">*</span>
-                                                                    </label>
-                                                                    <input
-                                                                        defaultValue={formik.values.firstName}
-                                                                        type="text"
-                                                                        onChange={edit ? formik.handleChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        name="firstName"
-                                                                        className="form-control mt-2"
-                                                                        disabled={!edit}
-                                                                        placeholder="First name"
-                                                                    />
-                                                                    {formik.touched.firstName && formik.errors.firstName ? (
-                                                                        <p className="error_message">
-                                                                            {formik.errors.firstName}
-                                                                        </p>
-                                                                    ) : null}
+                                                                                <div className={"update-pic-loading"}>
+                                                                                    <RotatingLines
+                                                                                        strokeColor="#F07C33"
+                                                                                        strokeWidth="5"
+                                                                                        animationDuration="0.75"
+                                                                                        width="40"
+                                                                                        visible={true}
+                                                                                    />
+                                                                                </div>
+                                                                        }
+                                                                    </div>
+
+
+                                                                    <div
+                                                                        className="edit_label_container text-center">
+                                                                        {
+                                                                            edit ?
+                                                                                <label
+                                                                                    className="changeProfile_label"
+                                                                                    htmlFor="changeProfile">
+                                                                                    <FaCamera/>
+                                                                                </label> : ""
+                                                                        }
+                                                                        <input
+                                                                            type="file"
+                                                                            accept={"image/*"}
+                                                                            id="changeProfile"
+                                                                            className="change_profile"
+                                                                            onChange={changeProfileHandler}
+                                                                        />
+                                                                    </div>
                                                                 </div>
-                                                                {/* last name */}
-                                                                <div className="form-group">
-                                                                    <label>
-                                                                        Last name <span className="astrick">*</span>
-                                                                    </label>
-                                                                    <input
-                                                                        defaultValue={formik.values.lastName}
-                                                                        type="text"
-                                                                        onChange={edit ? formik.handleChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        name="lastName"
-                                                                        className="form-control mt-2"
-                                                                        disabled={!edit}
-                                                                        placeholder="Lastname"
-                                                                    />
-                                                                    {formik.touched.lastName && formik.errors.lastName ? (
-                                                                        <p className="error_message">
-                                                                            {formik.errors.lastName}
-                                                                        </p>
-                                                                    ) : null}
-                                                                </div>
+                                                                {edit ?
+                                                                    <div>
+                                                                        <button onClick={() => {
+                                                                            setEdit(false)
+                                                                        }} className="profile_cancel_btn">Cancel
+                                                                        </button>
 
-                                                                {
-                                                                    !isNullOrEmpty(userData?.username) &&
+                                                                        <button
+                                                                            className={"edit_profile_btn ms-3 " + (edit ? "" : "opacity-50")}>
+                                                                            Save
+                                                                            {
+                                                                                updateCustomerData?.loading &&
+                                                                                <span
+                                                                                    className={"spinner-border spinner-border-sm ms-2 "}
+                                                                                    role="status"
+                                                                                    aria-hidden="true"></span>
+                                                                            }
+                                                                        </button>
+                                                                    </div> :
+                                                                    <button className="edit_profile_btn"
+                                                                            onClick={() => {
+                                                                                setEdit(
+                                                                                    true
+                                                                                )
+                                                                            }}>Edit Profile</button>
+
+                                                                }
+                                                            </div>
+
+
+                                                            <div className={"profile_inner_content_wrapper row "}>
+                                                                <div className="col-lg-6 col-sm-12 col-md-12">
+                                                                    <div
+                                                                        className="profile_info_container profile_cmn_radius  p-4 ">
+
+
+                                                                        <div className="change_profile_outer mt-3">
+
+                                                                        <div className="user_pic_container">
+
+                                                                            <h3 className="dm-sans-font">Personal
+                                                                                Information</h3>
+
+                                                                        </div>
+                                                                    </div>
                                                                     <div className="form-group">
                                                                         <label>
-                                                                            Username <span className="astrick">*</span>
+                                                                            First name <span
+                                                                            className="astrick">*</span>
                                                                         </label>
-                                                                        <OverlayTrigger
-                                                                            placement="bottom"
-                                                                            overlay={<Tooltip
-                                                                            className="custom-tooltip"
-                                                                                id="button-tooltip custom-tooltip">
-                                                                                Please refrain from changing username.
-                                                                                Your username are integral to several
-                                                                                functionalities.
-                                                                                Altering them might disrupt some
-                                                                                services.
-                                                                                For more
-                                                                                information, please contact us at
-                                                                                addy.ads.ultivic@gmail.com
-                                                                            </Tooltip>}
-                                                                        >
-                                                                            <input
-                                                                                defaultValue={formik.values.username}
-                                                                                type="text"
-                                                                                onBlur={formik.handleBlur}
-                                                                                name="username"
-                                                                                className="form-control mt-2"
-                                                                                disabled={true}
-                                                                                placeholder="Username"
-                                                                            />
-                                                                        </OverlayTrigger>
-                                                                        {formik.touched.username && formik.errors.username ? (
+                                                                        <input
+                                                                            defaultValue={formik.values.firstName}
+                                                                            type="text"
+                                                                            onChange={edit ? formik.handleChange : undefined}
+                                                                            onBlur={formik.handleBlur}
+                                                                            name="firstName"
+                                                                            className="form-control mt-2"
+                                                                            disabled={!edit}
+                                                                            placeholder="First name"
+                                                                        />
+                                                                        {formik.touched.firstName && formik.errors.firstName ? (
                                                                             <p className="error_message">
-                                                                                {formik.errors.username}
+                                                                                {formik.errors.firstName}
                                                                             </p>
                                                                         ) : null}
                                                                     </div>
-                                                                }
-                                                                {/*email  */}
-                                                                {
-                                                                    !isNullOrEmpty(userData?.email) &&
+                                                                    {/* last name */}
                                                                     <div className="form-group">
                                                                         <label>
-                                                                            {" "}
-                                                                            Email <span className="astrick">*</span>
+                                                                            Last name <span className="astrick">*</span>
                                                                         </label>
-
-                                                                        <OverlayTrigger
-                                                                            placement="bottom"
-                                                                            overlay={<Tooltip    className="custom-tooltip" id="button-tooltip">
-                                                                                Please refrain from changing email.
-                                                                                Your email are integral to several
-                                                                                functionalities.
-                                                                                Altering them might disrupt some
-                                                                                services.
-                                                                                For more
-                                                                                information, please contact us at
-                                                                                addy.ads.ultivic@gmail.com
-                                                                            </Tooltip>}
-                                                                        >
-                                                                            <input
-                                                                                readOnly={true}
-                                                                                placeholder="Email"
-                                                                                defaultValue={formik.values.email}
-                                                                                type="text"
-                                                                                onBlur={formik.handleBlur}
-                                                                                name="email"
-                                                                                disabled={true}
-                                                                                className="form-control mt-2 email_field"
-                                                                            />
-                                                                        </OverlayTrigger>
-
-
-                                                                        {formik.touched.email && formik.errors.email ? (
-                                                                            <p className="error_message">{formik.errors.email}</p>
+                                                                        <input
+                                                                            defaultValue={formik.values.lastName}
+                                                                            type="text"
+                                                                            onChange={edit ? formik.handleChange : undefined}
+                                                                            onBlur={formik.handleBlur}
+                                                                            name="lastName"
+                                                                            className="form-control mt-2"
+                                                                            disabled={!edit}
+                                                                            placeholder="Lastname"
+                                                                        />
+                                                                        {formik.touched.lastName && formik.errors.lastName ? (
+                                                                            <p className="error_message">
+                                                                                {formik.errors.lastName}
+                                                                            </p>
                                                                         ) : null}
                                                                     </div>
-                                                                }
-                                                                {/* contact number */}
-                                                                <div className="form-group">
-                                                                    <label> Contact Number</label>
-                                                                    <input
-                                                                        placeholder="Contact No"
-                                                                        defaultValue={formik.values.contactNo}
-                                                                        type="text"
-                                                                        onChange={edit ? formik.handleChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        name="contactNo"
-                                                                        className="form-control mt-2"
-                                                                        disabled={!edit}
-                                                                    />
-                                                                </div>
-                                                                {/* industry */}
 
-                                                                <div className='form-group'>
-                                                                    <label htmlFor="country">{jsondata.industry}</label>
-                                                                    <select
-                                                                        name="industry"
-                                                                        className="form-control cmn_select_box mt-1"
-                                                                        onChange={edit ? formik.handleChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        defaultValue={formik.values.industry}
-                                                                        disabled={!edit}
-                                                                    >
-                                                                        <option value="">Select Industry</option>
-                                                                        {Object.keys(Industries)?.map((key, index) => (
-                                                                            <option key={index} value={Industries[key]}>
-                                                                                {Industries[key]}
-                                                                            </option>
-                                                                        ))}
-                                                                    </select>
+                                                                    {
+                                                                        !isNullOrEmpty(userData?.username) &&
+                                                                        <div className="form-group">
+                                                                            <label>
+                                                                                Username <span
+                                                                                className="astrick">*</span>
+                                                                            </label>
+                                                                            <OverlayTrigger
+                                                                                placement="bottom"
+                                                                                overlay={<Tooltip
+                                                                                    className="custom-tooltip"
+                                                                                    id="button-tooltip custom-tooltip">
+                                                                                    Please refrain from changing
+                                                                                    username.
+                                                                                    Your username are integral to
+                                                                                    several
+                                                                                    functionalities.
+                                                                                    Altering them might disrupt some
+                                                                                    services.
+                                                                                    For more
+                                                                                    information, please contact us at
+                                                                                    addy.ads.ultivic@gmail.com
+                                                                                </Tooltip>}
+                                                                            >
+                                                                                <input
+                                                                                    defaultValue={formik.values.username}
+                                                                                    type="text"
+                                                                                    onBlur={formik.handleBlur}
+                                                                                    name="username"
+                                                                                    className="form-control mt-2"
+                                                                                    disabled={true}
+                                                                                    placeholder="Username"
+                                                                                />
+                                                                            </OverlayTrigger>
+                                                                            {formik.touched.username && formik.errors.username ? (
+                                                                                <p className="error_message">
+                                                                                    {formik.errors.username}
+                                                                                </p>
+                                                                            ) : null}
+                                                                        </div>
+                                                                    }
+                                                                    {/*email  */}
+                                                                    {
+                                                                        !isNullOrEmpty(userData?.email) &&
+                                                                        <div className="form-group">
+                                                                            <label>
+                                                                                {" "}
+                                                                                Email <span className="astrick">*</span>
+                                                                            </label>
+
+                                                                            <OverlayTrigger
+                                                                                placement="bottom"
+                                                                                overlay={<Tooltip
+                                                                                    className="custom-tooltip"
+                                                                                    id="button-tooltip">
+                                                                                    Please refrain from changing email.
+                                                                                    Your email are integral to several
+                                                                                    functionalities.
+                                                                                    Altering them might disrupt some
+                                                                                    services.
+                                                                                    For more
+                                                                                    information, please contact us at
+                                                                                    addy.ads.ultivic@gmail.com
+                                                                                </Tooltip>}
+                                                                            >
+                                                                                <input
+                                                                                    readOnly={true}
+                                                                                    placeholder="Email"
+                                                                                    defaultValue={formik.values.email}
+                                                                                    type="text"
+                                                                                    onBlur={formik.handleBlur}
+                                                                                    name="email"
+                                                                                    disabled={true}
+                                                                                    className="form-control mt-2 email_field"
+                                                                                />
+                                                                            </OverlayTrigger>
+
+
+                                                                            {formik.touched.email && formik.errors.email ? (
+                                                                                <p className="error_message">{formik.errors.email}</p>
+                                                                            ) : null}
+                                                                        </div>
+                                                                    }
+                                                                    {/* contact number */}
+                                                                    <div className="form-group">
+                                                                        <label> Contact Number</label>
+                                                                        <input
+                                                                            placeholder="Contact No"
+                                                                            defaultValue={formik.values.contactNo}
+                                                                            type="text"
+                                                                            onChange={edit ? formik.handleChange : undefined}
+                                                                            onBlur={formik.handleBlur}
+                                                                            name="contactNo"
+                                                                            className="form-control mt-2"
+                                                                            disabled={!edit}
+                                                                        />
+                                                                    </div>
+                                                                    {/* industry */}
+
+                                                                    <div className='form-group'>
+                                                                        <label
+                                                                            htmlFor="country">{jsondata.industry}</label>
+                                                                        <select
+                                                                            name="industry"
+                                                                            className="form-control cmn_select_box mt-1"
+                                                                            onChange={edit ? formik.handleChange : undefined}
+                                                                            onBlur={formik.handleBlur}
+                                                                            defaultValue={formik.values.industry}
+                                                                            disabled={!edit}
+                                                                        >
+                                                                            <option value="">Select Industry</option>
+                                                                            {Object.keys(Industries)?.map((key, index) => (
+                                                                                <option key={index}
+                                                                                        value={Industries[key]}>
+                                                                                    {Industries[key]}
+                                                                                </option>
+                                                                            ))}
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
-                                                                </div>
-                                                                </div>
+                                                            </div>
 
                                                             {/* address section starts here  */}
                                                             <div className="col-lg-6 col-sm-12 col-ms-12">
-                                                            <div className="address_info_container profile_cmn_radius cmn_shadow gray_border p-4">
-                                                            <div className={`${edit ? "" : "address-info"}`}>
+                                                                <div
+                                                                    className="address_info_container profile_cmn_radius  p-4">
+                                                                    <div className={`${edit ? "" : "address-info"}`}>
 
-                                                            <h3 className="dm-sans-font">Address</h3>
+                                                                        <h3 className="dm-sans-font">Address</h3>
 
-                                                          
 
-                                                
+                                                                        {/* address 1 */}
+                                                                        <div className="form-group">
+                                                                            <label>
+                                                                                {jsondata.addressLine1} {isAddressRequired &&
+                                                                                <span className="astrick">*</span>}
+                                                                            </label>
+                                                                            <input
+                                                                                onChange={edit ? formik.handleChange : undefined}
+                                                                                placeholder={jsondata.addressLine1}
+                                                                                onBlur={formik.handleBlur}
+                                                                                defaultValue={formik.values.addressLine1}
+                                                                                type="text"
+                                                                                className="form-control mt-1"
+                                                                                name="addressLine1"
+                                                                                disabled={!edit}
+                                                                            />
+                                                                            {formik.touched.addressLine1 &&
+                                                                            formik.errors.addressLine1 ? (
+                                                                                <p className="error_message">
+                                                                                    {formik.errors.addressLine1}
+                                                                                </p>
+                                                                            ) : null}
+                                                                        </div>
+                                                                        {/* address 2 */}
+                                                                        <div className="form-group">
+                                                                            <label>{jsondata.addressLine2}</label>
+                                                                            <input
+                                                                                onChange={edit ? formik.handleChange : undefined}
+                                                                                onBlur={formik.handleBlur}
+                                                                                defaultValue={formik.values.addressLine2}
+                                                                                disabled={!edit}
+                                                                                name="addressLine2"
+                                                                                className="form-control mt-1"
+                                                                                type="text"
+                                                                                placeholder={jsondata.addressLine2}
+                                                                            />
+                                                                        </div>
+                                                                        {/* country */}
+                                                                        <div className="form-group">
+                                                                            <label htmlFor="country">
+                                                                                Country{isAddressRequired &&
+                                                                                <span className="astrick">*</span>}
+                                                                            </label>
+                                                                            <select
 
-                                                      
-                                                        
-                                                                {/* address 1 */}
-                                                                <div className="form-group">
-                                                                    <label>
-                                                                        {jsondata.addressLine1} {isAddressRequired &&
-                                                                        <span className="astrick">*</span>}
-                                                                    </label>
-                                                                    <input
-                                                                        onChange={edit ? formik.handleChange : undefined}
-                                                                        placeholder={jsondata.addressLine1}
-                                                                        onBlur={formik.handleBlur}
-                                                                        defaultValue={formik.values.addressLine1}
-                                                                        type="text"
-                                                                        className="form-control mt-1"
-                                                                        name="addressLine1"
-                                                                        disabled={!edit}
-                                                                    />
-                                                                    {formik.touched.addressLine1 &&
-                                                                    formik.errors.addressLine1 ? (
-                                                                        <p className="error_message">
-                                                                            {formik.errors.addressLine1}
-                                                                        </p>
-                                                                    ) : null}
+                                                                                id="country"
+                                                                                name="country"
+                                                                                onChange={edit ? handleCountryChange : undefined}
+                                                                                onBlur={formik.handleBlur}
+                                                                                defaultValue={formik.values.country}
+                                                                                disabled={!edit}
+                                                                                className="form-control mt-1 cmn_select_box"
+                                                                            >
+                                                                                <option value="">Select Country</option>
+                                                                                {countries?.map((country) => (
+                                                                                    <option key={country.name}
+                                                                                            value={country.name}>
+                                                                                        {country.name}
+                                                                                    </option>
+                                                                                ))}
+                                                                            </select>
+                                                                            {formik.touched.country && formik.errors.country ? (
+                                                                                <p className="error_message">{formik.errors.country}</p>
+                                                                            ) : null}
+                                                                        </div>
+
+
+                                                                        {/* state */}
+                                                                        <div className="form-group">
+                                                                            <label htmlFor="state">
+                                                                                State{isAddressRequired &&
+                                                                                <span className="astrick">*</span>}
+                                                                            </label>
+                                                                            <select
+                                                                                id="state"
+                                                                                name="state"
+                                                                                onChange={edit ? handleStateChange : undefined}
+                                                                                onBlur={formik.handleBlur}
+                                                                                defaultValue={formik.values.state}
+                                                                                disabled={!edit}
+                                                                                className="form-control mt-1 cmn_select_box"
+                                                                            >
+                                                                                <option value="">Select State</option>
+                                                                                {states?.map((state) => (
+                                                                                    <option key={state.name}
+                                                                                            value={state.name}>
+                                                                                        {state.name}
+                                                                                    </option>
+                                                                                ))}
+                                                                            </select>
+                                                                            {formik.touched.state && formik.errors.state ? (
+                                                                                <p className="error_message">{formik.errors.state}</p>
+                                                                            ) : null}
+                                                                        </div>
+                                                                        {/* city */}
+                                                                        <div className="form-group">
+                                                                            <label>City</label>
+                                                                            <input
+                                                                                onChange={edit ? formik.handleChange : undefined}
+                                                                                onBlur={formik.handleBlur}
+                                                                                defaultValue={formik.values.city}
+                                                                                name="city"
+                                                                                className="form-control mt-1"
+                                                                                type="text"
+                                                                                disabled={!edit}
+                                                                                placeholder={"City"}
+                                                                            />
+                                                                        </div>
+
+                                                                        {/* county */}
+                                                                        <div className="form-group">
+                                                                            <label htmlFor="city">
+                                                                                County{isAddressRequired &&
+                                                                                <span className="astrick">*</span>}
+                                                                            </label>
+                                                                            <select
+                                                                                id="county"
+                                                                                name="county"
+                                                                                onChange={edit ? formik.handleChange : undefined}
+                                                                                onBlur={formik.handleBlur}
+                                                                                value={formik.values.county}
+                                                                                className="form-control mt-1 cmn_select_box"
+                                                                                disabled={!edit}
+                                                                            >
+                                                                                <option value="">Select County</option>
+                                                                                {cities?.map((city, index) => (
+                                                                                    <option key={index}
+                                                                                            value={city.isoCode}>
+                                                                                        {city.name}
+                                                                                    </option>
+                                                                                ))}
+                                                                            </select>
+                                                                            {formik.touched.county && formik.errors.county ? (
+                                                                                <p className="error_message">
+                                                                                    {formik.errors.county}
+                                                                                </p>
+                                                                            ) : null}
+                                                                        </div>
+
+                                                                        {/* pincode */}
+
+                                                                        <div className="form-group">
+                                                                            <label>{jsondata.pinCode}</label>
+                                                                            <input
+                                                                                onChange={edit ? formik.handleChange : undefined}
+                                                                                onBlur={formik.handleBlur}
+                                                                                onWheel={(e) => {
+                                                                                    e.target.blur()
+                                                                                }}
+                                                                                defaultValue={formik.values.pinCode}
+                                                                                name="pinCode"
+                                                                                className="form-control mt-1"
+                                                                                type="number"
+                                                                                disabled={!edit}
+                                                                                placeholder={jsondata.pinCode}
+                                                                            />
+                                                                        </div>
+
+
+                                                                    </div>
                                                                 </div>
-                                                                {/* address 2 */}
-                                                                <div className="form-group">
-                                                                    <label>{jsondata.addressLine2}</label>
-                                                                    <input
-                                                                        onChange={edit ? formik.handleChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        defaultValue={formik.values.addressLine2}
-                                                                        disabled={!edit}
-                                                                        name="addressLine2"
-                                                                        className="form-control mt-1"
-                                                                        type="text"
-                                                                        placeholder={jsondata.addressLine2}
-                                                                    />
-                                                                </div>
-                                                                {/* country */}
-                                                                <div className="form-group">
-                                                                    <label htmlFor="country">
-                                                                        Country{isAddressRequired &&
-                                                                        <span className="astrick">*</span>}
-                                                                    </label>
-                                                                    <select
-
-                                                                        id="country"
-                                                                        name="country"
-                                                                        onChange={edit ? handleCountryChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        defaultValue={formik.values.country}
-                                                                        disabled={!edit}
-                                                                        className="form-control mt-1 cmn_select_box"
-                                                                    >
-                                                                        <option value="">Select Country</option>
-                                                                        {countries?.map((country) => (
-                                                                            <option key={country.name}
-                                                                                    value={country.name}>
-                                                                                {country.name}
-                                                                            </option>
-                                                                        ))}
-                                                                    </select>
-                                                                    {formik.touched.country && formik.errors.country ? (
-                                                                        <p className="error_message">{formik.errors.country}</p>
-                                                                    ) : null}
-                                                                </div>
-
-                                                                
-                                                                {/* state */}
-                                                                <div className="form-group">
-                                                                    <label htmlFor="state">
-                                                                        State{isAddressRequired &&
-                                                                        <span className="astrick">*</span>}
-                                                                    </label>
-                                                                    <select
-                                                                        id="state"
-                                                                        name="state"
-                                                                        onChange={edit ? handleStateChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        defaultValue={formik.values.state}
-                                                                        disabled={!edit}
-                                                                        className="form-control mt-1 cmn_select_box"
-                                                                    >
-                                                                        <option value="">Select State</option>
-                                                                        {states?.map((state) => (
-                                                                            <option key={state.name} value={state.name}>
-                                                                                {state.name}
-                                                                            </option>
-                                                                        ))}
-                                                                    </select>
-                                                                    {formik.touched.state && formik.errors.state ? (
-                                                                        <p className="error_message">{formik.errors.state}</p>
-                                                                    ) : null}
-                                                                </div>
-                                                                {/* city */}
-                                                                <div className="form-group">
-                                                                    <label>City</label>
-                                                                    <input
-                                                                        onChange={edit ? formik.handleChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        defaultValue={formik.values.city}
-                                                                        name="city"
-                                                                        className="form-control mt-1"
-                                                                        type="text"
-                                                                        disabled={!edit}
-                                                                        placeholder={"City"}
-                                                                    />
-                                                                </div>
-
-                                                                {/* county */}
-                                                                <div className="form-group">
-                                                                    <label htmlFor="city">
-                                                                        County{isAddressRequired &&
-                                                                        <span className="astrick">*</span>}
-                                                                    </label>
-                                                                    <select
-                                                                        id="county"
-                                                                        name="county"
-                                                                        onChange={edit ? formik.handleChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        value={formik.values.county}
-                                                                        className="form-control mt-1 cmn_select_box"
-                                                                        disabled={!edit}
-                                                                    >
-                                                                        <option value="">Select County</option>
-                                                                        {cities?.map((city, index) => (
-                                                                            <option key={index} value={city.isoCode}>
-                                                                                {city.name}
-                                                                            </option>
-                                                                        ))}
-                                                                    </select>
-                                                                    {formik.touched.county && formik.errors.county ? (
-                                                                        <p className="error_message">
-                                                                            {formik.errors.county}
-                                                                        </p>
-                                                                    ) : null}
-                                                                </div>
-
-                                                                {/* pincode */}
-
-                                                                <div className="form-group">
-                                                                    <label>{jsondata.pinCode}</label>
-                                                                    <input
-                                                                        onChange={edit ? formik.handleChange : undefined}
-                                                                        onBlur={formik.handleBlur}
-                                                                        onWheel={(e) => {
-                                                                            e.target.blur()
-                                                                        }}
-                                                                        defaultValue={formik.values.pinCode}
-                                                                        name="pinCode"
-                                                                        className="form-control mt-1"
-                                                                        type="number"
-                                                                        disabled={!edit}
-                                                                        placeholder={jsondata.pinCode}
-                                                                    />
-                                                                </div>
-
-                                                        
-
-
-                                                       
-                                                           </div>
-                                                           </div>
 
                                                             </div>
-                                                           
+                                                                 </div>
                                                         </div>
 
 
                                                     </div>
 
-                                         
 
-
-                                                   
-
-
-                                              
                                             </div>
                                         </div>
 
@@ -646,7 +685,7 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-                </form>
+            </form>
             </section>
             {showCropImageModal &&
                 <CropImageModal imageUrl={image} showModal={showCropImageModal} setShowModal={setShowCropImageModal}

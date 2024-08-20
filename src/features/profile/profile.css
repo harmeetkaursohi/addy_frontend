@@ -23,6 +23,16 @@
 }
 .edit_content h3 {
     font-size: 24px;
+    margin-top: 13px;
+}
+.edit_wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 20px 0px;
+    align-items: center;
+}
+.profile-information{
+    border-radius: 20px;
 }
 ul.mb-3.edit_tabs.nav.nav-tabs {
      border-bottom: unset;
@@ -179,7 +189,9 @@ button.edit_profile_btn {
 .ImSpinner_icon{
     font-size: 20px;
 }
-
+.profile_Wrapper{
+    position: relative;
+}
 
   .custom-tooltip .tooltip-arrow::before {
     border-right-color: transparent !important; 
@@ -218,12 +230,12 @@ button.edit_profile_btn {
 }
 @media screen and (min-width:1499px) {
     .editprofile_outer{
-        width: 78%;
+        width: 100%;
         margin: auto;
     
     }
     .editprofile_outer {
-        width: 78%;
+        width: 100%;
         margin: auto;
     }
 }
@@ -324,6 +336,7 @@ button.edit_profile_btn {
    .profile_Wrapper{
     flex-wrap: wrap;
     gap: 27px !important;
+
    }
     .changeProfile_label{
         transform: translate(23px, -25px);

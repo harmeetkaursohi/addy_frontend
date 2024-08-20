@@ -8,6 +8,7 @@
     overflow-x: hidden;
     scrollbar-width: none;
     background-color: white;
+    transition: all ease-in 0.4s;
 }
 img.addy_logo {
     height: 45px;
