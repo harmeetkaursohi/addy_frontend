@@ -365,20 +365,17 @@ const SocialAccounts = ({}) => {
                                             isDisabled={socialAccountConnectData?.loading || getAllConnectedSocialAccountData?.loading}
                                             appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                             redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
-                                            // auth_type={'authenticate'}
                                             onResolve={(response) => {
                                                 setFacebookDropDown(true)
                                                 setInstagramDropDown(false)
                                                 setPinterestDropDown(false)
                                                 setLinkedinDropDown(false)
-                                                console.log("response====>",response)
                                                 connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.FACEBOOK), SocialAccountProvider.FACEBOOK)
                                             }}
                                             scope={`${import.meta.env.VITE_APP_FACEBOOK_SCOPE}`}
                                             onReject={(error) => {
                                                 console.log("error", error)
                                             }}
-                                            // response_type={"code"}
                                         >
 
                                             <FacebookLoginButton text={"Connect"} className={"facebook_connect"}
