@@ -136,7 +136,7 @@ const Layout = () => {
 
     return (
         <>
-            <section className="sidebar_container">
+            <section className="sidebar_container" >
 
                 <div
                     className={
