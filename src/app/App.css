@@ -306,9 +306,10 @@ h2.openEye {
 .cursor_pointer {
   cursor: pointer;
 }
-h2.acc_not_connected_heading {
+.acc_not_connected_heading {
   font-size: 20px;
-  margin-top: 24px;
+  font-family: "Nunito", sans-serif;
+  font-style: normal;
 }
 div:where(.swal2-container).swal2-center>.swal2-popup {
   padding-bottom: 25px !important;
@@ -1129,9 +1130,8 @@ img.acc_not_connected_img.mt-0 {
   }
 }
 @media screen and (max-width:991px) {
-  h2.acc_not_connected_heading {
+  .acc_not_connected_heading {
     font-size: 16px;
-    margin-top: 20px;
 }
 .cmn_heading_class {
   font-size: 20px;
@@ -1285,9 +1285,8 @@ width: 20px;
   .connected_heading{
     font-size: 14px;
   }
-  h2.acc_not_connected_heading {
+  .acc_not_connected_heading {
     font-size: 12px;
-    margin-top: 20px;
 }
 .cmn_wrapper_outer{
   padding: 0px 13px 30px;

@@ -567,7 +567,7 @@ button.ai_btn {
 .schedule_date_outer {
     display: flex;
     gap: 30px;
-    margin-top: 30px;
+    margin-top: 10px;
 }
 
 .date_time_outer select {

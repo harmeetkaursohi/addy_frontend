@@ -1,11 +1,13 @@
 import {useEffect, useState} from "react";
 import { useSelector} from "react-redux";
 import DraftComponent from "./DraftComponent";
-import {sortByKey} from "../../../utils/commonUtils";
+import notConnected_img from "../../../images/no_acc_connect_img.svg";
+import {formatMessage, sortByKey} from "../../../utils/commonUtils";
 import CommonLoader from "../../common/components/CommonLoader";
 import noDraftPosts from "../../../images/no_draft_posts.png";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../common/components/AppProvider";
+import {NoPostInDraft, NotConnected} from "../../../utils/contantData";
 
 export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger}) => {
     const {sidebar} = useAppContext()
@@ -45,15 +47,13 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading || getAllDraftPostsByCustomerAndPeriodData.loading) ?
                     <CommonLoader classname={"cmn_loader_outer"}/> :
                     getAllConnectedSocialAccountData?.data?.length === 0 ?
-                        <ConnectSocialMediaAccount messageFor={"ACCOUNT"}/> :
+                        <ConnectSocialMediaAccount image={notConnected_img} message={formatMessage(NotConnected,["posts","social media"])}/> :
                         getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 ?
-                            <ConnectSocialMediaAccount messageFor={"PAGE"}/> :
+                            <ConnectSocialMediaAccount image={notConnected_img} message={formatMessage(NotConnected,["posts","social media pages"])}/> :
                             (drafts !== null && Array.isArray(drafts) && drafts?.length === 0) ?
                                 <div className="noDraftPosts_outer p-5 text-center mt-3">
                                     <img src={noDraftPosts} alt={"No Drafts"} className=" no-draft-img"/>
-                                    <h2 className="acc_not_connected_heading">Oops!
-                                        It seems there are no posts to display at the
-                                        moment.</h2>
+                                    <h2 className="acc_not_connected_heading">{NoPostInDraft}</h2>
                                 </div>
                                 :
                                 drafts !== null && Array.isArray(drafts) && drafts?.length > 0 &&

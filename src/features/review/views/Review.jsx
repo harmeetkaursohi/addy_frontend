@@ -1,12 +1,12 @@
 import "./Review.css";
 import jsondata from "../../../locales/data/initialdata.json";
-import {ErrorFetchingPost, PostAlreadyDeleted, SocialAccountProvider} from "../../../utils/contantData";
+import {ErrorFetchingPost, NotConnected, PostAlreadyDeleted, SocialAccountProvider} from "../../../utils/contantData";
 import {useCallback, useEffect, useRef, useState} from "react";
 import usePosts from "../../common/hooks/usePosts";
 import {
     computeImageURL,
     concatenateString,
-    createOptionListForSelectTag, getCommentCreationTime,
+    createOptionListForSelectTag, formatMessage, getCommentCreationTime,
 } from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
@@ -22,6 +22,7 @@ import Select from "react-select";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../common/components/AppProvider";
 import {MdDelete} from "react-icons/md";
+import notConnected_img from "../../../images/no_acc_connect_img.svg";
 
 const Review = () => {
     const {sidebar} = useAppContext();
@@ -168,7 +169,7 @@ const Review = () => {
                         <div className="review_wrapper cmn_wrapper_outer  white_bg_color cmn_height_outer">
                             <div className="review_header align-items-center gap-3">
                                 <div className="review_heading flex-grow-1">
-                                    <h2 className="cmn_text_heading">{jsondata.likecomment}</h2>
+                                    <h2 className="cmn_text_heading">Published Posts</h2>
                                     <h6 className="cmn_small_heading ">
                                         {jsondata.review_post_heading}
                                     </h6>
@@ -233,25 +234,16 @@ const Review = () => {
                                     <>
                                         <div className="review_outer">
 
-                                            {!isLoading &&
-                                            results !== null &&
-                                            results?.length === 0 ? (
+                                            {
+                                                !isLoading && results !== null && results?.length === 0 ?
                                                 <div>
-                                                    <div
-                                                        className="W-100 text-center no_post_review_outer"
-
-                                                    >
-                                                        <div
-                                                            className={
-                                                                "no-post-review acc_not_connected_heading"
-                                                            }
-                                                        >
+                                                    <div className="W-100 text-center no_post_review_outer">
+                                                        <div className={"no-post-review acc_not_connected_heading"}>
                                                             Oops! It seems there are no posts to display at
                                                             the moment.
                                                         </div>
                                                     </div>
-                                                </div>
-                                            ) : (
+                                                </div> :
                                                 <ul className="review_list">
                                                     {results?.map((post, index) => {
                                                         return removedPosts?.some((removedPost) => removedPost?.postId === post.id && removedPost?.pageId === post.page.pageId) ?
@@ -393,7 +385,7 @@ const Review = () => {
                                                             );
                                                     })}
                                                 </ul>
-                                            )}
+                                            }
                                         </div>
 
 
@@ -414,11 +406,11 @@ const Review = () => {
                             )}
                             {
                                 getAllConnectedSocialAccountData?.data?.length === 0 &&
-                                <ConnectSocialMediaAccount messageFor={"ACCOUNT"}/>
+                                <ConnectSocialMediaAccount image={notConnected_img}  message={formatMessage(NotConnected,["posts","social media"])}/>
                             }
                             {
                                 getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 &&
-                                <ConnectSocialMediaAccount messageFor={"PAGE"}/>
+                                <ConnectSocialMediaAccount image={notConnected_img} message={formatMessage(NotConnected,["posts","social media pages"])}/>
                             }
                         </div>
                     </div>

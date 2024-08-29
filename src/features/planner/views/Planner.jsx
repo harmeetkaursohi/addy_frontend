@@ -403,7 +403,7 @@ const Planner = () => {
                                 </div>
                             } */}
                                 {/* new code planner */}
-                                <div className="row mt-5">
+                                <div className="row ">
                                     <div className="col-lg-9 col-md-12 col-sm-12">
                                         <div
                                             className={`${

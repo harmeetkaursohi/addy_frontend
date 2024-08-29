@@ -13,7 +13,7 @@ import {RotatingLines} from "react-loader-spinner";
 import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAccount";
 import {FaBell} from "react-icons/fa";
 import CommonLoader from "../common/components/CommonLoader";
-import {getCommentCreationTime} from "../../utils/commonUtils";
+import {formatMessage, getCommentCreationTime} from "../../utils/commonUtils";
 import {Dropdown} from "react-bootstrap";
 import {PiDotsThreeVerticalBold} from "react-icons/pi";
 import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
@@ -22,9 +22,11 @@ import {
     resetNotificationEventData,
     unseenNotificationsCountData
 } from "../../app/slices/notificationSlice/notificationSlice";
+import notConnected_img from "../../images/no_acc_connect_img.svg";
 import {resetReducers} from "../../app/actions/commonActions/commonActions";
 import Swal from "sweetalert2";
 import notification_img from "../../images/notification_img.svg"
+import {EmptyNotificationGridMessage, NotConnected} from "../../utils/contantData";
 const Notification = () => {
 
     const dispatch = useDispatch();
@@ -301,12 +303,8 @@ const Notification = () => {
                                     </>
                             }
                             {
-                                getAllConnectedSocialAccountData?.data?.length == 0 &&
-                                <ConnectSocialMediaAccount messageFor={"ACCOUNT"}/>
-                            }
-                            {
-                                getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 &&
-                                <ConnectSocialMediaAccount messageFor={"PAGE"}/>
+                                (getAllConnectedSocialAccountData?.data?.length == 0 || connectedPagesData?.facebookConnectedPages?.length === 0) &&
+                                <ConnectSocialMediaAccount image={notConnected_img} message={EmptyNotificationGridMessage}/>
                             }
 
 

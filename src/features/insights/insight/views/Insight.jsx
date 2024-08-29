@@ -25,14 +25,21 @@ import {
 import {getPostByPageIdAndPostStatus} from "../../../../app/actions/postActions/postActions";
 import {
     calculatePercentageGrowthFor, convertUnixTimestampToDateTime, createSocialMediaProfileViewInsightsQuery,
-    fetchCssForInsightPageListOption,
+    fetchCssForInsightPageListOption, formatMessage,
     generateUnixTimestampFor,
     getDatesForPinterest, groupBy,
 
 } from "../../../../utils/commonUtils";
-import {enabledSocialMedia, selectGraphDaysOptions, SocialAccountProvider} from "../../../../utils/contantData";
+import {
+    EmptyInsightGridMessage,
+    enabledSocialMedia,
+    NotConnected,
+    selectGraphDaysOptions,
+    SocialAccountProvider
+} from "../../../../utils/contantData";
 import Loader from "../../../loader/Loader";
 import CommonLoader from "../../../common/components/CommonLoader";
+import notConnected_img from "../../../../images/no_acc_connect_img.svg";
 import ConnectSocialMediaAccount from "../../../common/components/ConnectSocialMediaAccount";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import {useAppContext} from "../../../common/components/AppProvider";
@@ -972,9 +979,8 @@ const Insight = () => {
                         {
                             getAllConnectedSocialAccountData?.data?.length === 0 &&
                             <div className={"no-account-connected-insights-outer mt-4 mb-3"}>
-                                <ConnectSocialMediaAccount messageFor={"ACCOUNT"}/>
+                                <ConnectSocialMediaAccount image={notConnected_img} message={EmptyInsightGridMessage}/>
                             </div>
-
                         }
 
 

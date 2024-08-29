@@ -1607,7 +1607,8 @@ export const formatMessage = (message = null, values = []) => {
     }
     let replacedMessage = message;
     for (let i = 0; i < values.length; i++) {
-        replacedMessage = replacedMessage.replace('{' + i + '}', values[i]);
+        const regex = new RegExp(`\\{${i}\\}`, 'g');
+        replacedMessage = replacedMessage.replace(regex, values[i]);
     }
     return replacedMessage;
 }
@@ -1949,8 +1950,56 @@ export const concatenateString = (originalString, maxLength) => {
     }
 };
 
+
+
+export const getFileFromAttachmentSource = (attachment) => {
+    return new Promise((resolve, reject) => {
+        // Decode base64 string to binary data
+        const binaryData = atob(attachment?.attachmentSource);
+
+        // Convert binary data to array buffer
+        const arrayBuffer = new ArrayBuffer(binaryData.length);
+        const uint8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryData.length; i++) {
+            uint8Array[i] = binaryData.charCodeAt(i);
+        }
+
+        // Create Blob object from array buffer
+        const blob = new Blob([uint8Array], {type: 'application/octet-stream'});
+
+        // Generate URL for Blob object
+        const fileName = attachment?.fileName;
+        const fileType = 'application/octet-stream';
+        // const file = new File([blob], fileName, {type: fileType});
+        const file = blobToFile(blob, fileName, fileType);
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                resolve({
+                    id: attachment?.id,
+                    file: file,
+                    url: URL.createObjectURL(blob),
+                    mediaType: attachment?.mediaType,
+                    fileName: attachment?.fileName,
+                    height: img.height,
+                    width: img.width
+                });
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+};
+
 export const isCreatePostRequestValid = (requestBody, files) => {
     let shouldBreak = false;
+    const hasAttachments = requestBody?.attachments?.length > 0;
+    const isPostedOnFaceBook = requestBody.postPageInfos?.filter(page => page?.provider === "FACEBOOK")?.length > 0
+    const isPostedOnInstagram = requestBody.postPageInfos?.filter(page => page?.provider === "INSTAGRAM")?.length > 0
+    const isPostedOnLinkedin = requestBody.postPageInfos?.filter(page => page?.provider === "LINKEDIN")?.length > 0
+    const isPostedOnPinterest = requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0
     Object.keys(requestBody)?.forEach(key => {
         if (shouldBreak) return true;
         switch (key) {
@@ -1963,32 +2012,28 @@ export const isCreatePostRequestValid = (requestBody, files) => {
             }
             case "caption":
             case "hashTag": {
-                if (isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
-                    showErrorToast(formatMessage(IsRequired, ["Caption"]));
+                // If posted on facebook or linkedin one among caption , hastag or image is required
+                if((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)){
+                    showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" :""} ${isPostedOnLinkedin ? " and Linkedin" :""}, either Caption/HashTag or Image`]));
                     shouldBreak = true;
                 }
                 break;
             }
             case "pinTitle": {
-                if (isNullOrEmpty(requestBody.pinTitle) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0) {
+                if (isNullOrEmpty(requestBody.pinTitle) && isPostedOnPinterest) {
                     showErrorToast(formatMessage(IsRequired, ["Pin Title"]));
                     shouldBreak = true;
                 }
                 break;
             }
             case "destinationUrl": {
-                if (isNullOrEmpty(requestBody.destinationUrl) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0) {
+                if (isNullOrEmpty(requestBody.destinationUrl) && isPostedOnPinterest) {
                     showErrorToast(formatMessage(IsRequired, ["Destination Url"]));
                     shouldBreak = true;
                 }
                 break;
             }
             case "attachments": {
-                const hasAttachments = requestBody.attachments?.length > 0;
-                const isPostedOnFaceBook = requestBody.postPageInfos?.filter(page => page?.provider === "FACEBOOK")?.length > 0
-                const isPostedOnInstagram = requestBody.postPageInfos?.filter(page => page?.provider === "INSTAGRAM")?.length > 0
-                const isPostedOnLinkedin = requestBody.postPageInfos?.filter(page => page?.provider === "LINKEDIN")?.length > 0
-                const isPostedOnPinterest = requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0
                 if (hasAttachments) {
                     if (files.some(file => file?.mediaType === "IMAGE") && files.some(file => file?.mediaType === "VIDEO")) {
                         showErrorToast(OnlyImageOrVideoCanBePosted);
@@ -2005,7 +2050,6 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                         shouldBreak = true;
                         break;
                     }
-
                 }
                 if (isPostedOnPinterest) {
                     if (!hasAttachments) {
@@ -2150,50 +2194,15 @@ export const isCreatePostRequestValid = (requestBody, files) => {
     });
     return !shouldBreak;
 }
-
-export const getFileFromAttachmentSource = (attachment) => {
-    return new Promise((resolve, reject) => {
-        // Decode base64 string to binary data
-        const binaryData = atob(attachment?.attachmentSource);
-
-        // Convert binary data to array buffer
-        const arrayBuffer = new ArrayBuffer(binaryData.length);
-        const uint8Array = new Uint8Array(arrayBuffer);
-        for (let i = 0; i < binaryData.length; i++) {
-            uint8Array[i] = binaryData.charCodeAt(i);
-        }
-
-        // Create Blob object from array buffer
-        const blob = new Blob([uint8Array], {type: 'application/octet-stream'});
-
-        // Generate URL for Blob object
-        const fileName = attachment?.fileName;
-        const fileType = 'application/octet-stream';
-        // const file = new File([blob], fileName, {type: fileType});
-        const file = blobToFile(blob, fileName, fileType);
-
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const img = new Image();
-            img.onload = () => {
-                resolve({
-                    id: attachment?.id,
-                    file: file,
-                    url: URL.createObjectURL(blob),
-                    mediaType: attachment?.mediaType,
-                    fileName: attachment?.fileName,
-                    height: img.height,
-                    width: img.width
-                });
-            };
-            img.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
-    });
-};
-
-
 export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => {
+
+    const hasAttachments = requestBody.attachments?.length > 0;
+    const newlyAddedAttachments = files?.filter(attachment => attachment?.id === null || attachment?.id === undefined);
+    const allAttachments = [...oldAttachments, ...newlyAddedAttachments];
+    const isPostedOnPinterest = requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0
+    const isPostedOnLinkedin = requestBody.postPageInfos?.filter(page => page?.provider === "LINKEDIN")?.length > 0
+    const isPostedOnInstagram = requestBody.postPageInfos?.filter(page => page?.provider === "INSTAGRAM")?.length > 0
+    const isPostedOnFaceBook = requestBody.postPageInfos?.filter(page => page?.provider === "FACEBOOK")?.length > 0
 
     let shouldBreak = false;
     Object.keys(requestBody)?.forEach(key => {
@@ -2208,8 +2217,9 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
             }
             case "caption":
             case "hashTag": {
-                if (isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
-                    showErrorToast(formatMessage(IsRequired, ["Caption"]));
+                // If posted on facebook or linkedin one among caption , hashtag or image is required
+                if((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)){
+                    showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" :""} ${isPostedOnLinkedin ? " and Linkedin" :""}, either Caption/HashTag or Image`]));
                     shouldBreak = true;
                 }
                 break;
@@ -2229,10 +2239,6 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                 break;
             }
             case "attachments": {
-                const hasAttachments = requestBody.attachments?.length > 0;
-                const newlyAddedAttachments = files?.filter(attachment => attachment?.id === null || attachment?.id === undefined);
-                const allAttachments = [...oldAttachments, ...newlyAddedAttachments];
-
                 if (hasAttachments) {
                     if (files.some(file => file?.mediaType === "IMAGE") && files.some(file => file?.mediaType === "VIDEO")) {
                         showErrorToast(OnlyImageOrVideoCanBePosted);
@@ -2251,7 +2257,7 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                     }
 
                 }
-                const isPostedOnPinterest = requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0
+
                 if (isPostedOnPinterest) {
                     if (!hasAttachments) {
                         showErrorToast(formatMessage(IsRequiredFor, ["Image or video", "pinterest"]));
@@ -2287,7 +2293,6 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
 
                     }
                 }
-                const isPostedOnLinkedin = requestBody.postPageInfos?.filter(page => page?.provider === "LINKEDIN")?.length > 0
                 if (isPostedOnLinkedin && hasAttachments) {
 
                     if (files[0]?.mediaType === "IMAGE") {
@@ -2333,7 +2338,6 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                         }
                     }
                 }
-                const isPostedOnInstagram = requestBody.postPageInfos?.filter(page => page?.provider === "INSTAGRAM")?.length > 0
                 if (isPostedOnInstagram) {
                     if (!hasAttachments) {
                         showErrorToast(formatMessage(IsRequiredFor, ["Image or video", "instagram"]));
@@ -2374,7 +2378,6 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                         }
                     }
                 }
-                const isPostedOnFaceBook = requestBody.postPageInfos?.filter(page => page?.provider === "FACEBOOK")?.length > 0
                 if (isPostedOnFaceBook && hasAttachments) {
                     if (files[0]?.mediaType === "IMAGE" && allAttachments.some(file => (file?.file?.size / 1048576) > 10)) {
                         showErrorToast(formatMessage(MultiMediaSizeLimit, ["More", "10 mb", "image", "facebook"]));

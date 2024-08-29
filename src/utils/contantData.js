@@ -6,7 +6,7 @@ export const CouldNotPostComment = "Could not post comment!"
 export const UpdatedSuccessfully = "{0} updated successfully"
 export const PostAlreadyDeleted = "Looks like the post has been taken down"
 export const ErrorFetchingPost = "Something went wrong while fetching the post !"
-export const SelectAtleastOnePage = "Please Select atleast one page to post !"
+export const SelectAtleastOnePage = "Please Select at least one page!"
 export const IsRequired = "{0} is required !"
 export const IsRequiredFor = "{0} is required for {1} !"
 export const OnlyImageOrVideoCanBePosted = "Image and Video cannot be posted together !"
@@ -18,6 +18,10 @@ export const VideoFormatNotSupported = "Only {0} video format is supported for {
 export const PinterestImageLimitation = "Only single image can be posted on pinterest !"
 export const DisconnectAccountWarning = "Are you sure you want to disconnect? Doing so will remove all draft or scheduled posts for {0}. Are you still certain you want to disconnect?"
 export const DisconnectPageWarning = "Doing so will remove all draft or scheduled posts for this page. Are you still certain you want to disconnect?"
+export const NotConnected=" No {0} here yet. Connect your {1} to see what’s happening on your {0}!"
+export const NoPostInDraft=" This page is waiting for you! Start adding Posts to see the magic."
+export const EmptyInsightGridMessage=" Your insights dashboard is waiting. Start exploring to see meaningful trends!\n  Insights will appear here once you start using the platform. Let’s get started!"
+export const EmptyNotificationGridMessage="No items here yet. Let’s get started and make this list lively!"
 
 export const unProtectedUrls=["/login","/","/sign-up","/reset-password","/forgot-password","/auth-redirect"]
 

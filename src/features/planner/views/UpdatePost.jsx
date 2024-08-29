@@ -493,6 +493,150 @@ const UpdatePost = () => {
 
 
                                         <form onSubmit={null}>
+                                            {/* select media pages */}
+                                            <div className="createPost_outer media_outer">
+                                                <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
+
+                                                {/*    dropdown select platform=====*/}
+                                                <Dropdown className='insta_dropdown_btn mt-2'>
+                                                    <Dropdown.Toggle id="instagram"
+                                                                     className="instagram_dropdown tabs_grid">
+                                                        {selectedAllDropdownData.length > 0 ?
+                                                            (
+                                                                selectedAllDropdownData.map((data, index) => (
+                                                                    <div key={index} className="selected-option">
+                                                                        <img
+                                                                            src={data?.selectOption?.imageUrl || default_user_icon}
+                                                                            alt={data?.selectOption?.name}/>
+                                                                        <span>{data?.selectOption?.name}</span>
+                                                                        <RxCross2 onClick={(e) => {
+                                                                            handleCheckboxChange(data)
+                                                                        }}/>
+                                                                    </div>
+                                                                ))
+                                                            )
+                                                            :
+                                                            (
+                                                                <div className="social_inner_content">
+                                                                    <div>
+                                                                        <BiUser/>
+                                                                    </div>
+                                                                    <h6 className="cmn_headings">
+                                                                        Select platform
+                                                                    </h6>
+                                                                </div>
+                                                            )}
+                                                    </Dropdown.Toggle>
+
+
+                                                    <Dropdown.Menu className='w-100 social_media_list'>
+                                                        <div className="dropdown-options">
+
+                                                            <div className='_'>
+                                                                <div className="select_platform_outer">
+                                                                    <input type="checkbox"
+                                                                           id="choice1-2"
+                                                                           name="choice2"
+                                                                           checked={areAllOptionsSelected}
+                                                                           onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
+                                                                    />
+                                                                    <h3 className="cmn_headings" onClick={function () {
+                                                                        document.getElementById("choice1-2").click()
+                                                                    }}>Select all Platform</h3>
+                                                                </div>
+
+                                                                {
+                                                                    socialAccountData?.map((socialAccount, index) => {
+                                                                        return (
+
+                                                                            <>
+                                                                                {
+                                                                                    socialAccount && socialAccount?.pageAccessToken.length > 0 &&
+                                                                                    <div
+                                                                                        className={`instagram_outer ${socialAccount.provider == "FACEBOOK" ? "facebook_outer" : socialAccount.provider == "LINKEDIN" ? "linkedin_outer" : socialAccount.provider == "PINTEREST" ? "pinterest_outer" : ""}`}
+                                                                                        key={index}>
+                                                                                        <div
+                                                                                            className="checkbox-button_outer">
+
+                                                                                            {
+                                                                                                socialAccount && socialAccount?.pageAccessToken &&
+                                                                                                <>
+                                                                                                    <input
+                                                                                                        type="checkbox"
+                                                                                                        className=""
+                                                                                                        id={socialAccount.provider + "-checkbox"}
+                                                                                                        name="choice1"
+                                                                                                        checked={selectedGroups.includes(socialAccount?.provider)}
+                                                                                                        onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
+                                                                                                    />
+
+                                                                                                    <SocialMediaProviderBadge
+                                                                                                        provider={socialAccount.provider}/>
+
+                                                                                                </>
+                                                                                            }
+
+                                                                                        </div>
+
+                                                                                        {
+                                                                                            socialAccount?.pageAccessToken?.map((page, index) => (
+                                                                                                <div
+                                                                                                    className="instagramPages unselectedpages"
+                                                                                                    key={index}
+                                                                                                    style={{
+                                                                                                        background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : "",
+                                                                                                        border: selectedOptions.includes(page.pageId) === true ? "1px solid #048709" : ""
+                                                                                                    }}
+                                                                                                    onClick={(e) =>
+                                                                                                        handleCheckboxChange({
+                                                                                                            group: socialAccount?.provider,
+                                                                                                            selectOption: {
+                                                                                                                ...page,
+                                                                                                                socialMediaType: socialAccount?.provider
+                                                                                                            }
+                                                                                                        })}
+                                                                                                >
+                                                                                                    <div
+                                                                                                        className="checkbox-button_outer">
+                                                                                                        <img
+                                                                                                            src={page?.imageUrl || default_user_icon}/>
+                                                                                                        <h2 className="cmn_text_style">{page?.name}</h2>
+                                                                                                    </div>
+                                                                                                    <input
+                                                                                                        type="checkbox"
+                                                                                                        id={page.id}
+                                                                                                        name={page.name}
+                                                                                                        value={page.id}
+                                                                                                        checked={selectedOptions.includes(page.pageId)}
+                                                                                                        onChange={() =>
+                                                                                                            handleCheckboxChange({
+                                                                                                                group: socialAccount?.provider,
+                                                                                                                selectOption: page
+                                                                                                            })}
+                                                                                                    />
+                                                                                                </div>
+                                                                                            ))
+                                                                                        }
+
+
+                                                                                    </div>
+                                                                                }
+                                                                            </>
+
+                                                                        )
+                                                                    })
+                                                                }
+
+
+                                                            </div>
+
+                                                        </div>
+
+
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+
+                                            </div>
                                             {/* add media */}
                                             <div
                                                 className={`media_outer dashed_border  ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
@@ -542,14 +686,16 @@ const UpdatePost = () => {
                                                                                     e.preventDefault();
                                                                                     editHandler(index, file);
                                                                                 }}>
-                                                                                <BiSolidEditAlt style={{fontSize: '24px'}}
+                                                                                <BiSolidEditAlt
+                                                                                    style={{fontSize: '24px'}}
                                                                                 />
                                                                             </button>
                                                                         }
-                                                                        <button className="delete_upload" onClick={(e) => {
-                                                                            e.preventDefault();
-                                                                            handleRemoveSelectFile(file?.fileName, file?.id);
-                                                                        }}>
+                                                                        <button className="delete_upload"
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    handleRemoveSelectFile(file?.fileName, file?.id);
+                                                                                }}>
                                                                             <RiDeleteBin5Fill
                                                                                 style={{fontSize: '24px'}}
                                                                             />
@@ -610,162 +756,23 @@ const UpdatePost = () => {
                                                         }
                                                     </div>
 
-                                                    {
-                                                        disableImage === false && <>
-                                                            <h2 className='cmn_heading or_heading'>{jsondata.OR}</h2>
-                                                            <div className="ai_outer_btn">
-                                                                <button
-                                                                    className={`ai_btn cmn_white_text mt-2`}
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        setAIGenerateImageModal(true);
-                                                                    }}>
-                                                                    <i className="fa-solid fa-robot ai_icon me-2"
-                                                                       style={{fontSize: "15px"}}/> {jsondata.generateAi}
-                                                                </button>
-                                                            </div>
-                                                        </>
-                                                    }
+                                                    {/*{*/}
+                                                    {/*    disableImage === false && <>*/}
+                                                    {/*        <h2 className='cmn_heading or_heading'>{jsondata.OR}</h2>*/}
+                                                    {/*        <div className="ai_outer_btn">*/}
+                                                    {/*            <button*/}
+                                                    {/*                className={`ai_btn cmn_white_text mt-2`}*/}
+                                                    {/*                onClick={(e) => {*/}
+                                                    {/*                    e.preventDefault();*/}
+                                                    {/*                    setAIGenerateImageModal(true);*/}
+                                                    {/*                }}>*/}
+                                                    {/*                <i className="fa-solid fa-robot ai_icon me-2"*/}
+                                                    {/*                   style={{fontSize: "15px"}}/> {jsondata.generateAi}*/}
+                                                    {/*            </button>*/}
+                                                    {/*        </div>*/}
+                                                    {/*    </>*/}
+                                                    {/*}*/}
                                                 </div>
-
-                                            </div>
-                                            <div className="createPost_outer media_outer">
-                                                <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
-
-                                                {/*    dropdown select platform=====*/}
-                                                <Dropdown className='insta_dropdown_btn mt-2'>
-                                                    <Dropdown.Toggle id="instagram"
-                                                                     className="instagram_dropdown tabs_grid">
-                                                        {selectedAllDropdownData.length > 0 ?
-                                                            (
-                                                                selectedAllDropdownData.map((data, index) => (
-                                                                    <div key={index} className="selected-option">
-                                                                        <img
-                                                                            src={data?.selectOption?.imageUrl || default_user_icon}
-                                                                            alt={data?.selectOption?.name}/>
-                                                                        <span>{data?.selectOption?.name}</span>
-                                                                        <RxCross2 onClick={(e) => {
-                                                                            handleCheckboxChange(data)
-                                                                        }}/>
-                                                                    </div>
-                                                                ))
-                                                            )
-                                                            :
-                                                            (
-                                                                <div className="social_inner_content">
-                                                                    <div>
-                                                                        <BiUser/>
-                                                                    </div>
-                                                                    <h6 className="cmn_headings">
-                                                                        Select platform
-                                                                    </h6>
-                                                                </div>
-                                                            )}
-                                                    </Dropdown.Toggle>
-
-
-                                                    <Dropdown.Menu className='w-100 social_media_list'>
-                                                        <div className="dropdown-options">
-
-                                                            <div className='_'>
-                                                                <div className="select_platform_outer">
-                                                                    <input type="checkbox"
-                                                                           id="choice1-2"
-                                                                           name="choice2"
-                                                                           checked={areAllOptionsSelected}
-                                                                           onChange={areAllOptionsSelected ? handleUnselectAll : handleSelectAll}
-                                                                    />
-                                                                    <h3 className="cmn_headings" onClick={function () {
-                                                                        document.getElementById("choice1-2").click()
-                                                                    }}>Select all Platform</h3>
-                                                                </div>
-
-                                                                {
-                                                                    socialAccountData?.map((socialAccount, index) => {
-                                                                        return (
-
-                                                                            <>
-                                                                                {
-                                                                                    socialAccount && socialAccount?.pageAccessToken.length > 0 &&
-                                                                                    <div
-                                                                                    className={`instagram_outer ${socialAccount.provider=="FACEBOOK"?"facebook_outer":socialAccount.provider=="LINKEDIN"?"linkedin_outer":socialAccount.provider=="PINTEREST"?"pinterest_outer":""}`}
-                                                                                    key={index}>
-                                                                                        <div
-                                                                                            className="checkbox-button_outer">
-
-                                                                                            {
-                                                                                                socialAccount && socialAccount?.pageAccessToken &&
-                                                                                                <>
-                                                                                                    <input type="checkbox"
-                                                                                                           className=""
-                                                                                                           id={socialAccount.provider + "-checkbox"}
-                                                                                                           name="choice1"
-                                                                                                           checked={selectedGroups.includes(socialAccount?.provider)}
-                                                                                                           onChange={() => handleGroupCheckboxChange(socialAccount?.provider)}
-                                                                                                    />
-
-                                                                                                    <SocialMediaProviderBadge
-                                                                                                        provider={socialAccount.provider}/>
-
-                                                                                                </>
-                                                                                            }
-
-                                                                                        </div>
-
-                                                                                        {
-                                                                                            socialAccount?.pageAccessToken?.map((page, index) => (
-                                                                                                <div
-                                                                                                    className="instagramPages unselectedpages"
-                                                                                                    key={index}
-                                                                                                    style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : "",border:selectedOptions.includes(page.pageId) === true ? "1px solid #048709" : ""}}
-                                                                                                    onClick={(e) =>
-                                                                                                        handleCheckboxChange({
-                                                                                                            group: socialAccount?.provider,
-                                                                                                            selectOption: {
-                                                                                                                ...page,
-                                                                                                                socialMediaType: socialAccount?.provider
-                                                                                                            }
-                                                                                                        })}
-                                                                                                >
-                                                                                                    <div
-                                                                                                        className="checkbox-button_outer">
-                                                                                                        <img
-                                                                                                            src={page?.imageUrl || default_user_icon}/>
-                                                                                                        <h2 className="cmn_text_style">{page?.name}</h2>
-                                                                                                    </div>
-                                                                                                    <input
-                                                                                                        type="checkbox"
-                                                                                                        id={page.id}
-                                                                                                        name={page.name}
-                                                                                                        value={page.id}
-                                                                                                        checked={selectedOptions.includes(page.pageId)}
-                                                                                                        onChange={() =>
-                                                                                                            handleCheckboxChange({
-                                                                                                                group: socialAccount?.provider,
-                                                                                                                selectOption: page
-                                                                                                            })}
-                                                                                                    />
-                                                                                                </div>
-                                                                                            ))
-                                                                                        }
-
-
-                                                                                    </div>
-                                                                                }
-                                                                            </>
-
-                                                                        )
-                                                                    })
-                                                                }
-
-
-                                                            </div>
-
-                                                        </div>
-
-
-                                                    </Dropdown.Menu>
-                                                </Dropdown>
 
                                             </div>
 
@@ -775,30 +782,34 @@ const UpdatePost = () => {
                                             {
                                                 selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&
                                                 <div className=' media_outer'>
-                                                    <div className='caption_header'>
-                                                        <h5 className='post_heading create_post_text'>Pinterest Only *</h5>
-
-
+                                                    <div className='caption_header mt-2'>
+                                                        <h5 className='post_heading create_post_text mb-2'>Pinterest
+                                                            Only *</h5>
                                                     </div>
-                                                    <div className='textarea_outer'>
-                                                        <h6 className='create_post_text'>Pin Title*</h6>
-                                                        <input type={"text"} className='textarea mt-2'
-                                                               value={pinTitle}
-                                                               onChange={(e) => {
-                                                                   e.preventDefault()
-                                                                   setPinTitle(e.target.value);
-                                                               }}/>
-                                                    </div>
-                                                    <div className='textarea_outer mt-2'>
-                                                        <h6 className='create_post_text'>Destination Url*</h6>
-                                                        <input type={"text"} className='textarea mt-2'
-                                                               value={pinDestinationUrl}
-                                                               onChange={(e) => {
-                                                                   e.preventDefault();
-                                                                   setPinDestinationUrl(e.target.value);
-                                                               }}/>
+                                                    <div className={showPreview ? "" : 'post_caption_outer'}>
+                                                        <div className='textarea_outer flex-grow-1'>
+                                                            <h6 className='create_post_text'>Pin Title*</h6>
+                                                            <input type={"text"} className='textarea mt-2'
+                                                                   value={pinTitle}
+                                                                   onChange={(e) => {
+                                                                       e.preventDefault()
+                                                                       setPinTitle(e.target.value);
+                                                                   }}/>
+                                                        </div>
+
+                                                        <div
+                                                            className={`textarea_outer  ${showPreview ? "mt-2" : "flex-grow-1"}`}>
+                                                            <h6 className='create_post_text'>Destination Url*</h6>
+                                                            <input type={"text"} className='textarea mt-2'
+                                                                   value={pinDestinationUrl}
+                                                                   onChange={(e) => {
+                                                                       e.preventDefault();
+                                                                       setPinDestinationUrl(e.target.value);
+                                                                   }}/>
+                                                        </div>
                                                     </div>
                                                 </div>
+
                                             }
 
                                             {/* post caption */}
@@ -807,16 +818,16 @@ const UpdatePost = () => {
                                                 <div className='flex-grow-1'>
                                                     <div className='caption_header'>
                                                         <h5 className='post_heading create_post_text'>Add
-                                                            Post Caption *</h5>
+                                                            Post Caption </h5>
 
-                                                        <button className="ai_btn cmn_white_text"
-                                                                onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    setAIGenerateCaptionModal(true);
-                                                                }}>
-                                                            <img src={ai_icon}
-                                                                 className='ai_icon me-2'/>{jsondata.generateCaptionAi}
-                                                        </button>
+                                                        {/*<button className="ai_btn cmn_white_text"*/}
+                                                        {/*        onClick={(e) => {*/}
+                                                        {/*            e.preventDefault();*/}
+                                                        {/*            setAIGenerateCaptionModal(true);*/}
+                                                        {/*        }}>*/}
+                                                        {/*    <img src={ai_icon}*/}
+                                                        {/*         className='ai_icon me-2'/>{jsondata.generateCaptionAi}*/}
+                                                        {/*</button>*/}
 
                                                     </div>
                                                     <div className='textarea_outer'>
@@ -834,16 +845,17 @@ const UpdatePost = () => {
                                                     <div
                                                         className={`caption_header ${showPreview ? "hashtag_outer" : ""} `}>
                                                         <h5 className='post_heading create_post_text'>Add
-                                                            Hashtag *</h5>
+                                                            Hashtag </h5>
 
-                                                        <button className="ai_btn cmn_white_text"
-                                                                onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                    setAIGenerateHashTagModal(true);
-                                                                }}>
-                                                            <img src={ai_icon}
-                                                                 className='ai_icon me-2'/>
-                                                            {jsondata.generateHashtagAi} </button>
+                                                        {/*<button className="ai_btn cmn_white_text"*/}
+                                                        {/*        onClick={(e) => {*/}
+                                                        {/*            e.preventDefault();*/}
+                                                        {/*            setAIGenerateHashTagModal(true);*/}
+                                                        {/*        }}>*/}
+                                                        {/*    <img src={ai_icon}*/}
+                                                        {/*         className='ai_icon me-2'/>*/}
+                                                        {/*    {jsondata.generateHashtagAi} */}
+                                                        {/*</button>*/}
 
                                                     </div>
                                                     <div className='textarea_outer'>
@@ -948,18 +960,18 @@ const UpdatePost = () => {
                                     </div>
                                 </div>
                                 {
-                                    showPreview && files.length>0 &&
+                                    showPreview && files.length > 0 &&
                                     <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
                                         <div className='cmn_outer create_post_container'>
                                             <div className='post_preview_outer'>
                                                 <h3 className='Post_Preview_heading'>Post Preview</h3>
-                                               <div className='CommonFeedPreview_container'>
-                                                {
-                                                    allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
+                                                <div className='CommonFeedPreview_container'>
+                                                    {
+                                                        allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
 
-                                                        let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
+                                                            let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                        return (<span key={index}>
+                                                            return (<span key={index}>
                                                         {
                                                             selectedPageData && <CommonFeedPreview
                                                                 socialMediaType={option.group}
@@ -974,9 +986,9 @@ const UpdatePost = () => {
                                                             />
                                                         }
                                                     </span>
-                                                        )
-                                                    })
-                                                }
+                                                            )
+                                                        })
+                                                    }
                                                 </div>
                                             </div>
                                         </div>

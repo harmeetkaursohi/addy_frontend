@@ -21,7 +21,7 @@ const AI_ImageModal = lazy(() => import('../features/modals/views/ai_image_modal
 const AddressForm = lazy(() => import('../features/signup/views/tabs/AddressInfo.jsx'));
 const Draft = lazy(() => import('../features/unPublishedPages/Draft'));
 const Insight = lazy(() => import('../features/insights/insight/views/Insight'));
-const FaqComponent = lazy(() => import('../features/faq/FaqComponent'));
+// const FaqComponent = lazy(() => import('../features/faq/FaqComponent'));
 const PrivacyComponent = lazy(() => import('../features/privacy/PrivacyComponent'));
 const ContactUs = lazy(() => import('../features/contactUs/ContactUs'));
 const Profile = lazy(() => import('../features/profile/Profile.jsx'));
@@ -64,7 +64,7 @@ const App = () => {
                                 <Route path="/address" element={<AddressForm/>}/>
                                 <Route path="/draft" element={<Draft/>}/>
                                 <Route path="/insights" element={<Insight/>}/>
-                                <Route path="/faq" element={<FaqComponent/>}/>
+                                {/*<Route path="/faq" element={<FaqComponent/>}/>*/}
                                 {/*<Route path="/privacy" element={<PrivacyComponent/>}/>*/}
                                 <Route path="/contact" element={<ContactUs/>}/>
                                 <Route path="/profile" element={<Profile/>}/>

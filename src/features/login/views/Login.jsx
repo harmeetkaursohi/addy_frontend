@@ -32,7 +32,6 @@ const Login = () => {
         initialValues: {
             username: '',
             password: '',
-            isAgreedToTermsAndConditions: false,
             timeZoneId: Intl.DateTimeFormat().resolvedOptions().timeZone
         },
         validationSchema: validationSchemas.login,
@@ -122,36 +121,25 @@ const Login = () => {
                                                     value={formik.values.password}
                                                 />
                                                 <span className="password-toggle" onClick={togglePasswordVisibility}>
-                                            {showPassword ? (
+                                            {
+                                                showPassword ?
                                                 <h2 className="openEye">
                                                     <i className="fa-solid fa-eye"></i>
                                                 </h2>
-                                            ) : (
+                                             :
                                                 <h2 className="closeEyeIcon">
                                                     <i className="fa fa-eye-slash" aria-hidden="true"/>
                                                 </h2>
-                                            )}
+                                            }
                                             </span>
 
-                                                {formik.touched.password && formik.errors.password ? (
-                                                    <p className="error_message">{formik.errors.password}</p>) : null}
+                                                {
+                                                    formik.touched.password && formik.errors.password ?
+                                                    <p className="error_message">{formik.errors.password}</p> : null
+                                                }
 
                                             </div>
 
-
-                                            <div className={"agree-terms-conditions-login mt-2 ms-1"}>
-                                                <input type={"checkbox"} className={"privacy-policy-checkbox me-2"} onChange={formik.handleChange}
-                                                       name={"isAgreedToTermsAndConditions"}
-                                                       onBlur={formik.handleBlur}
-                                                       value={formik.values.isAgreedToTermsAndConditions}/>
-                                                <span className={"agree-privacy-policy-txt"}>I agree to the <Link to={`${import.meta.env.VITE_APP_ADDY_WEB_PRIVACY_POLICY_URL}`} target={"_blank"}>Privacy Policy</Link> and <Link to={`${import.meta.env.VITE_APP_ADDY_WEB_TERMS_AND_CONDITIONS_URL}`} target={"_blank"}>Terms and conditions</Link>
-                                                </span>
-
-                                            </div>
-                                            {
-                                                formik.touched.isAgreedToTermsAndConditions && formik.errors.isAgreedToTermsAndConditions ?
-                                                    <p className="error_message">{formik.errors.isAgreedToTermsAndConditions}</p> : null
-                                            }
                                             <div className='rememberPass_outer mt-2'>
 
                                                 <div className='text-end mt-3'>

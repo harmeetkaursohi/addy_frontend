@@ -31,7 +31,7 @@ export const SidebarMenuItems = [
 
     },
     {
-        "name": "Comment/Reviews",
+        "name": "Published Posts",
         "path": "/review",
         "icon": <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -88,18 +88,18 @@ export const SidebarMenuItems = [
     //     </svg>
     //
     // },
-    {
-        "name": "FAQ's",
-        "path": "/faq",
-        "icon": <svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M8 8.50448C8.2351 7.83614 8.69915 7.27258 9.30995 6.91361C9.92076 6.55463 10.6389 6.42341 11.3372 6.54319C12.0355 6.66296 12.6688 7.026 13.1251 7.568C13.5813 8.11001 13.8311 8.796 13.83 9.50448C13.83 11.5045 10.83 12.5045 10.83 12.5045M10.9099 16.5044H10.9199"
-                stroke="#767177" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path
-                d="M11 21.5C16.5228 21.5 21 17.0228 21 11.5C21 5.97715 16.5228 1.5 11 1.5C5.47715 1.5 1 5.97715 1 11.5C1 17.0228 5.47715 21.5 11 21.5Z"
-                stroke="#767177" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-
-    },
+    // {
+    //     "name": "FAQ's",
+    //     "path": "/faq",
+    //     "icon": <svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+    //         <path
+    //             d="M8 8.50448C8.2351 7.83614 8.69915 7.27258 9.30995 6.91361C9.92076 6.55463 10.6389 6.42341 11.3372 6.54319C12.0355 6.66296 12.6688 7.026 13.1251 7.568C13.5813 8.11001 13.8311 8.796 13.83 9.50448C13.83 11.5045 10.83 12.5045 10.83 12.5045M10.9099 16.5044H10.9199"
+    //             stroke="#767177" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    //         <path
+    //             d="M11 21.5C16.5228 21.5 21 17.0228 21 11.5C21 5.97715 16.5228 1.5 11 1.5C5.47715 1.5 1 5.97715 1 11.5C1 17.0228 5.47715 21.5 11 21.5Z"
+    //             stroke="#767177" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    //     </svg>
+    //
+    // },
 ];
 
