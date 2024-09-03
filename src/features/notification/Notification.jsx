@@ -211,7 +211,7 @@ const Notification = () => {
                                 &&
                                 <h6 className={"text-end clear-all-notifications  cursor-pointer " + (clearAllNotificationData?.loading ? "disable_btn" : "")}
                                     onClick={handleClearAllNotifications}
-                                >clear all</h6>
+                                >Clear all</h6>
                             }
 
                             {

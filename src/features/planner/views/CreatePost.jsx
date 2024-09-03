@@ -767,7 +767,7 @@ const CreatePost = () => {
                                                     <div className='flex-grow-1'>
                                                         <div
                                                             className={`caption_header ${showPreview ? "hashtag_outer" : ""} `}>
-                                                            <h5 className='post_heading create_post_text'>Add Hashtag *</h5>
+                                                            <h5 className='post_heading create_post_text'>Add Hashtag</h5>
 
                                                             {/*<button className="ai_btn cmn_white_text"*/}
                                                             {/*        onClick={(e) => {*/}
