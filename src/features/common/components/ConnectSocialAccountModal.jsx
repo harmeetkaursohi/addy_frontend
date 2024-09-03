@@ -69,7 +69,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                                         </>
                                 }
 
-                                <button onClick={handleConnectNow} className={"connection-error-close-btn connect_not_btn"}>Connect now</button>
+                                <button onClick={handleConnectNow} className={"connection-error-close-btn connect_not_btn"}>OK</button>
                             </div>
                         </div>
                     </Modal.Body>

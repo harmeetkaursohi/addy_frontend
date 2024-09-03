@@ -2,21 +2,47 @@
     display: flex;
     justify-content: space-between;
     gap: 20px;
-    padding: 20px 0px;
-    border-bottom: 1px solid #CBCBCB;
+    /*padding: 20px 0px;*/
+    /*border-bottom: 1px solid #CBCBCB;*/
     align-items: center;
+    margin-top: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 40%);
+
 }
 
+
+.followers-reach {
+    display: flex;                /* Use flexbox for layout */
+    justify-content: center;      /* Center items horizontally */
+    align-items: center;          /* Center items vertically */
+    gap: 16px;                    /* Space between the items */
+    font-size: 16px;
+    color: #555;
+}
+
+.account-detail {
+    font-size: 16px;
+    color: #888;
+}
+
+.label {
+    font-weight: lighter;            /* Bold for labels */
+    margin-bottom: 4px;           /* Space between label and value */
+}
+
+.value {
+    font-size: 14px;              /* Larger font size for values */
+}
 .Connectmodal_btn {
     background-color: #F07C33;
 }
 
 .modal_inner_content:first-child {
-    padding-top: 4px;
+    /*padding-top: 4px;*/
 }
 
 .modal_inner_content:last-child {
-    border-bottom: unset;
+    /*border-bottom: unset;*/
 }
 
 .facebook_content_outer {
@@ -86,13 +112,18 @@ div.commonmodal_header {
 
 .user_info_container {
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
     gap: 20px;
 }
-
-.facebook_title h2 {
-    font-size: 22px;
+.choose_page_outer.modal.show .modal-dialog{
+    max-width:600px
 }
+.facebook_title h2 {
+    font-size: 20px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 9px
+}
+
 
 .users_profile img {
     border-radius: 24px;
@@ -143,6 +174,8 @@ button, .modal_inner_content.disconnect_wrapper
     max-height: 400px;
     overflow-y: scroll;
     scrollbar-width: none;
+    padding: 0px 5px;
+    margin: 0px -5px;
 }
 
 /*media QUERY*/

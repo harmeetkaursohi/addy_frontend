@@ -152,6 +152,7 @@ element.style {
     background: #F4F4F4;
     padding: 16px 20px;
     font-family: "Nunito";
+    min-height: 70px;
 }
 
 .followers_inner_content {
@@ -787,6 +788,11 @@ width: 100%;
     width: 160px;
     height: 100%;
 
+}
+
+.addy_icon{
+    width: 50px;
+    height: auto;
 }
 
 .insta-icon {

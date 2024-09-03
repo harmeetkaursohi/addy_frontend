@@ -13,6 +13,7 @@
 img.addy_logo {
     height: 45px;
     object-fit: cover;
+    margin: 14px 7px 0px;
 }
 .cropped_logo_outer{
     width: 154px;
@@ -177,6 +178,7 @@ a.active {
     font-size: 16px;
     font-weight: 600;
     color: #F07C33;;
+    white-space: nowrap;
 }
 
 
@@ -242,6 +244,7 @@ border-radius: 20px;
     font-size: 16px;
     font-weight: 700;
     line-height: 24px;
+    white-space: nowrap;
 }
 .forward_arrow{
     left: 3rem;

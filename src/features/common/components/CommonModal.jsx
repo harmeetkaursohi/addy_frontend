@@ -56,6 +56,8 @@ const CommonModal = ({
                     <Modal.Body className='pt-0'>
                     <div className='d-flex  pt-3 pb-3'>
                     <div className='facebook_title flex-grow-1'>
+                        <h3>
+                        <img src="./Addy_icon.svg" class="addy_icon " /></h3>
                                 <h2 className='cmn_text_style'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
                     </div>
                     <div className='pop_up_cross_icon_outer  cursor-pointer' onClick={(e) => {
@@ -69,7 +71,7 @@ const CommonModal = ({
                                         return (
                                             <div key={index}
                                                  // className={`modal_inner_content ${(currentConnectedPages?.includes(data?.id) ? '' : (currentConnectedPages.length > 0 ? 'disconnect_wrapper' : ''))}`}>
-                                                 className={`modal_inner_content `}>
+                                                 className={`modal_inner_content ${currentConnectedPages?.includes(data?.id) ? "active_connected_page":"disconnected_page"} `}>
 
                                                 <div className="user_info_container">
                                                     <div className='users_profile'>
@@ -93,12 +95,23 @@ const CommonModal = ({
                                                     </div>
                                                     <div className='users_name'>
                                                         <h2 className={`cmn_text_style ${currentConnectedPages?.includes(data?.id) ? 'text-success' : ''}`}>{data.name}</h2>
-                                                        {data.about && <p className="cmn_text_style mb-0">{data.about}</p>}
+                                                        {/*{data.about && <p className="cmn_text_style mb-0">{data.about}</p>}*/}
+                                                        <div className="followers-reach">
+                                                            <div className="account-detail">
+                                                                <span className="label">Followers</span>
+                                                                <span className="value">{data.followers}</span>
+                                                            </div>
+                                                            <div className="account-detail">
+                                                                {/*Account Reach {data.account_reach}*/}
+                                                                <span className="label">Account Reach</span>
+                                                                <span className="value">{data.account_reach}</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className='connect_btn_outer 1'>
-                                                    <button
+                                                <button
                                                         disabled={facebookPageConnectData?.loading}
                                                         className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : 'disconected_btn'}`}
                                                         onClick={(e) => {
