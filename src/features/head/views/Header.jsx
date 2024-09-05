@@ -45,7 +45,7 @@ const Header = ({userData, setShowConnectAccountModal}) => {
                                         {
                                             (connectedPagesData?.loading || getAllConnectedSocialAccountData?.loading || getAllFacebookPagesData?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading) ?
                                                 <div
-                                                    className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
+                                                    className="createPost_btn crate_btn cmn_btn_color cursor-pointer loader_btn_container">
                                                     <Loader/>
                                                 </div> : <div onClick={handleCreatePost}
                                                               className="createPost_btn crate_btn cmn_btn_color cursor-pointer">

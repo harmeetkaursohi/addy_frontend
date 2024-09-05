@@ -18,13 +18,32 @@
     gap: 16px;                    /* Space between the items */
     font-size: 16px;
     color: #555;
+    margin-top: 9px;
 }
 
 .account-detail {
     font-size: 16px;
     color: #888;
 }
+.account-detail h3{
+    font-size: 13px;
+    color: #999999;
+    font-weight: 500;
+}
+.follower_reach_container{
+    border-right: 1px solid #908b8b;
+    padding-right: 28px
+}
+.account_reach_container{
+    padding-left: 12px
 
+}
+.account-detail h4{
+   font-weight: 600;
+    color: black;
+    font-size: 16px;
+    margin-top: 6px;
+}
 .label {
     font-weight: lighter;            /* Bold for labels */
     margin-bottom: 4px;           /* Space between label and value */

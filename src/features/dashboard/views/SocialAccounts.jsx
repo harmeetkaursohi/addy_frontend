@@ -436,11 +436,11 @@ const SocialAccounts = ({}) => {
                                                             currentConnectedFacebookPages?.length === 0 ?
                                                                 <div className={"no-page-connected-outer text-center"}>
                                                                     <div>No active connections at the moment.</div>
-                                                                    <div className={"cursor-pointer connect-page-btn"}
+                                                                    <button className={" cursor-pointer connect-page-btn clear_all_button_outer mt-3"}
                                                                          onClick={() => facebook()}
                                                                     >Connect
                                                                         now
-                                                                    </div>
+                                                                    </button>
                                                                 </div> :
                                                                 <>
                                                                     {
@@ -589,11 +589,11 @@ const SocialAccounts = ({}) => {
                                                             currentConnectedInstagramPages?.length === 0 ?
                                                                 <div className={"no-page-connected-outer text-center"}>
                                                                     <div>No active connections at the moment.</div>
-                                                                    <div className={"cursor-pointer connect-page-btn"}
+                                                                    <button className={"cursor-pointer connect-page-btn clear_all_button_outer mt-3"}
                                                                          onClick={() => setShowInstagramModal(true)}
                                                                     >Connect
                                                                         now
-                                                                    </div>
+                                                                    </button>
                                                                 </div> :
                                                                 <>
                                                                     {
@@ -746,11 +746,11 @@ const SocialAccounts = ({}) => {
                                                             currentConnectedLinkedinPages?.length === 0 ?
                                                                 <div className={"no-page-connected-outer text-center"}>
                                                                     <div>No active connections at the moment.</div>
-                                                                    <div className={"cursor-pointer connect-page-btn"}
+                                                                    <button className={"cursor-pointer connect-page-btn clear_all_button_outer mt-3"}
                                                                          onClick={() => setShowLinkedinModal(true)}
                                                                     >Connect
                                                                         now
-                                                                    </div>
+                                                                    </button>
                                                                 </div> :
                                                                 <>
                                                                     {
@@ -894,11 +894,11 @@ const SocialAccounts = ({}) => {
                                                             currentConnectedPinterestPages?.length === 0 ?
                                                                 <div className={"no-page-connected-outer text-center"}>
                                                                     <div>No active connections at the moment.</div>
-                                                                    <div className={"cursor-pointer connect-page-btn"}
+                                                                    <button className={"cursor-pointer connect-page-btn clear_all_button_outer mt-3"}
                                                                          onClick={() => setShowPinterestModal(true)}
                                                                     >Connect
                                                                         now
-                                                                    </div>
+                                                                    </button>
                                                                 </div> :
                                                                 <>
                                                                     {

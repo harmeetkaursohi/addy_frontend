@@ -97,6 +97,22 @@ ul {
   background-color: #fff6f2;
 
 }
+.loader_btn_container{
+  height:36px
+}
+.clear_all_button_outer{
+  border: none !important;
+  color: white !important;
+  text-decoration: unset !important;
+  padding: 8px 20px !important;
+  background: rgb(240, 124, 51) !important;
+  border-radius: 10px !important;
+  width: fit-content !important;
+  opacity: 1 !important;
+}
+button.clear_all_button_outer:hover{
+  text-decoration: unset;
+  color: white;}
 .cmn_outer{
   padding: 20px;
 }
