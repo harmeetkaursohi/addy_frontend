@@ -335,7 +335,7 @@ export const publishedPostAction = createAsyncThunk('post/publishedPostAction', 
         if (res?.data?.every(c => !c.success)) {
             showErrorToast("Post encountered with an issue. Currently saved as a draft.");
         } else if (res?.data?.every(c => c.success)) {
-            showSuccessToast("Post has been successfully shared across all the platform.");
+            showSuccessToast("Post has been successfully shared to the chosen platform.");
         } else {
             showWarningToast(`Post successfully on ${res?.data?.filter(c => c.success)?.map(c => c.pageName).join(" , ")} and failed to post on ${res?.data?.filter(c => !c.success)?.map(c => c.pageName).join(" , ")}`)
         }
@@ -527,7 +527,7 @@ export const createFacebookPostAction = createAsyncThunk('post/createFacebookPos
             if (res?.data?.every(response => !response.success)) {
                 showErrorToast("Post encountered with an issue. Currently saved as a draft.");
             } else if (res?.data?.every(response => response.success)) {
-                showSuccessToast("Post has been successfully shared across all the platform.");
+                showSuccessToast("Post has been successfully shared to the chosen platform.");
             } else {
                 showWarningToast(`Post successfully on ${res?.data?.filter(response => response.success)?.map(res => res.pageName).join(" , ")} and failed to post on ${res?.data?.filter(response => !response.success)?.map(res => res.pageName).join(" , ")}`)
             }
