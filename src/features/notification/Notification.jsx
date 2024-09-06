@@ -201,7 +201,10 @@ const Notification = () => {
                                 <h2 className="cmn_text_heading">{jsondata.notification}</h2>
 
                             </div>
-                            <h6 className={"cmn_small_heading "}>{jsondata.notification_heading}</h6>
+                            <div className="d-flex justify-content-between">
+                                <h6 className={"cmn_small_heading "}>{jsondata.notification_heading}</h6>
+
+
                             {
                                 (
                                     ((searchNotificationData?.data?.data && searchNotificationData?.data?.data?.length > 0) || (unseenNotificationsData?.data && unseenNotificationsData?.data?.length > 0) || (notificationEventData?.data?.length > 0))
@@ -209,11 +212,11 @@ const Notification = () => {
                                     (((searchNotificationData?.data?.data?.length || 0) + (unseenNotificationsData?.data?.length || 0) + (notificationEventData?.data?.length || 0)) > deletedNotifications?.length)
                                 )
                                 &&
-                                <h6 className={"text-end clear-all-notifications  cursor-pointer " + (clearAllNotificationData?.loading ? "disable_btn" : "")}
+                                <button className={"text-end clear-all-notifications  cursor-pointer  clear_all_button_outer " + (clearAllNotificationData?.loading ? "disable_btn" : "")}
                                     onClick={handleClearAllNotifications}
-                                >Clear all</h6>
+                                >Clear all</button>
                             }
-
+                            </div>
                             {
                                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
                                     <CommonLoader classname={"cmn_loader_outer"}></CommonLoader> :

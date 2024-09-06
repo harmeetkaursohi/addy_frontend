@@ -186,7 +186,9 @@ element.style {
     margin-top: 12px;
     align-items: center;
 }
-
+.monthly_growth .cmn_followers_btn{
+    cursor: auto;
+}
 .social_media_account {
     display: flex;
     justify-content: space-between;
