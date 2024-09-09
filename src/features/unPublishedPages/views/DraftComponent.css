@@ -145,17 +145,19 @@ height: 100%;
 
 .social-media-icon {
     height: 22px;
-    width: 22px;
+    width: 23px;
 }
 
 .social-media-page-name {
     font-size: 13px;
     font-weight: 500;
     padding: 5px 0px 0px 5px;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Nunito', sans-serif;    color: #5F6D7E;
+
 }
 
 .card-body.post_card {
+
     padding: 0px 20px 20px;
 }
 
@@ -196,7 +198,71 @@ h3.caption {
     line-height: normal;
     margin-bottom: 3px !important;
 }
+/*new draft modal css*/
+.edit_schedule_btn{
+    background: white;
+    border: none;
+    border: 1px solid #00A3FF;
+    color: black;
+    max-width: 192px;
+    width: 100%;
+}
+.modal_post_btn_outer{
+    display: flex;
+    gap: 22px;
+    justify-content: center;
+    margin-top: 24px;
+}
+.postcaption_modal_content_wrapper.modal-body {
+    padding: 0px;
+}
+.Post_caption_modal_content {
+    padding: 15px 26px 26px;
+}
+.draft_modal_Wrapper .modal-content{
+    overflow: hidden;
+    border-radius: 15px !important;
+    width: 530px;
+}
+.cross_btn_wrapper h3{
+    font-size: 17px;
+    padding: 5px 8px;
 
+
+}
+.draft_post_view_box .draft_img_wrapper img{
+    width: 100%;
+    height: 100%;
+}
+.cross_btn_wrapper{
+    position: absolute;
+    background: white;
+    border-radius: 8px;
+    left: auto;
+    right: 14px;
+    top: 10px;
+    cursor: pointer;
+    z-index: 2;
+}
+.small_font{
+    font-size: 16px;
+    font-weight: 500;
+}
+.draft_post_caption{
+    color: #5F6D7E;
+    font-size: 18px;
+    font-weight: 400;
+}
+.draft_post_hashtag{
+    color: #5F6D7E;
+    font-size: 14px;
+    font-weight: 400;
+
+}
+.draft_container_box{
+    margin-top: 18px;
+}
+/*new draft modal  css end*/
 span.hash_tags {
     color: #5F6D7E;
     font-family: "Nunito";
@@ -371,6 +437,14 @@ button.outline_btn {
     .upcoming_post_outer .video_player_outer {
         height: 350px !important;
     }
+
+}
+@media screen and (max-width: 1440px){
+    .small_font{
+        font-size: 12px;
+        font-weight: 500;
+        color:black
+    }
 }
 @media screen and (min-width:992px) {
  
@@ -398,6 +472,9 @@ button.outline_btn.schedule_btn{
     .upcoming_post_content {
         font-size: 14px;
 
+    }
+    .postcaption_modal_content_wrapper.modal-body .posted_date_outer {
+        padding: 10px;
     }
     .draft_container img.post_img {
         height: 240px;
@@ -477,6 +554,9 @@ button.outline_btn.schedule_btn{
     button.outline_btn.schedule_btn{
         margin-top: 10px;
 
+    }
+    .draft_modal_Wrapper .modal-content{
+        width: 100%;
     }
     .no_acc_connect_heading {
         font-size: 16px;

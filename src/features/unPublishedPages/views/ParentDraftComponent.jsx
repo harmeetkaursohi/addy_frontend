@@ -2,16 +2,25 @@ import {useEffect, useState} from "react";
 import { useSelector} from "react-redux";
 import DraftComponent from "./DraftComponent";
 import notConnected_img from "../../../images/no_acc_connect_img.svg";
+import fb_img from "../../../images/fb.svg";
+import instagram_img from "../../../images/instagram.png";
+import linkedin_img from "../../../images/linkedin.svg";
+
+import nature_img from "../../../images/download.jpg";
+
 import {formatMessage, sortByKey} from "../../../utils/commonUtils";
 import CommonLoader from "../../common/components/CommonLoader";
 import noDraftPosts from "../../../images/no_draft_posts.png";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../common/components/AppProvider";
 import {NoPostInDraft, NotConnected} from "../../../utils/contantData";
+import DraftModal from "./DraftModal";
 
 export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger}) => {
     const {sidebar} = useAppContext()
     const [drafts, setDrafts] = useState(null);
+    const [draftModal, setDraftModal] = useState(false);
+
     const [deletedAndPublishedPostIds, setDeletedAndPublishedPostIds] = useState({
         deletedPostIds: [],
         publishedPostIds: [],
@@ -43,6 +52,36 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
     return (
 
         <div className={"row draft_container_wrapper"}>
+            {/*{draftModal && <DraftModal show={draftModal} setShow={setDraftModal}/>}*/}
+            {/*<div className={"col-lg-3 col-sm-12 col-md-12"}>*/}
+            {/*    <div className={"draft_wrapper_box"} onClick={()=>{setDraftModal(true)}}>*/}
+
+            {/*        <div className={"draft_img_wrapper"}>*/}
+            {/*            <div className={"posted_date_outer"}>*/}
+            {/*                <h3>Posted on: <span>12/15/2024</span></h3>*/}
+            {/*            </div>*/}
+            {/*            <img src={nature_img}/>*/}
+            {/*        </div>*/}
+
+            {/*        <div className={"draft_page_outer"}>*/}
+            {/*            <div className={"caption_outer_containter"}>*/}
+            {/*                <h3>Caption:</h3>*/}
+            {/*                <h4>"Embracing the beauty .....</h4>*/}
+            {/*            </div>*/}
+
+            {/*            <div className={"social_media_page_outer"}>*/}
+            {/*                <div className={"text-center"}>*/}
+            {/*                    <img src={instagram_img} className={"insta_page_icon"}/>*/}
+            {/*                    <img src={fb_img} className={"fb_page_icon"}/>*/}
+            {/*                    <img src={linkedin_img} className={"linkedin_page_icon"}/>*/}
+            {/*                </div>*/}
+            {/*                <h4>Posting on 4 pages.</h4>*/}
+
+            {/*            </div>*/}
+
+            {/*        </div>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
             {
                 (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading || getAllDraftPostsByCustomerAndPeriodData.loading) ?
                     <CommonLoader classname={"cmn_loader_outer"}/> :
@@ -59,10 +98,8 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
                                 drafts !== null && Array.isArray(drafts) && drafts?.length > 0 &&
                                 sortByKey(drafts, "createdAt").map((curDraftObject, key) => {
                                     return (deletedAndPublishedPostIds?.deletedPostIds?.includes(curDraftObject?.id) || deletedAndPublishedPostIds?.publishedPostIds?.includes(curDraftObject?.id)) ? <></> :
-                                        <div
-                                            className={sidebar ? "col-lg-4 col-md-6 col-sm-12" : "col-lg-4 col-md-12 col-sm-12"}
-                                            key={key + "curDraftObject"}>
-                                            {
+
+
                                                 <DraftComponent batchIdData={curDraftObject}
                                                                 setDraftPost={setDraftPost}
                                                                 setDrafts={setDrafts} reference={reference}
@@ -70,8 +107,7 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
                                                                 setDeletedAndPublishedPostIds={setDeletedAndPublishedPostIds}
                                                                 setApiTrigger={setApiTrigger}
                                                 />
-                                            }
-                                        </div>
+
 
                                 })
             }

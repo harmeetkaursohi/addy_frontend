@@ -155,9 +155,7 @@ const CommonModal = ({
                                                     </div>
 
                                                     <div className='users_name'>
-                                                        <h2 className={`cmn_text_style ${currentConnectedPages?.includes(data?.id) ? 'text-success' : ''}`}>{data.name}</h2>
-                                                        {/*{data.about && <p className="cmn_text_style mb-0">{data.about}</p>}*/}
-
+                                                        <h2 className={`cmn_text_style ${currentConnectedPages?.includes(data?.id) ? '' : ''}`}>{data.name}</h2>
                                                         <div className="followers-reach">
                                                             <div className="account-detail follower_reach_container">
                                                                 <h3 className="label">Followers</h3>
@@ -169,7 +167,9 @@ const CommonModal = ({
                                                                             </h4>
                                                                         );
                                                                     }
-                                                                    return null; // Return null if the condition isn't met
+                                                                    return <h4 className={"hiddenNumber"}>
+                                                                        {/*NULL*/}
+                                                                    </h4>;
                                                                 })}
                                                             </div>
                                                             <div className="account-detail account_reach_container">
@@ -182,7 +182,9 @@ const CommonModal = ({
                                                                             </h4>
                                                                         );
                                                                     }
-                                                                    return null; // Return null if the condition isn't met
+                                                                    return <h4 className={"hiddenNumber"}>
+
+                                                                    </h4>;
                                                                 })}
 
                                                             </div>

@@ -245,8 +245,11 @@ element.style {
     text-align: center;
     padding-top: 0px;
     position: absolute;
-    top: 1px;
+    top: -9px;
     left: 11px;
+}
+.social_media_icon {
+    position: relative;
 }
 .social_media_content {
     display: flex;

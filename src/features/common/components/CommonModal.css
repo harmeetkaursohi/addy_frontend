@@ -31,18 +31,29 @@
     font-weight: 500;
 }
 .follower_reach_container{
-    border-right: 1px solid #908b8b;
+    border-right: 1px solid #c6bcbc;
     padding-right: 28px
 }
 .account_reach_container{
     padding-left: 12px
 
 }
+.users_profile {
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 25%);
+    overflow: hidden;
+    border-radius: 24px;
+}
+h4.hiddenNumber {
+    display: inline;
+    filter: blur(3px);
+}
+
+
 .account-detail h4{
    font-weight: 600;
     color: black;
     font-size: 16px;
-    margin-top: 6px;
+
 }
 .label {
     font-weight: lighter;            /* Bold for labels */
@@ -119,6 +130,7 @@ div.commonmodal_header {
 .users_name h2 {
     font-size: 22px;
     line-height: initial;
+    font-weight: 700;
 }
 
 .users_name p {
@@ -131,7 +143,7 @@ div.commonmodal_header {
 
 .user_info_container {
     display: flex;
-    /*align-items: center;*/
+    align-items: center;
     gap: 20px;
 }
 .choose_page_outer.modal.show .modal-dialog{
@@ -198,6 +210,15 @@ button, .modal_inner_content.disconnect_wrapper
 }
 
 /*media QUERY*/
+@media (min-width: 1900px) {
+    .users_profile img {
+        height: 70px;
+        width: 70px;
+    }
+    .users_name h2 {
+        font-size: 20px;
+    }
+}
 @media (max-width: 1699px) {
     .users_profile img {
         height: 70px;

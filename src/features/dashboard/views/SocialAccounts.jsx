@@ -393,9 +393,11 @@ const SocialAccounts = ({}) => {
                                                 <div className="social_media_content"
                                                      onClick={() => setFacebookDropDown(!facebookDropDown)}
                                                 >
-                                                    <img className="cmn_width" src={fb_img}/>
+                                                    <div className={"social_media_icon"}>
+                                                        <img className="cmn_width" src={fb_img}/>
 
-                                                    <h2 className={`pagecount ${currentConnectedFacebookPages?.length === undefined ? "blink" : ""}`}>{currentConnectedFacebookPages !== null && currentConnectedFacebookPages !== undefined ? currentConnectedFacebookPages?.length : 0}</h2>
+                                                        <h2 className={`pagecount ${currentConnectedFacebookPages?.length === undefined ? "blink" : ""}`}>{currentConnectedFacebookPages !== null && currentConnectedFacebookPages !== undefined ? currentConnectedFacebookPages?.length : 0}</h2>
+                                                    </div>
 
                                                     <div className="text-start flex-grow-1">
                                                         <h5 className="">{getAllConnectedSocialAccountData.data && getAllConnectedSocialAccountData.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>

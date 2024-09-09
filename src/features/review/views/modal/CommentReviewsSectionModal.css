@@ -79,7 +79,7 @@ p.liked_by {
 }
 .post_image_outerwrapper img {
     width: 100%;
-    object-fit: contain;
+    object-fit: cover;
     height: 250px;
 }
 .draft-outer .post_image_outerwrapper{
