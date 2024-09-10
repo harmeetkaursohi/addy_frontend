@@ -1,0 +1,308 @@
+.Frequently_asked_outer{
+    border-bottom: 1px solid #dddddd;
+    padding-bottom: 23px;
+    padding: 33px 24px;
+
+}
+.chataddy_outer{
+    border-bottom: 1px solid #dddddd;
+    padding: 20px 12px;
+}
+.cmn_small_style_font{
+    font-size: 20px;
+    font-weight: 700;
+}
+.needhelp_wrapper {
+    background: white;
+    border-radius: 10px;
+    height: 100%;
+}
+/* .accordion-item{
+    border: 2px solid #F07C33;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 20px;
+} */
+.accordian_wrapper .accordion-item {
+    border: unset !important;
+    box-shadow: 0px 5px 15px 0px #f3f1f1 !important;
+    margin-top:20px
+
+}
+.accordian_wrapper .accordion-item:not(.collapsed){
+    overflow: hidden !important;
+}
+.accordion-button:not(.collapsed){
+    background-color: unset !important;
+}
+
+
+.send_outer{
+    height: 37px;
+    width: 43px;
+    color: white;
+    background: #F07C33;
+    border-radius: 10px;
+    text-align: center;
+    line-height: 32px;
+
+
+}
+.user_chat_outer {
+    margin-top: 37px;
+}
+.input_wrapper{
+    width: 100%;
+}
+.chart_wrapper{
+
+border: 2px solid #F07C33;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 9px;
+    display: flex;
+    gap: 10px;
+    margin-top: 37px;
+}
+.attachlink_wrapepr img{
+    object-fit: contain;
+    height: 26px;
+    width: 24px;
+    margin-top: 6px;
+}
+.chart_wrapper input{
+    border: none;
+    padding:3px 0px 0px;
+}
+.chart_wrapper input.form-control:focus{
+    box-shadow: unset !important;
+}
+.chart_wrapper input::placeholder{
+    color: #949494;
+    font-weight: 400;
+    font-size: 15px;
+}
+.needhelp_heading{
+    color: black;
+    font-size: 37px;
+    margin-bottom: 33px !important;
+    font-weight: 700;
+}
+.attachlink_outer{
+    color: #F07C33;
+    font-size: 20px;
+    left: 11px;
+    top: 18px;
+
+}
+.attachlink_wrapepr{
+    height: 36px;
+    width: 36px;
+    padding-right: 23px;
+    border-right: 1px solid #AFAFAF;
+}
+.chat_inner_text {
+    border: 1px solid #F07C33;
+    border-radius: 10px;
+    padding: 10px 12px;
+    width: 362px;
+}
+.chat_inner_text h3{
+    color: #232323;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+}
+.userchat_image{
+    width: 34px;
+    height: 44px;
+}
+.chat_time{
+    font-size: 12px;
+    color: #333333;
+    margin-top: 8px;
+}
+.chat_container {
+    margin-top: 8rem;
+    padding: 19px 26px;
+}
+.user_chat_inner_text {
+    background-color: #F07C33;
+}
+.user_chat_inner_text h3{
+    color: white;
+}
+.user_profile_image_container{
+    border-radius: 30px;
+    height: 43px;
+    width: 40px;
+    text-align: center;
+}
+.Get_in_touch_outer {
+    background: white;
+    border-radius: 10px;
+    padding: 22px;
+    margin-top: 32px;
+}
+
+.email_wrapper {
+    height: 46px;
+    width: 46px;
+    background: #EDECE2;
+    border-radius: 10px;
+    color: #344054;
+    text-align: center;
+    line-height: 40px;
+}
+.email_wrapper svg{
+    color: #344054;
+    font-size: 20px;
+}
+.getintouch_inner_content h3{
+    color: #344054;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 0px;
+
+}
+.Get_in_touch_heading{
+    color: #34113F;
+    font-weight: 800;
+    font-size: 32px;
+}
+.Get_in_touch_content_wrapper{
+    margin-top: 27px;
+}
+
+
+.accordian_wrapper button:focus:not(:focus-visible){
+    outline: unset !important;
+}
+.accordian_wrapper .accordion-button:focus{
+    box-shadow: unset !important;
+}
+.accordian_wrapper .accordion-body{
+    color: #888888;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 21px;
+    padding-top: 0px;
+}
+.accordian_wrapper .accordion-item:last-of-type{
+    border-bottom-right-radius: 14px !important;
+    border-bottom-left-radius: 14px !important;
+    border-top-right-radius: 14px !important;
+    border-top-left-radius: 14px !important;
+}
+.accordian_wrapper .accordion-item:first-of-type{
+    border-bottom-right-radius: 14px !important;
+    border-bottom-left-radius: 14px !important;
+    border-top-left-radius: 14px !important;
+    border-top-right-radius: 14px !important;
+}
+
+.active_border.accordion-item{
+    border: 2px solid #F07C33 !important;
+    box-shadow: 0px 6px 16px 0px #F07C3324 !important;
+}
+.accordian_wrapper {
+    padding: 19px 26px;
+}
+.accordian_wrapper button.accordion-button {
+    color: #333333;
+    font-size: 16px;
+    font-weight: 500;
+}
+.accordian_wrapper .accordion-button:not(.collapsed)::after{
+    background-color: #F07C33;
+    background-position: center;
+    border-radius: 20px;
+    background-image: url("../../images/uparrow.png") ;
+    height: 27px;
+    width: 27px;
+    background-size: 13px 8px;
+ }
+.accordian_wrapper .accordion-button::after{
+    background-color: white;
+    box-shadow: 0px 5px 15px 0px #f3eded;
+    background-position: center;
+    border-radius: 20px;
+    background-image: url("../../images/downarrow.svg");
+    background-size: 13px 8px;
+    height: 27px;
+    width: 27px;
+}
+@media screen and (max-width:1260px) {
+    .chat_inner_text {
+        width: 251px;
+
+    }
+
+    .getintouch_inner_content h3 {
+
+        font-size: 13px;
+    }
+    .needhelp_heading {
+        font-size: 30px;
+    }
+    .getintouch_inner_content h3 {
+        margin-top: 10px;
+    }
+}
+@media screen and (max-width:991px) {
+    .getintouch_inner_content {
+        display: block !important;
+    }
+
+    .email_wrapper {
+        height: 36px;
+        width: 35px;
+        line-height: 32px;
+    }
+
+    .email_wrapper svg {
+
+    font-size: 18px;
+    }
+    .chat_container {
+        margin-top: 6rem;
+    }
+}
+@media screen and (max-width:767px) {
+    .chat_inner_text{
+        width: 100%;
+    }
+    .cmn_small_style_font {
+             font-size: 15px;
+    }
+    .accordian_wrapper button.accordion-button {
+
+        font-size: 13px;
+    }
+    .chat_inner_text h3 {
+
+        font-size: 12px;
+    }.chat_container {
+         margin-top: 5rem;
+         padding: 17px 16px;
+     }
+    .Frequently_asked_outer {
+        padding: 27px 22px;
+    }
+
+    .Get_in_touch_heading {
+
+        font-size: 25px;
+    }
+
+    .getintouch_inner_content{
+        margin-top: 11px;
+
+    }
+
+    .chart_wrapper {
+     gap: 5px;
+    }
+
+
+     }

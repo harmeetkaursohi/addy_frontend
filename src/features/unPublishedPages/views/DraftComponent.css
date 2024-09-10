@@ -47,7 +47,7 @@
     max-width: 98%;
     gap: 10px;
     padding: 4px 0px;
-    min-height: 57px;
+    min-height: 51px;
 }
 /*/ width /*/
 
@@ -232,7 +232,9 @@ h3.caption {
 }
 .draft_post_view_box .draft_img_wrapper img{
     width: 100%;
-    height: 100%;
+    min-height: 100%;
+    height: 392px;
+    object-fit: cover;
 }
 .cross_btn_wrapper{
     position: absolute;
@@ -243,6 +245,14 @@ h3.caption {
     top: 10px;
     cursor: pointer;
     z-index: 2;
+}
+.Post_caption_modal_content .caption{
+    color: #5F6D7E;
+    font-weight: 400;
+    font-size: 18px;
+}
+.draft_page_tags{
+    min-height: 49px;
 }
 .small_font{
     font-size: 16px;

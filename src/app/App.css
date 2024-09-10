@@ -1001,12 +1001,9 @@ position: relative;
 .social_media_page_outer img {
   height: 20px;
   width: 22px;
-  margin-left: -5px;
+  margin-left: -10px;
 }
-.social_media_page_outer {
-  display: flex;
-  align-items: center;
-}
+
 
 .social_media_page_outer img:first-child {
   margin-left: unset;
@@ -1082,7 +1079,7 @@ draft_page_outer h4{
 }
 .posted_date_outer {
   background: white;
-  padding: 12px;
+  padding: 8px 12px;
   border-radius: 10px;
   position: absolute;
   left: 11px;

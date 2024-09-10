@@ -302,13 +302,14 @@ const CreatePost = () => {
         };
 
 
-        isCreatePostRequestValid(requestBody?.postRequestDto, files) && dispatch(createFacebookPostAction(requestBody)).then((response) => {
+        (postStatus !== 'DRAFT' ? isCreatePostRequestValid(requestBody?.postRequestDto, files) : true) && dispatch(createFacebookPostAction(requestBody)).then((response) => {
             if (response.meta.requestStatus === "fulfilled") {
                 navigate("/planner");
             }
         }).catch((error) => {
             showErrorToast(error.response.data.message);
         });
+
 
     };
 
@@ -424,8 +425,10 @@ const CreatePost = () => {
 
                                 </div>
                                 <div className="row">
-                                    <div className={showPreview ? "col-lg-6 col-md-12 col-sm-12" : "col-lg-12 col-md-12 col-sm-12"}>
-                                        <div className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
+                                    <div
+                                        className={showPreview ? "col-lg-6 col-md-12 col-sm-12" : "col-lg-12 col-md-12 col-sm-12"}>
+                                        <div
+                                            className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
                                             <form onSubmit={(e) => {
                                                 e.preventDefault();
                                                 handlePostSubmit(e);
@@ -433,7 +436,8 @@ const CreatePost = () => {
 
                                                 {/* select platform */}
                                                 <div className="createPost_outer media_outer">
-                                                    <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
+                                                    <label
+                                                        className='create_post_label'>{jsondata.mediaPlatform} *</label>
 
                                                     <Dropdown className='insta_dropdown_btn mt-2'>
                                                         <Dropdown.Toggle id="instagram"
@@ -492,7 +496,7 @@ const CreatePost = () => {
                                                                                 <>
                                                                                     {socialAccount && socialAccount?.pageAccessToken.length > 0 &&
                                                                                         <div
-                                                                                            className={`instagram_outer ${socialAccount.provider=="FACEBOOK"?"facebook_outer":socialAccount.provider=="LINKEDIN"?"linkedin_outer":socialAccount.provider=="PINTEREST"?"pinterest_outer":""}`}
+                                                                                            className={`instagram_outer ${socialAccount.provider == "FACEBOOK" ? "facebook_outer" : socialAccount.provider == "LINKEDIN" ? "linkedin_outer" : socialAccount.provider == "PINTEREST" ? "pinterest_outer" : ""}`}
                                                                                             key={index}>
                                                                                             <div
                                                                                                 className="checkbox-button_outer">
@@ -513,7 +517,10 @@ const CreatePost = () => {
                                                                                                     <div
                                                                                                         className="instagramPages unselectedpages"
                                                                                                         key={index}
-                                                                                                        style={{background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : "",border:selectedOptions.includes(page.pageId) === true ? "1px solid #048709" : ""}}
+                                                                                                        style={{
+                                                                                                            background: selectedOptions.includes(page.pageId) === true ? "rgb(215 244 215)" : "",
+                                                                                                            border: selectedOptions.includes(page.pageId) === true ? "1px solid #048709" : ""
+                                                                                                        }}
                                                                                                         onClick={(e) =>
                                                                                                             handleCheckboxChange({
                                                                                                                 group: socialAccount?.provider,
@@ -560,7 +567,8 @@ const CreatePost = () => {
                                                 </div>
 
                                                 {/* add media */}
-                                                <div className={`media_outer dashed_border ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
+                                                <div
+                                                    className={`media_outer dashed_border ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
                                                     <div
                                                         className={showPreview ? "" : 'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
                                                         <div className="post_content_wrapper">
@@ -742,7 +750,8 @@ const CreatePost = () => {
                                                     className={`media_outer ${showPreview ? "" : "post_caption_outer"}`}>
                                                     <div className='flex-grow-1'>
                                                         <div className='caption_header'>
-                                                            <h5 className='post_heading create_post_text'>Add Caption </h5>
+                                                            <h5 className='post_heading create_post_text'>Add
+                                                                Caption </h5>
 
                                                             {/*<button className="ai_btn cmn_white_text"*/}
                                                             {/*        onClick={(e) => {*/}
@@ -767,7 +776,8 @@ const CreatePost = () => {
                                                     <div className='flex-grow-1'>
                                                         <div
                                                             className={`caption_header ${showPreview ? "hashtag_outer" : ""} `}>
-                                                            <h5 className='post_heading create_post_text'>Add Hashtag</h5>
+                                                            <h5 className='post_heading create_post_text'>Add
+                                                                Hashtag *</h5>
 
                                                             {/*<button className="ai_btn cmn_white_text"*/}
                                                             {/*        onClick={(e) => {*/}
@@ -886,17 +896,17 @@ const CreatePost = () => {
                                         </div>
                                     </div>
                                     {
-                                        showPreview && files.length>0 &&
+                                        showPreview && files.length > 0 &&
                                         <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
                                             <div className='cmn_outer create_post_container'>
                                                 <div className='post_preview_outer'>
                                                     <h3 className='Post_Preview_heading'>Post Preview</h3>
                                                     <div className='CommonFeedPreview_container'>
-                                                    {
-                                                        allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
-                                                            let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
+                                                        {
+                                                            allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
+                                                                let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                            return (<span key={index}>
+                                                                return (<span key={index}>
                                                     {selectedPageData &&
                                                         <CommonFeedPreview
                                                             socialMediaType={option.group}
@@ -915,9 +925,9 @@ const CreatePost = () => {
                                                     }
 
                                                 </span>
-                                                            )
-                                                        })
-                                                    }
+                                                                )
+                                                            })
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>

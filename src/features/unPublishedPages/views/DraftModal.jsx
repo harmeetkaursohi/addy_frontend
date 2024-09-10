@@ -125,7 +125,7 @@ function DraftModal({show,setShow,batchIdData}) {
                             <h4 onClick={() => {
                                 handleSeparateCaptionHashtag(batchIdData?.message)?.caption.length > 40 ? setShowCaption(!showCaption) : ""
                             }}
-                                className={`caption ${handleSeparateCaptionHashtag(batchIdData?.message)?.caption.length > 40 ? "cursor-pointer" : ""}  ${showCaption ? "upcoming_post_content " : "cmn_text_overflow"}`}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h4>
+                                className={`caption ${handleSeparateCaptionHashtag(batchIdData?.message)?.caption.length > 40 ? "cursor-pointer" : ""}  ${showCaption ? "upcoming_post_content " : "cmn_text_overflow"}`}>{batchIdData?.message !== null && batchIdData?.message !== "" && batchIdData?.message !== " "? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h4>
 
                             <div className={"draft_container_box"}>
                                 <h3 className={"small_font"}>Hashtags: </h3>
@@ -137,7 +137,7 @@ function DraftModal({show,setShow,batchIdData}) {
                             <div className={"draft_container_box"}>
                                 <h3 className={"small_font"}>Platforms: </h3>
                                 <div className={"social_media_page_outer"}>
-                                    <div className="page_tags">
+                                    <div className="page_tags draft_page_tags">
 
                                                 {batchIdData?.postPages && Array.isArray(batchIdData?.postPages) &&
                                                     Array.from(new Set(batchIdData.postPages.map((item) => item.pageId)))
@@ -167,7 +167,7 @@ function DraftModal({show,setShow,batchIdData}) {
                                                              onClick={handlePublishedPost}
                                                              isDisabled={labels !== "Post Now" && deletePostByBatchIdData?.loading}
                                     />
-                                    <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn"} label={"Schedule Post"}
+                                    <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn"} label={"Schedule Post/Edit"}
                                                              onClick={() => {
                                                                  setLabels("Schedule Post")
                                                                  navigate("/post/" + batchIdData?.id)

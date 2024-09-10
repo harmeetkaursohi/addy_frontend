@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {Suspense, lazy} from 'react';
 import './App.css'
 import {unProtectedUrls} from "../utils/contantData";
+const Needhelp = lazy(() => import('../features/NeedHelp/Needhelp.jsx'));
 
 
 const Dashboard = lazy(() => import('../features/dashboard/views/Dashboard.jsx'));
@@ -35,6 +36,7 @@ const Oauth2RedirectComponent = lazy(() => import('../features/authentication/Oa
 const NotFound = lazy(() => import('../features/common/components/NotFound'));
 const BillingForm = lazy(() => import('../features/billingInfo/views/BillingForm.jsx'));
 const SelectPlan = lazy(() => import('../features/selectplan/views/SelectPlan.jsx'));
+
 
 const App = () => {
     const PrivateRoute = () => {
@@ -69,7 +71,8 @@ const App = () => {
                                 <Route path="/contact" element={<ContactUs/>}/>
                                 <Route path="/profile" element={<Profile/>}/>
                                 <Route path="/notification" element={<Notification/>}/>
-                                
+                                <Route path="/needhelp" element={<Needhelp/>}/>
+
                              
                                 
                             </Route>

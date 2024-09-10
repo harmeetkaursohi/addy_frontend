@@ -137,7 +137,7 @@ const DraftComponent = ({
                         <h4 onClick={() => {
                             handleSeparateCaptionHashtag(batchIdData?.message)?.caption.length > 40 ? setShowCaption(!showCaption) : ""
                         }}
-                            className={`caption ${handleSeparateCaptionHashtag(batchIdData?.message)?.caption.length > 40 ? "cursor-pointer" : ""}  ${showCaption ? "upcoming_post_content " : "cmn_text_overflow"}`}>{batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h4>
+                            className={`caption ${handleSeparateCaptionHashtag(batchIdData?.message)?.caption.length > 40 ? "cursor-pointer" : ""}  ${showCaption ? "upcoming_post_content " : "cmn_text_overflow"}`}>{batchIdData?.message !== null && batchIdData?.message !== "" && batchIdData?.message !== " "? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h4>
                     </div>
                     <div className="social_media_page_outer">
                         {batchIdData?.postPages && Array.isArray(batchIdData?.postPages) &&
@@ -148,13 +148,15 @@ const DraftComponent = ({
                                 const count = uniquePages.length;
                                 return (
                                     <>
+                                        <div>
                                         {uniquePages.map((curPage, key) => (
                                             <img key={key} className={"social-media-icon"}
                                                  src={computeImageURL(curPage?.socialMediaType)}
                                                  alt={"social media icon"}/>
 
                                         ))}
-                                        {/*<h4>Posting on {uniquePages.length} pages.</h4>*/}
+                                        </div>
+                                        <h4>Posting on {uniquePages.length} pages.</h4>
                                     </>
 
                                 );

@@ -2013,10 +2013,15 @@ export const isCreatePostRequestValid = (requestBody, files) => {
             case "caption":
             case "hashTag": {
                 // If posted on facebook or linkedin one among caption , hastag or image is required
-                if((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)){
-                    showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" :""} ${isPostedOnLinkedin ? " and Linkedin" :""}, either Caption/HashTag or Image`]));
+                if (isNullOrEmpty(requestBody.hashTag)) {
+                    showErrorToast("Hashtag is required.");
                     shouldBreak = true;
+
                 }
+                // if((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)){
+                //     showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" :""} ${isPostedOnLinkedin ? " and Linkedin" :""}, either Caption/HashTag or Image`]));
+                //     shouldBreak = true;
+                // }
                 break;
             }
             case "pinTitle": {
