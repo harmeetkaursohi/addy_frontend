@@ -12,7 +12,7 @@ const CommonLoader = ({classname}) => {
                     strokeColor="#F07C33"
                     strokeWidth="5"
                     animationDuration="0.75"
-                    width="96"
+                    width="60"
                     visible={true}
                 />
             </div>

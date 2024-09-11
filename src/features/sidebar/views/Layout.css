@@ -1,5 +1,6 @@
 .sidebar_wrapper {
-    width: 280px;
+    /*width: 280px;*/
+    width: 224px;
     box-shadow: 2px 0px 50px 0px rgba(226, 232, 240, 0.68);
     z-index: 2;
     position: fixed;

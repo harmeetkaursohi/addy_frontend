@@ -84,7 +84,7 @@ const CommonSlider = ({
                     <Slider {...settings}>
 
                         {
-                            files?.length === 0 && <img src={noImageAvailable} alt={`Image`} className='post_img mb-2'/>
+                            files?.length === 0 && <img src={noImageAvailable} alt={`Image 23F`} className='post_img mb-2'/>
                         }
 
                         {
