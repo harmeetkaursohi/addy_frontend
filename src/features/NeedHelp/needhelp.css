@@ -49,7 +49,7 @@
 
 }
 .user_chat_outer {
-    margin-top: 37px;
+    margin-bottom: 37px;
 }
 .input_wrapper{
     width: 100%;
@@ -62,7 +62,13 @@ border: 2px solid #F07C33;
     padding: 9px;
     display: flex;
     gap: 10px;
-    margin-top: 37px;
+
+}
+.chat_scroll {
+    max-height: calc(100vh - 321px);
+    overflow: auto;
+    padding-right: 10px;
+    margin-right: -10px;
 }
 .attachlink_wrapepr img{
     object-fit: contain;
@@ -123,7 +129,7 @@ border: 2px solid #F07C33;
     margin-top: 8px;
 }
 .chat_container {
-    margin-top: 8rem;
+
     padding: 19px 26px;
 }
 .user_chat_inner_text {
@@ -264,9 +270,7 @@ border: 2px solid #F07C33;
 
     font-size: 18px;
     }
-    .chat_container {
-        margin-top: 6rem;
-    }
+
 }
 @media screen and (max-width:767px) {
     .chat_inner_text{
@@ -283,7 +287,7 @@ border: 2px solid #F07C33;
 
         font-size: 12px;
     }.chat_container {
-         margin-top: 5rem;
+         /*margin-top: 5rem;*/
          padding: 17px 16px;
      }
     .Frequently_asked_outer {

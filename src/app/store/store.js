@@ -10,6 +10,7 @@ import notificationSlice from "../slices/notificationSlice/notificationSlice";
 import pageAccessTokenSlice from "../slices/pageAccessTokenSlice/pageAccessTokenSlice";
 import webSlice from "../slices/webSlice/webSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
+import chatSlice from "../slices/ChatSlice/chatSlice";
 
 
 const rootReducers = combineReducers({
@@ -18,14 +19,15 @@ const rootReducers = combineReducers({
     pageAccessToken: pageAccessTokenSlice,
     socialAccount: socialAccountSlice,
     post: postSlice,
-    insight: insightSlice,    
+    insight: insightSlice,
     web: webSlice,
     notification: notificationSlice,
-    reset: resetReducers
+    reset: resetReducers,
+    chat:chatSlice
+
 })
 
 
-//reset reducer mechanism...
 const rootReducer = (state, action) => {
 
     if (action.type === resetReducers.type) {

@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import {Suspense, lazy} from 'react';
 import './App.css'
 import {unProtectedUrls} from "../utils/contantData";
-const Needhelp = lazy(() => import('../features/NeedHelp/Needhelp.jsx'));
+const NeedHelpComponent = lazy(() => import('../features/NeedHelp/NeedHelpComponent.jsx'));
 
 
 const Dashboard = lazy(() => import('../features/dashboard/views/Dashboard.jsx'));
@@ -71,7 +71,7 @@ const App = () => {
                                 <Route path="/contact" element={<ContactUs/>}/>
                                 <Route path="/profile" element={<Profile/>}/>
                                 <Route path="/notification" element={<Notification/>}/>
-                                <Route path="/needhelp" element={<Needhelp/>}/>
+                                <Route path="/needhelp" element={<NeedHelpComponent/>}/>
 
                              
                                 
