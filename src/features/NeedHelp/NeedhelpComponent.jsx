@@ -13,7 +13,7 @@ import {decodeJwtToken} from "../../app/auth/auth";
 import Loader from "../loader/Loader";
 import default_user_icon from "../../images/default_user_icon.svg";
 
-const NeedHelpComponent = () => {
+function NeedHelpComponent() {
     const [messageText, setMessageText] = useState('');
     const [activeKey, setActiveKey] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -229,6 +229,6 @@ const NeedHelpComponent = () => {
             </div>
         </div>
     );
-};
+}
 
 export default NeedHelpComponent;
