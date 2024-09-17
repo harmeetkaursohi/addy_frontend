@@ -7,19 +7,22 @@ import {IoLocationOutline} from 'react-icons/io5';
 import './needhelp.css';
 import {getToken} from "../../app/auth/auth";
 import {useDispatch, useSelector} from 'react-redux';
-import {sendMessage, fetchMessages, clearMessages,fetchAllMessages} from '../../app/slices/ChatSlice/chatSlice';
+import {sendMessage, fetchMessages, clearMessages, fetchAllMessages} from '../../app/slices/ChatSlice/chatSlice';
 import {useAppContext} from "../common/components/AppProvider";
 import {decodeJwtToken} from "../../app/auth/auth";
 import CommonLoader from "../common/components/CommonLoader";
 import Loader from "../loader/Loader";
+import default_user_icon from "../../images/default_user_icon.svg";
+
 const NeedHelpComponent = () => {
     const [messageText, setMessageText] = useState('');
     const [activeKey, setActiveKey] = useState(null);
-    const[isLoading,setIsLoading]=useState(false);
-
-        const dispatch = useDispatch();
-    const { messages = [], loading, error } = useSelector((state) => state.chat);
+    const [isLoading, setIsLoading] = useState(false);
+    const userData = useSelector((state) => state.user.userInfoReducer.data);
+    const dispatch = useDispatch();
+    const {messages = [], loading, error} = useSelector((state) => state.chat);
     const authToken = getToken();
+    const helpLine="Hi. I'm your Addy Service Assistant. How can i help you?";
     // const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJ0aW1lem9uZSI6IkFzaWEvQ2FsY3V0dGEiLCJjdXN0b21lcklkIjoiNjYzY2FiYWY0MGQwZDcwZDAxMzA0NDZmIiwicGxhbk5hbWUiOiJQUkVNSVVNIiwidXNlck5hbWUiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJleHAiOjE3MjY1ODU3NDIsImlhdCI6MTcyNjU0OTc0MiwiZW1haWwiOiJhZGR5LmFkcy51bHRpdmljQGdtYWlsLmNvbSIsImNvbnRhY3RObyI6IiJ9.FQ64fq5vyZ8tzJBJZeEFeDe3t-IlPlFKeOi6pYUGhj8';
     const decodeJwt = decodeJwtToken(authToken);
     const senderId = decodeJwt?.customerId;
@@ -112,7 +115,7 @@ const NeedHelpComponent = () => {
                                             </div>
                                             <div className='bot_chat_outer mb-3'>
                                                 <div className='chat_inner_text'>
-                                                    <h3>{'Hi how may i help you.'}</h3>
+                                                    <h3>{helpLine}</h3>
                                                 </div>
 
                                             </div>
@@ -148,8 +151,11 @@ const NeedHelpComponent = () => {
                                                                 </h6>
                                                             </div>
                                                             <div className='user_profile_image_container'>
-                                                            <img src={logo} className='userchat_image'
-                                                                     alt='User Profile'/>
+                                                                {/*<img src={logo} className='userchat_image'*/}
+                                                                {/*     alt='User Profile'/>*/}
+                                                                <img
+                                                                    src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
+                                                                    className='userchat_image'/>
                                                             </div>
                                                         </div>
                                                     ) : (
@@ -189,8 +195,8 @@ const NeedHelpComponent = () => {
                                             />
                                         </div>
                                         <div className='send_outer' onClick={handleSend}>
-                                            {isLoading?<Loader/>:
-                                            <IoSendSharp style={{cursor: 'pointer'}}/>}
+                                            {isLoading ? <Loader/> :
+                                                <IoSendSharp style={{cursor: 'pointer'}}/>}
                                         </div>
                                         {/*{loading && <p className='loading'>Sending...</p>}*/}
 

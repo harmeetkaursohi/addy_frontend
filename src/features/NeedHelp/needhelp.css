@@ -121,8 +121,9 @@ border: 2px solid #F07C33;
     line-height: 20px;
 }
 .userchat_image{
-    width: 34px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
+    border-radius: 23px;
 }
 .chat_time{
     font-size: 12px;
