@@ -2,15 +2,14 @@ import {BrowserRouter, Routes, Route} from "react-router-dom"
 import {AppProvider} from '../features/common/components/AppProvider.jsx'
 import React from 'react'
 import {Outlet, Navigate} from 'react-router-dom';
-import {getToken} from "../app/auth/auth.js";
+import {getToken} from "./auth/auth";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {Suspense, lazy} from 'react';
 import './App.css'
 import {unProtectedUrls} from "../utils/contantData";
+
 const NeedHelpComponent = lazy(() => import('../features/NeedHelp/NeedHelpComponent.jsx'));
-
-
 const Dashboard = lazy(() => import('../features/dashboard/views/Dashboard.jsx'));
 const Planner = lazy(() => import('../features/planner/views/Planner.jsx'));
 const SideBar = lazy(() => import('../features/sidebar/views/Layout'));
@@ -23,7 +22,7 @@ const AddressForm = lazy(() => import('../features/signup/views/tabs/AddressInfo
 const Draft = lazy(() => import('../features/unPublishedPages/Draft'));
 const Insight = lazy(() => import('../features/insights/insight/views/Insight'));
 // const FaqComponent = lazy(() => import('../features/faq/FaqComponent'));
-const PrivacyComponent = lazy(() => import('../features/privacy/PrivacyComponent'));
+// const PrivacyComponent = lazy(() => import('../features/privacy/PrivacyComponent'));
 const ContactUs = lazy(() => import('../features/contactUs/ContactUs'));
 const Profile = lazy(() => import('../features/profile/Profile.jsx'));
 const Notification = lazy(() => import('../features/notification/Notification'));

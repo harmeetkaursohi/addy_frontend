@@ -7,10 +7,9 @@ import {IoLocationOutline} from 'react-icons/io5';
 import './needhelp.css';
 import {getToken} from "../../app/auth/auth";
 import {useDispatch, useSelector} from 'react-redux';
-import {sendMessage, fetchMessages, clearMessages, fetchAllMessages} from '../../app/slices/ChatSlice/chatSlice';
+import {sendMessage, clearMessages, fetchAllMessages} from '../../app/slices/ChatSlice/chatSlice';
 import {useAppContext} from "../common/components/AppProvider";
 import {decodeJwtToken} from "../../app/auth/auth";
-import CommonLoader from "../common/components/CommonLoader";
 import Loader from "../loader/Loader";
 import default_user_icon from "../../images/default_user_icon.svg";
 
@@ -20,7 +19,7 @@ const NeedHelpComponent = () => {
     const [isLoading, setIsLoading] = useState(false);
     const userData = useSelector((state) => state.user.userInfoReducer.data);
     const dispatch = useDispatch();
-    const {messages = [], loading, error} = useSelector((state) => state.chat);
+    const {messages = [], error} = useSelector((state) => state.chat);
     const authToken = getToken();
     const helpLine="Hi. I'm your Addy Service Assistant. How can i help you?";
     // const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJ0aW1lem9uZSI6IkFzaWEvQ2FsY3V0dGEiLCJjdXN0b21lcklkIjoiNjYzY2FiYWY0MGQwZDcwZDAxMzA0NDZmIiwicGxhbk5hbWUiOiJQUkVNSVVNIiwidXNlck5hbWUiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJleHAiOjE3MjY1ODU3NDIsImlhdCI6MTcyNjU0OTc0MiwiZW1haWwiOiJhZGR5LmFkcy51bHRpdmljQGdtYWlsLmNvbSIsImNvbnRhY3RObyI6IiJ9.FQ64fq5vyZ8tzJBJZeEFeDe3t-IlPlFKeOi6pYUGhj8';
@@ -37,7 +36,7 @@ const NeedHelpComponent = () => {
     const timeFormatOptions = {
         hour: '2-digit',
         minute: '2-digit',
-        hour12: true // AM/PM format
+        hour12: true
     };
     const handleSend = async () => {
         setIsLoading(true)
@@ -155,7 +154,7 @@ const NeedHelpComponent = () => {
                                                                 {/*     alt='User Profile'/>*/}
                                                                 <img
                                                                     src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
-                                                                    className='userchat_image'/>
+                                                                    className='userchat_image' alt='User Profile'/>
                                                             </div>
                                                         </div>
                                                     ) : (
@@ -198,8 +197,6 @@ const NeedHelpComponent = () => {
                                             {isLoading ? <Loader/> :
                                                 <IoSendSharp style={{cursor: 'pointer'}}/>}
                                         </div>
-                                        {/*{loading && <p className='loading'>Sending...</p>}*/}
-
                                         {error && <p className='error'>{error}</p>}
                                     </div>
                                 </div>
