@@ -42,11 +42,26 @@ export const fetchChatById = async (authToken,size,page, params = { sortBy: 'cre
                 'Authorization': `Bearer ${authToken}`,
             },
         });
+        console.log('response....',response.data)
         return response.data; // Adjust this based on your API's response structure
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;
     }
-};
+}
 
+export const fetchAllChatById = async (authToken) => {
+    const url = `${import.meta.env.VITE_APP_API_BASE_URL}/chat/all/messages`;
+    try {
+        const response = await baseAxios.get(url, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        throw error;
+    }
+};
 

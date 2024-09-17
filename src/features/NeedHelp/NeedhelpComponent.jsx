@@ -6,23 +6,20 @@ import {MdOutlineMail} from 'react-icons/md';
 import {IoLocationOutline} from 'react-icons/io5';
 import './needhelp.css';
 import {useDispatch, useSelector} from 'react-redux';
-import {sendMessage, fetchMessages, clearMessages} from '../../app/slices/ChatSlice/chatSlice';
+import {sendMessage, fetchMessages, clearMessages,fetchAllMessages} from '../../app/slices/ChatSlice/chatSlice';
 import {useAppContext} from "../common/components/AppProvider";
 import {decodeJwtToken} from "../../app/auth/auth";
 const NeedHelpComponent = () => {
     const [messageText, setMessageText] = useState('');
     const [activeKey, setActiveKey] = useState(null);
     const dispatch = useDispatch();
-    const {messages, loading, error} = useSelector((state) => state.chat);
-
-    const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJ0aW1lem9uZSI6IkFzaWEvQ2FsY3V0dGEiLCJjdXN0b21lcklkIjoiNjYzY2FiYWY0MGQwZDcwZDAxMzA0NDZmIiwicGxhbk5hbWUiOiJQUkVNSVVNIiwidXNlck5hbWUiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJleHAiOjE3MjY1MDY4NTEsImlhdCI6MTcyNjQ3MDg1MSwiZW1haWwiOiJhZGR5LmFkcy51bHRpdmljQGdtYWlsLmNvbSIsImNvbnRhY3RObyI6IiJ9.ut5ZoQFDdXe2zBQ_XI-gqAfTxzEkWYKWwLle3MEIo-4';
+    const { messages = [], loading, error } = useSelector((state) => state.chat);
+    const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJ0aW1lem9uZSI6IkFzaWEvQ2FsY3V0dGEiLCJjdXN0b21lcklkIjoiNjYzY2FiYWY0MGQwZDcwZDAxMzA0NDZmIiwicGxhbk5hbWUiOiJQUkVNSVVNIiwidXNlck5hbWUiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJleHAiOjE3MjY1ODU3NDIsImlhdCI6MTcyNjU0OTc0MiwiZW1haWwiOiJhZGR5LmFkcy51bHRpdmljQGdtYWlsLmNvbSIsImNvbnRhY3RObyI6IiJ9.FQ64fq5vyZ8tzJBJZeEFeDe3t-IlPlFKeOi6pYUGhj8';
     const decodeJwt = decodeJwtToken(authToken);
     const senderId = decodeJwt?.customerId;
     console.log('SenderId.........', senderId)
-    const size = 10;
-    const page = 0;
     useEffect(() => {
-        dispatch(fetchMessages({authToken, size, page}));
+        dispatch(fetchAllMessages({authToken}));
         return () => {
             dispatch(clearMessages());
         };
@@ -94,8 +91,8 @@ const NeedHelpComponent = () => {
                                 </div>
                                 <div className='chat_container'>
                                     <div className="chat_scroll">
-                                        {messages.slice().reverse().map((message) => (
-                                            <div key={message.id} className={"user_chat_outer"}>
+                                        {messages.map((message) => (
+                                            <div key={message.id}>
                                                 {message.senderId === senderId ? (
                                                     <div  className='d-flex gap-3 justify-content-end'>
                                                         <div>
