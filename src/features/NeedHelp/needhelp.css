@@ -69,6 +69,7 @@ border: 2px solid #F07C33;
     overflow: auto;
     padding-right: 10px;
     margin-right: -10px;
+    min-height: 163px;
 }
 .attachlink_wrapepr img{
     object-fit: contain;
@@ -305,7 +306,7 @@ border: 2px solid #F07C33;
     }
 
     .chart_wrapper {
-     gap: 5px;
+        gap: 5px;
     }
 
 

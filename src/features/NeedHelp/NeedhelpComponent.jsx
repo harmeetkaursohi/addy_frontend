@@ -5,6 +5,7 @@ import {IoSendSharp} from 'react-icons/io5';
 import {MdOutlineMail} from 'react-icons/md';
 import {IoLocationOutline} from 'react-icons/io5';
 import './needhelp.css';
+import {getToken} from "../../app/auth/auth";
 import {useDispatch, useSelector} from 'react-redux';
 import {sendMessage, fetchMessages, clearMessages,fetchAllMessages} from '../../app/slices/ChatSlice/chatSlice';
 import {useAppContext} from "../common/components/AppProvider";
@@ -14,7 +15,8 @@ const NeedHelpComponent = () => {
     const [activeKey, setActiveKey] = useState(null);
     const dispatch = useDispatch();
     const { messages = [], loading, error } = useSelector((state) => state.chat);
-    const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJ0aW1lem9uZSI6IkFzaWEvQ2FsY3V0dGEiLCJjdXN0b21lcklkIjoiNjYzY2FiYWY0MGQwZDcwZDAxMzA0NDZmIiwicGxhbk5hbWUiOiJQUkVNSVVNIiwidXNlck5hbWUiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJleHAiOjE3MjY1ODU3NDIsImlhdCI6MTcyNjU0OTc0MiwiZW1haWwiOiJhZGR5LmFkcy51bHRpdmljQGdtYWlsLmNvbSIsImNvbnRhY3RObyI6IiJ9.FQ64fq5vyZ8tzJBJZeEFeDe3t-IlPlFKeOi6pYUGhj8';
+    const authToken = getToken();
+    // const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJ0aW1lem9uZSI6IkFzaWEvQ2FsY3V0dGEiLCJjdXN0b21lcklkIjoiNjYzY2FiYWY0MGQwZDcwZDAxMzA0NDZmIiwicGxhbk5hbWUiOiJQUkVNSVVNIiwidXNlck5hbWUiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJleHAiOjE3MjY1ODU3NDIsImlhdCI6MTcyNjU0OTc0MiwiZW1haWwiOiJhZGR5LmFkcy51bHRpdmljQGdtYWlsLmNvbSIsImNvbnRhY3RObyI6IiJ9.FQ64fq5vyZ8tzJBJZeEFeDe3t-IlPlFKeOi6pYUGhj8';
     const decodeJwt = decodeJwtToken(authToken);
     const senderId = decodeJwt?.customerId;
     console.log('SenderId.........', senderId)
@@ -24,7 +26,11 @@ const NeedHelpComponent = () => {
             dispatch(clearMessages());
         };
     }, [dispatch, authToken]);
-
+    const timeFormatOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true // AM/PM format
+    };
     const handleSend = async () => {
         if (!messageText.trim()) {
             return;
@@ -91,40 +97,63 @@ const NeedHelpComponent = () => {
                                 </div>
                                 <div className='chat_container'>
                                     <div className="chat_scroll">
-                                        {messages.map((message) => (
-                                            <div key={message.id}>
-                                                {message.senderId === senderId ? (
-                                                    <div  className='d-flex gap-3 justify-content-end'>
-                                                        <div>
-                                                            <div className='chat_inner_text user_chat_inner_text'>
-                                                                <h3>{message.text}</h3>
-                                                            </div>
-                                                            <h6 className='chat_time text-end'>
-                                                                {new Date(message.createdAt).toLocaleTimeString()}
-                                                            </h6>
-                                                        </div>
-                                                        <div className='user_profile_image_container'>
-                                                            <img src={logo} className='userchat_image' alt='User Profile'/>
-                                                        </div>
+                                        {messages.length === 0 ? (
+                                            <div className='d-flex gap-3 chat_inner_content'>
+                                                <div className='user_profile_image_container'>
+                                                    <img src={logo} className='userchat_image'
+                                                         alt='User Profile'/>
+                                                </div>
+                                                <div className='bot_chat_outer'>
+                                                    <div className='chat_inner_text'>
+                                                        <h3>{'Hi how may i help you.'}</h3>
                                                     </div>
-                                                ) : (
-                                                    <div className='d-flex gap-3 chat_inner_content'>
-                                                        <div className='user_profile_image_container'>
-                                                            <img src={logo} className='userchat_image' alt='User Profile'/>
-                                                        </div>
-                                                        <div className='bot_chat_outer'>
-                                                            <div className='chat_inner_text'>
-                                                                <h3>{message.text}</h3>
-                                                            </div>
-                                                            <h6 className='chat_time'>
-                                                                {new Date(message.createdAt).toLocaleTimeString()}
-                                                            </h6>
-                                                        </div>
-                                                    </div>
-                                                )}
+                                                    <h6 className='chat_time'>
+                                                        {/*{new Date().toLocaleTimeString()}*/}
+                                                        {new Date().toLocaleTimeString(undefined, timeFormatOptions)}
+                                                    </h6>
+                                                </div>
                                             </div>
-                                        ))}
+                                        ) : (
+                                            messages.map((message) => (
+                                                <div key={message.id}>
+                                                    {message.senderId === senderId ? (
+                                                        <div className='d-flex gap-3 justify-content-end'>
+                                                            <div>
+                                                                <div className='chat_inner_text user_chat_inner_text'>
+                                                                    <h3>{message.text}</h3>
+                                                                </div>
+                                                                <h6 className='chat_time text-end'>
+                                                                    {/*{new Date(message.createdAt).toLocaleTimeString()}*/}
+                                                                    {new Date(message.createdAt).toLocaleTimeString(undefined, timeFormatOptions)}
+                                                                </h6>
+                                                            </div>
+                                                            <div className='user_profile_image_container'>
+                                                            <img src={logo} className='userchat_image'
+                                                                     alt='User Profile'/>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className='d-flex gap-3 chat_inner_content'>
+                                                            <div className='user_profile_image_container'>
+                                                                <img src={logo} className='userchat_image'
+                                                                     alt='User Profile'/>
+                                                            </div>
+                                                            <div className='bot_chat_outer'>
+                                                                <div className='chat_inner_text'>
+                                                                    <h3>{message.text}</h3>
+                                                                </div>
+                                                                <h6 className='chat_time'>
+                                                                    {/*{new Date(message.createdAt).toLocaleTimeString()}*/}
+                                                                    {new Date(message.createdAt).toLocaleTimeString(undefined, timeFormatOptions)}
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            )))
+                                        }
                                     </div>
+
                                     <div className='chart_wrapper'>
                                         {/* <div className='attachlink_wrapepr'>
                                             <img src={attach_file} alt='Attach File'/>
