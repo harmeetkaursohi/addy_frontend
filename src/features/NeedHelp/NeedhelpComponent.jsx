@@ -21,8 +21,7 @@ const NeedHelpComponent = () => {
     const dispatch = useDispatch();
     const {messages = [], error} = useSelector((state) => state.chat);
     const authToken = getToken();
-    const helpLine="Hi. I'm your Addy Service Assistant. How can i help you?";
-    // const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJ0aW1lem9uZSI6IkFzaWEvQ2FsY3V0dGEiLCJjdXN0b21lcklkIjoiNjYzY2FiYWY0MGQwZDcwZDAxMzA0NDZmIiwicGxhbk5hbWUiOiJQUkVNSVVNIiwidXNlck5hbWUiOiIxMTIzOTM4NTQ1NzM5MDIwNDMzMzkiLCJleHAiOjE3MjY1ODU3NDIsImlhdCI6MTcyNjU0OTc0MiwiZW1haWwiOiJhZGR5LmFkcy51bHRpdmljQGdtYWlsLmNvbSIsImNvbnRhY3RObyI6IiJ9.FQ64fq5vyZ8tzJBJZeEFeDe3t-IlPlFKeOi6pYUGhj8';
+    const helpLine = "Hi. I'm your Addy Service Assistant. How can i help you?";
     const decodeJwt = decodeJwtToken(authToken);
     const senderId = decodeJwt?.customerId;
     console.log('SenderId.........', senderId)
