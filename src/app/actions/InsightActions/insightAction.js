@@ -56,7 +56,7 @@ export const getPostDataWithInsights = createAsyncThunk('insight/getPostDataWith
                 return response
             } else {
                 const postIds = data?.postIds?.map(postId => postId).join(",");
-                const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
+                const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true).limit(1),reactions.summary(total_count).limit(1),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
                 return await baseAxios.get(apiUrl).then(res => {
                     return res.data;
                 }).catch(async error => {

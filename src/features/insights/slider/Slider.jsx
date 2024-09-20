@@ -203,19 +203,20 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                                                 </h4>
                                                                 <h3>{formattedData?.total_comment}</h3>
                                                             </li>
-                                                            {selectedPage?.socialMediaType === "PINTEREST" ? (
+                                                            {
+                                                                selectedPage?.socialMediaType === "PINTEREST" ?
                                                                 <li>
                                                                     <h4 className="cmn_small_heading">Total
                                                                         Save</h4>
                                                                     <h3>{formattedData?.total_save}</h3>
                                                                 </li>
-                                                            ) : (
+                                                             :
                                                                 <li>
                                                                     <h4 className="cmn_small_heading">Total
                                                                         Share</h4>
                                                                     <h3>{formattedData?.total_share}</h3>
                                                                 </li>
-                                                            )}
+                                                            }
                                                         </ul>
                                                     </Card.Body>
                                                 </Card>

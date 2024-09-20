@@ -1293,7 +1293,7 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
                 }
             }
             formattedData = {
-                total_like: data?.likes?.summary?.total_count,
+                total_like: data?.likes?.summary?.total_count + data?.reactions?.summary?.total_count,
                 total_comment: data?.comments?.summary?.total_count,
                 total_share: data?.shares?.count || 0,
                 account_reach: data?.insights?.data[0]?.values[0]?.value,

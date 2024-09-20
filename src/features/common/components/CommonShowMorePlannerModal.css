@@ -52,7 +52,7 @@
 }
 
 .plans_tags_wrapper .d-flex.page_tags {
-    min-height: unset;
+    min-height: inherit;
 }
 
 .plans_tags_wrapper .d-flex {
