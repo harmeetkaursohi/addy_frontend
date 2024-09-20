@@ -201,7 +201,7 @@ function NeedHelpComponent() {
                                             searchMessageApi?.loading ?
                                                 <div className={"text-center mb-2"}><Loader/></div> :
                                                 searchMessageApi?.data?.hasNext &&
-                                                <div className={"load-more-msg-txt mb-2 cursor-pointer"} onClick={()=>{setTriggerSearchMessageApi(true)}}>load more messages...</div>
+                                                <div className={"load-more-msg-txt mb-2 cursor-pointer"} onClick={()=>{setTriggerSearchMessageApi(true)}}>load previous messages...</div>
                                         }
                                         {
                                             messageList?.map((message, index) => {
