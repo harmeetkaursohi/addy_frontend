@@ -9,7 +9,7 @@ import {Suspense, lazy} from 'react';
 import './App.css'
 import {unProtectedUrls} from "../utils/contantData";
 
-const NeedHelpComponent = lazy(() => import('../features/NeedHelp/NeedhelpComponent'));
+const NeedHelpComponent = lazy(() => import('../features/needHelp/NeedHelpComponent'));
 const Dashboard = lazy(() => import('../features/dashboard/views/Dashboard.jsx'));
 const Planner = lazy(() => import('../features/planner/views/Planner.jsx'));
 const SideBar = lazy(() => import('../features/sidebar/views/Layout'));

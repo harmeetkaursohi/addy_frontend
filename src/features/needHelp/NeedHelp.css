@@ -8,6 +8,19 @@
     border-bottom: 1px solid #dddddd;
     padding: 20px 12px;
 }
+.chat-message{
+    word-wrap: break-word;
+    word-break: break-word;
+}
+.load-more-msg-txt {
+    text-align: center;
+    font-size: 12px;
+    opacity: .7;
+    text-decoration: underline;
+}
+.load-more-msg-txt:hover{
+    color: blue;
+}
 .cmn_small_style_font{
     font-size: 20px;
     font-weight: 700;

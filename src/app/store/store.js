@@ -10,7 +10,7 @@ import notificationSlice from "../slices/notificationSlice/notificationSlice";
 import pageAccessTokenSlice from "../slices/pageAccessTokenSlice/pageAccessTokenSlice";
 import webSlice from "../slices/webSlice/webSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
-import chatSlice from "../slices/ChatSlice/chatSlice";
+import chatSlice from "../slices/chatSlice/chatSlice";
 
 
 const rootReducers = combineReducers({

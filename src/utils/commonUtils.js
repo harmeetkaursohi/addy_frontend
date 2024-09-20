@@ -1,5 +1,6 @@
 import * as yup from "yup";
 import {
+    EnterMessageToStartChat,
     ErrorFetchingPost,
     InvalidAspectRatio,
     InvalidImageDimension,
@@ -895,11 +896,14 @@ export const isTokenValid = () => {
     return token?.exp > Math.floor(Date.now() / 1000);
 }
 
-export const isNullOrEmpty = (value) => {
-    if (Array.isArray(value)) {
-        return value.length === 0;
-    }
-    return value === null || value === undefined || value?.trim() === ""
+export const isNullOrEmpty = (data) => {
+    return (
+        data === null ||
+        data === undefined ||
+        data === '' ||
+        (Array.isArray(data) && data.length === 0) ||
+        (typeof data === 'object' && !(data instanceof Date) && Object?.keys(data).length === 0)
+    );
 }
 export const isReplyCommentEmpty = (replyComment) => {
     if (replyComment === null || replyComment === undefined || replyComment === "") {
@@ -2741,4 +2745,40 @@ export const groupBy=(sourceArray=[],key)=>{
         })
     }
     return result;
+}
+export const handleApiResponse = (res, onSuccess, onReject) => {
+    if (res.meta.requestStatus === "fulfilled" && onSuccess !== null && onSuccess !== undefined) {
+        onSuccess();
+    }
+    if (res.meta.requestStatus === "rejected" && onReject !== null && onReject !== undefined) {
+        onReject();
+    }
+}
+export const isValidCreateChatRequest=(data)=>{
+    if (isNullOrEmpty(data.initiatorId)) {
+        showErrorToast(formatMessage(IsRequired, ["Chat Initiator"]));
+        return false;
+    }
+    if (isNullOrEmpty(data.data.text)) {
+        showErrorToast(EnterMessageToStartChat);
+        return false;
+    }
+    return true;
+
+}
+export const isValidCreateMessageRequest=(data)=>{
+    if (isNullOrEmpty(data.data.senderId)) {
+        showErrorToast(formatMessage(IsRequired, ["Message Sender"]));
+        return false;
+    }
+    if (isNullOrEmpty(data.data.chatId)) {
+        showErrorToast(formatMessage(IsRequired, ["Chat Id"]));
+        return false;
+    }
+    if (isNullOrEmpty(data.data.text)) {
+        showErrorToast(EnterMessageToStartChat);
+        return false;
+    }
+    return true;
+
 }

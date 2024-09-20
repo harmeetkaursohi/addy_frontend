@@ -22,6 +22,8 @@ export const NotConnected=" No {0} here yet. Connect your {1} to see what’s ha
 export const NoPostInDraft=" This page is waiting for you! Start adding Posts to see the magic."
 export const EmptyInsightGridMessage="Insights will appear here once you start using the platform. Let’s get started!"
 export const EmptyNotificationGridMessage="No items here yet. Let’s get started and make this list lively!"
+export const EnterMessageToStartChat="Please type message to start chat with Addy!"
+export const ChatOpenMessage="Hi. I'm your Addy Service Assistant. How can i help you?"
 
 export const unProtectedUrls=["/login","/","/sign-up","/reset-password","/forgot-password","/auth-redirect"]
 
