@@ -22,7 +22,7 @@ import {
     convertSentenceToHashtags,
     convertToUnixTimestamp, convertUnixTimestampToDateTime,
     getEnumValue, getFileFromAttachmentSource, getVideoDurationById,
-    groupByKey, isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
+    groupByKey, isCreatePostRequestValid, isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import {showErrorToast} from "../../common/components/Toast";
@@ -364,8 +364,7 @@ const UpdatePost = () => {
                         scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
                 };
-
-                isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject) && dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
+                (postStatus !== 'DRAFT' ? isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject) : true) && dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
                     if (response.meta.requestStatus === "fulfilled") {
                         navigate("/planner");
                     }

@@ -115,13 +115,12 @@ const DraftComponent = ({
   
     return (<>
 
-        {draftModal && <DraftModal show={draftModal} setShow={setDraftModal} batchIdData={batchIdData}/>}
         <div className={"col-lg-3 col-sm-12 col-md-12"}>
             <div className={"draft_wrapper_box"} onClick={() => {
                 setDraftModal(true)
             }}>
 
-                <div className={"draft_img_wrapper"}>
+                <div className={"draft_img_wrapper cursor-pointer"}>
                     <div className={"posted_date_outer"}>
                         <h3>Posted on: <span>{formatDate(batchIdData?.createdAt)}</span></h3>
                     </div>
@@ -140,8 +139,8 @@ const DraftComponent = ({
                             className={`caption ${handleSeparateCaptionHashtag(batchIdData?.message)?.caption.length > 40 ? "cursor-pointer" : ""}  ${showCaption ? "upcoming_post_content " : "cmn_text_overflow"}`}>{batchIdData?.message !== null && batchIdData?.message !== "" && batchIdData?.message !== " "? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h4>
                     </div>
                     <div className="social_media_page_outer">
-                        {batchIdData?.postPages && Array.isArray(batchIdData?.postPages) &&
-
+                        {
+                            batchIdData?.postPages && Array.isArray(batchIdData?.postPages) &&
                             (() => {
                                 const uniquePageIds = Array.from(new Set(batchIdData.postPages.map(item => item.pageId)));
                                 const uniquePages = uniquePageIds.map(id => batchIdData.postPages.find(page => page.pageId === id));
@@ -169,8 +168,20 @@ const DraftComponent = ({
                 </div>
             </div>
         </div>
+        {
+            draftModal && <DraftModal
+                show={draftModal}
+                setShow={setDraftModal}
+                batchIdData={batchIdData}
+                setDraftPost={setDraftPost}
+                setDrafts={setDrafts}
+                reference={reference}
+                deletedAndPublishedPostIds={deletedAndPublishedPostIds}
+                setDeletedAndPublishedPostIds={setDeletedAndPublishedPostIds}
+                setApiTrigger={setApiTrigger}
+            />
 
-
+        }
         {/*<div classNamessName="draft-outer draft_container mb-3">*/}
 
         {/*    <div className={"draft-heading"}>*/}
