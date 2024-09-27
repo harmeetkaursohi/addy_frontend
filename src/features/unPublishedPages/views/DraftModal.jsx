@@ -10,7 +10,7 @@ import {getToken} from "../../../app/auth/auth";
 import {deletePostByBatchIdAction, publishedPostAction} from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import Swal from "sweetalert2";
-import delete_img from "../../../images/trash_img.svg";
+import delete_img from "../../../images/deletePost.svg";
 import CommonSlider from "../../common/components/CommonSlider";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 
@@ -85,7 +85,9 @@ function DraftModal({show,
             reverseButtons: true,
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
-                cancelButton: 'custom-cancel-button-class'
+                cancelButton: 'custom-cancel-button-class',
+                popup:"small_swal_popup"
+
             }
         }).then((result) => {
             if (result.isConfirmed) {

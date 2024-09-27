@@ -17,7 +17,7 @@ import default_user_icon from '../../../images/default_user_icon.svg'
 import logout_img from '../../../images/log-out.svg'
 import {subscribeNotifications} from "../../../services/addyService";
 
-import logout_image from "../../../images/logout_img.svg"
+import logout_image from "../../../images/logout_img.png"
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect.jsx";
 import {
     getUpdatedNameAndImageUrlForConnectedPages,
@@ -124,7 +124,8 @@ const Layout = () => {
             customClass: {
                 confirmButton: 'confirmButton',
                 cancelButton: 'cancelButton',
-                popup:"animated-popup"
+                popup:"animated-popup small_swal_popup",
+               
             }
         }).then((result) => {
             if (result.isConfirmed) {

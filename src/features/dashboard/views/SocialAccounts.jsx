@@ -6,6 +6,9 @@ import {
     getInitialLetterCap, getLinkedInUrnId,
 
 } from "../../../utils/commonUtils";
+import { RxCross2 } from "react-icons/rx";
+import ReactDOMServer from 'react-dom/server';
+
 import {DisconnectAccountWarning, Linkedin_URN_Id_Types} from "../../../utils/contantData";
 import {FacebookLoginButton, LinkedInLoginButton} from "react-social-login-buttons";
 import fb_img from "../../../images/fb.svg";
@@ -36,6 +39,13 @@ import cancel_img from "../../../images/cancel_img.svg"
 import success_img from "../../../images/right_img.svg"
 import Warning_image from "../../../images/cancel_img.svg"
 import crossIcon from "../../../images/cross_img.svg"
+import addyLogo from "../../../images/addyLogoDisconnectPage.svg"
+import facebookImg from "../../../images/fa_facebook-square.svg"
+import linkedinImg from "../../../images/linkedin.svg"
+import instagramImg from "../../../images/instagram.png"
+import pinterestImg from "../../../images/linkedin.svg"
+
+
 const SocialAccounts = ({}) => {
 
     const dispatch = useDispatch();
@@ -68,6 +78,9 @@ const SocialAccounts = ({}) => {
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
 
+    const closeIconHTML = ReactDOMServer.renderToString(<div className="cancelImg">
+        <RxCross2 />
+    </div>);
 
     useEffect(() => {
 
@@ -237,10 +250,38 @@ const SocialAccounts = ({}) => {
 
 
     const disConnectSocialMediaAccountToCustomer = (socialMediaType) => {
+        const socialMediaImg = getInitialLetterCap(SocialAccountProvider[socialMediaType]);
+        
+        let imageUrl;
+        
+        if (socialMediaImg === 'Linkedin') {
+          imageUrl = linkedinImg;
+        }else if(socialMediaImg === 'Facebook') {
+            imageUrl = facebookImg;
+        }
+        else if(socialMediaImg === 'Instagram') {
+            imageUrl = instagramImg;
+        }
+        else if(socialMediaImg === 'Pinterest') {
+            imageUrl = pinterestImg;
+        }
         Swal.fire({
-            imageUrl: success_img,
-            title: `Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account`,
-            text: formatMessage(DisconnectAccountWarning,[getInitialLetterCap(SocialAccountProvider[socialMediaType])]),
+            // imageUrl: success_img,
+            // imageUrl:addyLogo,
+            html: `
+               <div class="swal_content">
+                <div class="swal_images">
+                <img src="${addyLogo}" alt="Image 1" class="addyLogo_img"/>
+                <img src="${imageUrl}" alt="Image 2" class="facebook_img" />
+                    ${closeIconHTML}
+               
+                </div>
+                <h2 class="disconnect_title">Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account</h2>
+                <p class="disconnect_paragraph">${formatMessage(DisconnectAccountWarning, [getInitialLetterCap(SocialAccountProvider[socialMediaType])])}</p>
+                </div>
+              `,
+            // title: `Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account`,
+            // text: formatMessage(DisconnectAccountWarning,[getInitialLetterCap(SocialAccountProvider[socialMediaType])]),
             showCancelButton: true,
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
@@ -249,7 +290,9 @@ const SocialAccounts = ({}) => {
             cancelButtonColor: "#E6E9EC",
             customClass: {
                 confirmButton: 'YesButton',
-            }
+                container: 'custom_swaldisconnect_container'
+            },
+           
         }).then((result) => {
             if (result.isConfirmed) {
                 if (socialMediaType === "INSTAGRAM") {

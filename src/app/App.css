@@ -343,6 +343,55 @@ h2.openEye {
 }
 div:where(.swal2-container).swal2-center>.swal2-popup {
   padding-bottom: 25px !important;
+  border-radius: 30px;
+
+}
+
+.facebook_img{
+  width: 45px;
+    height: 45px;
+
+    margin-left: -32px;
+    position: relative;
+    z-index: -1;
+}
+.cancelImg{
+  color: white;
+  height: 25px;
+  width: 25px;
+  background: #E14343;
+  border-radius: 20px;
+  text-align: center;
+  line-height: 22px;
+  position: absolute;
+  left: auto;
+  right: 11rem;
+  top: 59px;
+
+}
+.swal_content{
+  position: relative;
+}
+.disconnect_title{
+  font-size: 25px;
+    color: #263238;
+    font-family: "Nunito";
+    font-weight: 800;
+    padding-top: 6px;
+}
+.disconnect_paragraph{
+  font-size: 15px;
+    color: #263238;
+    font-family: "Nunito";
+    font-weight: 600;
+    margin: 0px;
+    padding: 7px 14px 0px;
+    line-height: 28px;
+}
+.addyLogo_img{
+  width: 75px;
+  height: 75px;
+  margin: 0 10px;
 }
 @keyframes shimmer {
   100% {
@@ -394,8 +443,16 @@ div:where(.swal2-container).swal2-center>.swal2-popup {
   border: 1px solid #D9D9D9;
 }
 .pop_up_cross_icon_outer svg{
-  font-size: 26px;
-  color: #F07C33;
+  font-size: 24px;
+  color: #6D6D6D;
+  margin-right: 6px;
+  cursor: pointer;
+}
+.swal_images {
+  padding-top: 16px;
+}
+.small_swal_popup{
+  max-width: 400px;
 }
 .Account_not_connect_wrapper .modal-header .btn-close{
   display: none;
@@ -423,29 +480,34 @@ div:where(.swal2-container).swal2-center>.swal2-popup {
     font-family: "Nunito";
 }
 h2#swal2-title {
- 
-  font-size: 28px;
+  font-size: 25px;
     color: #263238;
     font-family: "Nunito";
     font-weight: 800;
+    padding-top: 6px;
+}
+.custom_swaldisconnect_container img.swal2-image{
+  width: 90px;
+  height: 90px;
 }
 button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline:focus {
   box-shadow: unset !important;
 }
 div#swal2-html-container {
-  font-size: 19px;
+  font-size: 15px;
   color: #263238;
   font-family: "Nunito";
   font-weight: 600;
   margin: 0px;
-  padding: 7px 14px 0px;;
+  padding: 2px 14px 0px;;
   line-height: 28px;
 }
 img.swal2-image {
-  height: 140px;
+  height: 120px;
 }
 div:where(.swal2-container) div:where(.swal2-actions){
   gap: 15px;
+  margin: 15px auto 0;
 }
 button.swal2-cancel.cancelButton.swal2-styled.swal2-default-outline{
   border: 1px solid #263238 !important;
@@ -453,13 +515,14 @@ button.swal2-cancel.cancelButton.swal2-styled.swal2-default-outline{
   background: initial;
   background-color: white !important;
   color: #263238 !important;
-  font-size: 16px;
+  font-size: 13px;
   padding: 6px 30px;
  
 }
 button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline {
   border-radius: 7px;
   padding: 8px 30px;
+  font-size: 13px;
 }
 
 .blink{
@@ -979,10 +1042,12 @@ button.swal2-confirm.YesButton.swal2-styled.swal2-default-outline {
 }
 button.swal2-close{
   display: block !important;
-  color: #F07C33;
+  color: #6d6d6d;
+  padding-right: 20px;
 }
 button.swal2-close:hover{
-  color: #F07C33 !important;
+  color: #6d6d6d !important;
+  
 }
 button:focus:not(:focus-visible) {
   outline: none !important;
@@ -1241,6 +1306,7 @@ img.acc_not_connected_img.mt-0 {
   .connected_heading{
     font-size: 22px;
   }
+  
   .posted_date_outer span {
     font-size: 13px;
   }
@@ -1293,9 +1359,7 @@ margin-top: 10px;
 .cmn_wrapper_outer {
 padding: 0px 24px 30px;
 }
-div#swal2-html-container {
-font-size: 18px;
-}
+
 h2#swal2-title {
 font-size: 25px;
 }
@@ -1510,7 +1574,7 @@ padding-left: 60px;
 }
 button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline {
 padding: 7px 23px;
-font-size: 14px;
+font-size: 13px;
 
 }
 div.noDraftPosts_outer {

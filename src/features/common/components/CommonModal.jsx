@@ -12,7 +12,7 @@ import {
     getSocialMediaGraphByProviderTypeAction,
     getSocialMediaReportByProviderTypeAction
 } from "../../../app/actions/socialAccountActions/socialAccountActions";
-
+import no_page_connect_img from "../../../images/error_img.svg"
 
 const CommonModal = ({
                          socialMediaAccountInfo,
@@ -127,6 +127,10 @@ const CommonModal = ({
                         </div>
                         <div className='facebook_content_outer'>
                             <div className='choose_page_container'>
+                                <div className='text-center'>
+                                <img src={no_page_connect_img} className='no_page_connect_img'/>
+
+                                </div>
                                 {Array.isArray(allPagesList) && allPagesList.length > 0 ? allPagesList?.map((data, index) => {
                                         return (
                                             <div key={index}
@@ -213,7 +217,7 @@ const CommonModal = ({
                                     })
 
                                     :
-                                    <h3 className={"text-center"}>{noPageFoundMessage}</h3>
+                                    <h3 className={"text-center noPageFoundMessage_text"}>{noPageFoundMessage}</h3>
                                 }
                             </div>
                         </div>

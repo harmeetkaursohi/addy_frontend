@@ -9,8 +9,14 @@
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 40%);
 
 }
-
-
+img.no_page_connect_img {
+    margin: 6px 0px 20px;
+    width: 220px;
+}
+.noPageFoundMessage_text{
+    font-size: 20px;
+    font-weight: 600;
+}
 .followers-reach {
     display: flex;                /* Use flexbox for layout */
     justify-content: center;      /* Center items horizontally */
@@ -103,7 +109,7 @@ h4.hiddenNumber {
 }
 
 div.modal-content {
-    border-radius: 12px;
+    border-radius: 30px;
 }
 .acc_already_connect_wrapper .modal-content{
     border-radius: 15px;
@@ -266,7 +272,9 @@ button, .modal_inner_content.disconnect_wrapper
     .facebook_title {
         width: 100%;
     }
-    
+    img.no_page_connect_img{
+        width: 100%;
+    }
     .modal_inner_content {
         padding-bottom: 15px;
         align-items: start;

@@ -13,7 +13,7 @@ import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import {getToken} from "../../../app/auth/auth";
 import {useState} from "react";
 import Swal from 'sweetalert2';
-import delete_img from "../../../images/trash_img.svg"
+import delete_img from "../../../images/deletePost.svg"
 import {RxCross2} from "react-icons/rx"
 import nature_img from "../../../images/download.jpg";
 import instagram_img from "../../../images/instagram.png";
@@ -86,7 +86,8 @@ const DraftComponent = ({
             reverseButtons:true,
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
-                cancelButton: 'custom-cancel-button-class'
+                cancelButton: 'custom-cancel-button-class',
+                popup:"small_swal_popup"
             }
         }).then((result) => {
             if (result.isConfirmed) {

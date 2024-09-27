@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import not_connected from "../../../images/pagenot_connected.svg"
+import not_connected from "../../../images/pagenotConnect.svg"
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";

@@ -142,6 +142,7 @@ a.active {
     font-size: 16px;
     font-weight: 500;
     line-height: 27px;
+    white-space: nowrap;
 }
 .sidebar_item_outers img{
     height: 24px;
