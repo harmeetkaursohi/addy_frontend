@@ -798,6 +798,8 @@ width: 100%;
 .addy_icon{
     width: 50px;
     height: auto;
+    margin-bottom: 8px;
+    margin-top: 5px;
 }
 
 .insta-icon {

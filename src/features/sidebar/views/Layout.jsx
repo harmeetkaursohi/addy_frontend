@@ -114,7 +114,7 @@ const Layout = () => {
         Swal.fire({
             title: `Logout`,
             imageUrl: logout_image,
-            text: `Are you sure you want to logout?`,
+            html:`<p class="modal_heading">Are you sure you want to logout?</p>`,
             showCancelButton: true,
             cancelButtonText: "Cancel",
             confirmButtonText: "Log out",
@@ -124,7 +124,7 @@ const Layout = () => {
             customClass: {
                 confirmButton: 'confirmButton',
                 cancelButton: 'cancelButton',
-                popup:"animated-popup small_swal_popup",
+                popup:"animated-popup small_swal_popup logout_popup",
                
             }
         }).then((result) => {

@@ -77,7 +77,7 @@ const DraftComponent = ({
         Swal.fire({
             imageUrl:delete_img,
             title: `Delete Post`,
-            text: `Are you sure you want to delete this draft post?`,
+            html: `<p class="modal_heading">Are you sure you want to delete this draft post?</p>`,
             showCancelButton: true,
             cancelButtonText: 'Cancel',
             confirmButtonText: 'Delete',
@@ -87,7 +87,7 @@ const DraftComponent = ({
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
                 cancelButton: 'custom-cancel-button-class',
-                popup:"small_swal_popup"
+                popup:"small_swal_popup cmnpopupWrapper"
             }
         }).then((result) => {
             if (result.isConfirmed) {

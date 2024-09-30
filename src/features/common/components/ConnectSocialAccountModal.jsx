@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom";
 import './common.css'
 import { RxCross2 } from "react-icons/rx";
 const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
+    // console.log("dshdsjadjksag")
     const navigate = useNavigate();
     const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
@@ -29,23 +30,24 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                                         }}><RxCross2 className="pop_up_cross_icon"/></div>
                         </Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>
+                    <Modal.Body className="Account_not_connect_body">
                         <div className='facebook_content_outer'>
                             
                             <div className='text-center'>
                                 <img className={"acc-not-connected-error-svg mb-3 "} src={not_connected}></img>
                                
                                 <div className='facebook_title'>
-                         
+                               
+                        
                          {
                              (getAllConnectedSocialAccountData?.data === undefined || getAllConnectedSocialAccountData?.data?.length === 0) ?
-                                 <h1 className='cmn_text_style not_connect_heading'>Account Not
-                                     Connected</h1> :
+                             <h2 class="swal2-title page_not_connected" id="swal2-title">Account Not
+                                     Connected</h2> :
                                  <>
                                      {
                                          connectedPagesData?.facebookConnectedPages !== undefined && connectedPagesData?.facebookConnectedPages?.length === 0 ?
-                                             <h1 className='cmn_text_style not_connect_heading'>Page Not
-                                                 Connected</h1> : <></>
+                                         <h2 class="swal2-title page_not_connected" id="swal2-title">Page Not
+                                                 Connected</h2> : <></>
                                      }
                                  </>
 
@@ -55,16 +57,16 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
 
                                 {
                                     (getAllConnectedSocialAccountData?.data === undefined || getAllConnectedSocialAccountData?.data?.length === 0) ?
-                                        <h6 className={"text-center mb-4 NotConncted_text"}>Currently, there are no active connections at
+                                        <p className={"text-center mb-4 modal_heading"}>Currently, there are no active connections at
                                             the
                                             moment. Please connect
-                                            an account before attempting to create a post.</h6> :
+                                            an account before attempting to create a post.</p> :
                                         <>
                                             {
                                                 connectedPagesData?.facebookConnectedPages !== undefined && connectedPagesData?.facebookConnectedPages?.length === 0 ?
-                                                    <h6 className={"text-center mb-4 "}>Currently, there are no active connections at the
+                                                    <p className={"text-center mb-4 modal_heading"}>Currently, there are no active connections at the
                                                         moment. Please connect
-                                                        a page before attempting to create a post.</h6> : <></>
+                                                        a page before attempting to create a post.</p> : <></>
                                             }
                                         </>
                                 }

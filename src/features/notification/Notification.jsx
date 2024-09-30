@@ -170,7 +170,7 @@ const Notification = () => {
         Swal.fire({
             imageUrl: notification_img,
             title: `Clear Notifications`,
-            text: `Are you sure you want to clear notifications?`,
+            html: `<p class="modal_heading">Are you sure you want to clear notifications?</p>`,
             showCancelButton: true,
             confirmButtonText: 'Clear',
             cancelButtonText: 'Cancel',
@@ -180,7 +180,7 @@ const Notification = () => {
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
                 cancelButton: 'custom-cancel-button-class',
-                popup: 'small_swal_popup',
+                popup: 'small_swal_popup cmnpopupWrapper',
             }
         }).then((result) => {
             result.isConfirmed && setClearAllNotifications({

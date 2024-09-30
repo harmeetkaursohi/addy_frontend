@@ -13,9 +13,18 @@ img.no_page_connect_img {
     margin: 6px 0px 20px;
     width: 220px;
 }
-.noPageFoundMessage_text{
-    font-size: 20px;
+.logout_popup {
+    width: 100%;
+    max-width: 522px;
+}
+
+
+.noPageFoundMessage_text {
+    font-size: 22px;
     font-weight: 600;
+    padding-bottom: 20px;
+    color: #000;
+    font-family: 'Nunito';
 }
 .followers-reach {
     display: flex;                /* Use flexbox for layout */
@@ -156,12 +165,16 @@ div.commonmodal_header {
     max-width:600px
 }
 .facebook_title h2 {
-    font-size: 20px;
+    font-size: 22px;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 9px
+    padding-bottom: 9px;
+    color:#000;
 }
 
-
+.modal-body.cmn_body {
+    max-width: 546px;
+    margin: auto;
+}
 .users_profile img {
     border-radius: 24px;
     height: 100px;
