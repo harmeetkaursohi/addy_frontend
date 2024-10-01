@@ -6,6 +6,9 @@ import {
     getInitialLetterCap, getLinkedInUrnId,
 
 } from "../../../utils/commonUtils";
+import { RxCross2 } from "react-icons/rx";
+import ReactDOMServer from 'react-dom/server';
+
 import {DisconnectAccountWarning, Linkedin_URN_Id_Types} from "../../../utils/contantData";
 import {FacebookLoginButton, LinkedInLoginButton} from "react-social-login-buttons";
 import fb_img from "../../../images/fb.svg";
@@ -40,6 +43,13 @@ import {
 } from "../../../app/apis/socialAccount";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
+
+import addyLogo from "../../../images/addyLogoDisconnectPage.svg"
+import facebookImg from "../../../images/modal_facebook_image.svg"
+import linkedinImg from "../../../images/modal_linkedin_image.svg"
+import instagramImg from "../../../images/modal_instagram_image.svg"
+import pinterestImg from "../../../images/modal_pintrest_image.svg"
+
 
 const SocialAccounts = ({}) => {
 
@@ -76,6 +86,11 @@ const SocialAccounts = ({}) => {
     const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
 
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+    const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
+
+    // const closeIconHTML = ReactDOMServer.renderToString(<div className="cancelImg">
+    //     <RxCross2 />
+    // </div>);
 
     useEffect( () => {
         const getFacebookPages= async ()=>{
@@ -270,19 +285,48 @@ const SocialAccounts = ({}) => {
     // }
 
 
-    const disConnectSocialMediaAccountToCustomer =  (socialMediaType) => {
+    const disConnectSocialMediaAccountToCustomer = (socialMediaType) => {
+        const socialMediaImg = getInitialLetterCap(SocialAccountProvider[socialMediaType]);
+        let imageUrl;
+
+        if (socialMediaImg === 'Linkedin') {
+            imageUrl = linkedinImg;
+        }else if(socialMediaImg === 'Facebook') {
+            imageUrl = facebookImg;
+        }
+        else if(socialMediaImg === 'Instagram') {
+            imageUrl = instagramImg;
+        }
+        else if(socialMediaImg === 'Pinterest') {
+            imageUrl = pinterestImg;
+        }
         Swal.fire({
-            imageUrl: success_img,
-            title: `Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account`,
-            text: formatMessage(DisconnectAccountWarning, [getInitialLetterCap(SocialAccountProvider[socialMediaType])]),
+            // imageUrl: success_img,
+            // imageUrl:addyLogo,
+            html: `
+               <div class="swal_content">
+                <div class="swal_images">
+            
+                <img src="${imageUrl}" alt="Image 2" class="facebook_img" />
+                
+               
+                </div>
+                <h2 class="disconnect_title">Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account</h2>
+                <p class="disconnect_paragraph">${formatMessage(DisconnectAccountWarning, [getInitialLetterCap(SocialAccountProvider[socialMediaType])])}</p>
+                </div>
+              `,
+            // title: `Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account`,
+            // text: formatMessage(DisconnectAccountWarning,[getInitialLetterCap(SocialAccountProvider[socialMediaType])]),
             showCancelButton: true,
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
             confirmButtonColor: "#F07C33",
-            reverseButtons: true,
+            reverseButtons:true,
             cancelButtonColor: "#E6E9EC",
             customClass: {
                 confirmButton: 'YesButton',
+                container: 'custom_swaldisconnect_container'
+
             }
         }).then(async (result) => {
             if (result.isConfirmed) {
@@ -992,14 +1036,14 @@ const SocialAccounts = ({}) => {
                 <ConnectPagesModal showModal={showFacebookModal} setShowModal={setShowFacebookModal}
                                    allPagesList={getAllFacebookPagesApi?.data || []}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
-                                   noPageFoundMessage={"No Page Found!"}
+                                   noPageFoundMessage={"No Page Found, Please connect another account."}
                                    socialMediaType={SocialAccountProvider.FACEBOOK}
                                    socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>}
             {enabledSocialMedia?.isInstagramEnabled && showInstagramModal &&
                 <ConnectPagesModal showModal={showInstagramModal} setShowModal={setShowInstagramModal}
                                    allPagesList={instagramBusinessAccountsData?.data || []}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
-                                   noPageFoundMessage={"No Page Found!"}
+                                   noPageFoundMessage={"No Page Found, Please connect another account."}
                                    socialMediaType={SocialAccountProvider.INSTAGRAM}
                                    socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
             {enabledSocialMedia?.isPinterestEnabled && showPinterestModal &&
@@ -1015,7 +1059,7 @@ const SocialAccounts = ({}) => {
                                        return getFormattedLinkedinObject(key, getAllLinkedinPagesData?.data?.results[key])
                                    })}
                                    connectedPagesList={connectedPagesData?.facebookConnectedPages}
-                                   noPageFoundMessage={"No Page Found!"}
+                                   noPageFoundMessage={"No Page Found, Please connect another account."}
                                    socialMediaType={SocialAccountProvider.LINKEDIN}
                                    socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "LINKEDIN")[0]}/>}
 

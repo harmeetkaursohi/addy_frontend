@@ -9,8 +9,23 @@
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 40%);
 
 }
+img.no_page_connect_img {
+    margin: 6px 0px 20px;
+    width: 220px;
+}
+.logout_popup {
+    width: 100%;
+    max-width: 522px;
+}
 
 
+.noPageFoundMessage_text {
+    font-size: 22px;
+    font-weight: 600;
+    padding-bottom: 20px;
+    color: #000;
+    font-family: 'Nunito';
+}
 .followers-reach {
     display: flex;                /* Use flexbox for layout */
     justify-content: center;      /* Center items horizontally */
@@ -103,7 +118,7 @@ h4.hiddenNumber {
 }
 
 div.modal-content {
-    border-radius: 12px;
+    border-radius: 30px;
 }
 .acc_already_connect_wrapper .modal-content{
     border-radius: 15px;
@@ -150,12 +165,16 @@ div.commonmodal_header {
     max-width:600px
 }
 .facebook_title h2 {
-    font-size: 20px;
+    font-size: 22px;
     border-bottom: 1px solid #ddd;
-    padding-bottom: 9px
+    padding-bottom: 9px;
+    color:#000;
 }
 
-
+.modal-body.cmn_body {
+    max-width: 546px;
+    margin: auto;
+}
 .users_profile img {
     border-radius: 24px;
     height: 100px;
@@ -266,7 +285,9 @@ button, .modal_inner_content.disconnect_wrapper
     .facebook_title {
         width: 100%;
     }
-    
+    img.no_page_connect_img{
+        width: 100%;
+    }
     .modal_inner_content {
         padding-bottom: 15px;
         align-items: start;

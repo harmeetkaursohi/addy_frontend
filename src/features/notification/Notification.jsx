@@ -25,8 +25,9 @@ import {
 import notConnected_img from "../../images/no_acc_connect_img.svg";
 import {resetReducers} from "../../app/actions/commonActions/commonActions";
 import Swal from "sweetalert2";
-import notification_img from "../../images/notification_img.svg"
+import notification_img from "../../images/clear_notification.svg"
 import {EmptyNotificationGridMessage, NotConnected} from "../../utils/contantData";
+import no_notification_img from "../../images/no_notification_bg.svg"
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 const Notification = () => {
 
@@ -172,7 +173,7 @@ const Notification = () => {
         Swal.fire({
             imageUrl: notification_img,
             title: `Clear Notifications`,
-            text: `Are you sure you want to clear notifications?`,
+            html: `<p class="modal_heading">Are you sure you want to clear notifications?</p>`,
             showCancelButton: true,
             confirmButtonText: 'Clear',
             cancelButtonText: 'Cancel',
@@ -181,7 +182,8 @@ const Notification = () => {
             reverseButtons:true,
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
-                cancelButton: 'custom-cancel-button-class'
+                cancelButton: 'custom-cancel-button-class',
+                popup: 'small_swal_popup cmnpopupWrapper',
             }
         }).then((result) => {
             result.isConfirmed && setClearAllNotifications({
@@ -236,10 +238,13 @@ const Notification = () => {
                                                     ) ||
                                                     (clearAllNotifications?.isAllNotificationsCleared && (notificationEventData?.data?.length === 0 || notificationEventData?.data?.length === deletedNotifications?.length))
                                                 ) &&
-                                                <h4
-                                                    className={"no-notifications-text text-center mt-4"}><FaBell
-                                                    className={"me-1 mb-1"}/> {jsondata.no_notification_text}
-                                                </h4>
+                                                <div className="d-flex justify-content-center no_notification_wrapper">
+                                                    <div>
+                                                    <img src={no_notification_img}/>
+                                                    <h4 className="no-notifications-text text-center mt-4">No New Notifications</h4>
+
+                                                    </div>
+                                                </div>
                                             }
                                             {
                                                 notificationEventData?.data?.length > 0 && notificationEventData?.data?.map((notification, index) => {

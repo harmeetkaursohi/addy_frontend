@@ -69,9 +69,17 @@ span.error-detail {
     letter-spacing: -0.016px;
 }
 .no-notifications-text {
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #2e3646;
 }
-
+.no_notification_wrapper{
+    height: calc(100vh - 152px);
+    align-items: center;
+}
+.no_notification_wrapper img{
+    width:200px
+}
 .show-notification-details {
     display: inline-block;
     font-size: 13px;
@@ -133,6 +141,9 @@ span.error-detail {
     .notification_header {
         display: block;
         padding-top: 36px;
+    }
+    .no_notification_wrapper{
+        width: 100%;
     }
     .clear-all-notifications {
         margin-top: 7px;

@@ -403,7 +403,7 @@ select.page_title_options {
 }
 
 .Account_not_connect_wrapper div.modal-content {
-    border-radius: 10px;
+    border-radius: 30px;
 }
 img.connection-error-svg {
     height: 130px;
@@ -798,6 +798,8 @@ width: 100%;
 .addy_icon{
     width: 50px;
     height: auto;
+    margin-bottom: 8px;
+    margin-top: 5px;
 }
 
 .insta-icon {

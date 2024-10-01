@@ -13,7 +13,7 @@ import {
     getSocialMediaReportByProviderTypeAction
 } from "../../../app/actions/socialAccountActions/socialAccountActions";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
-
+import no_page_connect_img from "../../../images/error_img.svg"
 
 const CommonModal = ({
                          socialMediaAccountInfo,
@@ -116,21 +116,25 @@ const CommonModal = ({
         <>
             <section className='facebook_modal_outer'>
                 <Modal size="lg" show={showModal} onHide={handleClose} className='choose_page_outer'>
-
-                    <Modal.Body className='pt-0'>
+                <div className='pop_up_cross_icon_outer  cursor-pointer' onClick={(e) => {
+                                handleClose()
+                            }}><RxCross2 className="pop_up_cross_icon"/></div>
+                    <Modal.Body className='pt-0 cmn_body'>
                         <div className='d-flex  pt-3 pb-3'>
                             <div className='facebook_title flex-grow-1'>
                                 <h3>
                                     <img src="./Addy_icon.svg" className="addy_icon " /></h3>
                                 <h2 className='cmn_text_style'>Please choose your {socialMediaType===SocialAccountProvider.PINTEREST?"board":"page"}  to connect with Addy</h2>
                             </div>
-                            <div className='pop_up_cross_icon_outer  cursor-pointer' onClick={(e) => {
-                                handleClose()
-                            }}><RxCross2 className="pop_up_cross_icon"/></div>
+
 
                         </div>
                         <div className='facebook_content_outer'>
                             <div className='choose_page_container'>
+                                <div className='text-center'>
+                                <img src={no_page_connect_img} className='no_page_connect_img'/>
+
+                                </div>
                                 {Array.isArray(allPagesList) && allPagesList.length > 0 ? allPagesList?.map((data, index) => {
                                         return (
                                             <div key={index}
@@ -217,7 +221,7 @@ const CommonModal = ({
                                     })
 
                                     :
-                                    <h3 className={"text-center"}>{noPageFoundMessage}</h3>
+                                    <h3 className={"text-center noPageFoundMessage_text"}>{noPageFoundMessage}</h3>
                                 }
                             </div>
                         </div>

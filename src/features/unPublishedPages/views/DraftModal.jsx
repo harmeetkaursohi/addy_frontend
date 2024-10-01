@@ -10,7 +10,7 @@ import {getToken} from "../../../app/auth/auth";
 import {deletePostByBatchIdAction, publishedPostAction} from "../../../app/actions/postActions/postActions";
 import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
 import Swal from "sweetalert2";
-import delete_img from "../../../images/trash_img.svg";
+import delete_img from "../../../images/deletePost.svg";
 import CommonSlider from "../../common/components/CommonSlider";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 
@@ -76,7 +76,7 @@ function DraftModal({show,
         Swal.fire({
             imageUrl: delete_img,
             title: `Delete Post`,
-            text: `Are you sure you want to delete this draft post?`,
+            html: `<p class="modal_heading">Are you sure you want to delete this draft post?</p>`,
             showCancelButton: true,
             cancelButtonText: 'Cancel',
             confirmButtonText: 'Delete',
@@ -85,7 +85,9 @@ function DraftModal({show,
             reverseButtons: true,
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
-                cancelButton: 'custom-cancel-button-class'
+                cancelButton: 'custom-cancel-button-class',
+                popup:"small_swal_popup cmnpopupWrapper"
+
             }
         }).then((result) => {
             if (result.isConfirmed) {
