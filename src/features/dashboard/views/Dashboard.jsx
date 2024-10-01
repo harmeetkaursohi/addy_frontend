@@ -9,16 +9,17 @@ import SocialAccounts from "./SocialAccounts";
 import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
 import { useAppContext } from "../../common/components/AppProvider.jsx";
+import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 
 const Dashboard = () => {
     const { sidebar } = useAppContext();
 
     const dispatch = useDispatch();
     const token = getToken();
-    const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
 
-    const facebookPageList = useSelector(state => state.facebook.getFacebookPageReducer.facebookPageList);
-    const userData = useSelector(state => state.user.userInfoReducer.data);
+    const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
+    const {data:userData} = useGetUserInfoQuery("")
+
     const getAllPostsByCriteriaData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
 
     useEffect(() => {
@@ -35,8 +36,7 @@ const Dashboard = () => {
             <div className={sidebar? 'cmn_container':"cmn_Padding"}>
                 <div className="cmn_outer">
                 <div className="cmn_wrapper_outer white_bg_color">
-                    <Header userData={userData}
-                            facebookPageList={facebookPageList} setShowConnectAccountModal={setShowConnectAccountModal}/>
+                    <Header userData={userData} setShowConnectAccountModal={setShowConnectAccountModal}/>
                     <div className="dashboard_outer">
                         
                         <div className="row">

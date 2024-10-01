@@ -35,6 +35,7 @@ import EditImageModal from '../../common/components/EditImageModal.jsx';
 import {useAppContext} from '../../common/components/AppProvider.jsx';
 import {AiOutlineEye} from 'react-icons/ai';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
+import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 
 const UpdatePost = () => {
 
@@ -42,6 +43,8 @@ const UpdatePost = () => {
         const navigate = useNavigate();
         const token = getToken();
         const {id} = useParams();
+
+        const {data: userData} = useGetUserInfoQuery("")
 
         const [aiGenerateImageModal, setAIGenerateImageModal] = useState(false);
         const [aiGenerateCaptionModal, setAIGenerateCaptionModal] = useState(false);
@@ -72,7 +75,6 @@ const UpdatePost = () => {
         const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
 
         const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
-        const userData = useSelector(state => state.user.userInfoReducer.data);
         const getPostsByIdData = useSelector(state => state.post.getPostsByIdReducer?.data);
         const loadingUpdatePost = useSelector(state => state.post.updatePostOnSocialMediaReducer.loading);
 

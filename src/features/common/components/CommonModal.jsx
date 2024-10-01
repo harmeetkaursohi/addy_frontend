@@ -12,6 +12,7 @@ import {
     getSocialMediaGraphByProviderTypeAction,
     getSocialMediaReportByProviderTypeAction
 } from "../../../app/actions/socialAccountActions/socialAccountActions";
+import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 
 
 const CommonModal = ({
@@ -27,11 +28,14 @@ const CommonModal = ({
     const handleClose = () => setShowModal(false);
     const dispatch = useDispatch();
     const token = getToken();
+
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [mediaPageData, setMediaPageData] = useState(null);
     const [currentConnectedPages, setCurrentConnectedPages] = useState([]);
     const [state, setState] = useState(false);
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+
     const connectedPagesReducer = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const reportSectionData = useSelector(state => state.socialAccount.getSocialMediaReportByProviderTypeReducer);
 
@@ -57,7 +61,7 @@ const CommonModal = ({
             setCurrentConnectedPages(updatedIds);
 
             const promises = connectedPagesList.map(page => {
-                const selectedSocialMediaAccount = getAllConnectedSocialAccountData?.data?.find(c => c.id === page.socialMediaAccountId);
+                const selectedSocialMediaAccount = getConnectedSocialAccountApi?.data?.find(c => c.id === page.socialMediaAccountId);
                 const pageId = page.pageId;
                 console.log('pagiu_ID...',page.pageId)
 

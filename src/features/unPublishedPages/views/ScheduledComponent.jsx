@@ -21,6 +21,8 @@ import Swal from "sweetalert2";
 import {useAppContext} from '../../common/components/AppProvider';
 import delete_img from "../../../images/trash_img.svg"
 import noAccountData from "../../../images/no_connected_acc_img.svg"
+import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+
 const ScheduledComponent = ({scheduledData}) => {
     const {sidebar} = useAppContext()
 
@@ -32,12 +34,15 @@ const ScheduledComponent = ({scheduledData}) => {
 
     const [scheduledPosts, setScheduledPosts] = useState([]);
     const [deleteIdRef, setDeleteIdRef] = useState(null);
-      
+
     const [showCaption, setShowCaption] = useState(false);
     const [showHashTag, setShowHashTag] = useState(false);
-    
-    const[showCaptionIndex,setCaptionIndex]=useState()
-    const[showHashTagIndex,setHashTagIndex]=useState()
+
+    const [showCaptionIndex, setCaptionIndex] = useState()
+    const [showHashTagIndex, setHashTagIndex] = useState()
+
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+
     useEffect(() => {
         scheduledData?.data && setScheduledPosts(Object.values(scheduledData?.data));
 
@@ -54,7 +59,7 @@ const ScheduledComponent = ({scheduledData}) => {
             confirmButtonText: 'Delete',
             confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
-            reverseButtons:true,
+            reverseButtons: true,
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
                 cancelButton: 'custom-cancel-button-class'
@@ -91,16 +96,15 @@ const ScheduledComponent = ({scheduledData}) => {
     }
 
 
-const captionHandler=(index)=>{
-setCaptionIndex(index)
-setShowCaption(!showCaption)
-}
+    const captionHandler = (index) => {
+        setCaptionIndex(index)
+        setShowCaption(!showCaption)
+    }
 
-const hashTagHandler=(index)=>{
-    setHashTagIndex(index)
-    setShowHashTag(!showHashTag)
-}
-const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+    const hashTagHandler = (index) => {
+        setHashTagIndex(index)
+        setShowHashTag(!showHashTag)
+    }
 
     return (
         <>
@@ -116,83 +120,91 @@ const getAllConnectedSocialAccountData = useSelector(state => state.socialAccoun
                     <div className="">
                         <h2>{jsondata.upcomingpost}</h2>
                     </div>
-                    {(getAllConnectedSocialAccountData?.data === null || (Array.isArray(getAllConnectedSocialAccountData?.data) && getAllConnectedSocialAccountData?.data.filter(c => c.provider !== "GOOGLE").length === 0)) ?
+                    {(getConnectedSocialAccountApi?.data === null || (Array.isArray(getConnectedSocialAccountApi?.data) && getConnectedSocialAccountApi?.data.filter(c => c.provider !== "GOOGLE").length === 0)) ?
 
 
-                    <div className="text-center ">
-    <img src={noAccountData} alt="" className="no_acc_connect_img"/>
-    <h3 className="no_acc_connect_heading pt-4">No account is connected</h3>
-                     </div>:
-                    <div className={"row m-0"}>
+                        <div className="text-center ">
+                            <img src={noAccountData} alt="" className="no_acc_connect_img"/>
+                            <h3 className="no_acc_connect_heading pt-4">No account is connected</h3>
+                        </div> :
+                        <div className={"row m-0"}>
 
 
-                        {scheduledData?.data && Object.keys(scheduledData?.data).length === 0 ?
+                            {scheduledData?.data && Object.keys(scheduledData?.data).length === 0 ?
 
-                            <div className=" text-center mt-3 No_Upcoming_Outer">
-                                <h4 className="text-center mb-3">
-                                    No Upcoming Posts
-                                </h4>
-                                <img src={noPostScheduled} alt="" className=''/>
-                            </div>
+                                <div className=" text-center mt-3 No_Upcoming_Outer">
+                                    <h4 className="text-center mb-3">
+                                        No Upcoming Posts
+                                    </h4>
+                                    <img src={noPostScheduled} alt="" className=''/>
+                                </div>
 
-                            :
-                            scheduledPosts && Array.isArray(scheduledPosts) && scheduledPosts.map((curBatch, index) => (
-
-
-                                <div className={sidebar ? "col-lg-4 col-md-6 col-sm-12 " : "col-lg-4 col-md-12 col-sm-12 "}
-                                     key={index}>
-                                    <div className="draft-outer ">
-
-                                     
-
-                                        <div className="post-image-outer">
-
-                                            {curBatch?.attachments &&
-                                                <CommonSlider files={curBatch?.attachments} selectedFileType={null}
-                                                              caption={null}
-                                                              hashTag={null}
-                                                              viewSimilarToSocialMedia={false}/>}
-
-                                        </div>
+                                :
+                                scheduledPosts && Array.isArray(scheduledPosts) && scheduledPosts.map((curBatch, index) => (
 
 
-                                        <div className="card-body post_card">
-                                            <div className={'mb-2'}>
-                                                <span className={"hash_tags"}>{formatDate(curBatch?.feedPostDate)}</span>
+                                    <div
+                                        className={sidebar ? "col-lg-4 col-md-6 col-sm-12 " : "col-lg-4 col-md-12 col-sm-12 "}
+                                        key={index}>
+                                        <div className="draft-outer ">
+
+
+                                            <div className="post-image-outer">
+
+                                                {curBatch?.attachments &&
+                                                    <CommonSlider files={curBatch?.attachments} selectedFileType={null}
+                                                                  caption={null}
+                                                                  hashTag={null}
+                                                                  viewSimilarToSocialMedia={false}/>}
+
                                             </div>
-                                             
-                                             <div>
-                                              <h6 className='upcoming_post_heading'>Post Captions</h6>
-                                            <h3 onClick={handleSeparateCaptionHashtag(curBatch?.message)?.caption.length>40 ? ()=>{captionHandler(index)}:""} className={` mb-2 caption ${handleSeparateCaptionHashtag(curBatch?.message)?.caption.length>40?"cursor-pointer":""} ${showCaptionIndex ===index && showCaption ? "upcoming_post_content":"cmn_text_overflow"}`}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
-                                             </div>
 
-                                             <h6 className='upcoming_post_heading'>Hashtags: </h6>
 
-                                            <div  onClick={handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length>40 ? ()=>{hashTagHandler(index)}:""}className={`mb-2 ${handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length>40?"cursor-pointer":""} ${showHashTagIndex ===index && showHashTag? "hash_tags_outer_container":"cmn_text_overflow"}`}>
+                                            <div className="card-body post_card">
+                                                <div className={'mb-2'}>
+                                                    <span
+                                                        className={"hash_tags"}>{formatDate(curBatch?.feedPostDate)}</span>
+                                                </div>
+
+                                                <div>
+                                                    <h6 className='upcoming_post_heading'>Post Captions</h6>
+                                                    <h3 onClick={handleSeparateCaptionHashtag(curBatch?.message)?.caption.length > 40 ? () => {
+                                                        captionHandler(index)
+                                                    } : ""}
+                                                        className={` mb-2 caption ${handleSeparateCaptionHashtag(curBatch?.message)?.caption.length > 40 ? "cursor-pointer" : ""} ${showCaptionIndex === index && showCaption ? "upcoming_post_content" : "cmn_text_overflow"}`}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"}</h3>
+                                                </div>
+
+                                                <h6 className='upcoming_post_heading'>Hashtags: </h6>
+
+                                                <div
+                                                    onClick={handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length > 40 ? () => {
+                                                        hashTagHandler(index)
+                                                    } : ""}
+                                                    className={`mb-2 ${handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length > 40 ? "cursor-pointer" : ""} ${showHashTagIndex === index && showHashTag ? "hash_tags_outer_container" : "cmn_text_overflow"}`}>
                                                 <span
                                                     className={"hash_tags "}>{curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
+                                                </div>
+
+
+                                                <div className={"draft-heading"}>
+                                                    <h4 className={"posted-on-txt"}>Posted On : </h4>
+
+                                                    <div className="page_tags">
+                                                        {curBatch?.postPages && Array.isArray(curBatch?.postPages) &&
+                                                            curBatch?.postPages.map((curPage, index) => (
+                                                                <div className="selected-option" key={index}>
+                                                                    <div>
+                                                                        <img className={"me-1 social-media-icon"}
+                                                                             src={computeImageURL(curPage?.socialMediaType)}
+                                                                             alt={"instagram"}/>
+                                                                    </div>
+                                                                    <p className={"social-media-page-name"}>{curPage?.pageName}</p>
+                                                                </div>
+                                                            ))
+                                                        }
+                                                    </div>
+                                                </div>
                                             </div>
-
-
-                                        <div className={"draft-heading"}>
-                                            <h4 className={"posted-on-txt"}>Posted On : </h4>
-
-                                            <div className="page_tags">
-                                                {curBatch?.postPages && Array.isArray(curBatch?.postPages) &&
-                                                    curBatch?.postPages.map((curPage, index) => (
-                                                        <div className="selected-option" key={index}>
-                                                            <div>
-                                                                <img className={"me-1 social-media-icon"}
-                                                                     src={computeImageURL(curPage?.socialMediaType)}
-                                                                     alt={"instagram"}/>
-                                                            </div>
-                                                            <p className={"social-media-page-name"}>{curPage?.pageName}</p>
-                                                        </div>
-                                                    ))
-                                                }
-                                            </div>
-                                        </div>
-                                        </div>
                                             <div
                                                 className="upcomingPostBtn_Outer ">
 
@@ -214,15 +226,15 @@ const getAllConnectedSocialAccountData = useSelector(state => state.socialAccoun
                                             </div>
 
 
+                                        </div>
+
                                     </div>
 
-                                </div>
+                                ))}
 
-                            ))}
-                    
 
-                    </div>}
-               
+                        </div>}
+
 
                 </div>
 

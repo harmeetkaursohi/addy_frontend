@@ -23,6 +23,7 @@ import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMedi
 import {useAppContext} from "../../common/components/AppProvider";
 import {MdDelete} from "react-icons/md";
 import notConnected_img from "../../../images/no_acc_connect_img.svg";
+import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 
 const Review = () => {
     const {sidebar} = useAppContext();
@@ -42,6 +43,9 @@ const Review = () => {
     } = usePosts(baseSearchQuery);
 
     const token = getToken();
+
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
     const [pageDropdown, setPageDropdown] = useState([]);
@@ -54,7 +58,6 @@ const Review = () => {
     const [deletePostPageInfo, setDeletePostPageInfo] = useState(null);
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
     const getPostsPageData = useSelector((state) => state.post.getPostsPageReducer);
-    const getAllConnectedSocialAccountData = useSelector((state) => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector((state) => state.facebook.getFacebookConnectedPagesReducer);
 
     useEffect(() => {
@@ -87,22 +90,22 @@ const Review = () => {
     }, []);
 
     useEffect(() => {
-        if (getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
+        if (getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
             setBaseSearchQuery({...baseSearchQuery, offSet: 0});
         }
-    }, [getAllConnectedSocialAccountData, connectedPagesData]);
+    }, [getConnectedSocialAccountApi, connectedPagesData]);
 
     useEffect(() => {
-        if (getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
+        if (getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
             if (baseSearchQuery?.socialMediaType === null || baseSearchQuery?.socialMediaType === undefined) {
                 setPageDropdown(connectedPagesData?.facebookConnectedPages);
             } else {
                 setPageDropdown(
-                    getAllConnectedSocialAccountData?.data?.filter((socialMediaAccount) => socialMediaAccount?.provider === baseSearchQuery?.socialMediaType)[0]?.pageAccessToken
+                    getConnectedSocialAccountApi?.data?.filter((socialMediaAccount) => socialMediaAccount?.provider === baseSearchQuery?.socialMediaType)[0]?.pageAccessToken
                 );
             }
         }
-    }, [getAllConnectedSocialAccountData, connectedPagesData, baseSearchQuery]);
+    }, [getConnectedSocialAccountApi, connectedPagesData, baseSearchQuery]);
 
     useEffect(() => {
         if (postData) {
@@ -174,7 +177,7 @@ const Review = () => {
                                         {jsondata.review_post_heading}
                                     </h6>
                                 </div>
-                                {getAllConnectedSocialAccountData?.data?.length > 0 &&
+                                {getConnectedSocialAccountApi?.data?.length > 0 &&
                                     connectedPagesData?.facebookConnectedPages?.length > 0 && (
                                         <>
                                             <Select
@@ -225,12 +228,11 @@ const Review = () => {
                                         </>
                                     )}
                             </div>
-                            {getAllConnectedSocialAccountData?.loading ||
-                            connectedPagesData?.loading ? (
+                            {
+                                (getConnectedSocialAccountApi?.isLoading || connectedPagesData?.loading) ?
                                 <CommonLoader classname={"cmn_loader_outer"}></CommonLoader>
-                            ) : (
-                                getAllConnectedSocialAccountData?.data?.length > 0 &&
-                                connectedPagesData?.facebookConnectedPages?.length > 0 && (
+                             :
+                                getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0 &&
                                     <>
                                         <div className="review_outer">
 
@@ -402,14 +404,14 @@ const Review = () => {
                                             </div>
                                         }
                                     </>
-                                )
-                            )}
+
+                            }
                             {
-                                getAllConnectedSocialAccountData?.data?.length === 0 &&
+                                getConnectedSocialAccountApi?.data?.length === 0 &&
                                 <ConnectSocialMediaAccount image={notConnected_img}  message={formatMessage(NotConnected,["posts","social media"])}/>
                             }
                             {
-                                getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 &&
+                                getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 &&
                                 <ConnectSocialMediaAccount image={notConnected_img} message={formatMessage(NotConnected,["posts","social media pages"])}/>
                             }
                         </div>

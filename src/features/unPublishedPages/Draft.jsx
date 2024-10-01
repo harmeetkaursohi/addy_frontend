@@ -12,6 +12,7 @@ import {getToken} from "../../app/auth/auth";
 import ConnectSocialAccountModal from "../common/components/ConnectSocialAccountModal";
 import {useAppContext} from "../common/components/AppProvider";
 import Dropdown from "react-bootstrap/Dropdown";
+import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 
 const Draft = () => {
     const dispatch = useDispatch();
@@ -22,10 +23,11 @@ const Draft = () => {
         plannerCardDate: new Date(),
         period: "MONTH",
     });
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+
     const [apiTrigger, setApiTrigger] = useState(null);
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false);
     const connectedPagesData = useSelector((state) => state.facebook.getFacebookConnectedPagesReducer);
-    const getAllConnectedSocialAccountData = useSelector((state) => state.socialAccount.getAllConnectedSocialAccountReducer);
 
     useEffect(() => {
         dispatch(
@@ -54,7 +56,7 @@ const Draft = () => {
         const isAnyPageConnected =
             connectedPagesData?.facebookConnectedPages?.length > 0;
         const isAnyAccountConnected =
-            getAllConnectedSocialAccountData?.data?.length > 0;
+            getConnectedSocialAccountApi?.data?.length > 0;
         if (isAnyPageConnected && isAnyAccountConnected) {
             navigate("/planner/post");
         } else {
@@ -120,8 +122,8 @@ const Draft = () => {
                                         ref={calendarRef}
                                         plugins={[dayGridPlugin]}
                                         headerToolbar={
-                                            getAllConnectedSocialAccountData?.loading ||
-                                            getAllConnectedSocialAccountData?.data?.length === 0 ||
+                                            getConnectedSocialAccountApi?.isLoading ||
+                                            getConnectedSocialAccountApi?.data?.length === 0 ||
                                             connectedPagesData?.loading ||
                                             connectedPagesData?.facebookConnectedPages?.length === 0
                                                 ? {

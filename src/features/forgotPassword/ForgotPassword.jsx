@@ -2,19 +2,19 @@ import {useFormik} from 'formik';
 import React, {useEffect} from 'react'
 import {validationSchemas} from "../../utils/commonUtils"
 import jsondata from "../../locales/data/initialdata.json"
-import {useDispatch, useSelector} from "react-redux"
-import {forgotPassword} from '../../app/actions/userActions/userActions';
 import {Link, useNavigate} from 'react-router-dom';
 import addyads_img from "../../images/addylogo.png";
 import Frame from "../../images/forgotPassFrame.svg";
 import {RotatingLines} from "react-loader-spinner";
+import {useForgotPasswordMutation} from "../../app/apis/authApi";
+import {handleRTKQuery} from "../../utils/RTKQueryUtils";
+import {showSuccessToast} from "../common/components/Toast";
 
 
 function ForgotPassword() {
 
-    const dispatch = useDispatch()
     const navigate = useNavigate()
-    const forgotPasswordData = useSelector(state => state.user.forgotPasswordReducer)
+    const [forgotPassword, forgotPasswordApi] = useForgotPasswordMutation()
 
     useEffect(() => {
         document.title = "Forgot Password"
@@ -26,8 +26,15 @@ function ForgotPassword() {
             email: "",
         },
         validationSchema: validationSchemas.forgotPassword,
-        onSubmit: (values) => {
-            dispatch(forgotPassword({values, navigate}))
+        onSubmit: async (values) => {
+            await handleRTKQuery(async () => {
+                    return await forgotPassword(values.email).unwrap()
+                },
+                () => {
+                    showSuccessToast(`Email has been sent to ${values.email}`);
+                    navigate("/login")
+                })
+
         },
     });
 
@@ -75,14 +82,16 @@ function ForgotPassword() {
                                                     onBlur={formik.handleBlur}
                                                     value={formik.values.email}
                                                 />
-                                                {formik.touched.email && formik.errors.email ? (
+                                                {
+                                                    formik.touched.email && formik.errors.email &&
                                                     <p className="error_message">{formik.errors.email}</p>
-                                                ) : null}
-                                                <button type="submit"
-                                                        disabled={forgotPasswordData?.loading}
-                                                        className={' login_btn ' + (forgotPasswordData?.loading ? "opacity-50" : "")}>{jsondata.forgotpassword}
+                                                }
+                                                <button
+                                                    type="submit"
+                                                    disabled={forgotPasswordApi?.isLoading}
+                                                    className={' login_btn ' + (forgotPasswordApi?.isLoading ? "opacity-50" : "")}>{jsondata.forgotpassword}
                                                     {
-                                                        forgotPasswordData?.loading && <span
+                                                        forgotPasswordApi?.isLoading && <span
                                                             className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines
                                                             width={30} strokeColor={"white"}></RotatingLines></span>
                                                     }

@@ -19,8 +19,10 @@ import {
     isValidCreateMessageRequest
 } from "../../utils/commonUtils";
 import {ChatOpenMessage} from "../../utils/contantData";
+import {useGetUserInfoQuery} from "../../app/apis/userApi";
 
 function NeedHelpComponent() {
+
     const {sidebar} = useAppContext();
     const token = getToken()
     const decodedToken = decodeJwtToken(token);
@@ -39,8 +41,8 @@ function NeedHelpComponent() {
     const createChatApi = useSelector((state) => state.chat.createChatReducer);
     const sendMessageApi = useSelector((state) => state.chat.sendMessageReducer);
     const searchMessageApi = useSelector((state) => state.chat.searchMessageReducer);
-    const userApi = useSelector((state) => state.user.userInfoReducer);
 
+    const userApi = useGetUserInfoQuery("")
 
     const [triggerSearchMessageApi, setTriggerSearchMessageApi] = useState(false);
     const [activeChat, setActiveChat] = useState(null);

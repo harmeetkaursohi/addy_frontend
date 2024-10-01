@@ -4,23 +4,22 @@ import "./Contact.css";
 import {CiLocationOn} from "react-icons/ci";
 import {PiPhoneCall} from "react-icons/pi";
 import {FaRegEnvelope} from "react-icons/fa";
-import {validationSchemas} from "../../utils/commonUtils";
-import {contactUsFormActions} from "../../app/actions/webActions/webActions";
-import {useDispatch, useSelector} from "react-redux";
+import { validationSchemas} from "../../utils/commonUtils";
 import ReCAPTCHA from "react-google-recaptcha";
 import {showErrorToast, showSuccessToast} from "../common/components/Toast";
-import {useNavigate} from 'react-router'
 import Loader from "../loader/Loader";
 import {useAppContext} from "../common/components/AppProvider";
 import jsondata from "../../locales/data/initialdata.json"
+import {useContactUsMutation} from "../../app/apis/webApi";
 
 const ContactUs = () => {
-    const [isSmallScreen, setIsSmallScreen] = useState(false);
-    const navigate = useNavigate()
-    const dispatch = useDispatch();
+
     const {sidebar} = useAppContext()
     const recaptchaRef = useRef();
-    const contactUsFormReducer = useSelector((state) => state.web.contactUsFormReducer);
+
+    const [contactUs, contactUsApi] = useContactUsMutation();
+
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
     const [formData, setFormData] = useState({
         first_name: "",
         last_name: "",
@@ -29,6 +28,18 @@ const ContactUs = () => {
         message: "",
         recaptcha: "",
     });
+
+
+    useEffect(() => {
+        function handleResize() {
+            setIsSmallScreen(window.innerWidth <= 767);
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const handleOnChange = (e) => {
         setFormData((prevState) => {
             return {
@@ -48,37 +59,26 @@ const ContactUs = () => {
         },
         validationSchema: validationSchemas.contactForm,
         handleChange: handleOnChange,
-        onSubmit: (values, {resetForm}) => {
-            dispatch(contactUsFormActions(values)).then((res) => {
-                res = res?.payload
-                if (res?.status) {
+        onSubmit: async (values, {resetForm}) => {
+            let res=await contactUs(values).unwrap()
+            res = res?.payload
+            if (res?.status) {
+                resetForm()
+                showSuccessToast(res?.message);
+            } else if (res?.status === false) {
+                if (res?.errors && Object.keys(res?.errors).length) {
+                    const key = Object.keys(res?.errors)[0]
+                    showErrorToast(res?.errors[key]);
+                } else {
                     resetForm()
-                    showSuccessToast(res?.message);
-                } else if (res?.status === false) {
-                    if (res?.errors && Object.keys(res?.errors).length) {
-                        const key = Object.keys(res?.errors)[0]
-                        showErrorToast(res?.errors[key]);
-                    } else {
-                        resetForm()
-                        showErrorToast(res?.message);
-                    }
+                    showErrorToast(res?.message);
                 }
-                recaptchaRef.current.reset();
-            });
+            }
+            recaptchaRef.current.reset();
 
         },
     });
 
-
-    useEffect(() => {
-        function handleResize() {
-            setIsSmallScreen(window.innerWidth <= 767);
-        }
-
-        window.addEventListener('resize', handleResize);
-        handleResize();
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     return (
         <>
@@ -96,10 +96,9 @@ const ContactUs = () => {
                                     <ul>
                                         <li className="pt-4">
                                             <CiLocationOn size={22}/>
-                                            <span>
-                        {jsondata.contact_address} <br/>
+                                            <span>{jsondata.contact_address} <br/>
                                                 {jsondata.contact_us_address}
-                      </span>
+                                            </span>
                                         </li>
                                         <li>
                                             <PiPhoneCall className="PiPhoneCall"/>
@@ -126,11 +125,10 @@ const ContactUs = () => {
                                                     value={formik.values.first_name}
                                                     placeholder="First Name"
                                                 />
-                                                {formik.touched.first_name && formik.errors.first_name ? (
-                                                    <p className="error_message error_outer">
-                                                        {formik.errors.first_name}
-                                                    </p>
-                                                ) : null}
+                                                {
+                                                    formik.touched.first_name && formik.errors.first_name &&
+                                                    <p className="error_message error_outer">{formik.errors.first_name}</p>
+                                                }
 
                                             </div>
                                             <div className="flex-grow-1">
@@ -142,16 +140,12 @@ const ContactUs = () => {
                                                     value={formik.values.last_name}
                                                     placeholder="Last Name"
                                                 />
-                                                {formik.touched.last_name && formik.errors.last_name ? (
-                                                    <p className="error_message error_outer">
-                                                        {formik.errors.last_name}
-                                                    </p>
-                                                ) : null}
+                                                {
+                                                    formik.touched.last_name && formik.errors.last_name &&
+                                                    <p className="error_message error_outer">{formik.errors.last_name}</p>
+                                                }
                                             </div>
-
                                         </div>
-
-
                                         <input
                                             type="email"
                                             className="form-control"
@@ -161,12 +155,10 @@ const ContactUs = () => {
                                             value={formik.values.email_address}
                                             placeholder="Email Address"
                                         />
-                                        {formik.touched.email_address &&
-                                        formik.errors.email_address ? (
-                                            <p className="error_message error_outer">
-                                                {formik.errors.email_address}
-                                            </p>
-                                        ) : null}
+                                        {
+                                            formik.touched.email_address && formik.errors.email_address &&
+                                            <p className="error_message error_outer">{formik.errors.email_address}</p>
+                                        }
 
 
                                         <input
@@ -178,12 +170,10 @@ const ContactUs = () => {
                                             value={formik.values.phone_number}
                                             placeholder="Phone Number"
                                         />
-                                        {formik.touched.phone_number &&
-                                        formik.errors.phone_number ? (
-                                            <p className="error_message error_outer">
-                                                {formik.errors.phone_number}
-                                            </p>
-                                        ) : null}
+                                        {
+                                            formik.touched.phone_number && formik.errors.phone_number &&
+                                            <p className="error_message error_outer">{formik.errors.phone_number}</p>
+                                        }
 
 
                                         <textarea
@@ -195,9 +185,10 @@ const ContactUs = () => {
                                             onBlur={formik.handleBlur}
                                             value={formik.values.message}
                                         ></textarea>
-                                        {formik.touched.message && formik.errors.message ? (
+                                        {
+                                            formik.touched.message && formik.errors.message &&
                                             <p className="error_message error_outer">{formik.errors.message}</p>
-                                        ) : null}
+                                        }
 
 
                                         <ReCAPTCHA
@@ -213,15 +204,17 @@ const ContactUs = () => {
                                                 marginTop: "13px",
                                             }}
                                         />
-                                        {formik.touched["g-recaptcha-response"] && formik.errors["g-recaptcha-response"] ? (
-                                            <p className="error_message error_outer">
-                                                {formik.errors["g-recaptcha-response"]}
-                                            </p>
-                                        ) : null}
+                                        {
+                                            formik.touched["g-recaptcha-response"] && formik.errors["g-recaptcha-response"] &&
+                                            <p className="error_message error_outer">{formik.errors["g-recaptcha-response"]}</p>
+                                        }
                                         <div className=" mt-2">
-                                            <button type="submit" className={"cmn_btn_color sendMessageBtn"}
-                                                    disabled={contactUsFormReducer.loading}>
-                                                {contactUsFormReducer.loading ? <Loader/> : "Send Message"}
+                                            <button
+                                                type="submit" className={"cmn_btn_color sendMessageBtn"}
+                                                disabled={contactUsApi.isLoading}>
+                                                {
+                                                    contactUsApi.isLoading ? <Loader/> : "Send Message"
+                                                }
                                             </button>
                                         </div>
                                     </div>

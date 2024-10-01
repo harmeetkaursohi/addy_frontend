@@ -1,9 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {
-    disconnectSocialAccountAction,
+    // disconnectSocialAccountAction,
     findSocialAccountByProviderAndCustomerIdAction,
-    getAllConnectedSocialAccountAction,
-    socialAccountConnectActions,
     getAllByCustomerIdAction,
     getSocialMediaReportByProviderTypeAction,
     getSocialMediaGraphByProviderTypeAction, getAllInstagramBusinessAccounts, getAllPinterestBoards, getAllLinkedinPages
@@ -13,8 +11,8 @@ import {
 const socialAccountSlice = createSlice({
     name: 'socialAccount',
     initialState: {
-        connectSocialAccountReducer: {loading: false},
-        getAllConnectedSocialAccountReducer: {loading: true},
+        // connectSocialAccountReducer: {loading: false},
+        // getAllConnectedSocialAccountReducer: {loading: true},
         disconnectSocialAccountReducer: {loading: false},
         findSocialAccountByProviderAndCustomerIdReducer: {loading: false},
         getAllByCustomerIdReducer: {loading: false},
@@ -57,40 +55,40 @@ const socialAccountSlice = createSlice({
         },
 
         // social account connect
-        [socialAccountConnectActions.pending]: (state) => {
-            state.getAllConnectedSocialAccountReducer = {loading: true}
-            state.connectSocialAccountReducer = {loading: true}
-        },
-        [socialAccountConnectActions.fulfilled]: (state) => {
-            state.getAllConnectedSocialAccountReducer = {loading: false}
-            state.connectSocialAccountReducer = {loading: false}
-        },
-        [socialAccountConnectActions.rejected]: (state) => {
-            state.getAllConnectedSocialAccountReducer = {loading: false}
-            state.connectSocialAccountReducer = {loading: false}
-        },
+        // [socialAccountConnectActions.pending]: (state) => {
+        //     state.getAllConnectedSocialAccountReducer = {loading: true}
+        //     state.connectSocialAccountReducer = {loading: true}
+        // },
+        // [socialAccountConnectActions.fulfilled]: (state) => {
+        //     state.getAllConnectedSocialAccountReducer = {loading: false}
+        //     state.connectSocialAccountReducer = {loading: false}
+        // },
+        // [socialAccountConnectActions.rejected]: (state) => {
+        //     state.getAllConnectedSocialAccountReducer = {loading: false}
+        //     state.connectSocialAccountReducer = {loading: false}
+        // },
 
         //get all social connected account list
-        [getAllConnectedSocialAccountAction.pending]: (state) => {
-            state.getAllConnectedSocialAccountReducer = {loading: true}
-        },
-        [getAllConnectedSocialAccountAction.fulfilled]: (state, action) => {
-            state.getAllConnectedSocialAccountReducer = {loading: false, data: action.payload}
-        },
-        [getAllConnectedSocialAccountAction.rejected]: (state) => {
-            state.getAllConnectedSocialAccountReducer = {loading: false}
-        },
+        // [getAllConnectedSocialAccountAction.pending]: (state) => {
+        //     state.getAllConnectedSocialAccountReducer = {loading: true}
+        // },
+        // [getAllConnectedSocialAccountAction.fulfilled]: (state, action) => {
+        //     state.getAllConnectedSocialAccountReducer = {loading: false, data: action.payload}
+        // },
+        // [getAllConnectedSocialAccountAction.rejected]: (state) => {
+        //     state.getAllConnectedSocialAccountReducer = {loading: false}
+        // },
 
         // social account disconnect
-        [disconnectSocialAccountAction.pending]: (state) => {
-            state.disconnectSocialAccountReducer = {loading: true}
-        },
-        [disconnectSocialAccountAction.fulfilled]: (state) => {
-            state.disconnectSocialAccountReducer = {loading: false}
-        },
-        [disconnectSocialAccountAction.rejected]: (state) => {
-            state.disconnectSocialAccountReducer = {loading: false}
-        },
+        // [disconnectSocialAccountAction.pending]: (state) => {
+        //     state.disconnectSocialAccountReducer = {loading: true}
+        // },
+        // [disconnectSocialAccountAction.fulfilled]: (state) => {
+        //     state.disconnectSocialAccountReducer = {loading: false}
+        // },
+        // [disconnectSocialAccountAction.rejected]: (state) => {
+        //     state.disconnectSocialAccountReducer = {loading: false}
+        // },
 
         // get social account by customer id and provider
         [findSocialAccountByProviderAndCustomerIdAction.pending]: (state) => {

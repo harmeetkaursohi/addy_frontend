@@ -3,26 +3,23 @@ import React, {useState} from "react";
 import './common.css'
 import {useFormik} from "formik";
 import {formatMessage,  validationSchemas} from "../../../utils/commonUtils";
-import {useDispatch, useSelector} from "react-redux";
-import {updatePassword} from "../../../app/actions/userActions/userActions";
-import {getToken} from "../../../app/auth/auth";
 import {showSuccessToast} from "./Toast";
 import { UpdatedSuccessfully} from "../../../utils/contantData";
 import "./common.css"
 import lock_img from "../../../images/lock_img.svg"
 import { RxCross2 } from "react-icons/rx";
+import {useUpdatePasswordMutation} from "../../../app/apis/authApi";
+import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
+
 const UpdatePasswordModal = ({showModal, setShowModal}) => {
 
-    const updatePasswordData = useSelector(state => state.user.updatePasswordReducer);
-    const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState({
         oldPassword: false,
         newPassword: false,
         confirmPassword: false,
     })
-    const handleClose = () => {
-        setShowModal(false)
-    };
+    const [updatePassword,updatePasswordApi]=useUpdatePasswordMutation()
+
     const formik = useFormik({
         initialValues: {
             oldPassword: "",
@@ -30,20 +27,25 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
             confirmPassword: ""
         },
         validationSchema: validationSchemas.updatePassword,
-        onSubmit: (values) => {
-            dispatch(updatePassword({
-                token: getToken(),
-                data: {
-                    oldPassword: values.oldPassword, newPassword: values.newPassword
-                }
-            })).then(res => {
-                if (res.meta.requestStatus === "fulfilled") {
+        onSubmit: async (values) => {
+            const data={
+                oldPassword: values.oldPassword, newPassword: values.newPassword
+            }
+            await handleRTKQuery(
+                async () => {
+                    return await updatePassword(data).unwrap()
+                },
+                () => {
                     showSuccessToast(formatMessage(UpdatedSuccessfully, ["Password"]))
                     handleClose();
-                }
-            })
+                })
         }
     });
+
+    const handleClose = () => {
+        setShowModal(false)
+    };
+
     const togglePasswordVisibility = (toggleVisibilityFor) => {
         setShowPassword({...showPassword, [toggleVisibilityFor]: !showPassword[toggleVisibilityFor]})
     }
@@ -160,16 +162,16 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                 </div>
                                 <div className='update-password-btn-outer text-center  mt-4'>
                                 <button onClick={handleClose}
-                                            disabled={updatePasswordData?.loading}
+                                            disabled={updatePasswordApi?.isLoading}
                                             className={"close-update-password-btn me-4 cmn_modal_cancelbtn "}>Cancel
                                     </button>
                                     <button type={"submit"}
-                                            disabled={updatePasswordData?.loading}
+                                            disabled={updatePasswordApi?.isLoading}
 
                                             className={"update-password-btn connection-error-close-btn "}>
                                         Update
                                         {
-                                            updatePasswordData?.loading &&
+                                            updatePasswordApi?.isLoading &&
                                             <span className={"spinner-border spinner-border-sm  ms-2"} role="status"
                                                   aria-hidden="true"></span>
                                         }

@@ -3,26 +3,25 @@ import {Link, useNavigate} from "react-router-dom"
 import jsondata from "../../../../locales/data/initialdata.json"
 import {useFormik} from "formik"
 import {isNullOrEmpty, validationSchemas} from "../../../../utils/commonUtils"
-import {useDispatch, useSelector} from "react-redux"
 import Button from "../../../common/components/Button"
 import React, {useEffect, useState} from "react";
 import {Country, State, City} from 'country-state-city';
-import {signUpUser} from "../../../../app/actions/userActions/userActions";
-import {showErrorToast} from "../../../common/components/Toast";
 import Swal from "sweetalert2";
 import Frame from "../../../../images/signupFrame.svg";
 import success_img from "../../../../images/right_img.svg";
 
 import {GrPrevious} from "react-icons/gr";
+import {useSignUpMutation} from "../../../../app/apis/authApi";
+import {handleRTKQuery} from "../../../../utils/RTKQueryUtils";
 
 const AddressInfo = ({formData, setFormData, setShowTab}) => {
-
-    const dispatch = useDispatch()
     const navigate = useNavigate()
-    const signUpReducer = useSelector(state => state?.user?.signUpReducer);
+
     const [countries, setCountries] = useState([]);
     const [states, setStates] = useState([]);
     const [cities, setCities] = useState([]);
+    const [signUp, signUpApi] = useSignUpMutation()
+
 
     useEffect(() => {
         setCountries(Country.getAllCountries());
@@ -38,49 +37,44 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
             county: "",
             city: "",
             pinCode: "",
-            isAgreedToTermsAndConditions:false
+            isAgreedToTermsAndConditions: false
         },
         validationSchema: validationSchemas.address,
-        onSubmit: (values) => {
-            let addressObj = {
-                addressLine1: values.addressLine1,
-                addressLine2: values.addressLine2,
-                country: values.country,
-                state: values.state,
-                county: values.county,
-                city: values.city,
-                pinCode: values.pinCode
-            }
-
-            dispatch(signUpUser({
+        onSubmit: async (values) => {
+            let signUpData = {
                 ...formData,
                 fullName: formData.firstName + " " + formData.lastName,
-                address: addressObj,
-                navigate
-            })).then((response) => {
-                if (response.meta.requestStatus === "fulfilled") {
+                address: {
+                    addressLine1: values.addressLine1,
+                    addressLine2: values.addressLine2,
+                    country: values.country,
+                    state: values.state,
+                    county: values.county,
+                    city: values.city,
+                    pinCode: values.pinCode
+                }
+            }
+            await handleRTKQuery(
+                async () => {
+                    return await signUp(signUpData).unwrap()
+                },
+                () => {
                     Swal.fire({
                         imageUrl: success_img,
                         title: 'Registration Successful',
-                        html: `
-                             <p>Your registration is complete, and we've sent a confirmation email to your email address</p>
-                         `,
+                        html: `<p>Your registration is complete, and we've sent a confirmation email to your email address</p>`,
                         showConfirmButton: true,
                         confirmButtonColor: "#F07C33",
                         showCancelButton: false,
                     }).then(result => {
-                        if (result.isConfirmed) {
-                            navigate("/login");
-                        }
+                        result.isConfirmed && navigate("/login");
                     })
+                },
+                null,
+                () => {
                     formik.resetForm();
-                    setFormData(resetUserInfo);
-                }
-            }).catch((error) => {
-                showErrorToast(error.response.data.message);
-                formik.resetForm();
-                setFormData(resetUserInfo)
-            })
+                    setFormData(resetUserInfo)
+                })
         },
     });
 
@@ -95,12 +89,32 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
         isEnabled: false
     }
 
+    useEffect(() => {
+        if (formData && countries?.length > 0) {
+            formik.setFieldValue("addressLine1", formData?.address?.addressLine1);
+            formik.setFieldValue("addressLine2", formData?.address?.addressLine2);
+            formik.setFieldValue("country", formData?.address?.country);
+            formik.setFieldValue("state", formData?.address?.state);
+            formik.setFieldValue("pinCode", formData?.address?.pinCode);
+            if (!isNullOrEmpty(formData?.address?.country)) {
+                handleCountryChange({target: {value: formData?.address?.country}})
+            }
+            if (!isNullOrEmpty(formData?.address?.state)) {
+                handleStateChange({target: {value: formData?.address?.state}})
+            }
+            formik.setFieldValue("city", formData?.address?.city);
+            formik.setFieldValue('county', formData?.address?.county);
+            formik.setFieldValue('isAgreedToTermsAndConditions', formData?.address?.isAgreedToTermsAndConditions);
+        }
+    }, [formData, countries]);
+
     // handle previous tab
     const handlePreviousTab = (e) => {
         e.preventDefault();
         setFormData({...formData, address: formik.values})
         setShowTab((prev) => prev - 1);
     }
+
     // Custom onChange handler for the country select element
     const handleCountryChange = (event) => {
         const selectedCountry = event.target.value;
@@ -122,26 +136,6 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
         setCities(cities);
         formik.setFieldValue('county', "");
     }
-
-
-    useEffect(() => {
-        if (formData && countries?.length > 0) {
-            formik.setFieldValue("addressLine1", formData?.address?.addressLine1);
-            formik.setFieldValue("addressLine2", formData?.address?.addressLine2);
-            formik.setFieldValue("country", formData?.address?.country);
-            formik.setFieldValue("state", formData?.address?.state);
-            formik.setFieldValue("pinCode", formData?.address?.pinCode);
-            if (!isNullOrEmpty(formData?.address?.country)) {
-                handleCountryChange({target: {value: formData?.address?.country}})
-            }
-            if (!isNullOrEmpty(formData?.address?.state)) {
-                handleStateChange({target: {value: formData?.address?.state}})
-            }
-            formik.setFieldValue("city", formData?.address?.city);
-            formik.setFieldValue('county', formData?.address?.county);
-            formik.setFieldValue('isAgreedToTermsAndConditions', formData?.address?.isAgreedToTermsAndConditions);
-        }
-    }, [formData, countries]);
 
 
     return (
@@ -167,7 +161,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                         <div className="col-lg-6 col-md-12 col-sm-12">
                             <div className="gr_previous_outer cursor-pointer"
                                  onClick={(e) =>
-                                     !signUpReducer?.loading && handlePreviousTab(e)}><GrPrevious/>
+                                     !signUpApi?.isLoading && handlePreviousTab(e)}><GrPrevious/>
                             </div>
 
 
@@ -338,7 +332,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                                             <div className="mt-2">
                                                 <Button type={"Submit"} text={jsondata.signUp}
-                                                        loading={signUpReducer?.loading}/>
+                                                        loading={signUpApi?.isLoading}/>
 
                                             </div>
 
@@ -346,7 +340,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                         </div>
                                     </form>
                                     <h3 className='cmn_heading'>{jsondata.alreadyAccount}
-                                        <Link to={signUpReducer?.loading ? "/sign-up" : "/"} className="ms-2">
+                                        <Link to={signUpApi?.isLoading ? "/sign-up" : "/"} className="ms-2">
                                             <span className='sign_up'>{jsondata.login}</span>
                                         </Link>
                                     </h3>

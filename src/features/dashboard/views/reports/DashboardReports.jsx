@@ -25,13 +25,15 @@ import default_user_icon from "../../../../images/default_user_icon.svg"
 import {getToken} from "../../../../app/auth/auth";
 import avg_bar from "../../../../images/avg_bar.svg"
 import followers_bar from "../../../../images/followers_bar.svg"
+import {useGetConnectedSocialAccountQuery} from "../../../../app/apis/socialAccount";
 
 export const DashboardReports = () => {
 
     const token = getToken();
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+
     const reportSectionData = useSelector(state => state.socialAccount.getSocialMediaReportByProviderTypeReducer);
     const reportGraphSectionData = useSelector(state => state.socialAccount.getSocialMediaGraphByProviderTypeReducer);
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesReducer = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const facebookPageListReducer = useSelector(state => state.facebook.getFacebookPageReducer);
     const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
@@ -47,14 +49,14 @@ export const DashboardReports = () => {
 
 
     useEffect(() => {
-        if (getAllConnectedSocialAccountData?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages)) {
-            let selectedSocialMediaAccount = getAllConnectedSocialAccountData?.data?.find(c => c.provider === reportSelectedAccountType.toUpperCase() && connectedPagesReducer?.facebookConnectedPages?.some(connectedPage => connectedPage?.socialMediaAccountId === c?.id))
+        if (getConnectedSocialAccountApi?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages)) {
+            let selectedSocialMediaAccount = getConnectedSocialAccountApi?.data?.find(c => c.provider === reportSelectedAccountType.toUpperCase() && connectedPagesReducer?.facebookConnectedPages?.some(connectedPage => connectedPage?.socialMediaAccountId === c?.id))
             //  In case any account is disconnected and it was selected on reports section selectedSocialMediaAccount will be null so set 1st account selected
             if (selectedSocialMediaAccount === null || selectedSocialMediaAccount === undefined) {
                 if (connectedPagesReducer?.facebookConnectedPages?.length > 0) {
-                    const enabledSocialMediaAccounts=getAllConnectedSocialAccountData?.data?.filter(accountData=>enabledSocialMedia["is" + getInitialLetterCap(accountData.provider.toLowerCase()) + "Enabled"])
-                    const enabledSocialMediaAccountIds=enabledSocialMediaAccounts?.map(account=>account.id)
-                    const enabledPages=connectedPagesReducer?.facebookConnectedPages?.filter(page=>enabledSocialMediaAccountIds.includes(page.socialMediaAccountId))
+                    const enabledSocialMediaAccounts = getConnectedSocialAccountApi?.data?.filter(accountData => enabledSocialMedia["is" + getInitialLetterCap(accountData.provider.toLowerCase()) + "Enabled"])
+                    const enabledSocialMediaAccountIds = enabledSocialMediaAccounts?.map(account => account.id)
+                    const enabledPages = connectedPagesReducer?.facebookConnectedPages?.filter(page => enabledSocialMediaAccountIds.includes(page.socialMediaAccountId))
                     selectedSocialMediaAccount = enabledSocialMediaAccounts?.find(accountData => accountData?.id === enabledPages?.[0]?.socialMediaAccountId)
                 }
                 setReportSelectedAccountType(selectedSocialMediaAccount?.provider || "")
@@ -85,7 +87,7 @@ export const DashboardReports = () => {
                 setSelectedPage(null)
             }
         }
-    }, [connectedPagesReducer, getAllConnectedSocialAccountData, reportSelectedAccountType]);
+    }, [connectedPagesReducer, getConnectedSocialAccountApi, reportSelectedAccountType]);
 
 
     useEffect(() => {
@@ -133,12 +135,12 @@ export const DashboardReports = () => {
             <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer">
 
 
-                {getAllConnectedSocialAccountData?.loading || connectedPagesReducer?.loading || facebookPageListReducer?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading ?
+                {getConnectedSocialAccountApi?.isLoading || connectedPagesReducer?.loading || facebookPageListReducer?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading ?
                     <div className="cmn_background p-5 text-center account_not_connect_imcontainer ">
                         <CommonLoader classname={"cmn_loader_outer"}/>
                     </div> :
 
-                    (getAllConnectedSocialAccountData?.data === null || (Array.isArray(getAllConnectedSocialAccountData?.data) && getAllConnectedSocialAccountData?.data.filter(c => c.provider !== "GOOGLE").length === 0))
+                    (getConnectedSocialAccountApi?.data === null || (Array.isArray(getConnectedSocialAccountApi?.data) && getConnectedSocialAccountApi?.data.filter(c => c.provider !== "GOOGLE").length === 0))
 
                         ?
 
@@ -186,7 +188,7 @@ export const DashboardReports = () => {
 
                                             <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                              className="social_dropdowns"
-                                                             disabled={getAllConnectedSocialAccountData?.loading || reportSectionData?.loading || reportGraphSectionData?.loading}>
+                                                             disabled={getConnectedSocialAccountApi?.isLoading || reportSectionData?.loading || reportGraphSectionData?.loading}>
                                                 <img src={computeImageURL(reportSelectedAccountType)}
                                                      className="me-3 review-post-icon"
                                                      alt={SocialAccountProvider[reportSelectedAccountType]}/>
@@ -199,9 +201,9 @@ export const DashboardReports = () => {
 
                                                     <div className="filters_outer" key={index}
 
-                                                         disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data, connectedPagesReducer?.facebookConnectedPages)}
+                                                         disabled={!socialMediaAccountHasConnectedPages(cur, getConnectedSocialAccountApi?.data, connectedPagesReducer?.facebookConnectedPages)}
                                                          onClick={() => {
-                                                             setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
+                                                             setReportSelectedAccountData(getConnectedSocialAccountApi?.data.find(c => c.provider === cur))
                                                              setReportSelectedAccountType(cur)
                                                              setGraphDaysSelected(9)
 
@@ -227,7 +229,7 @@ export const DashboardReports = () => {
 
                                         <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                          className="social_dropdowns"
-                                                         disabled={getAllConnectedSocialAccountData?.loading || reportSectionData?.loading || reportGraphSectionData?.loading}>
+                                                         disabled={getConnectedSocialAccountApi?.isLoading || reportSectionData?.loading || reportGraphSectionData?.loading}>
                                             <img src={computeImageURL(reportSelectedAccountType)}
                                                  className="me-3 review-post-icon"
                                                  alt={SocialAccountProvider[reportSelectedAccountType]}/>{SocialAccountProvider[reportSelectedAccountType]}
@@ -237,9 +239,9 @@ export const DashboardReports = () => {
                                             {Object.keys(SocialAccountProvider).map((cur, index) => (
 
                                                 <Dropdown.Item key={index}
-                                                               disabled={!socialMediaAccountHasConnectedPages(cur, getAllConnectedSocialAccountData?.data, connectedPagesReducer?.facebookConnectedPages)}
+                                                               disabled={!socialMediaAccountHasConnectedPages(cur, getConnectedSocialAccountApi?.data, connectedPagesReducer?.facebookConnectedPages)}
                                                                onClick={() => {
-                                                                   setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
+                                                                   setReportSelectedAccountData(getConnectedSocialAccountApi?.data.find(c => c.provider === cur))
                                                                    setReportSelectedAccountType(cur)
                                                                    setGraphDaysSelected(9)
 
@@ -257,7 +259,7 @@ export const DashboardReports = () => {
 
                                         <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                          className="social_dropdowns"
-                                                         disabled={getAllConnectedSocialAccountData?.loading || reportSectionData?.loading || reportGraphSectionData?.loading}>
+                                                         disabled={getConnectedSocialAccountApi?.isLoading || reportSectionData?.loading || reportGraphSectionData?.loading}>
                                             <img
                                                 src={selectedPage?.imageUrl ? selectedPage?.imageUrl : default_user_icon}
                                                 className="me-3 dropdown-page-logo"
@@ -283,16 +285,12 @@ export const DashboardReports = () => {
 
                                                         <Dropdown.Item key={index}
                                                                        className="d-flex"
-                                                            // disabled={notConnectedSocialMediaAccount(cur, getAllConnectedSocialAccountData?.data)}
                                                                        onClick={() => {
                                                                            setSelectedPage(page)
-                                                                           // setReportSelectedAccountData(getAllConnectedSocialAccountData?.data.find(c => c.provider === cur))
-                                                                           // setReportSelectedAccountType(cur)
-
-
-                                                                       }}><img width={24}
-                                                                               src={page?.imageUrl ? page?.imageUrl : default_user_icon}
-                                                                               className="me-3"/>
+                                                                       }}>
+                                                            <img width={24}
+                                                                 src={page?.imageUrl ? page?.imageUrl : default_user_icon}
+                                                                 className="me-3"/>
                                                             <span>{page.name}</span>
                                                         </Dropdown.Item>
                                                     ))
@@ -371,20 +369,20 @@ export const DashboardReports = () => {
                                                             <h5>{curKey.replace(/_/g, ' ')}
                                                                 {
                                                                     ["INSTAGRAM", "PINTEREST"].includes(reportSelectedAccountType) &&
-                                                                   
+
                                                                     <>
-                                                                    <br/>
-                                                                    <span
-                                                                        className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 90 days)' : ''}  </span>
-                                                                    
+                                                                        <br/>
+                                                                        <span
+                                                                            className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 90 days)' : ''}  </span>
+
                                                                     </>
                                                                 }
                                                                 {
                                                                     ["FACEBOOK"].includes(reportSelectedAccountType) &&
                                                                     <>
-                                                                    <br/>
-                                                                    <span
-                                                                        className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 2 years)' : ''}  </span>
+                                                                        <br/>
+                                                                        <span
+                                                                            className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 2 years)' : ''}  </span>
                                                                     </>
                                                                 }
 

@@ -14,7 +14,7 @@ import noDraftPosts from "../../../images/no_draft_posts.png";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../common/components/AppProvider";
 import {NoPostInDraft, NotConnected} from "../../../utils/contantData";
-import DraftModal from "./DraftModal";
+import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 
 export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger}) => {
     const {sidebar} = useAppContext()
@@ -26,8 +26,9 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
         publishedPostIds: [],
 
     });
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+
     const getAllDraftPostsByCustomerAndPeriodData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
 
     useEffect(() => {
@@ -83,11 +84,11 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
             {/*    </div>*/}
             {/*</div>*/}
             {
-                (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading || getAllDraftPostsByCustomerAndPeriodData.loading) ?
+                (getConnectedSocialAccountApi?.isLoading || connectedPagesData?.loading || getAllDraftPostsByCustomerAndPeriodData.loading) ?
                     <CommonLoader classname={"cmn_loader_outer"}/> :
-                    getAllConnectedSocialAccountData?.data?.length === 0 ?
+                    getConnectedSocialAccountApi?.data?.length === 0 ?
                         <ConnectSocialMediaAccount image={notConnected_img} message={formatMessage(NotConnected,["posts","social media"])}/> :
-                        getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 ?
+                        getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 ?
                             <ConnectSocialMediaAccount image={notConnected_img} message={formatMessage(NotConnected,["posts","social media pages"])}/> :
                             (drafts !== null && Array.isArray(drafts) && drafts?.length === 0) ?
                                 <div className="noDraftPosts_outer p-5 text-center mt-3">

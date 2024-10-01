@@ -1,6 +1,6 @@
 import {
     baseAxios,
-    calculatePercentageGrowth,
+    calculatePercentageGrowth, cleanAndValidateRequestURL,
     computeAndReturnSummedDateValues, generateUnixTimestampFor, getFormattedAccountReachAndEngagementData,
 
 } from "../utils/commonUtils";
@@ -18,10 +18,8 @@ export async function exchangeForLongLivedToken(shortLivedToken, socialMediaType
         fb_exchange_token: shortLivedToken,
         client_secret: client_secret
     };
-
     try {
         const response = await baseAxios.get(url, {params});
-
         if (response.status === 200 && response.data && response.data.access_token) {
             return response.data.access_token;
         } else {
@@ -201,3 +199,9 @@ export const getFacebookInsightForSinglePost = async (accessToken, postId) => {
     const apiUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${postId}?access_token=${accessToken}&fields=id,message,likes.summary(true),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
     return baseAxios.get(apiUrl);
 }
+export const getPageFullInfoByPageAccessToken = async (pageAccessToken) => {
+    const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`;
+    const path = '/me';
+    const fields = 'id,name,feed,about,access_token,bio,photos,picture';
+    return await baseAxios.get(cleanAndValidateRequestURL(baseUrl, path, fields, pageAccessToken));
+};

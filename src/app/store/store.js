@@ -11,25 +11,26 @@ import pageAccessTokenSlice from "../slices/pageAccessTokenSlice/pageAccessToken
 import webSlice from "../slices/webSlice/webSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
 import chatSlice from "../slices/chatSlice/chatSlice";
+import {addyApi} from "../addyApi";
 
 
 const rootReducers = combineReducers({
-    user: userSlice,
+    // user: userSlice,
     facebook: facebookSlice,
     pageAccessToken: pageAccessTokenSlice,
     socialAccount: socialAccountSlice,
     post: postSlice,
     insight: insightSlice,
-    web: webSlice,
+    // web: webSlice,
     notification: notificationSlice,
     reset: resetReducers,
-    chat:chatSlice
+    chat:chatSlice,
+    [addyApi.reducerPath]: addyApi.reducer,
 
 })
 
-
 const rootReducer = (state, action) => {
-
+    // console.log("state====>",state)
     if (action.type === resetReducers.type) {
         const {sliceNames} = action.payload;
         let newState = {...state};
@@ -52,7 +53,10 @@ const rootReducer = (state, action) => {
 
 const store = configureStore({
     reducer: rootReducer,
-    middleware: [logger, thunk]
+    // middleware: [logger, thunk]
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(addyApi.middleware)
+        // getDefaultMiddleware().concat(addyApi.middleware).concat(logger).concat(thunk)
 });
 
 

@@ -5,10 +5,16 @@ import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import './common.css'
 import { RxCross2 } from "react-icons/rx";
+import {
+    useGetConnectedSocialAccountQuery,
+} from "../../../app/apis/socialAccount";
 const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
+
     const navigate = useNavigate();
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
+    const getConnectedSocialAccountApi=useGetConnectedSocialAccountQuery("")
+
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+
     const handleClose = () => {
         setShowModal(false)
     };
@@ -38,7 +44,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                                 <div className='facebook_title'>
                          
                          {
-                             (getAllConnectedSocialAccountData?.data === undefined || getAllConnectedSocialAccountData?.data?.length === 0) ?
+                             (getConnectedSocialAccountApi?.data === undefined || getConnectedSocialAccountApi?.data?.length === 0) ?
                                  <h1 className='cmn_text_style not_connect_heading'>Account Not
                                      Connected</h1> :
                                  <>
@@ -54,7 +60,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                      </div>
 
                                 {
-                                    (getAllConnectedSocialAccountData?.data === undefined || getAllConnectedSocialAccountData?.data?.length === 0) ?
+                                    (getConnectedSocialAccountApi?.data === undefined || getConnectedSocialAccountApi?.data?.length === 0) ?
                                         <h6 className={"text-center mb-4 NotConncted_text"}>Currently, there are no active connections at
                                             the
                                             moment. Please connect

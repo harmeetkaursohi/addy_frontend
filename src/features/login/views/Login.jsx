@@ -1,25 +1,22 @@
 import addyads_img from '../../../images/addylogo.png'
 import google_img from '../../../images/Google_img.svg'
-import fbImg from "../../../images/fb.svg"
-import {Link, useNavigate} from "react-router-dom"
+import {Link} from "react-router-dom"
 import jsondata from '../../../locales/data/initialdata.json'
 import './Login.css'
 import {useFormik} from 'formik';
-import {useDispatch} from "react-redux";
-import {loginUser} from "../../../app/actions/userActions/userActions.js";
 import {validationSchemas} from "../../../utils/commonUtils.js";
 import React, {useEffect, useState} from "react";
 import {showErrorToast} from "../../common/components/Toast";
 import Frame from "../../../images/loginFrame.svg";
 import {RotatingLines} from "react-loader-spinner";
 import {SomethingWentWrong} from "../../../utils/contantData";
+import {useLoginUserMutation} from "../../../app/apis/authApi";
+import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 
 const Login = () => {
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const [loginUser, loginUserApi] = useLoginUserMutation();
     const [showPassword, setShowPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         document.title = 'Login';
@@ -35,18 +32,14 @@ const Login = () => {
             timeZoneId: Intl.DateTimeFormat().resolvedOptions().timeZone
         },
         validationSchema: validationSchemas.login,
-        onSubmit: (values) => {
-            setIsLoading(true)
-            dispatch(loginUser({values})).then((response) => {
-                setIsLoading(false)
-                if (response.meta.requestStatus === "fulfilled") {
+        onSubmit: async (values) => {
+            await handleRTKQuery(async () => {
+                    return await loginUser(values).unwrap()
+                },
+                (res) => {
+                    localStorage.setItem('token', res.token);
                     window.location.href = "/dashboard"
-                    // navigate("/dashboard")
-                }
-            }).catch((error) => {
-                setIsLoading(false)
-                showErrorToast(error.response.data.message);
-            });
+                })
         },
     });
 
@@ -101,9 +94,10 @@ const Login = () => {
                                                     value={formik.values.username}
                                                 />
 
-                                                {formik.touched.username && formik.errors.username ? (
+                                                {
+                                                    formik.touched.username && formik.errors.username &&
                                                     <p className="error_message">{formik.errors.username}</p>
-                                                ) : null}
+                                                }
 
                                             </div>
 
@@ -123,38 +117,41 @@ const Login = () => {
                                                 <span className="password-toggle" onClick={togglePasswordVisibility}>
                                             {
                                                 showPassword ?
-                                                <h2 className="openEye">
-                                                    <i className="fa-solid fa-eye"></i>
-                                                </h2>
-                                             :
-                                                <h2 className="closeEyeIcon">
-                                                    <i className="fa fa-eye-slash" aria-hidden="true"/>
-                                                </h2>
+                                                    <h2 className="openEye">
+                                                        <i className="fa-solid fa-eye"></i>
+                                                    </h2>
+                                                    :
+                                                    <h2 className="closeEyeIcon">
+                                                        <i className="fa fa-eye-slash" aria-hidden="true"/>
+                                                    </h2>
                                             }
                                             </span>
 
                                                 {
-                                                    formik.touched.password && formik.errors.password ?
-                                                    <p className="error_message">{formik.errors.password}</p> : null
+                                                    formik.touched.password && formik.errors.password &&
+                                                    <p className="error_message">{formik.errors.password}</p>
                                                 }
 
                                             </div>
 
                                             <div className='rememberPass_outer mt-2'>
-
                                                 <div className='text-end mt-3'>
-
                                                     <Link to="/forgot-password">
                                                         <label
                                                             className='forgotPass_heading cursor_pointer'>{jsondata.forgotpassword}</label>
                                                     </Link>
 
                                                 </div>
-                                                <button type={"submit"} className='login_btn' disabled={isLoading}>Log
-                                                    In {isLoading ? (<span
-                                                        className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines
-                                                        width={30}
-                                                        strokeColor={"white"}></RotatingLines></span>) : ""}</button>
+                                                <button type={"submit"} className='login_btn'
+                                                        disabled={loginUserApi?.isLoading}>Log In
+                                                    {
+                                                        loginUserApi?.isLoading ?
+                                                            <span
+                                                                className={"loader-forgot-pswd z-index-1 mx-2"}><RotatingLines
+                                                                width={30} strokeColor={"white"}></RotatingLines>
+                                                            </span> : ""
+                                                    }
+                                                </button>
                                                 <h2 className='or_text'>OR</h2>
 
 

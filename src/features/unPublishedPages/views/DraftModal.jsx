@@ -184,7 +184,7 @@ function DraftModal({show,
                                                          label={"Schedule Post/Edit"}
                                                          onClick={() => {
                                                              setLabels("Schedule Post")
-                                                             navigate("/post/" + batchIdData?.id)
+                                                             navigate("/planner/post/" + batchIdData?.id)
                                                          }}
                                                          isDisabled={labels !== "Schedule Post" && deletePostByBatchIdData?.loading || publishedPostData?.loading}
                                 />

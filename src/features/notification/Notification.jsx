@@ -27,14 +27,17 @@ import {resetReducers} from "../../app/actions/commonActions/commonActions";
 import Swal from "sweetalert2";
 import notification_img from "../../images/notification_img.svg"
 import {EmptyNotificationGridMessage, NotConnected} from "../../utils/contantData";
+import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 const Notification = () => {
 
     const dispatch = useDispatch();
     const {sidebar} = useAppContext()
     const token = getToken();
+
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+
     const searchNotificationData = useSelector(state => state.notification.searchNotificationReducer)
     const clearAllNotificationData = useSelector(state => state.notification.clearAllNotificationReducer)
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const unseenNotificationsData = useSelector(state => state.notification.getUnseenNotificationsReducer)
     const setNotificationsToSeenData = useSelector(state => state.notification.setNotificationsToSeenReducer)
@@ -60,10 +63,10 @@ const Notification = () => {
     }, [])
 
     useEffect(() => {
-        if (getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
+        if (getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
             dispatch(getUnseenNotifications({token: token}))
         }
-    }, [getAllConnectedSocialAccountData, connectedPagesData])
+    }, [getConnectedSocialAccountApi, connectedPagesData])
 
 
     useEffect(() => {
@@ -218,9 +221,9 @@ const Notification = () => {
                             }
                             </div>
                             {
-                                (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
+                                (getConnectedSocialAccountApi?.isLoading || connectedPagesData?.loading) ?
                                     <CommonLoader classname={"cmn_loader_outer"}></CommonLoader> :
-                                    getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0 &&
+                                    getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0 &&
                                     <>
                                         <div className=" align-items-center mt-4">
                                             {
@@ -306,7 +309,7 @@ const Notification = () => {
                                     </>
                             }
                             {
-                                (getAllConnectedSocialAccountData?.data?.length == 0 || connectedPagesData?.facebookConnectedPages?.length === 0) &&
+                                (getConnectedSocialAccountApi?.data?.length == 0 || connectedPagesData?.facebookConnectedPages?.length === 0) &&
                                 <ConnectSocialMediaAccount image={notConnected_img} message={EmptyNotificationGridMessage}/>
                             }
 

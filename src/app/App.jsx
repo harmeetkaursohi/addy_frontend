@@ -8,6 +8,28 @@ import 'react-toastify/dist/ReactToastify.css';
 import {Suspense, lazy} from 'react';
 import './App.css'
 import {unProtectedUrls} from "../utils/contantData";
+// import SideBar from "../features/sidebar/views/Layout"
+// import Draft from "../features/unPublishedPages/Draft";
+// import SelectPlan from "../features/selectplan/views/SelectPlan";
+// import BillingForm from "../features/billingInfo/views/BillingForm";
+// import Dashboard from "../features/dashboard/views/Dashboard";
+// import Planner from "../features/planner/views/Planner";
+// import CreatePost from "../features/planner/views/CreatePost";
+// import UpdatePost from "../features/planner/views/UpdatePost";
+// import Review from "../features/review/views/Review";
+// import AI_ImageModal from "../features/modals/views/ai_image_modal/AI_ImageModal";
+// import Insight from "../features/insights/insight/views/Insight";
+// import ContactUs from "../features/contactUs/ContactUs";
+// import Profile from "../features/profile/Profile";
+// import NeedHelpComponent from "../features/needHelp/NeedHelpComponent";
+// import Login from "../features/login/views/Login";
+// import Signup from "../features/signup/views/Signup";
+// import CreatePassword from "../features/resetPassword/views/CreatePassword";
+// import ForgotPassword from "../features/forgotPassword/ForgotPassword";
+// import ConnectPagesModal from "../features/modals/views/facebookModal/ConnectPagesModal";
+// import Oauth2RedirectComponent from "../features/authentication/Oauth2RedirectComponent";
+// import NotFound from "../features/common/components/NotFound";
+// import AddressInfo  from "../features/signup/views/tabs/AddressInfo"
 
 const NeedHelpComponent = lazy(() => import('../features/needHelp/NeedHelpComponent'));
 const Dashboard = lazy(() => import('../features/dashboard/views/Dashboard.jsx'));
@@ -59,18 +81,19 @@ const App = () => {
                                 <Route path="/dashboard" element={<Dashboard/>}/>
                                 <Route path="/planner" element={<Planner/>}/>
                                 <Route path="/planner/post" element={<CreatePost/>}/>
-                                <Route path="/post/:id" element={<UpdatePost/>}/>
-                                <Route path="/review" element={<Review/>}/>
+                                {/*<Route path="/post/:id" element={<UpdatePost/>}/>*/}
+                                <Route path="/planner/post/:id" element={<UpdatePost/>}/>
+                                <Route path="/published-post" element={<Review/>}/>
                                 <Route path="/image" element={<AI_ImageModal/>}/>
                                 <Route path="/address" element={<AddressForm/>}/>
                                 <Route path="/draft" element={<Draft/>}/>
-                                <Route path="/insights" element={<Insight/>}/>
+                                <Route path="/insight" element={<Insight/>}/>
                                 {/*<Route path="/faq" element={<FaqComponent/>}/>*/}
                                 {/*<Route path="/privacy" element={<PrivacyComponent/>}/>*/}
                                 <Route path="/contact" element={<ContactUs/>}/>
                                 <Route path="/profile" element={<Profile/>}/>
                                 <Route path="/notification" element={<Notification/>}/>
-                                <Route path="/needhelp" element={<NeedHelpComponent/>}/>
+                                <Route path="/help" element={<NeedHelpComponent/>}/>
 
 
                             </Route>

@@ -4,23 +4,24 @@ import jsondata from "../../../locales/data/initialdata.json"
 import {useFormik} from 'formik';
 import {validationSchemas} from '../../../utils/commonUtils';
 import {useLocation, useNavigate} from 'react-router-dom';
-import {useDispatch, useSelector} from 'react-redux';
 import frame from "../../../images/createpassFrame.svg";
 import addyads_img from "../../../images/addylogo.png";
-import {createPassword} from "../../../app/actions/userActions/userActions.js";
+import {useCreatePasswordMutation} from "../../../app/apis/authApi";
+import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
+import {showSuccessToast} from "../../common/components/Toast";
 
 const CreatePassword = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const location = useLocation();
     const queryParamVale = new URLSearchParams(location.search);
-    const navigate = useNavigate()
-
     const userId = queryParamVale.get("id")
     const token = queryParamVale.get("token")
-    const dispatch = useDispatch()
-    const createPasswordReducer=useSelector(state => state.user.createPasswordReducer)
+
+    const navigate = useNavigate()
+
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const[createPassword,createPasswordApi]=useCreatePasswordMutation()
 
     useEffect(() => {
         document.title = "Create Password"
@@ -43,12 +44,18 @@ const CreatePassword = () => {
             customerToken: token
         },
         validationSchema: validationSchemas.createPassword,
-        onSubmit: (values) => {
-            const obj = {
-                newPassword: values.password, customerId: values.customerId, customerToken: values.customerToken,
-            }
-            dispatch(createPassword({values: obj, navigate: navigate}))
-        }
+        onSubmit: async (values) => {
+            await handleRTKQuery(async () => {
+                    return await createPassword({
+                        newPassword: values.password, customerId: values.customerId, customerToken: values.customerToken,
+                    }).unwrap()
+                },
+                () => {
+                    showSuccessToast('Password created successfully');
+                    navigate("/login")
+                })
+
+        },
     });
 
     return (<section>
@@ -94,19 +101,22 @@ const CreatePassword = () => {
                                                 value={formik.values.password}
                                             />
                                             <span className="password-toggle" onClick={togglePasswordVisibility}>
-                                            {showPassword ? (
+                                            {
+                                                showPassword ?
                                                 <h2 className="openEye">
                                                     <i className="fa-solid fa-eye"></i>
                                                 </h2>
-                                            ) : (
+                                             :
                                                 <h2 className="closeEyeIcon">
                                                     <i className="fa fa-eye-slash" aria-hidden="true"/>
                                                 </h2>
-                                            )}
+                                            }
                                             </span>
 
-                                            {formik.touched.password && formik.errors.password ? (
-                                                <p className="error_message">{formik.errors.password}</p>) : null}
+                                            {
+                                                formik.touched.password && formik.errors.password &&
+                                                <p className="error_message">{formik.errors.password}</p>
+                                            }
 
                                         </div>
                                         <div className='form-group '>
@@ -123,22 +133,25 @@ const CreatePassword = () => {
                                             />
 
                                             <span className="password-toggle" onClick={toggleConfirmPasswordVisibility}>
-                                            {showConfirmPassword ? (
+                                            {
+                                                showConfirmPassword ?
                                                 <h2 className="openEye">
                                                     <i className="fa-solid fa-eye "></i>
-                                                </h2>) : (
+                                                </h2> :
                                                 <h2 className="openEye">
                                                     <i className="fa fa-eye-slash" aria-hidden="true"/>
                                                 </h2>
-                                            )}
+                                            }
                                             </span>
 
-                                            {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-                                                <p className="error_message">{formik.errors.confirmPassword}</p>) : null}
+                                            {
+                                                formik.touched.confirmPassword && formik.errors.confirmPassword &&
+                                                <p className="error_message">{formik.errors.confirmPassword}</p>
+                                            }
 
                                         </div>
 
-                                        <button disabled={createPasswordReducer?.loading} className=' login_btn'>{jsondata.createPassword.createpasstext}</button>
+                                        <button disabled={createPasswordApi?.isLoading} className=' login_btn'>{jsondata.createPassword.createpasstext}</button>
 
                                     </form>
                                 </div>

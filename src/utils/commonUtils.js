@@ -34,8 +34,7 @@ export const validationSchemas = {
 
     login: yup.object().shape({
         username: yup.string().required('Username is required'),
-        password: yup.string().required('Password is required'),
-        isAgreedToTermsAndConditions: yup.boolean().oneOf([true], 'You must agree to terms and conditions')
+        password: yup.string().required('Password is required')
     }),
 
     register: yup.object().shape({

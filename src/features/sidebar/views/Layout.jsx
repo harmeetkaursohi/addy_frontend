@@ -4,10 +4,8 @@ import addy_logo from "../../../images/addylogoo.png";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
-import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
-import {getAllConnectedSocialAccountAction} from "../../../app/actions/socialAccountActions/socialAccountActions";
 import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
 import {useAppContext} from "../../common/components/AppProvider.jsx";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
@@ -24,6 +22,8 @@ import {
     isPageInfoAvailableFromSocialMediaFor
 } from "../../../utils/commonUtils";
 import {updatePageAccessTokenByIds} from "../../../app/actions/pageAccessTokenAction/pageAccessTokenAction";
+import {useLazyGetUserInfoQuery} from "../../../app/apis/userApi";
+import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 
 const Layout = () => {
     const navigate = useNavigate();
@@ -32,14 +32,14 @@ const Layout = () => {
     const splitLocation = pathname.split("/");
     const token = getToken();
     const dispatch = useDispatch();
-    const userData = useSelector((state) => state.user.userInfoReducer.data);
-    const loading = useSelector((state) => state.user.userInfoReducer.loading);
+
+    const [getUserInfo, getUserInfoApi] = useLazyGetUserInfoQuery()
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
 
     const facebookPageListReducer = useSelector(state => state.facebook.getFacebookPageReducer);
     const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
     const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
     const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
-    const getAllConnectedSocialAccountData = useSelector((state) => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector((state) => state.facebook.getFacebookConnectedPagesReducer);
 
 
@@ -52,7 +52,7 @@ const Layout = () => {
     }, []);
 
     useEffect(() => {
-        if (getAllConnectedSocialAccountData?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
+        if (getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
             // First Map -> Insert socialMediaType in each page
             // Second Map -> Getting latest imageUrl if Updated or url expired
             // Third Filter -> Filter all the pages whose images we need to updated
@@ -65,7 +65,7 @@ const Layout = () => {
             let allConnectedPages = connectedPagesData?.facebookConnectedPages?.map((page) => {
                 return {
                     ...page,
-                    socialMediaType: getAllConnectedSocialAccountData?.data?.filter(account => account.id === page.socialMediaAccountId)[0]?.provider
+                    socialMediaType: getConnectedSocialAccountApi?.data?.filter(account => account.id === page.socialMediaAccountId)[0]?.provider
                 }
             })
             const connectedSocialMediaTypes = Array.from(new Set(allConnectedPages.map(page => page.socialMediaType)));
@@ -81,28 +81,22 @@ const Layout = () => {
                 }))
             }
         }
-    }, [connectedPagesData, getAllConnectedSocialAccountData])
+    }, [connectedPagesData, getConnectedSocialAccountApi])
 
 
     useEffect(() => {
-        if (token && !userData) {
-            const decodeJwt = decodeJwtToken(token);
-            const requestBody = {
-                customerId: decodeJwt.customerId,
-                token: token,
-            };
-            // Dispatch the API call only when userData is not available
-            dispatch(getUserInfo(requestBody));
+        if (token && !getUserInfoApi.data) {
+            getUserInfo("");
         }
-    }, [token, userData, dispatch]);
+    }, [token, getUserInfoApi.data]);
 
     useEffect(() => {
         const decodeJwt = decodeJwtToken(token);
-        if (getAllConnectedSocialAccountData?.data === undefined || connectedPagesData?.facebookConnectedPages === undefined) {
-            dispatch(getAllConnectedSocialAccountAction({
-                customerId: decodeJwt.customerId,
-                token: token,
-            }));
+        if (getConnectedSocialAccountApi?.data === undefined || connectedPagesData?.facebookConnectedPages === undefined) {
+            // dispatch(getAllConnectedSocialAccountAction({
+            //     customerId: decodeJwt.customerId,
+            //     token: token,
+            // }));
             dispatch(getFacebookConnectedPages({
                 customerId: decodeJwt?.customerId,
                 token: token,
@@ -120,11 +114,11 @@ const Layout = () => {
             confirmButtonText: "Log out",
             confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
-            reverseButtons: true ,
+            reverseButtons: true,
             customClass: {
                 confirmButton: 'confirmButton',
                 cancelButton: 'cancelButton',
-                popup:"animated-popup"
+                popup: "animated-popup"
             }
         }).then((result) => {
             if (result.isConfirmed) {
@@ -136,7 +130,7 @@ const Layout = () => {
 
     return (
         <>
-            <section className="sidebar_container" >
+            <section className="sidebar_container">
 
                 <div
                     className={
@@ -153,8 +147,8 @@ const Layout = () => {
                     </div>
                     <div className="user_profile_outer">
                         <Link to="/dashboard">
-                                <img src={addy_logo} className={`addy_logo ${sidebar?"cropped_logo_outer":""}`}/>
-                           
+                            <img src={addy_logo} className={`addy_logo ${sidebar ? "cropped_logo_outer" : ""}`}/>
+
                         </Link>
 
 
@@ -167,14 +161,16 @@ const Layout = () => {
                             }}>
 
 
-                            {loading ? <SkeletonEffect count={1}/> : userData !== undefined &&
-                                <>
-                                    <img
-                                        src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
-                                        className='profile_img'/>
-                                    <h3 className={sidebar ? "d-none" : ""}>{userData?.fullName || "name"}</h3>
-
-                                </>
+                            {
+                                getUserInfoApi?.isLoading ?
+                                    <SkeletonEffect count={1}/> :
+                                    getUserInfoApi.data !== undefined &&
+                                    <>
+                                        <img
+                                            src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
+                                            className='profile_img'/>
+                                        <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
+                                    </>
                             }
                         </div>
 
@@ -198,7 +194,7 @@ const Layout = () => {
                                     {sidebar ? (
                                         <OverlayTrigger
                                             placement="right"
-                                            delay={{ show: 400, hide: 300 }} 
+                                            delay={{show: 400, hide: 300}}
                                             overlay={
                                                 <Tooltip id="button-tooltip" className="ms-4">
                                                     {item.name}

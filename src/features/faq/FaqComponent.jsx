@@ -1,35 +1,43 @@
 import React, {useState, useEffect} from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import './faq.css'
-import {list} from "../../app/actions/webActions/webActions";
-import {useDispatch, useSelector} from "react-redux";
-import {resetReducers} from "../../app/actions/commonActions/commonActions";
+import {useDispatch} from "react-redux";
 import {useAppContext} from "../common/components/AppProvider";
 import jsondata from "../../locales/data/initialdata.json"
+import {addyApi} from "../../app/addyApi";
+import {useLazyFaqListQuery} from "../../app/apis/webApi";
 const FaqComponent = () => {
+
+    const {sidebar} = useAppContext()
+
     const dispatch = useDispatch();
-    const faqList = useSelector(state => state.web.listReducer);
+
+    const [faqList,getFaqListApi]=useLazyFaqListQuery()
     const [items, setItems] = useState([]);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState("");
     const [searchLoading, setSearchLoading] = useState(false);
+
+
     useEffect(() => {
         handleLoadMore();
         return () => {
-            dispatch(resetReducers({sliceNames: ["listReducer"]}))
+            dispatch(addyApi.util.invalidateTags(["getFaqListApi"]))
         }
     }, [search]);
+
     useEffect(() => {
-        if (faqList.data) {
-            page === 1 ? setItems(faqList.data) : setItems((prevItems) => ([...prevItems, ...faqList.data]))
-            if (faqList.data.length && faqList.hasNextPage) setPage(prevPage => prevPage + 1);
+        if (getFaqListApi.data) {
+            page === 1 ? setItems(getFaqListApi.data) : setItems((prevItems) => ([...prevItems, ...getFaqListApi.data]))
+            if (getFaqListApi.data.length && getFaqListApi.hasNextPage) setPage(prevPage => prevPage + 1);
         }
         setSearchLoading(false)
-    }, [faqList]);
+    }, [getFaqListApi]);
+
     const handleLoadMore = () => {
-        dispatch(list({page, search}));
+        faqList({page:page, search:search})
     }
-    const {sidebar} = useAppContext()
+
 
     return (
         <>
@@ -51,9 +59,9 @@ const FaqComponent = () => {
                                            className="search-faqs-input"/>
                                     <div className="submit_Button_Wrapper">
                                         <button type="submit" className={"cmn_btn_color"}
-                                                disabled={faqList.loading || searchLoading}
-                                                style={{opacity: (faqList.loading || searchLoading) ? "0.6" : "1.0"}}>
-                                            {(faqList.loading || searchLoading) ? (
+                                                disabled={getFaqListApi.isLoading || searchLoading}
+                                                style={{opacity: (getFaqListApi.isLoading || searchLoading) ? "0.6" : "1.0"}}>
+                                            {(getFaqListApi.isLoading || searchLoading) ? (
                                                 <span className="spinner-border spinner-border-sm me-1" role="status"
                                                       aria-hidden="true"/>) : 'Submit'}
                                         </button>
@@ -74,9 +82,11 @@ const FaqComponent = () => {
                                     }
                                 </Accordion> : (<div>FAQ's not found.</div>)}
                                 <div className="load-more-faqs-container">
-                                    {(items.length && faqList.hasNextPage) || (faqList.loading && !faqList.hasNextPage) ?
+                                    {
+                                        (items.length && getFaqListApi.hasNextPage) || (getFaqListApi.isLoading && !getFaqListApi.hasNextPage) ?
                                         <button type="button" className="load-more-faqs-btn" onClick={handleLoadMore}
-                                                disabled={faqList.loading}> {faqList.loading ? 'Loading...' : 'Load More'}</button> : ""}
+                                                disabled={getFaqListApi.isLoading}> {getFaqListApi.isLoading ? 'Loading...' : 'Load More'}</button> : ""
+                                    }
                                 </div>
                             </div>
                         </div>

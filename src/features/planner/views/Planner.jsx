@@ -28,6 +28,7 @@ import ConnectSocialAccountModal from "../../common/components/ConnectSocialAcco
 import Loader from '../../loader/Loader'
 import SkeletonEffect from '../../loader/skeletonEffect/SkletonEffect'
 import {useAppContext} from '../../common/components/AppProvider'
+import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 
 const Planner = () => {
     const dispatch = useDispatch();
@@ -52,9 +53,8 @@ const Planner = () => {
         {title: 'Instagram post', start: new Date().getTime(), imageUrl: instagram_img},
         {title: "Twitter", start: new Date().getTime(), imageUrl: linkedin}
     ]);
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
 
-
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer);
     const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
@@ -108,7 +108,7 @@ const Planner = () => {
 
     const handleCreatePost = () => {
         const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
-        const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
+        const isAnyAccountConnected = getConnectedSocialAccountApi?.data?.length > 0
         if (isAnyPageConnected && isAnyAccountConnected) {
             navigate("/planner/post")
         } else {
@@ -358,7 +358,8 @@ const Planner = () => {
             <section>
                 <div className={sidebar ? 'cmn_container' : "cmn_Padding"}>
                     <div className='cmn_outer'>
-                        <div className={`planner_outer  white_bg_color cmn_height_outer ${isDraftPost? "":"planner_container"}`}>
+                        <div
+                            className={`planner_outer  white_bg_color cmn_height_outer ${isDraftPost ? "" : "planner_container"}`}>
                             <div className='planner_header_outer'>
                                 <div className='planner_header'>
                                     <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
@@ -395,7 +396,7 @@ const Planner = () => {
                                         {Object.keys(SocialAccountProvider).map((cur, index) => {
                                             return (
                                                 <option key={index} value={cur}
-                                                        disabled={getAllConnectedSocialAccountData?.data?.filter(c => c.provider === cur).length === 0}>{SocialAccountProvider[cur].charAt(0).toUpperCase() + SocialAccountProvider[cur].slice(1)}</option>)
+                                                        disabled={getConnectedSocialAccountApi?.data?.filter(c => c.provider === cur).length === 0}>{SocialAccountProvider[cur].charAt(0).toUpperCase() + SocialAccountProvider[cur].slice(1)}</option>)
                                         })}
                                     </select>
 
@@ -426,7 +427,7 @@ const Planner = () => {
                                                 }}
                                                 headerToolbar={
                                                     isDraftPost &&
-                                                    (getAllConnectedSocialAccountData?.loading || getAllConnectedSocialAccountData?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0) ?
+                                                    (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0) ?
                                                         {
                                                             left: "  ",
                                                             center: "",
@@ -489,20 +490,19 @@ const Planner = () => {
                                                         onClick={handleDraft}
                                                         isDisabled={false}
                                                     />
-                                                    {getAllConnectedSocialAccountData?.loading ||
-                                                    connectedPagesData?.loading ? (
-                                                        <span
-                                                            className=" create_post_btn cmn_white_text cursor-pointer text-center">
-                            <Loader className="create-post-loader"/>
-                          </span>
-                                                    ) : (
-                                                        <button
-                                                            onClick={handleCreatePost}
-                                                            className="cmn_btn_color create_post_btn cmn_white_text cursor-pointer"
-                                                        >
-                                                            {jsondata.createpost}
-                                                        </button>
-                                                    )}
+                                                    {
+                                                        (getConnectedSocialAccountApi?.isLoading || connectedPagesData?.loading) ?
+                                                            <span
+                                                                className=" create_post_btn cmn_white_text cursor-pointer text-center"><Loader
+                                                                className="create-post-loader"/></span>
+                                                            :
+                                                            <button
+                                                                onClick={handleCreatePost}
+                                                                className="cmn_btn_color create_post_btn cmn_white_text cursor-pointer"
+                                                            >
+                                                                {jsondata.createpost}
+                                                            </button>
+                                                    }
                                                 </div>
 
                                             </div>

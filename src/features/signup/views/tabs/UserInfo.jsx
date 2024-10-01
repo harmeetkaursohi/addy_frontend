@@ -8,10 +8,12 @@ import Button from "../../../common/components/Button";
 import React, {useEffect} from 'react'
 import {useSelector} from "react-redux";
 import {Industries} from "../../../../utils/contantData";
+import {useSignUpMutation} from "../../../../app/apis/authApi";
 
 
 const UserInfo = ({formData, setFormData, setShowTab}) => {
 
+    const [_, signUpApi] = useSignUpMutation()
     const formik = useFormik({
         initialValues: {
             username: "",
@@ -35,7 +37,6 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
             setShowTab(2);
         },
     });
-    const signUpReducer = useSelector(state => state?.user?.signUpReducer);
 
     useEffect(() => {
         if (formData) {
@@ -200,7 +201,7 @@ const UserInfo = ({formData, setFormData, setShowTab}) => {
                                                 <Button type={"Submit"} text={jsondata.next}/>
                                             </div>
                                         </form>
-                                        <h3>{jsondata.alreadyAccount} <Link to={signUpReducer?.loading ? "/sign-up" : "/"}><span
+                                        <h3>{jsondata.alreadyAccount} <Link to={signUpApi?.isLoading ? "/sign-up" : "/"}><span
                                             className='sign_up'>{jsondata.login}</span></Link></h3>
                                     </div>
                                 </div>

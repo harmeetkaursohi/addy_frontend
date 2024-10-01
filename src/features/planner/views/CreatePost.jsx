@@ -13,7 +13,6 @@ import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
 import {createFacebookPostAction} from "../../../app/actions/postActions/postActions.js";
-import {getUserInfo} from "../../../app/actions/userActions/userActions";
 import {RiDeleteBin5Fill} from "react-icons/ri";
 import {showErrorToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
@@ -33,6 +32,8 @@ import EditImageModal from '../../common/components/EditImageModal.jsx';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 import {useAppContext} from '../../common/components/AppProvider.jsx';
 import {AiOutlineEye} from 'react-icons/ai';
+import {useGetUserInfoQuery} from "../../../app/apis/userApi";
+import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 
 const CreatePost = () => {
 
@@ -40,6 +41,7 @@ const CreatePost = () => {
     const navigate = useNavigate();
     const token = getToken();
 
+    const {data:userData} = useGetUserInfoQuery("")
     const [aiGenerateImageModal, setAIGenerateImageModal] = useState(false);
     const [aiGenerateCaptionModal, setAIGenerateCaptionModal] = useState(false);
     const [aiGenerateHashTagModal, setAIGenerateHashTagModal] = useState(false);
@@ -58,10 +60,10 @@ const CreatePost = () => {
     const [disableVideo, setDisableVideo] = useState(false);
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
 
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
-    const userData = useSelector(state => state.user.userInfoReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
 
 
@@ -78,14 +80,14 @@ const CreatePost = () => {
             setShowConnectAccountModal(false)
         } else {
             const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
-            const isAnyAccountConnected = getAllConnectedSocialAccountData?.data?.length > 0
+            const isAnyAccountConnected = getConnectedSocialAccountApi?.data?.length > 0
             if (isAnyPageConnected && isAnyAccountConnected) {
                 setShowConnectAccountModal(false)
             } else {
                 setShowConnectAccountModal(true)
             }
         }
-    }, [connectedPagesData, getAllConnectedSocialAccountData])
+    }, [connectedPagesData, getConnectedSocialAccountApi])
 
     useEffect(() => {
         if (files && files.length <= 0) {
@@ -211,14 +213,6 @@ const CreatePost = () => {
     };
 
     const areAllOptionsSelected = allOptions.flatMap((group) => group.allOptions).every((option) => selectedOptions.includes(option.pageId));
-
-    useEffect(() => {
-        if (token && !userData) {
-            const decodeJwt = decodeJwtToken(token);
-            const requestBody = {customerId: decodeJwt.customerId, token: token}
-            dispatch(getUserInfo(requestBody))
-        }
-    }, [token, dispatch, userData]);
 
 
     useEffect(() => {
@@ -405,7 +399,7 @@ const CreatePost = () => {
         <>
             <div className={`cmn_container ${sidebar ? "" : "cmn_Padding"}`}>
                 {
-                    (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
+                    (getConnectedSocialAccountApi?.isLoading || connectedPagesData?.loading) ?
                         <CommonLoader></CommonLoader> :
                         <div className="Container">
                             <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
@@ -907,7 +901,8 @@ const CreatePost = () => {
                                                                 let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
                                                                 return (<span key={index}>
-                                                    {selectedPageData &&
+                                                    {
+                                                        selectedPageData &&
                                                         <CommonFeedPreview
                                                             socialMediaType={option.group}
                                                             previewTitle={`${getEnumValue(option.group)} feed Preview`}

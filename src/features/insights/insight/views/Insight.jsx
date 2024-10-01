@@ -55,11 +55,13 @@ import bar_icon from "../../../../images/bar_icon.svg"
 import heart_icon from "../../../../images/heart_icon.svg"
 import PinterestGraph from "../../../react_chart/views/PinterestGraph";
 import {RotatingLines} from "react-loader-spinner";
+import {useGetConnectedSocialAccountQuery} from "../../../../app/apis/socialAccount";
 
 const Insight = () => {
     const dispatch = useDispatch();
     const token = getToken();
     const {sidebar} = useAppContext();
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
 
     const getAllByCustomerIdData = useSelector(state => state.socialAccount.getAllByCustomerIdReducer);
     const getProfileInfoReducer = useSelector(state => state.insight.getProfileInfoReducer);
@@ -68,7 +70,6 @@ const Insight = () => {
     const getDemographicsInsightData = useSelector(state => state.insight.getDemographicsInsightReducer);
     const getPostByPageIdAndPostStatusData = useSelector(state => state.post.getPostByPageIdAndPostStatusReducer);
     const getPostDataWithInsightsData = useSelector((state) => state.insight.getPostDataWithInsightsReducer);
-    const getAllConnectedSocialAccountData = useSelector(state => state.socialAccount.getAllConnectedSocialAccountReducer);
     const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
 
     const [connectedFacebookPages, setConnectedFacebookPages] = useState(null);
@@ -343,9 +344,9 @@ const Insight = () => {
                         <h2 className="insight_heading cmn_text_style">Insights</h2>
                         <h6 className="cmn_small_heading">{jsondata.insight_heading}</h6>
                         {
-                            (getAllConnectedSocialAccountData?.loading || connectedPagesData?.loading) ?
+                            (getConnectedSocialAccountApi?.iLoading || connectedPagesData?.loading) ?
                                 <CommonLoader></CommonLoader> :
-                                getAllConnectedSocialAccountData?.data?.length > 0 &&
+                                getConnectedSocialAccountApi?.data?.length > 0 &&
                                 <div className="insight_inner_content">
                                     <h5 className="Choose_platform_title">Choose PlatForm</h5>
 
@@ -357,7 +358,7 @@ const Insight = () => {
                                                     variant="success"
                                                     id="dropdown-basic"
                                                     className="instagram_dropdown"
-                                                    disabled={!getAllConnectedSocialAccountData?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.FACEBOOK?.toUpperCase())}
+                                                    disabled={!getConnectedSocialAccountApi?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.FACEBOOK?.toUpperCase())}
                                                 >
                                                     <i className={`fa-brands fa-facebook me-2 `}
                                                        style={{color: "#0866ff", fontSize: "20px"}}/>
@@ -403,7 +404,7 @@ const Insight = () => {
                                                     variant="success"
                                                     id="dropdown-basic"
                                                     className="instagram_dropdown"
-                                                    disabled={!getAllConnectedSocialAccountData?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.INSTAGRAM?.toUpperCase())}
+                                                    disabled={!getConnectedSocialAccountApi?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.INSTAGRAM?.toUpperCase())}
                                                 >
                                                     <img src={instagram_img} className="me-2  "
                                                          style={{height: "18px", width: "18px"}}/>
@@ -446,7 +447,7 @@ const Insight = () => {
                                                     variant="success"
                                                     id="dropdown-basic"
                                                     className="instagram_dropdown"
-                                                    disabled={!getAllConnectedSocialAccountData?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.PINTEREST?.toUpperCase())}
+                                                    disabled={!getConnectedSocialAccountApi?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.PINTEREST?.toUpperCase())}
                                                 >
                                                     <i className={`fa-brands fa-pinterest me-2 `}
                                                        style={{color: "#e60023", fontSize: "20px"}}/>
@@ -495,7 +496,7 @@ const Insight = () => {
                                                     variant="success"
                                                     id="dropdown-basic"
                                                     className="instagram_dropdown"
-                                                    disabled={!getAllConnectedSocialAccountData?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.LINKEDIN?.toUpperCase())}
+                                                    disabled={!getConnectedSocialAccountApi?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.LINKEDIN?.toUpperCase())}
                                                 >
                                                     <img src={linkedin_img} className="me-2  "/>
                                                     Linkedin {(!connectedLinkedinPages?.length && getAllByCustomerIdData?.loading) ?
@@ -977,7 +978,7 @@ const Insight = () => {
 
                         }
                         {
-                            getAllConnectedSocialAccountData?.data?.length === 0 &&
+                            getConnectedSocialAccountApi?.data?.length === 0 &&
                             <div className={"no-account-connected-insights-outer mt-4 mb-3"}>
                                 <ConnectSocialMediaAccount image={notConnected_img} message={EmptyInsightGridMessage}/>
                             </div>
