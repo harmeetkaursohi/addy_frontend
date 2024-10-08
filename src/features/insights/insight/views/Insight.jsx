@@ -56,12 +56,14 @@ import heart_icon from "../../../../images/heart_icon.svg"
 import PinterestGraph from "../../../react_chart/views/PinterestGraph";
 import {RotatingLines} from "react-loader-spinner";
 import {useGetConnectedSocialAccountQuery} from "../../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../../app/apis/pageAccessTokenApi";
 
 const Insight = () => {
     const dispatch = useDispatch();
     const token = getToken();
     const {sidebar} = useAppContext();
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
     const getAllByCustomerIdData = useSelector(state => state.socialAccount.getAllByCustomerIdReducer);
     const getProfileInfoReducer = useSelector(state => state.insight.getProfileInfoReducer);
@@ -70,7 +72,6 @@ const Insight = () => {
     const getDemographicsInsightData = useSelector(state => state.insight.getDemographicsInsightReducer);
     const getPostByPageIdAndPostStatusData = useSelector(state => state.post.getPostByPageIdAndPostStatusReducer);
     const getPostDataWithInsightsData = useSelector((state) => state.insight.getPostDataWithInsightsReducer);
-    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
 
     const [connectedFacebookPages, setConnectedFacebookPages] = useState(null);
     const [connectedInstagramPages, setConnectedInstagramPages] = useState(null);
@@ -344,7 +345,7 @@ const Insight = () => {
                         <h2 className="insight_heading cmn_text_style">Insights</h2>
                         <h6 className="cmn_small_heading">{jsondata.insight_heading}</h6>
                         {
-                            (getConnectedSocialAccountApi?.iLoading || connectedPagesData?.loading) ?
+                            (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading) ?
                                 <CommonLoader></CommonLoader> :
                                 getConnectedSocialAccountApi?.data?.length > 0 &&
                                 <div className="insight_inner_content">

@@ -11,6 +11,12 @@ export const handleRTKQuery = async (fetchData, onSuccess, onFailure, onComplete
     }
 }
 
+export const getAuthHeader = () => {
+    return {
+        headers:getAuthorizationHeader()
+    }
+}
+
 export const getAuthorizationHeader = () => {
     return {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
@@ -19,6 +25,6 @@ export const getAuthorizationHeader = () => {
 
 export const handleQueryError = async (queryFulfilled) => {
     queryFulfilled.catch(error => {
-        showErrorToast(error.error.data.message);
+        showErrorToast(error.error.data.message  );
     })
 }

@@ -4,6 +4,7 @@ export const SomethingWentWrongTryLater = "Something went wrong, Please try agai
 export const NoBusinessAccountFound = "No business account found for {0} to connect!"
 export const CouldNotPostComment = "Could not post comment!"
 export const UpdatedSuccessfully = "{0} updated successfully"
+export const DeletedSuccessfully = "{0} deleted successfully"
 export const PostAlreadyDeleted = "Looks like the post has been taken down"
 export const ErrorFetchingPost = "Something went wrong while fetching the post !"
 export const SelectAtleastOnePage = "Please Select at least one page!"

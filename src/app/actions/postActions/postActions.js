@@ -321,6 +321,7 @@ export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', as
 });
 
 export const getAllPlannerPostAction = createAsyncThunk('post/getAllPlannerPostAction', async (data, thunkAPI) => {
+    console.log("here it is requiring")
     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/by-criteria`, data?.query, setAuthenticationHeader(data.token)).then(res => {
         return res.data;
     }).catch(error => {

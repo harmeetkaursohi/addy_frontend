@@ -1,11 +1,12 @@
 import {addyApi} from "../addyApi";
 import {getAuthorizationHeader, handleQueryError} from "../../utils/RTKQueryUtils";
 import {showErrorToast} from "../../features/common/components/Toast";
-import {createAsyncThunk} from "@reduxjs/toolkit";
 import {baseAxios, cleanAndValidateRequestURL} from "../../utils/commonUtils";
-import {setAuthenticationHeader} from "../auth/auth";
+import {  getInstagramBusinessAccounts} from "../../utils/dataFormatterUtils";
 import {exchangeForLongLivedToken, getPageFullInfoByPageAccessToken} from "../../services/facebookService";
 import {SocialAccountProvider} from "../../utils/contantData";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {setAuthenticationHeader} from "../auth/auth";
 
 
 const baseUrl=`${import.meta.env.VITE_APP_API_BASE_URL}`
@@ -46,6 +47,44 @@ export const socialAccount = addyApi.injectEndpoints({
                 await handleQueryError(queryFulfilled)
             },
         }),
+        getAllInstagramBusinessAccounts: build.query({
+            query: (accessToken) => {
+                return {
+                    url:`${fbBaseUrl}/me/accounts?access_token=${accessToken}&fields=instagram_business_account{id,name,username,profile_picture_url},id`,
+                    method: 'GET'
+                };
+            },
+            async transformResponse(response, meta, arg) {
+                return getInstagramBusinessAccounts(response.data);
+            },
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
+        getAllPinterestBoards: build.query({
+            query: (socialMediaAccountId) => {
+                return {
+                    url:`${baseUrl}/pinterest/boards/${socialMediaAccountId}`,
+                    method: 'GET',
+                    headers:getAuthorizationHeader()
+                };
+            },
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
+        getAllLinkedinPages: build.query({
+            query: (data) => {
+                return {
+                    url:`${baseUrl}/linkedin/organizationAcls?q=${data?.q}&role=${data?.role}&state=${data?.state}`,
+                    method: 'GET',
+                    headers:getAuthorizationHeader()
+                };
+            },
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
         connectSocialAccount: build.mutation({
             query: (requestBody) => {
                 return {
@@ -75,30 +114,13 @@ export const socialAccount = addyApi.injectEndpoints({
         }),
     }),
 });
-export const getAllFacebookPages = createAsyncThunk('facebook/getAllFacebookPages', async (data, thunkAPI) => {
-        try {
-            const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data.providerId}`;
-            const path = `/accounts`;
-            const response = await baseAxios.get(cleanAndValidateRequestURL(baseUrl, path, '', data.accessToken))
-            const pageInfoList = [];
-            for (let obj of response.data.data) {
-                const pageInfoResponse = await getPageFullInfoByPageAccessToken(obj.access_token);
-                const longLivedToken = await exchangeForLongLivedToken(pageInfoResponse?.data?.access_token,SocialAccountProvider.FACEBOOK);
-                pageInfoResponse.data.access_token = longLivedToken;
-                pageInfoList.push(pageInfoResponse.data);
-            }
-            return pageInfoList;
-        } catch (error) {
-            showErrorToast(error.response.data.message);
-            return thunkAPI.rejectWithValue(error.response);
-        }
-    }
-);
 
 export const {
     useGetConnectedSocialAccountQuery,
-    useLazyGetAllFacebookPagesQuery,
     useGetAllFacebookPagesQuery,
+    useGetAllInstagramBusinessAccountsQuery,
+    useGetAllPinterestBoardsQuery,
+    useGetAllLinkedinPagesQuery,
     useConnectSocialAccountMutation,
     useDisconnectSocialAccountMutation,
 } = socialAccount

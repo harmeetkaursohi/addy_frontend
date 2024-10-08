@@ -8,17 +8,10 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useRef, useState} from "react";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {
-    getAllSocialMediaPostsByCriteria,
-    getAllPlannerPostAction,
-    getAllPostsForPlannerAction,
-    getPlannerPostCountAction,
-} from "../../../app/actions/postActions/postActions";
-import {useDispatch, useSelector} from "react-redux";
-import {
     isPostDatesOnSameDayOrInFuture,
     computeAndReturnPlannerEvent,
     dateFormat,
-    computeImageURL
+    computeImageURL, isNullOrEmpty
 } from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
@@ -29,85 +22,97 @@ import Loader from '../../loader/Loader'
 import SkeletonEffect from '../../loader/skeletonEffect/SkletonEffect'
 import {useAppContext} from '../../common/components/AppProvider'
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
+import {
+    useGetPlannerPostsCountQuery,
+    useGetPostsForPlannerQuery, useGetSocialMediaPostsByCriteriaQuery,
+} from "../../../app/apis/postApi";
 
 const Planner = () => {
-    const dispatch = useDispatch();
-    const token = getToken();
-    const navigate = useNavigate();
-    const {sidebar} = useAppContext();
 
-    const [isLoading, setIsLoading] = useState(false);
+    const {sidebar} = useAppContext();
+    const token = getToken();
+    const decodeJwt = decodeJwtToken(token);
+    const navigate = useNavigate();
     const calendarRef = useRef(null);
+
     const [baseSearchQuery, setBaseSearchQuery] = useState({
         postStatus: ["SCHEDULED", "PUBLISHED"],
         socialMediaTypes: Object.keys(SocialAccountProvider)
     });
+    const [showMorePlannerModalSearchQuery, setShowMorePlannerModalSearchQuery] = useState({
+        postStatus: ["PUBLISHED", "SCHEDULED"],
+        batchIds: [],
+        plannerCardDate: null,
+        socialMediaTypes: [],
+        period: "DAY"
+    });
+    const [draftSearchQuery, setDraftSearchQuery] = useState({
+        postStatus: ["DRAFT"],
+        plannerCardDate: null,
+        period: "MONTH",
+    });
     const [isDraftPost, setDraftPost] = useState(false);
     const [showMorePlannerModel, setShowMorePlannerModel] = useState(false);
-    const [plannerPosts, setPlannerPosts] = useState([]);
     const [eventDate, setEventDate] = useState(null);
-    const [batchIds, setBatchIds] = useState([]);
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
 
     const [events, setEvents] = useState([
         {title: 'Instagram post', start: new Date().getTime(), imageUrl: instagram_img},
         {title: "Twitter", start: new Date().getTime(), imageUrl: linkedin}
     ]);
+
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
-    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
-    const getAllPostsForPlannerData = useSelector(state => state.post.getAllPostsForPlannerReducer);
-    const getPlannerPostCountReportData = useSelector(state => state.post.getPlannerPostCountReportReducer);
+    const calendarApi = calendarRef?.current?.getApi();
+    const view = calendarApi?.view;
+    const startDate = view?.currentStart;
+    const endDate = view?.currentEnd;
 
-    const getAllPlannerPostsData = useSelector(state => state.post.getAllPlannerPostReducer);
+    const getPostsForPlannerApi = useGetPostsForPlannerQuery({
+        ...baseSearchQuery,
+        customerId: decodeJwt.customerId,
+        plannerCardDate: baseSearchQuery.plannerCardDate ? baseSearchQuery.plannerCardDate.toISOString() : null,
+        creationDateRange: {
+            startDate: startDate?.toISOString(),
+            endDate: endDate?.toISOString()
+        }
+    }, {skip: isNullOrEmpty(calendarRef) || isNullOrEmpty(baseSearchQuery) || isNullOrEmpty(startDate) || isNullOrEmpty(endDate) || isDraftPost})
+
+    const getPlannerPostsCountApi = useGetPlannerPostsCountQuery({
+        ...baseSearchQuery,
+        customerId: decodeJwt.customerId,
+        plannerCardDate: baseSearchQuery.plannerCardDate ? baseSearchQuery.plannerCardDate.toISOString() : null,
+        creationDateRange: {
+            startDate: startDate?.toISOString(),
+            endDate: endDate?.toISOString()
+        }
+    }, {skip: isNullOrEmpty(calendarRef) || isNullOrEmpty(baseSearchQuery) || isNullOrEmpty(startDate) || isNullOrEmpty(endDate) || isDraftPost})
 
 
     useEffect(() => {
         document.title = isDraftPost ? 'Draft' : 'Planner';
     }, []);
 
-
     useEffect(() => {
-        if (calendarRef.current) {
-            const decodeJwt = decodeJwtToken(token);
-            const calendarApi = calendarRef.current.getApi();
-            const view = calendarApi.view;
-            const startDate = view.currentStart;
-            const endDate = view.currentEnd;
-
-            const requestBody = {
-                token: token,
-                query: {
-                    ...baseSearchQuery,
-                    customerId: decodeJwt.customerId,
-                    creationDateRange: {
-                        startDate: startDate,
-                        endDate: endDate
-                    }
-                }
-            }
-
-            dispatch(getAllPostsForPlannerAction(requestBody));
-            dispatch(getPlannerPostCountAction(requestBody));
+        if (calendarRef?.current) {
+            // Re-render the component once calenderRef is set so that Apis will be hit with selected calendar time
+            setBaseSearchQuery({
+                ...baseSearchQuery
+            })
         }
     }, []);
 
-
     useEffect(() => {
-        if (!getAllPostsForPlannerData.loading && getAllPostsForPlannerData?.data) {
-            setEvents(computeAndReturnPlannerEvent(getAllPostsForPlannerData?.data));
+        if (!getPostsForPlannerApi.isLoading && getPostsForPlannerApi?.data) {
+            setEvents(computeAndReturnPlannerEvent(getPostsForPlannerApi?.data));
         }
-    }, [getAllPostsForPlannerData]);
+    }, [getPostsForPlannerApi]);
 
-
-    useEffect(() => {
-        if (getAllPlannerPostsData?.data) {
-            setPlannerPosts(Object.values(getAllPlannerPostsData?.data))
-        }
-    }, [getAllPlannerPostsData]);
 
     const handleCreatePost = () => {
-        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
+        const isAnyPageConnected = getAllConnectedPagesApi?.data?.length > 0
         const isAnyAccountConnected = getConnectedSocialAccountApi?.data?.length > 0
         if (isAnyPageConnected && isAnyAccountConnected) {
             navigate("/planner/post")
@@ -115,7 +120,6 @@ const Planner = () => {
             setShowConnectAccountModal(true)
         }
     }
-
 
     // render event content
     const renderCalendarCards = ({event}) => {
@@ -125,29 +129,25 @@ const Planner = () => {
         const date = new Date(dateString);
         const dayOfMonth = date.getDate();
 
-
         let backgroundColor
         let border
         let textColor
-        if (dayOfMonth === 1 || dayOfMonth === 28 || dayOfMonth === 21 || dayOfMonth === 17 || dayOfMonth === 13 || dayOfMonth === 5 || dayOfMonth === 9) {
+        if ([1, 5, 9, 13, 17, 21, 28].includes(dayOfMonth)) {
             backgroundColor = '#fce5d6';
             border = "4px solid #B94D09";
             textColor = "#782E00"
-
-        } else if (dayOfMonth === 8 || dayOfMonth === 30 || dayOfMonth === 25 || dayOfMonth === 22 || dayOfMonth === 18 || dayOfMonth === 6 || dayOfMonth === 14 || dayOfMonth === 26 || dayOfMonth === 3) {
+        } else if ([3, 6, 8, 14, 18, 22, 25, 26, 30].includes(dayOfMonth)) {
             backgroundColor = '#defcd6';
             border = "4px solid #56B909";
             textColor = "#023E01"
-        } else if (dayOfMonth === 27 || dayOfMonth === 4 || dayOfMonth === 23 || dayOfMonth === 19 || dayOfMonth === 12 || dayOfMonth === 15 || dayOfMonth === 10 || dayOfMonth === 31) {
+        } else if ([4, 10, 12, 15, 19, 23, 27, 31].includes(dayOfMonth)) {
             backgroundColor = '#d6f3fc';
             border = "4px solid  #098FB9";
             textColor = "#033C48"
-
         } else {
             backgroundColor = '#fcd6d6';
             border = "4px solid #B90909";
             textColor = "#780000"
-
         }
 
 
@@ -189,7 +189,7 @@ const Planner = () => {
                     {/*})}*/}
                 </div>
                 {
-                    !getAllPostsForPlannerData?.loading && !getPlannerPostCountReportData?.loading &&
+                    !getPostsForPlannerApi?.isLoading && !getPlannerPostsCountApi?.isLoading &&
                     <button className="createPost_btn crate_btn ms-0 p-0 w-100 planner_view_more_btn"
                             onClick={(e) => handleShowMorePostModal(event)}
                     >
@@ -203,17 +203,16 @@ const Planner = () => {
             </div>)
     }
 
-
     const customDayHeaderContent = (args) => {
         let days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'];
         return days[args.date.getDay()];
     };
 
-
     const customHeaderClick = (eventType) => {
         if (eventType === "Prev") {
             calendarRef?.current?.getApi().prev();
-        } else if (eventType === "Next") {
+        }
+        else if (eventType === "Next") {
             calendarRef?.current?.getApi().next();
         }
         let inst = new Date(calendarRef?.current?.getApi()?.currentData?.viewTitle.toString());
@@ -235,13 +234,11 @@ const Planner = () => {
             },
             plannerCardDate: inst
         })
+        setDraftSearchQuery({
+            ...draftSearchQuery,
+            plannerCardDate: inst
+        })
     };
-
-    const handleDraft = (e) => {
-        setIsLoading(true);
-        setDraftPost(!isDraftPost);
-        setIsLoading(false);
-    }
 
     const handleShowMorePostModal = (event) => {
         const startDate = event.start;
@@ -256,72 +253,23 @@ const Planner = () => {
         const plannerPostList = {};
         const batchIdList = [];
 
-        Object.keys(getAllPostsForPlannerData?.data)?.filter((key) => {
+        Object.keys(getPostsForPlannerApi?.data)?.filter((key) => {
             const datePart = key.substring(0, 10);
             if (datePart === targetDate.substring(0, 10)) {
-                plannerPostList.plannerPostData = getAllPostsForPlannerData.data[key]
+                plannerPostList.plannerPostData = getPostsForPlannerApi.data[key]
             }
         })
-
         Object.keys(plannerPostList.plannerPostData)?.map((batchId) => {
             batchIdList.push(batchId);
         })
-
-        setBatchIds(batchIdList);
-
-
-        dispatch(getAllPlannerPostAction({
-            token: token,
-            query: JSON.parse(JSON.stringify({
-                postStatus: ["PUBLISHED", "SCHEDULED"],
-                batchIds: batchIdList,
-                plannerCardDate: targetDate,
-                socialMediaTypes: baseSearchQuery?.socialMediaTypes || [],
-                period: "DAY"
-            }))
-        }));
-
+        setShowMorePlannerModalSearchQuery({
+            ...showMorePlannerModalSearchQuery,
+            batchIds: batchIdList,
+            plannerCardDate: targetDate,
+            socialMediaTypes: baseSearchQuery?.socialMediaTypes || [],
+        })
         setShowMorePlannerModel(true);
     };
-
-
-    useEffect(() => {
-
-        if (Object.keys(baseSearchQuery).length > 0) {
-
-            if (isDraftPost) {
-                dispatch(getAllSocialMediaPostsByCriteria({
-                    token: token,
-                    query: {postStatus: ["DRAFT"], plannerCardDate: baseSearchQuery?.plannerCardDate, period: "MONTH"}
-                }));
-            } else {
-
-                const decodeJwt = decodeJwtToken(token);
-                const calendarApi = calendarRef.current.getApi();
-                const view = calendarApi.view;
-                const startDate = view.currentStart;
-                const endDate = view.currentEnd;
-
-                const requestBody = {
-                    token: token,
-                    query: {
-                        ...baseSearchQuery,
-                        customerId: decodeJwt.customerId,
-                        socialMediaTypes: baseSearchQuery?.socialMediaTypes || [],
-                        creationDateRange: {
-                            startDate: startDate,
-                            endDate: endDate
-                        }
-                    }
-                }
-
-                dispatch(getAllPostsForPlannerAction(requestBody));
-                dispatch(getPlannerPostCountAction(requestBody));
-            }
-
-
-        }
-    }, [baseSearchQuery, isDraftPost]);
 
     const handleSocialMediaFilters = (curKey) => {
 
@@ -353,6 +301,15 @@ const Planner = () => {
         }
 
     }
+
+    const handleDraft = () => {
+        setDraftSearchQuery({
+            ...draftSearchQuery,
+            plannerCardDate: baseSearchQuery?.plannerCardDate?.toISOString()
+        })
+        setDraftPost(!isDraftPost);
+    }
+
     return (
         <>
             <section>
@@ -407,11 +364,7 @@ const Planner = () => {
                                 <div className="row ">
                                     <div className="col-lg-9 col-md-12 col-sm-12">
                                         <div
-                                            className={`${
-                                                isDraftPost
-                                                    ? "calendar-container hidden"
-                                                    : "CalenderOuter_Wrapper"
-                                            }`}>
+                                            className={`${isDraftPost ? "calendar-container hidden" : "CalenderOuter_Wrapper"}`}>
                                             <FullCalendar
                                                 ref={calendarRef}
                                                 plugins={[dayGridPlugin]}
@@ -427,7 +380,7 @@ const Planner = () => {
                                                 }}
                                                 headerToolbar={
                                                     isDraftPost &&
-                                                    (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.data?.length === 0 || connectedPagesData?.loading || connectedPagesData?.facebookConnectedPages?.length === 0) ?
+                                                    (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.data?.length === 0) ?
                                                         {
                                                             left: "  ",
                                                             center: "",
@@ -468,11 +421,7 @@ const Planner = () => {
                                         </div>
                                     </div>
                                     <div className="col-lg-3 col-md-12 col-sm-12">
-                                        <div className={`${
-                                            isDraftPost
-                                                ? " d-none"
-                                                : "planner_create_post_container"
-                                        }`}>
+                                        <div className={`${isDraftPost ? " d-none" : "planner_create_post_container"}`}>
                                             <div className="planner_create_post">
                                                 <h3 className="planner_create_post_heading">Create a post </h3>
                                                 <p>
@@ -486,12 +435,11 @@ const Planner = () => {
                                                                 : jsondata.draftPost
                                                         }
                                                         className={"draft_btn  cmn_white_text"}
-                                                        isLoading={isLoading}
                                                         onClick={handleDraft}
                                                         isDisabled={false}
                                                     />
                                                     {
-                                                        (getConnectedSocialAccountApi?.isLoading || connectedPagesData?.loading) ?
+                                                        (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading) ?
                                                             <span
                                                                 className=" create_post_btn cmn_white_text cursor-pointer text-center"><Loader
                                                                 className="create-post-loader"/></span>
@@ -510,7 +458,7 @@ const Planner = () => {
                                                 <h3 className="planner_create_post_heading pb-2">Post Track</h3>
                                                 {isDraftPost === false && <ul className="schdeuled_post_list">
 
-                                                    {(getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data)) ? (<></>) : (<>
+                                                    {(getPlannerPostsCountApi?.data && Object.keys(getPlannerPostsCountApi.data)) ? (<></>) : (<>
 
                                                         <li>
                                                             <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
@@ -523,12 +471,12 @@ const Planner = () => {
                                                             <h3><Loader/></h3></li>
 
                                                     </>)}
-                                                    {getPlannerPostCountReportData?.data && Object.keys(getPlannerPostCountReportData.data).map((key, index) => {
+                                                    {getPlannerPostsCountApi?.data && Object.keys(getPlannerPostsCountApi.data).map((key, index) => {
 
                                                         return (
                                                             <li key={index}>
                                                                 <h4>{key}</h4>
-                                                                <h3>{getPlannerPostCountReportData.data[key]}</h3></li>
+                                                                <h3>{getPlannerPostsCountApi.data[key]}</h3></li>
                                                         )
                                                     })}
 
@@ -581,18 +529,17 @@ const Planner = () => {
 
                             {
                                 isDraftPost === true &&
-                                <ParentDraftComponent setDraftPost={setDraftPost} reference={"PLANNER"}/>
+                                <ParentDraftComponent searchQuery={draftSearchQuery} setDraftPost={setDraftPost} reference={"PLANNER"}/>
                             }
 
 
                             {
                                 showMorePlannerModel &&
                                 <CommonShowMorePlannerModel
-                                    commonShowMorePlannerModal={showMorePlannerModel}
-                                    setCommonShowMorePlannerModal={setShowMorePlannerModel}
-                                    plannerPosts={plannerPosts}
+                                    showCommonShowMorePlannerModal={showMorePlannerModel}
+                                    setShowCommonShowMorePlannerModal={setShowMorePlannerModel}
                                     eventDate={eventDate}
-                                    baseSearchQuery={baseSearchQuery}
+                                    showMorePlannerModalSearchQuery={showMorePlannerModalSearchQuery}
                                 />
                             }
 
@@ -601,8 +548,10 @@ const Planner = () => {
                 </div>
             </section>
             {
-                showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal}
-                                                                      setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
+                showConnectAccountModal &&
+                <ConnectSocialAccountModal
+                    showModal={showConnectAccountModal}
+                    setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
             }
             {/* {showPost && <IndividualPostModal show={showPost} setShow={setShowPost}/>} */}
 

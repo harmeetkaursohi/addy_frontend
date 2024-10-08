@@ -1,62 +1,63 @@
 import Modal from 'react-bootstrap/Modal';
 import './CommonShowMorePlannerModal.css'
 import {
-    computeImageURL,
-    handleSeparateCaptionHashtag,
+    computeImageURL, formatMessage,
+    handleSeparateCaptionHashtag, isNullOrEmpty,
     isPlannerPostEditable,
     sortByKey
 } from "../../../utils/commonUtils";
 import CommonSlider from "./CommonSlider";
 import CommonLoader from "./CommonLoader";
 import {useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
-import {
-    deletePostByBatchIdAction, deletePostFromPage, getAllPostsForPlannerAction, getPlannerPostCountAction
-} from "../../../app/actions/postActions/postActions";
-import {showErrorToast, showSuccessToast} from "./Toast";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth";
+import { showSuccessToast} from "./Toast";
 import Swal from "sweetalert2";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import default_user_icon from "../../../images/default_user_icon.svg"
 import {RiDeleteBin7Line} from "react-icons/ri";
+import {
+    useDeletePostByIdMutation,
+    useDeletePostFromPagesByPageIdsMutation,
+    useGetSocialMediaPostsByCriteriaQuery
+} from "../../../app/apis/postApi";
+import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
+import {DeletedSuccessfully} from "../../../utils/contantData";
+import {addyApi} from "../../../app/addyApi";
 
 
 const CommonShowMorePlannerModal = ({
-                                        commonShowMorePlannerModal = null,
-                                        setCommonShowMorePlannerModal = null,
-                                        plannerPosts,
+                                        showCommonShowMorePlannerModal,
+                                        setShowCommonShowMorePlannerModal,
                                         eventDate,
-                                        baseSearchQuery
+                                        showMorePlannerModalSearchQuery,
                                     }) => {
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const token = getToken();
-    const getAllPlannerPostsDataLoading = useSelector(state => state.post.getAllPlannerPostReducer.loading);
-    const deletePostFromPageData = useSelector(state => state.post.deletePostFromPageReducer);
-    const [deleteBatchIdRef, setDeleteBatchIdRef] = useState(null);
+
+    const [posts, setPosts] = useState([])
+
+    const [postToDeleteId, setPostToDeleteId] = useState(null);
     const [deletedPostsIds, setDeletedPostsIds] = useState([]);
-    const [removedPostPagesRef, setRemovedPostPagesRef] = useState(null);
+    const [postPageToRemove, setPostPageToRemove] = useState(null);
     const [removedPostPages, setRemovedPostPages] = useState([]);
 
-    useEffect(() => {
-        if (removedPostPagesRef !== null && removedPostPagesRef !== undefined) {
-            dispatch(deletePostFromPage({
-                token: token,
-                postId: removedPostPagesRef?.postId,
-                pageIds: [removedPostPagesRef?.pageId]
-            })).then(res => {
-                if (res.meta.requestStatus === "fulfilled") {
-                    setRemovedPostPages([...removedPostPages, {
-                        postId: removedPostPagesRef?.postId,
-                        pageId: removedPostPagesRef?.pageId
-                    }]);
-                }
-                setRemovedPostPagesRef(null)
-            })
-        }
-    }, [removedPostPagesRef])
+    const [deletePostById, deletePostApi] = useDeletePostByIdMutation()
+    const [deletePostFromPagesByPageIds, deletePostFromPagesApi] = useDeletePostFromPagesByPageIdsMutation()
+    const postsApi = useGetSocialMediaPostsByCriteriaQuery(showMorePlannerModalSearchQuery, {skip: isNullOrEmpty(showMorePlannerModalSearchQuery?.batchIds) || isNullOrEmpty(showMorePlannerModalSearchQuery?.plannerCardDate)})
 
+    useEffect(() => {
+        if (!isNullOrEmpty(postsApi?.data)) {
+            setPosts(Object.values(postsApi?.data))
+        }
+    }, [postsApi])
+
+    useEffect(() => {
+        if (postPageToRemove !== null && postPageToRemove !== undefined) {
+            handleDeletePostFromPage()
+        }
+    }, [postPageToRemove])
 
     const handleDeletePlannerPost = (e, postId) => {
         e.preventDefault();
@@ -68,69 +69,74 @@ const CommonShowMorePlannerModal = ({
                 showCancelButton: true,
                 confirmButtonText: 'Delete',
                 cancelButtonText: 'Cancel',
-                reverseButtons:true,
+                reverseButtons: true,
                 confirmButtonColor: "#F07C33",
                 cancelButtonColor: "#E6E9EC",
                 customClass: {
                     confirmButton: 'custom-confirm-button-class',
                     cancelButton: 'custom-cancel-button-class'
                 }
-            }).then((result) => {
+            }).then(async (result) => {
                 if (result.isConfirmed) {
-                    setDeleteBatchIdRef(postId);
-                    dispatch(deletePostByBatchIdAction({postId: postId, token: token}))
-                        .then((response) => {
-                            if (response.meta.requestStatus === "fulfilled") {
-                                showSuccessToast("Posts has been deleted successfully");
-                                setDeletedPostsIds([...deletedPostsIds, postId])
-                                setDeleteBatchIdRef(null);
-                                if (plannerPosts?.length === deletedPostsIds?.length + 1) {
-                                    getUpdatedPlannerData();
-                                    setCommonShowMorePlannerModal(false);
-                                }
-
+                    setPostToDeleteId(postId)
+                    await handleRTKQuery(
+                        async () => {
+                            return await deletePostById(postId).unwrap()
+                        },
+                        () => {
+                            showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]))
+                            setDeletedPostsIds([...deletedPostsIds, postId])
+                            // If all the posts are deleted then close the modal and reload planner data
+                            if (posts?.length === deletedPostsIds?.length + 1) {
+                                getUpdatedPlannerData();
+                                setShowCommonShowMorePlannerModal(false);
                             }
-                        })
-                        .catch((error) => {
-                            setDeleteBatchIdRef(null);
-                            showErrorToast(error.response.data.message);
+                        },
+                        null,
+                        () => {
+                            setPostToDeleteId(null);
                         });
                 }
             });
         }
     }
+    const handleDeletePostFromPage = async () => {
+        await handleRTKQuery(
+            async () => {
+                return await deletePostFromPagesByPageIds({
+                    postId: postPageToRemove?.postId,
+                    pageIds: [postPageToRemove?.pageId]
+                }).unwrap()
+            },
+            () => {
+                setRemovedPostPages([...removedPostPages, {
+                    postId: postPageToRemove?.postId,
+                    pageId: postPageToRemove?.pageId
+                }]);
+            },
+            null,
+            () => {
+                setPostPageToRemove(null)
+            });
 
-    useEffect(() => {
-        return () => {
-            setDeletedPostsIds([])
-            setRemovedPostPages([])
-        }
-    }, [])
+    }
 
     const getUpdatedPlannerData = () => {
-        const decodeJwt = decodeJwtToken(token);
-        const requestBody = {
-            customerId: decodeJwt.customerId,
-            token: token,
-            query: baseSearchQuery
+        dispatch(addyApi.util.invalidateTags(["getPostsForPlannerApi", "getPlannerPostsCountApi","getSocialMediaPostsByCriteriaApi"]))
+    }
+
+    const handleCloseModal = () => {
+        if(deletedPostsIds.length > 0 || removedPostPages.length > 0){
+            getUpdatedPlannerData();
         }
-        dispatch(getAllPostsForPlannerAction(requestBody));
-        dispatch(getPlannerPostCountAction(requestBody));
+        setShowCommonShowMorePlannerModal(false);
     }
-
-    const handleCloseModal = (e) => {
-        e.preventDefault();
-        deletedPostsIds.length > 0 && getUpdatedPlannerData();
-        setCommonShowMorePlannerModal(false);
-    }
-    const handleClose = () => setCommonShowMorePlannerModal(false);
-
 
     return (
         <>
             <div className='generate_ai_img_container '>
-                <Modal show={commonShowMorePlannerModal}
-                       onHide={handleClose}
+                <Modal show={showCommonShowMorePlannerModal}
+                       onHide={handleCloseModal}
                        className={"alert_modal_body "}
                        dialogClassName='modal-lg plannner_modal'
                        backdrop="static"
@@ -142,17 +148,16 @@ const CommonShowMorePlannerModal = ({
 
                             <div className="more_plans">
                                 <h2 className="text-center">{eventDate}</h2>
-                                <div className={getAllPlannerPostsDataLoading ? "" : "more_plans_wrapper"}>
+                                <div className={postsApi?.isLoading ? "" : "more_plans_wrapper"}>
                                     {/*map starts here for gird*/}
                                     {
-                                        getAllPlannerPostsDataLoading ? (
-                                                <CommonLoader/>) :
-                                            sortByKey(plannerPosts, "feedPostDate")?.map((plannerPost, index) => {
+                                        postsApi?.isLoading ? <CommonLoader/> :
+                                            sortByKey(posts, "feedPostDate")?.map((plannerPost, index) => {
 
                                                 return deletedPostsIds.includes(plannerPost?.id) ? <></> :
 
                                                     <div
-                                                        className={"more_plans_grid mb-3 " + (deleteBatchIdRef === plannerPost?.id ? "disable_more_plans_grid" : "")}
+                                                        className={"more_plans_grid mb-3 " + (postToDeleteId === plannerPost?.id ? "disable_more_plans_grid" : "")}
                                                         key={index}>
                                                         <div className="plan_grid_img">
                                                             {plannerPost?.attachments &&
@@ -176,13 +181,12 @@ const CommonShowMorePlannerModal = ({
                                                                             plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
                                                                             plannerPost?.postPages.map((curPage, index) => {
                                                                                 return removedPostPages?.some(removedPostPages => removedPostPages?.postId === plannerPost?.id && removedPostPages?.pageId === curPage?.pageId) ? <></> : (
-                                                                                    (removedPostPagesRef?.postId === plannerPost.id && removedPostPagesRef?.pageId === curPage?.pageId) ?
-                                                                                        <SkeletonEffect
-                                                                                            count={1}></SkeletonEffect>
+                                                                                    (postPageToRemove?.postId === plannerPost.id && postPageToRemove?.pageId === curPage?.pageId) ?
+                                                                                        <SkeletonEffect count={1}></SkeletonEffect>
                                                                                         : <div key={index}
                                                                                                className={"planner_tag_container"}>
                                                                                             {
-                                                                                                deleteBatchIdRef === plannerPost?.id ?
+                                                                                                postToDeleteId === plannerPost?.id ?
                                                                                                     <SkeletonEffect
                                                                                                         count={1}></SkeletonEffect> :
                                                                                                     <div
@@ -192,7 +196,7 @@ const CommonShowMorePlannerModal = ({
                                                                                                             className="plan_tag_img position-relative">
                                                                                                             <img
                                                                                                                 className="plan_image"
-                                                                                                                src={curPage?.imageURL ||default_user_icon}
+                                                                                                                src={curPage?.imageURL || default_user_icon}
                                                                                                                 alt="fb"/>
                                                                                                             <img
                                                                                                                 className="plan_social_img"
@@ -204,7 +208,7 @@ const CommonShowMorePlannerModal = ({
                                                                                                     </div>
                                                                                             }
                                                                                             {
-                                                                                                (deleteBatchIdRef !== plannerPost?.id && curPage?.errorInfo?.isDeletedFromSocialMedia) &&
+                                                                                                (postToDeleteId !== plannerPost?.id && curPage?.errorInfo?.isDeletedFromSocialMedia) &&
                                                                                                 <>
                                                                                                     <div
                                                                                                         className={"post-deleted-tag"}> Deleted
@@ -212,7 +216,7 @@ const CommonShowMorePlannerModal = ({
                                                                                                             !plannerPost?.postPages?.every(postPage => postPage?.errorInfo?.isDeletedFromSocialMedia) &&
                                                                                                             <RiDeleteBin7Line
                                                                                                                 onClick={() => {
-                                                                                                                    !deletePostFromPageData?.loading && setRemovedPostPagesRef({
+                                                                                                                    !deletePostFromPagesApi?.isLoading && setPostPageToRemove({
                                                                                                                         postId: plannerPost?.id,
                                                                                                                         pageId: curPage?.pageId
                                                                                                                     })
@@ -257,7 +261,7 @@ const CommonShowMorePlannerModal = ({
                                                                 </div>
                                                             </div>
                                                             {
-                                                                deleteBatchIdRef === plannerPost?.id ?
+                                                                postToDeleteId === plannerPost?.id ?
                                                                     <SkeletonEffect count={1}></SkeletonEffect> :
                                                                     <>
                                                                         <p className="mt-2 mb-1">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.caption || "" : ""}</p>

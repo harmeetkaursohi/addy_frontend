@@ -1,20 +1,16 @@
 import './DraftComponent.css'
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {
-    computeImageURL,
-    handleSeparateCaptionHashtag,
+    computeImageURL, formatMessage,
+    handleSeparateCaptionHashtag, isNullOrEmpty,
 } from "../../../utils/commonUtils";
 import {formatDate} from "@fullcalendar/core";
 import CommonSlider from "../../common/components/CommonSlider";
 import {useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import jsondata from "../../../locales/data/initialdata.json";
 import {useEffect, useState} from "react";
-import {
-    deletePostByBatchIdAction, getAllSocialMediaPostsByCriteria
-} from "../../../app/actions/postActions/postActions";
-import {getToken} from "../../../app/auth/auth";
-import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
+import { showSuccessToast} from "../../common/components/Toast";
 import noPostScheduled from "../../../images/no_post_scheduled.svg";
 import CommonLoader from "../../common/components/CommonLoader";
 import Swal from "sweetalert2";
@@ -22,18 +18,19 @@ import {useAppContext} from '../../common/components/AppProvider';
 import delete_img from "../../../images/trash_img.svg"
 import noAccountData from "../../../images/no_connected_acc_img.svg"
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+import {useDeletePostByIdMutation} from "../../../app/apis/postApi";
+import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
+import {addyApi} from "../../../app/addyApi";
+import {DeletedSuccessfully} from "../../../utils/contantData";
 
 const ScheduledComponent = ({scheduledData}) => {
     const {sidebar} = useAppContext()
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const deletePostState = useSelector(state => state.post.deletePostByBatchIdReducer);
-
-    const token = getToken();
 
     const [scheduledPosts, setScheduledPosts] = useState([]);
-    const [deleteIdRef, setDeleteIdRef] = useState(null);
+    const [postToDeleteId, setPostToDeleteId] = useState(null);
 
     const [showCaption, setShowCaption] = useState(false);
     const [showHashTag, setShowHashTag] = useState(false);
@@ -42,59 +39,52 @@ const ScheduledComponent = ({scheduledData}) => {
     const [showHashTagIndex, setHashTagIndex] = useState()
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const [deletePostById, deletePostApi] = useDeletePostByIdMutation()
 
     useEffect(() => {
         scheduledData?.data && setScheduledPosts(Object.values(scheduledData?.data));
 
     }, [scheduledData]);
 
-    const handleDeletePost = (e) => {
-        e.preventDefault();
-        Swal.fire({
-            imageUrl: delete_img,
-            title: `Delete Post`,
-            text: `Are you sure you want to delete this post?`,
-            showCancelButton: true,
-            cancelButtonText: 'Cancel',
-            confirmButtonText: 'Delete',
-            confirmButtonColor: "#F07C33",
-            cancelButtonColor: "#E6E9EC",
-            reverseButtons: true,
-            customClass: {
-                confirmButton: 'custom-confirm-button-class',
-                cancelButton: 'custom-cancel-button-class'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                if (e?.target?.id !== null) {
-                    setDeleteIdRef(e?.target?.id);
-                    dispatch(deletePostByBatchIdAction({postId: e?.target?.id, token: token}))
-                        .then((response) => {
-                            if (response.meta.requestStatus === "fulfilled") {
-                                setDeleteIdRef(null);
-                                showSuccessToast("Post has been deleted successfully");
-                                dispatch(getAllSocialMediaPostsByCriteria({
-                                    token: token,
-                                    query: {
-                                        limit: 6,
-                                        period: "MONTH",
-                                        sortOrder: "asc",
-                                        sort: "feedPostDate",
-                                        postStatus: ["SCHEDULED"]
-                                    }
-                                }));
-                            }
-                        }).catch((error) => {
-                        setDeleteIdRef(null);
-                        showErrorToast(error.response.data.message);
-                    });
+    useEffect(() => {
+        if (!isNullOrEmpty(postToDeleteId)) {
+            Swal.fire({
+                imageUrl: delete_img,
+                title: `Delete Post`,
+                text: `Are you sure you want to delete this post?`,
+                showCancelButton: true,
+                cancelButtonText: 'Cancel',
+                confirmButtonText: 'Delete',
+                confirmButtonColor: "#F07C33",
+                cancelButtonColor: "#E6E9EC",
+                reverseButtons: true,
+                customClass: {
+                    confirmButton: 'custom-confirm-button-class',
+                    cancelButton: 'custom-cancel-button-class'
                 }
-            }
-        });
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    await handleRTKQuery(
+                        async () => {
+                            return await deletePostById(postToDeleteId).unwrap()
+                        },
+                        () => {
+                            showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]))
+                            dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
+                        },
+                        null,
+                        () => {
+                            setPostToDeleteId(null);
+                        });
 
+                } else {
+                    setPostToDeleteId(null)
+                }
+            });
 
-    }
+        }
 
+    }, [postToDeleteId]);
 
     const captionHandler = (index) => {
         setCaptionIndex(index)
@@ -211,8 +201,10 @@ const ScheduledComponent = ({scheduledData}) => {
                                                 <GenericButtonWithLoader
                                                     className={"outline_btn nunito_font schedule_btn loading"}
                                                     label={"Delete Post"}
-                                                    isLoading={deleteIdRef === curBatch?.id && deletePostState?.loading}
-                                                    onClick={handleDeletePost}
+                                                    isLoading={postToDeleteId === curBatch?.id && deletePostApi?.isLoading}
+                                                    onClick={(e) => {
+                                                        setPostToDeleteId(e.target.id)
+                                                    }}
                                                     id={curBatch?.id}
                                                     contentText={"Deleting..."}
                                                     isDisabled={false}

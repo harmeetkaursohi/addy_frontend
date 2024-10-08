@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import DraftComponent from "./DraftComponent";
 import notConnected_img from "../../../images/no_acc_connect_img.svg";
 import fb_img from "../../../images/fb.svg";
@@ -8,28 +8,31 @@ import linkedin_img from "../../../images/linkedin.svg";
 
 import nature_img from "../../../images/download.jpg";
 
-import {formatMessage, sortByKey} from "../../../utils/commonUtils";
+import {formatMessage, isNullOrEmpty, sortByKey} from "../../../utils/commonUtils";
 import CommonLoader from "../../common/components/CommonLoader";
 import noDraftPosts from "../../../images/no_draft_posts.png";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../common/components/AppProvider";
 import {NoPostInDraft, NotConnected} from "../../../utils/contantData";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
+import {useGetSocialMediaPostsByCriteriaQuery} from "../../../app/apis/postApi";
 
-export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger}) => {
-    const {sidebar} = useAppContext()
+export const ParentDraftComponent = ({searchQuery, setDraftPost, reference = "", setApiTrigger}) => {
+
     const [drafts, setDrafts] = useState(null);
-    const [draftModal, setDraftModal] = useState(false);
-
     const [deletedAndPublishedPostIds, setDeletedAndPublishedPostIds] = useState({
         deletedPostIds: [],
         publishedPostIds: [],
 
     });
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
+    const draftPostsApi = useGetSocialMediaPostsByCriteriaQuery({
+        ...searchQuery,
+        plannerCardDate: searchQuery?.plannerCardDate?.toISOString() || null
+    }, {skip: isNullOrEmpty(searchQuery)})
 
-    const getAllDraftPostsByCustomerAndPeriodData = useSelector(state => state.post.getAllDraftPostsByCustomerAndPeriodReducer);
-    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
 
     useEffect(() => {
         if (drafts !== null && Array.isArray(drafts) && (deletedAndPublishedPostIds.deletedPostIds.length + deletedAndPublishedPostIds.publishedPostIds.length === drafts?.length)) {
@@ -38,17 +41,10 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
     }, [deletedAndPublishedPostIds])
 
     useEffect(() => {
-        if (getAllDraftPostsByCustomerAndPeriodData?.data) {
-            setDrafts(Object.values(getAllDraftPostsByCustomerAndPeriodData?.data));
+        if (draftPostsApi?.data) {
+            setDrafts(Object.values(draftPostsApi?.data));
         }
-        return () => {
-            setDrafts(null)
-            setDeletedAndPublishedPostIds({
-                deletedPostIds: [],
-                publishedPostIds: [],
-            })
-        }
-    }, [getAllDraftPostsByCustomerAndPeriodData]);
+    }, [draftPostsApi]);
 
     return (
 
@@ -84,12 +80,14 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
             {/*    </div>*/}
             {/*</div>*/}
             {
-                (getConnectedSocialAccountApi?.isLoading || connectedPagesData?.loading || getAllDraftPostsByCustomerAndPeriodData.loading) ?
+                (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading || draftPostsApi?.isLoading) ?
                     <CommonLoader classname={"cmn_loader_outer"}/> :
                     getConnectedSocialAccountApi?.data?.length === 0 ?
-                        <ConnectSocialMediaAccount image={notConnected_img} message={formatMessage(NotConnected,["posts","social media"])}/> :
-                        getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 ?
-                            <ConnectSocialMediaAccount image={notConnected_img} message={formatMessage(NotConnected,["posts","social media pages"])}/> :
+                        <ConnectSocialMediaAccount image={notConnected_img}
+                                                   message={formatMessage(NotConnected, ["posts", "social media"])}/> :
+                        getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 ?
+                            <ConnectSocialMediaAccount image={notConnected_img}
+                                                       message={formatMessage(NotConnected, ["posts", "social media pages"])}/> :
                             (drafts !== null && Array.isArray(drafts) && drafts?.length === 0) ?
                                 <div className="noDraftPosts_outer p-5 text-center mt-3">
                                     <img src={noDraftPosts} alt={"No Drafts"} className=" no-draft-img"/>
@@ -97,17 +95,16 @@ export const ParentDraftComponent = ({setDraftPost, reference = "",setApiTrigger
                                 </div>
                                 :
                                 drafts !== null && Array.isArray(drafts) && drafts?.length > 0 &&
-                                sortByKey(drafts, "createdAt").map((curDraftObject, key) => {
-                                    return (deletedAndPublishedPostIds?.deletedPostIds?.includes(curDraftObject?.id) || deletedAndPublishedPostIds?.publishedPostIds?.includes(curDraftObject?.id)) ? <></> :
+                                sortByKey(drafts, "createdAt").map((curDraftPost, index) => {
+                                    return (deletedAndPublishedPostIds?.deletedPostIds?.includes(curDraftPost?.id) || deletedAndPublishedPostIds?.publishedPostIds?.includes(curDraftPost?.id)) ? <></> :
+                                            <DraftComponent batchIdData={curDraftPost}
+                                                            setDraftPost={setDraftPost}
+                                                            setDrafts={setDrafts} reference={reference}
+                                                            deletedAndPublishedPostIds={deletedAndPublishedPostIds}
+                                                            setDeletedAndPublishedPostIds={setDeletedAndPublishedPostIds}
+                                                            setApiTrigger={setApiTrigger}
+                                            />
 
-
-                                                <DraftComponent batchIdData={curDraftObject}
-                                                                setDraftPost={setDraftPost}
-                                                                setDrafts={setDrafts} reference={reference}
-                                                                deletedAndPublishedPostIds={deletedAndPublishedPostIds}
-                                                                setDeletedAndPublishedPostIds={setDeletedAndPublishedPostIds}
-                                                                setApiTrigger={setApiTrigger}
-                                                />
 
 
                                 })

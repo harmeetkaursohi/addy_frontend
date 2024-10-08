@@ -4,22 +4,26 @@ import { useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import Loader from "../../loader/Loader";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
-import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+import {
+    useConnectSocialAccountMutation,
+    useDisconnectSocialAccountMutation,
+    useGetAllFacebookPagesQuery,
+    useGetAllInstagramBusinessAccountsQuery, useGetAllLinkedinPagesQuery,
+    useGetAllPinterestBoardsQuery,
+    useGetConnectedSocialAccountQuery
+} from "../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
+import {enabledSocialMedia} from "../../../utils/contantData";
+import {isNullOrEmpty} from "../../../utils/commonUtils";
 
 const Header = ({userData, setShowConnectAccountModal}) => {
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
-
-    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
-    const getAllFacebookPagesData = useSelector(state => state.facebook.getFacebookPageReducer);
-    const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
-    const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
-    const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
-
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
     const navigate = useNavigate();
     const handleCreatePost = () => {
-        const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
+        const isAnyPageConnected = getAllConnectedPagesApi?.data?.length > 0
         const isAnyAccountConnected = getConnectedSocialAccountApi?.data?.length > 0
         if (isAnyPageConnected && isAnyAccountConnected) {
             navigate("/planner/post")
@@ -43,21 +47,28 @@ const Header = ({userData, setShowConnectAccountModal}) => {
 
                                     
                                     <div className="create_Ad_outer">
+                                        {/*{*/}
+                                        {/*    (getAllConnectedPagesApi?.isLoading || getConnectedSocialAccountApi?.isLoading || getAllFacebookPagesApi?.isLoading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading) ?*/}
+                                        {/*        <div*/}
+                                        {/*            className="createPost_btn crate_btn cmn_btn_color cursor-pointer loader_btn_container">*/}
+                                        {/*            <Loader/>*/}
+                                        {/*        </div> :*/}
+                                        {/*        <div onClick={handleCreatePost}*/}
+                                        {/*             className="createPost_btn crate_btn cmn_btn_color cursor-pointer">*/}
+                                        {/*            {jsondata.createpost}*/}
+                                        {/*        </div>*/}
+                                        {/*}*/}
                                         {
-                                            (connectedPagesData?.loading || getConnectedSocialAccountApi?.isLoading || getAllFacebookPagesData?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading) ?
-                                                <div
-                                                    className="createPost_btn crate_btn cmn_btn_color cursor-pointer loader_btn_container">
-                                                    <Loader/>
-                                                </div> : <div onClick={handleCreatePost}
-                                                              className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
-                                                    {jsondata.createpost}
-                                                </div>
+                                            !getAllConnectedPagesApi?.isLoading &&
+                                            <div onClick={handleCreatePost}
+                                                 className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
+                                                {jsondata.createpost}
+                                            </div>
                                         }
 
                                     </div>
 
-                               
-                           
+
                         </div>
 
                     </form>

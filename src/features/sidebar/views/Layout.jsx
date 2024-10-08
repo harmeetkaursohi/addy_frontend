@@ -6,7 +6,6 @@ import {SidebarMenuItems} from "../SidebarMenu.jsx";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
-import {getFacebookConnectedPages} from "../../../app/actions/facebookActions/facebookActions";
 import {useAppContext} from "../../common/components/AppProvider.jsx";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import {FaBars} from "react-icons/fa";
@@ -18,14 +17,26 @@ import {subscribeNotifications} from "../../../services/addyService";
 import logout_image from "../../../images/logout_img.png"
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect.jsx";
 import {
-    getUpdatedNameAndImageUrlForConnectedPages,
+    getUpdatedNameAndImageUrlForConnectedPages, isNullOrEmpty,
     isPageInfoAvailableFromSocialMediaFor
 } from "../../../utils/commonUtils";
 import {updatePageAccessTokenByIds} from "../../../app/actions/pageAccessTokenAction/pageAccessTokenAction";
-import {useLazyGetUserInfoQuery} from "../../../app/apis/userApi";
-import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+import {useGetUserInfoQuery, useLazyGetUserInfoQuery} from "../../../app/apis/userApi";
+import {
+    useConnectSocialAccountMutation,
+    useDisconnectSocialAccountMutation,
+    useGetAllFacebookPagesQuery,
+    useGetAllInstagramBusinessAccountsQuery, useGetAllLinkedinPagesQuery,
+    useGetAllPinterestBoardsQuery,
+    useGetConnectedSocialAccountQuery
+} from "../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
+import {enabledSocialMedia} from "../../../utils/contantData";
+import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils";
 
 const Layout = () => {
+
+    const {sidebar, show_sidebar} = useAppContext();
     const navigate = useNavigate();
     const location = useLocation();
     const {pathname} = location;
@@ -33,18 +44,31 @@ const Layout = () => {
     const token = getToken();
     const dispatch = useDispatch();
 
-    const [getUserInfo, getUserInfoApi] = useLazyGetUserInfoQuery()
+    const getUserInfoApi = useGetUserInfoQuery("")
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
-    const facebookPageListReducer = useSelector(state => state.facebook.getFacebookPageReducer);
-    const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
-    const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
-    const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
-    const connectedPagesData = useSelector((state) => state.facebook.getFacebookConnectedPagesReducer);
+    const connectedSocialAccount =  getConnectedSocialMediaAccount(getConnectedSocialAccountApi?.data || [])
 
+    const getAllFacebookPagesApi = useGetAllFacebookPagesQuery({
+        providerId: connectedSocialAccount?.facebook?.providerId,
+        accessToken: connectedSocialAccount?.facebook?.accessToken
+    }, {skip: !enabledSocialMedia?.isFacebookEnabled || isNullOrEmpty(connectedSocialAccount.facebook)})
+
+    const getAllInstagramPagesApi = useGetAllInstagramBusinessAccountsQuery(connectedSocialAccount?.instagram?.accessToken,
+        {skip: !enabledSocialMedia?.isInstagramEnabled || isNullOrEmpty(connectedSocialAccount.instagram)})
+
+    const getAllPinterestPagesApi = useGetAllPinterestBoardsQuery(connectedSocialAccount?.pinterest?.id,
+        {skip: !enabledSocialMedia?.isPinterestEnabled || isNullOrEmpty(connectedSocialAccount.pinterest)})
+
+    const getAllLinkedinPagesApi = useGetAllLinkedinPagesQuery({
+        q: "roleAssignee",
+        role: "ADMINISTRATOR",
+        state: "APPROVED"
+    }, {skip: !enabledSocialMedia?.isLinkedinEnabled || isNullOrEmpty(connectedSocialAccount.linkedin)})
 
     const unseenNotificationsCount = useSelector(state => state.notification.unseenNotificationsCountReducer)
-    const {sidebar, show_sidebar} = useAppContext();
+
 
 
     useEffect(() => {
@@ -52,17 +76,17 @@ const Layout = () => {
     }, []);
 
     useEffect(() => {
-        if (getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
+        if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
             // First Map -> Insert socialMediaType in each page
             // Second Map -> Getting latest imageUrl if Updated or url expired
             // Third Filter -> Filter all the pages whose images we need to updated
             let pageInfoFromSocialMedia = {
-                facebook: facebookPageListReducer,
-                instagram: instagramBusinessAccountsData,
-                linkedin: getAllLinkedinPagesData,
-                pinterest: pinterestBoardsData,
+                facebook: getAllFacebookPagesApi,
+                instagram: getAllInstagramPagesApi,
+                linkedin: getAllLinkedinPagesApi,
+                pinterest: getAllPinterestPagesApi,
             }
-            let allConnectedPages = connectedPagesData?.facebookConnectedPages?.map((page) => {
+            let allConnectedPages = getAllConnectedPagesApi?.data?.map((page) => {
                 return {
                     ...page,
                     socialMediaType: getConnectedSocialAccountApi?.data?.filter(account => account.id === page.socialMediaAccountId)[0]?.provider
@@ -81,28 +105,7 @@ const Layout = () => {
                 }))
             }
         }
-    }, [connectedPagesData, getConnectedSocialAccountApi])
-
-
-    useEffect(() => {
-        if (token && !getUserInfoApi.data) {
-            getUserInfo("");
-        }
-    }, [token, getUserInfoApi.data]);
-
-    useEffect(() => {
-        const decodeJwt = decodeJwtToken(token);
-        if (getConnectedSocialAccountApi?.data === undefined || connectedPagesData?.facebookConnectedPages === undefined) {
-            // dispatch(getAllConnectedSocialAccountAction({
-            //     customerId: decodeJwt.customerId,
-            //     token: token,
-            // }));
-            dispatch(getFacebookConnectedPages({
-                customerId: decodeJwt?.customerId,
-                token: token,
-            }));
-        }
-    }, []);
+    }, [getAllConnectedPagesApi, getConnectedSocialAccountApi])
 
     const LogOut = () => {
         Swal.fire({

@@ -15,64 +15,88 @@ import {SocialAccountProvider, enabledSocialMedia} from "../../../../utils/conta
 import jsondata from "../../../../locales/data/initialdata.json";
 import polygon_img from "../../../../images/polygon.svg";
 import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {
-    getSocialMediaGraphByProviderTypeAction, getSocialMediaReportByProviderTypeAction
-} from "../../../../app/actions/socialAccountActions/socialAccountActions";
 import {LineGraph} from "./LineGraph";
 import {DashBoardReportLoader} from "./DashBoardReportLoader";
 import default_user_icon from "../../../../images/default_user_icon.svg"
-import {getToken} from "../../../../app/auth/auth";
 import avg_bar from "../../../../images/avg_bar.svg"
 import followers_bar from "../../../../images/followers_bar.svg"
-import {useGetConnectedSocialAccountQuery} from "../../../../app/apis/socialAccount";
+import {
+    useGetAllFacebookPagesQuery,
+    useGetAllInstagramBusinessAccountsQuery, useGetAllLinkedinPagesQuery, useGetAllPinterestBoardsQuery,
+    useGetConnectedSocialAccountQuery
+} from "../../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../../app/apis/pageAccessTokenApi";
+import {getConnectedSocialMediaAccount} from "../../../../utils/dataFormatterUtils";
+import {
+    useGetSocialMediaGraphReportByPageQuery,
+    useGetSocialMediaReportByPageQuery
+} from "../../../../app/apis/insightApi";
 
 export const DashboardReports = () => {
 
-    const token = getToken();
-    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
 
-    const reportSectionData = useSelector(state => state.socialAccount.getSocialMediaReportByProviderTypeReducer);
-    const reportGraphSectionData = useSelector(state => state.socialAccount.getSocialMediaGraphByProviderTypeReducer);
-    const connectedPagesReducer = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
-    const facebookPageListReducer = useSelector(state => state.facebook.getFacebookPageReducer);
-    const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
-    const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
-    const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
+    const connectedSocialAccount = getConnectedSocialMediaAccount(getConnectedSocialAccountApi?.data || [])
+
+    const getAllFacebookPagesApi = useGetAllFacebookPagesQuery({
+        providerId: connectedSocialAccount?.facebook?.providerId,
+        accessToken: connectedSocialAccount?.facebook?.accessToken
+    }, {skip: !enabledSocialMedia?.isFacebookEnabled || isNullOrEmpty(connectedSocialAccount.facebook)})
+
+    const getAllInstagramPagesApi = useGetAllInstagramBusinessAccountsQuery(connectedSocialAccount?.instagram?.accessToken, {skip: !enabledSocialMedia?.isInstagramEnabled || isNullOrEmpty(connectedSocialAccount.instagram)})
+
+    const getAllPinterestPagesApi = useGetAllPinterestBoardsQuery(connectedSocialAccount?.pinterest?.id, {skip: !enabledSocialMedia?.isPinterestEnabled || isNullOrEmpty(connectedSocialAccount.pinterest)})
+
+    const getAllLinkedinPagesApi = useGetAllLinkedinPagesQuery({
+        q: "roleAssignee",
+        role: "ADMINISTRATOR",
+        state: "APPROVED"
+    }, {skip: !enabledSocialMedia?.isLinkedinEnabled || isNullOrEmpty(connectedSocialAccount.linkedin)})
+
 
     const [connectedPagesToSelectedSocialMediaAccount, setConnectedPagesToSelectedSocialMediaAccount] = useState([])
     const [selectedPage, setSelectedPage] = useState(null);
-    const dispatch = useDispatch();
     const [reportSelectedAccountType, setReportSelectedAccountType] = useState("");
     const [reportSelectedAccountData, setReportSelectedAccountData] = useState(null);
     const [graphDaysSelected, setGraphDaysSelected] = useState(9);
 
+    const socialMediaReportApi = useGetSocialMediaReportByPageQuery({
+        page: selectedPage
+    }, {skip: isNullOrEmpty(selectedPage)})
+
+    const socialMediaGraphReportApi = useGetSocialMediaGraphReportByPageQuery({
+        page: selectedPage,
+        query: getQueryForGraphData(selectedPage?.provider, graphDaysSelected),
+    }, {skip: isNullOrEmpty(selectedPage)})
+
 
     useEffect(() => {
-        if (getConnectedSocialAccountApi?.data && connectedPagesReducer?.facebookConnectedPages && Array.isArray(connectedPagesReducer?.facebookConnectedPages)) {
-            let selectedSocialMediaAccount = getConnectedSocialAccountApi?.data?.find(c => c.provider === reportSelectedAccountType.toUpperCase() && connectedPagesReducer?.facebookConnectedPages?.some(connectedPage => connectedPage?.socialMediaAccountId === c?.id))
+        if (getConnectedSocialAccountApi?.data && getAllConnectedPagesApi?.data && Array.isArray(getAllConnectedPagesApi?.data)) {
+            let selectedSocialMediaAccount = getConnectedSocialAccountApi?.data?.find(c => c.provider === reportSelectedAccountType.toUpperCase() && getAllConnectedPagesApi?.data?.some(connectedPage => connectedPage?.socialMediaAccountId === c?.id))
             //  In case any account is disconnected and it was selected on reports section selectedSocialMediaAccount will be null so set 1st account selected
             if (selectedSocialMediaAccount === null || selectedSocialMediaAccount === undefined) {
-                if (connectedPagesReducer?.facebookConnectedPages?.length > 0) {
+                if (getAllConnectedPagesApi?.data?.length > 0) {
                     const enabledSocialMediaAccounts = getConnectedSocialAccountApi?.data?.filter(accountData => enabledSocialMedia["is" + getInitialLetterCap(accountData.provider.toLowerCase()) + "Enabled"])
                     const enabledSocialMediaAccountIds = enabledSocialMediaAccounts?.map(account => account.id)
-                    const enabledPages = connectedPagesReducer?.facebookConnectedPages?.filter(page => enabledSocialMediaAccountIds.includes(page.socialMediaAccountId))
+                    const enabledPages = getAllConnectedPagesApi?.data?.filter(page => enabledSocialMediaAccountIds.includes(page.socialMediaAccountId))
                     selectedSocialMediaAccount = enabledSocialMediaAccounts?.find(accountData => accountData?.id === enabledPages?.[0]?.socialMediaAccountId)
                 }
                 setReportSelectedAccountType(selectedSocialMediaAccount?.provider || "")
             }
             setReportSelectedAccountData(selectedSocialMediaAccount);
-            let connectedPagesToSelectedSocialMediaAccount = connectedPagesReducer?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === selectedSocialMediaAccount?.id);
+            let connectedPagesToSelectedSocialMediaAccount = getAllConnectedPagesApi?.data?.filter(pageData => pageData?.socialMediaAccountId === selectedSocialMediaAccount?.id);
             const pagesDataFromSocialMedia = getPagesDataFromSocialMedia(selectedSocialMediaAccount?.provider, {
-                facebook: facebookPageListReducer,
-                instagram: instagramBusinessAccountsData,
-                linkedin: getAllLinkedinPagesData,
-                pinterest: pinterestBoardsData,
+                facebook: getAllFacebookPagesApi,
+                instagram: getAllInstagramPagesApi,
+                linkedin: getAllLinkedinPagesApi,
+                pinterest: getAllPinterestPagesApi,
             });
             // Get Updated Image Url For Dropdown
             connectedPagesToSelectedSocialMediaAccount = connectedPagesToSelectedSocialMediaAccount?.map((page) => {
                 return {
                     ...page,
+                    provider:selectedSocialMediaAccount?.provider,
                     imageUrl: getImageUrl(selectedSocialMediaAccount?.provider, pagesDataFromSocialMedia?.filter(c => c.id === page.pageId)[0])
                 }
             });
@@ -87,45 +111,12 @@ export const DashboardReports = () => {
                 setSelectedPage(null)
             }
         }
-    }, [connectedPagesReducer, getConnectedSocialAccountApi, reportSelectedAccountType]);
+    }, [getAllConnectedPagesApi, getConnectedSocialAccountApi, reportSelectedAccountType, getAllFacebookPagesApi, getAllInstagramPagesApi, getAllPinterestPagesApi, getAllLinkedinPagesApi]);
 
 
     useEffect(() => {
         setGraphDaysSelected(9)
     }, [reportSelectedAccountType]);
-
-    useEffect(() => {
-        if (selectedPage) {
-            handleFetchSocialMediaReport(null, null, false)
-        }
-    }, [selectedPage]);
-
-    useEffect(() => {
-        if (graphDaysSelected) {
-            handleFetchSocialMediaReport(null, null, true);
-        }
-    }, [graphDaysSelected]);
-
-
-    const handleFetchSocialMediaReport = (socialAccountData, pages, searchGraphOnly = false) => {
-        if (selectedPage && reportSelectedAccountData && (reportSelectedAccountData?.provider === "PINTEREST" ? (selectedPage.id === reportSelectedAccountData.id) : (selectedPage.socialMediaAccountId === reportSelectedAccountData.id))) {
-            !searchGraphOnly && dispatch(getSocialMediaReportByProviderTypeAction({
-                token: token,
-                pages: [selectedPage],
-                socialMediaType: reportSelectedAccountType,
-                socialAccountData: reportSelectedAccountData
-            }))
-
-            dispatch(getSocialMediaGraphByProviderTypeAction({
-                token: token,
-                pages: [selectedPage],
-                socialMediaType: reportSelectedAccountType,
-                socialAccountData: reportSelectedAccountData,
-                query: getQueryForGraphData(reportSelectedAccountType, graphDaysSelected)
-            }))
-        }
-
-    }
 
 
     return (
@@ -133,355 +124,306 @@ export const DashboardReports = () => {
         <>
 
             <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer">
+                {
+                    getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading || getAllFacebookPagesApi?.isLoading || getAllInstagramPagesApi?.isLoading || getAllPinterestPagesApi?.isLoading || getAllLinkedinPagesApi?.isLoading ?
+                        <div className="cmn_background p-5 text-center account_not_connect_imcontainer ">
+                            <CommonLoader classname={"cmn_loader_outer"}/>
+                        </div> :
 
-
-                {getConnectedSocialAccountApi?.isLoading || connectedPagesReducer?.loading || facebookPageListReducer?.loading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading ?
-                    <div className="cmn_background p-5 text-center account_not_connect_imcontainer ">
-                        <CommonLoader classname={"cmn_loader_outer"}/>
-                    </div> :
-
-                    (getConnectedSocialAccountApi?.data === null || (Array.isArray(getConnectedSocialAccountApi?.data) && getConnectedSocialAccountApi?.data.filter(c => c.provider !== "GOOGLE").length === 0))
-
-                        ?
-
-                        <div className="cmn_background p-5 text-center account_not_connect_imcontainer">
-                            <img src={noAccountData} alt="" className="img-fluid"/>
-                        </div>
-
-                        :
-
-                        // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
-                        isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
-                            <div className=" p-5 text-center no_acc_container ">
-                                <h6 className="no_acc_title">No Page is Connected yet!</h6>
-                                <h3 className="connected_heading mt-3">Click on Connect to add your <br></br>pages in
-                                    Addy.</h3>
-                                <img src={noPageData} className="img-fluid mt-5" alt=""/>
+                        (getConnectedSocialAccountApi?.data === null || (Array.isArray(getConnectedSocialAccountApi?.data) && getConnectedSocialAccountApi?.data.filter(c => c.provider !== "GOOGLE").length === 0))
+                            ?
+                            <div className="cmn_background p-5 text-center account_not_connect_imcontainer">
+                                <img src={noAccountData} alt="" className="img-fluid"/>
                             </div>
-
                             :
+                            // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
+                            isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
+                                <div className=" p-5 text-center no_acc_container ">
+                                    <h6 className="no_acc_title">No Page is Connected yet!</h6>
+                                    <h3 className="connected_heading mt-3">Click on Connect to add your <br></br>pages
+                                        in
+                                        Addy.</h3>
+                                    <img src={noPageData} className="img-fluid mt-5" alt=""/>
+                                </div>
 
-                            <div className="post_activity_outer mx-2">
+                                :
 
-                                <div
-                                    className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container">
+                                <div className="post_activity_outer mx-2">
 
-                                    {
-                                        false && <div className="days_outer">
-                                            <select className="custom_select_days dropdown_days "
-                                                    value={graphDaysSelected}
-                                                    onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
-                                                    disabled={connectedPagesReducer?.loading || facebookPageListReducer?.loading || reportGraphSectionData?.loading}>
-                                                <option value={9}>Last 7 days</option>
-                                                <option value={17}>Last 15 days</option>
-                                                {
-                                                    reportSelectedAccountType === "INSTAGRAM" ?
-                                                        <option value={30}> Last 28 days</option> :
-                                                        <option value={32}> Last 30 days</option>
-                                                }
+                                    <div
+                                        className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container">
 
-                                            </select>
-                                        </div>
-                                    }
-                                    {
-                                        false && <Dropdown className="dropdown_btn">
+                                        <Dropdown className="dropdown_btn">
 
                                             <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                              className="social_dropdowns"
-                                                             disabled={getConnectedSocialAccountApi?.isLoading || reportSectionData?.loading || reportGraphSectionData?.loading}>
+                                                             disabled={getConnectedSocialAccountApi?.isLoading || socialMediaReportApi?.isLoading || socialMediaGraphReportApi?.isLoading}>
                                                 <img src={computeImageURL(reportSelectedAccountType)}
                                                      className="me-3 review-post-icon"
-                                                     alt={SocialAccountProvider[reportSelectedAccountType]}/>
-                                                {SocialAccountProvider[reportSelectedAccountType]}
-
+                                                     alt={SocialAccountProvider[reportSelectedAccountType]}/>{SocialAccountProvider[reportSelectedAccountType]}
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
-                                                {Object.keys(SocialAccountProvider).map((cur, index) => (
-
-                                                    <div className="filters_outer" key={index}
-
-                                                         disabled={!socialMediaAccountHasConnectedPages(cur, getConnectedSocialAccountApi?.data, connectedPagesReducer?.facebookConnectedPages)}
-                                                         onClick={() => {
-                                                             setReportSelectedAccountData(getConnectedSocialAccountApi?.data.find(c => c.provider === cur))
-                                                             setReportSelectedAccountType(cur)
-                                                             setGraphDaysSelected(9)
-
-
-                                                         }}>
-                                                        <div className="choose_platform_dropdown">
-                                                            <img width={24}
-                                                                 src={computeImageURL(cur)}
-                                                            />
-                                                            <h5 className="inter_font">{getInitialLetterCap(SocialAccountProvider[cur])}</h5>
-                                                            <input type="checkbox"/>
-
-                                                        </div>
-
-                                                    </div>
-                                                ))
-
+                                                {
+                                                    Object.keys(SocialAccountProvider).map((cur, index) => (
+                                                        <Dropdown.Item
+                                                            key={index}
+                                                            disabled={!socialMediaAccountHasConnectedPages(cur, getConnectedSocialAccountApi?.data, getAllConnectedPagesApi?.data)}
+                                                            onClick={() => {
+                                                                setReportSelectedAccountData(getConnectedSocialAccountApi?.data.find(c => c.provider === cur))
+                                                                setReportSelectedAccountType(cur)
+                                                                setGraphDaysSelected(9)
+                                                            }}>
+                                                            <img
+                                                                width={24}
+                                                                src={computeImageURL(cur)}
+                                                                className="me-3"/>
+                                                            {getInitialLetterCap(SocialAccountProvider[cur])}
+                                                        </Dropdown.Item>
+                                                    ))
                                                 }
                                             </Dropdown.Menu>
                                         </Dropdown>
-                                    }
-                                    <Dropdown className="dropdown_btn">
+                                        <Dropdown className="dropdown_btn facebook_pages">
 
-                                        <Dropdown.Toggle variant="success" id="dropdown-basic"
-                                                         className="social_dropdowns"
-                                                         disabled={getConnectedSocialAccountApi?.isLoading || reportSectionData?.loading || reportGraphSectionData?.loading}>
-                                            <img src={computeImageURL(reportSelectedAccountType)}
-                                                 className="me-3 review-post-icon"
-                                                 alt={SocialAccountProvider[reportSelectedAccountType]}/>{SocialAccountProvider[reportSelectedAccountType]}
-                                        </Dropdown.Toggle>
+                                            <Dropdown.Toggle variant="success" id="dropdown-basic"
+                                                             className="social_dropdowns"
+                                                             disabled={getConnectedSocialAccountApi?.isLoading || socialMediaReportApi?.isLoading || socialMediaGraphReportApi?.isLoading}>
+                                                <img
+                                                    src={selectedPage?.imageUrl ? selectedPage?.imageUrl : default_user_icon}
+                                                    className="me-3 dropdown-page-logo"
+                                                    alt={""}/>{selectedPage?.name}
+                                            </Dropdown.Toggle>
 
-                                        <Dropdown.Menu>
-                                            {Object.keys(SocialAccountProvider).map((cur, index) => (
-
-                                                <Dropdown.Item key={index}
-                                                               disabled={!socialMediaAccountHasConnectedPages(cur, getConnectedSocialAccountApi?.data, connectedPagesReducer?.facebookConnectedPages)}
-                                                               onClick={() => {
-                                                                   setReportSelectedAccountData(getConnectedSocialAccountApi?.data.find(c => c.provider === cur))
-                                                                   setReportSelectedAccountType(cur)
-                                                                   setGraphDaysSelected(9)
-
-
-                                                               }}><img width={24}
-                                                                       src={computeImageURL(cur)}
-                                                                       className="me-3"/> {getInitialLetterCap(SocialAccountProvider[cur])}
-                                                </Dropdown.Item>
-                                            ))
-
-                                            }
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                    <Dropdown className="dropdown_btn facebook_pages">
-
-                                        <Dropdown.Toggle variant="success" id="dropdown-basic"
-                                                         className="social_dropdowns"
-                                                         disabled={getConnectedSocialAccountApi?.isLoading || reportSectionData?.loading || reportGraphSectionData?.loading}>
-                                            <img
-                                                src={selectedPage?.imageUrl ? selectedPage?.imageUrl : default_user_icon}
-                                                className="me-3 dropdown-page-logo"
-                                                alt={""}/>{selectedPage?.name}
-                                        </Dropdown.Toggle>
-
-                                        {
-                                            reportSelectedAccountType === "PINTEREST" ?
-                                                <Dropdown.Menu>
-                                                    <Dropdown.Item className="d-flex"
-                                                                   onClick={() => {
-                                                                       setSelectedPage(reportSelectedAccountData)
-                                                                   }}><img width={24}
-                                                                           src={reportSelectedAccountData?.imageUrl ? reportSelectedAccountData?.imageUrl : default_user_icon}
-                                                                           className="me-3"/>
-                                                        <span>{reportSelectedAccountData.name}</span>
-                                                    </Dropdown.Item>
-                                                </Dropdown.Menu>
-
-                                                :
-                                                <Dropdown.Menu>
-                                                    {connectedPagesToSelectedSocialMediaAccount?.map((page, index) => (
-
-                                                        <Dropdown.Item key={index}
-                                                                       className="d-flex"
-                                                                       onClick={() => {
-                                                                           setSelectedPage(page)
-                                                                       }}>
-                                                            <img width={24}
-                                                                 src={page?.imageUrl ? page?.imageUrl : default_user_icon}
-                                                                 className="me-3"/>
-                                                            <span>{page.name}</span>
-                                                        </Dropdown.Item>
-                                                    ))
-
-                                                    }
-                                                </Dropdown.Menu>
-
-                                        }
-
-
-                                    </Dropdown>
-                                </div>
-
-
-                                {
-                                    reportSectionData?.loading ?
-
-                                        //loader component
-                                        <DashBoardReportLoader/>
-                                        :
-                                        <>
                                             {
+                                                reportSelectedAccountType === "PINTEREST" ?
+                                                    <Dropdown.Menu>
+                                                        <Dropdown.Item className="d-flex"
+                                                                       onClick={() => {
+                                                                           setSelectedPage(reportSelectedAccountData)
+                                                                       }}><img width={24}
+                                                                               src={reportSelectedAccountData?.imageUrl ? reportSelectedAccountData?.imageUrl : default_user_icon}
+                                                                               className="me-3"/>
+                                                            <span>{reportSelectedAccountData.name}</span>
+                                                        </Dropdown.Item>
+                                                    </Dropdown.Menu>
 
-                                                //TODO-:enable this when api implemented....
-                                                false && <div className="Performing_Post_container">
-                                                    <h3 className="cmn_text_heading">Dashboard <span
-                                                        className="overview_heading nunito_font">Overview</span></h3>
-                                                    <ul className="post_performing_list">
-                                                        <li className="box_shadow">
-                                                            <h4 className="cmn_text_style nunito_font">Avg Impression</h4>
-                                                            <div className="postdata_wrapper">
+                                                    :
+                                                    <Dropdown.Menu>
+                                                        {connectedPagesToSelectedSocialMediaAccount?.map((page, index) => (
 
-                                                                <img src={avg_bar}/>
-                                                                <div>
-                                                                    <h5 className="cmn_text_heading">3.5k</h5>
-                                                                    <span className="d-flex align-items-center gap-1"><div
-                                                                        className="HiMiniArrowUpRight"><HiMiniArrowUpRight/></div> 89%</span>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                        <li className="box_shadow">
-                                                            <h4 className="cmn_text_style nunito_font">Followers</h4>
-                                                            <div className="postdata_wrapper">
+                                                            <Dropdown.Item key={index}
+                                                                           className="d-flex"
+                                                                           onClick={() => {
+                                                                               setSelectedPage(page)
+                                                                           }}>
+                                                                <img width={24}
+                                                                     src={page?.imageUrl ? page?.imageUrl : default_user_icon}
+                                                                     className="me-3"/>
+                                                                <span>{page.name}</span>
+                                                            </Dropdown.Item>
+                                                        ))
 
-                                                                <img src={followers_bar}/>
-                                                                <div>
-                                                                    <h5 className="cmn_text_heading">3.5k</h5>
-                                                                    <span className="d-flex align-items-center gap-1"><div
-                                                                        className="HiMiniArrowUpRight"><HiMiniArrowUpRight/></div> 89%</span>
-                                                                </div>
+                                                        }
+                                                    </Dropdown.Menu>
 
-                                                            </div>
-                                                        </li>
-
-                                                        <li className="box_shadow">
-                                                            <h4 className="cmn_text_style nunito_font">Avg Reach</h4>
-                                                            <div className="postdata_wrapper">
-
-                                                                <img src={avg_bar}/>
-                                                                <div>
-                                                                    <h5 className="cmn_text_heading">80%</h5>
-                                                                    <span className="d-flex align-items-center gap-1"><div
-                                                                        className="HiMiniArrowUpRight"><HiMiniArrowUpRight/></div> 89%</span>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
                                             }
-                                            <div className="followers_outer mt-4">
 
-                                                {reportSectionData?.data &&
-                                                    Object.keys(reportSectionData?.data).map((curKey, index) => (
 
-                                                        <div className="followers_wrapper " key={index}>
-                                                            <h5>{curKey.replace(/_/g, ' ')}
-                                                                {
-                                                                    ["INSTAGRAM", "PINTEREST"].includes(reportSelectedAccountType) &&
+                                        </Dropdown>
+                                    </div>
 
-                                                                    <>
-                                                                        <br/>
+
+                                    {
+                                        socialMediaReportApi?.isLoading ?
+
+                                            //loader component
+                                            <DashBoardReportLoader/>
+                                            :
+                                            <>
+                                                {
+                                                    //TODO-:enable this when api implemented....
+                                                    false &&
+                                                    <div className="Performing_Post_container">
+                                                        <h3 className="cmn_text_heading">Dashboard <span
+                                                            className="overview_heading nunito_font">Overview</span>
+                                                        </h3>
+                                                        <ul className="post_performing_list">
+                                                            <li className="box_shadow">
+                                                                <h4 className="cmn_text_style nunito_font">Avg
+                                                                    Impression</h4>
+                                                                <div className="postdata_wrapper">
+
+                                                                    <img src={avg_bar}/>
+                                                                    <div>
+                                                                        <h5 className="cmn_text_heading">3.5k</h5>
                                                                         <span
-                                                                            className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 90 days)' : ''}  </span>
+                                                                            className="d-flex align-items-center gap-1"><div
+                                                                            className="HiMiniArrowUpRight"><HiMiniArrowUpRight/></div> 89%</span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            <li className="box_shadow">
+                                                                <h4 className="cmn_text_style nunito_font">Followers</h4>
+                                                                <div className="postdata_wrapper">
 
-                                                                    </>
-                                                                }
-                                                                {
-                                                                    ["FACEBOOK"].includes(reportSelectedAccountType) &&
-                                                                    <>
-                                                                        <br/>
+                                                                    <img src={followers_bar}/>
+                                                                    <div>
+                                                                        <h5 className="cmn_text_heading">3.5k</h5>
                                                                         <span
-                                                                            className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 2 years)' : ''}  </span>
-                                                                    </>
-                                                                }
+                                                                            className="d-flex align-items-center gap-1"><div
+                                                                            className="HiMiniArrowUpRight"><HiMiniArrowUpRight/></div> 89%</span>
+                                                                    </div>
 
-                                                            </h5>
-                                                            <div className="followers_inner_content">
-                                                                <h2> {reportSectionData?.data[curKey]?.lifeTime || 0
-                                                                }</h2>
-                                                                <div className="monthly_growth">
-                                                                    <button className="cmn_followers_btn">
-                                                                        <img src={polygon_img} className="polygon_img"/>
-                                                                        {reportSectionData?.data[curKey]?.month || 0}
-                                                                    </button>
-                                                                    <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
+                                                                </div>
+                                                            </li>
+
+                                                            <li className="box_shadow">
+                                                                <h4 className="cmn_text_style nunito_font">Avg
+                                                                    Reach</h4>
+                                                                <div className="postdata_wrapper">
+
+                                                                    <img src={avg_bar}/>
+                                                                    <div>
+                                                                        <h5 className="cmn_text_heading">80%</h5>
+                                                                        <span
+                                                                            className="d-flex align-items-center gap-1"><div
+                                                                            className="HiMiniArrowUpRight"><HiMiniArrowUpRight/></div> 89%</span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                }
+                                                <div className="followers_outer mt-4">
+
+                                                    {
+                                                        socialMediaReportApi?.data &&
+                                                        Object.keys(socialMediaReportApi?.data).map((curKey, index) => (
+
+                                                            <div className="followers_wrapper " key={index}>
+                                                                <h5>{curKey.replace(/_/g, ' ')}
+                                                                    {
+                                                                        ["INSTAGRAM", "PINTEREST"].includes(reportSelectedAccountType) &&
+
+                                                                        <>
+                                                                            <br/>
+                                                                            <span
+                                                                                className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 90 days)' : ''}  </span>
+
+                                                                        </>
+                                                                    }
+                                                                    {
+                                                                        ["FACEBOOK"].includes(reportSelectedAccountType) &&
+                                                                        <>
+                                                                            <br/>
+                                                                            <span
+                                                                                className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 2 years)' : ''}  </span>
+                                                                        </>
+                                                                    }
+
+                                                                </h5>
+                                                                <div className="followers_inner_content">
+                                                                    <h2>
+                                                                        {
+                                                                            socialMediaReportApi?.data[curKey]?.lifeTime || 0
+                                                                        }
+                                                                    </h2>
+                                                                    <div className="monthly_growth">
+                                                                        <button className="cmn_followers_btn">
+                                                                            <img src={polygon_img}
+                                                                                 className="polygon_img"/>
+                                                                            {
+                                                                                socialMediaReportApi?.data[curKey]?.month || 0
+                                                                            }
+                                                                        </button>
+                                                                        <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
 
 
-                                                    ))
-                                                }
+                                                        ))
+                                                    }
 
+                                                </div>
+                                            </>
+                                    }
+
+                                    {/* chart */}
+                                    <div className="page_title_header mb-0">
+                                        <div className="page_title_container">
+                                            <div className="page_title_dropdown">
+                                                <h3 className="cmn_white_text instagram_overview_heading">{SocialAccountProvider[reportSelectedAccountType]?.charAt(0)?.toUpperCase() + SocialAccountProvider[reportSelectedAccountType]?.slice(1)} Overview</h3>
                                             </div>
-                                        </>
-                                }
+                                            <div className="days_outer">
+                                                <select className=" dropdown_days box_shadow"
+                                                        value={graphDaysSelected}
+                                                        onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
+                                                        disabled={getAllConnectedPagesApi?.isLoading || getAllFacebookPagesApi?.isLoading || socialMediaGraphReportApi?.isLoading}>
+                                                    <option value={9}>Last 7 days</option>
+                                                    <option value={17}>Last 15 days</option>
+                                                    {
+                                                        reportSelectedAccountType === "INSTAGRAM" ?
+                                                            <option value={30}> Last 28 days</option> :
+                                                            <option value={32}> Last 30 days</option>
+                                                    }
 
-                                {/* chart */}
-                                <div className="page_title_header mb-0">
-                                    <div className="page_title_container">
-                                        <div className="page_title_dropdown">
-                                            <h3 className="cmn_white_text instagram_overview_heading">{SocialAccountProvider[reportSelectedAccountType]?.charAt(0)?.toUpperCase() + SocialAccountProvider[reportSelectedAccountType]?.slice(1)} Overview</h3>
+                                                </select>
+                                            </div>
+
                                         </div>
-                                        <div className="days_outer">
-                                            <select className=" dropdown_days box_shadow"
-                                                    value={graphDaysSelected}
-                                                    onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
-                                                    disabled={connectedPagesReducer?.loading || facebookPageListReducer?.loading || reportGraphSectionData?.loading}>
-                                                <option value={9}>Last 7 days</option>
-                                                <option value={17}>Last 15 days</option>
-                                                {
-                                                    reportSelectedAccountType === "INSTAGRAM" ?
-                                                        <option value={30}> Last 28 days</option> :
-                                                        <option value={32}> Last 30 days</option>
-                                                }
+                                        {/* <Chart/> */}
 
-                                            </select>
+                                        <div className="account_info mt-2">
+
+                                            <LineGraph reportData={socialMediaGraphReportApi}/>
+
                                         </div>
-
                                     </div>
-                                    {/* <Chart/> */}
 
-                                    <div className="account_info mt-2">
+                                    {/* Performing Post */}
+                                    {
+                                        false && <div className="Performing_Post_container">
+                                            <h3 className="nunito_font">Performing Post</h3>
+                                            <ul className="post_performing_list">
+                                                <li className="box_shadow">
+                                                    <h4 className="cmn_text_style nunito_font">Organic Visitors</h4>
+                                                    <div className="d-flex gap-2 align-items-center p-3">
+                                                        <div className="postdata_container ">
+                                                            <IoLocationOutline/>
+                                                        </div>
+                                                        <h5 className="performing_post_heading nunito_font">3.5k</h5>
 
-                                        <LineGraph reportData={reportGraphSectionData}/>
+                                                    </div>
+                                                </li>
+                                                <li className="box_shadow">
+                                                    <h4 className="cmn_text_style nunito_font">Visitors from Ads</h4>
+                                                    <div className="d-flex gap-2 align-items-center p-3">
+                                                        <div className="postdata_container">
+                                                            <LuBarChart3/>
+                                                        </div>
+                                                        <h5 className="performing_post_heading nunito_font">3.5k</h5>
 
-                                    </div>
+                                                    </div>
+                                                </li>
+
+                                                <li className="box_shadow">
+                                                    <h4 className="cmn_text_style nunito_font">Ads click rate</h4>
+                                                    <div className=" d-flex gap-2 align-items-center p-3">
+                                                        <div className="postdata_container ">
+                                                            <img src={send_icon} height="18px" width="18px"/>
+
+                                                        </div>
+                                                        <h5 className="performing_post_heading nunito_font">80%</h5>
+
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    }
+
                                 </div>
-
-                                {/* Performing Post */}
-                                {
-                                    false && <div className="Performing_Post_container">
-                                        <h3 className="nunito_font">Performing Post</h3>
-                                        <ul className="post_performing_list">
-                                            <li className="box_shadow">
-                                                <h4 className="cmn_text_style nunito_font">Organic Visitors</h4>
-                                                <div className="d-flex gap-2 align-items-center p-3">
-                                                    <div className="postdata_container ">
-                                                        <IoLocationOutline/>
-                                                    </div>
-                                                    <h5 className="performing_post_heading nunito_font">3.5k</h5>
-
-                                                </div>
-                                            </li>
-                                            <li className="box_shadow">
-                                                <h4 className="cmn_text_style nunito_font">Visitors from Ads</h4>
-                                                <div className="d-flex gap-2 align-items-center p-3">
-                                                    <div className="postdata_container">
-                                                        <LuBarChart3/>
-                                                    </div>
-                                                    <h5 className="performing_post_heading nunito_font">3.5k</h5>
-
-                                                </div>
-                                            </li>
-
-                                            <li className="box_shadow">
-                                                <h4 className="cmn_text_style nunito_font">Ads click rate</h4>
-                                                <div className=" d-flex gap-2 align-items-center p-3">
-                                                    <div className="postdata_container ">
-                                                        <img src={send_icon} height="18px" width="18px"/>
-
-                                                    </div>
-                                                    <h5 className="performing_post_heading nunito_font">80%</h5>
-
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                }
-
-                            </div>
                 }
 
             </div>

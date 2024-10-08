@@ -3,64 +3,48 @@ import {LoginSocialFacebook, LoginSocialLinkedin, LoginSocialPinterest} from "re
 import {
     computeAndSocialAccountJSON, formatMessage,
     getFormattedLinkedinObject,
-    getInitialLetterCap, getLinkedInUrnId,
+    getInitialLetterCap, getLinkedInUrnId, isNullOrEmpty,
 
 } from "../../../utils/commonUtils";
-import { RxCross2 } from "react-icons/rx";
-import ReactDOMServer from 'react-dom/server';
-
 import {DisconnectAccountWarning, Linkedin_URN_Id_Types} from "../../../utils/contantData";
 import {FacebookLoginButton, LinkedInLoginButton} from "react-social-login-buttons";
 import fb_img from "../../../images/fb.svg";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import React, {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {
-    getAllInstagramBusinessAccounts, getAllLinkedinPages, getAllPinterestBoards,
-} from "../../../app/actions/socialAccountActions/socialAccountActions";
-import {getAllSocialMediaPostsByCriteria} from "../../../app/actions/postActions/postActions";
-import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
+import {useDispatch} from "react-redux";
+import {showErrorToast} from "../../common/components/Toast";
 import Swal from "sweetalert2";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import ConnectPagesModal from "../../modals/views/facebookModal/ConnectPagesModal";
-import {
-    getFacebookConnectedPages
-} from "../../../app/actions/facebookActions/facebookActions";
 import default_user_icon from "../../../images/default_user_icon.svg"
 import {
     SocialAccountProvider
 } from "../../../utils/contantData";
 import AccountAlreadyConnectedWarningModal from "./AccountAlreadyConnectedWarningModal";
 import {SomethingWentWrong, enabledSocialMedia} from "../../../utils/contantData";
-import cancel_img from "../../../images/cancel_img.svg"
-import success_img from "../../../images/right_img.svg"
-import Warning_image from "../../../images/cancel_img.svg"
 import crossIcon from "../../../images/cross_img.svg"
 import {
     useConnectSocialAccountMutation,
-    useDisconnectSocialAccountMutation, useGetAllFacebookPagesQuery,
-    useGetConnectedSocialAccountQuery, useLazyGetAllFacebookPagesQuery
+    useDisconnectSocialAccountMutation,
+    useGetAllFacebookPagesQuery,
+    useGetAllInstagramBusinessAccountsQuery, useGetAllLinkedinPagesQuery,
+    useGetAllPinterestBoardsQuery,
+    useGetConnectedSocialAccountQuery,
 } from "../../../app/apis/socialAccount";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 
-import addyLogo from "../../../images/addyLogoDisconnectPage.svg"
 import facebookImg from "../../../images/modal_facebook_image.svg"
 import linkedinImg from "../../../images/modal_linkedin_image.svg"
 import instagramImg from "../../../images/modal_instagram_image.svg"
 import pinterestImg from "../../../images/modal_pintrest_image.svg"
+import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
+import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils";
 
 
 const SocialAccounts = ({}) => {
 
     const dispatch = useDispatch();
-    const token = getToken();
     // const [checkForDisablePages, setCheckForDisablePages] = useState(true);
-    const [connectSocialAccount, connectSocialAccountApi] = useConnectSocialAccountMutation()
-    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
-    const [disconnectSocialAccount, disconnectSocialAccountApi] = useDisconnectSocialAccountMutation()
-    // const [getAllFacebookPages, getAllFacebookPagesApi] = useLazyGetAllFacebookPagesQuery()
-    const  getAllFacebookPagesApi = useGetAllFacebookPagesQuery()
 
     const [currentConnectedFacebookPages, setCurrentConnectedFacebookPages] = useState(null);
     const [currentConnectedInstagramPages, setCurrentConnectedInstagramPages] = useState(null);
@@ -79,94 +63,37 @@ const SocialAccounts = ({}) => {
     const [showPinterestModal, setShowPinterestModal] = useState(false);
     const [showLinkedinModal, setShowLinkedinModal] = useState(false);
 
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const connectedSocialAccount = getConnectedSocialMediaAccount(getConnectedSocialAccountApi?.data || [])
 
+    const [connectSocialAccount, connectSocialAccountApi] = useConnectSocialAccountMutation()
 
-    const instagramBusinessAccountsData = useSelector(state => state.socialAccount.getAllInstagramBusinessAccountsReducer);
-    const pinterestBoardsData = useSelector(state => state.socialAccount.getAllPinterestBoardsReducer);
-    const getAllLinkedinPagesData = useSelector(state => state.socialAccount.getAllLinkedinPagesReducer);
+    const [disconnectSocialAccount, disconnectSocialAccountApi] = useDisconnectSocialAccountMutation()
+    const  getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
-    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
-    const socialAccountConnectData = useSelector(state => state.socialAccount.connectSocialAccountReducer);
+    const getAllFacebookPagesApi = useGetAllFacebookPagesQuery({
+        providerId: connectedSocialAccount?.facebook?.providerId,
+        accessToken: connectedSocialAccount?.facebook?.accessToken
+    }, {skip: !enabledSocialMedia?.isFacebookEnabled || isNullOrEmpty(connectedSocialAccount.facebook)})
 
-    // const closeIconHTML = ReactDOMServer.renderToString(<div className="cancelImg">
-    //     <RxCross2 />
-    // </div>);
+    const getAllInstagramPagesApi = useGetAllInstagramBusinessAccountsQuery(connectedSocialAccount?.instagram?.accessToken,
+        {skip: !enabledSocialMedia?.isInstagramEnabled || isNullOrEmpty(connectedSocialAccount.instagram)})
 
-    useEffect( () => {
-        const getFacebookPages= async ()=>{
-            if (enabledSocialMedia?.isFacebookEnabled && !getConnectedSocialAccountApi?.isLoading && getConnectedSocialAccountApi?.data?.filter(c => c.provider === 'FACEBOOK').length > 0) {
-                console.log("getAllFacebookPagesApi====>before",getAllFacebookPagesApi)
-                let faceBookSocialAccount = getConnectedSocialAccountApi?.data?.find(c => c.provider === 'FACEBOOK');
-                await handleRTKQuery(
-                    async () => {
-                        return await getAllFacebookPages({
-                            providerId: faceBookSocialAccount?.providerId,
-                            accessToken: faceBookSocialAccount?.accessToken
-                        }).unwrap()
-                    },
-                    () => {
-                        const decodeJwt = decodeJwtToken(token);
-                        dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-                    })
-                // dispatch(getAllFacebookPages1({
-                //     providerId: faceBookSocialAccount?.providerId,
-                //     accessToken: faceBookSocialAccount?.accessToken
-                // })).then((res) => {
-                //     const decodeJwt = decodeJwtToken(token);
-                //     dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-                // })
-            }
-        }
+    const getAllPinterestPagesApi = useGetAllPinterestBoardsQuery(connectedSocialAccount?.pinterest?.id,
+        {skip: !enabledSocialMedia?.isPinterestEnabled || isNullOrEmpty(connectedSocialAccount.pinterest)})
 
-        getFacebookPages();
-
-    }, [getConnectedSocialAccountApi]);
-    useEffect(() => {
-        if (enabledSocialMedia?.isInstagramEnabled && !getConnectedSocialAccountApi?.isLoading && getConnectedSocialAccountApi?.data?.filter(c => c.provider === 'INSTAGRAM').length > 0) {
-            let instagramSocialAccount = getConnectedSocialAccountApi?.data?.find(c => c.provider === 'INSTAGRAM');
-            dispatch(getAllInstagramBusinessAccounts({
-                accessToken: instagramSocialAccount?.accessToken
-            })).then((res) => {
-                const decodeJwt = decodeJwtToken(token);
-                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-            })
-        }
-
-    }, [getConnectedSocialAccountApi]);
+    const getAllLinkedinPagesApi = useGetAllLinkedinPagesQuery({
+        q: "roleAssignee",
+        role: "ADMINISTRATOR",
+        state: "APPROVED"
+    }, {skip: !enabledSocialMedia?.isLinkedinEnabled || isNullOrEmpty(connectedSocialAccount.linkedin)})
 
 
     useEffect(() => {
-        if (enabledSocialMedia?.isPinterestEnabled && !getConnectedSocialAccountApi?.isLoading && getConnectedSocialAccountApi?.data?.filter(c => c.provider === 'PINTEREST').length > 0) {
-            let pinterestSocialAccount = getConnectedSocialAccountApi?.data?.find(c => c.provider === 'PINTEREST');
-            dispatch(getAllPinterestBoards({
-                token: token,
-                socialMediaAccountId: pinterestSocialAccount?.id
-            })).then((res) => {
-                const decodeJwt = decodeJwtToken(token);
-                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-            })
-        }
-    }, [getConnectedSocialAccountApi]);
-
-    useEffect(() => {
-        if (enabledSocialMedia?.isLinkedinEnabled && !getConnectedSocialAccountApi?.isLoading && getConnectedSocialAccountApi?.data?.filter(c => c.provider === 'LINKEDIN').length > 0) {
-            dispatch(getAllLinkedinPages({
-                token: token,
-                q: "roleAssignee",
-                role: "ADMINISTRATOR",
-                state: "APPROVED"
-            })).then((res) => {
-                const decodeJwt = decodeJwtToken(token);
-                dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-            })
-        }
-    }, [getConnectedSocialAccountApi]);
-
-    useEffect(() => {
-        if (enabledSocialMedia?.isLinkedinEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+        if (enabledSocialMedia?.isLinkedinEnabled && getAllConnectedPagesApi?.data && Array.isArray(getAllConnectedPagesApi?.data) && !isNullOrEmpty(getAllLinkedinPagesApi?.data)) {
             const connectedLinkedinSocialAccount = getConnectedSocialAccountApi?.data?.filter(socialAccount => socialAccount?.provider === "LINKEDIN")[0]
-            const connectedLinkedinPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedLinkedinSocialAccount?.id)
-            const linkedinPages = (getAllLinkedinPagesData?.data?.results === null || getAllLinkedinPagesData?.data?.results === undefined) ? {} : getAllLinkedinPagesData?.data?.results
+            const connectedLinkedinPages = getAllConnectedPagesApi?.data?.filter(pageData => pageData?.socialMediaAccountId === connectedLinkedinSocialAccount?.id)
+            const linkedinPages = (getAllLinkedinPagesApi?.data?.results === null || getAllLinkedinPagesApi?.data?.results === undefined) ? {} : getAllLinkedinPagesApi?.data?.results
             const currentConnectedLinkedinPagesIds = Object.keys(linkedinPages)?.filter(LinkedinPageId =>
                 connectedLinkedinPages?.some(linkedinPage => linkedinPage?.pageId === getLinkedInUrnId(LinkedinPageId, Linkedin_URN_Id_Types.ORGANIZATION))
             )
@@ -175,32 +102,30 @@ const SocialAccounts = ({}) => {
             })
             setCurrentConnectedLinkedinPages(currentConnectedLinkedinPages || null)
         }
-    }, [connectedPagesData?.facebookConnectedPages]);
-
+    }, [getAllConnectedPagesApi?.data,getAllLinkedinPagesApi?.data]);
 
     useEffect(() => {
-        if (enabledSocialMedia?.isPinterestEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+        if (enabledSocialMedia?.isPinterestEnabled && getAllConnectedPagesApi?.data && Array.isArray(getAllConnectedPagesApi?.data) && !isNullOrEmpty(getAllPinterestPagesApi?.data)) {
             const connectedPinterestSocialAccount = getConnectedSocialAccountApi?.data?.filter(socialAccount => socialAccount?.provider === "PINTEREST")[0]
-            const connectedPinterestBoards = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedPinterestSocialAccount?.id)
-            const currentConnectedPinterestBoards = pinterestBoardsData?.data?.items?.filter(board =>
+            const connectedPinterestBoards = getAllConnectedPagesApi?.data?.filter(pageData => pageData?.socialMediaAccountId === connectedPinterestSocialAccount?.id)
+            const currentConnectedPinterestBoards = getAllPinterestPagesApi?.data?.items?.filter(board =>
                 connectedPinterestBoards?.some(pinBoard => pinBoard?.pageId === board?.id)
             )
-            setCurrentConnectedPinterestPages(currentConnectedPinterestBoards || null);
+            setCurrentConnectedPinterestPages(currentConnectedPinterestBoards || []);
         }
-    }, [connectedPagesData?.facebookConnectedPages]);
-
+    }, [getAllConnectedPagesApi?.data,getAllPinterestPagesApi?.data]);
 
     useEffect(() => {
-        if (enabledSocialMedia?.isInstagramEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+        if (enabledSocialMedia?.isInstagramEnabled && getAllConnectedPagesApi?.data && Array.isArray(getAllConnectedPagesApi?.data) && !isNullOrEmpty(getAllInstagramPagesApi?.data)) {
             const connectedInstagramSocialAccount = getConnectedSocialAccountApi?.data?.filter(socialAccount => socialAccount?.provider === "INSTAGRAM")[0]
-            const connectedInstagramPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedInstagramSocialAccount?.id)
-            const currentConnectedInstagramPages = instagramBusinessAccountsData?.data?.filter(page =>
+            const connectedInstagramPages = getAllConnectedPagesApi?.data?.filter(pageData => pageData?.socialMediaAccountId === connectedInstagramSocialAccount?.id)
+            const currentConnectedInstagramPages = getAllInstagramPagesApi?.data?.filter(page =>
                 connectedInstagramPages?.some(instaPage => instaPage?.pageId === page?.id)
             );
-            setCurrentConnectedInstagramPages(currentConnectedInstagramPages || null);
+            setCurrentConnectedInstagramPages(currentConnectedInstagramPages || []);
             // List of pages to remove from the database incase user has deactivated page but it will still be present in our db
             // const pagesToRemove = connectedInstagramPages?.filter(page =>
-            //     !instagramBusinessAccountsData?.data?.some(fbPage => fbPage?.id === page?.pageId)
+            //     !getAllInstagramPagesApi?.data?.some(fbPage => fbPage?.id === page?.pageId)
             // );
             // if (!isNullOrEmpty(pagesToRemove)) {
             //     checkForDisablePages && removeDisabledPages(pagesToRemove)
@@ -209,17 +134,16 @@ const SocialAccounts = ({}) => {
             // }
 
         }
-    }, [connectedPagesData?.facebookConnectedPages]);
+    }, [getAllConnectedPagesApi?.data,getAllInstagramPagesApi?.data]);
 
     useEffect(() => {
-
-        if (enabledSocialMedia?.isFacebookEnabled && connectedPagesData?.facebookConnectedPages && Array.isArray(connectedPagesData?.facebookConnectedPages)) {
+        if (enabledSocialMedia?.isFacebookEnabled && getAllConnectedPagesApi?.data && Array.isArray(getAllConnectedPagesApi?.data)  ) {
             const connectedFacebookSocialAccount = getConnectedSocialAccountApi?.data?.filter(socialAccount => socialAccount?.provider === "FACEBOOK")[0]
-            const connectedFacebookPages = connectedPagesData?.facebookConnectedPages?.filter(pageData => pageData?.socialMediaAccountId === connectedFacebookSocialAccount?.id)
+            const connectedFacebookPages = getAllConnectedPagesApi?.data?.filter(pageData => pageData?.socialMediaAccountId === connectedFacebookSocialAccount?.id)
             const currentConnectedFaceBookPages = getAllFacebookPagesApi?.data?.filter(page =>
                 connectedFacebookPages?.some(fbPage => fbPage?.pageId === page?.id)
             )
-            setCurrentConnectedFacebookPages(currentConnectedFaceBookPages || null);
+            setCurrentConnectedFacebookPages(currentConnectedFaceBookPages || []);
             // List of pages to remove from the database incase user has deactivated page but it will still be present in our db
 
             // const pagesToRemove = connectedFacebookPages?.filter(page =>
@@ -231,7 +155,7 @@ const SocialAccounts = ({}) => {
             //     setCheckForDisablePages(false);
             // }
         }
-    }, [connectedPagesData?.facebookConnectedPages]);
+    }, [getAllConnectedPagesApi?.data,getAllFacebookPagesApi?.data]);
 
     const connectSocialMediaAccountToCustomer = (object, socialMediaType) => {
         object.then(async (res) => {
@@ -240,17 +164,7 @@ const SocialAccounts = ({}) => {
                 },
                 () => {
                     dispatch(addyApi.util.invalidateTags(["getConnectedSocialAccountApi"]))
-                    dispatch(getAllSocialMediaPostsByCriteria({
-                        token: token,
-                        query: {
-                            limit: 6,
-                            sort: "feedPostDate",
-                            sortOrder: "asc",
-                            period: "MONTH",
-                            postStatus: ["SCHEDULED"]
-                        }
-                    }));
-
+                    dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
                 },
                 (response) => {
                     response.status === 409 && setAccountAlreadyConnectedWarningModal({
@@ -288,16 +202,16 @@ const SocialAccounts = ({}) => {
     const disConnectSocialMediaAccountToCustomer = (socialMediaType) => {
         const socialMediaImg = getInitialLetterCap(SocialAccountProvider[socialMediaType]);
         let imageUrl;
-
         if (socialMediaImg === 'Linkedin') {
             imageUrl = linkedinImg;
-        }else if(socialMediaImg === 'Facebook') {
+        }
+        if (socialMediaImg === 'Facebook') {
             imageUrl = facebookImg;
         }
-        else if(socialMediaImg === 'Instagram') {
+        if (socialMediaImg === 'Instagram') {
             imageUrl = instagramImg;
         }
-        else if(socialMediaImg === 'Pinterest') {
+        if (socialMediaImg === 'Pinterest') {
             imageUrl = pinterestImg;
         }
         Swal.fire({
@@ -306,10 +220,7 @@ const SocialAccounts = ({}) => {
             html: `
                <div class="swal_content">
                 <div class="swal_images">
-            
                 <img src="${imageUrl}" alt="Image 2" class="facebook_img" />
-                
-               
                 </div>
                 <h2 class="disconnect_title">Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account</h2>
                 <p class="disconnect_paragraph">${formatMessage(DisconnectAccountWarning, [getInitialLetterCap(SocialAccountProvider[socialMediaType])])}</p>
@@ -321,7 +232,7 @@ const SocialAccounts = ({}) => {
             confirmButtonText: 'Yes',
             cancelButtonText: 'Cancel',
             confirmButtonColor: "#F07C33",
-            reverseButtons:true,
+            reverseButtons: true,
             cancelButtonColor: "#E6E9EC",
             customClass: {
                 confirmButton: 'YesButton',
@@ -353,18 +264,9 @@ const SocialAccounts = ({}) => {
                     },
                     () => {
                         dispatch(addyApi.util.invalidateTags(["getConnectedSocialAccountApi"]))
-                        dispatch(getAllSocialMediaPostsByCriteria({
-                            token: token,
-                            query: {
-                                limit: 6,
-                                period: "MONTH",
-                                sort: "feedPostDate",
-                                sortOrder: "asc",
-                                postStatus: ["SCHEDULED"]
-                            }
-                        }));
+                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
                     },
-                    ()=>{
+                    () => {
                         Swal.fire({
                             imageUrl: crossIcon,
                             title: 'Error',
@@ -372,14 +274,11 @@ const SocialAccounts = ({}) => {
                             text: `An error occurred while disconnecting your ${getInitialLetterCap(SocialAccountProvider[socialMediaType])}  account. Please try again later.`,
                             customClass: {
                                 confirmButton: 'confirmButton',
-
                             }
                         });
                     })
             }
         });
-
-
     }
 
     const facebook = () => {
@@ -416,7 +315,7 @@ const SocialAccounts = ({}) => {
                         {
                             getConnectedSocialAccountApi?.isLoading ?
                                 <SkeletonEffect count={1}/> :
-                                getConnectedSocialAccountApi?.data?.filter(c => c.provider === 'FACEBOOK').length === 0 ?
+                                getConnectedSocialAccountApi?.data?.filter(c => c?.provider === 'FACEBOOK')?.length === 0 ?
 
                                     <div className="social_media_outer">
                                         <div className="social_media_content">
@@ -466,12 +365,12 @@ const SocialAccounts = ({}) => {
                                                     </div>
 
                                                     <div className="text-start flex-grow-1">
-                                                        <h5 className="">{getConnectedSocialAccountApi.data && getConnectedSocialAccountApi.data.find(c => c.provider === 'FACEBOOK')?.name || "facebook"}</h5>
+                                                        <h5 className="">{getConnectedSocialAccountApi?.data && getConnectedSocialAccountApi?.data?.find(c => c?.provider === 'FACEBOOK')?.name || "facebook"}</h5>
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
 
-                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !connectedPagesData?.loading) && currentConnectedFacebookPages?.length === 0 &&
+                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !getAllConnectedPagesApi?.isLoading) && currentConnectedFacebookPages?.length === 0 &&
                                                         <button className="DisConnectBtn cmn_connect_btn w-auto"
                                                                 onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}>
                                                             Disconnect
@@ -625,7 +524,7 @@ const SocialAccounts = ({}) => {
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
-                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !connectedPagesData?.loading) && currentConnectedInstagramPages?.length === 0 &&
+                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !getAllConnectedPagesApi?.isLoading) && currentConnectedInstagramPages?.length === 0 &&
                                                         <button className="DisConnectBtn cmn_connect_btn w-auto"
                                                                 onClick={() => disConnectSocialMediaAccountToCustomer("INSTAGRAM")}>
                                                             Disconnect
@@ -652,7 +551,7 @@ const SocialAccounts = ({}) => {
                                                 <ul className="menu_items">
 
                                                     {
-                                                        instagramBusinessAccountsData?.loading ?
+                                                        getAllInstagramPagesApi?.isLoading ?
                                                             <SkeletonEffect count={3}/> :
 
                                                             currentConnectedInstagramPages?.length === 0 ?
@@ -687,7 +586,7 @@ const SocialAccounts = ({}) => {
                                                                     }
                                                                     <li>
                                                                         {
-                                                                            (instagramBusinessAccountsData?.data && Array.isArray(instagramBusinessAccountsData?.data)) &&
+                                                                            (getAllInstagramPagesApi?.data && Array.isArray(getAllInstagramPagesApi?.data)) &&
                                                                             <div
                                                                                 className="connectDisconnect_btn_outer">
                                                                                 <button
@@ -779,7 +678,7 @@ const SocialAccounts = ({}) => {
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
-                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !connectedPagesData?.loading) && currentConnectedLinkedinPages?.length === 0 &&
+                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !getAllConnectedPagesApi?.isLoading) && currentConnectedLinkedinPages?.length === 0 &&
 
                                                         <button
                                                             className="DisConnectBtn cmn_connect_btn w-auto"
@@ -810,7 +709,7 @@ const SocialAccounts = ({}) => {
                                                 <ul className="menu_items">
 
                                                     {
-                                                        getAllLinkedinPagesData?.loading ?
+                                                        getAllLinkedinPagesApi?.isLoading ?
                                                             <SkeletonEffect count={3}/> :
 
                                                             currentConnectedLinkedinPages?.length === 0 ?
@@ -845,7 +744,7 @@ const SocialAccounts = ({}) => {
                                                                     }
                                                                     <li>
                                                                         {
-                                                                            (getAllLinkedinPagesData?.data && getAllLinkedinPagesData?.data?.results && Object.keys(getAllLinkedinPagesData?.data?.results)?.length > 0) &&
+                                                                            (getAllLinkedinPagesApi?.data && getAllLinkedinPagesApi?.data?.results && Object.keys(getAllLinkedinPagesApi?.data?.results)?.length > 0) &&
                                                                             <div
                                                                                 className="connectDisconnect_btn_outer">
                                                                                 <button
@@ -932,7 +831,7 @@ const SocialAccounts = ({}) => {
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
-                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !connectedPagesData?.loading) && currentConnectedPinterestPages?.length === 0 &&
+                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !getAllConnectedPagesApi?.isLoading) && currentConnectedPinterestPages?.length === 0 &&
                                                         <button className="DisConnectBtn cmn_connect_btn w-auto"
                                                                 onClick={() => disConnectSocialMediaAccountToCustomer("PINTEREST")}>
                                                             Disconnect
@@ -959,7 +858,7 @@ const SocialAccounts = ({}) => {
                                                 <ul className="menu_items">
 
                                                     {
-                                                        pinterestBoardsData?.loading ?
+                                                        getAllPinterestPagesApi?.isLoading ?
                                                             <SkeletonEffect count={3}/> :
 
                                                             currentConnectedPinterestPages?.length === 0 ?
@@ -994,7 +893,7 @@ const SocialAccounts = ({}) => {
                                                                     }
                                                                     <li>
                                                                         {
-                                                                            (pinterestBoardsData?.data && pinterestBoardsData?.data?.items && Array.isArray(pinterestBoardsData?.data?.items)) &&
+                                                                            (getAllPinterestPagesApi?.data && getAllPinterestPagesApi?.data?.items && Array.isArray(getAllPinterestPagesApi?.data?.items)) &&
                                                                             <div
                                                                                 className="connectDisconnect_btn_outer">
                                                                                 <button
@@ -1032,36 +931,44 @@ const SocialAccounts = ({}) => {
                 {/* end pinterest connect */}
 
             </div>
-            {enabledSocialMedia?.isFacebookEnabled && showFacebookModal &&
+            {
+                enabledSocialMedia?.isFacebookEnabled && showFacebookModal &&
                 <ConnectPagesModal showModal={showFacebookModal} setShowModal={setShowFacebookModal}
                                    allPagesList={getAllFacebookPagesApi?.data || []}
-                                   connectedPagesList={connectedPagesData?.facebookConnectedPages}
+                                   connectedPagesList={getAllConnectedPagesApi?.data}
                                    noPageFoundMessage={"No Page Found, Please connect another account."}
                                    socialMediaType={SocialAccountProvider.FACEBOOK}
-                                   socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>}
-            {enabledSocialMedia?.isInstagramEnabled && showInstagramModal &&
+                                   socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "FACEBOOK")[0]}/>
+            }
+            {
+                enabledSocialMedia?.isInstagramEnabled && showInstagramModal &&
                 <ConnectPagesModal showModal={showInstagramModal} setShowModal={setShowInstagramModal}
-                                   allPagesList={instagramBusinessAccountsData?.data || []}
-                                   connectedPagesList={connectedPagesData?.facebookConnectedPages}
+                                   allPagesList={getAllInstagramPagesApi?.data || []}
+                                   connectedPagesList={getAllConnectedPagesApi?.data}
                                    noPageFoundMessage={"No Page Found, Please connect another account."}
                                    socialMediaType={SocialAccountProvider.INSTAGRAM}
-                                   socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>}
-            {enabledSocialMedia?.isPinterestEnabled && showPinterestModal &&
+                                   socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "INSTAGRAM")[0]}/>
+            }
+            {
+                enabledSocialMedia?.isPinterestEnabled && showPinterestModal &&
                 <ConnectPagesModal showModal={showPinterestModal} setShowModal={setShowPinterestModal}
-                                   allPagesList={pinterestBoardsData?.data?.items || []}
-                                   connectedPagesList={connectedPagesData?.facebookConnectedPages}
+                                   allPagesList={getAllPinterestPagesApi?.data?.items || []}
+                                   connectedPagesList={getAllConnectedPagesApi?.data}
                                    noPageFoundMessage={"No Board Found!"}
                                    socialMediaType={SocialAccountProvider.PINTEREST}
-                                   socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "PINTEREST")[0]}/>}
-            {enabledSocialMedia?.isLinkedinEnabled && showLinkedinModal &&
+                                   socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "PINTEREST")[0]}/>
+            }
+            {
+                enabledSocialMedia?.isLinkedinEnabled && showLinkedinModal &&
                 <ConnectPagesModal showModal={showLinkedinModal} setShowModal={setShowLinkedinModal}
-                                   allPagesList={Object.keys(getAllLinkedinPagesData?.data?.results || {})?.map(key => {
-                                       return getFormattedLinkedinObject(key, getAllLinkedinPagesData?.data?.results[key])
+                                   allPagesList={Object.keys(getAllLinkedinPagesApi?.data?.results || {})?.map(key => {
+                                       return getFormattedLinkedinObject(key, getAllLinkedinPagesApi?.data?.results[key])
                                    })}
-                                   connectedPagesList={connectedPagesData?.facebookConnectedPages}
+                                   connectedPagesList={getAllConnectedPagesApi?.data}
                                    noPageFoundMessage={"No Page Found, Please connect another account."}
                                    socialMediaType={SocialAccountProvider.LINKEDIN}
-                                   socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "LINKEDIN")[0]}/>}
+                                   socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter(account => account.provider === "LINKEDIN")[0]}/>
+            }
 
             {
                 accountAlreadyConnectedWarningModal?.showModal &&

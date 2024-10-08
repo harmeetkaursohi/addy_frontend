@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import delete_img from "../../../images/deletePost.svg";
 import CommonSlider from "../../common/components/CommonSlider";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
+import {useDeletePostByIdMutation} from "../../../app/apis/postApi";
 
 
 function DraftModal({show,
@@ -31,16 +32,19 @@ function DraftModal({show,
     const dispatch = useDispatch();
 
     const token = getToken();
+
+    const [deletePostById,deletePostByIdApi]=useDeletePostByIdMutation()
+
     const publishedPostData = useSelector((state) => state.post.publishedPostReducer);
-    const deletePostByBatchIdData = useSelector((state) => state.post.deletePostByBatchIdReducer);
-    const [batchToDelete, setBatchToDelete] = useState(null);
+
+    const [postToDelete, setPostToDelete] = useState(null);
     const [postToPublish, setPostToPublish] = useState(null);
-    const [labels, setLabels] = useState("")
+    const [action, setAction] = useState("")
     const [showCaption, setShowCaption] = useState(false)
     const [showHastag, setShowHashtag] = useState(false)
 
     const handlePublishedPost = (e) => {
-        setLabels("Post Now")
+        setAction("POST")
         e.preventDefault();
         setPostToPublish(batchIdData?.id)
         dispatch(publishedPostAction({postId: batchIdData?.id, token: token}))
@@ -48,7 +52,7 @@ function DraftModal({show,
                 if (response.meta.requestStatus === "fulfilled") {
                     const allSuccess = response?.payload?.every(post => post.success)
                     const allFailed = response?.payload?.every(post => !post.success)
-                    setBatchToDelete(null);
+                    setPostToDelete(null);
                     if (reference === "PLANNER") {
                         setDrafts !== null && setDrafts([]);
                         setDraftPost !== null && setDraftPost(false)
@@ -63,16 +67,15 @@ function DraftModal({show,
                     handleClose()
                 }
             }).catch((error) => {
-            setBatchToDelete(null);
+            setPostToDelete(null);
             showErrorToast(error.response.data.message);
         });
 
     }
 
     const handleDeletePost = (e) => {
-        setLabels("Delete Post")
-        e.preventDefault();
-        setBatchToDelete(batchIdData?.id)
+        setAction("DELETE")
+        setPostToDelete(batchIdData?.id)
         Swal.fire({
             imageUrl: delete_img,
             title: `Delete Post`,
@@ -89,14 +92,19 @@ function DraftModal({show,
                 popup:"small_swal_popup cmnpopupWrapper"
 
             }
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
+
+
+
+
+
                 if (e?.target?.id !== null) {
-                    setBatchToDelete(e?.target?.id);
+                    setPostToDelete(e?.target?.id);
                     dispatch(deletePostByBatchIdAction({postId: e?.target?.id, token: token}))
                         .then((response) => {
                             if (response.meta.requestStatus === "fulfilled") {
-                                setBatchToDelete(null);
+                                setPostToDelete(null);
                                 setDeletedAndPublishedPostIds({
                                     ...deletedAndPublishedPostIds,
                                     deletedPostIds: [...deletedAndPublishedPostIds?.deletedPostIds, batchIdData?.id]
@@ -105,7 +113,7 @@ function DraftModal({show,
                                 showSuccessToast("Post has been deleted successfully");
                             }
                         }).catch((error) => {
-                        setBatchToDelete(null);
+                        setPostToDelete(null);
                         showErrorToast(error.response.data.message);
                     });
                 }
@@ -180,24 +188,24 @@ function DraftModal({show,
                                                          label={"Post Now"}
                                                          isLoading={batchIdData?.id === postToPublish && publishedPostData?.loading}
                                                          onClick={handlePublishedPost}
-                                                         isDisabled={labels !== "Post Now" && deletePostByBatchIdData?.loading}
+                                                         isDisabled={action !== "POST" && deletePostByIdApi?.isLoading}
                                 />
                                 <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn"}
                                                          label={"Schedule Post/Edit"}
                                                          onClick={() => {
-                                                             setLabels("Schedule Post")
+                                                             setAction("SCHEDULE")
                                                              navigate("/planner/post/" + batchIdData?.id)
                                                          }}
-                                                         isDisabled={labels !== "Schedule Post" && deletePostByBatchIdData?.loading || publishedPostData?.loading}
+                                                         isDisabled={action !== "SCHEDULE" && deletePostByIdApi?.isLoading || publishedPostData?.loading}
                                 />
 
                                 <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn"}
                                                          label={"Delete Post"}
-                                                         isLoading={batchIdData?.id === batchToDelete && deletePostByBatchIdData?.loading}
+                                                         isLoading={batchIdData?.id === postToDelete && deletePostByIdApi?.isLoading}
                                                          onClick={handleDeletePost}
                                                          id={batchIdData?.id}
                                                          contentText={"Deleting..."}
-                                                         isDisabled={labels !== "Delete Post" && publishedPostData?.loading}
+                                                         isDisabled={action !== "DELETE" && publishedPostData?.loading}
                                 />
                             </div>
 

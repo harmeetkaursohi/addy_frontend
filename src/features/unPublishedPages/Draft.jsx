@@ -13,10 +13,13 @@ import ConnectSocialAccountModal from "../common/components/ConnectSocialAccount
 import {useAppContext} from "../common/components/AppProvider";
 import Dropdown from "react-bootstrap/Dropdown";
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../app/apis/pageAccessTokenApi";
+import {useGetSocialMediaPostsByCriteriaQuery} from "../../app/apis/postApi";
+import {isNullOrEmpty} from "../../utils/commonUtils";
 
 const Draft = () => {
-    const dispatch = useDispatch();
-    const token = getToken();
+
+    const {sidebar} = useAppContext();
     const navigate = useNavigate();
     const [baseSearchQuery, setBaseSearchQuery] = useState({
         postStatus: ["DRAFT"],
@@ -24,19 +27,18 @@ const Draft = () => {
         period: "MONTH",
     });
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
     const [apiTrigger, setApiTrigger] = useState(null);
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false);
-    const connectedPagesData = useSelector((state) => state.facebook.getFacebookConnectedPagesReducer);
 
-    useEffect(() => {
-        dispatch(
-            getAllSocialMediaPostsByCriteria({
-                token: token,
-                query: {...baseSearchQuery},
-            })
-        );
-    }, [baseSearchQuery,apiTrigger]);
+    // useEffect(() => {
+    //     dispatch(getAllSocialMediaPostsByCriteria({
+    //             token: token,
+    //             query: {...baseSearchQuery},
+    //         })
+    //     );
+    // }, [baseSearchQuery, apiTrigger]);
 
     const calendarRef = useRef(null);
 
@@ -53,17 +55,15 @@ const Draft = () => {
         setBaseSearchQuery({...baseSearchQuery, plannerCardDate: inst});
     };
     const handleCreatePost = () => {
-        const isAnyPageConnected =
-            connectedPagesData?.facebookConnectedPages?.length > 0;
-        const isAnyAccountConnected =
-            getConnectedSocialAccountApi?.data?.length > 0;
+        const isAnyPageConnected = getAllConnectedPagesApi?.data?.length > 0;
+        const isAnyAccountConnected = getConnectedSocialAccountApi?.data?.length > 0;
         if (isAnyPageConnected && isAnyAccountConnected) {
             navigate("/planner/post");
         } else {
             setShowConnectAccountModal(true);
         }
     };
-    const {sidebar} = useAppContext();
+
     return (
         <>
             <section>
@@ -121,21 +121,17 @@ const Draft = () => {
                                     <FullCalendar
                                         ref={calendarRef}
                                         plugins={[dayGridPlugin]}
-                                        headerToolbar={
-                                            getConnectedSocialAccountApi?.isLoading ||
-                                            getConnectedSocialAccountApi?.data?.length === 0 ||
-                                            connectedPagesData?.loading ||
-                                            connectedPagesData?.facebookConnectedPages?.length === 0
-                                                ? {
-                                                    left: "  ",
-                                                    center: "",
-                                                    right: "",
-                                                }
-                                                : {
-                                                    left: "  prev",
-                                                    center: "title",
-                                                    right: "next,timeGridDay,",
-                                                }
+                                        headerToolbar={getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.data?.length === 0
+                                            ? {
+                                                left: "  ",
+                                                center: "",
+                                                right: "",
+                                            }
+                                            : {
+                                                left: "  prev",
+                                                center: "title",
+                                                right: "next,timeGridDay,",
+                                            }
                                         }
                                         customButtons={{
                                             prev: {
@@ -151,18 +147,19 @@ const Draft = () => {
                                 </div>
                             </div>
 
-                            <ParentDraftComponent reference={"DRAFT"} setApiTrigger={setApiTrigger}/>
+                            <ParentDraftComponent searchQuery={baseSearchQuery} reference={"DRAFT"} setApiTrigger={setApiTrigger}/>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {showConnectAccountModal && (
+            {
+                showConnectAccountModal &&
                 <ConnectSocialAccountModal
                     showModal={showConnectAccountModal}
                     setShowModal={setShowConnectAccountModal}
                 />
-            )}
+            }
         </>
     );
 };

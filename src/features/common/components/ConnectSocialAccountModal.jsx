@@ -8,12 +8,12 @@ import { RxCross2 } from "react-icons/rx";
 import {
     useGetConnectedSocialAccountQuery,
 } from "../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
 
     const navigate = useNavigate();
     const getConnectedSocialAccountApi=useGetConnectedSocialAccountQuery("")
-
-    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
     const handleClose = () => {
         setShowModal(false)
@@ -50,7 +50,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                                      Connected</h2> :
                                  <>
                                      {
-                                         connectedPagesData?.facebookConnectedPages !== undefined && connectedPagesData?.facebookConnectedPages?.length === 0 ?
+                                         getAllConnectedPagesApi?.data !== undefined && getAllConnectedPagesApi?.data?.length === 0 ?
                                          <h2 class="swal2-title page_not_connected" id="swal2-title">Page Not
                                                  Connected</h2> : <></>
                                      }
@@ -68,10 +68,13 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                                             an account before attempting to create a post.</p> :
                                         <>
                                             {
-                                                connectedPagesData?.facebookConnectedPages !== undefined && connectedPagesData?.facebookConnectedPages?.length === 0 ?
-                                                    <p className={"text-center mb-4 modal_heading"}>Currently, there are no active connections at the
+                                                getAllConnectedPagesApi?.data !== undefined && getAllConnectedPagesApi?.data?.length === 0 ?
+                                                    <p
+                                                        className={"text-center mb-4 modal_heading"}>
+                                                        Currently, there are no active connections at the
                                                         moment. Please connect
-                                                        a page before attempting to create a post.</p> : <></>
+                                                        a page before attempting to create a post.</p> :
+                                                    <></>
                                             }
                                         </>
                                 }

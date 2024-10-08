@@ -34,6 +34,7 @@ import {useAppContext} from '../../common/components/AppProvider.jsx';
 import {AiOutlineEye} from 'react-icons/ai';
 import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 
 const CreatePost = () => {
 
@@ -61,8 +62,8 @@ const CreatePost = () => {
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
-    const connectedPagesData = useSelector(state => state.facebook.getFacebookConnectedPagesReducer);
     const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
     const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
 
@@ -76,10 +77,10 @@ const CreatePost = () => {
 
 
     useEffect(() => {
-        if (connectedPagesData.loading) {
+        if (getAllConnectedPagesApi.isLoading) {
             setShowConnectAccountModal(false)
         } else {
-            const isAnyPageConnected = connectedPagesData?.facebookConnectedPages?.length > 0
+            const isAnyPageConnected = getAllConnectedPagesApi?.data?.length > 0
             const isAnyAccountConnected = getConnectedSocialAccountApi?.data?.length > 0
             if (isAnyPageConnected && isAnyAccountConnected) {
                 setShowConnectAccountModal(false)
@@ -87,7 +88,7 @@ const CreatePost = () => {
                 setShowConnectAccountModal(true)
             }
         }
-    }, [connectedPagesData, getConnectedSocialAccountApi])
+    }, [getAllConnectedPagesApi, getConnectedSocialAccountApi])
 
     useEffect(() => {
         if (files && files.length <= 0) {
@@ -399,7 +400,7 @@ const CreatePost = () => {
         <>
             <div className={`cmn_container ${sidebar ? "" : "cmn_Padding"}`}>
                 {
-                    (getConnectedSocialAccountApi?.isLoading || connectedPagesData?.loading) ?
+                    (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading) ?
                         <CommonLoader></CommonLoader> :
                         <div className="Container">
                             <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>

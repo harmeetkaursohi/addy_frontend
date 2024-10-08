@@ -24,6 +24,7 @@ import {useAppContext} from "../../common/components/AppProvider";
 import {MdDelete} from "react-icons/md";
 import notConnected_img from "../../../images/no_acc_connect_img.svg";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 
 const Review = () => {
     const {sidebar} = useAppContext();
@@ -45,6 +46,7 @@ const Review = () => {
     const token = getToken();
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
     const [isOpenCommentReviewsSectionModal, setOpenCommentReviewsSectionModal] = useState(false);
     const [postData, setPostData] = useState(null);
@@ -58,12 +60,10 @@ const Review = () => {
     const [deletePostPageInfo, setDeletePostPageInfo] = useState(null);
     const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
     const getPostsPageData = useSelector((state) => state.post.getPostsPageReducer);
-    const connectedPagesData = useSelector((state) => state.facebook.getFacebookConnectedPagesReducer);
 
     useEffect(() => {
         if (deletePostPageInfo !== null && deletePostPageInfo !== undefined) {
-            dispatch(
-                deletePostFromPage({
+            dispatch(deletePostFromPage({
                     token: token,
                     postId: deletePostPageInfo?.id,
                     pageIds: [deletePostPageInfo?.page?.pageId],
@@ -90,22 +90,22 @@ const Review = () => {
     }, []);
 
     useEffect(() => {
-        if (getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
+        if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
             setBaseSearchQuery({...baseSearchQuery, offSet: 0});
         }
-    }, [getConnectedSocialAccountApi, connectedPagesData]);
+    }, [getConnectedSocialAccountApi, getAllConnectedPagesApi]);
 
     useEffect(() => {
-        if (getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0) {
+        if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
             if (baseSearchQuery?.socialMediaType === null || baseSearchQuery?.socialMediaType === undefined) {
-                setPageDropdown(connectedPagesData?.facebookConnectedPages);
+                setPageDropdown(getAllConnectedPagesApi?.data);
             } else {
                 setPageDropdown(
                     getConnectedSocialAccountApi?.data?.filter((socialMediaAccount) => socialMediaAccount?.provider === baseSearchQuery?.socialMediaType)[0]?.pageAccessToken
                 );
             }
         }
-    }, [getConnectedSocialAccountApi, connectedPagesData, baseSearchQuery]);
+    }, [getConnectedSocialAccountApi, getAllConnectedPagesApi, baseSearchQuery]);
 
     useEffect(() => {
         if (postData) {
@@ -177,8 +177,8 @@ const Review = () => {
                                         {jsondata.review_post_heading}
                                     </h6>
                                 </div>
-                                {getConnectedSocialAccountApi?.data?.length > 0 &&
-                                    connectedPagesData?.facebookConnectedPages?.length > 0 && (
+                                {
+                                    getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 && (
                                         <>
                                             <Select
                                                 className={"review-pages-media-dropdown"}
@@ -229,10 +229,10 @@ const Review = () => {
                                     )}
                             </div>
                             {
-                                (getConnectedSocialAccountApi?.isLoading || connectedPagesData?.loading) ?
+                                (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading) ?
                                 <CommonLoader classname={"cmn_loader_outer"}></CommonLoader>
                              :
-                                getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length > 0 &&
+                                getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                     <>
                                         <div className="review_outer">
 
@@ -411,7 +411,7 @@ const Review = () => {
                                 <ConnectSocialMediaAccount image={notConnected_img}  message={formatMessage(NotConnected,["posts","social media"])}/>
                             }
                             {
-                                getConnectedSocialAccountApi?.data?.length > 0 && connectedPagesData?.facebookConnectedPages?.length === 0 &&
+                                getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
                                 <ConnectSocialMediaAccount image={notConnected_img} message={formatMessage(NotConnected,["posts","social media pages"])}/>
                             }
                         </div>

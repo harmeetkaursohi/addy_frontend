@@ -1,10 +1,13 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {
     // disconnectSocialAccountAction,
+    // getAllInstagramBusinessAccounts,
     findSocialAccountByProviderAndCustomerIdAction,
     getAllByCustomerIdAction,
-    getSocialMediaReportByProviderTypeAction,
-    getSocialMediaGraphByProviderTypeAction, getAllInstagramBusinessAccounts, getAllPinterestBoards, getAllLinkedinPages
+    // getSocialMediaReportByProviderTypeAction,
+    // getSocialMediaGraphByProviderTypeAction,
+    // getAllPinterestBoards,
+    // getAllLinkedinPages
 } from "../../actions/socialAccountActions/socialAccountActions.js";
 
 
@@ -16,11 +19,11 @@ const socialAccountSlice = createSlice({
         disconnectSocialAccountReducer: {loading: false},
         findSocialAccountByProviderAndCustomerIdReducer: {loading: false},
         getAllByCustomerIdReducer: {loading: false},
-        getSocialMediaReportByProviderTypeReducer: {loading: false},
-        getSocialMediaGraphByProviderTypeReducer: {loading: false},
-        getAllInstagramBusinessAccountsReducer: {loading: false},
-        getAllPinterestBoardsReducer: {loading: false},
-        getAllLinkedinPagesReducer: {loading: false},
+        // getSocialMediaReportByProviderTypeReducer: {loading: false},
+        // getSocialMediaGraphByProviderTypeReducer: {loading: false},
+        // getAllInstagramBusinessAccountsReducer: {loading: false},
+        // getAllPinterestBoardsReducer: {loading: false},
+        // getAllLinkedinPagesReducer: {loading: false},
 
     },
     reducers: {
@@ -33,26 +36,26 @@ const socialAccountSlice = createSlice({
 
 
         // get social account by customer id and provider
-        [getSocialMediaReportByProviderTypeAction.pending]: (state) => {
-            state.getSocialMediaReportByProviderTypeReducer = {loading: true}
-        },
-        [getSocialMediaReportByProviderTypeAction.fulfilled]: (state, action) => {
-            state.getSocialMediaReportByProviderTypeReducer = {loading: false, data: action.payload}
-        },
-        [getSocialMediaReportByProviderTypeAction.rejected]: (state) => {
-            state.getSocialMediaReportByProviderTypeReducer = {loading: false}
-        },
+        // [getSocialMediaReportByProviderTypeAction.pending]: (state) => {
+        //     state.getSocialMediaReportByProviderTypeReducer = {loading: true}
+        // },
+        // [getSocialMediaReportByProviderTypeAction.fulfilled]: (state, action) => {
+        //     state.getSocialMediaReportByProviderTypeReducer = {loading: false, data: action.payload}
+        // },
+        // [getSocialMediaReportByProviderTypeAction.rejected]: (state) => {
+        //     state.getSocialMediaReportByProviderTypeReducer = {loading: false}
+        // },
 
 
-        [getSocialMediaGraphByProviderTypeAction.pending]: (state) => {
-            state.getSocialMediaGraphByProviderTypeReducer = {loading: true}
-        },
-        [getSocialMediaGraphByProviderTypeAction.fulfilled]: (state, action) => {
-            state.getSocialMediaGraphByProviderTypeReducer = {loading: false, data: action.payload}
-        },
-        [getSocialMediaGraphByProviderTypeAction.rejected]: (state) => {
-            state.getSocialMediaGraphByProviderTypeReducer = {loading: false}
-        },
+        // [getSocialMediaGraphByProviderTypeAction.pending]: (state) => {
+        //     state.getSocialMediaGraphByProviderTypeReducer = {loading: true}
+        // },
+        // [getSocialMediaGraphByProviderTypeAction.fulfilled]: (state, action) => {
+        //     state.getSocialMediaGraphByProviderTypeReducer = {loading: false, data: action.payload}
+        // },
+        // [getSocialMediaGraphByProviderTypeAction.rejected]: (state) => {
+        //     state.getSocialMediaGraphByProviderTypeReducer = {loading: false}
+        // },
 
         // social account connect
         // [socialAccountConnectActions.pending]: (state) => {
@@ -112,36 +115,36 @@ const socialAccountSlice = createSlice({
             state.getAllByCustomerIdReducer = {loading: false}
         },
         // Get All Instagram Business Accounts
-        [getAllInstagramBusinessAccounts.pending]: (state) => {
-            state.getAllInstagramBusinessAccountsReducer = {loading: true}
-        },
-        [getAllInstagramBusinessAccounts.fulfilled]: (state, action) => {
-            state.getAllInstagramBusinessAccountsReducer = {loading: false, data: action.payload}
-        },
-        [getAllInstagramBusinessAccounts.rejected]: (state) => {
-            state.getAllInstagramBusinessAccountsReducer = {loading: false}
-        },
+        // [getAllInstagramBusinessAccounts.pending]: (state) => {
+        //     state.getAllInstagramBusinessAccountsReducer = {loading: true}
+        // },
+        // [getAllInstagramBusinessAccounts.fulfilled]: (state, action) => {
+        //     state.getAllInstagramBusinessAccountsReducer = {loading: false, data: action.payload}
+        // },
+        // [getAllInstagramBusinessAccounts.rejected]: (state) => {
+        //     state.getAllInstagramBusinessAccountsReducer = {loading: false}
+        // },
         // Get All Pinterest Boards
-        [getAllPinterestBoards.pending]: (state) => {
-            state.getAllPinterestBoardsReducer = {loading: true}
-        },
-        [getAllPinterestBoards.fulfilled]: (state, action) => {
-            state.getAllPinterestBoardsReducer = {loading: false, data: action.payload}
-        },
-        [getAllPinterestBoards.rejected]: (state) => {
-            state.getAllPinterestBoardsReducer = {loading: false}
-        },
+        // [getAllPinterestBoards.pending]: (state) => {
+        //     state.getAllPinterestBoardsReducer = {loading: true}
+        // },
+        // [getAllPinterestBoards.fulfilled]: (state, action) => {
+        //     state.getAllPinterestBoardsReducer = {loading: false, data: action.payload}
+        // },
+        // [getAllPinterestBoards.rejected]: (state) => {
+        //     state.getAllPinterestBoardsReducer = {loading: false}
+        // },
 
         // Get All Linkedin Pages
-        [getAllLinkedinPages.pending]: (state) => {
-            state.getAllLinkedinPagesReducer = {loading: true}
-        },
-        [getAllLinkedinPages.fulfilled]: (state, action) => {
-            state.getAllLinkedinPagesReducer = {loading: false, data: action.payload}
-        },
-        [getAllLinkedinPages.rejected]: (state) => {
-            state.getAllLinkedinPagesReducer = {loading: false}
-        },
+        // [getAllLinkedinPages.pending]: (state) => {
+        //     state.getAllLinkedinPagesReducer = {loading: true}
+        // },
+        // [getAllLinkedinPages.fulfilled]: (state, action) => {
+        //     state.getAllLinkedinPagesReducer = {loading: false, data: action.payload}
+        // },
+        // [getAllLinkedinPages.rejected]: (state) => {
+        //     state.getAllLinkedinPagesReducer = {loading: false}
+        // },
 
     }
 

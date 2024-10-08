@@ -18,12 +18,10 @@ import {
 } from "./contantData.js";
 import {exchangeForLongLivedToken, getAllFacebookConnectedSocialMediaAccounts} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
-import {facebookPageConnect, getFacebookConnectedPages} from "../app/actions/facebookActions/facebookActions.js";
 import fb from "../images/fb.svg";
 import instagram_img from "../images/instagram.png";
 import linkedin from "../images/linkedin.svg";
 import Pinterest from "../images/pinterest_icon.svg";
-import {getAllSocialMediaPostsByCriteria} from "../app/actions/postActions/postActions";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import {Linkedin_URN_Id_Types} from "./contantData.js";
@@ -206,76 +204,6 @@ export const cleanAndValidateRequestURL = (baseUrl, path, fields, token) => {
     return url.toString();
 }
 
-
-export const pageConnectAction = (dispatch, token, data, socialMediaAccountInfo) => {
-    const decodeJwt = decodeJwtToken(token);
-    let requestBody = {
-        customerId: decodeJwt?.customerId, pageAccessTokenDTO: {
-            pageId: data?.id,
-            name: data?.name,
-            socialMediaAccountId: socialMediaAccountInfo?.id
-        }, token: token
-    }
-    switch (socialMediaAccountInfo?.provider) {
-        case SocialAccountProvider.FACEBOOK.toUpperCase(): {
-            requestBody = {
-                ...requestBody, pageAccessTokenDTO: {
-                    ...requestBody.pageAccessTokenDTO,
-                    imageUrl: data.picture?.data?.url,
-                    about: data?.about,
-                    access_token: data?.access_token,
-                }
-            }
-            break;
-        }
-        case SocialAccountProvider.INSTAGRAM.toUpperCase(): {
-            requestBody = {
-                ...requestBody, pageAccessTokenDTO: {
-                    ...requestBody.pageAccessTokenDTO,
-                    imageUrl: data?.profile_picture_url,
-                    about: data?.about,
-                    access_token: socialMediaAccountInfo.accessToken,
-                }
-            }
-            break;
-        }
-        case SocialAccountProvider.PINTEREST.toUpperCase(): {
-            requestBody = {
-                ...requestBody, pageAccessTokenDTO: {
-                    ...requestBody.pageAccessTokenDTO,
-                    imageUrl: data?.media?.image_cover_url,
-                    about: data?.description,
-                    access_token: socialMediaAccountInfo.accessToken,
-                }
-            }
-            break;
-        }
-        case SocialAccountProvider.LINKEDIN.toUpperCase(): {
-            requestBody = {
-                ...requestBody, pageAccessTokenDTO: {
-                    ...requestBody.pageAccessTokenDTO,
-                    imageUrl: data?.logo_url,
-                    about: data?.description,
-                    access_token: socialMediaAccountInfo.accessToken,
-                }
-            }
-            break;
-        }
-        default: {
-        }
-    }
-    if (data) {
-        dispatch(facebookPageConnect(requestBody)).then((response) => {
-            dispatch(getFacebookConnectedPages({customerId: decodeJwt?.customerId, token: token}))
-            dispatch(getAllSocialMediaPostsByCriteria({
-                token: token,
-                query: {limit: 6, period: "MONTH", sort: "feedPostDate", sortOrder: "asc", postStatus: ["SCHEDULED"]}
-            }));
-        }).catch((error) => {
-            console.log("--->error", error)
-        })
-    }
-}
 
 // Define a function to convert combined date and time string to Unix timestamp
 export function convertToUnixTimestamp(scheduleDate, scheduleTime) {
@@ -910,17 +838,7 @@ export const isReplyCommentEmpty = (replyComment) => {
     }
     return replyComment?.message === null || replyComment?.message === undefined || replyComment?.message?.trim() === "" || replyComment?.message?.trim() === replyComment?.mentionedPageName
 }
-export const getInstagramBusinessAccounts = (accountsData) => {
-    const businessAccounts = accountsData?.filter(data => {
-        return data.hasOwnProperty("instagram_business_account")
-    })
-    if (isNullOrEmpty(businessAccounts)) {
-        return [];
-    }
-    return businessAccounts?.map(data => {
-        return data["instagram_business_account"]
-    })
-}
+
 export const isErrorInInstagramMention = (socialMediaType, error) => {
     return error?.response?.data?.error?.code === 20 && error?.response?.data?.error?.error_subcode === 1772179
 
@@ -2458,7 +2376,7 @@ export const isPageInfoAvailableFromSocialMediaFor = (socialMedia = [], data) =>
 
         switch (socialMediaType) {
             case "FACEBOOK": {
-                return data?.facebook?.facebookPageList !== undefined && data?.facebook?.facebookPageList !== null
+                return data?.facebook?.data !== undefined && data?.facebook?.data !== null
             }
             case "INSTAGRAM": {
                 return data?.instagram?.data !== undefined && data?.instagram?.data !== null
@@ -2526,7 +2444,7 @@ export const getPagesDataFromSocialMedia = (socialMediaType, data) => {
 
     switch (socialMediaType) {
         case "FACEBOOK": {
-            return data.facebook?.facebookPageList;
+            return data.facebook?.data;
         }
         case "INSTAGRAM": {
             return data.instagram?.data;
@@ -2566,8 +2484,8 @@ export const getUpdatedNameAndImageUrlForConnectedPages = (page, data) => {
     let updatedName;
     switch (page.socialMediaType) {
         case "FACEBOOK": {
-            updatedImageUrl = data.facebook?.facebookPageList?.filter(c => c.id === page.pageId)[0]?.picture?.data?.url || null;
-            updatedName = data.facebook?.facebookPageList?.filter(c => c.id === page.pageId)[0]?.name || page?.name;
+            updatedImageUrl = data.facebook?.data?.filter(c => c.id === page.pageId)[0]?.picture?.data?.url || null;
+            updatedName = data.facebook?.data?.filter(c => c.id === page.pageId)[0]?.name || page?.name;
             break;
         }
         case "INSTAGRAM": {
