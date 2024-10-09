@@ -1,30 +1,45 @@
 import {baseAxios} from "../utils/commonUtils";
 import {showErrorToast} from "../features/common/components/Toast";
 import {getAuthHeader} from "../utils/RTKQueryUtils";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {setAuthenticationHeader} from "../app/auth/auth";
+import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils";
 
-
+const baseUrl=`${import.meta.env.VITE_APP_API_BASE_URL}`
 // Planner Service
 export const getPostsForPlanner=async (data)=>{
-    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner`, data, getAuthHeader()).then(res => {
+    try {
+        const res=await baseAxios.post(`${baseUrl}/posts/planner`, data, getAuthHeader())
         return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
+    } catch (error) {
+        showErrorToast(error.response.data.error.message);
         throw error;
-    });
+    }
 }
 export const getPlannerPostsCount=async (data)=>{
-    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner-report`, data, getAuthHeader()).then(res => {
+    try {
+        const res=await baseAxios.post(`${baseUrl}/posts/planner-report`, data, getAuthHeader())
         return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
+    } catch (error) {
+        showErrorToast(error.response.data.error.message);
         throw error;
-    });
+    }
 }
 export const getSocialMediaPostsByCriteria=async (data)=>{
-    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/by-criteria`, data, getAuthHeader()).then(res => {
+    try {
+        const res=await baseAxios.post(`${baseUrl}/posts/by-criteria`, data, getAuthHeader())
         return res.data;
-    }).catch(error => {
+    } catch (error) {
         showErrorToast(error.response.data.message);
         throw error;
-    });
+    }
+}
+export const getPublishedPosts=async (data)=>{
+    try {
+        const res=await baseAxios.post(`${baseUrl}/posts/reviews`, data, getAuthHeader())
+        return res.data;
+    } catch (error) {
+        showErrorToast(error.response.data.message);
+        throw error;
+    }
 }

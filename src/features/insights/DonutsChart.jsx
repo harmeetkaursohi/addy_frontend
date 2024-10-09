@@ -66,7 +66,7 @@ const DonutsChart = ({chartData = null, socialMediaType}) => {
 
 
     return (
-        chartData?.loading ? <div className="d-flex justify-content-center profile-visit-graph ">
+        (chartData?.isLoading || chartData?.isFetching) ? <div className="d-flex justify-content-center profile-visit-graph ">
                 <RotatingLines
                     strokeColor="#F07C33"
                     strokeWidth="5"

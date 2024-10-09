@@ -4,15 +4,15 @@ import {
     generateAIHashTagAction,
     generateAICaptionAction,
     createFacebookPostAction,
-    getAllPostsForPlannerAction,
+    // getAllPostsForPlannerAction,
     getPostsByIdAction,
     updatePostOnSocialMediaAction,
-    getPlannerPostCountAction,
-    deletePostByBatchIdAction,
-    publishedPostAction,
-    getAllPlannerPostAction,
-    getPostsPageAction,
-    getAllSocialMediaPostsByCriteria,
+    // getPlannerPostCountAction,
+    // deletePostByBatchIdAction,
+    // publishedPostAction,
+    // getAllPlannerPostAction,
+    // getPostsPageAction,
+    // getAllSocialMediaPostsByCriteria,
     getPostPageInfoAction,
     likePostAction,
     replyCommentOnPostAction,
@@ -22,7 +22,8 @@ import {
     deleteCommentsOnPostAction,
     updateCommentsOnPostAction,
     getPostByPageIdAndPostStatus,
-    getRepliesOnComment, deletePostFromPage
+    getRepliesOnComment,
+    // deletePostFromPage
 } from "../../actions/postActions/postActions.js";
 
 
@@ -33,15 +34,15 @@ const postSlice = createSlice({
         generateAIHashTagReducer: {loading: false},
         generateAICaptionReducer: {loading: false},
         createFacebookPostActionReducer: {loading: false},
-        getAllPostsForPlannerReducer: {loading: false},
+        // getAllPostsForPlannerReducer: {loading: false},
         getPostsByIdReducer: {loading: false},
         updatePostOnSocialMediaReducer: {loading: false},
-        getPlannerPostCountReportReducer: {loading: false},
-        getAllDraftPostsByCustomerAndPeriodReducer: {loading: false},
-        publishedPostReducer: {loading: false},
-        deletePostByBatchIdReducer: {loading: false},
-        getAllPlannerPostReducer: {loading: false},
-        getPostsPageReducer: {loading: false},
+        // getPlannerPostCountReportReducer: {loading: false},
+        // getAllDraftPostsByCustomerAndPeriodReducer: {loading: false},
+        // publishedPostReducer: {loading: false},
+        // deletePostByBatchIdReducer: {loading: false},
+        // getAllPlannerPostReducer: {loading: false},
+        // getPostsPageReducer: {loading: false},
         getPostPageInfoReducer: {loading: false},
         likePostReducer: {loading: false},
         dislikePostReducer: {loading: false},
@@ -52,13 +53,13 @@ const postSlice = createSlice({
         replyCommentOnPostActionReducer:{loading: false},
         getPostByPageIdAndPostStatusReducer:{loading: false},
         getRepliesOnCommentReducer:{loading: false},
-        deletePostFromPageReducer:{loading: false},
+        // deletePostFromPageReducer:{loading: false},
     },
 
     reducers: {
-        resetPublishedPostReducer: (state) => {
-            state.publishedPostReducer = {loading: false, data: null}
-        }
+        // resetPublishedPostReducer: (state) => {
+        //     state.publishedPostReducer = {loading: false, data: null}
+        // }
     },
 
     extraReducers: {
@@ -153,57 +154,57 @@ const postSlice = createSlice({
         },
 
         // Start Review
-        [getPostsPageAction.pending]: (state) => {
-            state.getPostsPageReducer = {loading: true}
-        },
-        [getPostsPageAction.fulfilled]: (state, action) => {
-            state.getPostsPageReducer = {loading: false, data: action.payload}
-        },
-        [getPostsPageAction.rejected]: (state) => {
-            state.getPostsPageReducer = {loading: false}
-        },
+        // [getPostsPageAction.pending]: (state) => {
+        //     state.getPostsPageReducer = {loading: true}
+        // },
+        // [getPostsPageAction.fulfilled]: (state, action) => {
+        //     state.getPostsPageReducer = {loading: false, data: action.payload}
+        // },
+        // [getPostsPageAction.rejected]: (state) => {
+        //     state.getPostsPageReducer = {loading: false}
+        // },
 
         // End Review
 
-        [getAllPlannerPostAction.pending]: (state) => {
-            state.getAllPlannerPostReducer = {loading: true}
-        },
-        [getAllPlannerPostAction.fulfilled]: (state, action) => {
-            state.getAllPlannerPostReducer = {loading: false, data: action.payload}
-        },
-        [getAllPlannerPostAction.rejected]: (state) => {
-            state.getAllPlannerPostReducer = {loading: false}
-        },
+        // [getAllPlannerPostAction.pending]: (state) => {
+        //     state.getAllPlannerPostReducer = {loading: true}
+        // },
+        // [getAllPlannerPostAction.fulfilled]: (state, action) => {
+        //     state.getAllPlannerPostReducer = {loading: false, data: action.payload}
+        // },
+        // [getAllPlannerPostAction.rejected]: (state) => {
+        //     state.getAllPlannerPostReducer = {loading: false}
+        // },
 
-        [publishedPostAction.pending]: (state) => {
-            state.publishedPostReducer = {loading: true}
-        },
-        [publishedPostAction.fulfilled]: (state, action) => {
-            state.publishedPostReducer = {loading: false, data: action.payload}
-        },
-        [publishedPostAction.rejected]: (state) => {
-            state.publishedPostReducer = {loading: false}
-        },
+        // [publishedPostAction.pending]: (state) => {
+        //     state.publishedPostReducer = {loading: true}
+        // },
+        // [publishedPostAction.fulfilled]: (state, action) => {
+        //     state.publishedPostReducer = {loading: false, data: action.payload}
+        // },
+        // [publishedPostAction.rejected]: (state) => {
+        //     state.publishedPostReducer = {loading: false}
+        // },
 
-        [deletePostByBatchIdAction.pending]: (state) => {
-            state.deletePostByBatchIdReducer = {loading: true}
-        },
-        [deletePostByBatchIdAction.fulfilled]: (state) => {
-            state.deletePostByBatchIdReducer = {loading: false, data: "success"}
-        },
-        [deletePostByBatchIdAction.rejected]: (state) => {
-            state.deletePostByBatchIdReducer = {loading: false}
-        },
+        // [deletePostByBatchIdAction.pending]: (state) => {
+        //     state.deletePostByBatchIdReducer = {loading: true}
+        // },
+        // [deletePostByBatchIdAction.fulfilled]: (state) => {
+        //     state.deletePostByBatchIdReducer = {loading: false, data: "success"}
+        // },
+        // [deletePostByBatchIdAction.rejected]: (state) => {
+        //     state.deletePostByBatchIdReducer = {loading: false}
+        // },
         // Delete Post From Page
-        [deletePostFromPage.pending]: (state) => {
-            state.deletePostFromPageReducer = {loading: true}
-        },
-        [deletePostFromPage.fulfilled]: (state) => {
-            state.deletePostFromPageReducer = {loading: false, data: "success"}
-        },
-        [deletePostFromPage.rejected]: (state) => {
-            state.deletePostFromPageReducer = {loading: false}
-        },
+        // [deletePostFromPage.pending]: (state) => {
+        //     state.deletePostFromPageReducer = {loading: true}
+        // },
+        // [deletePostFromPage.fulfilled]: (state) => {
+        //     state.deletePostFromPageReducer = {loading: false, data: "success"}
+        // },
+        // [deletePostFromPage.rejected]: (state) => {
+        //     state.deletePostFromPageReducer = {loading: false}
+        // },
 
 
         [updatePostOnSocialMediaAction.pending]: (state) => {
@@ -228,36 +229,36 @@ const postSlice = createSlice({
         },
 
         //get all posts for planner
-        [getAllPostsForPlannerAction.pending]: (state) => {
-            state.getAllPostsForPlannerReducer = {loading: true}
-        },
-        [getAllPostsForPlannerAction.fulfilled]: (state, action) => {
-            state.getAllPostsForPlannerReducer = {loading: false, data: action.payload}
-        },
-        [getAllPostsForPlannerAction.rejected]: (state) => {
-            state.getAllPostsForPlannerReducer = {loading: false}
-        },
+        // [getAllPostsForPlannerAction.pending]: (state) => {
+        //     state.getAllPostsForPlannerReducer = {loading: true}
+        // },
+        // [getAllPostsForPlannerAction.fulfilled]: (state, action) => {
+        //     state.getAllPostsForPlannerReducer = {loading: false, data: action.payload}
+        // },
+        // [getAllPostsForPlannerAction.rejected]: (state) => {
+        //     state.getAllPostsForPlannerReducer = {loading: false}
+        // },
 
-        [getAllSocialMediaPostsByCriteria.pending]: (state) => {
-            state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: true}
-        },
-        [getAllSocialMediaPostsByCriteria.fulfilled]: (state, action) => {
-            state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: false, data: action.payload}
-        },
-        [getAllSocialMediaPostsByCriteria.rejected]: (state) => {
-            state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: false}
-        },
+        // [getAllSocialMediaPostsByCriteria.pending]: (state) => {
+        //     state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: true}
+        // },
+        // [getAllSocialMediaPostsByCriteria.fulfilled]: (state, action) => {
+        //     state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: false, data: action.payload}
+        // },
+        // [getAllSocialMediaPostsByCriteria.rejected]: (state) => {
+        //     state.getAllDraftPostsByCustomerAndPeriodReducer = {loading: false}
+        // },
 
         //get all posts for planner
-        [getPlannerPostCountAction.pending]: (state) => {
-            state.getPlannerPostCountReportReducer = {loading: true}
-        },
-        [getPlannerPostCountAction.fulfilled]: (state, action) => {
-            state.getPlannerPostCountReportReducer = {loading: false, data: action.payload}
-        },
-        [getPlannerPostCountAction.rejected]: (state) => {
-            state.getPlannerPostCountReportReducer = {loading: false}
-        },
+        // [getPlannerPostCountAction.pending]: (state) => {
+        //     state.getPlannerPostCountReportReducer = {loading: true}
+        // },
+        // [getPlannerPostCountAction.fulfilled]: (state, action) => {
+        //     state.getPlannerPostCountReportReducer = {loading: false, data: action.payload}
+        // },
+        // [getPlannerPostCountAction.rejected]: (state) => {
+        //     state.getPlannerPostCountReportReducer = {loading: false}
+        // },
 
         //ai generate image
         [generateAIImageAction.pending]: (state) => {

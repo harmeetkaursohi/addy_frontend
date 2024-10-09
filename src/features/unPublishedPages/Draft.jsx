@@ -3,19 +3,14 @@ import {useNavigate} from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import {ParentDraftComponent} from "./views/ParentDraftComponent";
-import {useEffect, useRef, useState} from "react";
+import { useRef, useState} from "react";
 import instagram_img from "../../images/instagram.png";
 import linkedin from "../../images/linkedin.svg";
-import {getAllSocialMediaPostsByCriteria} from "../../app/actions/postActions/postActions";
-import {useDispatch, useSelector} from "react-redux";
-import {getToken} from "../../app/auth/auth";
 import ConnectSocialAccountModal from "../common/components/ConnectSocialAccountModal";
 import {useAppContext} from "../common/components/AppProvider";
 import Dropdown from "react-bootstrap/Dropdown";
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../app/apis/pageAccessTokenApi";
-import {useGetSocialMediaPostsByCriteriaQuery} from "../../app/apis/postApi";
-import {isNullOrEmpty} from "../../utils/commonUtils";
 
 const Draft = () => {
 
@@ -29,16 +24,7 @@ const Draft = () => {
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
-    const [apiTrigger, setApiTrigger] = useState(null);
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false);
-
-    // useEffect(() => {
-    //     dispatch(getAllSocialMediaPostsByCriteria({
-    //             token: token,
-    //             query: {...baseSearchQuery},
-    //         })
-    //     );
-    // }, [baseSearchQuery, apiTrigger]);
 
     const calendarRef = useRef(null);
 
@@ -147,7 +133,7 @@ const Draft = () => {
                                 </div>
                             </div>
 
-                            <ParentDraftComponent searchQuery={baseSearchQuery} reference={"DRAFT"} setApiTrigger={setApiTrigger}/>
+                            <ParentDraftComponent searchQuery={baseSearchQuery}/>
                         </div>
                     </div>
                 </div>

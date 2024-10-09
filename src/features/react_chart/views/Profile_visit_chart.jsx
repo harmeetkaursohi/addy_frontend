@@ -7,7 +7,7 @@ const ProfileVisitChart = ({graphData,socialMediaType}) => {
     const [data, setData] = useState([{day: 'Mon', uv: 4000}, {day: 'Tue', uv: 3000}, {day: 'Wed', uv: 2000}, {day: 'Thur', uv: 2780}, {day: 'Fri', uv: 1890}, {day: 'Sat', uv: 2390}, {day: 'Sun', uv: 3490},])
 
     useEffect(() => {
-        if (graphData.data && !graphData.loading && Array.isArray(graphData.data) && socialMediaType!==null && socialMediaType!==undefined) {
+        if (graphData.data && !graphData.isLoading && !graphData?.isFetching && Array.isArray(graphData.data) && socialMediaType!==null && socialMediaType!==undefined) {
             switch(socialMediaType){
                 case "FACEBOOK":
                 case "INSTAGRAM":{
@@ -65,7 +65,7 @@ const ProfileVisitChart = ({graphData,socialMediaType}) => {
         return null;
     };
     return (
-        graphData?.loading  ?
+        (graphData?.isLoading || graphData?.isFetching)  ?
             <div className="d-flex justify-content-center profile-visit-graph ">
                 <RotatingLines
                     strokeColor="#F07C33"

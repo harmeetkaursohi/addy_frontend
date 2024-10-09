@@ -2,84 +2,15 @@ import {
     baseAxios,
     calculatePercentageGrowth,
     computeAndReturnSummedDateValues,
-    generateUnixTimestampFor
+    generateUnixTimestampFor, objectToQueryString
 } from "../utils/commonUtils";
+import {getFormattedDemographicData, getFormattedInsightsForProfileViews} from "../utils/dataFormatterUtils";
 import {SocialAccountProvider} from "../utils/contantData";
+import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils";
+import {showErrorToast} from "../features/common/components/Toast";
 
-// export const getInstagramConnectedPageIdsReport = async (page) => {
-//     let initialObject = {
-//         Followers: {lifeTime: 0, month: 0},
-//         Accounts_Reached: {lifeTime: 0, month: 0},
-//         Post_Activity: {lifeTime: 0, month: 0},
-//     };
-//     if (page) {
-//
-//         const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`;
-//         const pageId = page?.pageId;
-//         const accessToken = page?.access_token;
-//
-//         const fullPathTotalFollowers = `${baseUrl}/${pageId}?fields=followers_count&access_token=${accessToken}`;
-//
-//         //total lifeTime followers
-//         await baseAxios.get(fullPathTotalFollowers)
-//             .then((response) => {
-//                 const pageData = response?.data;
-//                 if (pageData) {
-//                     initialObject.Followers.lifeTime = pageData?.followers_count || 0;
-//                 }
-//             })
-//             .catch((error) => {
-//                 initialObject.Followers.lifeTime += 0;
-//             });
-//
-//         //last 1 month
-//         const followersLastMonthUrlPath = `${baseUrl}/${pageId}/insights?metric=follower_count&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
-//         await baseAxios.get(followersLastMonthUrlPath)
-//             .then((response) => {
-//                 const data = response?.data?.data
-//                 if (data?.length === 0) {
-//                     initialObject.Followers.month = "N/A";
-//                 } else {
-//                     const followersGainedInLast30Days = data[0]?.values?.reduce((accumulator, currentValue) => {
-//                         return accumulator + currentValue.value;
-//                     }, 0)
-//                     initialObject.Followers.month += followersGainedInLast30Days;
-//                 }
-//             })
-//             .catch((error) => {
-//                 initialObject.Followers.month += 0;
-//                 console.error('Error:', error);
-//             });
-//
-//
-//         //Post activities Page reach
-//         let accounts_Reached = {lifeTime: 0, month: 0};
-//         let post_Activity = {lifeTime: 0, month: 0};
-//         let Url = `${baseUrl}/${pageId}/insights?metric=accounts_engaged,reach&metric_type=total_value&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
-//         for (let i = 0; i < 3; i++) {
-//             await baseAxios.get(Url)
-//                 .then((response) => {
-//                     const reachData = response?.data?.data?.filter(data => data?.name === "reach")[0]
-//                     const activityData = response?.data?.data?.filter(data => data?.name === "accounts_engaged")[0]
-//                     Url = response?.data?.paging?.previous
-//                     accounts_Reached.lifeTime += reachData?.total_value?.value || 0
-//                     post_Activity.lifeTime += activityData?.total_value?.value || 0
-//                     if (i === 0) {
-//                         accounts_Reached.month += reachData?.total_value?.value || 0
-//                         post_Activity.month += activityData?.total_value?.value || 0
-//                     }
-//                 })
-//                 .catch((error) => {
-//                     console.error('Error:', error);
-//                 });
-//         }
-//         initialObject.Accounts_Reached = accounts_Reached
-//         initialObject.Post_Activity = post_Activity
-//     }
-//
-//
-//     return initialObject;
-// };
+const fbBaseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`
+
 export const getInstagramPageReports = async (pagesList, accessToken) => {
     let result = {}
 
@@ -92,10 +23,9 @@ export const getInstagramPageReports = async (pagesList, accessToken) => {
                 Post_Activity: {lifeTime: 0, month: 0},
             };
 
-            const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`;
             const pageId = page?.id;
 
-            const fullPathTotalFollowers = `${baseUrl}/${pageId}?fields=followers_count&access_token=${accessToken}`;
+            const fullPathTotalFollowers = `${fbBaseUrl}/${pageId}?fields=followers_count&access_token=${accessToken}`;
 
             //total lifeTime followers
             await baseAxios.get(fullPathTotalFollowers)
@@ -161,6 +91,7 @@ export const getInstagramPageReports = async (pagesList, accessToken) => {
     }
     return result;
 };
+
 export const getInstagramReportByPage = async (page, accessToken) => {
     let initialObject = {
         Followers: {lifeTime: 0, month: 0},
@@ -169,11 +100,10 @@ export const getInstagramReportByPage = async (page, accessToken) => {
     };
     if (page) {
 
-        const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`;
         const pageId = page?.pageId;
         const accessToken = page?.access_token;
 
-        const fullPathTotalFollowers = `${baseUrl}/${pageId}?fields=followers_count&access_token=${accessToken}`;
+        const fullPathTotalFollowers = `${fbBaseUrl}/${pageId}?fields=followers_count&access_token=${accessToken}`;
 
         //total lifeTime followers
         await baseAxios.get(fullPathTotalFollowers)
@@ -234,6 +164,7 @@ export const getInstagramReportByPage = async (page, accessToken) => {
     }
     return initialObject;
 };
+
 export const getInstagramGraphReportByPage = async (page, query) => {
 
     let initialObject = {
@@ -246,12 +177,11 @@ export const getInstagramGraphReportByPage = async (page, query) => {
 
     if (page && query) {
         // for (const curPage of listOfPages) {
-        const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`;
         const pageId = page?.pageId;
         const accessToken = page?.access_token;
 
         //Page reach by provided date
-        const graphDataApiUrl = `${baseUrl}/${pageId}/insights?metric=reach,follower_count&metric_type=time_series&period=day&since=${query?.createdFrom}&until=${query?.createdTo}&access_token=${accessToken}`;
+        const graphDataApiUrl = `${fbBaseUrl}/${pageId}/insights?metric=reach,follower_count&metric_type=time_series&period=day&since=${query?.createdFrom}&until=${query?.createdTo}&access_token=${accessToken}`;
 
 
         await baseAxios.get(graphDataApiUrl).then((response) => {
@@ -268,6 +198,7 @@ export const getInstagramGraphReportByPage = async (page, query) => {
 
     return initialObject;
 };
+
 export const getDashBoardInstagramGraphReport = async (page, query) => {
 
     let initialObject = {
@@ -279,13 +210,11 @@ export const getDashBoardInstagramGraphReport = async (page, query) => {
     let reachedReportCount = [];
 
     if (page) {
-        // for (const curPage of listOfPages) {
-        const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`;
         const pageId = page?.pageId;
         const accessToken = page?.access_token;
 
         //Page reach by provided date
-        const graphDataApiUrl = `${baseUrl}/${pageId}/insights?metric=reach,follower_count&metric_type=time_series&period=day&since=${query?.createdFrom}&until=${query?.createdTo}&access_token=${accessToken}`;
+        const graphDataApiUrl = `${fbBaseUrl}/${pageId}/insights?metric=reach,follower_count&metric_type=time_series&period=day&since=${query?.createdFrom}&until=${query?.createdTo}&access_token=${accessToken}`;
 
 
         await baseAxios.get(graphDataApiUrl).then((response) => {
@@ -302,3 +231,80 @@ export const getDashBoardInstagramGraphReport = async (page, query) => {
 
     return initialObject;
 };
+
+export const getInstagramProfileInsightsInfo = async (data) => {
+    try {
+        const profile_count_info = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}?fields=name,followers_count,follows_count,media_count,profile_picture_url,biography&access_token=${data?.pageAccessToken}`;
+        const res=await baseAxios.get(profile_count_info)
+        return getFormattedInsightProfileInfo(res.data, "INSTAGRAM")
+    } catch (error) {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    }
+}
+
+export const getInstagramDemographicData = async (data) => {
+    let formattedApiResponse = {
+        age: null,
+        gender: null,
+        country: null,
+        city: null
+    }
+    // const baseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}/insights?metric=reached_audience_demographics&period=lifetime&timeframe=${data?.period}&metric_type=total_value&access_token=${data?.pageAccessToken}`;
+    // const cityDemographicDataApiUrl = baseUrl + "&breakdown=city";
+    // await baseAxios.get(cityDemographicDataApiUrl).then(cityDemographicData => {
+    //     formattedApiResponse = {
+    //         ...formattedApiResponse,
+    //         city: getFormattedDemographicData(cityDemographicData, "CITY", "INSTAGRAM")
+    //     }
+    // }).catch(error => {
+    //     // showErrorToast(error.response.data.error.message);
+    //     return thunkAPI.rejectWithValue(error.response);
+    // });
+
+    // const ageDemographicDataApiUrl = baseUrl + "&breakdown=age";
+    // await baseAxios.get(ageDemographicDataApiUrl).then(ageDemographicData => {
+    //     formattedApiResponse = {
+    //         ...formattedApiResponse,
+    //         age: getFormattedDemographicData(ageDemographicData, "AGE", "INSTAGRAM")
+    //     }
+    // }).catch(error => {
+    //     // showErrorToast(error.response.data.error.message);
+    //     return thunkAPI.rejectWithValue(error.response);
+    // });
+    // const genderDemographicDataApiUrl = baseUrl + "&breakdown=gender";
+    // await baseAxios.get(genderDemographicDataApiUrl).then(genderDemographicData => {
+    //     formattedApiResponse = {
+    //         ...formattedApiResponse,
+    //         gender: getFormattedDemographicData(genderDemographicData, "GENDER", "INSTAGRAM")
+    //     }
+    // }).catch(error => {
+    //     // showErrorToast(error.response.data.error.message);
+    //     return thunkAPI.rejectWithValue(error.response);
+    // });
+
+
+    try {
+        const baseUrl = `${fbBaseUrl}/${data?.pageId}/insights?metric=follower_demographics&period=lifetime&metric_type=total_value&access_token=${data?.pageAccessToken}`;
+        const countryDemographicDataApiUrl = baseUrl + "&breakdown=country";
+        const  countryDemographicData=await baseAxios.get(countryDemographicDataApiUrl)
+        return {
+            ...formattedApiResponse,
+            country: getFormattedDemographicData(countryDemographicData, "COUNTRY", "INSTAGRAM")
+        }
+    } catch (error) {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    }
+
+}
+
+export const getInstagramProfileVisits = async (data) => {
+    const profile_view_url = `${fbBaseUrl}/${data?.pageId}/insights?` + objectToQueryString(data.query);
+    return await baseAxios.get(profile_view_url).then(res => {
+        return getFormattedInsightsForProfileViews(res.data || {}, "INSTAGRAM");
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}

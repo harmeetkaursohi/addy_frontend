@@ -305,7 +305,7 @@ const Planner = () => {
     const handleDraft = () => {
         setDraftSearchQuery({
             ...draftSearchQuery,
-            plannerCardDate: baseSearchQuery?.plannerCardDate?.toISOString()
+            plannerCardDate: baseSearchQuery?.plannerCardDate
         })
         setDraftPost(!isDraftPost);
     }
@@ -529,7 +529,7 @@ const Planner = () => {
 
                             {
                                 isDraftPost === true &&
-                                <ParentDraftComponent searchQuery={draftSearchQuery} setDraftPost={setDraftPost} reference={"PLANNER"}/>
+                                <ParentDraftComponent searchQuery={draftSearchQuery} />
                             }
 
 

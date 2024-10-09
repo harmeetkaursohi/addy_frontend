@@ -3,39 +3,35 @@ import Modal from 'react-bootstrap/Modal';
 import "./DraftComponent.css"
 import {RxCross1} from "react-icons/rx";
 import {formatDate} from "@fullcalendar/core";
-import {computeImageURL, handleSeparateCaptionHashtag} from "../../../utils/commonUtils";
+import {computeImageURL, formatMessage, handleSeparateCaptionHashtag} from "../../../utils/commonUtils";
 import {useNavigate} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {getToken} from "../../../app/auth/auth";
-import {deletePostByBatchIdAction, publishedPostAction} from "../../../app/actions/postActions/postActions";
-import {showErrorToast, showSuccessToast} from "../../common/components/Toast";
+import {useDispatch, } from "react-redux";
+import { showSuccessToast} from "../../common/components/Toast";
 import Swal from "sweetalert2";
 import delete_img from "../../../images/deletePost.svg";
 import CommonSlider from "../../common/components/CommonSlider";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
-import {useDeletePostByIdMutation} from "../../../app/apis/postApi";
+import {useDeletePostByIdMutation, usePublishedPostByIdMutation} from "../../../app/apis/postApi";
+import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
+import {addyApi} from "../../../app/addyApi";
+import {DeletedSuccessfully} from "../../../utils/contantData";
 
 
-function DraftModal({show,
+function DraftModal({
+                        show,
                         setShow,
-                        batchIdData,
-                        setDraftPost = null,
-                        setDrafts = null,
-                        reference = "",
-                        deletedAndPublishedPostIds,
-                        setDeletedAndPublishedPostIds,
-                        setApiTrigger}) {
+                        postData
+                    }) {
 
     const handleClose = () => setShow(false);
 
-    const navigate = useNavigate();
+
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const token = getToken();
+    const [deletePostById, deletePostByIdApi] = useDeletePostByIdMutation()
+    const [publishedPostById, publishedPostByIdApi] = usePublishedPostByIdMutation()
 
-    const [deletePostById,deletePostByIdApi]=useDeletePostByIdMutation()
-
-    const publishedPostData = useSelector((state) => state.post.publishedPostReducer);
 
     const [postToDelete, setPostToDelete] = useState(null);
     const [postToPublish, setPostToPublish] = useState(null);
@@ -43,39 +39,30 @@ function DraftModal({show,
     const [showCaption, setShowCaption] = useState(false)
     const [showHastag, setShowHashtag] = useState(false)
 
-    const handlePublishedPost = (e) => {
+    const handlePublishedPost = async () => {
         setAction("POST")
-        e.preventDefault();
-        setPostToPublish(batchIdData?.id)
-        dispatch(publishedPostAction({postId: batchIdData?.id, token: token}))
-            .then((response) => {
-                if (response.meta.requestStatus === "fulfilled") {
-                    const allSuccess = response?.payload?.every(post => post.success)
-                    const allFailed = response?.payload?.every(post => !post.success)
-                    setPostToDelete(null);
-                    if (reference === "PLANNER") {
-                        setDrafts !== null && setDrafts([]);
-                        setDraftPost !== null && setDraftPost(false)
-                    } else if (allSuccess) {
-                        setDeletedAndPublishedPostIds({
-                            ...deletedAndPublishedPostIds,
-                            publishedPostIds: [...deletedAndPublishedPostIds?.publishedPostIds, batchIdData?.id]
-                        })
-                    } else if (!allSuccess && !allFailed) {
-                        setApiTrigger(new Date().getMilliseconds());
-                    }
-                    handleClose()
+        setPostToPublish(postData?.id)
+        await handleRTKQuery(
+            async () => {
+                return await publishedPostById(postData?.id).unwrap()
+            },
+            (res) => {
+                if (res?.some(cur => cur.success)) {
+                    dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
                 }
-            }).catch((error) => {
-            setPostToDelete(null);
-            showErrorToast(error.response.data.message);
-        });
-
+                handleClose()
+            },
+            null,
+            () => {
+                setAction("")
+                setPostToPublish(null)
+            }
+        )
     }
 
-    const handleDeletePost = (e) => {
+    const handleDeletePost = () => {
         setAction("DELETE")
-        setPostToDelete(batchIdData?.id)
+        setPostToDelete(postData?.id)
         Swal.fire({
             imageUrl: delete_img,
             title: `Delete Post`,
@@ -89,34 +76,29 @@ function DraftModal({show,
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
                 cancelButton: 'custom-cancel-button-class',
-                popup:"small_swal_popup cmnpopupWrapper"
+                popup: "small_swal_popup cmnpopupWrapper"
 
             }
         }).then(async (result) => {
             if (result.isConfirmed) {
-
-
-
-
-
-                if (e?.target?.id !== null) {
-                    setPostToDelete(e?.target?.id);
-                    dispatch(deletePostByBatchIdAction({postId: e?.target?.id, token: token}))
-                        .then((response) => {
-                            if (response.meta.requestStatus === "fulfilled") {
-                                setPostToDelete(null);
-                                setDeletedAndPublishedPostIds({
-                                    ...deletedAndPublishedPostIds,
-                                    deletedPostIds: [...deletedAndPublishedPostIds?.deletedPostIds, batchIdData?.id]
-                                })
-                                handleClose()
-                                showSuccessToast("Post has been deleted successfully");
-                            }
-                        }).catch((error) => {
-                        setPostToDelete(null);
-                        showErrorToast(error.response.data.message);
-                    });
-                }
+                await handleRTKQuery(
+                    async () => {
+                        return await deletePostById(postData?.id).unwrap()
+                    },
+                    () => {
+                        showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]))
+                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
+                        handleClose()
+                    },
+                    null,
+                    () => {
+                        setAction("")
+                        setPostToDelete(null)
+                    }
+                )
+            } else {
+                setAction("")
+                setPostToDelete(null)
             }
         });
 
@@ -130,14 +112,14 @@ function DraftModal({show,
                     <div className={"draft_post_view_box"}>
                         <div className={"draft_img_wrapper"}>
                             <div className={"posted_date_outer"}>
-                                <h3>Posted on: <span>{formatDate(batchIdData?.createdAt)}</span></h3>
+                                <h3>Posted on: <span>{formatDate(postData?.createdAt)}</span></h3>
                             </div>
                             <div className={"cross_btn_wrapper"} onClick={handleClose}>
                                 <h3><RxCross1/></h3>
                             </div>
                             {
-                                batchIdData?.attachments &&
-                                <CommonSlider files={batchIdData?.attachments} selectedFileType={null} caption={null}
+                                postData?.attachments &&
+                                <CommonSlider files={postData?.attachments} selectedFileType={null} caption={null}
                                               hashTag={null}
                                               viewSimilarToSocialMedia={false}/>
                             }
@@ -146,27 +128,28 @@ function DraftModal({show,
                             <h3 className={"small_font"}>Post Caption:</h3>
                             <h4
                                 onClick={() => {
-                                    handleSeparateCaptionHashtag(batchIdData?.message)?.caption.length > 40 ? setShowCaption(!showCaption) : ""
+                                    handleSeparateCaptionHashtag(postData?.message)?.caption.length > 40 ? setShowCaption(!showCaption) : ""
                                 }}
-                                className={`caption ${handleSeparateCaptionHashtag(batchIdData?.message)?.caption.length > 40 ? "cursor-pointer" : ""}  ${showCaption ? "upcoming_post_content " : "cmn_text_overflow"}`}>{batchIdData?.message !== null && batchIdData?.message !== "" && batchIdData?.message !== " " ? handleSeparateCaptionHashtag(batchIdData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h4>
+                                className={`caption ${handleSeparateCaptionHashtag(postData?.message)?.caption.length > 40 ? "cursor-pointer" : ""}  ${showCaption ? "upcoming_post_content " : "cmn_text_overflow"}`}>{postData?.message !== null && postData?.message !== "" && postData?.message !== " " ? handleSeparateCaptionHashtag(postData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h4>
 
                             <div className={"draft_container_box"}>
                                 <h3 className={"small_font"}>Hashtags: </h3>
                                 <span id='hash-tag'
                                       className={"hash_tags "}
                                       onClick={() => {
-                                          handleSeparateCaptionHashtag(batchIdData?.message)?.hashtag.length > 40 ? setShowHashtag(!showHastag) : ""
+                                          handleSeparateCaptionHashtag(postData?.message)?.hashtag.length > 40 ? setShowHashtag(!showHastag) : ""
                                       }}>
-                                    {batchIdData?.message !== null && batchIdData?.message !== "" ? handleSeparateCaptionHashtag(batchIdData?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
+                                    {postData?.message !== null && postData?.message !== "" ? handleSeparateCaptionHashtag(postData?.message)?.hashtag || "---No Tags---" : "---No Tags---"}</span>
                             </div>
                             <div className={"draft_container_box"}>
                                 <h3 className={"small_font"}>Platforms: </h3>
                                 <div className={"social_media_page_outer"}>
                                     <div className="page_tags draft_page_tags">
 
-                                        {batchIdData?.postPages && Array.isArray(batchIdData?.postPages) &&
-                                            Array.from(new Set(batchIdData.postPages.map((item) => item.pageId)))
-                                                .map((id) => batchIdData.postPages.find((page) => page.pageId === id))
+                                        {
+                                            postData?.postPages && Array.isArray(postData?.postPages) &&
+                                            Array.from(new Set(postData.postPages.map((item) => item.pageId)))
+                                                .map((id) => postData.postPages.find((page) => page.pageId === id))
                                                 .map((curPage, key) => (
                                                     <div className="selected-option" key={"curPage" + key}>
                                                         <div>
@@ -186,7 +169,7 @@ function DraftModal({show,
                             <div className={"modal_post_btn_outer"}>
                                 <GenericButtonWithLoader className={"post_now cmn_bg_btn"}
                                                          label={"Post Now"}
-                                                         isLoading={batchIdData?.id === postToPublish && publishedPostData?.loading}
+                                                         isLoading={postData?.id === postToPublish && publishedPostByIdApi?.isLoading}
                                                          onClick={handlePublishedPost}
                                                          isDisabled={action !== "POST" && deletePostByIdApi?.isLoading}
                                 />
@@ -194,18 +177,18 @@ function DraftModal({show,
                                                          label={"Schedule Post/Edit"}
                                                          onClick={() => {
                                                              setAction("SCHEDULE")
-                                                             navigate("/planner/post/" + batchIdData?.id)
+                                                             navigate("/planner/post/" + postData?.id)
                                                          }}
-                                                         isDisabled={action !== "SCHEDULE" && deletePostByIdApi?.isLoading || publishedPostData?.loading}
+                                                         isDisabled={action !== "SCHEDULE" && deletePostByIdApi?.isLoading || publishedPostByIdApi?.isLoading}
                                 />
 
                                 <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn"}
                                                          label={"Delete Post"}
-                                                         isLoading={batchIdData?.id === postToDelete && deletePostByIdApi?.isLoading}
+                                                         isLoading={postData?.id === postToDelete && deletePostByIdApi?.isLoading}
                                                          onClick={handleDeletePost}
-                                                         id={batchIdData?.id}
+                                                         id={postData?.id}
                                                          contentText={"Deleting..."}
-                                                         isDisabled={action !== "DELETE" && publishedPostData?.loading}
+                                                         isDisabled={action !== "DELETE" && publishedPostByIdApi?.isLoading}
                                 />
                             </div>
 

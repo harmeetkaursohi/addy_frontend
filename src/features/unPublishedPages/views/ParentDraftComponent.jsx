@@ -18,14 +18,9 @@ import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {useGetSocialMediaPostsByCriteriaQuery} from "../../../app/apis/postApi";
 
-export const ParentDraftComponent = ({searchQuery, setDraftPost, reference = "", setApiTrigger}) => {
+export const ParentDraftComponent = ({searchQuery}) => {
 
     const [drafts, setDrafts] = useState(null);
-    const [deletedAndPublishedPostIds, setDeletedAndPublishedPostIds] = useState({
-        deletedPostIds: [],
-        publishedPostIds: [],
-
-    });
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
     const draftPostsApi = useGetSocialMediaPostsByCriteriaQuery({
@@ -33,12 +28,6 @@ export const ParentDraftComponent = ({searchQuery, setDraftPost, reference = "",
         plannerCardDate: searchQuery?.plannerCardDate?.toISOString() || null
     }, {skip: isNullOrEmpty(searchQuery)})
 
-
-    useEffect(() => {
-        if (drafts !== null && Array.isArray(drafts) && (deletedAndPublishedPostIds.deletedPostIds.length + deletedAndPublishedPostIds.publishedPostIds.length === drafts?.length)) {
-            setDrafts([])
-        }
-    }, [deletedAndPublishedPostIds])
 
     useEffect(() => {
         if (draftPostsApi?.data) {
@@ -96,16 +85,7 @@ export const ParentDraftComponent = ({searchQuery, setDraftPost, reference = "",
                                 :
                                 drafts !== null && Array.isArray(drafts) && drafts?.length > 0 &&
                                 sortByKey(drafts, "createdAt").map((curDraftPost, index) => {
-                                    return (deletedAndPublishedPostIds?.deletedPostIds?.includes(curDraftPost?.id) || deletedAndPublishedPostIds?.publishedPostIds?.includes(curDraftPost?.id)) ? <></> :
-                                            <DraftComponent batchIdData={curDraftPost}
-                                                            setDraftPost={setDraftPost}
-                                                            setDrafts={setDrafts} reference={reference}
-                                                            deletedAndPublishedPostIds={deletedAndPublishedPostIds}
-                                                            setDeletedAndPublishedPostIds={setDeletedAndPublishedPostIds}
-                                                            setApiTrigger={setApiTrigger}
-                                            />
-
-
+                                    return  <DraftComponent postData={curDraftPost}/>
 
                                 })
             }

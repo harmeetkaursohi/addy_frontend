@@ -309,62 +309,62 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
 
 });
 
-export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
-    console.log("data--->", data)
-    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
+// export const getPostsPageAction = createAsyncThunk('post/getPostsPageAction', async (data, thunkAPI) => {
+//     console.log("data--->", data)
+//     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/reviews`, data, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+//
+// });
 
-});
-
-export const getAllPlannerPostAction = createAsyncThunk('post/getAllPlannerPostAction', async (data, thunkAPI) => {
-    console.log("here it is requiring")
-    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/by-criteria`, data?.query, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
-
-
-export const publishedPostAction = createAsyncThunk('post/publishedPostAction', async (data, thunkAPI) => {
-    return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/publish/${data?.postId}`, null, setAuthenticationHeader(data.token)).then(res => {
-        if (res?.data?.every(c => !c.success)) {
-            showErrorToast("Post encountered with an issue. Currently saved as a draft.");
-        } else if (res?.data?.every(c => c.success)) {
-            showSuccessToast("Post has been successfully shared to the chosen platform.");
-        } else {
-            showWarningToast(`Post successfully on ${res?.data?.filter(c => c.success)?.map(c => c.pageName).join(" , ")} and failed to post on ${res?.data?.filter(c => !c.success)?.map(c => c.pageName).join(" , ")}`)
-        }
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const getAllPlannerPostAction = createAsyncThunk('post/getAllPlannerPostAction', async (data, thunkAPI) => {
+//     console.log("here it is requiring")
+//     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/by-criteria`, data?.query, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
 
-export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatchIdAction', async (data, thunkAPI) => {
-    return await baseAxios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data?.postId}`, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const publishedPostAction = createAsyncThunk('post/publishedPostAction', async (data, thunkAPI) => {
+//     return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/publish/${data?.postId}`, null, setAuthenticationHeader(data.token)).then(res => {
+//         if (res?.data?.every(c => !c.success)) {
+//             showErrorToast("Post encountered with an issue. Currently saved as a draft.");
+//         } else if (res?.data?.every(c => c.success)) {
+//             showSuccessToast("Post has been successfully shared to the chosen platform.");
+//         } else {
+//             showWarningToast(`Post successfully on ${res?.data?.filter(c => c.success)?.map(c => c.pageName).join(" , ")} and failed to post on ${res?.data?.filter(c => !c.success)?.map(c => c.pageName).join(" , ")}`)
+//         }
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
-export const deletePostFromPage = createAsyncThunk('post/deletePostFromPage', async (data, thunkAPI) => {
-    return await baseAxios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/posts?postId=${data?.postId}&pageIds=${data.pageIds.map(id => id).join(',')}`, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+
+// export const deletePostByBatchIdAction = createAsyncThunk('post/deletePostByBatchIdAction', async (data, thunkAPI) => {
+//     return await baseAxios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data?.postId}`, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
+
+// export const deletePostFromPage = createAsyncThunk('post/deletePostFromPage', async (data, thunkAPI) => {
+//     return await baseAxios.delete(`${import.meta.env.VITE_APP_API_BASE_URL}/posts?postId=${data?.postId}&pageIds=${data.pageIds.map(id => id).join(',')}`, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
 
 export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOnSocialMediaAction', async (data, thunkAPI) => {
@@ -453,33 +453,33 @@ export const getPostsByIdAction = createAsyncThunk('post/getPostsByIdAction', as
     });
 });
 
-export const getAllPostsForPlannerAction = createAsyncThunk('post/getAllPostsForPlannerAction', async (data, thunkAPI) => {
-    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner`, data?.query, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const getAllPostsForPlannerAction = createAsyncThunk('post/getAllPostsForPlannerAction', async (data, thunkAPI) => {
+//     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner`, data?.query, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
-export const getAllSocialMediaPostsByCriteria = createAsyncThunk('post/getAllSocialMediaPostsByCriteria', async (data, thunkAPI) => {
-    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/by-criteria`, data?.query, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const getAllSocialMediaPostsByCriteria = createAsyncThunk('post/getAllSocialMediaPostsByCriteria', async (data, thunkAPI) => {
+//     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/by-criteria`, data?.query, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
 
-export const getPlannerPostCountAction = createAsyncThunk('get/getPlannerPostCountAction', async (data, thunkAPI) => {
-    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner-report`, data?.query, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const getPlannerPostCountAction = createAsyncThunk('get/getPlannerPostCountAction', async (data, thunkAPI) => {
+//     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner-report`, data?.query, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
 
 export const createFacebookPostAction = createAsyncThunk('post/createFacebookPostAction', async (data, thunkAPI) => {

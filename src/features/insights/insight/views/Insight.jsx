@@ -8,32 +8,25 @@ import HorizontalBarChart from "../../horizontalbar";
 import Carousel from "../../slider/Slider";
 import {useDispatch, useSelector} from "react-redux";
 import jsondata from "../../../../locales/data/initialdata.json"
-import {
-    getAllByCustomerIdAction,
-} from "../../../../app/actions/socialAccountActions/socialAccountActions";
-import {getToken, setAuthenticationHeader} from "../../../../app/auth/auth";
+import {getToken} from "../../../../app/auth/auth";
 import linkedin_img from "../../../../images/linkedin.svg"
 import {
     getAccountReachedAndAccountEngaged,
-    getDemographicsInsight,
     getPostDataWithInsights,
-    getProfileInsightsInfo,
-    getProfileVisitsInsightsInfo,
     pinterestPinClick,
     postEngagement
 } from "../../../../app/actions/InsightActions/insightAction";
 import {getPostByPageIdAndPostStatus} from "../../../../app/actions/postActions/postActions";
 import {
     calculatePercentageGrowthFor, convertUnixTimestampToDateTime, createSocialMediaProfileViewInsightsQuery,
-    fetchCssForInsightPageListOption, formatMessage,
+    fetchCssForInsightPageListOption,
     generateUnixTimestampFor,
-    getDatesForPinterest, groupBy,
+    groupBy, isNullOrEmpty,
 
 } from "../../../../utils/commonUtils";
 import {
     EmptyInsightGridMessage,
     enabledSocialMedia,
-    NotConnected,
     selectGraphDaysOptions,
     SocialAccountProvider
 } from "../../../../utils/contantData";
@@ -57,19 +50,74 @@ import PinterestGraph from "../../../react_chart/views/PinterestGraph";
 import {RotatingLines} from "react-loader-spinner";
 import {useGetConnectedSocialAccountQuery} from "../../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../../app/apis/pageAccessTokenApi";
+import {
+    useGetAccountsReachAndEngagementQuery,
+    useGetDemographicsInsightQuery,
+    useGetProfileInsightsInfoQuery,
+    useGetProfileVisitsInsightsQuery
+} from "../../../../app/apis/insightApi";
 
 const Insight = () => {
+
     const dispatch = useDispatch();
     const token = getToken();
     const {sidebar} = useAppContext();
+
+    const [selectedPage, setSelectedPage] = useState(null);
+    const [daysForProfileVisitGraph, setDaysForProfileVisitGraph] = useState(7);
+    const [selectedPeriodForReachAndEngagement, setSelectedPeriodForReachAndEngagement] = useState(7);
+
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
-    const getAllByCustomerIdData = useSelector(state => state.socialAccount.getAllByCustomerIdReducer);
-    const getProfileInfoReducer = useSelector(state => state.insight.getProfileInfoReducer);
-    const getProfileVisitsInsightsInfoReducerData = useSelector(state => state.insight.getProfileVisitsInsightsInfoReducer);
+    const profileInsightsApi = useGetProfileInsightsInfoQuery({
+        socialMediaType: selectedPage?.socialMediaType,
+        pageAccessToken: selectedPage?.access_token,
+        pageId: selectedPage?.pageId
+    }, {skip: isNullOrEmpty(selectedPage) })
+
+    const demographicsInsightApi = useGetDemographicsInsightQuery({
+        socialMediaType: selectedPage?.socialMediaType,
+        pageAccessToken: selectedPage?.access_token,
+        pageId: selectedPage?.pageId
+    }, {skip: isNullOrEmpty(selectedPage) || selectedPage?.socialMediaType!=="LINKEDIN"})
+
+    const profileVisitsApi = useGetProfileVisitsInsightsQuery({
+        pageId: selectedPage?.pageId,
+        socialMediaType: selectedPage?.socialMediaType,
+        query: createSocialMediaProfileViewInsightsQuery({
+            days: daysForProfileVisitGraph,
+            access_token: selectedPage?.access_token,
+            pageId: selectedPage?.pageId
+        }, selectedPage?.socialMediaType)
+    }, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(daysForProfileVisitGraph)|| selectedPage?.socialMediaType==="PINTEREST"})
+
+    const accountsReachAndEngagementApi = useGetAccountsReachAndEngagementQuery({
+        socialMediaType: selectedPage?.socialMediaType,
+        pageAccessToken: selectedPage?.access_token,
+        pageId: selectedPage?.pageId,
+        period: selectedPeriodForReachAndEngagement
+    }, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(selectedPeriodForReachAndEngagement)})
+
+    useEffect(() => {
+        if (selectedPeriodForReachAndEngagement && selectedPage) {
+            dispatch(getAccountReachedAndAccountEngaged({
+                token: token,
+                socialMediaType: selectedPage?.socialMediaType,
+                pageAccessToken: selectedPage?.access_token,
+                pageId: selectedPage?.pageId,
+                period: selectedPeriodForReachAndEngagement
+            }))
+        }
+    }, [selectedPeriodForReachAndEngagement, selectedPage])
+
+    console.log("accountsReachAndEngagementApi====>", accountsReachAndEngagementApi)
+    console.log("profileVisitsApi====>", profileVisitsApi)
+    console.log("profileInsightsApi====>", profileInsightsApi)
+    console.log("demographicsInsightApi====>", demographicsInsightApi)
+    console.log("selectedPage=====>", selectedPage)
+
     const getAccountReachedAndAccountEngagedData = useSelector(state => state.insight.getAccountReachedAndAccountEngagedReducer);
-    const getDemographicsInsightData = useSelector(state => state.insight.getDemographicsInsightReducer);
     const getPostByPageIdAndPostStatusData = useSelector(state => state.post.getPostByPageIdAndPostStatusReducer);
     const getPostDataWithInsightsData = useSelector((state) => state.insight.getPostDataWithInsightsReducer);
 
@@ -79,50 +127,42 @@ const Insight = () => {
     const [connectedPinterestBoards, setConnectedPinterestBoards] = useState(null);
 
 
-    const [selectedPage, setSelectedPage] = useState(null);
-    const [selectedPeriodForReachAndEngagement, setSelectedPeriodForReachAndEngagement] = useState(7);
-    const [selectedDaysForProfileVisitGraph, setSelectedDaysForProfileVisitGraph] = useState(null);
+
+
 
     const [insightsCacheData, setInsightCacheData] = useState({
         getPostByPageIdAndPostStatusDataCache: {},
         getPostDataWithInsightsDataCache: []
     });
 
-    const handleSelectedPeriodForReachAndEngagement = (e) => {
-        e.preventDefault();
+    const handleSelectedPeriodForReachAndEngagement = () => {
         setSelectedPeriodForReachAndEngagement(parseInt(e.target.value))
     }
 
-
     useEffect(() => {
-        dispatch(getAllByCustomerIdAction({
-            token: token
-        }))
-    }, [])
-
-    useEffect(() => {
-        if (!getAllByCustomerIdData?.loading && getAllByCustomerIdData?.data !== null && getAllByCustomerIdData?.data !== undefined && getAllByCustomerIdData?.data?.length > 0) {
-            const socialAccountData = groupBy(getAllByCustomerIdData?.data, "provider")
+        if (!getConnectedSocialAccountApi?.isLoading && getConnectedSocialAccountApi?.data !== null && getConnectedSocialAccountApi?.data !== undefined && getConnectedSocialAccountApi?.data?.length > 0) {
+            const socialAccountData = groupBy(getConnectedSocialAccountApi?.data, "provider")
             socialAccountData["FACEBOOK"]?.length > 0 ? setConnectedFacebookPages(socialAccountData["FACEBOOK"][0]?.pageAccessToken) : setConnectedFacebookPages([])
             socialAccountData["INSTAGRAM"]?.length > 0 ? setConnectedInstagramPages(socialAccountData["INSTAGRAM"][0]?.pageAccessToken) : setConnectedInstagramPages([])
             socialAccountData["LINKEDIN"]?.length > 0 ? setConnectedLinkedinPages(socialAccountData["LINKEDIN"][0]?.pageAccessToken) : setConnectedLinkedinPages([])
             socialAccountData["PINTEREST"]?.length > 0 ? setConnectedPinterestBoards(socialAccountData["PINTEREST"][0]?.pageAccessToken) : setConnectedPinterestBoards([])
         }
 
-    }, [getAllByCustomerIdData])
+    }, [getConnectedSocialAccountApi])
 
     const handleSelectPage = (socialMediaType, page) => {
-        setSelectedDaysForProfileVisitGraph(null)
-        dispatch(resetReducers({sliceNames: ["getDemographicsInsightReducer"]}))
+        // dispatch(resetReducers({sliceNames: ["getDemographicsInsightReducer"]}))
         setSelectedPage({...page, socialMediaType: socialMediaType})
-        dispatch(resetReducers({sliceNames: ["getPostDataWithInsightsReducer"]}))
+        // dispatch(resetReducers({sliceNames: ["getPostDataWithInsightsReducer"]}))
 
     }
 
 
     useEffect(() => {
         if (selectedPage !== null && selectedPage !== undefined) {
-            setSelectedDaysForProfileVisitGraph(7);
+            setDaysForProfileVisitGraph(7)
+            setSelectedPeriodForReachAndEngagement(7)
+
             setInsightCacheData({
                 getPostByPageIdAndPostStatusDataCache: {},
                 getPostDataWithInsightsDataCache: []
@@ -145,28 +185,7 @@ const Insight = () => {
     }, [selectedPage])
 
 
-    useEffect(() => {
-        if (selectedPage !== null && selectedPage !== undefined) {
-            dispatch(getProfileInsightsInfo({
-                token: token,
-                socialMediaType: selectedPage?.socialMediaType,
-                pageAccessToken: selectedPage?.access_token,
-                pageId: selectedPage?.pageId
-            }))
-        }
-    }, [selectedPage])
 
-    useEffect(() => {
-        if (selectedPeriodForReachAndEngagement && selectedPage) {
-            dispatch(getAccountReachedAndAccountEngaged({
-                token: token,
-                socialMediaType: selectedPage?.socialMediaType,
-                pageAccessToken: selectedPage?.access_token,
-                pageId: selectedPage?.pageId,
-                period: selectedPeriodForReachAndEngagement
-            }))
-        }
-    }, [selectedPeriodForReachAndEngagement, selectedPage])
 
     useEffect(() => {
         if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
@@ -212,33 +231,9 @@ const Insight = () => {
         }
     }, [getPostDataWithInsightsData]);
 
-    useEffect(() => {
-        if (selectedPage !== undefined && selectedPage !== null) {
-            dispatch(getDemographicsInsight({
-                socialMediaType: selectedPage?.socialMediaType,
-                pageAccessToken: selectedPage?.access_token,
-                pageId: selectedPage?.pageId,
-            }))
-        }
-    }, [selectedPage])
 
 
-    useEffect(() => {
-        if (selectedPage !== null && selectedPage !== undefined && selectedDaysForProfileVisitGraph !== null && selectedDaysForProfileVisitGraph !== undefined) {
-            let query = {
-                token: token,
-                pages: [selectedPage],
-                pageId: selectedPage?.pageId,
-                socialMediaType: selectedPage?.socialMediaType,
-                query: createSocialMediaProfileViewInsightsQuery({
-                    days: selectedDaysForProfileVisitGraph,
-                    access_token: selectedPage.access_token,
-                    pageId: selectedPage?.pageId
-                }, selectedPage?.socialMediaType)
-            }
-            dispatch(getProfileVisitsInsightsInfo(query))
-        }
-    }, [selectedDaysForProfileVisitGraph])
+
 
     // new post engagement code starts here
     const [postEngageVal, setPostEngagementVal] = useState(7)
@@ -291,7 +286,7 @@ const Insight = () => {
 
     useEffect(() => {
 
-        if(selectedPage!==null && selectedPage!==undefined && selectedPage?.socialMediaType==="PINTEREST"){
+        if (selectedPage !== null && selectedPage !== undefined && selectedPage?.socialMediaType === "PINTEREST") {
             let graphdata = {token: token, day: day}
             dispatch(pinterestPinClick(graphdata))
         }
@@ -323,20 +318,6 @@ const Insight = () => {
     }
 
 
-// useEffect(()=>{
-
-//     fetch(`https://graph.facebook.com/v19.0/${selectedPage?.pageId}/insights?metric=post_engagements&access_token=${selectedPage?.access_token}&since=${1622505600}&until=${1625097600}&period=day`)
-//     .then((res)=>{
-//         return res.json()
-//     }).then((res)=>console.log(res,"res111"))
-// },[selectedPage])
-
-// GET https://graph.instagram.com/{media-id}
-//   ?fields=comments_count,like_count,media_type,permalink,timestamp
-//   &access_token={access_token}
-// GET graph.facebook.com/{media-id}/insights
-//     ?metric=engagement,impressions,reach
-
     return (
         <section>
             <div className={`insight_wrapper ${sidebar ? "cmn_container" : "cmn_Padding"}`}>
@@ -363,12 +344,12 @@ const Insight = () => {
                                                 >
                                                     <i className={`fa-brands fa-facebook me-2 `}
                                                        style={{color: "#0866ff", fontSize: "20px"}}/>
-                                                    Facebook {(!connectedFacebookPages?.length && getAllByCustomerIdData?.loading) ?
+                                                    Facebook {(!connectedFacebookPages?.length && getConnectedSocialAccountApi?.isLoading) ?
                                                     <Loader className="social-account-loader"/> : (<></>)}
                                                 </Dropdown.Toggle>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item>
-                                                        {(!connectedFacebookPages?.length && !getAllByCustomerIdData?.loading) ?
+                                                        {(!connectedFacebookPages?.length && !getConnectedSocialAccountApi?.isLoading) ?
                                                             <h3 className="noPageHeading">No Page is Connected
                                                                 yet</h3> : (<></>)}
                                                         <ul className="Social_media_wrapper">
@@ -409,13 +390,13 @@ const Insight = () => {
                                                 >
                                                     <img src={instagram_img} className="me-2  "
                                                          style={{height: "18px", width: "18px"}}/>
-                                                    Instagram {(!connectedInstagramPages?.length && getAllByCustomerIdData?.loading) ?
+                                                    Instagram {(!connectedInstagramPages?.length && getConnectedSocialAccountApi?.isLoading) ?
                                                     <Loader className="social-account-loader"/> : (<></>)}
                                                 </Dropdown.Toggle>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item>
 
-                                                        {(!connectedInstagramPages?.length && !getAllByCustomerIdData?.loading) ?
+                                                        {(!connectedInstagramPages?.length && !getConnectedSocialAccountApi?.isLoading) ?
                                                             <h3 className="noPageHeading">No Page is Connected
                                                                 yet</h3> : (<></>)}
                                                         <ul className="Social_media_wrapper">
@@ -453,21 +434,22 @@ const Insight = () => {
                                                     <i className={`fa-brands fa-pinterest me-2 `}
                                                        style={{color: "#e60023", fontSize: "20px"}}/>
 
-                                                    Pinterest {(!connectedPinterestBoards?.length && getAllByCustomerIdData?.loading) ?
+                                                    Pinterest {(!connectedPinterestBoards?.length && getConnectedSocialAccountApi?.isLoading) ?
                                                     <Loader className="social-account-loader"/> : (<></>)}
                                                 </Dropdown.Toggle>
                                                 <Dropdown.Menu>
 
 
                                                     <Dropdown.Item>
-                                                        {(!connectedPinterestBoards?.length && !getAllByCustomerIdData?.loading) ?
+                                                        {(!connectedPinterestBoards?.length && !getConnectedSocialAccountApi?.isLoading) ?
                                                             <h3 className="noPageHeading">No Page is Connected
                                                                 yet</h3> : (<></>)}
                                                         <ul className="Social_media_wrapper">
                                                             {
                                                                 connectedPinterestBoards?.map((board, index) => {
                                                                     return (
-                                                                        <li style={{...fetchCssForInsightPageListOption(board, selectedPage)}}
+                                                                        <li
+                                                                            style={{...fetchCssForInsightPageListOption(board, selectedPage)}}
                                                                             key={index} onClick={() => {
                                                                             handleSelectPage("PINTEREST", board)
                                                                         }}>
@@ -500,12 +482,12 @@ const Insight = () => {
                                                     disabled={!getConnectedSocialAccountApi?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.LINKEDIN?.toUpperCase())}
                                                 >
                                                     <img src={linkedin_img} className="me-2  "/>
-                                                    Linkedin {(!connectedLinkedinPages?.length && getAllByCustomerIdData?.loading) ?
+                                                    Linkedin {(!connectedLinkedinPages?.length && getConnectedSocialAccountApi?.isLoading) ?
                                                     <Loader className="social-account-loader"/> : (<></>)}
                                                 </Dropdown.Toggle>
                                                 <Dropdown.Menu>
                                                     <Dropdown.Item>
-                                                        {(!connectedLinkedinPages?.length && !getAllByCustomerIdData?.loading) ?
+                                                        {(!connectedLinkedinPages?.length && !getConnectedSocialAccountApi?.isLoading) ?
                                                             <h3 className="noPageHeading">No Page is Connected
                                                                 yet</h3> : (<></>)}
                                                         <ul className="Social_media_wrapper">
@@ -554,7 +536,7 @@ const Insight = () => {
                                                                     <h3>Visitors Demographics</h3>
 
                                                                 </div>
-                                                                {(getDemographicsInsightData?.data?.country === null || selectedPage.socialMediaType === "PINTEREST")
+                                                                {(demographicsInsightApi?.data?.country === null || selectedPage.socialMediaType === "PINTEREST")
                                                                     ?
                                                                     <div className={"no_data_available text-center"}>
                                                                         <img className="no_data_available_img"
@@ -562,7 +544,7 @@ const Insight = () => {
                                                                              alt={"coming soon!"}/>
                                                                     </div>
                                                                     :
-                                                                    <DonutChart chartData={getDemographicsInsightData}
+                                                                    <DonutChart chartData={demographicsInsightApi}
                                                                                 socialMediaType={selectedPage?.socialMediaType}/>}
                                                             </div>
 
@@ -572,17 +554,17 @@ const Insight = () => {
                                                                 <div
                                                                     className="user_profile_card_wrapper text-center mt-3">
                                                                     {
-                                                                        getProfileInfoReducer.loading ?
+                                                                        (profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
                                                                             <i
                                                                                 style={{fontSize: "60px"}}
                                                                                 className="fa fa-spinner fa-spin"/> :
                                                                             <img
-                                                                                src={getProfileInfoReducer?.data?.imageUrl || default_user_icon}/>
+                                                                                src={profileInsightsApi?.data?.imageUrl || default_user_icon}/>
                                                                     }
-                                                                    <h3 className="cmn_text_style pt-4">{getProfileInfoReducer?.data?.name}</h3>
+                                                                    <h3 className="cmn_text_style pt-4">{profileInsightsApi?.data?.name}</h3>
                                                                     <h6 className="cmn_text pt-2">
                                                                         {
-                                                                            getProfileInfoReducer?.data?.about || ""
+                                                                            profileInsightsApi?.data?.about || ""
                                                                         }
                                                                     </h6>
                                                                 </div>
@@ -592,13 +574,13 @@ const Insight = () => {
                                                                     <ul className="d-flex mt-4 user_info_list">
                                                                         <li>
                                                                             <h3 className="cmn_text">Likes</h3>
-                                                                            <h4>{getProfileInfoReducer.loading ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.likes}</h4>
+                                                                            <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.likes}</h4>
                                                                         </li>
                                                                         <li>
                                                                             <h3 className="cmn_text">Followers</h3>
-                                                                            <h4>{getProfileInfoReducer.loading ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.followers}</h4>
+                                                                            <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.followers}</h4>
                                                                         </li>
                                                                     </ul>
                                                                 }
@@ -607,18 +589,18 @@ const Insight = () => {
                                                                     <ul className="d-flex mt-4 user_info_list">
                                                                         <li>
                                                                             <h3 className="cmn_text">Post</h3>
-                                                                            <h4 className="">{getProfileInfoReducer.loading ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.total_posts}</h4>
+                                                                            <h4 className="">{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.total_posts}</h4>
                                                                         </li>
                                                                         <li>
                                                                             <h3 className="cmn_text">Followers</h3>
-                                                                            <h4>{getProfileInfoReducer.loading ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.followers}</h4>
+                                                                            <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.followers}</h4>
                                                                         </li>
                                                                         <li>
                                                                             <h3 className="cmn_text">Following</h3>
-                                                                            <h4>{getProfileInfoReducer.loading ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : getProfileInfoReducer?.data?.following}</h4>
+                                                                            <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
+                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.following}</h4>
                                                                         </li>
                                                                     </ul>
                                                                 }
@@ -640,7 +622,7 @@ const Insight = () => {
                                                                             <img src={calendar_img} alt=""
                                                                                  className="me-2" height="20px"
                                                                                  width="20px"/>
-                                                                            {`Last ${selectedDaysForProfileVisitGraph} days`}
+                                                                            {`Last ${daysForProfileVisitGraph} days`}
                                                                         </Dropdown.Toggle>
                                                                         <Dropdown.Menu>
                                                                             {selectGraphDaysOptions.map((c, i) => (
@@ -648,7 +630,7 @@ const Insight = () => {
                                                                                 <Dropdown.Item
                                                                                     key={i}
                                                                                     onClick={() => {
-                                                                                        setSelectedDaysForProfileVisitGraph(c.days);
+                                                                                        setDaysForProfileVisitGraph(c.days);
                                                                                     }}>
                                                                                     {c.label}
                                                                                 </Dropdown.Item>
@@ -660,7 +642,7 @@ const Insight = () => {
                                                             </div>
 
                                                             <div className="profile_visit_graph_outer mt-2">
-                                                                {(selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(getProfileVisitsInsightsInfoReducerData?.data) && getProfileVisitsInsightsInfoReducerData?.data?.length === 0))
+                                                                {(selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(profileVisitsApi?.data) && profileVisitsApi?.data?.length === 0))
                                                                     ?
                                                                     <div className={"no_data_available text-center"}>
                                                                         <img className="no_data_available_img  "
@@ -669,7 +651,7 @@ const Insight = () => {
                                                                     </div>
                                                                     :
                                                                     <ProfileVisitChart
-                                                                        graphData={getProfileVisitsInsightsInfoReducerData}
+                                                                        graphData={profileVisitsApi}
                                                                         socialMediaType={selectedPage?.socialMediaType}/>
                                                                 }
                                                             </div>
@@ -678,7 +660,8 @@ const Insight = () => {
                                                     </div>
                                                 </div>
                                                 <div className="row mt-4 mb-4">
-                                                    {false &&
+                                                    {
+                                                        false &&
                                                         <div className="col-lg-4 col-md-12 col-sm-12">
                                                             <div
                                                                 className="cmn_shadow  insight_followers_outer visitors_container">
@@ -686,7 +669,7 @@ const Insight = () => {
                                                                     <h3>Followers</h3>
 
                                                                 </div>
-                                                                {(getDemographicsInsightData?.data?.country === null || selectedPage.socialMediaType === "PINTEREST")
+                                                                {(demographicsInsightApi?.data?.country === null || selectedPage.socialMediaType === "PINTEREST")
                                                                     ?
                                                                     <div className={"no_data_available text-center"}>
                                                                         <img className="no_data_available_img"
@@ -694,7 +677,7 @@ const Insight = () => {
                                                                              alt={"coming soon!"}/>
                                                                     </div>
                                                                     :
-                                                                    <DonutChart chartData={getDemographicsInsightData}
+                                                                    <DonutChart chartData={demographicsInsightApi}
                                                                                 socialMediaType={selectedPage?.socialMediaType}/>}
                                                             </div>
                                                         </div>
@@ -714,7 +697,7 @@ const Insight = () => {
                                                                     </div>
                                                                     :
                                                                     <HorizontalBarChart
-                                                                        demographicData={getDemographicsInsightData}/>}
+                                                                        demographicData={demographicsInsightApi}/>}
                                                             </div>
                                                         </div>
                                                     }
@@ -853,9 +836,9 @@ const Insight = () => {
                                                             </div>
                                                             <h4 className="cmn_text_style">
                                                                 {
-                                                                    getProfileInfoReducer?.loading ?
+                                                                    (profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
                                                                         <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : (getProfileInfoReducer?.data?.followers === null || getProfileInfoReducer?.data?.followers === undefined) ? "N/A" : getProfileInfoReducer?.data?.followers
+                                                                    </span> : (profileInsightsApi?.data?.followers === null || profileInsightsApi?.data?.followers === undefined) ? "N/A" : profileInsightsApi?.data?.followers
                                                                 }
                                                             </h4>
                                                             <h5 className="cmn_text_style">Total Followers</h5>
@@ -869,9 +852,9 @@ const Insight = () => {
                                                             </div>
                                                             <h4 className="cmn_text_style">
                                                                 {
-                                                                    getProfileInfoReducer?.loading ?
+                                                                    (profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
                                                                         <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : (getProfileInfoReducer?.data?.likes === null || getProfileInfoReducer?.data?.likes === undefined) ? "N/A" : getProfileInfoReducer?.data?.likes
+                                                                    </span> : (profileInsightsApi?.data?.likes === null || profileInsightsApi?.data?.likes === undefined) ? "N/A" : profileInsightsApi?.data?.likes
                                                                 }
                                                             </h4>
                                                             <h5 className="cmn_text_style">Accounts likes</h5>

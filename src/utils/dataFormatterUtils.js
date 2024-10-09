@@ -1,4 +1,10 @@
-import {isNullOrEmpty} from "./commonUtils";
+import {
+    filterAndSumLinkedinOrgStatisticsDataFor,
+    filterAndSumPinterestUserAnalyticsDataFor,
+    filterGenderAgeDataFromFacebookDemographicData,
+    getFormattedPostTime,
+    isNullOrEmpty
+} from "./commonUtils";
 import {SocialAccountProvider} from "./contantData";
 
 export const getInstagramBusinessAccounts = (accountsData) => {
@@ -70,4 +76,298 @@ export const getConnectedSocialMediaAccount = (connectedSocialAccount) => {
         pinterest: connectedSocialAccount?.filter(socialMediaAccount => socialMediaAccount.provider === "PINTEREST")?.[0] || null
     }
 
+}
+
+export const getFormattedInsightProfileInfo = (data, socialMediaType) => {
+    let response;
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
+            response = {
+                id: data?.id,
+                name: data?.name,
+                followers: data?.followers_count,
+                likes: data?.fan_count,
+                about: data?.about,
+                imageUrl: data?.picture?.data?.url
+            }
+            break;
+        }
+        case SocialAccountProvider.INSTAGRAM.toUpperCase() : {
+            response = {
+                id: data?.id,
+                name: data?.name,
+                followers: data?.followers_count,
+                following: data?.follows_count,
+                about: data?.biography,
+                total_posts: data?.media_count,
+                imageUrl: data?.profile_picture_url
+            }
+            break;
+        }
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            response = {
+                id: data?.id,
+                name: data?.business_name,
+                followers: data?.follower_count,
+                following: data?.following_count,
+                about: data?.about,
+                total_posts: data?.pin_count,
+                imageUrl: data?.profile_image
+            }
+            break;
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            response = {
+                followers: data?.all_time?.firstDegreeSize
+            }
+            break;
+        }
+    }
+    return response;
+}
+
+export const getFormattedDemographicData = (data, key, socialMediaType) => {
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK.toUpperCase(): {
+            let formattedData;
+            if (data?.data?.data?.length > 0) {
+                let demographicData;
+                if (key === "CITY") {
+                    demographicData = data?.data?.data?.filter(data => data?.name === "page_fans_city")
+                }
+                if (key === "COUNTRY") {
+                    demographicData = data?.data?.data?.filter(data => data?.name === "page_fans_country")
+                }
+                if (key === "AGE" || key === "GENDER") {
+                    demographicData = data?.data?.data?.filter(data => data?.name === "page_fans_gender_age")
+                }
+                if (demographicData?.length > 0) {
+                    if (key === "CITY") {
+                        formattedData = Object.keys(demographicData[0]?.values[0]?.value)?.map(cur => {
+                            return {
+                                city_name: cur,
+                                value: demographicData[0]?.values[0]?.value[cur]
+                            }
+                        })
+                    }
+                    if (key === "COUNTRY") {
+                        formattedData = Object.keys(demographicData[0]?.values[0]?.value)?.map(cur => {
+                            return {
+                                country_code: cur,
+                                value: demographicData[0]?.values[0]?.value[cur]
+                            }
+                        })
+                    }
+                    if (key === "AGE" || key === "GENDER") {
+                        return filterGenderAgeDataFromFacebookDemographicData(demographicData[0]?.values[0]?.value, key)
+                    }
+                } else {
+                    formattedData = null
+                }
+
+            } else {
+                formattedData = null
+            }
+            return formattedData
+        }
+        case SocialAccountProvider.INSTAGRAM.toUpperCase(): {
+            let formattedData;
+            if (data?.data?.data[0]?.total_value?.breakdowns[0]?.results === undefined || data?.data?.data[0]?.total_value?.breakdowns[0]?.results === null || data?.data?.data[0]?.total_value?.breakdowns[0]?.results?.length === 0) {
+                formattedData = null
+            } else {
+                formattedData = data?.data?.data[0]?.total_value?.breakdowns[0]?.results?.map(data => {
+                    if (key === "CITY") {
+                        return {
+                            city_name: data?.dimension_values[0],
+                            value: data?.value
+                        }
+                    }
+                    if (key === "COUNTRY") {
+                        return {
+                            country_code: data?.dimension_values[0],
+                            value: data?.value
+                        }
+                    }
+                    if (key === "GENDER") {
+                        return {
+                            gender: data?.dimension_values[0],
+                            value: data?.value
+                        }
+                    }
+                    if (key === "AGE") {
+                        return {
+                            age_range: data?.dimension_values[0],
+                            value: data?.value
+                        }
+                    }
+
+                })
+            }
+            return formattedData
+        }
+        case SocialAccountProvider.LINKEDIN.toUpperCase(): {
+            let formattedData;
+            const keyData = data?.elements?.filter(data => data.hasOwnProperty(key))
+            if (keyData?.length === 0) {
+                formattedData = null;
+            } else {
+                if (key === "followerCountsByGeoCountry") {
+                    formattedData = keyData[0]?.followerCountsByGeoCountry?.map(data => {
+                        return {
+                            country_name: data?.geo,
+                            value: data?.followerCounts?.organicFollowerCount + data?.followerCounts?.paidFollowerCount
+                        }
+                    });
+                }
+            }
+            return formattedData
+        }
+    }
+}
+
+export const getFormattedInsightsForProfileViews = (data, socialMediaType) => {
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase():
+        case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
+            return Array.isArray(data.data) && data.data.length > 0 ? data.data[0].values || [] : [];
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            return Array.isArray(data?.elements) && data?.elements?.length > 0 ? data?.elements || [] : [];
+        }
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            break;
+        }
+    }
+    return {};
+}
+
+export const getFormattedAccountReachAndEngagementData = (data, socialMediaType) => {
+    let formattedData = {
+        engagement: {
+            presentData: null,
+            previousData: {
+                data: null,
+                dateRange: null
+            }
+        },
+        reach: {
+            presentData: null,
+            previousData: {
+                data: null,
+                dateRange: null
+            }
+        }
+    }
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            const engagement = data?.filter(data => data?.name === "page_post_engagements")[0]?.values
+            const reach = data?.filter(data => data?.name === "page_impressions_unique")[0]?.values
+            const totalEngagementForPreviousDate = engagement.slice(0, (engagement?.length) / 2);
+            const totalEngagementForPresentDate = engagement.slice((engagement?.length) / 2)
+            const totalReachForPreviousDate = reach.slice(0, (reach?.length) / 2);
+            const totalReachForPresentDate = reach.slice((reach?.length) / 2)
+            formattedData = {
+                engagement: {
+                    presentData: totalEngagementForPresentDate.reduce((accumulator, currentValue) => {
+                        return accumulator + currentValue.value;
+                    }, 0),
+                    previousData: {
+                        data: totalEngagementForPreviousDate.reduce((accumulator, currentValue) => {
+                            return accumulator + currentValue.value;
+                        }, 0),
+                        dateRange: `${getFormattedPostTime(totalEngagementForPreviousDate[0]?.end_time, "DD-Mon") + "-" + getFormattedPostTime(totalEngagementForPreviousDate[totalEngagementForPreviousDate?.length - 1]?.end_time, "DD-Mon")}`
+                    }
+                },
+                reach: {
+                    presentData: totalReachForPresentDate.reduce((accumulator, currentValue) => {
+                        return accumulator + currentValue.value;
+                    }, 0),
+                    previousData: {
+                        data: totalReachForPreviousDate.reduce((accumulator, currentValue) => {
+                            return accumulator + currentValue.value;
+                        }, 0),
+                        dateRange: `${getFormattedPostTime(totalReachForPreviousDate[0]?.end_time, "DD-Mon") + "-" + getFormattedPostTime(totalReachForPreviousDate[totalEngagementForPreviousDate?.length - 1]?.end_time, "DD-Mon")}`
+                    }
+                }
+
+            }
+            return formattedData;
+        }
+        case "INSTAGRAM": {
+            const presentReach = data?.presentData?.filter(data => data?.name === "reach")[0]?.total_value?.value
+            const presentEngagement = data?.presentData?.filter(data => data?.name === "accounts_engaged")[0]?.total_value?.value
+            const previousReach = data?.previousData?.data?.filter(data => data?.name === "reach")[0]?.total_value?.value
+            const previousEngagement = data?.previousData?.data?.filter(data => data?.name === "accounts_engaged")[0]?.total_value?.value
+            formattedData = {
+                engagement: {
+                    presentData: presentEngagement,
+                    previousData: {
+                        data: previousEngagement,
+                        dateRange: data?.previousData?.dateRange
+                    }
+                },
+                reach: {
+                    presentData: presentReach,
+                    previousData: {
+                        data: previousReach,
+                        dateRange: data?.previousData?.dateRange
+                    }
+                }
+            }
+            return formattedData;
+        }
+        case "PINTEREST": {
+            const readyData = data?.all?.daily_metrics?.filter(insightsData => insightsData?.data_status !== "PROCESSING");
+            const totalDays = Math.floor(readyData?.length);
+            const previousData = readyData?.slice(0, totalDays / 2);
+            const presentData = readyData?.slice((totalDays / 2) * -1);
+            const dateRange = getFormattedPostTime(new Date(previousData[0]?.date), "DD-Mon") + "-" + getFormattedPostTime(new Date(previousData[(totalDays / 2) - 1]?.date), "DD-Mon")
+            const summedPreviousData = filterAndSumPinterestUserAnalyticsDataFor(previousData, previousData?.length, ["IMPRESSION", "ENGAGEMENT"]);
+            const summedPresentData = filterAndSumPinterestUserAnalyticsDataFor(presentData, presentData?.length, ["IMPRESSION", "ENGAGEMENT"]);
+            formattedData = {
+                engagement: {
+                    presentData: summedPresentData?.ENGAGEMENT || 0,
+                    previousData: {
+                        data: summedPreviousData?.ENGAGEMENT || 0,
+                        dateRange: dateRange
+                    }
+                },
+                reach: {
+                    presentData: summedPresentData?.IMPRESSION || 0,
+                    previousData: {
+                        data: summedPreviousData?.IMPRESSION || 0,
+                        dateRange: dateRange
+                    }
+                }
+            }
+            return formattedData;
+        }
+        case "LINKEDIN": {
+            const statisticsData = data?.timeBound?.elements;
+            const totalDays = Math.floor(statisticsData?.length);
+            const previousData = statisticsData?.slice(0, totalDays / 2);
+            const presentData = statisticsData?.slice((totalDays / 2) * -1);
+            const dateRange = getFormattedPostTime(previousData[0]?.timeRange?.start, "DD-Mon") + "-" + getFormattedPostTime(previousData[previousData?.length - 1]?.timeRange?.start, "DD-Mon")
+            const summedPreviousData = filterAndSumLinkedinOrgStatisticsDataFor(previousData, previousData?.length, ["impressionCount", "engagement"]);
+            const summedPresentData = filterAndSumLinkedinOrgStatisticsDataFor(presentData, presentData?.length, ["impressionCount", "engagement"]);
+            formattedData = {
+                engagement: {
+                    presentData: summedPresentData?.engagement,
+                    previousData: {
+                        data: summedPreviousData?.engagement,
+                        dateRange: dateRange
+                    }
+                },
+                reach: {
+                    presentData: summedPresentData?.impressionCount,
+                    previousData: {
+                        data: summedPreviousData?.impressionCount,
+                        dateRange: dateRange
+                    }
+                }
+            }
+            return formattedData;
+            break;
+        }
+    }
 }
