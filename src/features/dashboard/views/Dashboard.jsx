@@ -50,11 +50,8 @@ const Dashboard = () => {
 
                 </div>
                 {/* upcoming post */}
-                <div className="cmn_outer pt-0">
-                    <div className="cmn_wrapper_outer white_bg_color ">
-                        <ScheduledComponent scheduledData={getSocialMediaPostsByCriteriaApi}/>
-                    </div>
-                </div>
+            
+                    <ScheduledComponent scheduledData={getSocialMediaPostsByCriteriaApi}/>               
 
             </div>
             {
