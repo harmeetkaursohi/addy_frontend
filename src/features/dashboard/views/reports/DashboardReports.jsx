@@ -136,7 +136,7 @@ export const DashboardReports = () => {
                             :
                             // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
                             isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
-                                <div className=" p-5 text-center no_acc_container ">
+                                <div className=" p-5 text-center no_acc_container cmn_background">
                                     <h6 className="no_acc_title">No Page is Connected yet!</h6>
                                     <h3 className="connected_heading mt-3">Click on Connect to add your <br></br>pages
                                         in

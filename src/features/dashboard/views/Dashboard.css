@@ -309,7 +309,9 @@ element.style {
     padding: 15px;
 }
 
-
+.no_acc_container img{
+    width: 80%;
+}
 
 button.facebook_connect > div > div {
     display: none !important;
