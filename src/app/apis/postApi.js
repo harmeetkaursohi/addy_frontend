@@ -4,7 +4,7 @@ import {
     handleQueryError
 } from "../../utils/RTKQueryUtils";
 import {
-    getPlannerPostsCount,
+    getPlannerPostsCount, getPostByPageIdAndPostStatus,
     getPostsForPlanner,
     getPublishedPosts,
     getSocialMediaPostsByCriteria
@@ -91,8 +91,16 @@ export const postApi = addyApi.injectEndpoints({
                 await handleQueryError(queryFulfilled)
             },
         }),
+        getPostByPageIdAndPostStatus: build.query({
+            async queryFn (data) {
+                let result = await getPostByPageIdAndPostStatus(data)
+                return {data: result};
+            },
+            providesTags: ["getPostByPageIdAndPostStatusApi"],
+        }),
     }),
 });
+
 
 
 export const {
@@ -100,6 +108,7 @@ export const {
     useGetPostsForPlannerQuery,
     useGetPlannerPostsCountQuery,
     useGetPublishedPostsQuery,
+    useGetPostByPageIdAndPostStatusQuery,
     useDeletePostByIdMutation,
     useDeletePostFromPagesByPageIdsMutation,
     usePublishedPostByIdMutation,

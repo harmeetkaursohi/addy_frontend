@@ -8,13 +8,14 @@ import {
 import {
     getFormattedAccountReachAndEngagementData,
     getFormattedDemographicData,
-    getFormattedInsightsForProfileViews
+    getFormattedInsightsForProfileViews, getFormattedPostWithInsightsApiResponse
 } from "../utils/dataFormatterUtils";
 import {getToken, setAuthenticationHeader} from "../app/auth/auth";
 import {SocialAccountProvider} from "../utils/contantData";
 import {getAuthHeader} from "../utils/RTKQueryUtils";
 import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils";
 import {showErrorToast} from "../features/common/components/Toast";
+import {getPinterestPostEngagements} from "./pinterestService";
 
 const baseUrl = `${import.meta.env.VITE_APP_API_BASE_URL}`
 
@@ -237,6 +238,27 @@ export const getLinkedinAccountReachAndEngagement = async (data) => {
         return getFormattedAccountReachAndEngagementData(response?.data, data?.socialMediaType);
     }).catch((error) => {
         showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const getLinkedinPostDataWithInsights = async (data) => {
+    const postIds = data.postIds.map(id => id).join(',');
+    const apiUrl = `${baseUrl}/linkedin/post/insights?ids=${postIds}&orgId=${data?.pageId}`;
+    return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
+        return getFormattedPostWithInsightsApiResponse(res.data, data.postIds, SocialAccountProvider?.LINKEDIN);
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+
+export const getLinkedinPostEngagements = async (data) => {
+    const apiUrl = `${baseUrl}/linkedin/insight-graph/${data?.pageId}?`+ objectToQueryString(data.query);
+    return await baseAxios.get(apiUrl, getAuthHeader()).then((res) => {
+        return res?.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.error.message);
         throw error;
     });
 }

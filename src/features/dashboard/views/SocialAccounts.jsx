@@ -313,7 +313,7 @@ const SocialAccounts = ({}) => {
                     enabledSocialMedia?.isFacebookEnabled &&
                     <>
                         {
-                            getConnectedSocialAccountApi?.isLoading ?
+                            (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching) ?
                                 <SkeletonEffect count={1}/> :
                                 getConnectedSocialAccountApi?.data?.filter(c => c?.provider === 'FACEBOOK')?.length === 0 ?
 
@@ -328,7 +328,7 @@ const SocialAccounts = ({}) => {
                                         </div>
 
                                         <LoginSocialFacebook
-                                            isDisabled={connectSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isLoading}
+                                            isDisabled={connectSocialAccountApi?.isLoading || connectSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching}
                                             appId={`${import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID}`}
                                             redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                             onResolve={(response) => {
@@ -370,7 +370,7 @@ const SocialAccounts = ({}) => {
                                                     </div>
                                                     {
 
-                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !getAllConnectedPagesApi?.isLoading) && currentConnectedFacebookPages?.length === 0 &&
+                                                        (!getAllFacebookPagesApi?.isLoading || !getAllFacebookPagesApi?.isFetching || !getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || !getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) && currentConnectedFacebookPages?.length === 0 &&
                                                         <button className="DisConnectBtn cmn_connect_btn w-auto"
                                                                 onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}>
                                                             Disconnect
@@ -397,7 +397,7 @@ const SocialAccounts = ({}) => {
 
                                                 <ul className="menu_items">
                                                     {
-                                                        getAllFacebookPagesApi?.isLoading ?
+                                                        (getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching) ?
                                                             <SkeletonEffect count={3}/> :
 
                                                             currentConnectedFacebookPages?.length === 0 ?
@@ -474,7 +474,7 @@ const SocialAccounts = ({}) => {
                     enabledSocialMedia?.isInstagramEnabled &&
                     <>
                         {
-                            getConnectedSocialAccountApi?.isLoading ?
+                            (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching) ?
                                 <SkeletonEffect count={1}/> :
                                 getConnectedSocialAccountApi?.data?.filter(c => c.provider === 'INSTAGRAM').length === 0 ?
                                     <div className="social_media_outer">
@@ -489,7 +489,7 @@ const SocialAccounts = ({}) => {
 
 
                                         <LoginSocialFacebook
-                                            isDisabled={connectSocialAccountApi?.loading || getConnectedSocialAccountApi?.isLoading}
+                                            isDisabled={connectSocialAccountApi?.loading || connectSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching}
                                             appId={`${import.meta.env.VITE_APP_INSTAGRAM_CLIENT_ID}`}
                                             redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                             onResolve={(response) => {
@@ -524,7 +524,7 @@ const SocialAccounts = ({}) => {
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
-                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !getAllConnectedPagesApi?.isLoading) && currentConnectedInstagramPages?.length === 0 &&
+                                                        (!getAllFacebookPagesApi?.isLoading || !getAllFacebookPagesApi?.isFetching || !getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || !getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) && currentConnectedInstagramPages?.length === 0 &&
                                                         <button className="DisConnectBtn cmn_connect_btn w-auto"
                                                                 onClick={() => disConnectSocialMediaAccountToCustomer("INSTAGRAM")}>
                                                             Disconnect
@@ -551,7 +551,7 @@ const SocialAccounts = ({}) => {
                                                 <ul className="menu_items">
 
                                                     {
-                                                        getAllInstagramPagesApi?.isLoading ?
+                                                        ( getAllInstagramPagesApi?.isLoading || getAllInstagramPagesApi?.isFetching ) ?
                                                             <SkeletonEffect count={3}/> :
 
                                                             currentConnectedInstagramPages?.length === 0 ?
@@ -629,7 +629,7 @@ const SocialAccounts = ({}) => {
                     enabledSocialMedia?.isLinkedinEnabled &&
                     <>
                         {
-                            getConnectedSocialAccountApi?.isLoading ?
+                            (  getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching) ?
                                 <SkeletonEffect count={1}/> :
                                 getConnectedSocialAccountApi?.data?.filter(c => c.provider === 'LINKEDIN').length === 0 ?
                                     <div className="social_media_outer">
@@ -643,7 +643,7 @@ const SocialAccounts = ({}) => {
 
 
                                         <LoginSocialLinkedin
-                                            isDisabled={connectSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isLoading}
+                                            isDisabled={connectSocialAccountApi?.isLoading || connectSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching}
                                             redirect_uri={`${import.meta.env.VITE_APP_OAUTH2_REDIRECT_URL}/dashboard`}
                                             client_id={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_ID}`}
                                             client_secret={`${import.meta.env.VITE_APP_LINKEDIN_CLIENT_SECRET}`}
@@ -678,7 +678,7 @@ const SocialAccounts = ({}) => {
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
-                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !getAllConnectedPagesApi?.isLoading) && currentConnectedLinkedinPages?.length === 0 &&
+                                                        (!getAllFacebookPagesApi?.isLoading || !getAllFacebookPagesApi?.isFetching || !getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || !getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) && currentConnectedLinkedinPages?.length === 0 &&
 
                                                         <button
                                                             className="DisConnectBtn cmn_connect_btn w-auto"
@@ -709,7 +709,7 @@ const SocialAccounts = ({}) => {
                                                 <ul className="menu_items">
 
                                                     {
-                                                        getAllLinkedinPagesApi?.isLoading ?
+                                                        (getAllLinkedinPagesApi?.isLoading || getAllLinkedinPagesApi?.isFetching) ?
                                                             <SkeletonEffect count={3}/> :
 
                                                             currentConnectedLinkedinPages?.length === 0 ?
@@ -785,7 +785,7 @@ const SocialAccounts = ({}) => {
                     enabledSocialMedia?.isPinterestEnabled &&
                     <>
                         {
-                            getConnectedSocialAccountApi?.isLoading ?
+                            (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching) ?
                                 <SkeletonEffect count={1}/> :
                                 getConnectedSocialAccountApi?.data?.filter(c => c.provider === 'PINTEREST').length === 0 ?
                                     <div className="social_media_outer">
@@ -799,7 +799,7 @@ const SocialAccounts = ({}) => {
                                         </div>
 
                                         <LoginSocialPinterest
-                                            isDisabled={connectSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isLoading}
+                                            isDisabled={connectSocialAccountApi?.isLoading || connectSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching}
                                             client_id={`${import.meta.env.VITE_APP_PINTEREST_CLIENT_ID}`}
                                             client_secret={`${import.meta.env.VITE_APP_PINTEREST_CLIENT_SECRET}`}
                                             scope={`${import.meta.env.VITE_APP_PINTEREST_SCOPE}`}
@@ -831,7 +831,7 @@ const SocialAccounts = ({}) => {
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
-                                                        (!getAllFacebookPagesApi?.isLoading || !getConnectedSocialAccountApi?.isLoading || !getAllConnectedPagesApi?.isLoading) && currentConnectedPinterestPages?.length === 0 &&
+                                                        (!getAllFacebookPagesApi?.isLoading || !getAllFacebookPagesApi?.isFetching || !getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || !getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) && currentConnectedPinterestPages?.length === 0 &&
                                                         <button className="DisConnectBtn cmn_connect_btn w-auto"
                                                                 onClick={() => disConnectSocialMediaAccountToCustomer("PINTEREST")}>
                                                             Disconnect
@@ -858,7 +858,7 @@ const SocialAccounts = ({}) => {
                                                 <ul className="menu_items">
 
                                                     {
-                                                        getAllPinterestPagesApi?.isLoading ?
+                                                        (getAllPinterestPagesApi?.isLoading || getAllPinterestPagesApi?.isFetching) ?
                                                             <SkeletonEffect count={3}/> :
 
                                                             currentConnectedPinterestPages?.length === 0 ?

@@ -1,10 +1,14 @@
 import {
     baseAxios,
     calculatePercentageGrowth,
-    computeAndReturnSummedDateValues,
-    generateUnixTimestampFor, objectToQueryString
+    computeAndReturnSummedDateValues, extractParameterFromUrl,
+    generateUnixTimestampFor, getFormattedPostTime, objectToQueryString
 } from "../utils/commonUtils";
-import {getFormattedDemographicData, getFormattedInsightsForProfileViews} from "../utils/dataFormatterUtils";
+import {
+    getFormattedAccountReachAndEngagementData,
+    getFormattedDemographicData,
+    getFormattedInsightsForProfileViews, getFormattedPostWithInsightsApiResponse
+} from "../utils/dataFormatterUtils";
 import {SocialAccountProvider} from "../utils/contantData";
 import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils";
 import {showErrorToast} from "../features/common/components/Toast";
@@ -40,7 +44,7 @@ export const getInstagramPageReports = async (pagesList, accessToken) => {
                 });
 
             //last 1 month
-            const followersLastMonthUrlPath = `${baseUrl}/${pageId}/insights?metric=follower_count&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
+            const followersLastMonthUrlPath = `${fbBaseUrl}/${pageId}/insights?metric=follower_count&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
             await baseAxios.get(followersLastMonthUrlPath)
                 .then((response) => {
                     const data = response?.data?.data
@@ -62,7 +66,7 @@ export const getInstagramPageReports = async (pagesList, accessToken) => {
             //Post activities Page reach
             let accounts_Reached = {lifeTime: 0, month: 0};
             let post_Activity = {lifeTime: 0, month: 0};
-            let Url = `${baseUrl}/${pageId}/insights?metric=accounts_engaged,reach&metric_type=total_value&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
+            let Url = `${fbBaseUrl}/${pageId}/insights?metric=accounts_engaged,reach&metric_type=total_value&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
             for (let i = 0; i < 3; i++) {
                 await baseAxios.get(Url)
                     .then((response) => {
@@ -118,7 +122,7 @@ export const getInstagramReportByPage = async (page, accessToken) => {
             });
 
         //last 1 month
-        const followersLastMonthUrlPath = `${baseUrl}/${pageId}/insights?metric=follower_count&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
+        const followersLastMonthUrlPath = `${fbBaseUrl}/${pageId}/insights?metric=follower_count&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
         await baseAxios.get(followersLastMonthUrlPath)
             .then((response) => {
                 const data = response?.data?.data
@@ -140,7 +144,7 @@ export const getInstagramReportByPage = async (page, accessToken) => {
         //Post activities Page reach
         let accounts_Reached = {lifeTime: 0, month: 0};
         let post_Activity = {lifeTime: 0, month: 0};
-        let Url = `${baseUrl}/${pageId}/insights?metric=accounts_engaged,reach&metric_type=total_value&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
+        let Url = `${fbBaseUrl}/${pageId}/insights?metric=accounts_engaged,reach&metric_type=total_value&period=day&since=${generateUnixTimestampFor(30)}&until=${generateUnixTimestampFor("now")}&access_token=${accessToken}`;
         for (let i = 0; i < 3; i++) {
             await baseAxios.get(Url)
                 .then((response) => {
@@ -303,6 +307,56 @@ export const getInstagramProfileVisits = async (data) => {
     const profile_view_url = `${fbBaseUrl}/${data?.pageId}/insights?` + objectToQueryString(data.query);
     return await baseAxios.get(profile_view_url).then(res => {
         return getFormattedInsightsForProfileViews(res.data || {}, "INSTAGRAM");
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+
+const getAccountReachedAndAccountEngagedForInstagram = async (data) => {
+    let apiResponse = {
+        previousData: {
+            data: null,
+            dateRange: null
+        },
+        presentData: null
+    }
+    const apiUrl = `${fbBaseUrl}/${data?.pageId}/insights?metric=reach,accounts_engaged&metric_type=total_value&period=day&since=${generateUnixTimestampFor(data?.period)}&until=${generateUnixTimestampFor("now")}&access_token=${data?.pageAccessToken}`;
+    return await baseAxios.get(apiUrl).then(async presentData => {
+        if (presentData?.status === 200) {
+            apiResponse = {...apiResponse, presentData: presentData?.data?.data}
+            await baseAxios.get(presentData?.data?.paging?.previous).then(previousData => {
+                if (previousData?.status === 200) {
+                    apiResponse = {
+                        ...apiResponse,
+                        previousData: {
+                            data: previousData?.data?.data,
+                            dateRange: `${getFormattedPostTime(new Date(extractParameterFromUrl(presentData?.data?.paging?.previous, "since") * 1000), "DD-Mon")}` + "-" + `${getFormattedPostTime(new Date(extractParameterFromUrl(presentData?.data?.paging?.previous, "until") * 1000), "DD-Mon")}`
+                        }
+                    }
+                }
+            })
+        }
+        return apiResponse
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error
+    });
+
+}
+
+
+export const getInstagramAccountReachAndEngagement = async (data) => {
+    return await getAccountReachedAndAccountEngagedForInstagram(data).then((res) => {
+        return getFormattedAccountReachAndEngagementData(res, data?.socialMediaType);
+    })
+}
+
+export const getInstagramPostDataWithInsights=async (data)=>{
+    const postIds = data.postIds.map(id => id).join(',');
+    const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,insights.metric(reach,shares),caption,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
+    return await baseAxios.get(apiUrl).then(res => {
+        return getFormattedPostWithInsightsApiResponse(res.data, data.postIds, SocialAccountProvider?.INSTAGRAM);
     }).catch(error => {
         showErrorToast(error.response.data.error.message);
         throw error;

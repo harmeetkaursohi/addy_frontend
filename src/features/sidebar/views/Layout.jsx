@@ -21,10 +21,8 @@ import {
     isPageInfoAvailableFromSocialMediaFor
 } from "../../../utils/commonUtils";
 import {updatePageAccessTokenByIds} from "../../../app/actions/pageAccessTokenAction/pageAccessTokenAction";
-import {useGetUserInfoQuery, useLazyGetUserInfoQuery} from "../../../app/apis/userApi";
+import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 import {
-    useConnectSocialAccountMutation,
-    useDisconnectSocialAccountMutation,
     useGetAllFacebookPagesQuery,
     useGetAllInstagramBusinessAccountsQuery, useGetAllLinkedinPagesQuery,
     useGetAllPinterestBoardsQuery,
@@ -166,7 +164,7 @@ const Layout = () => {
 
 
                             {
-                                getUserInfoApi?.isLoading ?
+                                getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
                                     <SkeletonEffect count={1}/> :
                                     getUserInfoApi.data !== undefined &&
                                     <>

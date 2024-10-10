@@ -25,7 +25,7 @@ import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {
     useGetPlannerPostsCountQuery,
-    useGetPostsForPlannerQuery, useGetSocialMediaPostsByCriteriaQuery,
+    useGetPostsForPlannerQuery,
 } from "../../../app/apis/postApi";
 
 const Planner = () => {
@@ -105,7 +105,7 @@ const Planner = () => {
     }, []);
 
     useEffect(() => {
-        if (!getPostsForPlannerApi.isLoading && getPostsForPlannerApi?.data) {
+        if (!getPostsForPlannerApi.isLoading && !getPostsForPlannerApi?.isFetching && getPostsForPlannerApi?.data) {
             setEvents(computeAndReturnPlannerEvent(getPostsForPlannerApi?.data));
         }
     }, [getPostsForPlannerApi]);
@@ -189,7 +189,7 @@ const Planner = () => {
                     {/*})}*/}
                 </div>
                 {
-                    !getPostsForPlannerApi?.isLoading && !getPlannerPostsCountApi?.isLoading &&
+                    !getPostsForPlannerApi?.isLoading && !getPostsForPlannerApi?.isFetching && !getPlannerPostsCountApi?.isLoading && !getPlannerPostsCountApi?.isFetching &&
                     <button className="createPost_btn crate_btn ms-0 p-0 w-100 planner_view_more_btn"
                             onClick={(e) => handleShowMorePostModal(event)}
                     >
@@ -380,7 +380,7 @@ const Planner = () => {
                                                 }}
                                                 headerToolbar={
                                                     isDraftPost &&
-                                                    (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.data?.length === 0) ?
+                                                    (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.data?.length === 0) ?
                                                         {
                                                             left: "  ",
                                                             center: "",
@@ -439,7 +439,7 @@ const Planner = () => {
                                                         isDisabled={false}
                                                     />
                                                     {
-                                                        (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading) ?
+                                                        (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching) ?
                                                             <span
                                                                 className=" create_post_btn cmn_white_text cursor-pointer text-center"><Loader
                                                                 className="create-post-loader"/></span>

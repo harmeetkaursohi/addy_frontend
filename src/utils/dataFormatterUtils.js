@@ -1,11 +1,12 @@
 import {
+    convertUnixTimestampToDateTime,
     filterAndSumLinkedinOrgStatisticsDataFor,
     filterAndSumPinterestUserAnalyticsDataFor,
-    filterGenderAgeDataFromFacebookDemographicData,
-    getFormattedPostTime,
+    filterGenderAgeDataFromFacebookDemographicData, getAttachmentsData,
+    getFormattedPostTime, getValueOrDefault,
     isNullOrEmpty
 } from "./commonUtils";
-import {SocialAccountProvider} from "./contantData";
+import {ErrorFetchingPost, SocialAccountProvider} from "./contantData";
 
 export const getInstagramBusinessAccounts = (accountsData) => {
     const businessAccounts = accountsData?.filter(data => {
@@ -370,4 +371,180 @@ export const getFormattedAccountReachAndEngagementData = (data, socialMediaType)
             break;
         }
     }
+}
+
+export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, socialMediaType) => {
+    let response = {};
+    switch (socialMediaType) {
+        case SocialAccountProvider?.FACEBOOK: {
+            insightsData?.map(res => {
+                response = res.hasOwnProperty("error") ? {...response, [res?.id]: res} : {
+                    ...response,
+                    [res?.data?.id]: res?.data
+                }
+            })
+            return response;
+        }
+        case SocialAccountProvider?.INSTAGRAM: {
+            postIds?.map(postId => {
+                response = insightsData[postId] === undefined ? {
+                    ...response,
+                    [postId]: {id: postId, error: {message: "Object does not exist"}}
+                } : {...response, [postId]: insightsData[postId]}
+            })
+            return response;
+        }
+        case SocialAccountProvider?.PINTEREST: {
+            postIds?.map(postId => {
+                response = insightsData[postId].hasOwnProperty("error") ? {
+                    ...response,
+                    [postId]: {id: postId, error: insightsData[postId]}
+                } : {...response, [postId]: insightsData[postId]}
+            })
+            return response;
+        }
+        case SocialAccountProvider?.LINKEDIN: {
+            postIds?.map(postId => {
+                response = insightsData[postId].hasOwnProperty("error") ? {
+                    ...response,
+                    [postId]: {id: postId, error: insightsData[postId]?.error}
+                } : {...response, [postId]: insightsData[postId]}
+            })
+            return response;
+        }
+    }
+}
+
+export const getFormattedPostDataForSlider = (data, socialMediaType) => {
+    if (data === null || data === undefined) {
+        return []
+    }
+    let formattedData = {}
+    let errorResponse = {id: data?.id, hasError: true, errorInfo: {}}
+    switch (socialMediaType) {
+        case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
+            if (data?.hasOwnProperty("error")) {
+                return {
+                    ...errorResponse,
+                    errorInfo: {
+                        isDeletedFromSocialMedia: data?.error?.message?.includes("Object does not exist"),
+                        errorMessage: data?.error?.message
+                    }
+                }
+            }
+            formattedData = {
+                total_like: data?.like_count,
+                total_comment: data?.comments_count,
+                total_share: data?.insights?.data?.filter(cur => cur.name === "shares")?.length === 0 ? "N/A" : data?.insights?.data?.filter(cur => cur.name === "shares")[0]?.values[0]?.value,
+                account_reach: data?.insights?.data?.filter(cur => cur.name === "reach")[0]?.values[0]?.value,
+                creation_time: data?.timestamp,
+                attachments: getAttachmentsData(data, socialMediaType),
+            }
+            return formattedData
+        }
+        case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
+            if (data?.hasOwnProperty("error")) {
+                return {
+                    ...errorResponse,
+                    errorInfo: {
+                        isDeletedFromSocialMedia: data?.error?.message?.includes("Object does not exist"),
+                        errorMessage: data?.error?.message
+                    }
+                }
+            }
+            formattedData = {
+                total_like: data?.likes?.summary?.total_count + getValueOrDefault(data?.reactions?.summary?.total_count, 0),
+                total_comment: data?.comments?.summary?.total_count,
+                total_share: data?.shares?.count || 0,
+                account_reach: data?.insights?.data[0]?.values[0]?.value,
+                creation_time: data?.created_time,
+                attachments: getAttachmentsData(data, socialMediaType),
+            }
+            return formattedData
+        }
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            if (data?.hasOwnProperty("error")) {
+                return {
+                    ...errorResponse,
+                    errorInfo: {
+                        isDeletedFromSocialMedia: data?.error?.status === "404",
+                        errorMessage: data?.error?.message
+                    }
+                }
+            }
+            formattedData = {
+                total_like: data?.pin_metrics?.all_time?.reaction,
+                total_comment: data?.pin_metrics?.all_time?.comment,
+                total_save: data?.pin_metrics?.all_time?.save,
+                account_reach: data?.pin_metrics?.all_time?.impression,
+                creation_time: data?.created_at,
+                attachments: getAttachmentsData(data, socialMediaType),
+            }
+            return formattedData;
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            if (data?.hasOwnProperty("error")) {
+                return {
+                    ...errorResponse,
+                    errorInfo: {
+                        isDeletedFromSocialMedia: data?.error?.status === "404",
+                        errorMessage: data?.error?.message || ErrorFetchingPost
+                    }
+                }
+            }
+            formattedData = {
+                total_like: data?.shareStatistics?.totalShareStatistics?.likeCount || 0,
+                total_comment: data?.shareStatistics?.totalShareStatistics?.commentCount || 0,
+                total_share: data?.shareStatistics?.totalShareStatistics?.shareCount || 0,
+                account_reach: data?.shareStatistics?.totalShareStatistics?.impressionCount || 0,
+                creation_time: data?.postInfo?.createdAt,
+                attachments: getAttachmentsData(data, socialMediaType),
+            }
+            return formattedData;
+        }
+    }
+
+}
+
+export const getFormattedDataForPostEngagementGraph = (data, socialMediaType) => {
+    if (data === null || data === undefined) {
+        return []
+    }
+    let formattedData = []
+    switch (socialMediaType) {
+        case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
+            formattedData = data?.data[0]?.values?.map((cur) => {
+                const date = new Date(cur.end_time)
+                const month = date.toLocaleString('default', {month: 'short'})
+                const day = date.getDate();
+                const year = date.getFullYear();
+                const formattedDate = `${month} ${day} ${year}`
+
+                return {
+                    date: formattedDate,
+                    "POST ENGAGEMENT": cur.value
+                }
+            })
+            return formattedData
+        }
+        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
+            formattedData = data?.all?.daily_metrics?.map((cur) => {
+                return {
+                    date: cur.date,
+                    "POST ENGAGEMENT": cur?.metrics?.ENGAGEMENT
+                }
+            })
+            return formattedData;
+        }
+        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
+            formattedData = data?.elements?.map((cur) => {
+                return {
+                    date: convertUnixTimestampToDateTime(cur?.timeRange?.start / 1000)?.date,
+                    "POST ENGAGEMENT": cur?.totalShareStatistics?.engagement
+                }
+            })
+            return formattedData;
+        }
+    }
+
 }

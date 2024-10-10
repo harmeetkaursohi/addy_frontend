@@ -1,40 +1,46 @@
 import {addyApi} from "../addyApi";
-import {handleQueryError} from "../../utils/RTKQueryUtils";
+import {getAuthorizationHeader, handleQueryError} from "../../utils/RTKQueryUtils";
 import {
     getFacebookAccountReachAndEngagement,
     getFacebookDemographicData,
     getFacebookGraphReportByPage,
-    getFacebookPageReports, getFacebookProfileInsightsInfo, getFacebookProfileVisits,
+    getFacebookPageReports,
+    getFacebookPostDataWithInsights,
+    getFacebookPostEngagements,
+    getFacebookProfileInsightsInfo,
+    getFacebookProfileVisits,
     getFacebookReportByPage
 } from "../../services/facebookService";
 import {
+    getInstagramAccountReachAndEngagement,
     getInstagramDemographicData,
     getInstagramGraphReportByPage,
-    getInstagramPageReports, getInstagramProfileInsightsInfo, getInstagramProfileVisits,
+    getInstagramPageReports,
+    getInstagramPostDataWithInsights,
+    getInstagramProfileInsightsInfo,
+    getInstagramProfileVisits,
     getInstagramReportByPage
 } from "../../services/instagramService";
 import {
     getLinkedinAccountReachAndEngagement,
     getLinkedInDemographicData,
     getLinkedinGraphReportByPage,
-    getLinkedinPageReports, getLinkedinProfileInsightsInfo, getLinkedinProfileVisits,
+    getLinkedinPageReports,
+    getLinkedinPostDataWithInsights,
+    getLinkedinPostEngagements,
+    getLinkedinProfileInsightsInfo,
+    getLinkedinProfileVisits,
     getLinkedinReportByPage
 } from "../../services/linkedinService";
 import {
-    getPinterestBoardReports, getPinterestGraphReportByPage, getPinterestProfileInsightsInfo,
+    getPinterestAccountReachAndEngagement,
+    getPinterestBoardReports,
+    getPinterestGraphReportByPage,
+    getPinterestPostDataWithInsights, getPinterestPostEngagements,
+    getPinterestProfileInsightsInfo,
     getPinterestReportByPage
 } from "../../services/pinterestService";
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {
-    baseAxios,
-    generateUnixTimestampFor,
-    getDatesForPinterest,
-} from "../../utils/commonUtils";
-import {
-    getFormattedAccountReachAndEngagementData
-} from "../../utils/dataFormatterUtils";
-import {showErrorToast} from "../../features/common/components/Toast";
-import {setAuthenticationHeader} from "../auth/auth";
+import { getDatesForPinterest} from "../../utils/commonUtils";
 
 
 export const insightApi = addyApi.injectEndpoints({
@@ -214,7 +220,7 @@ export const insightApi = addyApi.injectEndpoints({
                         break;
                     }
                     case  "INSTAGRAM": {
-                        result = await getInstagramProfileVisits(data)
+                        result = await getInstagramAccountReachAndEngagement(data)
                         break;
                     }
                     case  "LINKEDIN": {
@@ -222,7 +228,7 @@ export const insightApi = addyApi.injectEndpoints({
                         break;
                     }
                     case  "PINTEREST": {
-                        result = await getFacebookAccountReachAndEngagement(data)
+                        result = await getPinterestAccountReachAndEngagement(data)
                         break;
                     }
                     default : {
@@ -234,28 +240,73 @@ export const insightApi = addyApi.injectEndpoints({
                 await handleQueryError(queryFulfilled)
             },
         }),
+        getPostDataWithInsights: build.query({
+            async queryFn(data) {
+                let result;
+                switch (data?.socialMediaType) {
+                    case "FACEBOOK": {
+                        result = await getFacebookPostDataWithInsights(data)
+                        break;
+                    }
+                    case  "INSTAGRAM": {
+                        result = await getInstagramPostDataWithInsights(data)
+                        break;
+                    }
+                    case  "LINKEDIN": {
+                        result = await getLinkedinPostDataWithInsights(data)
+                        break;
+                    }
+                    case  "PINTEREST": {
+                        result = await getPinterestPostDataWithInsights(data)
+                        break;
+                    }
+                    default : {
+                    }
+                }
+                return {data: result};
+            },
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
+        getPinClicks: build.query({
+             query:(day) =>{
+                 return {
+                     url: `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/user_account/analytics?start_date=${getDatesForPinterest(day)}&end_date=${getDatesForPinterest("now")}`,
+                     method: 'GET',
+                     headers:getAuthorizationHeader()
+                 };
+            },
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
+        getPostEngagements: build.query({
+             async queryFn(data){
+                 let result;
+                 switch (data?.socialMediaType) {
+                     case "FACEBOOK": {
+                         result = await getFacebookPostEngagements(data)
+                         break;
+                     }
+                     case  "LINKEDIN": {
+                         result = await getLinkedinPostEngagements(data)
+                         break;
+                     }
+                     case  "PINTEREST": {
+                         result = await getPinterestPostEngagements(data)
+                         break;
+                     }
+                     default : {
+                     }
+                 }
+                 return {data: result};
+            },
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
     }),
-});
-
-
-export const getAccountReachedAndAccountEngaged = createAsyncThunk('insight/getAccountReachedAndAccountEngaged', async (data, thunkAPI) => {
-
-    switch (data?.socialMediaType) {
-        case "INSTAGRAM": {
-            return await getAccountReachedAndAccountEngagedForInstagram(data, thunkAPI).then((res) => {
-                return getFormattedAccountReachAndEngagementData(res, data?.socialMediaType);
-            })
-        }
-        case "PINTEREST": {
-            const apiUrl = `${import.meta.env.VITE_APP_API_BASE_URL}/pinterest/user_account/analytics?start_date=${getDatesForPinterest((data?.period * 2) + 1)}&end_date=${getDatesForPinterest("now")}`;
-            return await baseAxios.get(apiUrl, setAuthenticationHeader(data?.token)).then(res => {
-                return getFormattedAccountReachAndEngagementData(res?.data, data?.socialMediaType);
-            }).catch(error => {
-                showErrorToast(error.response.data.error.message);
-                return thunkAPI.rejectWithValue(error.response);
-            });
-        }
-    }
 });
 
 
@@ -267,4 +318,7 @@ export const {
     useGetDemographicsInsightQuery,
     useGetProfileVisitsInsightsQuery,
     useGetAccountsReachAndEngagementQuery,
+    useGetPostDataWithInsightsQuery,
+    useGetPinClicksQuery,
+    useGetPostEngagementsQuery,
 } = insightApi

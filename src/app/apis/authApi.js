@@ -2,7 +2,7 @@ import {addyApi} from "../addyApi";
 import {getAuthorizationHeader, handleQueryError} from "../../utils/RTKQueryUtils";
 
 
-const baseUrl=`${import.meta.env.VITE_APP_API_BASE_URL}`
+const baseUrl = `${import.meta.env.VITE_APP_API_BASE_URL}`
 export const authApi = addyApi.injectEndpoints({
     endpoints: (build) => ({
         loginUser: build.mutation({

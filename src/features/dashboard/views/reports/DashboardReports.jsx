@@ -34,7 +34,6 @@ import {
 
 export const DashboardReports = () => {
 
-
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
     const connectedSocialAccount = getConnectedSocialMediaAccount(getConnectedSocialAccountApi?.data || [])
@@ -53,7 +52,6 @@ export const DashboardReports = () => {
         role: "ADMINISTRATOR",
         state: "APPROVED"
     }, {skip: !enabledSocialMedia?.isLinkedinEnabled || isNullOrEmpty(connectedSocialAccount.linkedin)})
-
 
     const [connectedPagesToSelectedSocialMediaAccount, setConnectedPagesToSelectedSocialMediaAccount] = useState([])
     const [selectedPage, setSelectedPage] = useState(null);
@@ -125,7 +123,7 @@ export const DashboardReports = () => {
 
             <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer">
                 {
-                    getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading || getAllFacebookPagesApi?.isLoading || getAllInstagramPagesApi?.isLoading || getAllPinterestPagesApi?.isLoading || getAllLinkedinPagesApi?.isLoading ?
+                    getConnectedSocialAccountApi?.isLoading  || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching || getAllInstagramPagesApi?.isLoading || getAllInstagramPagesApi?.isFetching || getAllPinterestPagesApi?.isLoading || getAllPinterestPagesApi?.isFetching || getAllLinkedinPagesApi?.isLoading || getAllLinkedinPagesApi?.isFetching ?
                         <div className="cmn_background p-5 text-center account_not_connect_imcontainer ">
                             <CommonLoader classname={"cmn_loader_outer"}/>
                         </div> :
@@ -157,7 +155,7 @@ export const DashboardReports = () => {
 
                                             <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                              className="social_dropdowns"
-                                                             disabled={getConnectedSocialAccountApi?.isLoading || socialMediaReportApi?.isLoading || socialMediaGraphReportApi?.isLoading}>
+                                                             disabled={getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || socialMediaReportApi?.isLoading || socialMediaReportApi?.isFetching || socialMediaGraphReportApi?.isLoading || socialMediaGraphReportApi?.isFetching}>
                                                 <img src={computeImageURL(reportSelectedAccountType)}
                                                      className="me-3 review-post-icon"
                                                      alt={SocialAccountProvider[reportSelectedAccountType]}/>{SocialAccountProvider[reportSelectedAccountType]}
@@ -188,7 +186,7 @@ export const DashboardReports = () => {
 
                                             <Dropdown.Toggle variant="success" id="dropdown-basic"
                                                              className="social_dropdowns"
-                                                             disabled={getConnectedSocialAccountApi?.isLoading || socialMediaReportApi?.isLoading || socialMediaGraphReportApi?.isLoading}>
+                                                             disabled={getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || socialMediaReportApi?.isLoading || socialMediaReportApi?.isFetching || socialMediaGraphReportApi?.isLoading || socialMediaGraphReportApi?.isFetching}>
                                                 <img
                                                     src={selectedPage?.imageUrl ? selectedPage?.imageUrl : default_user_icon}
                                                     className="me-3 dropdown-page-logo"
@@ -235,7 +233,7 @@ export const DashboardReports = () => {
 
 
                                     {
-                                        socialMediaReportApi?.isLoading ?
+                                        (socialMediaReportApi?.isLoading || socialMediaReportApi?.isFetching) ?
 
                                             //loader component
                                             <DashBoardReportLoader/>
@@ -360,7 +358,7 @@ export const DashboardReports = () => {
                                                 <select className=" dropdown_days box_shadow"
                                                         value={graphDaysSelected}
                                                         onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
-                                                        disabled={getAllConnectedPagesApi?.isLoading || getAllFacebookPagesApi?.isLoading || socialMediaGraphReportApi?.isLoading}>
+                                                        disabled={getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching || socialMediaGraphReportApi?.isLoading || socialMediaGraphReportApi?.isFetching}>
                                                     <option value={9}>Last 7 days</option>
                                                     <option value={17}>Last 15 days</option>
                                                     {

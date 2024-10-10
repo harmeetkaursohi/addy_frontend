@@ -6,22 +6,15 @@ import {FiArrowDownRight, FiArrowUpRight} from "react-icons/fi";
 import DonutChart from "../../DonutsChart";
 import HorizontalBarChart from "../../horizontalbar";
 import Carousel from "../../slider/Slider";
-import {useDispatch, useSelector} from "react-redux";
 import jsondata from "../../../../locales/data/initialdata.json"
-import {getToken} from "../../../../app/auth/auth";
 import linkedin_img from "../../../../images/linkedin.svg"
 import {
-    getAccountReachedAndAccountEngaged,
-    getPostDataWithInsights,
-    pinterestPinClick,
-    postEngagement
-} from "../../../../app/actions/InsightActions/insightAction";
-import {getPostByPageIdAndPostStatus} from "../../../../app/actions/postActions/postActions";
-import {
-    calculatePercentageGrowthFor, convertUnixTimestampToDateTime, createSocialMediaProfileViewInsightsQuery,
+    calculatePercentageGrowthFor,
+    createPostEngagementInsightsQuery,
+    createSocialMediaProfileViewInsightsQuery,
     fetchCssForInsightPageListOption,
-    generateUnixTimestampFor,
-    groupBy, isNullOrEmpty,
+    groupBy,
+    isNullOrEmpty,
 
 } from "../../../../utils/commonUtils";
 import {
@@ -34,7 +27,6 @@ import Loader from "../../../loader/Loader";
 import CommonLoader from "../../../common/components/CommonLoader";
 import notConnected_img from "../../../../images/no_acc_connect_img.svg";
 import ConnectSocialMediaAccount from "../../../common/components/ConnectSocialMediaAccount";
-import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import {useAppContext} from "../../../common/components/AppProvider";
 import default_user_icon from "../../../../images/default_user_icon.svg"
 import calendar_img from "../../../../images/calender_img.svg"
@@ -52,35 +44,42 @@ import {useGetConnectedSocialAccountQuery} from "../../../../app/apis/socialAcco
 import {useGetAllConnectedPagesQuery} from "../../../../app/apis/pageAccessTokenApi";
 import {
     useGetAccountsReachAndEngagementQuery,
-    useGetDemographicsInsightQuery,
+    useGetDemographicsInsightQuery, useGetPinClicksQuery, useGetPostEngagementsQuery,
     useGetProfileInsightsInfoQuery,
     useGetProfileVisitsInsightsQuery
 } from "../../../../app/apis/insightApi";
 
 const Insight = () => {
 
-    const dispatch = useDispatch();
-    const token = getToken();
     const {sidebar} = useAppContext();
 
+    const [postStackPageNumber, setPostStackPageNumber] = useState(0)
     const [selectedPage, setSelectedPage] = useState(null);
     const [daysForProfileVisitGraph, setDaysForProfileVisitGraph] = useState(7);
+    const [selectedDaysForPinClicks, setSelectedDaysForPinClicks] = useState(9)
+    const [selectedDaysForPostEngagement, setSelectedDaysForPostEngagement] = useState(7)
     const [selectedPeriodForReachAndEngagement, setSelectedPeriodForReachAndEngagement] = useState(7);
+    const [connectedFacebookPages, setConnectedFacebookPages] = useState(null);
+    const [connectedInstagramPages, setConnectedInstagramPages] = useState(null);
+    const [connectedLinkedinPages, setConnectedLinkedinPages] = useState(null);
+    const [connectedPinterestBoards, setConnectedPinterestBoards] = useState(null);
+
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
     const profileInsightsApi = useGetProfileInsightsInfoQuery({
         socialMediaType: selectedPage?.socialMediaType,
         pageAccessToken: selectedPage?.access_token,
         pageId: selectedPage?.pageId
-    }, {skip: isNullOrEmpty(selectedPage) })
+    }, {skip: isNullOrEmpty(selectedPage)})
 
     const demographicsInsightApi = useGetDemographicsInsightQuery({
         socialMediaType: selectedPage?.socialMediaType,
         pageAccessToken: selectedPage?.access_token,
         pageId: selectedPage?.pageId
-    }, {skip: isNullOrEmpty(selectedPage) || selectedPage?.socialMediaType!=="LINKEDIN"})
+    }, {skip: isNullOrEmpty(selectedPage) || selectedPage?.socialMediaType !== "LINKEDIN"})
 
     const profileVisitsApi = useGetProfileVisitsInsightsQuery({
         pageId: selectedPage?.pageId,
@@ -90,7 +89,7 @@ const Insight = () => {
             access_token: selectedPage?.access_token,
             pageId: selectedPage?.pageId
         }, selectedPage?.socialMediaType)
-    }, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(daysForProfileVisitGraph)|| selectedPage?.socialMediaType==="PINTEREST"})
+    }, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(daysForProfileVisitGraph) || selectedPage?.socialMediaType === "PINTEREST"})
 
     const accountsReachAndEngagementApi = useGetAccountsReachAndEngagementQuery({
         socialMediaType: selectedPage?.socialMediaType,
@@ -99,45 +98,18 @@ const Insight = () => {
         period: selectedPeriodForReachAndEngagement
     }, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(selectedPeriodForReachAndEngagement)})
 
-    useEffect(() => {
-        if (selectedPeriodForReachAndEngagement && selectedPage) {
-            dispatch(getAccountReachedAndAccountEngaged({
-                token: token,
-                socialMediaType: selectedPage?.socialMediaType,
-                pageAccessToken: selectedPage?.access_token,
-                pageId: selectedPage?.pageId,
-                period: selectedPeriodForReachAndEngagement
-            }))
-        }
-    }, [selectedPeriodForReachAndEngagement, selectedPage])
+    const pinClicksApi = useGetPinClicksQuery(selectedDaysForPinClicks, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(selectedDaysForPinClicks) || selectedPage?.socialMediaType !== "PINTEREST"})
 
-    console.log("accountsReachAndEngagementApi====>", accountsReachAndEngagementApi)
-    console.log("profileVisitsApi====>", profileVisitsApi)
-    console.log("profileInsightsApi====>", profileInsightsApi)
-    console.log("demographicsInsightApi====>", demographicsInsightApi)
-    console.log("selectedPage=====>", selectedPage)
+    const postEngagementsApi = useGetPostEngagementsQuery({
+        socialMediaType:selectedPage?.socialMediaType,
+        pageId: selectedPage?.pageId,
+        query:createPostEngagementInsightsQuery({
+            days:selectedDaysForPostEngagement,
+            access_token: selectedPage?.access_token,
+            pageId: selectedPage?.pageId
+        }, selectedPage?.socialMediaType)
+    }, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(selectedDaysForPostEngagement) || selectedPage?.socialMediaType === "INSTAGRAM"})
 
-    const getAccountReachedAndAccountEngagedData = useSelector(state => state.insight.getAccountReachedAndAccountEngagedReducer);
-    const getPostByPageIdAndPostStatusData = useSelector(state => state.post.getPostByPageIdAndPostStatusReducer);
-    const getPostDataWithInsightsData = useSelector((state) => state.insight.getPostDataWithInsightsReducer);
-
-    const [connectedFacebookPages, setConnectedFacebookPages] = useState(null);
-    const [connectedInstagramPages, setConnectedInstagramPages] = useState(null);
-    const [connectedLinkedinPages, setConnectedLinkedinPages] = useState(null);
-    const [connectedPinterestBoards, setConnectedPinterestBoards] = useState(null);
-
-
-
-
-
-    const [insightsCacheData, setInsightCacheData] = useState({
-        getPostByPageIdAndPostStatusDataCache: {},
-        getPostDataWithInsightsDataCache: []
-    });
-
-    const handleSelectedPeriodForReachAndEngagement = () => {
-        setSelectedPeriodForReachAndEngagement(parseInt(e.target.value))
-    }
 
     useEffect(() => {
         if (!getConnectedSocialAccountApi?.isLoading && getConnectedSocialAccountApi?.data !== null && getConnectedSocialAccountApi?.data !== undefined && getConnectedSocialAccountApi?.data?.length > 0) {
@@ -150,173 +122,17 @@ const Insight = () => {
 
     }, [getConnectedSocialAccountApi])
 
+    const handleSelectedPeriodForReachAndEngagement = (e) => {
+        setSelectedPeriodForReachAndEngagement(parseInt(e.target.value))
+    }
+
     const handleSelectPage = (socialMediaType, page) => {
-        // dispatch(resetReducers({sliceNames: ["getDemographicsInsightReducer"]}))
+        setDaysForProfileVisitGraph(7)
+        setSelectedPeriodForReachAndEngagement(7)
+        setPostStackPageNumber(0)
+        setSelectedDaysForPostEngagement(7)
         setSelectedPage({...page, socialMediaType: socialMediaType})
-        // dispatch(resetReducers({sliceNames: ["getPostDataWithInsightsReducer"]}))
-
     }
-
-
-    useEffect(() => {
-        if (selectedPage !== null && selectedPage !== undefined) {
-            setDaysForProfileVisitGraph(7)
-            setSelectedPeriodForReachAndEngagement(7)
-
-            setInsightCacheData({
-                getPostByPageIdAndPostStatusDataCache: {},
-                getPostDataWithInsightsDataCache: []
-            })
-        }
-    }, [selectedPage])
-
-    useEffect(() => {
-        if (selectedPage !== null && selectedPage !== undefined) {
-            dispatch(getPostByPageIdAndPostStatus({
-                token: token,
-                requestBody: {
-                    postStatuses: ["PUBLISHED"],
-                    pageIds: [selectedPage?.pageId],
-                    pageSize: 3,
-                    pageNumber: 0
-                }
-            }));
-        }
-    }, [selectedPage])
-
-
-
-
-    useEffect(() => {
-        if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined && Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0) {
-            const updatedInsightsCacheData = {
-                ...insightsCacheData,
-                getPostByPageIdAndPostStatusDataCache: {
-                    ...insightsCacheData?.getPostByPageIdAndPostStatusDataCache,
-                    [getPostByPageIdAndPostStatusData?.data?.pageNumber]: getPostByPageIdAndPostStatusData?.data
-                }
-            }
-            setInsightCacheData(updatedInsightsCacheData)
-            dispatch(getPostDataWithInsights({
-                socialMediaType: selectedPage?.socialMediaType,
-                pageAccessToken: selectedPage?.access_token,
-                token: token,
-                insightsCache: updatedInsightsCacheData,
-                pageId: selectedPage?.pageId,
-                postIds: getPostByPageIdAndPostStatusData?.data?.data[selectedPage?.pageId]?.map(post => post.postPageInfos[0]?.socialMediaPostId)
-            }))
-        }
-    }, [getPostByPageIdAndPostStatusData])
-
-
-    useEffect(() => {
-        if (getPostDataWithInsightsData?.data !== undefined && getPostDataWithInsightsData?.data !== null) {
-            const postWithInsightsDataArray = Object.keys(getPostDataWithInsightsData?.data)?.map(socialMediaPostId => {
-                return {[socialMediaPostId]: getPostDataWithInsightsData?.data[socialMediaPostId]}
-            })
-            const seen = new Set();
-            let withoutDuplicates = [...insightsCacheData?.getPostDataWithInsightsDataCache, ...postWithInsightsDataArray]?.filter(postWithInsightData => {
-                let postId = Object?.keys(postWithInsightData)[0];
-                if (!seen.has(postId)) {
-                    seen.add(postId);
-                    return true;
-                }
-                return false;
-            })
-
-            setInsightCacheData({
-                ...insightsCacheData,
-                getPostDataWithInsightsDataCache: [...withoutDuplicates]
-            })
-        }
-    }, [getPostDataWithInsightsData]);
-
-
-
-
-
-    // new post engagement code starts here
-    const [postEngageVal, setPostEngagementVal] = useState(7)
-    const [selectDayGraph, setSelectDayGraph] = useState(8)
-    const [day, setDay] = useState(9)
-
-    const setlectPostEngagehandler = (e) => {
-        setPostEngagementVal(e.target.value)
-    }
-
-
-    const now = new Date();
-
-    const selectDayHandler = (e) => {
-        setSelectDayGraph(e.target.value)
-    }
-
-    const dayHandler = (e) => {
-        setDay(e.target.value)
-    }
-
-    useEffect(() => {
-
-        let data
-
-        if (selectedPage?.socialMediaType === "PINTEREST") {
-            data = {
-                socialMediaType: selectedPage?.socialMediaType, token: token,
-                day: selectDayGraph
-            }
-        } else if (selectedPage?.socialMediaType === "FACEBOOK") {
-            data = {
-                socialMediaType: selectedPage?.socialMediaType, token: selectedPage?.access_token,
-                since: postEngageVal, until: now.toISOString().split('T')[0], pageId: selectedPage?.pageId
-            }
-        } else if (selectedPage?.socialMediaType === "LINKEDIN") {
-            data = {
-                socialMediaType: selectedPage?.socialMediaType,
-                token: token,
-                since: generateUnixTimestampFor(postEngageVal) * 1000,
-                until: generateUnixTimestampFor("now") * 1000,
-                pageId: selectedPage?.pageId
-            }
-        }
-
-        dispatch(postEngagement(data))
-
-    }, [selectDayGraph, postEngageVal, selectedPage, selectedPage?.pageId])
-
-
-    useEffect(() => {
-
-        if (selectedPage !== null && selectedPage !== undefined && selectedPage?.socialMediaType === "PINTEREST") {
-            let graphdata = {token: token, day: day}
-            dispatch(pinterestPinClick(graphdata))
-        }
-
-    }, [day])
-
-
-    const getpinterestPinClickdata = useSelector(state => state.insight.getpinterestPinClickReducer)
-
-    const insightEngagementData = useSelector(state => state?.insight?.getpostEngagementReducer)
-
-
-    useEffect(() => {
-        dispatch(resetReducers({sliceNames: ["getpostEngagementReducer"]}))
-    }, [selectedPage])
-
-
-    let filterPinterestgraphData = insightEngagementData?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" || dailyAnalyticData?.data_status === "BEFORE_BUSINESS_CREATED") || []
-    let getPinClickGraphdata = getpinterestPinClickdata?.data?.data?.all?.daily_metrics?.filter(dailyAnalyticData => dailyAnalyticData?.data_status === "READY" || dailyAnalyticData?.data_status === "BEFORE_BUSINESS_CREATED") || []
-
-    let linkedinGraphdata
-    if (insightEngagementData?.data?.length > 0) {
-
-        linkedinGraphdata = insightEngagementData?.data?.map(entry => ({
-
-            date: convertUnixTimestampToDateTime(entry?.timeRange?.start / 1000)?.date,
-            "POST ENGAGEDMENT": entry?.totalShareStatistics?.engagement
-        }))
-    }
-
 
     return (
         <section>
@@ -720,23 +536,23 @@ const Insight = () => {
                                                     </div>
 
 
-                                                    {!getAccountReachedAndAccountEngagedData?.loading &&
+                                                    {!accountsReachAndEngagementApi?.isLoading && !accountsReachAndEngagementApi?.isFetching &&
                                                         <>
                                                             {
-                                                                getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data < getAccountReachedAndAccountEngagedData?.data?.reach?.presentData ?
+                                                                accountsReachAndEngagementApi?.data?.reach?.previousData?.data < accountsReachAndEngagementApi?.data?.reach?.presentData ?
                                                                     < h3 className="overview_text">
                                                                         You reached{" "}
                                                                         <span
-                                                                            className="hightlighted_text color-growth ">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2)}% </span>more
+                                                                            className="hightlighted_text color-growth ">+{calculatePercentageGrowthFor(accountsReachAndEngagementApi?.data?.reach?.previousData?.data, accountsReachAndEngagementApi?.data?.reach?.presentData, 2)}% </span>more
                                                                         accounts compared
-                                                                        to {getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.dateRange}
+                                                                        to {accountsReachAndEngagementApi?.data?.reach?.previousData?.dateRange}
                                                                     </h3> :
                                                                     <h3 className="overview_text">
                                                                         This indicates a decline of <span
-                                                                        className="hightlighted_text">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2))}% </span> in
+                                                                        className="hightlighted_text">{Math.abs(calculatePercentageGrowthFor(accountsReachAndEngagementApi?.data?.reach?.previousData?.data, accountsReachAndEngagementApi?.data?.reach?.presentData, 2))}% </span> in
                                                                         the number of
                                                                         accounts reached compared to the period
-                                                                        of {getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.dateRange}.
+                                                                        of {accountsReachAndEngagementApi?.data?.reach?.previousData?.dateRange}.
                                                                     </h3>
                                                             }
                                                         </>
@@ -751,10 +567,10 @@ const Insight = () => {
                                                             </div>
                                                             <h4 className="cmn_text_style">
                                                                 {
-                                                                    getAccountReachedAndAccountEngagedData?.loading ?
+                                                                    accountsReachAndEngagementApi?.isLoading || accountsReachAndEngagementApi?.isFetching ?
                                                                         <span><i className="fa fa-spinner fa-spin"/>
                                                                     </span> :
-                                                                        getAccountReachedAndAccountEngagedData?.data?.reach?.presentData
+                                                                        accountsReachAndEngagementApi?.data?.reach?.presentData
 
                                                                 }
 
@@ -764,21 +580,21 @@ const Insight = () => {
                                                             <h5 className="cmn_text_style">Accounts Reached</h5>
                                                             <div className="mt-3">
                                                                 {
-                                                                    !getAccountReachedAndAccountEngagedData?.loading && <>
+                                                                    (!accountsReachAndEngagementApi?.isLoading && !accountsReachAndEngagementApi?.isFetching) && <>
                                                                         {
-                                                                            getAccountReachedAndAccountEngagedData?.data?.reach?.presentData >= getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data ?
+                                                                            accountsReachAndEngagementApi?.data?.reach?.presentData >= accountsReachAndEngagementApi?.data?.reach?.previousData?.data ?
                                                                                 <>
                                                                                     <FiArrowUpRight
                                                                                         className="top_Arrow"/>
                                                                                     <span
-                                                                                        className="hightlighted_text color-growth post_growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2)}%</span>
+                                                                                        className="hightlighted_text color-growth post_growth">+{calculatePercentageGrowthFor(accountsReachAndEngagementApi?.data?.reach?.previousData?.data, accountsReachAndEngagementApi?.data?.reach?.presentData, 2)}%</span>
                                                                                 </>
                                                                                 :
                                                                                 <>
                                                                                     <FiArrowDownRight
                                                                                         className="top_Arrow"/>
                                                                                     <span
-                                                                                        className="hightlighted_text post_growth">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.reach?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.reach?.presentData, 2))}%</span>
+                                                                                        className="hightlighted_text post_growth">{Math.abs(calculatePercentageGrowthFor(accountsReachAndEngagementApi?.data?.reach?.previousData?.data, accountsReachAndEngagementApi?.data?.reach?.presentData, 2))}%</span>
                                                                                 </>
                                                                         }
                                                                     </>
@@ -797,30 +613,30 @@ const Insight = () => {
 
                                                             <h4 className="cmn_text_style">
                                                                 {
-                                                                    getAccountReachedAndAccountEngagedData?.loading ?
+                                                                    accountsReachAndEngagementApi?.isLoading || accountsReachAndEngagementApi?.isFetching ?
                                                                         <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData
+                                                                    </span> : accountsReachAndEngagementApi?.data?.engagement?.presentData
                                                                 }
 
 
                                                             </h4>
                                                             <h5 className="cmn_text_style">Accounts Engaged</h5>
                                                             <div className="mt-3">
-                                                                {!getAccountReachedAndAccountEngagedData?.loading && <>
+                                                                {!accountsReachAndEngagementApi?.isLoading && !accountsReachAndEngagementApi?.isFetching && <>
                                                                     {
-                                                                        getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData >= getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data ?
+                                                                        accountsReachAndEngagementApi?.data?.engagement?.presentData >= accountsReachAndEngagementApi?.data?.engagement?.previousData?.data ?
                                                                             <>
                                                                                 <FiArrowUpRight
                                                                                     className="top_Arrow"/>
                                                                                 <span
-                                                                                    className="hightlighted_text color-growth post_growth">+{calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData, 2)}%</span>
+                                                                                    className="hightlighted_text color-growth post_growth">+{calculatePercentageGrowthFor(accountsReachAndEngagementApi?.data?.engagement?.previousData?.data, accountsReachAndEngagementApi?.data?.engagement?.presentData, 2)}%</span>
                                                                             </>
                                                                             :
                                                                             <>
                                                                                 <FiArrowDownRight
                                                                                     className="top_Arrow"/>
                                                                                 <span
-                                                                                    className="hightlighted_text post_growth">{Math.abs(calculatePercentageGrowthFor(getAccountReachedAndAccountEngagedData?.data?.engagement?.previousData?.data, getAccountReachedAndAccountEngagedData?.data?.engagement?.presentData, 2))}%</span>
+                                                                                    className="hightlighted_text post_growth">{Math.abs(calculatePercentageGrowthFor(accountsReachAndEngagementApi?.data?.engagement?.previousData?.data, accountsReachAndEngagementApi?.data?.engagement?.presentData, 2))}%</span>
                                                                             </>
                                                                     }
                                                                 </>
@@ -865,7 +681,8 @@ const Insight = () => {
                                                 </div>
 
                                                 {/* pin click section starts here */}
-                                                {selectedPage?.socialMediaType === "PINTEREST" &&
+                                                {
+                                                    selectedPage?.socialMediaType === "PINTEREST" &&
                                                     <div className="row">
                                                         <div className="col-lg-12 col-sm-12 col-md-12">
                                                             <div
@@ -876,22 +693,24 @@ const Insight = () => {
                                                                             Click
                                                                         </div>
                                                                     </div>
-
-                                                                    <select value={day} onChange={dayHandler}
-                                                                            className=" days_option box_shadow"
+                                                                    <select
+                                                                        value={selectedDaysForPinClicks}
+                                                                        onChange={(e) => {
+                                                                            setSelectedDaysForPinClicks(e.target.value)
+                                                                        }}
+                                                                        className=" days_option box_shadow"
                                                                     >
                                                                         <option value={9}>Last 7 days</option>
                                                                         <option value={17}>Last 15 days</option>
                                                                         <option value={30}>Last 28 days</option>
                                                                     </select>
-
-
                                                                 </div>
 
                                                                 <div className="profile_visit_graph_outer mt-2">
-
-                                                                    <PinterestGraph graphData={getPinClickGraphdata}
-                                                                                    loading={getpinterestPinClickdata?.loading}/>
+                                                                    <PinterestGraph
+                                                                        graphData={pinClicksApi?.data}
+                                                                        isLoading={pinClicksApi?.isLoading || pinClicksApi?.isFetching}
+                                                                    />
 
                                                                 </div>
 
@@ -899,47 +718,48 @@ const Insight = () => {
 
                                                         </div>
 
-                                                    </div>}
+                                                    </div>
+                                                }
                                                 {/* {interaction section start here} */}
-                                                {selectedPage?.socialMediaType !== "INSTAGRAM" &&
+                                                {
+                                                    selectedPage?.socialMediaType !== "INSTAGRAM" &&
                                                     <div className="interaction_wrapper cmn_insight_box_shadow mt-5">
                                                         <div
                                                             className="days_outer reach-engagement-select interaction_outer">
 
                                                             <h3 className="overview_title">Interactions</h3>
                                                             {
-                                                                selectedPage?.socialMediaType !== "PINTEREST" ?
+                                                                <select
+                                                                    value={selectedDaysForPostEngagement}
+                                                                    className=" days_option box_shadow"
+                                                                    onChange={(e)=>{
+                                                                      setSelectedDaysForPostEngagement(e.target.value)
+                                                                    }}
+                                                                >
+                                                                    <option value={7}>Last 7 days</option>
+                                                                    <option value={15}>Last 15 days</option>
+                                                                    <option value={28}>Last 28 days</option>
+                                                                </select>
 
-                                                                    <select value={postEngageVal}
-                                                                            className=" days_option box_shadow"
-                                                                            onChange={setlectPostEngagehandler}>
-                                                                        <option value={7}>Last 7 days</option>
-                                                                        <option value={15}>Last 15 days</option>
-                                                                        <option value={28}>Last 28 days</option>
-                                                                    </select> :
-                                                                    <select value={selectDayGraph}
-                                                                            className=" days_option box_shadow"
-                                                                            onChange={selectDayHandler}>
-                                                                        <option value={8}>Last 7 days</option>
-                                                                        <option value={16}>Last 15 days</option>
-                                                                        <option value={29}>Last 28 days</option>
-                                                                    </select>
                                                             }
                                                         </div>
                                                         <div className="interaction_graph_outer">
-                                                            {insightEngagementData?.loading ? <div
-                                                                    className="d-flex justify-content-center profile-visit-graph ">
-                                                                    <RotatingLines
-                                                                        strokeColor="#F07C33"
-                                                                        strokeWidth="5"
-                                                                        animationDuration="0.75"
-                                                                        width="70"
-                                                                        visible={true}
+                                                            {
+                                                                (postEngagementsApi?.isLoading || postEngagementsApi?.isFetching) ?
+                                                                    <div
+                                                                        className="d-flex justify-content-center profile-visit-graph ">
+                                                                        <RotatingLines
+                                                                            strokeColor="#F07C33"
+                                                                            strokeWidth="5"
+                                                                            animationDuration="0.75"
+                                                                            width="70"
+                                                                            visible={true}
+                                                                        />
+                                                                    </div> :
+                                                                    <HorizontalBarChart
+                                                                        graphData={postEngagementsApi?.data}
+                                                                        socialMediaType={selectedPage?.socialMediaType}
                                                                     />
-                                                                </div> :
-                                                                <HorizontalBarChart
-                                                                    socialMediaType={selectedPage?.socialMediaType}
-                                                                    postInteractiondata={selectedPage.socialMediaType === "LINKEDIN" ? linkedinGraphdata : selectedPage?.socialMediaType === "PINTEREST" ? filterPinterestgraphData : insightEngagementData?.data?.data}/>
                                                             }
                                                         </div>
 
@@ -949,11 +769,17 @@ const Insight = () => {
                                                 {/* {interaction section end here} */}
 
 
-                                                <button className=" post_stack mt-5 "
-                                                        style={{display: 'inline-block'}}> Posts stacks
+                                                <button
+                                                    className=" post_stack mt-5 "
+                                                    style={{display: 'inline-block'}}
+                                                > Posts stacks
                                                 </button>
                                                 {/* slider  */}
-                                                <Carousel selectedPage={selectedPage} cacheData={insightsCacheData}/>
+                                                <Carousel
+                                                    postStackPageNumber={postStackPageNumber}
+                                                    setPostStackPageNumber={setPostStackPageNumber}
+                                                    selectedPage={selectedPage}
+                                                />
 
 
                                             </>
@@ -977,9 +803,3 @@ const Insight = () => {
 };
 
 export default Insight;
-
-const DemographicDatNotAvailable = ({className = "", message = ""}) => {
-    return (
-        <div className={"demographic_data " + className}>{message}</div>
-    );
-}

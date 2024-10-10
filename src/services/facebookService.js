@@ -7,12 +7,16 @@ import {
     objectToQueryString,
 } from "../utils/commonUtils";
 import {
-    getFormattedInsightsForProfileViews, getFormattedAccountReachAndEngagementData
+    getFormattedInsightsForProfileViews,
+    getFormattedAccountReachAndEngagementData,
+    getFormattedPostWithInsightsApiResponse
 } from "../utils/dataFormatterUtils";
 import {getFormattedDemographicData} from "../utils/dataFormatterUtils";
 import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils"
 import {showErrorToast} from "../features/common/components/Toast";
-import {SocialAccountProvider, SomethingWentWrong} from "../utils/contantData";
+import {ErrorFetchingPost, SocialAccountProvider, SomethingWentWrong} from "../utils/contantData";
+import axios from "axios";
+import {setAuthenticationHeader} from "../app/auth/auth";
 
 const fbBaseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`
 
@@ -189,7 +193,6 @@ export const getFacebookPageReports = async (listOfPages) => {
         }
     }
     return result;
-
 }
 
 export const getFacebookGraphReportByPage = async (page, query) => {
@@ -221,7 +224,6 @@ export const getFacebookGraphReportByPage = async (page, query) => {
 
     }
     return initialObject;
-
 };
 
 export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
@@ -262,24 +264,17 @@ export const getDashBoardFacebookGraphReport = async (listOfPages, query) => {
 };
 
 export const computeInsightURL = async (pageId, metric, pageAccessToken, isLifeTime = false, mandatoryQueryParams = null) => {
-
     // Construct the base URL
     const baseUrl = `${fbBaseUrl}/${pageId}/insights`;
-
     let finalQuery = await finalQueryParam(pageId, metric, pageAccessToken, isLifeTime, mandatoryQueryParams);
-
     // Construct the query parameters
     let queryParams = new URLSearchParams(finalQuery);
-
-
     // Combine the base URL and query parameters
     return `${baseUrl}?${queryParams.toString()}`;
 }
 
 const finalQueryParam = async (pageId, metric, pageAccessToken, isLifeTime = false, mandatoryQueryParams = null) => {
-
     let baseObject = {metric: metric, access_token: pageAccessToken};
-
     if (isLifeTime) {
         return Object.assign(baseObject, {period: 'total_over_range', date_preset: 'maximum'})
     } else if (mandatoryQueryParams === null && !isLifeTime) {
@@ -287,7 +282,6 @@ const finalQueryParam = async (pageId, metric, pageAccessToken, isLifeTime = fal
     } else if (mandatoryQueryParams !== null && !isLifeTime) {
         return Object.assign(baseObject, mandatoryQueryParams)
     }
-
 }
 
 export const getFacebookInsightForSinglePost = async (accessToken, postId) => {
@@ -345,6 +339,37 @@ export const getFacebookAccountReachAndEngagement = async (data) => {
     return await baseAxios.get(apiUrl).then(res => {
         return getFormattedAccountReachAndEngagementData(res.data?.data, data?.socialMediaType);
     }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+
+export const getFacebookPostDataWithInsights = async (data) => {
+    const postIds = data?.postIds?.map(postId => postId).join(",");
+    const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true).limit(1),reactions.summary(total_count).limit(1),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
+    return await baseAxios.get(apiUrl).then(res => {
+        return res.data;
+    }).catch(async error => {
+        if (error?.response?.status === 400) {
+            return getFormattedPostWithInsightsApiResponse(await Promise.all(data?.postIds?.map(postId => {
+                return getFacebookInsightForSinglePost(data?.pageAccessToken, postId).catch(error => {
+                    return {id: postId, ...error.response.data}
+                })
+            })), postIds, SocialAccountProvider?.FACEBOOK);
+
+        } else {
+            showErrorToast(ErrorFetchingPost);
+            throw error;
+        }
+    });
+}
+
+
+export const getFacebookPostEngagements = async (data) => {
+    let apiUrl = `${fbBaseUrl}/${data?.pageId}/insights/page_post_engagements?` + objectToQueryString(data.query)
+    return await baseAxios.get(apiUrl).then((res) => {
+        return res.data;
+    }).catch((error) => {
         showErrorToast(error.response.data.error.message);
         throw error;
     });

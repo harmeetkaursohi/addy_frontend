@@ -997,139 +997,6 @@ export const extractParameterFromUrl = (url, parameterName) => {
     return urlSearchParams.get(parameterName);
 }
 
-export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, socialMediaType) => {
-    let response = {};
-    switch (socialMediaType) {
-        case SocialAccountProvider?.FACEBOOK: {
-            insightsData?.map(res => {
-                response = res.hasOwnProperty("error") ? {...response, [res?.id]: res} : {
-                    ...response,
-                    [res?.data?.id]: res?.data
-                }
-            })
-            return response;
-        }
-        case SocialAccountProvider?.INSTAGRAM: {
-            postIds?.map(postId => {
-                response = insightsData[postId] === undefined ? {
-                    ...response,
-                    [postId]: {id: postId, error: {message: "Object does not exist"}}
-                } : {...response, [postId]: insightsData[postId]}
-            })
-            return response;
-        }
-        case SocialAccountProvider?.PINTEREST: {
-            postIds?.map(postId => {
-                response = insightsData[postId].hasOwnProperty("error") ? {
-                    ...response,
-                    [postId]: {id: postId, error: insightsData[postId]}
-                } : {...response, [postId]: insightsData[postId]}
-            })
-            return response;
-        }
-        case SocialAccountProvider?.LINKEDIN: {
-            postIds?.map(postId => {
-                response = insightsData[postId].hasOwnProperty("error") ? {
-                    ...response,
-                    [postId]: {id: postId, error: insightsData[postId]?.error}
-                } : {...response, [postId]: insightsData[postId]}
-            })
-            return response;
-        }
-    }
-}
-
-
-export const getFormattedPostDataForSlider = (data, socialMediaType) => {
-    if (data === null || data === undefined) {
-        return []
-    }
-    let formattedData = {}
-    let errorResponse = {id: data?.id, hasError: true, errorInfo: {}}
-    switch (socialMediaType) {
-        case SocialAccountProvider.INSTAGRAM?.toUpperCase(): {
-            if (data?.hasOwnProperty("error")) {
-                return {
-                    ...errorResponse,
-                    errorInfo: {
-                        isDeletedFromSocialMedia: data?.error?.message?.includes("Object does not exist"),
-                        errorMessage: data?.error?.message
-                    }
-                }
-            }
-            formattedData = {
-                total_like: data?.like_count,
-                total_comment: data?.comments_count,
-                total_share: data?.insights?.data?.filter(cur => cur.name === "shares")?.length === 0 ? "N/A" : data?.insights?.data?.filter(cur => cur.name === "shares")[0]?.values[0]?.value,
-                account_reach: data?.insights?.data?.filter(cur => cur.name === "reach")[0]?.values[0]?.value,
-                creation_time: data?.timestamp,
-                attachments: getAttachmentsData(data, socialMediaType),
-            }
-            return formattedData
-        }
-        case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
-            if (data?.hasOwnProperty("error")) {
-                return {
-                    ...errorResponse,
-                    errorInfo: {
-                        isDeletedFromSocialMedia: data?.error?.message?.includes("Object does not exist"),
-                        errorMessage: data?.error?.message
-                    }
-                }
-            }
-            formattedData = {
-                total_like: data?.likes?.summary?.total_count + data?.reactions?.summary?.total_count,
-                total_comment: data?.comments?.summary?.total_count,
-                total_share: data?.shares?.count || 0,
-                account_reach: data?.insights?.data[0]?.values[0]?.value,
-                creation_time: data?.created_time,
-                attachments: getAttachmentsData(data, socialMediaType),
-            }
-            return formattedData
-        }
-        case SocialAccountProvider.PINTEREST?.toUpperCase(): {
-            if (data?.hasOwnProperty("error")) {
-                return {
-                    ...errorResponse,
-                    errorInfo: {
-                        isDeletedFromSocialMedia: data?.error?.status === "404",
-                        errorMessage: data?.error?.message
-                    }
-                }
-            }
-            formattedData = {
-                total_like: data?.pin_metrics?.all_time?.reaction,
-                total_comment: data?.pin_metrics?.all_time?.comment,
-                total_save: data?.pin_metrics?.all_time?.save,
-                account_reach: data?.pin_metrics?.all_time?.impression,
-                creation_time: data?.created_at,
-                attachments: getAttachmentsData(data, socialMediaType),
-            }
-            return formattedData;
-        }
-        case SocialAccountProvider.LINKEDIN?.toUpperCase(): {
-            if (data?.hasOwnProperty("error")) {
-                return {
-                    ...errorResponse,
-                    errorInfo: {
-                        isDeletedFromSocialMedia: data?.error?.status === "404",
-                        errorMessage: data?.error?.message || ErrorFetchingPost
-                    }
-                }
-            }
-            formattedData = {
-                total_like: data?.shareStatistics?.totalShareStatistics?.likeCount || 0,
-                total_comment: data?.shareStatistics?.totalShareStatistics?.commentCount || 0,
-                total_share: data?.shareStatistics?.totalShareStatistics?.shareCount || 0,
-                account_reach: data?.shareStatistics?.totalShareStatistics?.impressionCount || 0,
-                creation_time: data?.postInfo?.createdAt,
-                attachments: getAttachmentsData(data, socialMediaType),
-            }
-            return formattedData;
-        }
-    }
-
-}
 export const getAttachmentsData = (data, socialMediaType) => {
     if (data === undefined || data === null || socialMediaType === undefined || socialMediaType === null) {
         return []
@@ -2335,6 +2202,38 @@ export const createSocialMediaProfileViewInsightsQuery = (queryObject, socialMed
 
     }
 
+}
+
+export const createPostEngagementInsightsQuery = (queryObject, socialMediaType) => {
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            return {
+                period: "day",
+                access_token: queryObject.access_token,
+                since: generateUnixTimestampFor(queryObject.days ),
+                until: generateUnixTimestampFor("now"),
+            }
+        }
+        case "INSTAGRAM": {
+            return {
+            }
+        }
+        case "LINKEDIN": {
+            return {
+                q: "organizationalEntity",
+                startDate: generateUnixTimestampFor(queryObject.days) * 1000,
+                endDate: generateUnixTimestampFor("now") * 1000,
+                timeGranularityType: "DAY"
+            }
+        }
+        case "PINTEREST": {
+            return {
+                start_date: getDatesForPinterest(queryObject.days + 1),
+                end_date: getDatesForPinterest("now"),
+            }
+
+        }
+    }
 }
 
 export function objectToQueryString(obj) {

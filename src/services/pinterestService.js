@@ -3,7 +3,7 @@ import {
     calculatePercentageGrowth,
     computeAndReturnSummedDateValues,
     filterAndSumPinterestUserAnalyticsDataFor,
-    getDatesForPinterest,
+    getDatesForPinterest, objectToQueryString,
 
 } from "../utils/commonUtils";
 import {setAuthenticationHeader} from "../app/auth/auth";
@@ -11,7 +11,12 @@ import {SocialAccountProvider} from "../utils/contantData";
 import {getAuthHeader, getAuthorizationHeader} from "../utils/RTKQueryUtils";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {showErrorToast} from "../features/common/components/Toast";
-import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils";
+import {
+    getFormattedAccountReachAndEngagementData,
+    getFormattedInsightProfileInfo,
+    getFormattedPostWithInsightsApiResponse
+} from "../utils/dataFormatterUtils";
+import axios from "axios";
 
 const baseUrl = `${import.meta.env.VITE_APP_API_BASE_URL}`
 
@@ -64,7 +69,7 @@ export const getPinterestReportByPage = async (page) => {
 
 export const getPinterestBoardReports = async (pagesList, socialMediaAccount) => {
     let result = {}
-    if(Array.isArray(pagesList)){
+    if (Array.isArray(pagesList)) {
         let initialObject = {
             Followers: {lifeTime: 0, month: "N/A"},
             Pin_Count: {lifeTime: 0, month: "N/A"},
@@ -76,13 +81,13 @@ export const getPinterestBoardReports = async (pagesList, socialMediaAccount) =>
             .then((response) => {
                 const pinterestAccountData = response.data.items;
                 if (pinterestAccountData) {
-                    for(const curPage of pagesList){
-                        const filteredBoard=pinterestAccountData?.filter(cur=>cur.id===curPage.id)?.[0]
-                        initialObject.Followers.lifeTime=filteredBoard.follower_count
-                        initialObject.Pin_Count.lifeTime=filteredBoard.pin_count
-                        result={
+                    for (const curPage of pagesList) {
+                        const filteredBoard = pinterestAccountData?.filter(cur => cur.id === curPage.id)?.[0]
+                        initialObject.Followers.lifeTime = filteredBoard.follower_count
+                        initialObject.Pin_Count.lifeTime = filteredBoard.pin_count
+                        result = {
                             ...result,
-                            [filteredBoard.id]:initialObject
+                            [filteredBoard.id]: initialObject
                         }
                     }
                 }
@@ -137,10 +142,39 @@ export const getDashBoardPinterestGraphReport = async (page, query, token) => {
 export const getPinterestProfileInsightsInfo = async () => {
     try {
         const apiUrl = `${baseUrl}/pinterest/user_account`;
-        const res=await baseAxios.get(apiUrl, getAuthHeader())
+        const res = await baseAxios.get(apiUrl, getAuthHeader())
         return getFormattedInsightProfileInfo(res.data, "PINTEREST");
     } catch (error) {
         showErrorToast(error.response.data.error.message);
         throw error;
     }
+}
+
+export const getPinterestAccountReachAndEngagement = async (data) => {
+    const apiUrl = `${baseUrl}/pinterest/user_account/analytics?start_date=${getDatesForPinterest((data?.period * 2) + 1)}&end_date=${getDatesForPinterest("now")}`;
+    return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
+        return getFormattedAccountReachAndEngagementData(res?.data, data?.socialMediaType);
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+export const getPinterestPostDataWithInsights = async (data) => {
+    const postIds = data.postIds.map(id => id).join(',');
+    const apiUrl = `${baseUrl}/pinterest/pin-insights?ids=${postIds}`;
+    return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
+        return getFormattedPostWithInsightsApiResponse(res.data, data.postIds, SocialAccountProvider?.PINTEREST);
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+export const getPinterestPostEngagements = async (data) => {
+    let apiUrl = `${baseUrl}/pinterest/user_account/analytics?`+ objectToQueryString(data.query)
+    return await baseAxios.get(apiUrl, getAuthHeader()).then((res) => {
+        return res.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
 }

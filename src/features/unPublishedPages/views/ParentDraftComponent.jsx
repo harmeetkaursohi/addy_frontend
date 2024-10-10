@@ -69,7 +69,7 @@ export const ParentDraftComponent = ({searchQuery}) => {
             {/*    </div>*/}
             {/*</div>*/}
             {
-                (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading || draftPostsApi?.isLoading) ?
+                (getConnectedSocialAccountApi?.isLoading ||getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || draftPostsApi?.isLoading || draftPostsApi?.isFetching) ?
                     <CommonLoader classname={"cmn_loader_outer"}/> :
                     getConnectedSocialAccountApi?.data?.length === 0 ?
                         <ConnectSocialMediaAccount image={notConnected_img}

@@ -4,116 +4,99 @@ import "slick-carousel/slick/slick-theme.css";
 import Card from "react-bootstrap/Card";
 import calender_icon from "../../../images/calender_icon2.svg";
 import "./slider.css";
-import {useDispatch, useSelector} from "react-redux";
 import {
     concatenateString,
-    getFormattedPostDataForSlider,
-    getFormattedPostTime, getValueOrDefault,
+    getFormattedPostTime, getValueOrDefault, isNullOrEmpty,
 } from "../../../utils/commonUtils";
+import {
+    getFormattedPostDataForSlider,
+} from "../../../utils/dataFormatterUtils";
 import CommonLoader from "../../common/components/CommonLoader";
-import {useEffect, useRef, useState} from "react";
 import CommonSlider from "../../common/components/CommonSlider";
 import {FaGreaterThan, FaLessThan} from "react-icons/fa";
-import {getPostByPageIdAndPostStatus} from "../../../app/actions/postActions/postActions";
-import {getToken} from "../../../app/auth/auth";
 import {ErrorFetchingPost, PostAlreadyDeleted, SocialAccountProvider} from "../../../utils/contantData";
 import {useAppContext} from "../../common/components/AppProvider";
+import {useGetPostByPageIdAndPostStatusQuery} from "../../../app/apis/postApi";
+import {useGetPostDataWithInsightsQuery} from "../../../app/apis/insightApi";
 
 
-const Carousel = ({selectedPage, cacheData}) => {
+const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) => {
 
     return (
         <div className="slider_outer_container ">
-            <DisplayPosts selectedPage={selectedPage} insightsCache={cacheData}/>
+            <DisplayPosts
+                postStackPageNumber={postStackPageNumber}
+                setPostStackPageNumber={setPostStackPageNumber}
+                selectedPage={selectedPage}
+            />
         </div>
     );
 }
 export default Carousel;
 
-const DisplayPosts = ({selectedPage, insightsCache}) => {
-    const dispatch = useDispatch();
+const DisplayPosts = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) => {
 
     const {sidebar, show_sidebar} = useAppContext();
 
-    const token = getToken();
-    const getPostDataWithInsightsData = useSelector(state => state.insight.getPostDataWithInsightsReducer);
-    const getPostByPageIdAndPostStatusData = useSelector(state => state.post.getPostByPageIdAndPostStatusReducer);
-    const [hasPosts, setHasPosts] = useState(true);
-    useEffect(() => {
-        if (getPostByPageIdAndPostStatusData?.data?.data !== null && getPostByPageIdAndPostStatusData?.data?.data !== undefined) {
-            setHasPosts(Object.keys(getPostByPageIdAndPostStatusData?.data?.data)?.length > 0);
-        }
-    }, [getPostByPageIdAndPostStatusData]);
+
+    const postByPageIdAndPostStatusApi = useGetPostByPageIdAndPostStatusQuery({
+        postStatuses: ["PUBLISHED"],
+        pageIds: [selectedPage?.pageId],
+        pageSize: 3,
+        pageNumber: postStackPageNumber
+    }, {skip: isNullOrEmpty(selectedPage)})
+
+    const postDataWithInsightsApi = useGetPostDataWithInsightsQuery({
+        socialMediaType: selectedPage?.socialMediaType,
+        pageAccessToken: selectedPage?.access_token,
+        pageId: selectedPage?.pageId,
+        postIds: postByPageIdAndPostStatusApi?.data?.data?.[0]?.[selectedPage?.pageId]?.map(post => post?.postPageInfos?.[0]?.socialMediaPostId)
+    }, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(postByPageIdAndPostStatusApi?.data) || postByPageIdAndPostStatusApi?.isLoading || postByPageIdAndPostStatusApi?.isFetching || isNullOrEmpty(postByPageIdAndPostStatusApi?.data?.data?.[0])})
 
 
-    const previous = () => {
-        const prevPageNumber = parseInt(getPostByPageIdAndPostStatusData?.data?.pageNumber) - 1;
-        dispatch(getPostByPageIdAndPostStatus({
-                token: token,
-                insightPostsCache: insightsCache,
-                requestBody: {
-                    postStatuses: ["PUBLISHED"],
-                    pageIds: [selectedPage?.pageId],
-                    pageSize: 3,
-                    pageNumber: prevPageNumber
-                },
-            })
-        );
-    };
-    const next = () => {
-        const nextPageNumber = parseInt(getPostByPageIdAndPostStatusData?.data?.pageNumber) + 1;
-        dispatch(getPostByPageIdAndPostStatus({
-                token: token,
-                insightPostsCache: insightsCache,
-                requestBody: {
-                    postStatuses: ["PUBLISHED"],
-                    pageIds: [selectedPage?.pageId],
-                    pageSize: 3,
-                    pageNumber: nextPageNumber,
-                },
-            })
-        );
-    };
     return (
         <>
             {
-                hasPosts && <>
+                !isNullOrEmpty(postByPageIdAndPostStatusApi?.data?.data?.[0]) &&
+                <>
                     <button
-                        disabled={
-                            getPostByPageIdAndPostStatusData?.loading ||
-                            getPostByPageIdAndPostStatusData?.data?.pageNumber === 0
-                        }
+                        disabled={postByPageIdAndPostStatusApi?.isLoading || postByPageIdAndPostStatusApi?.isFetching || postByPageIdAndPostStatusApi?.data?.pageNumber === 0}
                         className="slider_btn previousSliderButton"
-                        onClick={previous}
+                        onClick={() => {
+                            setPostStackPageNumber(postStackPageNumber - 1)
+                        }}
                     >
                         <FaLessThan/>
                     </button>
                     <button
-                        disabled={
-                            getPostByPageIdAndPostStatusData?.loading ||
-                            getPostByPageIdAndPostStatusData?.data?.isLast
-                        }
+                        disabled={postByPageIdAndPostStatusApi?.loading || postByPageIdAndPostStatusApi?.isFetching || postByPageIdAndPostStatusApi?.data?.isLast}
                         className="slider_btn  nextSliderButton"
-                        onClick={next}
+                        onClick={() => {
+                            setPostStackPageNumber(postStackPageNumber + 1)
+                        }}
                     >
                         <FaGreaterThan/>
                     </button>
                 </>
             }
             {
-                (getPostDataWithInsightsData?.loading || getPostByPageIdAndPostStatusData?.loading) ?
+                (postDataWithInsightsApi?.isLoading || postDataWithInsightsApi?.isFetching || postByPageIdAndPostStatusApi?.isLoading || postByPageIdAndPostStatusApi?.isFetching) ?
                     <CommonLoader></CommonLoader> :
-                    Object.keys(getPostDataWithInsightsData?.data || {})?.length > 0 ?
+                    isNullOrEmpty(postByPageIdAndPostStatusApi?.data?.data?.[0]) ?
+                        <div className={"text-center select-account-txt mt-3"}>
+                            No posts to display
+                        </div> :
                         <div className="row">
                             {
 
-                                Object.keys(getPostDataWithInsightsData?.data)?.length > 0 && Object.keys(getPostDataWithInsightsData?.data || {})?.map(
+                                Object.keys(postDataWithInsightsApi?.data)?.length > 0 &&
+                                Object.keys(postDataWithInsightsApi?.data || {})?.map(
                                     (key, index) => {
                                         const formattedData = getFormattedPostDataForSlider(
-                                            getPostDataWithInsightsData?.data?.[key],
+                                            postDataWithInsightsApi?.data?.[key],
                                             selectedPage?.socialMediaType
                                         );
-                                        const deletedPostData = formattedData?.hasError ? getPostByPageIdAndPostStatusData?.data?.data[selectedPage?.pageId]?.filter(post => post?.postPageInfos[0]?.socialMediaPostId === formattedData?.id)[0] : {}
+                                        const deletedPostData = formattedData?.hasError ? postByPageIdAndPostStatusApi?.data?.data?.[0]?.[selectedPage?.pageId]?.filter(post=>post?.postPageInfos[0]?.socialMediaPostId===key)[0] : {}
                                         return formattedData?.hasError ?
                                             <div
                                                 className={sidebar ? "col-lg-4 col-md-6 col-sm-12" : "col-lg-4 col-md-12 col-sm-12"}
@@ -205,17 +188,17 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
                                                             </li>
                                                             {
                                                                 selectedPage?.socialMediaType === "PINTEREST" ?
-                                                                <li>
-                                                                    <h4 className="cmn_small_heading">Total
-                                                                        Save</h4>
-                                                                    <h3>{formattedData?.total_save}</h3>
-                                                                </li>
-                                                             :
-                                                                <li>
-                                                                    <h4 className="cmn_small_heading">Total
-                                                                        Share</h4>
-                                                                    <h3>{formattedData?.total_share}</h3>
-                                                                </li>
+                                                                    <li>
+                                                                        <h4 className="cmn_small_heading">Total
+                                                                            Save</h4>
+                                                                        <h3>{formattedData?.total_save}</h3>
+                                                                    </li>
+                                                                    :
+                                                                    <li>
+                                                                        <h4 className="cmn_small_heading">Total
+                                                                            Share</h4>
+                                                                        <h3>{formattedData?.total_share}</h3>
+                                                                    </li>
                                                             }
                                                         </ul>
                                                     </Card.Body>
@@ -224,10 +207,8 @@ const DisplayPosts = ({selectedPage, insightsCache}) => {
 
                                     }
                                 )}
-                        </div> :
-                        <div className={"text-center select-account-txt mt-3"}>
-                            No posts to display
                         </div>
+
             }
         </>
     );

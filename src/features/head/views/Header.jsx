@@ -59,7 +59,7 @@ const Header = ({userData, setShowConnectAccountModal}) => {
                                         {/*        </div>*/}
                                         {/*}*/}
                                         {
-                                            !getAllConnectedPagesApi?.isLoading &&
+                                            (!getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) &&
                                             <div onClick={handleCreatePost}
                                                  className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
                                                 {jsondata.createpost}

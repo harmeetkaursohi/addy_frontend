@@ -247,11 +247,11 @@ const Profile = () => {
                                                                 <div className="profile_Wrapper">
                                                                     <div>
                                                                         <img
-                                                                            style={{opacity: (getUserInfoApi?.isLoading || updateProfilePicApi?.isLoading) ? ".4" : "1"}}
+                                                                            style={{opacity: (getUserInfoApi?.isLoading || getUserInfoApi?.isFetching || updateProfilePicApi?.isLoading) ? ".4" : "1"}}
                                                                             src={userData?.profilePic ? "data:image/jpeg; base64," + userData?.profilePic : default_user_icon}
                                                                             className='user_pic '/>
                                                                         {
-                                                                            (getUserInfoApi?.isLoading || updateProfilePicApi?.isLoading) &&
+                                                                            (getUserInfoApi?.isLoading ||  getUserInfoApi?.isFetching || updateProfilePicApi?.isLoading) &&
                                                                             <div className={"update-pic-loading"}>
                                                                                 <RotatingLines
                                                                                     strokeColor="#F07C33"

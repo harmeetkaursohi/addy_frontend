@@ -115,11 +115,11 @@ const CommonModal = ({
                                                                     <h3 className="label">Followers</h3>
                                                                     {
                                                                         currentConnectedPages?.includes(data?.id) ?
-                                                                            getSocialMediaReportApi?.isLoading ?
+                                                                            (getSocialMediaReportApi?.isLoading || getSocialMediaReportApi?.isFetching) ?
                                                                                 <i className="fa fa-spinner fa-spin"/> :
                                                                                 <h4>
                                                                                     {
-                                                                                        getSocialMediaReportApi.data[data.id]?.Followers?.lifeTime
+                                                                                        getSocialMediaReportApi?.data?.[data?.id]?.Followers?.lifeTime
                                                                                     }
                                                                                 </h4>
                                                                             :
@@ -131,13 +131,13 @@ const CommonModal = ({
                                                                     <h3 className="label"> {socialMediaAccountInfo.provider === "PINTEREST" ? "Pin Count" : "Account Reach"}</h3>
                                                                     {
                                                                         currentConnectedPages?.includes(data?.id) ?
-                                                                            getSocialMediaReportApi?.isLoading ?
+                                                                            getSocialMediaReportApi?.isLoading || getSocialMediaReportApi?.isFetching ?
                                                                                 <i className="fa fa-spinner fa-spin"/> :
                                                                                 <h4>
                                                                                     {
                                                                                         socialMediaAccountInfo.provider === "PINTEREST"?
-                                                                                            getSocialMediaReportApi.data[data.id]?.Pin_Count?.lifeTime:
-                                                                                            getSocialMediaReportApi.data[data.id]?.Accounts_Reached?.lifeTime
+                                                                                            getSocialMediaReportApi?.data?.[data?.id]?.Pin_Count?.lifeTime:
+                                                                                            getSocialMediaReportApi?.data?.[data?.id]?.Accounts_Reached?.lifeTime
                                                                                     }
                                                                                 </h4>
                                                                             :

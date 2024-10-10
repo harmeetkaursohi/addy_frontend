@@ -244,7 +244,7 @@ const Review = () => {
                                 }
                             </div>
                             {
-                                (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading) ?
+                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching ||getAllConnectedPagesApi?.isFetching ||  getAllConnectedPagesApi?.isLoading) ?
                                     <CommonLoader classname={"cmn_loader_outer"}></CommonLoader>
                                     :
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&

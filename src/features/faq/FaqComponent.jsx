@@ -59,9 +59,9 @@ const FaqComponent = () => {
                                            className="search-faqs-input"/>
                                     <div className="submit_Button_Wrapper">
                                         <button type="submit" className={"cmn_btn_color"}
-                                                disabled={getFaqListApi.isLoading || searchLoading}
-                                                style={{opacity: (getFaqListApi.isLoading || searchLoading) ? "0.6" : "1.0"}}>
-                                            {(getFaqListApi.isLoading || searchLoading) ? (
+                                                disabled={getFaqListApi.isLoading || getFaqListApi?.isFetching || searchLoading}
+                                                style={{opacity: (getFaqListApi.isLoading || getFaqListApi?.isFetching  || searchLoading) ? "0.6" : "1.0"}}>
+                                            {(getFaqListApi.isLoading || getFaqListApi?.isFetching  || searchLoading) ? (
                                                 <span className="spinner-border spinner-border-sm me-1" role="status"
                                                       aria-hidden="true"/>) : 'Submit'}
                                         </button>
@@ -83,9 +83,9 @@ const FaqComponent = () => {
                                 </Accordion> : (<div>FAQ's not found.</div>)}
                                 <div className="load-more-faqs-container">
                                     {
-                                        (items.length && getFaqListApi.hasNextPage) || (getFaqListApi.isLoading && !getFaqListApi.hasNextPage) ?
+                                        (items.length && getFaqListApi.hasNextPage) || ((getFaqListApi.isLoading || getFaqListApi?.isFetching)  && !getFaqListApi.hasNextPage) ?
                                         <button type="button" className="load-more-faqs-btn" onClick={handleLoadMore}
-                                                disabled={getFaqListApi.isLoading}> {getFaqListApi.isLoading ? 'Loading...' : 'Load More'}</button> : ""
+                                                disabled={getFaqListApi.isLoading || getFaqListApi.isLoading || getFaqListApi?.isFetching}> {getFaqListApi.isLoading || getFaqListApi.isLoading || getFaqListApi?.isFetching ? 'Loading...' : 'Load More'}</button> : ""
                                     }
                                 </div>
                             </div>

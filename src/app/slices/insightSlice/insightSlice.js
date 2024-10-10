@@ -1,40 +1,40 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {
-    getPostDataWithInsights,
+    // getPostDataWithInsights,
     // getProfileInsightsInfo,
     // getProfileVisitsInsightsInfo,
-    getAccountReachedAndAccountEngaged,
+    // getAccountReachedAndAccountEngaged,
     // getDemographicsInsight,
-    pinterestPinClick,
-    postEngagement
+    // pinterestPinClick,
+    // postEngagement
     
 } from "../../actions/InsightActions/insightAction";
 
 const insightSlice = createSlice({
     name: 'insight',
     initialState: {
-        getPostDataWithInsightsReducer: {loading: false},
+        // getPostDataWithInsightsReducer: {loading: false},
         // getProfileInfoReducer: {loading: false},
-        getAccountReachedAndAccountEngagedReducer: {loading: false},
+        // getAccountReachedAndAccountEngagedReducer: {loading: false},
         // getDemographicsInsightReducer: {loading: false},
         // getProfileVisitsInsightsInfoReducer:{loading:false},
-        getpinterestPostEngageReducer:{loading:false},
-        getfacebookPostEngageReducer:{loading:false},
-        getlinkedinPostEngageReducer:{loading:false},
-        getpinterestPinClickReducer:{loading:false}
+        // getpinterestPostEngageReducer:{loading:false},
+        // getfacebookPostEngageReducer:{loading:false},
+        // getlinkedinPostEngageReducer:{loading:false},
+        // getpinterestPinClickReducer:{loading:false}
   
     },
     extraReducers: {
         // Get Facebook Post Data With Insights
-        [getPostDataWithInsights.pending]: (state) => {
-            state.getPostDataWithInsightsReducer = {loading: true}
-        },
-        [getPostDataWithInsights.fulfilled]: (state, action) => {
-            state.getPostDataWithInsightsReducer = {loading: false, data: action.payload}
-        },
-        [getPostDataWithInsights.rejected]: (state) => {
-            state.getPostDataWithInsightsReducer = {loading: false}
-        },
+        // [getPostDataWithInsights.pending]: (state) => {
+        //     state.getPostDataWithInsightsReducer = {loading: true}
+        // },
+        // [getPostDataWithInsights.fulfilled]: (state, action) => {
+        //     state.getPostDataWithInsightsReducer = {loading: false, data: action.payload}
+        // },
+        // [getPostDataWithInsights.rejected]: (state) => {
+        //     state.getPostDataWithInsightsReducer = {loading: false}
+        // },
 
 
         // Get Total Followers
@@ -59,15 +59,15 @@ const insightSlice = createSlice({
         // },
 
         // Get Account Reached And Account Engaged
-        [getAccountReachedAndAccountEngaged.pending]: (state) => {
-            state.getAccountReachedAndAccountEngagedReducer = {loading: true}
-        },
-        [getAccountReachedAndAccountEngaged.fulfilled]: (state, action) => {
-            state.getAccountReachedAndAccountEngagedReducer = {loading: false, data: action.payload}
-        },
-        [getAccountReachedAndAccountEngaged.rejected]: (state) => {
-            state.getAccountReachedAndAccountEngagedReducer = {loading: false}
-        },
+        // [getAccountReachedAndAccountEngaged.pending]: (state) => {
+        //     state.getAccountReachedAndAccountEngagedReducer = {loading: true}
+        // },
+        // [getAccountReachedAndAccountEngaged.fulfilled]: (state, action) => {
+        //     state.getAccountReachedAndAccountEngagedReducer = {loading: false, data: action.payload}
+        // },
+        // [getAccountReachedAndAccountEngaged.rejected]: (state) => {
+        //     state.getAccountReachedAndAccountEngagedReducer = {loading: false}
+        // },
 
         // Get Demographics Insight
         // [getDemographicsInsight.pending]: (state) => {
@@ -85,26 +85,26 @@ const insightSlice = createSlice({
         // get pinterest pin click data 
 
         
-        [pinterestPinClick.pending]: (state) => {
-            state.getpinterestPinClickReducer = {loading: true}
-        },
-        [pinterestPinClick.fulfilled]: (state, action) => {
-            state.getpinterestPinClickReducer = {loading: false, data: action.payload}
-        },
-        [pinterestPinClick.rejected]: (state) => {
-            state.getpinterestPinClickReducer = {loading: false}
-        },
+        // [pinterestPinClick.pending]: (state) => {
+        //     state.getpinterestPinClickReducer = {loading: true}
+        // },
+        // [pinterestPinClick.fulfilled]: (state, action) => {
+        //     state.getpinterestPinClickReducer = {loading: false, data: action.payload}
+        // },
+        // [pinterestPinClick.rejected]: (state) => {
+        //     state.getpinterestPinClickReducer = {loading: false}
+        // },
 
         // get all social platform insight engagement data 
-        [postEngagement.pending]: (state) => {
-            state.getpostEngagementReducer = {loading: true}
-        },
-        [postEngagement.fulfilled]: (state, action) => {
-            state.getpostEngagementReducer = {loading: false, data: action.payload}
-        },
-        [postEngagement.rejected]: (state) => {
-            state.getpostEngagementReducer = {loading: false}
-        },
+        // [postEngagement.pending]: (state) => {
+        //     state.getpostEngagementReducer = {loading: true}
+        // },
+        // [postEngagement.fulfilled]: (state, action) => {
+        //     state.getpostEngagementReducer = {loading: false, data: action.payload}
+        // },
+        // [postEngagement.rejected]: (state) => {
+        //     state.getpostEngagementReducer = {loading: false}
+        // },
     }
 });
 

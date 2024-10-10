@@ -148,10 +148,10 @@ const CommonShowMorePlannerModal = ({
 
                             <div className="more_plans">
                                 <h2 className="text-center">{eventDate}</h2>
-                                <div className={postsApi?.isLoading ? "" : "more_plans_wrapper"}>
+                                <div className={postsApi?.isLoading || postsApi?.isFetching ? "" : "more_plans_wrapper"}>
                                     {/*map starts here for gird*/}
                                     {
-                                        postsApi?.isLoading ? <CommonLoader/> :
+                                        postsApi?.isLoading || postsApi?.isFetching ? <CommonLoader/> :
                                             sortByKey(posts, "feedPostDate")?.map((plannerPost, index) => {
 
                                                 return deletedPostsIds.includes(plannerPost?.id) ? <></> :
