@@ -74,12 +74,12 @@ const CommonModal = ({
                         </div>
                         <div className='facebook_content_outer'>
                             <div className='choose_page_container'>
-                                {
+                                {/* {
                                     isNullOrEmpty(allPagesList) &&
                                     <div className='text-center'>
                                         <img src={no_page_connect_img} className='no_page_connect_img'/>
                                     </div>
-                                }
+                                } */}
 
                                 {
                                     Array.isArray(allPagesList) && allPagesList.length > 0 ? allPagesList?.map((data, index) => {

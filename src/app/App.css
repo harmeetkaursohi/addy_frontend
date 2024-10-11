@@ -382,14 +382,15 @@ div:where(.swal2-container).swal2-center>.swal2-popup {
   padding-top: 6px;
 }
 .disconnect_paragraph{
-  font-size: 16px;
+  font-size: 14px;
     color: #000;
     font-family: "Nunito";
-    font-weight: 400;
+    font-weight: 500;
     margin: 0px;
     padding: 7px 14px 0px;
+    line-height: 20px;
 }
-.modal-dialog.modal-lg {}
+
 
 .choose_page_outer.notfound_popup.modal.show .modal-dialog {
     max-width: 554px;
@@ -403,6 +404,44 @@ div:where(.swal2-container).swal2-center>.swal2-popup {
   width: 75px;
   height: 75px;
   margin: 0 10px;
+}
+/* instagram guide */
+ol.guid_instagram {
+  padding: 20px;
+  background: rgba(244, 247, 252, 1);
+  padding-left: 35px;
+  text-align: left;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 1);
+  margin-top: 18px;
+  box-shadow: 0px 0px 8px 0px rgba(0,0,0,5%);
+  border-radius: 10px;
+}
+
+.instaGuide 
+.cmn_body.modal-body {
+  padding: 28px 20px;
+}
+button.facebook_connect.connect_buttoon {
+  display: block;
+  border: 1px solid rgb(240, 124, 51);
+  border-radius: 5px;
+  box-shadow: unset;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 12px;
+  margin: 10px;
+  width: 11px;
+  overflow: hidden;
+  padding: 0px 10px;
+  user-select: none;
+  height: 39px;
+  background: rgb(240, 124, 51);
+  font-weight: 500;
 }
 @keyframes shimmer {
   100% {
