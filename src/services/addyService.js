@@ -1,11 +1,8 @@
 import {fetchEventSource} from "@microsoft/fetch-event-source";
 import {getToken, setAuthenticationHeader} from "../app/auth/auth";
-import {
-    increaseUnseenNotificationsCountData,
-    notificationEventData,
-    unseenNotificationsCountData
-} from "../app/slices/notificationSlice/notificationSlice";
 import {Events} from "../utils/contantData";
+import {increaseUnseenNotificationsCount, notificationEventData,unseenNotificationsCount} from "../app/globalSlice/globalSlice";
+import {addyApi} from "../app/addyApi";
 
 export const subscribeNotifications = async (dispatch) => {
     await fetchEventSource(`${import.meta.env.VITE_APP_API_BASE_URL}/notification/trigger`, {
@@ -23,12 +20,14 @@ export const subscribeNotifications = async (dispatch) => {
             const data = JSON.parse(event.data)
             switch (event.event) {
                 case Events.NOTIFICATION_EVENT: {
+                    dispatch(addyApi.util.invalidateTags(["getUnseenNotificationsApi","searchNotificationsApi"]))
                     dispatch(notificationEventData([data]))
-                    dispatch(increaseUnseenNotificationsCountData({count: 1}))
+                    dispatch(increaseUnseenNotificationsCount({count: 1}))
                     break;
                 }
                 case Events.UNSEEN_NOTIFICATIONS_COUNT_EVENT : {
-                    dispatch(unseenNotificationsCountData(data))
+                    dispatch(addyApi.util.invalidateTags(["getUnseenNotificationsApi","searchNotificationsApi"]))
+                    dispatch(unseenNotificationsCount(data))
                     break;
                 }
             }

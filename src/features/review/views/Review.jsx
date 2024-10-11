@@ -133,12 +133,13 @@ const Review = () => {
     }, [isDirty]);
 
     useEffect(() => {
-        if (removedPosts.length > 0) {
-            return () => {
+        return () => {
+            if(removedPosts.length > 0){
                 dispatch(addyApi.util.invalidateTags(["getPublishedPostsApi"]))
                 setRemovedPosts([]);
-            };
-        }
+            }
+
+        };
 
     }, [removedPosts]);
 

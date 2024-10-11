@@ -46,10 +46,17 @@ export const getPublishedPosts=async (data)=>{
 export const getPostByPageIdAndPostStatus=async (data)=>{
     return await baseAxios.post(`${baseUrl}/posts/byPageAndStatus`, data, getAuthHeader()).then(res => {
         return res.data;
-        // return {...res.data, data: {...res.data.data[0]}};
     }).catch(error => {
         showErrorToast(error.response.data.message);
         throw error;
+    });
+}
+export const searchNotification=async (data)=>{
+    return await baseAxios.post(`${baseUrl}/notification/search`, data,getAuthHeader()).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        throw error
     });
 }
 

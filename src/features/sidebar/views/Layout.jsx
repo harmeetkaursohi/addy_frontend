@@ -3,7 +3,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import addy_logo from "../../../images/addylogoo.png";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth";
+import { getToken} from "../../../app/auth/auth";
 import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
 import {useAppContext} from "../../common/components/AppProvider.jsx";
@@ -13,7 +13,6 @@ import {RxCross2} from "react-icons/rx";
 import default_user_icon from '../../../images/default_user_icon.svg'
 import logout_img from '../../../images/log-out.svg'
 import {subscribeNotifications} from "../../../services/addyService";
-
 import logout_image from "../../../images/logout_img.png"
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect.jsx";
 import {
@@ -65,9 +64,7 @@ const Layout = () => {
         state: "APPROVED"
     }, {skip: !enabledSocialMedia?.isLinkedinEnabled || isNullOrEmpty(connectedSocialAccount.linkedin)})
 
-    const unseenNotificationsCount = useSelector(state => state.notification.unseenNotificationsCountReducer)
-
-
+    const unseenNotifications = useSelector(state => state.global.unseenNotificationsCount)
 
     useEffect(() => {
         subscribeNotifications(dispatch);
@@ -207,8 +204,8 @@ const Layout = () => {
                                                 className={item.path === "/" + splitLocation[1] ? "sidebar_inner_content" : "sidebar_item_outers"}>
 
                                                 {
-                                                    (item.name === "Notifications" && unseenNotificationsCount.count !== undefined && unseenNotificationsCount.count > 0) &&
-                                                    <h2 className={"notification-count-sidebar "}>{unseenNotificationsCount.count}</h2>
+                                                    (item.name === "Notifications" && unseenNotifications > 0) &&
+                                                    <h2 className={"notification-count-sidebar "}>{unseenNotifications}</h2>
                                                 }
                                                 {/* <img src={item.icon}/> */}
                                                 {item.icon}
@@ -220,8 +217,8 @@ const Layout = () => {
                                         <div
                                             className={item.path === "/" + splitLocation[1] ? "sidebar_inner_content" : "sidebar_item_outers"}>
                                             {
-                                                (item.name === "Notifications" && unseenNotificationsCount.count !== undefined && unseenNotificationsCount.count > 0) &&
-                                                <h2 className={"notification-count-sidebar "}>{unseenNotificationsCount.count}</h2>
+                                                (item.name === "Notifications" && unseenNotifications > 0) &&
+                                                <h2 className={"notification-count-sidebar "}>{unseenNotifications}</h2>
                                             }
                                             {item.icon}
                                             <h6 className=''>{item.name} </h6>

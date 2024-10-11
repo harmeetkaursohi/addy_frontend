@@ -7,6 +7,7 @@ import socialAccountSlice from "../slices/socialAccountSlice/socialAccountSlice.
 import postSlice from "../slices/postSlice/postSlice.js";
 import insightSlice from "../slices/insightSlice/insightSlice";
 import notificationSlice from "../slices/notificationSlice/notificationSlice";
+import globalSlice from "../globalSlice/globalSlice";
 import pageAccessTokenSlice from "../slices/pageAccessTokenSlice/pageAccessTokenSlice";
 import webSlice from "../slices/webSlice/webSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
@@ -25,6 +26,7 @@ const rootReducers = combineReducers({
     notification: notificationSlice,
     reset: resetReducers,
     chat:chatSlice,
+    global:globalSlice,
     [addyApi.reducerPath]: addyApi.reducer,
 
 })
@@ -55,7 +57,7 @@ const store = configureStore({
     reducer: rootReducer,
     // middleware: [logger, thunk]
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(addyApi.middleware)
+        getDefaultMiddleware().concat(addyApi.middleware).concat(thunk)
         // getDefaultMiddleware().concat(addyApi.middleware).concat(logger).concat(thunk)
 });
 

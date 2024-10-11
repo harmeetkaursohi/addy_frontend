@@ -1,173 +1,100 @@
 import {useAppContext} from "../common/components/AppProvider";
 import "./Notification.css"
 import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {
-    clearAllNotification,
-    deleteNotification,
-    getUnseenNotifications,
-    searchNotification, setNotificationsToSeen
-} from "../../app/actions/notificationAction/notificationAction";
-import {getToken} from "../../app/auth/auth";
+import {useDispatch} from "react-redux";
 import {RotatingLines} from "react-loader-spinner";
 import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAccount";
-import {FaBell} from "react-icons/fa";
 import CommonLoader from "../common/components/CommonLoader";
-import {formatMessage, getCommentCreationTime} from "../../utils/commonUtils";
-import {Dropdown} from "react-bootstrap";
-import {PiDotsThreeVerticalBold} from "react-icons/pi";
+import {getCommentCreationTime, isNullOrEmpty, removeObjectFromArray} from "../../utils/commonUtils";
 import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 import jsondata from "../../locales/data/initialdata.json"
-import {
-    resetNotificationEventData,
-    unseenNotificationsCountData
-} from "../../app/slices/notificationSlice/notificationSlice";
 import notConnected_img from "../../images/no_acc_connect_img.svg";
-import {resetReducers} from "../../app/actions/commonActions/commonActions";
 import Swal from "sweetalert2";
 import notification_img from "../../images/clear_notification.svg"
-import {EmptyNotificationGridMessage, NotConnected} from "../../utils/contantData";
+import {EmptyNotificationGridMessage} from "../../utils/contantData";
 import no_notification_img from "../../images/no_notification_bg.svg"
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../app/apis/pageAccessTokenApi";
+import {
+    useClearAllNotificationMutation,
+    useDeleteNotificationByIdMutation,
+    useGetUnseenNotificationsQuery, useLazySearchNotificationsQuery,
+     useSetNotificationsToSeenByCustomerIdMutation,
+    useSetNotificationsToSeenMutation
+} from "../../app/apis/notificationApi";
+import {unseenNotificationsCount} from "../../app/globalSlice/globalSlice";
+import {handleRTKQuery} from "../../utils/RTKQueryUtils";
+import {Dropdown} from "react-bootstrap";
+import {PiDotsThreeVerticalBold} from "react-icons/pi";
+
 const Notification = () => {
 
-    const dispatch = useDispatch();
     const {sidebar} = useAppContext()
-    const token = getToken();
+    const dispatch = useDispatch();
 
-    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
-    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
-
-    const searchNotificationData = useSelector(state => state.notification.searchNotificationReducer)
-    const clearAllNotificationData = useSelector(state => state.notification.clearAllNotificationReducer)
-    const unseenNotificationsData = useSelector(state => state.notification.getUnseenNotificationsReducer)
-    const setNotificationsToSeenData = useSelector(state => state.notification.setNotificationsToSeenReducer)
-    const notificationEventData = useSelector(state => state.notification.notificationEventReducer)
-    const deleteNotificationData = useSelector(state => state.notification.deleteNotificationReducer)
-    const [notifications, setNotifications] = useState([]);
-    const [notificationsUpdatedToSeenIds, setNotificationsUpdatedToSeenIds] = useState([]);
-    const [fetchNotifications, setFetchNotifications] = useState(false);
-    const [clearAllNotifications, setClearAllNotifications] = useState({
-        clearNotifications: false,
-        isAllNotificationsCleared: false
-    });
-    const [deletedNotifications, setDeletedNotifications] = useState([]);
     const [baseSearchQuery, setBaseSearchQuery] = useState({
-        offSet: 0,
-        pageSize: 5,
+        offSet: -1,
+        pageSize: 10,
         isSeen: true
     });
 
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
+    const unseenNotificationsApi = useGetUnseenNotificationsQuery("", {skip: isNullOrEmpty(getConnectedSocialAccountApi?.data) || isNullOrEmpty(getAllConnectedPagesApi?.data)})
+    const [searchNotifications, searchNotificationsApi] = useLazySearchNotificationsQuery()
+
+    const [setNotificationToSeen, setNotificationsToSeenApi] = useSetNotificationsToSeenMutation()
+    const [setNotificationsToSeenByCustomerId, notificationsToSeenByCustomerIdApi] = useSetNotificationsToSeenByCustomerIdMutation()
+    const [deleteNotificationById, deleteNotificationByIdApi] = useDeleteNotificationByIdMutation()
+    const [clearNotification, clearNotificationApi] = useClearAllNotificationMutation()
+
+    const [notificationsList, setNotificationsList] = useState([]);
+    const [unSeenNotificationsList, setUnSeenNotificationsList] = useState([]);
+
+    const [isAllNotificationsCleared, setIsAllNotificationsCleared] = useState(false)
 
     useEffect(() => {
-        dispatch(resetNotificationEventData())
-    }, [])
-
-    useEffect(() => {
-        if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
-            dispatch(getUnseenNotifications({token: token}))
-        }
-    }, [getConnectedSocialAccountApi, getAllConnectedPagesApi])
-
-
-    useEffect(() => {
-        if (unseenNotificationsData?.data !== null && unseenNotificationsData?.data !== undefined) {
-            dispatch(unseenNotificationsCountData({count: 0}))
-            if (unseenNotificationsData?.data?.length > 0) {
-                const notificationsToUpdate = unseenNotificationsData?.data?.map(notification => notification?.id)
-                dispatch(setNotificationsToSeen({
-                    token: token,
-                    ids: notificationsToUpdate
-                })).then(res => {
-                    if (res.meta.requestStatus === "fulfilled") {
-                        setNotificationsUpdatedToSeenIds([...notificationsUpdatedToSeenIds, ...notificationsToUpdate]);
-                        setBaseSearchQuery({
-                            ...baseSearchQuery, offSet: unseenNotificationsData?.data?.length
-                        })
-                    }
-                    setFetchNotifications(true);
-                })
-            } else {
-                setFetchNotifications(true);
-            }
-        }
-    }, [unseenNotificationsData])
-
-    useEffect(() => {
-        if (notificationEventData?.data !== null && notificationEventData?.data !== undefined && notificationEventData?.data?.length > 0) {
-            const notificationsToUpdate = notificationEventData?.data?.map(notification => notification?.id)?.filter(id => !notificationsUpdatedToSeenIds.includes(id))
-            if (notificationsToUpdate?.length > 0) {
-                dispatch(setNotificationsToSeen({
-                    token: token,
-                    ids: notificationsToUpdate
-                })).then(res => {
-                    if (res.meta.requestStatus === "fulfilled") {
-                        setNotificationsUpdatedToSeenIds([...notificationsUpdatedToSeenIds, ...notificationsToUpdate]);
-                    }
-                })
-            }
-        }
-    }, [notificationEventData])
-
-
-    useEffect(() => {
-        if (fetchNotifications) {
-            dispatch(searchNotification({
-                data: baseSearchQuery,
-                token: token
-            }))
-            setFetchNotifications(false)
-        }
-    }, [fetchNotifications])
-
-    useEffect(() => {
-        if (searchNotificationData.data !== null && searchNotificationData?.data !== undefined) {
-            setNotifications([...notifications, ...searchNotificationData?.data?.data])
-        }
-    }, [searchNotificationData])
-
-    useEffect(() => {
-        if (deletedNotifications?.length > 0 && (notifications?.length + notificationsUpdatedToSeenIds?.length - deletedNotifications?.length <= 2) && searchNotificationData?.data?.isLast === false) {
+        if (!isNullOrEmpty(getConnectedSocialAccountApi?.data) && !isNullOrEmpty(getAllConnectedPagesApi?.data)) {
             setBaseSearchQuery({
                 ...baseSearchQuery,
-                offSet: notifications?.length + notificationsUpdatedToSeenIds?.length - deletedNotifications?.length
+                offSet: 0
             })
-            setFetchNotifications(true)
         }
-    }, [deletedNotifications])
-
+    }, []);
+    useEffect(() => {
+        if (notificationsList?.length===0 && unSeenNotificationsList?.length===0 && baseSearchQuery?.offSet>=0) {
+            setBaseSearchQuery({
+                ...baseSearchQuery,
+                offSet: 0
+            })
+        }
+    }, [notificationsList,unSeenNotificationsList]);
 
     useEffect(() => {
-        if (clearAllNotifications?.clearNotifications) {
-            dispatch(clearAllNotification({token: token})).then(res => {
-                if (res.meta.requestStatus === "fulfilled") {
-                    setClearAllNotifications({
-                        clearNotifications: false,
-                        isAllNotificationsCleared: true
-                    })
-                    resetData();
-                }
-
-            })
+        if (baseSearchQuery?.offSet >= 0) {
+            searchNotifications(baseSearchQuery)
         }
-    }, [clearAllNotifications])
-
+    }, [baseSearchQuery]);
 
     useEffect(() => {
         return () => {
-            resetData();
+            if (unseenNotificationsApi?.data?.length > 0) {
+                setNotificationsToSeenByCustomerId()
+            }
         }
-    }, [])
-
-    const resetData = () => {
-        setNotifications([])
-        setDeletedNotifications([])
-        dispatch(resetNotificationEventData())
-        dispatch(unseenNotificationsCountData({count: 0}))
-        dispatch(resetReducers({sliceNames: ["getUnseenNotificationsReducer"]}))
-        dispatch(resetReducers({sliceNames: ["searchNotificationReducer"]}))
-    }
+    }, [unseenNotificationsApi]);
+    useEffect(() => {
+        if (unseenNotificationsApi?.data?.length > 0 && !unseenNotificationsApi?.isLoading && !unseenNotificationsApi?.isFetching) {
+            dispatch(unseenNotificationsCount({count: 0}))
+            setUnSeenNotificationsList([...unSeenNotificationsList, ...unseenNotificationsApi?.data])
+        }
+    }, [unseenNotificationsApi]);
+    useEffect(() => {
+        if (searchNotificationsApi?.data?.data?.length > 0 && !searchNotificationsApi?.isLoading && !searchNotificationsApi?.isFetching) {
+            console.log("searchNotificationsApi====>",searchNotificationsApi)
+            setNotificationsList([...notificationsList, ...searchNotificationsApi?.data?.data])
+        }
+    }, [searchNotificationsApi]);
 
     const handleClearAllNotifications = (e) => {
         e.preventDefault();
@@ -180,17 +107,22 @@ const Notification = () => {
             cancelButtonText: 'Cancel',
             confirmButtonColor: "#F07C33",
             cancelButtonColor: "#E6E9EC",
-            reverseButtons:true,
+            reverseButtons: true,
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
                 cancelButton: 'custom-cancel-button-class',
                 popup: 'small_swal_popup cmnpopupWrapper',
             }
-        }).then((result) => {
-            result.isConfirmed && setClearAllNotifications({
-                ...clearAllNotifications,
-                clearNotifications: true
-            });
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await handleRTKQuery(
+                    async () => {
+                        return await clearNotification().unwrap()
+                    },
+                    () => {
+                        setIsAllNotificationsCleared(true)
+                    })
+            }
         });
 
 
@@ -201,7 +133,7 @@ const Notification = () => {
             <section>
                 <div className={sidebar ? "comment_container" : "cmn_Padding"}>
                     <div className="cmn_outer">
-                    
+
                         <div className="notification_wrapper cmn_wrapper_outer white_bg_color cmn_height_outer">
                             <div className="notification_header align-items-center gap-3">
                                 <h2 className="cmn_text_heading">{jsondata.notification}</h2>
@@ -210,83 +142,68 @@ const Notification = () => {
                             <div className="d-flex justify-content-between">
                                 <h6 className={"cmn_small_heading "}>{jsondata.notification_heading}</h6>
 
-
-                            {
-                                (
-                                    ((searchNotificationData?.data?.data && searchNotificationData?.data?.data?.length > 0) || (unseenNotificationsData?.data && unseenNotificationsData?.data?.length > 0) || (notificationEventData?.data?.length > 0))
-                                    &&
-                                    (((searchNotificationData?.data?.data?.length || 0) + (unseenNotificationsData?.data?.length || 0) + (notificationEventData?.data?.length || 0)) > deletedNotifications?.length)
-                                )
-                                &&
-                                <button className={"text-end clear-all-notifications  cursor-pointer  clear_all_button_outer " + (clearAllNotificationData?.loading ? "disable_btn" : "")}
-                                    onClick={handleClearAllNotifications}
-                                >Clear all</button>
-                            }
+                                {
+                                    !isAllNotificationsCleared &&
+                                    (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
+                                    <button
+                                        className={"text-end clear-all-notifications  cursor-pointer  clear_all_button_outer " + (clearNotificationApi?.isLoading ? "disable_btn" : "")}
+                                        onClick={handleClearAllNotifications}
+                                    >Clear all</button>
+                                }
                             </div>
                             {
-                                (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading) ?
+                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching) ?
                                     <CommonLoader classname={"cmn_loader_outer"}></CommonLoader> :
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                     <>
                                         <div className=" align-items-center mt-4">
                                             {
-                                                (
-                                                    (searchNotificationData?.data !== undefined && unseenNotificationsData?.data !== undefined) &&
-                                                    (
-                                                        (searchNotificationData?.data?.data?.length === 0 && notificationEventData?.data?.length === 0 && unseenNotificationsData?.data?.length === 0)
-                                                        ||
-                                                        ((notifications?.length + notificationEventData?.data?.length + unseenNotificationsData?.data?.length === deletedNotifications?.length) && searchNotificationData?.data?.isLast)
-                                                    ) ||
-                                                    (clearAllNotifications?.isAllNotificationsCleared && (notificationEventData?.data?.length === 0 || notificationEventData?.data?.length === deletedNotifications?.length))
-                                                ) &&
+                                                (isAllNotificationsCleared ||
+                                                    (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
                                                 <div className="d-flex justify-content-center no_notification_wrapper">
                                                     <div>
-                                                    <img src={no_notification_img}/>
-                                                    <h4 className="no-notifications-text text-center mt-4">No New Notifications</h4>
-
+                                                        <img src={no_notification_img}/>
+                                                        <h4 className="no-notifications-text text-center mt-4">No New
+                                                            Notifications</h4>
                                                     </div>
                                                 </div>
                                             }
                                             {
-                                                notificationEventData?.data?.length > 0 && notificationEventData?.data?.map((notification, index) => {
-                                                    return deletedNotifications?.includes(notification?.id) ? <></> : (
+                                                !isAllNotificationsCleared && unSeenNotificationsList?.length > 0 &&
+                                                unSeenNotificationsList?.map((notification, index) => {
+                                                    // return deletedNotifications?.includes(notification?.id) ? <></> : (
+                                                    return (
                                                         <span key={index}>
                                                              <NotificationComponent notification={notification}
-                                                                                    deletedNotifications={deletedNotifications}
-                                                                                    setDeletedNotifications={setDeletedNotifications}/>
+                                                                                    notificationsList={notificationsList}
+                                                                                    setNotificationsList={setNotificationsList}
+                                                                                    unSeenNotificationsList={unSeenNotificationsList}
+                                                                                    setUnSeenNotificationsList={setUnSeenNotificationsList}/>
                                                         </span>
                                                     )
-
                                                 })
                                             }
+
 
                                             {
-                                                unseenNotificationsData?.data !== undefined && unseenNotificationsData?.data?.length > 0 &&
-                                                unseenNotificationsData?.data?.map((notification, index) => {
-                                                    return deletedNotifications?.includes(notification?.id) ? <></> : (
+                                                !isAllNotificationsCleared && notificationsList?.length > 0 &&
+                                                notificationsList?.map((notification, index) => {
+                                                    // return deletedNotifications?.includes(notification?.id) ? <></> : (
+                                                    return (
                                                         <span key={index}>
                                                              <NotificationComponent notification={notification}
-                                                                                    deletedNotifications={deletedNotifications}
-                                                                                    setDeletedNotifications={setDeletedNotifications}/>
+                                                                                    notificationsList={notificationsList}
+                                                                                    setNotificationsList={setNotificationsList}
+                                                                                    unSeenNotificationsList={unSeenNotificationsList}
+                                                                                    setUnSeenNotificationsList={setUnSeenNotificationsList}/>
                                                         </span>
                                                     )
                                                 })
                                             }
-                                            {
-                                                notifications?.length > 0 &&
-                                                notifications?.map((notification, index) => {
-                                                    return deletedNotifications?.includes(notification?.id) ? <></> : (
-                                                        <span key={index}>
-                                                             <NotificationComponent notification={notification}
-                                                                                    deletedNotifications={deletedNotifications}
-                                                                                    setDeletedNotifications={setDeletedNotifications}/>
-                                                        </span>
-                                                    )
-                                                })
-                                            }
+
                                         </div>
                                         {
-                                            (searchNotificationData?.loading || unseenNotificationsData?.loading) ?
+                                            (searchNotificationsApi?.isLoading || searchNotificationsApi?.isFetching || unseenNotificationsApi?.isLoading || unseenNotificationsApi?.isFetching) ?
                                                 <div className="d-flex justify-content-center  ">
                                                     <RotatingLines
                                                         strokeColor="#F07C33"
@@ -296,15 +213,15 @@ const Notification = () => {
                                                         visible={true}
                                                     />
                                                 </div> :
-                                                searchNotificationData?.data?.isLast === false && <div
-                                                    className={" load-more-not-btn-outer " + ((searchNotificationData?.loading || deleteNotificationData?.loading || setNotificationsToSeenData?.loading) ? "disable_btn" : "")}>
+                                                searchNotificationsApi?.data?.hasNext &&
+                                                <div
+                                                    className={" load-more-not-btn-outer " + ((searchNotificationsApi?.isLoading || searchNotificationsApi?.isFetching || deleteNotificationByIdApi?.isFetching || setNotificationsToSeenApi?.isLoading) ? "disable_btn" : "")}>
                                                     <div className={"load-more-notification-btn  cursor-pointer"}
                                                          onClick={() => {
                                                              setBaseSearchQuery({
                                                                  ...baseSearchQuery,
-                                                                 offSet: notifications?.length + notificationsUpdatedToSeenIds?.length - deletedNotifications?.length
+                                                                 offSet: notificationsList?.length
                                                              })
-                                                             setFetchNotifications(true)
                                                          }}
                                                     > Load more...
                                                     </div>
@@ -315,13 +232,15 @@ const Notification = () => {
                                     </>
                             }
                             {
-                                (getConnectedSocialAccountApi?.data?.length == 0 || getAllConnectedPagesApi?.data?.length === 0) &&
-                                <ConnectSocialMediaAccount image={notConnected_img} message={EmptyNotificationGridMessage}/>
+                                (getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.data?.length === 0) &&
+                                <ConnectSocialMediaAccount
+                                    image={notConnected_img}
+                                    message={EmptyNotificationGridMessage}/>
                             }
 
 
                         </div>
-                   
+
                     </div>
                 </div>
             </section>
@@ -331,27 +250,46 @@ const Notification = () => {
 }
 export default Notification;
 
-const NotificationComponent = ({notification, deletedNotifications, setDeletedNotifications}) => {
-    const deleteNotificationData = useSelector(state => state.notification.deleteNotificationReducer)
+const NotificationComponent = ({
+                                   notification,
+                                   notificationsList,
+                                   setNotificationsList,
+                                   unSeenNotificationsList,
+                                   setUnSeenNotificationsList,
+                               }) => {
+
+
     const [showNotificationErrorDetails, setShowNotificationErrorDetails] = useState(false);
     const [notificationToDelete, setNotificationToDelete] = useState(null);
-    const dispatch = useDispatch();
-    const token = getToken();
+
+    const [deleteNotificationById, deleteNotificationByIdApi] = useDeleteNotificationByIdMutation()
 
     useEffect(() => {
         if (notificationToDelete !== null) {
-            dispatch(deleteNotification({
-                id: notificationToDelete?.id,
-                token: token
-            })).then(res => {
-                if (res.meta.requestStatus === "fulfilled") {
-                    setDeletedNotifications([...deletedNotifications, notificationToDelete?.id])
-                }
-                setNotificationToDelete(null)
-            })
+            handleDeleteNotification()
         }
     }, [notificationToDelete])
 
+    const handleDeleteNotification = async () => {
+        await handleRTKQuery(
+            async () => {
+                return await deleteNotificationById(notificationToDelete?.id).unwrap()
+            },
+            () => {
+                let updatedNotificationsList;
+                if (notificationToDelete?.seen) {
+                    updatedNotificationsList = removeObjectFromArray(notificationsList, notificationToDelete, "id")
+                    setNotificationsList(updatedNotificationsList)
+                } else {
+                    updatedNotificationsList = removeObjectFromArray(unSeenNotificationsList, notificationToDelete, "id")
+                    setUnSeenNotificationsList(updatedNotificationsList)
+                }
+            },
+            null,
+            () => {
+                setNotificationToDelete(null)
+            })
+    }
 
     let errorInfo;
     if (notification?.additionalInfo?.hasOwnProperty('postPageInfo')) {
@@ -404,10 +342,11 @@ const NotificationComponent = ({notification, deletedNotifications, setDeletedNo
                                         className={"comment-edit-del-icon"}/>
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <Dropdown.Item href="#/action-2"
-                                                   onClick={() => {
-                                                       !deleteNotificationData?.loading && setNotificationToDelete(notification)
-                                                   }}>Delete</Dropdown.Item>
+                                    <Dropdown.Item
+                                        href="#/action-2"
+                                        onClick={() => {
+                                            !deleteNotificationByIdApi?.isLoading && setNotificationToDelete(notification)
+                                        }}>Delete</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </div>

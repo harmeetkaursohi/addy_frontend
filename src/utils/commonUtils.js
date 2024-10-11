@@ -1426,7 +1426,7 @@ export const createOptionListForSelectTag = (data = null, label, value, addition
     return list
 }
 
-export const getValueOrDefault = (value=null, defaultValue) => {
+export const getValueOrDefault = (value = null, defaultValue) => {
     if (isNullOrEmpty(value)) {
         return defaultValue
     }
@@ -1507,7 +1507,6 @@ export const concatenateString = (originalString, maxLength) => {
         return originalString?.substring(0, maxLength) + "...";
     }
 };
-
 
 
 export const getFileFromAttachmentSource = (attachment) => {
@@ -1781,8 +1780,8 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
             case "caption":
             case "hashTag": {
                 // If posted on facebook or linkedin one among caption , hashtag or image is required
-                if((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)){
-                    showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" :""} ${isPostedOnLinkedin ? " and Linkedin" :""}, either Caption/HashTag or Image`]));
+                if ((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
+                    showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" : ""} ${isPostedOnLinkedin ? " and Linkedin" : ""}, either Caption/HashTag or Image`]));
                     shouldBreak = true;
                 }
                 break;
@@ -2210,13 +2209,12 @@ export const createPostEngagementInsightsQuery = (queryObject, socialMediaType) 
             return {
                 period: "day",
                 access_token: queryObject.access_token,
-                since: generateUnixTimestampFor(queryObject.days ),
+                since: generateUnixTimestampFor(queryObject.days),
                 until: generateUnixTimestampFor("now"),
             }
         }
         case "INSTAGRAM": {
-            return {
-            }
+            return {}
         }
         case "LINKEDIN": {
             return {
@@ -2237,7 +2235,7 @@ export const createPostEngagementInsightsQuery = (queryObject, socialMediaType) 
 }
 
 export function objectToQueryString(obj) {
-     return Object.keys(obj)
+    return Object.keys(obj)
         .map(key => {
             if (obj[key] !== null && obj[key] !== undefined) {
                 return `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;
@@ -2249,18 +2247,18 @@ export function objectToQueryString(obj) {
 }
 
 
-export const countCommonElementsFromArray=(sourceArray=[],comparisonArray=[])=>{
-    if(sourceArray.length===0 ||comparisonArray.length===0 ){
+export const countCommonElementsFromArray = (sourceArray = [], comparisonArray = []) => {
+    if (sourceArray.length === 0 || comparisonArray.length === 0) {
         return 0
     }
     const commonElements = comparisonArray.filter(value => sourceArray.includes(value));
     return commonElements.length;
 }
 
-export const groupBy=(sourceArray=[],key)=>{
-    let result={};
-    if(Array.isArray(sourceArray) ){
-        sourceArray?.forEach(data=>{
+export const groupBy = (sourceArray = [], key) => {
+    let result = {};
+    if (Array.isArray(sourceArray)) {
+        sourceArray?.forEach(data => {
             if (!result[data[key]]) {
                 result[data[key]] = [];
             }
@@ -2277,7 +2275,7 @@ export const handleApiResponse = (res, onSuccess, onReject) => {
         onReject();
     }
 }
-export const isValidCreateChatRequest=(data)=>{
+export const isValidCreateChatRequest = (data) => {
     if (isNullOrEmpty(data.initiatorId)) {
         showErrorToast(formatMessage(IsRequired, ["Chat Initiator"]));
         return false;
@@ -2289,7 +2287,7 @@ export const isValidCreateChatRequest=(data)=>{
     return true;
 
 }
-export const isValidCreateMessageRequest=(data)=>{
+export const isValidCreateMessageRequest = (data) => {
     if (isNullOrEmpty(data.data.senderId)) {
         showErrorToast(formatMessage(IsRequired, ["Message Sender"]));
         return false;
@@ -2305,3 +2303,6 @@ export const isValidCreateMessageRequest=(data)=>{
     return true;
 
 }
+export const removeObjectFromArray = (array, object, keyToCompare) => {
+    return array.filter(item => item[keyToCompare] !== object[keyToCompare]);
+};
