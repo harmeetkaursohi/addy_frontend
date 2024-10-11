@@ -11,6 +11,7 @@ import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 import {
     useGetSocialMediaPostsByCriteriaQuery
 } from "../../../app/apis/postApi";
+import NotFoundPopup from "../../common/components/NotFoundPopup.jsx";
 
 const Dashboard = () => {
     const {sidebar} = useAppContext();
@@ -49,6 +50,7 @@ const Dashboard = () => {
                     </div>
 
                 </div>
+                <NotFoundPopup/>
                 {/* upcoming post */}
             
                     <ScheduledComponent scheduledData={getSocialMediaPostsByCriteriaApi}/>               

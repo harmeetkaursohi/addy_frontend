@@ -78,7 +78,9 @@ button.ConnectBtn {
     font-family: "Nunito";
     font-weight: 400;
 }
-
+.user_profileInfo_wrapper .connect_text {
+    font-weight: 600;
+}
 
 .connect_text_not_connect {
     color: rgb(255, 58, 58);
@@ -299,6 +301,9 @@ element.style {
     letter-spacing: -0.015px;
     font-family: "Nunito";
 }
+h5.userName {
+    white-space: nowrap;
+}
 
 
 
@@ -324,7 +329,7 @@ button.facebook_connect > div > div:last-child {
 }
 
 button.facebook_connect {
-    min-width: 98px !important;
+    min-width: 77px !important;
     text-align: center;
     height: 35px !important;
     margin: 0px !important;
@@ -596,7 +601,7 @@ width: 100%;
     }
    
     button.facebook_connect {
-        min-width: 90px !important;
+        min-width: 77px !important;
         height: 33px !important;
     }
     

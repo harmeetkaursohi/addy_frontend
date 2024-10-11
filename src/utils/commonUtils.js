@@ -112,7 +112,8 @@ export const validationSchemas = {
 };
 
 
-export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
+export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider,setShowNoBusinessAccountModal) => {
+    console.log("setShowNoBusinessAccountModal",setShowNoBusinessAccountModal)
     const token = localStorage.getItem("token");
     const decodeJwt = decodeJwtToken(token);
     const response = {
@@ -130,7 +131,7 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
                     return accountData.hasOwnProperty("instagram_business_account")
                 })
                 if (isNullOrEmpty(instagramBusinessAccount)) {
-                    throw new Error(formatMessage(NoBusinessAccountFound, [getInitialLetterCap(tokenProvider)]));
+                    setShowNoBusinessAccountModal(true)
                 }
             }
             return {
@@ -163,12 +164,12 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider) => {
                     refreshToken: jsonObj?.data?.refresh_token || null,
                 }
             }
-        }
+        } 
 
 
         case SocialAccountProvider.PINTEREST : {
             if (jsonObj.data.account_type !== "BUSINESS") {
-                throw new Error(formatMessage(NoBusinessAccountFound, [getInitialLetterCap(tokenProvider)]));
+                setShowNoBusinessAccountModal(true)
             }
             return {
                 ...response, socialAccountData: {

@@ -86,7 +86,7 @@ ul {
 }
 
 .disconnected_page{
-  border: 2px solid #ddd;
+  border: 3px solid #ccc;
   border-radius: 15px;
   padding: 15px;
   margin-top: 13px;
@@ -383,11 +383,21 @@ div:where(.swal2-container).swal2-center>.swal2-popup {
 }
 .disconnect_paragraph{
   font-size: 16px;
-    color: #263238;
+    color: #000;
     font-family: "Nunito";
     font-weight: 400;
     margin: 0px;
     padding: 7px 14px 0px;
+}
+.modal-dialog.modal-lg {}
+
+.choose_page_outer.notfound_popup.modal.show .modal-dialog {
+    max-width: 554px;
+}
+
+.notfound_popup .facebook_content_outer {
+        max-width:380px;
+    margin:auto;
 }
 .addyLogo_img{
   width: 75px;
@@ -448,6 +458,7 @@ div:where(.swal2-container).swal2-center>.swal2-popup {
   color: #6D6D6D;
   margin-right: 6px;
   cursor: pointer;
+  z-index: 999;
 }
 .swal_images {
   padding-top: 20px;
@@ -485,8 +496,8 @@ div:where(.swal2-container).swal2-center>.swal2-popup {
     border: 1px solid #263238;
     background-color: white;
     color: #263238;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 600;
     font-family: "Nunito";
 }
 h2#swal2-title {
@@ -576,8 +587,9 @@ line-height: 20px;
 }
 .pop_up_cross_icon_outer.cursor-pointer {
   position: absolute;
-  right: 10px;
-  top: 15px;
+  right: 21px;
+  top: 25px;
+  z-index: 999;
 }
 .dropdown_btn .dropdown-item.disabled, .dropdown-item:disabled {
 
@@ -623,7 +635,7 @@ line-height: 20px;
 }
 .confirm_btn button {
   border-radius: 5px;
-  height: 40px;
+  height: 36px;
   width: 110px
 }
 img.post_img {

@@ -12,7 +12,7 @@ import {useConnectPageMutation} from "../../../app/apis/pageAccessTokenApi";
 import {useGetSocialMediaReportQuery} from "../../../app/apis/insightApi";
 import {addyApi} from "../../../app/addyApi";
 import {useDispatch} from "react-redux";
-
+import NotFoundPopup from './NotFoundPopup.jsx';
 const CommonModal = ({
                          socialMediaAccountInfo,
                          showModal,
@@ -29,6 +29,7 @@ const CommonModal = ({
     const currentConnectedPages = connectedPagesList?.map(page => page?.pageId) || []
 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [showNoBusinessAccountModal, setShowNoBusinessAccountModal] = useState(false);
     const [mediaPageData, setMediaPageData] = useState(null);
 
     const getSocialMediaReportApi = useGetSocialMediaReportQuery({
@@ -59,13 +60,14 @@ const CommonModal = ({
                         <RxCross2 className="pop_up_cross_icon"/>
                     </div>
                     <Modal.Body className='pt-0 cmn_body'>
-                        <div className='d-flex  pt-3 pb-3'>
-                            <div className='facebook_title flex-grow-1'>
+                        <div className='d-flex  pt-3 pb-4'>
+                            <div className='facebook_title flex-grow-1 header_border pb-4'>
                                 <h3>
                                     <img src="./Addy_icon.svg" className="addy_icon "/></h3>
                                 <h2 className='cmn_text_style'>Please choose
                                     your {socialMediaType === SocialAccountProvider.PINTEREST ? "board" : "page"} to
                                     connect with Addy</h2>
+                                    <p className='planInfo'>You have Personal Plan, you can add only one page.&nbsp;  <span>Upgrade Plan</span></p>
                             </div>
 
 
@@ -191,6 +193,7 @@ const CommonModal = ({
                     title={"Are you sure ?"}
                     confirmMessage={currentConnectedPages?.includes(mediaPageData?.id) ? DisconnectPageWarning : `You want to connect ${socialMediaType} page ?`}
                 />}
+                {showNoBusinessAccountModal &&  <NotFoundPopup show={showNoBusinessAccountModal}  setShow={setShowNoBusinessAccountModal}/>}
         </>
     );
 }

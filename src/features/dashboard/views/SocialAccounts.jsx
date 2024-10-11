@@ -39,7 +39,7 @@ import instagramImg from "../../../images/modal_instagram_image.svg"
 import pinterestImg from "../../../images/modal_pintrest_image.svg"
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils";
-
+import NotFoundPopup from "../../common/components/NotFoundPopup";
 
 const SocialAccounts = ({}) => {
 
@@ -62,7 +62,7 @@ const SocialAccounts = ({}) => {
     const [showInstagramModal, setShowInstagramModal] = useState(false);
     const [showPinterestModal, setShowPinterestModal] = useState(false);
     const [showLinkedinModal, setShowLinkedinModal] = useState(false);
-
+    const [showNoBusinessAccountModal, setShowNoBusinessAccountModal] = useState(false);
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const connectedSocialAccount = getConnectedSocialMediaAccount(getConnectedSocialAccountApi?.data || [])
 
@@ -159,24 +159,29 @@ const SocialAccounts = ({}) => {
 
     const connectSocialMediaAccountToCustomer = (object, socialMediaType) => {
         object.then(async (res) => {
-            await handleRTKQuery(async () => {
-                    return await connectSocialAccount(res.socialAccountData).unwrap()
+            // Check if socialAccountData has a value            
+            if (res?.socialAccountData?.name) {
+                await handleRTKQuery(async () => {
+                    return await connectSocialAccount(res.socialAccountData).unwrap();
                 },
                 () => {
-                    dispatch(addyApi.util.invalidateTags(["getConnectedSocialAccountApi"]))
-                    dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
+                    dispatch(addyApi.util.invalidateTags(["getConnectedSocialAccountApi"]));
+                    dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]));
                 },
                 (response) => {
-                    response.status === 409 && setAccountAlreadyConnectedWarningModal({
-                        showModal: true,
-                        socialMediaType: socialMediaType
-                    })
-
-                })
+                    if (response.status === 409) {
+                        setAccountAlreadyConnectedWarningModal({
+                            showModal: true,
+                            socialMediaType: socialMediaType
+                        });
+                    }
+                });
+            } 
         }).catch((error) => {
             showErrorToast(error?.response?.data?.message || error?.message);
-        })
+        });
     }
+    
 
     // const removeDisabledPages = (disabledPages, x) => {
     //     const updatedData = disabledPages?.map(page => {
@@ -336,7 +341,7 @@ const SocialAccounts = ({}) => {
                                                 setInstagramDropDown(false)
                                                 setPinterestDropDown(false)
                                                 setLinkedinDropDown(false)
-                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.FACEBOOK), SocialAccountProvider.FACEBOOK)
+                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.FACEBOOK,setShowNoBusinessAccountModal), SocialAccountProvider.FACEBOOK)
                                             }}
                                             scope={`${import.meta.env.VITE_APP_FACEBOOK_SCOPE}`}
                                             onReject={(error) => {
@@ -365,7 +370,7 @@ const SocialAccounts = ({}) => {
                                                     </div>
 
                                                     <div className="text-start flex-grow-1">
-                                                        <h5 className="">{getConnectedSocialAccountApi?.data && getConnectedSocialAccountApi?.data?.find(c => c?.provider === 'FACEBOOK')?.name || "facebook"}</h5>
+                                                        <h5 className="userName">{getConnectedSocialAccountApi?.data && getConnectedSocialAccountApi?.data?.find(c => c?.provider === 'FACEBOOK')?.name || "facebook"}</h5>
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
@@ -445,7 +450,7 @@ const SocialAccounts = ({}) => {
                                                                                     className="ConnectBtn cmn_connect_btn"
                                                                                     onClick={() => facebook()}
                                                                                 >
-                                                                                    Connect More
+                                                                                    Manage Pages
                                                                                 </button>
                                                                             </div>
 
@@ -497,7 +502,7 @@ const SocialAccounts = ({}) => {
                                                 setFacebookDropDown(false)
                                                 setPinterestDropDown(false)
                                                 setLinkedinDropDown(false)
-                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.INSTAGRAM), SocialAccountProvider.INSTAGRAM)
+                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.INSTAGRAM,setShowNoBusinessAccountModal), SocialAccountProvider.INSTAGRAM)
                                             }}
                                             scope={`${import.meta.env.VITE_APP_INSTAGRAM_SCOPE}`}
                                             onReject={(error) => {
@@ -520,7 +525,7 @@ const SocialAccounts = ({}) => {
 
                                                     {/*<img className="cmn_width " src={fb_img}/>*/}
                                                     <div className="text-start flex-grow-1">
-                                                        <h5 className="">{getConnectedSocialAccountApi.data && getConnectedSocialAccountApi.data.find(c => c.provider === 'INSTAGRAM')?.name || "instagram"}</h5>
+                                                        <h5 className="userName">{getConnectedSocialAccountApi.data && getConnectedSocialAccountApi.data.find(c => c.provider === 'INSTAGRAM')?.name || "instagram"}</h5>
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
@@ -600,7 +605,7 @@ const SocialAccounts = ({}) => {
                                                                                     className="ConnectBtn cmn_connect_btn"
                                                                                     onClick={() => setShowInstagramModal(true)}
                                                                                 >
-                                                                                    Connect More
+                                                                                    Manage Pages
                                                                                 </button>
                                                                             </div>
 
@@ -653,7 +658,7 @@ const SocialAccounts = ({}) => {
                                                 setInstagramDropDown(false)
                                                 setPinterestDropDown(false)
                                                 setFacebookDropDown(false)
-                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.LINKEDIN), SocialAccountProvider.LINKEDIN)
+                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.LINKEDIN,setShowNoBusinessAccountModal), SocialAccountProvider.LINKEDIN)
                                             }}
                                             onReject={(error) => {
                                                 showErrorToast(SomethingWentWrong)
@@ -674,7 +679,7 @@ const SocialAccounts = ({}) => {
                                                     <h2 className={`pagecount ${currentConnectedLinkedinPages?.length === undefined ? "blink" : ""}`}>{currentConnectedLinkedinPages !== null ? currentConnectedLinkedinPages?.length : 0}</h2>
 
                                                     <div className="text-start flex-grow-1">
-                                                        <h5 className="">{getConnectedSocialAccountApi.data && getConnectedSocialAccountApi.data.find(c => c.provider === 'LINKEDIN')?.name || "linkedin"}</h5>
+                                                        <h5 className="userName">{getConnectedSocialAccountApi.data && getConnectedSocialAccountApi.data.find(c => c.provider === 'LINKEDIN')?.name || "linkedin"}</h5>
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
@@ -757,7 +762,7 @@ const SocialAccounts = ({}) => {
                                                                                     className="ConnectBtn cmn_connect_btn"
                                                                                     onClick={() => setShowLinkedinModal(true)}
                                                                                 >
-                                                                                    Connect More
+                                                                                    Manage Pages
                                                                                 </button>
                                                                             </div>
 
@@ -808,7 +813,7 @@ const SocialAccounts = ({}) => {
                                                 setPinterestDropDown(true)
                                                 setInstagramDropDown(false)
                                                 setFacebookDropDown(false)
-                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.PINTEREST), SocialAccountProvider.PINTEREST)
+                                                connectSocialMediaAccountToCustomer(computeAndSocialAccountJSON(response, SocialAccountProvider.PINTEREST,setShowNoBusinessAccountModal), SocialAccountProvider.PINTEREST)
                                             }}
                                             onReject={(error) => {
                                             }}>
@@ -827,7 +832,7 @@ const SocialAccounts = ({}) => {
                                                     <i className="fa-brands fa-pinterest pinterest-icon"/>
                                                     <h2 className={`pagecount ${currentConnectedPinterestPages?.length === undefined ? "blink" : ""}`}>{currentConnectedPinterestPages !== null ? currentConnectedPinterestPages?.length : 0}</h2>
                                                     <div className="text-start flex-grow-1">
-                                                        <h5 className="">{getConnectedSocialAccountApi.data && getConnectedSocialAccountApi.data.find(c => c.provider === 'PINTEREST')?.name || "pinterest"}</h5>
+                                                        <h5 className="userName">{getConnectedSocialAccountApi.data && getConnectedSocialAccountApi.data.find(c => c.provider === 'PINTEREST')?.name || "pinterest"}</h5>
                                                         <h4 className="connect_text">Connected</h4>
                                                     </div>
                                                     {
@@ -907,7 +912,7 @@ const SocialAccounts = ({}) => {
                                                                                     className="ConnectBtn cmn_connect_btn"
                                                                                     onClick={() => setShowPinterestModal(true)}
                                                                                 >
-                                                                                    Connect More
+                                                                                    Manage Pages
                                                                                 </button>
                                                                             </div>
 
@@ -976,6 +981,8 @@ const SocialAccounts = ({}) => {
                     accountAlreadyConnectedWarningModal={accountAlreadyConnectedWarningModal}
                     setAccountAlreadyConnectedWarningModal={setAccountAlreadyConnectedWarningModal}></AccountAlreadyConnectedWarningModal>
             }
+
+{showNoBusinessAccountModal &&  <NotFoundPopup show={showNoBusinessAccountModal}  setShow={setShowNoBusinessAccountModal}/>}
 
         </div>
 

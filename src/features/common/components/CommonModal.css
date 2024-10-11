@@ -5,8 +5,8 @@
     /*padding: 20px 0px;*/
     /*border-bottom: 1px solid #CBCBCB;*/
     align-items: center;
-    margin-top: 10px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 40%);
+    margin-top: 17px;
+    box-shadow:1px 2px 4px 0 rgba(0, 0, 0, 0.17);
 
 }
 img.no_page_connect_img {
@@ -53,10 +53,13 @@ img.no_page_connect_img {
     padding-left: 12px
 
 }
+.header_border{
+border-bottom: 2px solid rgba(203, 203, 203, 1);
+}
 .users_profile {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 25%);
     overflow: hidden;
-    border-radius: 24px;
+    border-radius: 15px;
 }
 h4.hiddenNumber {
     display: inline;
@@ -83,16 +86,14 @@ h4.hiddenNumber {
 }
 
 .modal_inner_content:first-child {
-    /*padding-top: 4px;*/
+    margin-top: 0;
 }
 
 .modal_inner_content:last-child {
     /*border-bottom: unset;*/
 }
 
-.facebook_content_outer {
-    padding: 0px 10px;
-}
+
 .facebook_content_outer button{
     padding: 5px 22px;
     border-radius: 6px;
@@ -166,14 +167,23 @@ div.commonmodal_header {
 }
 .facebook_title h2 {
     font-size: 22px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 9px;
+    /* padding-bottom: 9px; */
     color:#000;
 }
+p.planInfo {
+    font-size: 16px;
+    font-weight: 300;
+    color: #000;
+}
 
+p.planInfo span {
+    text-decoration: underline;
+    color: #00A3FF;
+    font-weight: 400;
+    cursor: pointer;
+}
 .modal-body.cmn_body {
-    max-width: 546px;
-    margin: auto;
+    padding: 47px 34px;
 }
 .users_profile img {
     border-radius: 24px;

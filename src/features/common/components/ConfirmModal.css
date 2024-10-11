@@ -4,10 +4,10 @@
 }
 
 .yes_btn{
-    font-size: 16px;
+    font-size: 14px;
     border: none;
     color: white;
-    font-weight: 700;
+    font-weight: 600;
 }
 .success_img{
     height: 120px;
@@ -57,9 +57,7 @@
     .confirm_container h2 {
         font-size: 24px;
     }
-    .confirm_btn button {
-        height: 37px;
-    }
+  
     .success_img {
         height: 90px;
     }
