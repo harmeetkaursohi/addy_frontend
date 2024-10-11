@@ -16,9 +16,7 @@ const NotFoundPopup = ({ show, setShow }) => {
       >
         <div
           className="pop_up_cross_icon_outer  cursor-pointer"
-          onClick={(e) => {
-            handleClose();
-          }}
+          onClick={handleClose}
         >
           <RxCross2 className="pop_up_cross_icon" />
         </div>
@@ -38,9 +36,7 @@ const NotFoundPopup = ({ show, setShow }) => {
                   one or connect an existing account.
                 </p>
                 <button
-                  onClick={(e) => {
-                    handleClose();
-                  }}
+                  onClick={handleClose}
                   className="cmn_connect_btn connect_btn connect_btn disconected_btn mt-4"
                 >
                   Okay
