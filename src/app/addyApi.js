@@ -5,6 +5,6 @@ export const addyApi = createApi({
     baseQuery: fetchBaseQuery({
         // baseUrl: ""
     }),
-    tagTypes: ["getUserInfoApi","getFaqListApi","getConnectedSocialAccountApi","getAllConnectedPagesApi","getSocialMediaPostsByCriteriaApi","getPostsForPlannerApi","getPlannerPostsCountApi","getPublishedPostsApi"],
+    tagTypes: ["getUserInfoApi","getFaqListApi","getConnectedSocialAccountApi","getAllConnectedPagesApi","getSocialMediaPostsByCriteriaApi","getPostsForPlannerApi","getPlannerPostsCountApi","getPublishedPostsApi","searchNotificationsApi","getUnseenNotificationsApi"],
     endpoints: () => ({}),
 })

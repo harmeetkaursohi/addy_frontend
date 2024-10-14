@@ -25,6 +25,6 @@ export const getAuthorizationHeader = () => {
 
 export const handleQueryError = async (queryFulfilled) => {
     queryFulfilled.catch(error => {
-        showErrorToast(error.error.data.message  );
+        showErrorToast(error.error.data.message);
     })
 }

@@ -75,6 +75,12 @@ const CreatePost = () => {
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
     const [showPreview, setShowPreview] = useState(false)
 
+    useEffect(() => {
+        const userInfo = decodeJwtToken(token);
+        const requestBody = {token: token, customerId: userInfo?.customerId}
+        dispatch(getAllByCustomerIdAction(requestBody));
+
+    }, []);
 
     useEffect(() => {
         if (getAllConnectedPagesApi.isLoading) {
@@ -99,8 +105,8 @@ const CreatePost = () => {
 
 
     useEffect(() => {
-        if (socialAccounts) {
-            const filteredSocialMediaData = socialAccounts.filter((account) => {
+        if (getConnectedSocialAccountApi?.data) {
+            const filteredSocialMediaData = getConnectedSocialAccountApi?.data.filter((account) => {
                 switch (account.provider) {
                     case "FACEBOOK":
                         return enabledSocialMedia?.isFacebookEnabled;
@@ -116,7 +122,7 @@ const CreatePost = () => {
             });
             setSocialAccountData(filteredSocialMediaData);
         }
-    }, [socialAccounts]);
+    }, [getConnectedSocialAccountApi?.data]);
 
 
     // Create all Options
@@ -215,12 +221,6 @@ const CreatePost = () => {
 
     const areAllOptionsSelected = allOptions.flatMap((group) => group.allOptions).every((option) => selectedOptions.includes(option.pageId));
 
-
-    useEffect(() => {
-        const userInfo = decodeJwtToken(token);
-        const requestBody = {token: token, customerId: userInfo?.customerId}
-        dispatch(getAllByCustomerIdAction(requestBody));
-    }, []);
 
     const handleSelectedFile = (e) => {
         e.preventDefault();
