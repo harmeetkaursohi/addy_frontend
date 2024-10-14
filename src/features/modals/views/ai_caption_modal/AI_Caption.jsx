@@ -1,25 +1,25 @@
 import Modal from 'react-bootstrap/Modal';
 import './AI_Caption.css'
-import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import {generateAICaptionAction} from "../../../../app/actions/postActions/postActions.js";
 import {conventStringToArrayString} from "../../../../services/facebookService.js";
 import {isNullOrEmpty} from "../../../../utils/commonUtils";
 import Loader from "../../../loader/Loader";
 import robot_img from "../../../../images/ai_robot.svg"
-import { RxCross2 } from 'react-icons/rx';
+import {RxCross2} from 'react-icons/rx';
+import {useGenerateCaptionMutation} from "../../../../app/apis/aiApi";
 
 const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addCaption}) => {
+
     const handleClose = () => setAIGenerateCaptionModal(false);
-    const dispatch = useDispatch();
+
     const [caption, setCaption] = useState("");
     const [captionSuggestionList, setCaptionSuggestionList] = useState([]);
     const [selectedCaption, setSelectedCaption] = useState("");
-    const generateAICaptionData = useSelector((state) => state.post.generateAICaptionReducer)
+
+    const [generateCaption, generateCaptionApi] = useGenerateCaptionMutation();
 
     const handleCaptionSubmit = (e) => {
         e.preventDefault();
-
         const requestBody = {
             "model": "gpt-3.5-turbo",
             "messages": [
@@ -30,14 +30,14 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
             ]
         }
 
-        !isNullOrEmpty(caption) && dispatch(generateAICaptionAction(requestBody))
+        !isNullOrEmpty(caption) && generateCaption(requestBody)
     }
     useEffect(() => {
-        if (generateAICaptionData?.data !== null && generateAICaptionData !== undefined) {
+        if (generateCaptionApi?.data !== null && generateCaptionApi !== undefined) {
             setSelectedCaption("")
-            setCaptionSuggestionList(conventStringToArrayString(generateAICaptionData?.data)?.slice(0, 10));
+            setCaptionSuggestionList(conventStringToArrayString(generateCaptionApi?.data)?.slice(0, 10));
         }
-    }, [generateAICaptionData])
+    }, [generateCaptionApi])
 
 
     const handleAddCaptions = () => {
@@ -55,14 +55,14 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
         <>
             <div className='generate_ai_img_container'>
                 <Modal show={aiGenerateCaptionModal} onHide={handleClose} className='generate_ai_container'>
-                    
+
                     <Modal.Body className='pt-0'>
-                    <div className='pop_up_cross_icon_outer text-end cursor-pointer mt-2' onClick={() => {
-                                            handleClose()
-                                        }}><RxCross2 className="pop_up_cross_icon"/></div>
+                        <div className='pop_up_cross_icon_outer text-end cursor-pointer mt-2' onClick={() => {
+                            handleClose()
+                        }}><RxCross2 className="pop_up_cross_icon"/></div>
                         <div className='robot_img_outer text-center'>
-                        <img src={robot_img}/>
-                        <h3 className='cmn_heading_class mt-4'>Generate Caption with AI </h3>
+                            <img src={robot_img}/>
+                            <h3 className='cmn_heading_class mt-4'>Generate Caption with AI </h3>
 
                         </div>
                         <div className='generate_image_wrapper_box'>
@@ -78,18 +78,19 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
                                     />
 
 
-                                    <button disabled={isNullOrEmpty(caption) || generateAICaptionData?.loading}
+                                    <button disabled={isNullOrEmpty(caption) || generateCaptionApi?.isLoading}
                                             className={'generate_btn cmn_white_text ' + (isNullOrEmpty(caption) ? " opacity-50" : "")}>
                                         {
-                                            generateAICaptionData?.loading ?
-                                                <div className={"loading_txt"}><Loader className={"me-2 ai_caption_loading_btn"}/> Loading
+                                            generateCaptionApi?.isLoading ?
+                                                <div className={"loading_txt"}><Loader
+                                                    className={"me-2 ai_caption_loading_btn"}/> Loading
                                                 </div> : captionSuggestionList?.length === 0 ? "Generate" : "Regenerate"
                                         }
                                     </button>
                                 </div>
                                 <div className='caption_outer'>
                                     {
-                                        !generateAICaptionData?.loading && captionSuggestionList?.length > 0 &&
+                                        !generateCaptionApi?.isLoading && captionSuggestionList?.length > 0 &&
                                         <h6 className='cmn_white_text caption_heading'>Of course! Here are some captions
                                             for your post:</h6>
                                     }

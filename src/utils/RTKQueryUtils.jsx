@@ -13,13 +13,19 @@ export const handleRTKQuery = async (fetchData, onSuccess, onFailure, onComplete
 
 export const getAuthHeader = () => {
     return {
-        headers:getAuthorizationHeader()
+        headers: getAuthorizationHeader()
     }
 }
 
 export const getAuthorizationHeader = () => {
     return {
         'Authorization': `Bearer ${localStorage.getItem("token")}`
+    }
+}
+
+export const getOpenAIAuthHeader = () => {
+    return {
+        'Authorization': `Bearer ${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`
     }
 }
 

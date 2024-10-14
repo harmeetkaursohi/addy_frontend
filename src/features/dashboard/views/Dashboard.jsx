@@ -1,7 +1,6 @@
 import Header from "../../head/views/Header"
 import './Dashboard.css'
 import React, {useEffect, useState} from "react";
-import {getToken} from "../../../app/auth/auth.js";
 import ScheduledComponent from "../../unPublishedPages/views/ScheduledComponent";
 import {DashboardReports} from "./reports/DashboardReports";
 import SocialAccounts from "./SocialAccounts";

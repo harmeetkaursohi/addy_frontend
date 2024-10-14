@@ -1,12 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit'
 import {
-    generateAIImageAction,
-    generateAIHashTagAction,
-    generateAICaptionAction,
+    // generateAIImageAction,
+    // generateAIHashTagAction,
+    // generateAICaptionAction,
     // createFacebookPostAction,
     // getAllPostsForPlannerAction,
     // getPostsByIdAction,
-    updatePostOnSocialMediaAction,
+    // updatePostOnSocialMediaAction,
     // getPlannerPostCountAction,
     // deletePostByBatchIdAction,
     // publishedPostAction,
@@ -30,13 +30,13 @@ import {
 const postSlice = createSlice({
     name: 'post',
     initialState: {
-        generateAIImageReducer: {loading: false},
-        generateAIHashTagReducer: {loading: false},
-        generateAICaptionReducer: {loading: false},
+        // generateAIImageReducer: {loading: false},
+        // generateAIHashTagReducer: {loading: false},
+        // generateAICaptionReducer: {loading: false},
         // createFacebookPostActionReducer: {loading: false},
         // getAllPostsForPlannerReducer: {loading: false},
         // getPostsByIdReducer: {loading: false},
-        updatePostOnSocialMediaReducer: {loading: false},
+        // updatePostOnSocialMediaReducer: {loading: false},
         // getPlannerPostCountReportReducer: {loading: false},
         // getAllDraftPostsByCustomerAndPeriodReducer: {loading: false},
         // publishedPostReducer: {loading: false},
@@ -207,15 +207,15 @@ const postSlice = createSlice({
         // },
 
 
-        [updatePostOnSocialMediaAction.pending]: (state) => {
-            state.updatePostOnSocialMediaReducer = {loading: true}
-        },
-        [updatePostOnSocialMediaAction.fulfilled]: (state, action) => {
-            state.updatePostOnSocialMediaReducer = {loading: false, data: action.payload}
-        },
-        [updatePostOnSocialMediaAction.rejected]: (state) => {
-            state.updatePostOnSocialMediaReducer = {loading: false}
-        },
+        // [updatePostOnSocialMediaAction.pending]: (state) => {
+        //     state.updatePostOnSocialMediaReducer = {loading: true}
+        // },
+        // [updatePostOnSocialMediaAction.fulfilled]: (state, action) => {
+        //     state.updatePostOnSocialMediaReducer = {loading: false, data: action.payload}
+        // },
+        // [updatePostOnSocialMediaAction.rejected]: (state) => {
+        //     state.updatePostOnSocialMediaReducer = {loading: false}
+        // },
 
         //get all posts by batch id
         // [getPostsByIdAction.pending]: (state) => {
@@ -261,37 +261,37 @@ const postSlice = createSlice({
         // },
 
         //ai generate image
-        [generateAIImageAction.pending]: (state) => {
-            state.generateAIImageReducer = {loading: true}
-        },
-        [generateAIImageAction.fulfilled]: (state, action) => {
-            state.generateAIImageReducer = {loading: false, data: action.payload}
-        },
-        [generateAIImageAction.rejected]: (state) => {
-            state.generateAIImageReducer = {loading: false}
-        },
+        // [generateAIImageAction.pending]: (state) => {
+        //     state.generateAIImageReducer = {loading: true}
+        // },
+        // [generateAIImageAction.fulfilled]: (state, action) => {
+        //     state.generateAIImageReducer = {loading: false, data: action.payload}
+        // },
+        // [generateAIImageAction.rejected]: (state) => {
+        //     state.generateAIImageReducer = {loading: false}
+        // },
 
         //  ai generate hash tag
-        [generateAIHashTagAction.pending]: (state) => {
-            state.generateAIHashTagReducer = {loading: true}
-        },
-        [generateAIHashTagAction.fulfilled]: (state, action) => {
-            state.generateAIHashTagReducer = {loading: false, data: action.payload}
-        },
-        [generateAIHashTagAction.rejected]: (state) => {
-            state.generateAIHashTagReducer = {loading: false}
-        },
+        // [generateAIHashTagAction.pending]: (state) => {
+        //     state.generateAIHashTagReducer = {loading: true}
+        // },
+        // [generateAIHashTagAction.fulfilled]: (state, action) => {
+        //     state.generateAIHashTagReducer = {loading: false, data: action.payload}
+        // },
+        // [generateAIHashTagAction.rejected]: (state) => {
+        //     state.generateAIHashTagReducer = {loading: false}
+        // },
 
         //  ai generate caption
-        [generateAICaptionAction.pending]: (state) => {
-            state.generateAICaptionReducer = {loading: true}
-        },
-        [generateAICaptionAction.fulfilled]: (state, action) => {
-            state.generateAICaptionReducer = {loading: false, data: action.payload}
-        },
-        [generateAICaptionAction.rejected]: (state) => {
-            state.generateAICaptionReducer = {loading: false}
-        },
+        // [generateAICaptionAction.pending]: (state) => {
+        //     state.generateAICaptionReducer = {loading: true}
+        // },
+        // [generateAICaptionAction.fulfilled]: (state, action) => {
+        //     state.generateAICaptionReducer = {loading: false, data: action.payload}
+        // },
+        // [generateAICaptionAction.rejected]: (state) => {
+        //     state.generateAICaptionReducer = {loading: false}
+        // },
 
         // [createFacebookPostAction.pending]: (state) => {
         //     state.createFacebookPostActionReducer = {loading: true}

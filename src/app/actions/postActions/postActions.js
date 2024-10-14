@@ -1,8 +1,8 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../../auth/auth.js";
-import {showErrorToast, showSuccessToast, showWarningToast} from "../../../features/common/components/Toast.jsx";
+import {setAuthenticationHeader} from "../../auth/auth.js";
+import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 import {baseAxios, isErrorInInstagramMention, objectToQueryString} from "../../../utils/commonUtils";
-import {CouldNotPostComment, SocialAccountProvider, UpdateCommentFailedMsg} from "../../../utils/contantData";
+import {CouldNotPostComment,  UpdateCommentFailedMsg} from "../../../utils/contantData";
 
 export const addCommentOnPostAction = createAsyncThunk('post/addCommentOnPostAction', async (data, thunkAPI) => {
     switch (data?.socialMediaType) {
@@ -367,79 +367,79 @@ export const getPostPageInfoAction = createAsyncThunk('post/getPostPageInfoActio
 // });
 
 
-export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOnSocialMediaAction', async (data, thunkAPI) => {
-
-    const formData = new FormData();
-
-    // Create a FormData object to hold the data.
-    if (data.updatePostRequestDTO.caption !== null && data.updatePostRequestDTO.caption !== "null") {
-        formData.append('caption', data.updatePostRequestDTO.caption);
-    }
-    if (data.updatePostRequestDTO.hashTag !== null && data.updatePostRequestDTO.hashTag !== "null") {
-        formData.append('hashTag', data.updatePostRequestDTO.hashTag);
-    }
-
-    formData.append('boostPost', data.updatePostRequestDTO?.boostPost);
-    formData.append('postStatus', data.updatePostRequestDTO.postStatus);
-
-    if (data.updatePostRequestDTO.scheduledPostDate !== null) {
-        formData.append('scheduledPostDate', data.updatePostRequestDTO.scheduledPostDate);
-    }
-    if (data.updatePostRequestDTO.postPageInfos?.some(pageInfo => pageInfo?.provider === SocialAccountProvider.PINTEREST.toUpperCase())) {
-        formData.append('pinTitle', data.updatePostRequestDTO.pinTitle);
-        formData.append('pinDestinationUrl', data.updatePostRequestDTO.destinationUrl);
-    }
-
-    data.updatePostRequestDTO.postPageInfos.forEach((pageInfo, index) => {
-        formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
-        formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.provider);
-        if (pageInfo?.id !== null) {
-            formData.append(`postPageInfos[${index}].id`, pageInfo?.id);
-        }
-    });
-
-
-    if (data.updatePostRequestDTO.attachments.length > 0) {
-        data.updatePostRequestDTO.attachments.forEach((attachment, index) => {
-            if (attachment?.file !== null && attachment?.file !== "null") {
-                formData.append(`attachments[${index}].file`, attachment?.file);
-                // formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE" : "VIDEO");
-            }
-            if (attachment?.mediaType !== "null" && attachment?.mediaType !== null) {
-                formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
-            }
-            if (attachment?.id !== null) {
-                formData.append(`attachments[${index}].id`, attachment?.id);
-            }
-            if (attachment?.gridFsId !== null) {
-                formData.append(`attachments[${index}].gridFsId`, attachment?.gridFsId);
-            }
-        });
-    }
-
-    return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.id}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
-
-        if (data.updatePostRequestDTO.postStatus === "DRAFT") {
-            showSuccessToast("Post has been put to draft successfully");
-        }
-        if (data.updatePostRequestDTO.postStatus === "SCHEDULED") {
-            showSuccessToast("Post planned successfully");
-        }
-        if (data.updatePostRequestDTO.postStatus === "PUBLISHED") {
-            if (res?.data?.every(c => !c.success)) {
-                showErrorToast("Post encountered with an issue. Currently saved as a draft.");
-            } else if (res?.data?.every(c => c.success)) {
-                showSuccessToast("Post has been successfully shared to the chosen platform.");
-            } else {
-                showWarningToast(`Post successfully on ${res?.data?.filter(c => c.success)?.map(c => c.pageName).join(" , ")} and failed to post on ${res?.data?.filter(c => !c.success)?.map(c => c.pageName).join(" , ")}`)
-            }
-        }
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOnSocialMediaAction', async (data, thunkAPI) => {
+//
+//     const formData = new FormData();
+//
+//     // Create a FormData object to hold the data.
+//     if (data.updatePostRequestDTO.caption !== null && data.updatePostRequestDTO.caption !== "null") {
+//         formData.append('caption', data.updatePostRequestDTO.caption);
+//     }
+//     if (data.updatePostRequestDTO.hashTag !== null && data.updatePostRequestDTO.hashTag !== "null") {
+//         formData.append('hashTag', data.updatePostRequestDTO.hashTag);
+//     }
+//
+//     formData.append('boostPost', data.updatePostRequestDTO?.boostPost);
+//     formData.append('postStatus', data.updatePostRequestDTO.postStatus);
+//
+//     if (data.updatePostRequestDTO.scheduledPostDate !== null) {
+//         formData.append('scheduledPostDate', data.updatePostRequestDTO.scheduledPostDate);
+//     }
+//     if (data.updatePostRequestDTO.postPageInfos?.some(pageInfo => pageInfo?.provider === SocialAccountProvider.PINTEREST.toUpperCase())) {
+//         formData.append('pinTitle', data.updatePostRequestDTO.pinTitle);
+//         formData.append('pinDestinationUrl', data.updatePostRequestDTO.destinationUrl);
+//     }
+//
+//     data.updatePostRequestDTO.postPageInfos.forEach((pageInfo, index) => {
+//         formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
+//         formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.provider);
+//         if (pageInfo?.id !== null) {
+//             formData.append(`postPageInfos[${index}].id`, pageInfo?.id);
+//         }
+//     });
+//
+//
+//     if (data.updatePostRequestDTO.attachments.length > 0) {
+//         data.updatePostRequestDTO.attachments.forEach((attachment, index) => {
+//             if (attachment?.file !== null && attachment?.file !== "null") {
+//                 formData.append(`attachments[${index}].file`, attachment?.file);
+//                 // formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE" : "VIDEO");
+//             }
+//             if (attachment?.mediaType !== "null" && attachment?.mediaType !== null) {
+//                 formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
+//             }
+//             if (attachment?.id !== null) {
+//                 formData.append(`attachments[${index}].id`, attachment?.id);
+//             }
+//             if (attachment?.gridFsId !== null) {
+//                 formData.append(`attachments[${index}].gridFsId`, attachment?.gridFsId);
+//             }
+//         });
+//     }
+//
+//     return await baseAxios.put(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.id}`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
+//
+//         if (data.updatePostRequestDTO.postStatus === "DRAFT") {
+//             showSuccessToast("Post has been put to draft successfully");
+//         }
+//         if (data.updatePostRequestDTO.postStatus === "SCHEDULED") {
+//             showSuccessToast("Post planned successfully");
+//         }
+//         if (data.updatePostRequestDTO.postStatus === "PUBLISHED") {
+//             if (res?.data?.every(c => !c.success)) {
+//                 showErrorToast("Post encountered with an issue. Currently saved as a draft.");
+//             } else if (res?.data?.every(c => c.success)) {
+//                 showSuccessToast("Post has been successfully shared to the chosen platform.");
+//             } else {
+//                 showWarningToast(`Post successfully on ${res?.data?.filter(c => c.success)?.map(c => c.pageName).join(" , ")} and failed to post on ${res?.data?.filter(c => !c.success)?.map(c => c.pageName).join(" , ")}`)
+//             }
+//         }
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
 // export const getPostsByIdAction = createAsyncThunk('post/getPostsByIdAction', async (data, thunkAPI) => {
 //     return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.id}`, setAuthenticationHeader(data.token)).then(res => {
@@ -537,47 +537,47 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
 //     });
 // });
 
-export const generateAIImageAction = createAsyncThunk('post/generateAIImageAction', async (data, thunkAPI) => {
-    return generateAIImageService(data).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.error.message);
-        return thunkAPI.rejectWithValue(error.response);
-    })
-});
+// export const generateAIImageAction = createAsyncThunk('post/generateAIImageAction', async (data, thunkAPI) => {
+//     return generateAIImageService(data).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.error.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     })
+// });
 
-export const generateAICaptionAction = createAsyncThunk('post/generateAICaptionAction', async (data, thunkAPI) => {
-    return generateAICaptionAndHashTagService(data).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.error.message);
-        return thunkAPI.rejectWithValue(error);
-    })
-});
+// export const generateAICaptionAction = createAsyncThunk('post/generateAICaptionAction', async (data, thunkAPI) => {
+//     return generateAICaptionAndHashTagService(data).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.error.message);
+//         return thunkAPI.rejectWithValue(error);
+//     })
+// });
 
-export const generateAIHashTagAction = createAsyncThunk('post/generateAIHashTagAction', async (data, thunkAPI) => {
-    return generateAICaptionAndHashTagService(data).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.error.message);
-        return thunkAPI.rejectWithValue(error.response);
-    })
-});
+// export const generateAIHashTagAction = createAsyncThunk('post/generateAIHashTagAction', async (data, thunkAPI) => {
+//     return generateAICaptionAndHashTagService(data).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.error.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     })
+// });
 
-export const generateAIImageService = async (imageRequestBody) => {
-    const requestBody = {
-        prompt: imageRequestBody.prompt,
-        n: imageRequestBody.noOfImg,
-        size: imageRequestBody.imageSize,
-        response_format: imageRequestBody.response_format
-    }
-    return await baseAxios.post(`${import.meta.env.VITE_APP_AI_GENERATE_IMAGE_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
-}
+// export const generateAIImageService = async (imageRequestBody) => {
+//     const requestBody = {
+//         prompt: imageRequestBody.prompt,
+//         n: imageRequestBody.noOfImg,
+//         size: imageRequestBody.imageSize,
+//         response_format: imageRequestBody.response_format
+//     }
+//     return await baseAxios.post(`${import.meta.env.VITE_APP_AI_GENERATE_IMAGE_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
+// }
 
 
-export const generateAICaptionAndHashTagService = async (requestBody) => {
-    return await baseAxios.post(`${import.meta.env.VITE_APP_AI_GENERATE_CAPTION_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
-}
+// export const generateAICaptionAndHashTagService = async (requestBody) => {
+//     return await baseAxios.post(`${import.meta.env.VITE_APP_AI_GENERATE_CAPTION_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
+// }
 // export const getPostByPageIdAndPostStatus = createAsyncThunk('post/getPostByPageIdAndPostStatus', async (data, thunkAPI) => {
 //     if (data?.insightPostsCache?.getPostByPageIdAndPostStatusDataCache[data?.requestBody?.pageNumber] === undefined) {
 //         return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/byPageAndStatus`, data?.requestBody, setAuthenticationHeader(data.token)).then(res => {

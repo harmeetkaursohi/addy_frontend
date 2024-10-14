@@ -1,22 +1,20 @@
 import Modal from 'react-bootstrap/Modal';
 import './AI_Image.css'
 import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {generateAIImageAction} from "../../../../app/actions/postActions/postActions.js";
 import {base64StringToFile, checkDimensions, isNullOrEmpty} from "../../../../utils/commonUtils";
 import Loader from "../../../loader/Loader";
-import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import { RxCross2 } from 'react-icons/rx';
 import robot_img from "../../../../images/ai_robot.svg"
 import { IoIosCheckmarkCircle } from 'react-icons/io';
+import {useGenerateImageMutation} from "../../../../app/apis/aiApi";
 const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, setFiles}) => {
 
     const handleClose = () => setAIGenerateImageModal(false);
     const [imageName, setImageName] = useState("");
     const [selectedImages, setSelectedImages] = useState([]);
     const [generatedImagesMultipart, setGeneratedImagesMultipart] = useState([]);
-    const dispatch = useDispatch();
-    const generateAIImageData = useSelector(state => state.post.generateAIImageReducer);
+
+    const [generateImage,generateImageApi]=useGenerateImageMutation();
 
     const handleOnSubmit = (e) => {
         e.preventDefault();
@@ -27,13 +25,13 @@ const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, se
             response_format: "b64_json"
         }
 
-        !isNullOrEmpty(imageName) && dispatch(generateAIImageAction(imageRequestBody))
+        !isNullOrEmpty(imageName) && generateImage(imageRequestBody)
     }
 
 
     useEffect(() => {
-        if (generateAIImageData?.data !== null && generateAIImageData?.data !== undefined) {
-            let images = generateAIImageData?.data?.data?.map((imageUrl, index) => {
+        if (generateImageApi?.data !== null && generateImageApi?.data !== undefined) {
+            let images = generateImageApi?.data?.data?.map((imageUrl, index) => {
                 return base64StringToFile(imageUrl?.b64_json, imageName + index + new Date().getTime() + ".jpg", "image/jpeg");
             })
             const dimensionPromises = images?.map((file) => checkDimensions(file));
@@ -47,14 +45,8 @@ const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, se
                 });
 
         }
-    }, [generateAIImageData])
-    useEffect(() => {
-        return () => {
-            dispatch(resetReducers({sliceNames: ["generateAIImageReducer"]}));
-            setGeneratedImagesMultipart([])
-            setSelectedImages([])
-        }
-    }, [])
+    }, [generateImageApi])
+
     const handleSelectImage = (data) => {
         if (selectedImages.includes(data)) {
             const selectedImagesData = [...selectedImages];
@@ -93,14 +85,14 @@ const AI_ImageModal = ({aiGenerateImageModal, setAIGenerateImageModal, files, se
                                            value={imageName}
                                            onChange={(e) => setImageName(e.target.value)}
                                     />
-                                    <button disabled={generateAIImageData?.loading || isNullOrEmpty(imageName)}
+                                    <button disabled={generateImageApi?.isLoading || isNullOrEmpty(imageName)}
                                             className={'generate_btn cmn_white_text' + (isNullOrEmpty(imageName) ? " opacity-50 " : "")}>
                                         {
-                                            generateAIImageData?.loading ?
+                                            generateImageApi?.isLoading ?
                                                 <div className={"loading_txt"}><Loader
                                                     className={"me-2 ai_caption_loading_btn"}/> Loading
                                                 </div> :
-                                                (generateAIImageData?.data === null || generateAIImageData?.data === undefined) ?
+                                                (generateImageApi?.data === null || generateImageApi?.data === undefined) ?
 
                                                     "Generate" : "Regenerate"
 

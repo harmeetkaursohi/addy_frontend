@@ -1,36 +1,26 @@
 import Modal from 'react-bootstrap/Modal';
 import "./AI_Hashtag.css"
 import cross_icon from '../../../../images/cross_icon.svg'
-import {useDispatch, useSelector} from "react-redux";
-import {generateAIHashTagAction} from "../../../../app/actions/postActions/postActions.js";
 import {useEffect, useState} from "react";
-import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import {showInfoToast} from "../../../common/components/Toast";
 import {isNullOrEmpty} from "../../../../utils/commonUtils";
 import Loader from "../../../loader/Loader";
 import { RxCross2 } from 'react-icons/rx';
 import robot_img from "../../../../images/ai_robot.svg"
+import {useGenerateHashtagMutation} from "../../../../app/apis/aiApi";
 
 const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, parentHashTag, setParentHashTag}) => {
 
     const handleClose = () => setAIGenerateHashTagModal(false);
-    const dispatch = useDispatch();
     const [aiGeneratedHashTag, setAiGeneratedHashTag] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [searchContent, setSearchContent] = useState(null);
-    const generateAIHashTagData = useSelector((state) => state.post.generateAIHashTagReducer)
 
-
-    useEffect(() => {
-        return () => {
-            dispatch(resetReducers({sliceNames: ["generateAIHashTagReducer"]}));
-            setAiGeneratedHashTag([]);
-        }
-    }, []);
+    const [generateHashtag, generateCaptionApi] = useGenerateHashtagMutation();
 
     useEffect(() => {
-        if (generateAIHashTagData?.data) {
-            const choices = generateAIHashTagData?.data.choices;
+        if (generateCaptionApi?.data) {
+            const choices = generateCaptionApi?.data.choices;
 
             // Initialize a Set to accumulate the tags and ensure uniqueness
             let accumulatedTagsSet = new Set();
@@ -57,8 +47,7 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
             // Set aiGeneratedHashTag with the accumulated unique tags, limited to 25
             setAiGeneratedHashTag(accumulatedTagsArray.slice(0, 25));
         }
-    }, [generateAIHashTagData]);
-
+    }, [generateCaptionApi]);
 
     const handleHashTagSubmit = (e) => {
         e.preventDefault();
@@ -69,13 +58,12 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
                     {"role": "user", "content": "provide hashtags about " + searchContent}
                 ]
             }
-            dispatch(generateAIHashTagAction(requestBody))
+            generateHashtag(requestBody)
         } else {
             showInfoToast("Describe the hashtag you want to generate!")
         }
 
     }
-
 
     const addOrRemoveHashTag = (e, type, currentValue) => {
         e.preventDefault();
@@ -109,7 +97,6 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
                     setParentHashTag("");
                     setAiGeneratedHashTag([]);
                     setSelectedTags([]);
-                    dispatch(resetReducers({sliceNames: ["generateAIHashTagReducer"]}));
                     break;
                 }
                 default: {
@@ -150,12 +137,13 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
                                     />
 
 
-                                    <button disabled={isNullOrEmpty(searchContent) || generateAIHashTagData?.loading}
+                                    <button disabled={isNullOrEmpty(searchContent) || generateCaptionApi?.isLoading}
                                             className={'generate_btn cmn_white_text ' + (isNullOrEmpty(searchContent) ? " opacity-50" : "")}
                                             onClick={(e) => {
                                                 handleHashTagSubmit(e)
                                             }}>
-                                        {generateAIHashTagData?.loading ?
+                                        {
+                                            generateCaptionApi?.isLoading ?
                                             <div className={"loading_txt"}><Loader className={"me-2 ai_caption_loading_btn"}/> Loading
                                             </div> : aiGeneratedHashTag?.length === 0 ? "Generate" : "Regenerate"
                                         }

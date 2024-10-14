@@ -1,67 +1,48 @@
 import {addyApi} from "../addyApi";
-import {getAuthorizationHeader, handleQueryError} from "../../utils/RTKQueryUtils";
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {showErrorToast} from "../../features/common/components/Toast";
-import {generateAICaptionAndHashTagService} from "../actions/postActions/postActions";
+import {getOpenAIAuthHeader, handleQueryError} from "../../utils/RTKQueryUtils";
 
 
-const baseUrl = `${import.meta.env.VITE_APP_API_BASE_URL}`
 export const aiApi = addyApi.injectEndpoints({
     endpoints: (build) => ({
         generateCaption: build.mutation({
-            query: (userCredentials) => {
-                return {
-                    url: `${baseUrl}/auth/login`,
-                    method: 'POST',
-                    body:userCredentials
-                };
-            },
-            async onQueryStarted(_, {queryFulfilled,}) {
-                await handleQueryError(queryFulfilled)
-            },
-        }),
-        signUp: build.mutation({
             query: (requestBody) => {
                 return {
-                    url: `${baseUrl}/auth/register`,
+                    url: `${import.meta.env.VITE_APP_AI_GENERATE_CAPTION_URL}`,
                     method: 'POST',
-                    body:requestBody,
+                    body: requestBody,
+                    headers: getOpenAIAuthHeader()
                 };
             },
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },
         }),
-        createPassword: build.mutation({
+        generateHashtag: build.mutation({
             query: (requestBody) => {
                 return {
-                    url: `${baseUrl}/auth/reset-password`,
+                    url: `${import.meta.env.VITE_APP_AI_GENERATE_CAPTION_URL}`,
                     method: 'POST',
-                    body:requestBody,
+                    body: requestBody,
+                    headers: getOpenAIAuthHeader()
                 };
             },
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },
         }),
-        forgotPassword: build.mutation({
-            query: (email) => {
-                return {
-                    url: `${baseUrl}/auth/forgot-password?email=${email}`,
-                    method: 'POST',
-                };
-            },
-            async onQueryStarted(_, {queryFulfilled,}) {
-                await handleQueryError(queryFulfilled)
-            },
-        }),
-        updatePassword: build.mutation({
+        generateImage: build.mutation({
             query: (requestBody) => {
+                const body = {
+                    prompt: requestBody.prompt,
+                    n: requestBody.noOfImg,
+                    size: requestBody.imageSize,
+                    response_format: requestBody.response_format
+                }
                 return {
-                    url: `${baseUrl}/auth/password`,
-                    method: 'PUT',
-                    body:requestBody,
-                    headers:getAuthorizationHeader()
+                    url: `${import.meta.env.VITE_APP_AI_GENERATE_IMAGE_URL}`,
+                    method: 'POST',
+                    body: body,
+                    headers: getOpenAIAuthHeader()
                 };
             },
             async onQueryStarted(_, {queryFulfilled,}) {
@@ -71,13 +52,10 @@ export const aiApi = addyApi.injectEndpoints({
     }),
 });
 
-export const generateAICaptionAction = createAsyncThunk('post/generateAICaptionAction', async (data, thunkAPI) => {
-    return generateAICaptionAndHashTagService(data).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.error.message);
-        return thunkAPI.rejectWithValue(error);
-    })
-});
 
-export const {} = aiApi
+
+export const {
+    useGenerateCaptionMutation,
+    useGenerateHashtagMutation,
+    useGenerateImageMutation,
+} = aiApi
