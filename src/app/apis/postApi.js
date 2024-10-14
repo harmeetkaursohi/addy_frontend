@@ -10,13 +10,18 @@ import {
     getSocialMediaPostsByCriteria
 } from "../../services/postToGetService";
 import {showErrorToast, showSuccessToast, showWarningToast} from "../../features/common/components/Toast";
+import {mapCreatePostDataToFormData, mapUpdatePostDataToFormData} from "../../utils/dataFormatterUtils";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {baseAxios} from "../../utils/commonUtils";
+import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../auth/auth";
+import {SocialAccountProvider} from "../../utils/contantData";
 
 
 const baseUrl = `${import.meta.env.VITE_APP_API_BASE_URL}`
 export const postApi = addyApi.injectEndpoints({
     endpoints: (build) => ({
         getSocialMediaPostsByCriteria: build.query({
-            async queryFn (data)  {
+            async queryFn(data) {
                 let result = await getSocialMediaPostsByCriteria(data)
                 return {data: result};
             },
@@ -69,7 +74,7 @@ export const postApi = addyApi.injectEndpoints({
                 };
             },
             async onQueryStarted(_, {queryFulfilled,}) {
-                queryFulfilled.then(res=>{
+                queryFulfilled.then(res => {
                     if (res?.data?.every(c => !c.success)) {
                         showErrorToast("Post encountered with an issue. Currently saved as a draft.");
                     } else if (res?.data?.every(c => c.success)) {
@@ -81,8 +86,40 @@ export const postApi = addyApi.injectEndpoints({
                 await handleQueryError(queryFulfilled)
             },
         }),
+        createPost: build.mutation({
+            query: (requestBody) => {
+                const formData = mapCreatePostDataToFormData(requestBody)
+                return {
+                    url: `${baseUrl}/posts`,
+                    method: 'POST',
+                    body: formData,
+                    headers: getAuthorizationHeader(),
+                };
+            },
+            invalidatesTags:["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi","getPostDataWithInsightsApi"],
+            async onQueryStarted(requestBody, {queryFulfilled,}) {
+                queryFulfilled.then(res => {
+                    if (requestBody.postStatus === "DRAFT") {
+                        showSuccessToast("Post has been put to draft successfully");
+                    }
+                    if (requestBody.postStatus === "SCHEDULED") {
+                        showSuccessToast("Post planned successfully");
+                    }
+                    if (requestBody.postStatus === "PUBLISHED") {
+                        if (res?.data?.every(response => !response.success)) {
+                            showErrorToast("Post encountered with an issue. Currently saved as a draft.");
+                        } else if (res?.data?.every(response => response.success)) {
+                            showSuccessToast("Post has been successfully shared to the chosen platform.");
+                        } else {
+                            showWarningToast(`Post successfully on ${res?.data?.filter(response => response.success)?.map(res => res.pageName).join(" , ")} and failed to post on ${res?.data?.filter(response => !response.success)?.map(res => res.pageName).join(" , ")}`)
+                        }
+                    }
+                })
+                await handleQueryError(queryFulfilled)
+            },
+        }),
         getPublishedPosts: build.query({
-            async queryFn (data) {
+            async queryFn(data) {
                 let result = await getPublishedPosts(data)
                 return {data: result};
             },
@@ -92,15 +129,59 @@ export const postApi = addyApi.injectEndpoints({
             },
         }),
         getPostByPageIdAndPostStatus: build.query({
-            async queryFn (data) {
+            async queryFn(data) {
                 let result = await getPostByPageIdAndPostStatus(data)
                 return {data: result};
             },
             providesTags: ["getPostByPageIdAndPostStatusApi"],
         }),
+        getPostsById: build.query({
+            query:(id)=> {
+                return {
+                    url: `${baseUrl}/posts/${id}`,
+                    method: 'GET',
+                    headers:getAuthorizationHeader()
+                };
+            },
+            providesTags: ["getPostsByIdApi"],
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
+        updatePostById: build.mutation({
+            query:(requestBody)=> {
+                const formData= mapUpdatePostDataToFormData(requestBody)
+                return {
+                    url: `${baseUrl}/posts/${requestBody?.id}`,
+                    method: 'PUT',
+                    headers:getAuthorizationHeader(),
+                    body:formData
+                };
+            },
+            invalidatesTags:["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi","getPostDataWithInsightsApi"],
+            async onQueryStarted(requestBody, {queryFulfilled,}) {
+                queryFulfilled.then(res => {
+                    if (requestBody.updatePostRequestDTO.postStatus === "DRAFT") {
+                        showSuccessToast("Post has been put to draft successfully");
+                    }
+                    if (requestBody.updatePostRequestDTO.postStatus === "SCHEDULED") {
+                        showSuccessToast("Post planned successfully");
+                    }
+                    if (requestBody.updatePostRequestDTO.postStatus === "PUBLISHED") {
+                        if (res?.data?.every(c => !c.success)) {
+                            showErrorToast("Post encountered with an issue. Currently saved as a draft.");
+                        } else if (res?.data?.every(c => c.success)) {
+                            showSuccessToast("Post has been successfully shared to the chosen platform.");
+                        } else {
+                            showWarningToast(`Post successfully on ${res?.data?.filter(c => c.success)?.map(c => c.pageName).join(" , ")} and failed to post on ${res?.data?.filter(c => !c.success)?.map(c => c.pageName).join(" , ")}`)
+                        }
+                    }
+                })
+                await handleQueryError(queryFulfilled)
+            },
+        }),
     }),
 });
-
 
 
 export const {
@@ -112,4 +193,7 @@ export const {
     useDeletePostByIdMutation,
     useDeletePostFromPagesByPageIdsMutation,
     usePublishedPostByIdMutation,
+    useCreatePostMutation,
+    useGetPostsByIdQuery,
+    useUpdatePostByIdMutation,
 } = postApi

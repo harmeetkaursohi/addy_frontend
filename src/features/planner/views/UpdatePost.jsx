@@ -1,18 +1,15 @@
 import './CreatePost.css'
-import ai_icon from '../../../images/ai_icon.svg'
 import jsondata from '../../../locales/data/initialdata.json'
 import React, {useEffect, useState} from "react";
 import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
 import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
-import {useDispatch, useSelector} from "react-redux";
-import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
+import {useDispatch} from "react-redux";
 import {Dropdown} from 'react-bootstrap'
 import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
-import {getPostsByIdAction, updatePostOnSocialMediaAction} from "../../../app/actions/postActions/postActions.js";
 import {RiDeleteBin5Fill} from "react-icons/ri";
 import {useNavigate, useParams} from "react-router-dom";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
@@ -22,29 +19,33 @@ import {
     convertSentenceToHashtags,
     convertToUnixTimestamp, convertUnixTimestampToDateTime,
     getEnumValue, getFileFromAttachmentSource, getVideoDurationById,
-    groupByKey, isCreatePostRequestValid, isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
+    groupByKey,  isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import {showErrorToast} from "../../common/components/Toast";
-import {resetReducers} from "../../../app/actions/commonActions/commonActions";
 import default_user_icon from "../../../images/default_user_icon.svg";
 import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantData";
 import Loader from '../../loader/Loader.jsx';
-
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import {useAppContext} from '../../common/components/AppProvider.jsx';
 import {AiOutlineEye} from 'react-icons/ai';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 import {useGetUserInfoQuery} from "../../../app/apis/userApi";
+import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+import {useGetPostsByIdQuery, useUpdatePostByIdMutation} from "../../../app/apis/postApi";
+import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
+import {addyApi} from "../../../app/addyApi";
 
 const UpdatePost = () => {
 
         const dispatch = useDispatch();
         const navigate = useNavigate();
-        const token = getToken();
         const {id} = useParams();
 
         const {data: userData} = useGetUserInfoQuery("")
+        const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+        const postsByIdApi = useGetPostsByIdQuery(id, {skip: isNullOrEmpty(id)})
+        const [updatePostById, updatePostByIdApi] = useUpdatePostByIdMutation()
 
         const [aiGenerateImageModal, setAIGenerateImageModal] = useState(false);
         const [aiGenerateCaptionModal, setAIGenerateCaptionModal] = useState(false);
@@ -74,23 +75,12 @@ const UpdatePost = () => {
         const [selectedGroups, setSelectedGroups] = useState([]);
         const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
 
-        const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
-        const getPostsByIdData = useSelector(state => state.post.getPostsByIdReducer?.data);
-        const loadingUpdatePost = useSelector(state => state.post.updatePostOnSocialMediaReducer.loading);
-
         const [videoFile, setVideoFile] = useState(null)
         const [videoBlob, setVideoBlob] = useState(null)
         const [trimmedVideoUrl, setTrimmedVideoUrl] = useState()
 
-        const loader = useSelector(state => state.post.getPostsByIdReducer?.loading)
-
         const {sidebar} = useAppContext()
 
-        useEffect(() => {
-            return () => {
-                dispatch(resetReducers({sliceNames: ["getPostsByIdReducer"]}))
-            }
-        }, []);
 
         useEffect(() => {
             if (files && files.length <= 0) {
@@ -107,14 +97,10 @@ const UpdatePost = () => {
             }
         }, []);
 
-        useEffect(() => {
-            const userInfo = decodeJwtToken(token);
-            dispatch(getAllByCustomerIdAction({token: token, customerId: userInfo?.customerId}));
-        }, []);
 
         useEffect(() => {
-            if (socialAccounts) {
-                const filteredSocialMediaData = socialAccounts.filter((account) => {
+            if (getConnectedSocialAccountApi?.data) {
+                const filteredSocialMediaData = getConnectedSocialAccountApi?.data.filter((account) => {
                     switch (account.provider) {
                         case "FACEBOOK":
                             return enabledSocialMedia?.isFacebookEnabled;
@@ -130,7 +116,7 @@ const UpdatePost = () => {
                 });
                 setSocialAccountData(filteredSocialMediaData);
             }
-        }, [socialAccounts]);
+        }, [getConnectedSocialAccountApi?.data]);
 
         // Create all Options
         useEffect(() => {
@@ -161,53 +147,49 @@ const UpdatePost = () => {
             }
         }, [socialAccountData, selectedOptions])
 
-        useEffect(() => {
-            if (id) {
-                dispatch(getPostsByIdAction({id: id, token: token}))
-            }
-        }, [id]);
 
         useEffect(() => {
-            if (getPostsByIdData && Object.keys(getPostsByIdData).length > 0) {
-                if (getPostsByIdData.scheduledPostDate) {
-                    setScheduleDate(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.date)
-                    setScheduleTime(convertUnixTimestampToDateTime(getPostsByIdData.scheduledPostDate)?.time)
+            if (postsByIdApi?.data && Object.keys(postsByIdApi?.data).length > 0) {
+                const postData = postsByIdApi?.data
+                if (postData.scheduledPostDate) {
+                    setScheduleDate(convertUnixTimestampToDateTime(postData.scheduledPostDate)?.date)
+                    setScheduleTime(convertUnixTimestampToDateTime(postData.scheduledPostDate)?.time)
                 }
-                setSelectedOptions(getPostsByIdData?.postPageInfos?.map(c => c.pageId) || []);
+                setSelectedOptions(postData?.postPageInfos?.map(c => c.pageId) || []);
 
-                setCaption(getPostsByIdData?.caption || "");
-                setPinTitle(getPostsByIdData?.pinTitle || "");
-                setPinDestinationUrl(getPostsByIdData?.pinDestinationUrl || "");
-                setHashTag(getPostsByIdData?.hashTag || "");
-                setPostStatus(getPostsByIdData?.postStatus)
-                setFiles(getPostsByIdData?.attachments || []);
+                setCaption(postData?.caption || "");
+                setPinTitle(postData?.pinTitle || "");
+                setPinDestinationUrl(postData?.pinDestinationUrl || "");
+                setHashTag(postData?.hashTag || "");
+                setPostStatus(postData?.postStatus)
+                setFiles(postData?.attachments || []);
             }
-        }, [allOptions, getPostsByIdData]);
+        }, [allOptions, postsByIdApi?.data]);
 
         useEffect(() => {
-            if (getPostsByIdData && Object.keys(getPostsByIdData).length > 0 && getPostsByIdData?.attachments?.length > 0) {
-                if (getPostsByIdData?.attachments[0]?.mediaType === "IMAGE") {
-                    Promise.all(getPostsByIdData?.attachments?.map(attachment => getFileFromAttachmentSource(attachment)))
+            if (postsByIdApi?.data && Object.keys(postsByIdApi?.data).length > 0 && postsByIdApi?.data?.attachments?.length > 0) {
+                if (postsByIdApi?.data?.attachments[0]?.mediaType === "IMAGE") {
+                    Promise.all(postsByIdApi?.data?.attachments?.map(attachment => getFileFromAttachmentSource(attachment)))
                         .then((results) => {
                             setOldAttachmentsFileObject(results);
                         })
 
                 }
-                if (getPostsByIdData?.attachments[0]?.mediaType === "VIDEO") {
-                    getVideoDurationById(getPostsByIdData?.attachments[0]?.id).then(res => {
+                if (postsByIdApi?.data?.attachments[0]?.mediaType === "VIDEO") {
+                    getVideoDurationById(postsByIdApi?.data?.attachments[0]?.id).then(res => {
                         setOldAttachmentsFileObject([{
-                            id: getPostsByIdData?.attachments[0]?.id,
+                            id: postsByIdApi?.data?.attachments[0]?.id,
                             mediaType: "VIDEO",
-                            fileName: getPostsByIdData?.attachments[0]?.fileName,
+                            fileName: postsByIdApi?.data?.attachments[0]?.fileName,
                             duration: res.duration,
-                            fileSize: getPostsByIdData?.attachments[0]?.fileSize
+                            fileSize: postsByIdApi?.data?.attachments[0]?.fileSize
                         }]);
                     });
                 }
 
             }
 
-        }, [getPostsByIdData])
+        }, [postsByIdApi?.data])
 
 
         useEffect(() => {
@@ -323,9 +305,8 @@ const UpdatePost = () => {
                 });
         }
 
-        const updatePost = (e, postStatus, scheduleDate, scheduleTime) => {
+        const updatePost = async (e, postStatus, scheduleDate, scheduleTime) => {
                 e.preventDefault();
-                const userInfo = decodeJwtToken(token);
                 const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
                 if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
 
@@ -339,15 +320,12 @@ const UpdatePost = () => {
                         return;
                     }
                 }
-
                 const requestBody = {
-                    token: token,
-                    customerId: userInfo?.customerId,
                     id: id,
                     updatePostRequestDTO: {
                         postPageInfos: selectedOptions?.map((obj) => ({
                             pageId: obj,
-                            id: getPostsByIdData.postPageInfos && getPostsByIdData.postPageInfos?.find(c => c.pageId === obj)?.id || null,
+                            id: postsByIdApi?.data.postPageInfos && postsByIdApi?.data.postPageInfos?.find(c => c.pageId === obj)?.id || null,
                             provider: selectedAllDropdownData?.find(c => c?.selectOption?.pageId === obj)?.group || null
                         })),
                         caption: isNullOrEmpty(caption) ? "" : caption.toString().trim(),
@@ -366,13 +344,17 @@ const UpdatePost = () => {
                         scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
                 };
-                (postStatus !== 'DRAFT' ? isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject) : true) && dispatch(updatePostOnSocialMediaAction(requestBody)).then((response) => {
-                    if (response.meta.requestStatus === "fulfilled") {
+                await handleRTKQuery(
+                    async () => {
+                        if (postStatus === "DRAFT" || isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files,oldAttachmentsFileObject)) {
+                            return await updatePostById(requestBody).unwrap();
+                        }
+                    },
+                    () => {
                         navigate("/planner");
+                        dispatch(addyApi.util.invalidateTags("getPostsByIdApi"));
                     }
-                }).catch((error) => {
-                    showErrorToast(error.response.data.message);
-                });
+                );
 
             }
         ;
@@ -649,7 +631,10 @@ const UpdatePost = () => {
                                                         <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
 
 
-                                                        {loader && <div className='text-center mt-4'><Loader/></div>}
+                                                        {
+                                                            (postsByIdApi?.isLoading || postsByIdApi?.isFetching) &&
+                                                            <div className='text-center mt-4'><Loader/></div>
+                                                        }
 
                                                         <div className="drag_scroll ">
                                                             {files?.map((file, index) => {
@@ -888,7 +873,7 @@ const UpdatePost = () => {
                                                                                  }}
 
                                                                                  className={"cmn_bg_btn schedule_btn loading"}
-                                                                                 isLoading={reference === "Scheduled" && loadingUpdatePost}/>
+                                                                                 isLoading={reference === "Scheduled" && updatePostByIdApi?.isLoading}/>
 
                                                         {/* <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                                  onClick={(e) => {
@@ -897,7 +882,7 @@ const UpdatePost = () => {
                                                                                  }}
 
                                                                                  className={"save_btn cmn_bg_btn loading"}
-                                                                                 isLoading={reference === "Draft" && loadingUpdatePost}/> */}
+                                                                                 isLoading={reference === "Draft" && updatePostByIdApi?.isLoading}/> */}
                                                     </div>
                                                 </div>
 
@@ -1006,7 +991,7 @@ const UpdatePost = () => {
                                                          }}
 
                                                          className={"save_btn cmn_bg_btn loading"}
-                                                         isLoading={reference === "Draft" && loadingUpdatePost}/>
+                                                         isLoading={reference === "Draft" && updatePostByIdApi?.isLoading}/>
 
                                 <GenericButtonWithLoader label={jsondata.publishnow}
                                                          onClick={(e) => {
@@ -1015,7 +1000,7 @@ const UpdatePost = () => {
                                                          }}
                                                          isDisabled={false}
                                                          className={"publish_btn cmn_bg_btn loading"}
-                                                         isLoading={reference === "Published" && loadingUpdatePost}/>
+                                                         isLoading={reference === "Published" && updatePostByIdApi?.isLoading}/>
                             </div>
                         </div>
                     </div>

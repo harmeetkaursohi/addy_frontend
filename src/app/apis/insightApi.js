@@ -265,6 +265,7 @@ export const insightApi = addyApi.injectEndpoints({
                 }
                 return {data: result};
             },
+            providesTags:["getPostDataWithInsightsApi"],
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },

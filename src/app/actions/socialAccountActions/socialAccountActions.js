@@ -1,16 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {showErrorToast} from "../../../features/common/components/Toast.jsx";
 import {setAuthenticationHeader} from "../../auth/auth.js";
-import {
-    getDashBoardFacebookGraphReport,
-} from "../../../services/facebookService";
-import {
-    getDashBoardInstagramGraphReport,
-} from "../../../services/instagramService";
-import { getInstagramBusinessAccounts} from "../../../utils/dataFormatterUtils";
 import {baseAxios} from "../../../utils/commonUtils";
-import {getDashBoardPinterestGraphReport} from "../../../services/pinterestService";
-import {getDashBoardLinkedinGraphReport} from "../../../services/linkedinService";
 
 
 // export const socialAccountConnectActions = createAsyncThunk('socialAccount/socialAccountConnectActions', async (data, thunkAPI) => {
@@ -160,20 +151,20 @@ import {getDashBoardLinkedinGraphReport} from "../../../services/linkedinService
 // });
 
 
-export const findSocialAccountByProviderAndCustomerIdAction = createAsyncThunk('socialAccount/findSocialAccountByProviderAndCustomerIdAction', async (data, thunkAPI) => {
-    return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/findSocialAccountByProviderAndCustomerId/${data.customerId}?provider=${data.provider}`, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const findSocialAccountByProviderAndCustomerIdAction = createAsyncThunk('socialAccount/findSocialAccountByProviderAndCustomerIdAction', async (data, thunkAPI) => {
+//     return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account/findSocialAccountByProviderAndCustomerId/${data.customerId}?provider=${data.provider}`, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
-export const getAllByCustomerIdAction = createAsyncThunk('socialAccount/getAllByCustomerIdAction', async (data, thunkAPI) => {
-    return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account`, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const getAllByCustomerIdAction = createAsyncThunk('socialAccount/getAllByCustomerIdAction', async (data, thunkAPI) => {
+//     return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/social-account`, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });

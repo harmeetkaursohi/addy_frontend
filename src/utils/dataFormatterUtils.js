@@ -548,3 +548,76 @@ export const getFormattedDataForPostEngagementGraph = (data, socialMediaType) =>
     }
 
 }
+
+export const mapCreatePostDataToFormData=(data)=>{
+    const formData = new FormData();
+    if (data.caption !== null && data.caption !== "null") {
+        formData.append('caption', data.caption);
+    }
+    if (data.hashTag !== null && data.hashTag !== "null") {
+        formData.append('hashTag', data.hashTag);
+    }
+    if (data.postPageInfos?.some(pageInfo => pageInfo?.provider === SocialAccountProvider.PINTEREST.toUpperCase())) {
+        formData.append('pinTitle', data.pinTitle);
+        formData.append('pinDestinationUrl', data.destinationUrl);
+    }
+    formData.append('boostPost', data?.boostPost);
+    formData.append('postStatus', data.postStatus);
+    if (data.scheduledPostDate) {
+        formData.append('scheduledPostDate', data.scheduledPostDate);
+    }
+    data.postPageInfos.forEach((pageInfo, index) => {
+        formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
+        formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.provider);
+    });
+    // Loop through the attachments array and append each attachment's data.
+    data.attachments.forEach((attachment, index) => {
+        formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
+        formData.append(`attachments[${index}].file`, attachment?.file);
+    });
+    return formData;
+}
+
+export const mapUpdatePostDataToFormData=(data)=>{
+    const formData = new FormData();
+    if (data.updatePostRequestDTO.caption !== null && data.updatePostRequestDTO.caption !== "null") {
+        formData.append('caption', data.updatePostRequestDTO.caption);
+    }
+    if (data.updatePostRequestDTO.hashTag !== null && data.updatePostRequestDTO.hashTag !== "null") {
+        formData.append('hashTag', data.updatePostRequestDTO.hashTag);
+    }
+    formData.append('boostPost', data.updatePostRequestDTO?.boostPost);
+    formData.append('postStatus', data.updatePostRequestDTO.postStatus);
+    if (data.updatePostRequestDTO.scheduledPostDate !== null) {
+        formData.append('scheduledPostDate', data.updatePostRequestDTO.scheduledPostDate);
+    }
+    if (data.updatePostRequestDTO.postPageInfos?.some(pageInfo => pageInfo?.provider === SocialAccountProvider.PINTEREST.toUpperCase())) {
+        formData.append('pinTitle', data.updatePostRequestDTO.pinTitle);
+        formData.append('pinDestinationUrl', data.updatePostRequestDTO.destinationUrl);
+    }
+    data.updatePostRequestDTO.postPageInfos.forEach((pageInfo, index) => {
+        formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
+        formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.provider);
+        if (pageInfo?.id !== null) {
+            formData.append(`postPageInfos[${index}].id`, pageInfo?.id);
+        }
+    });
+    if (data.updatePostRequestDTO.attachments.length > 0) {
+        data.updatePostRequestDTO.attachments.forEach((attachment, index) => {
+            if (attachment?.file !== null && attachment?.file !== "null") {
+                formData.append(`attachments[${index}].file`, attachment?.file);
+                // formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE" : "VIDEO");
+            }
+            if (attachment?.mediaType !== "null" && attachment?.mediaType !== null) {
+                formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
+            }
+            if (attachment?.id !== null) {
+                formData.append(`attachments[${index}].id`, attachment?.id);
+            }
+            if (attachment?.gridFsId !== null) {
+                formData.append(`attachments[${index}].gridFsId`, attachment?.gridFsId);
+            }
+        });
+    }
+    return formData;
+}

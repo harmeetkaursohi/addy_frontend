@@ -3,7 +3,7 @@ import userSlice from "../slices/userSlice/userSlice.js";
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import facebookSlice from "../slices/facebookSlice/facebookSlice.js";
-import socialAccountSlice from "../slices/socialAccountSlice/socialAccountSlice.js";
+// import socialAccountSlice from "../slices/socialAccountSlice/socialAccountSlice.js";
 import postSlice from "../slices/postSlice/postSlice.js";
 import insightSlice from "../slices/insightSlice/insightSlice";
 import notificationSlice from "../slices/notificationSlice/notificationSlice";
@@ -19,7 +19,7 @@ const rootReducers = combineReducers({
     // user: userSlice,
     facebook: facebookSlice,
     pageAccessToken: pageAccessTokenSlice,
-    socialAccount: socialAccountSlice,
+    // socialAccount: socialAccountSlice,
     post: postSlice,
     insight: insightSlice,
     // web: webSlice,

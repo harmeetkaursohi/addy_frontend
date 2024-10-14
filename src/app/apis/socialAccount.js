@@ -1,7 +1,7 @@
 import {addyApi} from "../addyApi";
 import {getAuthorizationHeader, handleQueryError} from "../../utils/RTKQueryUtils";
 import {showErrorToast} from "../../features/common/components/Toast";
-import {baseAxios, cleanAndValidateRequestURL} from "../../utils/commonUtils";
+import { cleanAndValidateRequestURL} from "../../utils/commonUtils";
 import {  getInstagramBusinessAccounts} from "../../utils/dataFormatterUtils";
 import {exchangeForLongLivedToken, getPageFullInfoByPageAccessToken} from "../../services/facebookService";
 import {SocialAccountProvider} from "../../utils/contantData";

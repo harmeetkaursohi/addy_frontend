@@ -3,9 +3,9 @@ import {
     generateAIImageAction,
     generateAIHashTagAction,
     generateAICaptionAction,
-    createFacebookPostAction,
+    // createFacebookPostAction,
     // getAllPostsForPlannerAction,
-    getPostsByIdAction,
+    // getPostsByIdAction,
     updatePostOnSocialMediaAction,
     // getPlannerPostCountAction,
     // deletePostByBatchIdAction,
@@ -21,7 +21,7 @@ import {
     getCommentsOnPostAction,
     deleteCommentsOnPostAction,
     updateCommentsOnPostAction,
-    getPostByPageIdAndPostStatus,
+    // getPostByPageIdAndPostStatus,
     getRepliesOnComment,
     // deletePostFromPage
 } from "../../actions/postActions/postActions.js";
@@ -33,9 +33,9 @@ const postSlice = createSlice({
         generateAIImageReducer: {loading: false},
         generateAIHashTagReducer: {loading: false},
         generateAICaptionReducer: {loading: false},
-        createFacebookPostActionReducer: {loading: false},
+        // createFacebookPostActionReducer: {loading: false},
         // getAllPostsForPlannerReducer: {loading: false},
-        getPostsByIdReducer: {loading: false},
+        // getPostsByIdReducer: {loading: false},
         updatePostOnSocialMediaReducer: {loading: false},
         // getPlannerPostCountReportReducer: {loading: false},
         // getAllDraftPostsByCustomerAndPeriodReducer: {loading: false},
@@ -51,7 +51,7 @@ const postSlice = createSlice({
         deleteCommentsOnPostActionReducer: {loading: false},
         updateCommentsOnPostActionReducer:{loading: false},
         replyCommentOnPostActionReducer:{loading: false},
-        getPostByPageIdAndPostStatusReducer:{loading: false},
+        // getPostByPageIdAndPostStatusReducer:{loading: false},
         getRepliesOnCommentReducer:{loading: false},
         // deletePostFromPageReducer:{loading: false},
     },
@@ -218,15 +218,15 @@ const postSlice = createSlice({
         },
 
         //get all posts by batch id
-        [getPostsByIdAction.pending]: (state) => {
-            state.getPostsByIdReducer = {loading: true}
-        },
-        [getPostsByIdAction.fulfilled]: (state, action) => {
-            state.getPostsByIdReducer = {loading: false, data: action.payload}
-        },
-        [getPostsByIdAction.rejected]: (state) => {
-            state.getPostsByIdReducer = {loading: false}
-        },
+        // [getPostsByIdAction.pending]: (state) => {
+        //     state.getPostsByIdReducer = {loading: true}
+        // },
+        // [getPostsByIdAction.fulfilled]: (state, action) => {
+        //     state.getPostsByIdReducer = {loading: false, data: action.payload}
+        // },
+        // [getPostsByIdAction.rejected]: (state) => {
+        //     state.getPostsByIdReducer = {loading: false}
+        // },
 
         //get all posts for planner
         // [getAllPostsForPlannerAction.pending]: (state) => {
@@ -293,15 +293,15 @@ const postSlice = createSlice({
             state.generateAICaptionReducer = {loading: false}
         },
 
-        [createFacebookPostAction.pending]: (state) => {
-            state.createFacebookPostActionReducer = {loading: true}
-        },
-        [createFacebookPostAction.fulfilled]: (state) => {
-            state.createFacebookPostActionReducer = {loading: false}
-        },
-        [createFacebookPostAction.rejected]: (state) => {
-            state.createFacebookPostActionReducer = {loading: false}
-        },
+        // [createFacebookPostAction.pending]: (state) => {
+        //     state.createFacebookPostActionReducer = {loading: true}
+        // },
+        // [createFacebookPostAction.fulfilled]: (state) => {
+        //     state.createFacebookPostActionReducer = {loading: false}
+        // },
+        // [createFacebookPostAction.rejected]: (state) => {
+        //     state.createFacebookPostActionReducer = {loading: false}
+        // },
 
         [replyCommentOnPostAction.pending]: (state) => {
             state.replyCommentOnPostActionReducer = {loading: true}
@@ -312,15 +312,15 @@ const postSlice = createSlice({
         [replyCommentOnPostAction.rejected]: (state) => {
             state.replyCommentOnPostActionReducer = {loading: false}
         },
-        [getPostByPageIdAndPostStatus.pending]: (state) => {
-            state.getPostByPageIdAndPostStatusReducer = {loading: true}
-        },
-        [getPostByPageIdAndPostStatus.fulfilled]: (state,action) => {
-            state.getPostByPageIdAndPostStatusReducer = {loading: false,data: action.payload}
-        },
-        [getPostByPageIdAndPostStatus.rejected]: (state) => {
-            state.getPostByPageIdAndPostStatusReducer = {loading: false}
-        },
+        // [getPostByPageIdAndPostStatus.pending]: (state) => {
+        //     state.getPostByPageIdAndPostStatusReducer = {loading: true}
+        // },
+        // [getPostByPageIdAndPostStatus.fulfilled]: (state,action) => {
+        //     state.getPostByPageIdAndPostStatusReducer = {loading: false,data: action.payload}
+        // },
+        // [getPostByPageIdAndPostStatus.rejected]: (state) => {
+        //     state.getPostByPageIdAndPostStatusReducer = {loading: false}
+        // },
 
 
     }

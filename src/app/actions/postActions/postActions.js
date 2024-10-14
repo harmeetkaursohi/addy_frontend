@@ -371,8 +371,6 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
 
     const formData = new FormData();
 
-    console.log("updatePostRequestDTO---->", data);
-
     // Create a FormData object to hold the data.
     if (data.updatePostRequestDTO.caption !== null && data.updatePostRequestDTO.caption !== "null") {
         formData.append('caption', data.updatePostRequestDTO.caption);
@@ -406,7 +404,6 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
             if (attachment?.file !== null && attachment?.file !== "null") {
                 formData.append(`attachments[${index}].file`, attachment?.file);
                 // formData.append(`attachments[${index}].mediaType`, attachment?.file.type.includes("image") ? "IMAGE" : "VIDEO");
-
             }
             if (attachment?.mediaType !== "null" && attachment?.mediaType !== null) {
                 formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
@@ -444,14 +441,14 @@ export const updatePostOnSocialMediaAction = createAsyncThunk('post/updatePostOn
     });
 });
 
-export const getPostsByIdAction = createAsyncThunk('post/getPostsByIdAction', async (data, thunkAPI) => {
-    return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.id}`, setAuthenticationHeader(data.token)).then(res => {
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const getPostsByIdAction = createAsyncThunk('post/getPostsByIdAction', async (data, thunkAPI) => {
+//     return await baseAxios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/${data.id}`, setAuthenticationHeader(data.token)).then(res => {
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
 // export const getAllPostsForPlannerAction = createAsyncThunk('post/getAllPostsForPlannerAction', async (data, thunkAPI) => {
 //     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/planner`, data?.query, setAuthenticationHeader(data.token)).then(res => {
@@ -482,63 +479,63 @@ export const getPostsByIdAction = createAsyncThunk('post/getPostsByIdAction', as
 // });
 
 
-export const createFacebookPostAction = createAsyncThunk('post/createFacebookPostAction', async (data, thunkAPI) => {
-
-    const formData = new FormData();
-
-    // Create a FormData object to hold the data.
-    if (data.postRequestDto.caption !== null && data.postRequestDto.caption !== "null") {
-        formData.append('caption', data.postRequestDto.caption);
-    }
-    if (data.postRequestDto.hashTag !== null && data.postRequestDto.hashTag !== "null") {
-        formData.append('hashTag', data.postRequestDto.hashTag);
-    }
-    if (data.postRequestDto.postPageInfos?.some(pageInfo => pageInfo?.provider === SocialAccountProvider.PINTEREST.toUpperCase())) {
-        formData.append('pinTitle', data.postRequestDto.pinTitle);
-        formData.append('pinDestinationUrl', data.postRequestDto.destinationUrl);
-    }
-
-    formData.append('boostPost', data.postRequestDto?.boostPost);
-    formData.append('postStatus', data.postRequestDto.postStatus);
-
-    if (data.postRequestDto.scheduledPostDate) {
-        formData.append('scheduledPostDate', data.postRequestDto.scheduledPostDate);
-    }
-
-    data.postRequestDto.postPageInfos.forEach((pageInfo, index) => {
-        formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
-        formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.provider);
-    });
-
-
-    // Loop through the attachments array and append each attachment's data.
-    data.postRequestDto.attachments.forEach((attachment, index) => {
-        formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
-        formData.append(`attachments[${index}].file`, attachment?.file);
-    });
-
-    return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
-        if (data.postRequestDto.postStatus === "DRAFT") {
-            showSuccessToast("Post has been put to draft successfully");
-        }
-        if (data.postRequestDto.postStatus === "SCHEDULED") {
-            showSuccessToast("Post planned successfully");
-        }
-        if (data.postRequestDto.postStatus === "PUBLISHED") {
-            if (res?.data?.every(response => !response.success)) {
-                showErrorToast("Post encountered with an issue. Currently saved as a draft.");
-            } else if (res?.data?.every(response => response.success)) {
-                showSuccessToast("Post has been successfully shared to the chosen platform.");
-            } else {
-                showWarningToast(`Post successfully on ${res?.data?.filter(response => response.success)?.map(res => res.pageName).join(" , ")} and failed to post on ${res?.data?.filter(response => !response.success)?.map(res => res.pageName).join(" , ")}`)
-            }
-        }
-        return res.data;
-    }).catch(error => {
-        showErrorToast(error.response.data.message);
-        return thunkAPI.rejectWithValue(error.response);
-    });
-});
+// export const createFacebookPostAction = createAsyncThunk('post/createFacebookPostAction', async (data, thunkAPI) => {
+//
+//     const formData = new FormData();
+//
+//     // Create a FormData object to hold the data.
+//     if (data.postRequestDto.caption !== null && data.postRequestDto.caption !== "null") {
+//         formData.append('caption', data.postRequestDto.caption);
+//     }
+//     if (data.postRequestDto.hashTag !== null && data.postRequestDto.hashTag !== "null") {
+//         formData.append('hashTag', data.postRequestDto.hashTag);
+//     }
+//     if (data.postRequestDto.postPageInfos?.some(pageInfo => pageInfo?.provider === SocialAccountProvider.PINTEREST.toUpperCase())) {
+//         formData.append('pinTitle', data.postRequestDto.pinTitle);
+//         formData.append('pinDestinationUrl', data.postRequestDto.destinationUrl);
+//     }
+//
+//     formData.append('boostPost', data.postRequestDto?.boostPost);
+//     formData.append('postStatus', data.postRequestDto.postStatus);
+//
+//     if (data.postRequestDto.scheduledPostDate) {
+//         formData.append('scheduledPostDate', data.postRequestDto.scheduledPostDate);
+//     }
+//
+//     data.postRequestDto.postPageInfos.forEach((pageInfo, index) => {
+//         formData.append(`postPageInfos[${index}].pageId`, pageInfo?.pageId);
+//         formData.append(`postPageInfos[${index}].socialMediaType`, pageInfo?.provider);
+//     });
+//
+//
+//     // Loop through the attachments array and append each attachment's data.
+//     data.postRequestDto.attachments.forEach((attachment, index) => {
+//         formData.append(`attachments[${index}].mediaType`, attachment?.mediaType);
+//         formData.append(`attachments[${index}].file`, attachment?.file);
+//     });
+//
+//     return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts`, formData, setAuthenticationHeaderWithMultipart(data.token)).then(res => {
+//         if (data.postRequestDto.postStatus === "DRAFT") {
+//             showSuccessToast("Post has been put to draft successfully");
+//         }
+//         if (data.postRequestDto.postStatus === "SCHEDULED") {
+//             showSuccessToast("Post planned successfully");
+//         }
+//         if (data.postRequestDto.postStatus === "PUBLISHED") {
+//             if (res?.data?.every(response => !response.success)) {
+//                 showErrorToast("Post encountered with an issue. Currently saved as a draft.");
+//             } else if (res?.data?.every(response => response.success)) {
+//                 showSuccessToast("Post has been successfully shared to the chosen platform.");
+//             } else {
+//                 showWarningToast(`Post successfully on ${res?.data?.filter(response => response.success)?.map(res => res.pageName).join(" , ")} and failed to post on ${res?.data?.filter(response => !response.success)?.map(res => res.pageName).join(" , ")}`)
+//             }
+//         }
+//         return res.data;
+//     }).catch(error => {
+//         showErrorToast(error.response.data.message);
+//         return thunkAPI.rejectWithValue(error.response);
+//     });
+// });
 
 export const generateAIImageAction = createAsyncThunk('post/generateAIImageAction', async (data, thunkAPI) => {
     return generateAIImageService(data).then(res => {
@@ -581,18 +578,18 @@ export const generateAIImageService = async (imageRequestBody) => {
 export const generateAICaptionAndHashTagService = async (requestBody) => {
     return await baseAxios.post(`${import.meta.env.VITE_APP_AI_GENERATE_CAPTION_URL}`, requestBody, setAuthenticationHeader(`${import.meta.env.VITE_APP_OPEN_API_SECRET_KEY}`))
 }
-export const getPostByPageIdAndPostStatus = createAsyncThunk('post/getPostByPageIdAndPostStatus', async (data, thunkAPI) => {
-    if (data?.insightPostsCache?.getPostByPageIdAndPostStatusDataCache[data?.requestBody?.pageNumber] === undefined) {
-        return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/byPageAndStatus`, data?.requestBody, setAuthenticationHeader(data.token)).then(res => {
-            return {...res.data, data: {...res.data.data[0]}};
-        }).catch(error => {
-            showErrorToast(error.response.data.message);
-            return thunkAPI.rejectWithValue(error.response);
-        });
-    } else {
-        return data.insightPostsCache.getPostByPageIdAndPostStatusDataCache[data?.requestBody?.pageNumber]
-    }
-});
+// export const getPostByPageIdAndPostStatus = createAsyncThunk('post/getPostByPageIdAndPostStatus', async (data, thunkAPI) => {
+//     if (data?.insightPostsCache?.getPostByPageIdAndPostStatusDataCache[data?.requestBody?.pageNumber] === undefined) {
+//         return await baseAxios.post(`${import.meta.env.VITE_APP_API_BASE_URL}/posts/byPageAndStatus`, data?.requestBody, setAuthenticationHeader(data.token)).then(res => {
+//             return {...res.data, data: {...res.data.data[0]}};
+//         }).catch(error => {
+//             showErrorToast(error.response.data.message);
+//             return thunkAPI.rejectWithValue(error.response);
+//         });
+//     } else {
+//         return data.insightPostsCache.getPostByPageIdAndPostStatusDataCache[data?.requestBody?.pageNumber]
+//     }
+// });
 
 
 

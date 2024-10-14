@@ -1,4 +1,4 @@
-import React,  from "react";
+import React  from "react";
 import {RxCross2} from "react-icons/rx";
 import Modal from "react-bootstrap/Modal";
 import no_page_connect_img from "../../../images/no_business_account.svg";

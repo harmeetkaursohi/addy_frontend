@@ -1,14 +1,8 @@
 import React, {useState} from "react";
 import {RxCross2} from "react-icons/rx";
 import Modal from "react-bootstrap/Modal";
-import no_page_connect_img from "../../../images/instagram_logo_image.png";
 import instaGuid from "../../../images/instaguid.png";
 import FacebookAuthorizedModal from "./FacebookAuthorizedModal";
-import {computeAndSocialAccountJSON} from "../../../utils/commonUtils";
-import {commonConnectSocialAccountButtonStyle, SocialAccountProvider} from "../../../utils/contantData";
-import {FacebookLoginButton} from "react-social-login-buttons";
-import {LoginSocialFacebook} from "reactjs-social-login";
-import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 
 const InstagramGuidePopup = ({
                                  show,

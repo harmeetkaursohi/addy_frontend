@@ -1,18 +1,13 @@
 import './CreatePost.css'
-import ai_icon from '../../../images/ai_icon.svg'
 import jsondata from '../../../locales/data/initialdata.json'
 import React, {useEffect, useState} from "react";
 import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
 import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
-import {useDispatch, useSelector} from "react-redux";
-import {getAllByCustomerIdAction} from "../../../app/actions/socialAccountActions/socialAccountActions.js";
 import {Dropdown} from 'react-bootstrap'
 import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
-import {createFacebookPostAction} from "../../../app/actions/postActions/postActions.js";
 import {RiDeleteBin5Fill} from "react-icons/ri";
 import {showErrorToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
@@ -35,14 +30,13 @@ import {AiOutlineEye} from 'react-icons/ai';
 import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
+import {useCreatePostMutation} from "../../../app/apis/postApi";
+import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 
 const CreatePost = () => {
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const token = getToken();
 
-    const {data:userData} = useGetUserInfoQuery("")
     const [aiGenerateImageModal, setAIGenerateImageModal] = useState(false);
     const [aiGenerateCaptionModal, setAIGenerateCaptionModal] = useState(false);
     const [aiGenerateHashTagModal, setAIGenerateHashTagModal] = useState(false);
@@ -61,11 +55,10 @@ const CreatePost = () => {
     const [disableVideo, setDisableVideo] = useState(false);
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
 
+    const {data: userData} = useGetUserInfoQuery("")
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
-
-    const socialAccounts = useSelector(state => state.socialAccount.getAllByCustomerIdReducer.data);
-    const loadingCreateFacebookPost = useSelector(state => state.post.createFacebookPostActionReducer.loading);
+    const [createPosts, createPostApi] = useCreatePostMutation()
 
 
     const [trimmedVideoUrl, setTrimmedVideoUrl] = useState()
@@ -75,12 +68,6 @@ const CreatePost = () => {
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
     const [showPreview, setShowPreview] = useState(false)
 
-    useEffect(() => {
-        const userInfo = decodeJwtToken(token);
-        const requestBody = {token: token, customerId: userInfo?.customerId}
-        dispatch(getAllByCustomerIdAction(requestBody));
-
-    }, []);
 
     useEffect(() => {
         if (getAllConnectedPagesApi.isLoading) {
@@ -256,18 +243,14 @@ const CreatePost = () => {
         setFiles(updatedFiles);
     };
 
-    const createPost = (e, postStatus, scheduleDate, scheduleTime) => {
-
+    const createPost = async (e, postStatus, scheduleDate, scheduleTime) => {
         e.preventDefault();
-        const userInfo = decodeJwtToken(token);
         const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
         if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
-
             if (!scheduleDate && !scheduleTime) {
                 showErrorToast("Please enter scheduleDate and scheduleTime!!");
                 return;
             }
-
             if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
                 showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
                 return;
@@ -275,37 +258,33 @@ const CreatePost = () => {
         }
 
         const requestBody = {
-            token: token,
-            customerId: userInfo?.customerId,
-            postRequestDto: {
-                postPageInfos: allOptions?.flatMap(obj => {
-                    const provider = obj.group;
-                    const selectedOptionsData = obj.allOptions
-                        .filter(option => selectedOptions.includes(option.pageId))
-                        .map(option => ({pageId: option.pageId, provider}));
-                    return selectedOptionsData;
-                }) || [],
-                caption: caption ? caption : "",
-                hashTag: hashTag ? hashTag : "",
-                pinTitle: pinTitle ? pinTitle : "",
-                destinationUrl: pinDestinationUrl ? pinDestinationUrl : "",
-                attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file})),
-                postStatus: postStatus,
-                boostPost: boostPost,
-                scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
-            },
+            postPageInfos: allOptions?.flatMap(obj => {
+                const provider = obj.group;
+                const selectedOptionsData = obj.allOptions
+                    .filter(option => selectedOptions.includes(option.pageId))
+                    .map(option => ({pageId: option.pageId, provider}));
+                return selectedOptionsData;
+            }) || [],
+            caption: caption ? caption : "",
+            hashTag: hashTag ? hashTag : "",
+            pinTitle: pinTitle ? pinTitle : "",
+            destinationUrl: pinDestinationUrl ? pinDestinationUrl : "",
+            attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file})),
+            postStatus: postStatus,
+            boostPost: boostPost,
+            scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
         };
 
-
-        (postStatus !== 'DRAFT' ? isCreatePostRequestValid(requestBody?.postRequestDto, files) : true) && dispatch(createFacebookPostAction(requestBody)).then((response) => {
-            if (response.meta.requestStatus === "fulfilled") {
+        await handleRTKQuery(
+            async () => {
+                if (postStatus === "DRAFT" || isCreatePostRequestValid(requestBody, files)) {
+                    return await createPosts(requestBody).unwrap();
+                }
+            },
+            () => {
                 navigate("/planner");
             }
-        }).catch((error) => {
-            showErrorToast(error.response.data.message);
-        });
-
-
+        );
     };
 
     const handlePostSubmit = (e) => {
@@ -348,10 +327,8 @@ const CreatePost = () => {
     const [showEditVideoModal, setShowEditVideoModal] = useState(false)
 
     const editHandler = (index, file) => {
-
         setImgFile(file)
         setEditImgIndex(index)
-
         if (file.mediaType === 'VIDEO') {
             setShowEditVideoModal(true)
             setVideoFile(file)
@@ -812,9 +789,9 @@ const CreatePost = () => {
                                                                                          setReference("Scheduled")
                                                                                          handleSchedulePost(e);
                                                                                      }}
-                                                                                     isDisabled={loadingCreateFacebookPost && reference !== "Scheduled"} // Disable if not null and not "Scheduled"
+                                                                                     isDisabled={createPostApi?.isLoading && reference !== "Scheduled"} // Disable if not null and not "Scheduled"
                                                                                      className={"cmn_bg_btn schedule_btn loading"}
-                                                                                     isLoading={reference === "Scheduled" && loadingCreateFacebookPost}
+                                                                                     isLoading={reference === "Scheduled" && createPostApi?.isLoading}
 
                                                             />
                                                         </div>
@@ -881,9 +858,9 @@ const CreatePost = () => {
                                                                                      handlePostSubmit(e);
                                                                                  }}
                                                             //  isDisabled={false}
-                                                                                 isDisabled={loadingCreateFacebookPost && reference !== "Published"}
+                                                                                 isDisabled={createPostApi?.isLoading && reference !== "Published"}
                                                                                  className={"publish_btn cmn_bg_btn loading"}
-                                                                                 isLoading={reference === "Published" && loadingCreateFacebookPost}/> */}
+                                                                                 isLoading={reference === "Published" && createPostApi?.isLoading}/> */}
                                                     </div>
                                                 </div>
 
@@ -939,17 +916,17 @@ const CreatePost = () => {
                                                                  setReference("Draft")
                                                                  handleDraftPost(e);
                                                              }}
-                                                             isDisabled={loadingCreateFacebookPost && reference !== "Draft"} // Disable if not null and not "Scheduled"
+                                                             isDisabled={createPostApi?.isLoading && reference !== "Draft"} // Disable if not null and not "Scheduled"
                                                              className={"save_btn cmn_bg_btn loading"}
-                                                             isLoading={reference === "Draft" && loadingCreateFacebookPost}/>
+                                                             isLoading={reference === "Draft" && createPostApi?.isLoading}/>
                                     <GenericButtonWithLoader label={jsondata.publishnow}
                                                              onClick={(e) => {
                                                                  setReference("Published")
                                                                  handlePostSubmit(e);
                                                              }}
-                                                             isDisabled={loadingCreateFacebookPost && reference !== "Published"}
+                                                             isDisabled={createPostApi?.isLoading && reference !== "Published"}
                                                              className={"publish_btn cmn_bg_btn loading"}
-                                                             isLoading={reference === "Published" && loadingCreateFacebookPost}/>
+                                                             isLoading={reference === "Published" && createPostApi?.isLoading}/>
 
                                 </div>
                             </div>
