@@ -52,8 +52,7 @@ const Dashboard = () => {
                 </div>
                 <NotFoundPopup/>
                 {/* upcoming post */}
-            
-                    <ScheduledComponent scheduledData={getSocialMediaPostsByCriteriaApi}/>               
+                <ScheduledComponent scheduledData={getSocialMediaPostsByCriteriaApi}/>
 
             </div>
             {

@@ -196,5 +196,17 @@ export const Industries = Object.freeze({
     OTHER: 'Other',
 });
 
-
 export const selectGraphDaysOptions= [{days:7,label:'last 7 days'},{days:15,label:'last 15 days'},{days:30,label:'last 30 days'}];
+
+export const  commonConnectSocialAccountButtonStyle = {
+    borderRadius: "5px",
+    background: "#F07C33",
+    boxShadow: "unset",
+    fontSize: "12px",
+    color: "#fff",
+    border: "1px solid #F07C33",
+    height: "39px",
+    minWidth: "111px",
+    margin: "10px",
+    width: "11px",
+};
