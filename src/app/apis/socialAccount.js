@@ -5,8 +5,6 @@ import {baseAxios, cleanAndValidateRequestURL} from "../../utils/commonUtils";
 import {  getInstagramBusinessAccounts} from "../../utils/dataFormatterUtils";
 import {exchangeForLongLivedToken, getPageFullInfoByPageAccessToken} from "../../services/facebookService";
 import {SocialAccountProvider} from "../../utils/contantData";
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {setAuthenticationHeader} from "../auth/auth";
 
 
 const baseUrl=`${import.meta.env.VITE_APP_API_BASE_URL}`
