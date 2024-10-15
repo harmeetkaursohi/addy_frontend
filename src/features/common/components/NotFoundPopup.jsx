@@ -3,11 +3,11 @@ import {RxCross2} from "react-icons/rx";
 import Modal from "react-bootstrap/Modal";
 import no_page_connect_img from "../../../images/no_business_account.svg";
 
-const NotFoundPopup = ({show, setShow,setShowInstagramGuideModal}) => {
+const NotFoundPopup = ({show, setShow,isInstagramGuideModal=false,setShowInstagramGuideModal}) => {
 
     const handleClose = () => {
         setShow(false);
-        setShowInstagramGuideModal(false);
+        isInstagramGuideModal && setShowInstagramGuideModal(false);
     }
 
     return (

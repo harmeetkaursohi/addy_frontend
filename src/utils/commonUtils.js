@@ -113,7 +113,6 @@ export const validationSchemas = {
 
 
 export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider,setShowNoBusinessAccountModal) => {
-    console.log("setShowNoBusinessAccountModal",setShowNoBusinessAccountModal)
     const token = localStorage.getItem("token");
     const decodeJwt = decodeJwtToken(token);
     const response = {

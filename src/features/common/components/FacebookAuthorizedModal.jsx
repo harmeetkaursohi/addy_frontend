@@ -94,6 +94,7 @@ const FacebookAuthorizedModal = ({
             {
                 showNoBusinessAccountModal &&
                 <NotFoundPopup
+                    isInstagramGuideModal={true}
                     setShowInstagramGuideModal={setShowInstagramGuideModal}
                     show={showNoBusinessAccountModal}
                     setShow={setShowNoBusinessAccountModal}
