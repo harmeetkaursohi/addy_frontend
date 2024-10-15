@@ -15,7 +15,7 @@ import {useEffect, useState} from "react";
 import {RotatingLines} from "react-loader-spinner";
 import {getToken} from "../../../../app/auth/auth";
 
-const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
+const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFunction}) => {
 
     const token = getToken();
     const [comment, setComment] = useState("");
@@ -40,29 +40,28 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
     })
 
     useEffect(() => {
-        if (postData && postPageData) {
-            // In case of facebook set data object
+        if (postData && postSocioData) {
             switch (postData?.socialMediaType) {
                 case "FACEBOOK": {
                     setCommonFooterDataObject({
-                        total_likes: postPageData?.reactions?.summary?.total_count || 0,
-                        total_comments: postPageData?.comments?.summary?.total_count || 0,
-                        total_shares: postPageData?.shares?.count || 0,
-                        can_comment: postPageData?.comments?.summary?.can_comment
+                        total_likes: postSocioData?.reactions?.summary?.total_count || 0,
+                        total_comments: postSocioData?.comments?.summary?.total_count || 0,
+                        total_shares: postSocioData?.shares?.count || 0,
+                        can_comment: postSocioData?.comments?.summary?.can_comment
                     })
                     break;
                 }
                 case "INSTAGRAM": {
                     setCommonFooterDataObject({
-                        total_likes: postPageData?.like_count || 0,
-                        total_comments: postPageData?.comments_count || 0,
+                        total_likes: postSocioData?.like_count || 0,
+                        total_comments: postSocioData?.comments_count || 0,
                         total_shares: 0,
-                        can_comment: postPageData?.is_comment_enabled
+                        can_comment: postSocioData?.is_comment_enabled
                     })
                     break;
                 }
                 case "PINTEREST": {
-                    const data = postPageData[postData?.id];
+                    const data = postSocioData[postData?.id];
                     setCommonFooterDataObject({
                         total_likes: data?.pin_metrics?.all_time?.reaction || 0,
                         total_comments: data?.pin_metrics?.all_time?.comment || 0,
@@ -73,10 +72,10 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                 }
                 case "LINKEDIN": {
                     setCommonFooterDataObject({
-                        total_likes: postPageData?.likesSummary?.totalLikes || 0,
-                        total_comments: postPageData?.commentsSummary?.totalFirstLevelComments || 0,
-                        total_shares: postData?.shares,
-                        can_comment: postPageData?.commentsSummary?.commentsState === "OPEN"
+                        total_likes: postSocioData?.likesSummary?.totalLikes || 0,
+                        total_comments: postSocioData?.commentsSummary?.totalFirstLevelComments || 0,
+                        total_shares: postSocioData?.shares,
+                        can_comment: postSocioData?.commentsSummary?.commentsState === "OPEN"
                     })
                     break;
                 }
@@ -86,7 +85,7 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                 }
             }
         }
-    }, [postData, postPageData])
+    }, [postData, postSocioData])
 
     function handleOnEmojiClick(emojiData) {
         setComment(
@@ -96,76 +95,66 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
     }
 
     useEffect(() => {
-        if (postData && postPageData) {
+        if (postData && postSocioData) {
             setBaseQueryForGetPostPageInfoAction({
                 ...baseQueryForGetPostPageInfoAction,
                 postIds: [postData?.id],
                 pageAccessToken: postData?.page?.access_token,
                 socialMediaType: postData?.socialMediaType
             })
-            postData?.socialMediaType === "FACEBOOK" && setLike(postPageData?.likes?.summary?.has_liked)
+            postData?.socialMediaType === "FACEBOOK" && setLike(postSocioData?.likes?.summary?.has_liked)
         }
-    }, [postData, postPageData])
+    }, [postData, postSocioData])
 
 
-    useEffect(() => {
-        if (postPageData && postData?.socialMediaType === "INSTAGRAM") {
-            // Get Insights of Post in case of Instagram and set data object
-
-
-        }
-    }, [postPageData])
-
-
-    const handleAddLikesOnPost = (e) => {
-        e.preventDefault();
-        const requestBody = {
-            postId: postData?.id,
-            pageAccessToken: postData?.page?.access_token
-        }
-
-        dispatch(likePostAction(requestBody)).then((response) => {
-            if (response.meta.requestStatus === "fulfilled") {
-                dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction)).then((response) => {
-                    if (response.meta.requestStatus === "fulfilled") {
-                        setLike(true);
-                    }
-                }).catch((error) => {
-                    setLike(false);
-                    showErrorToast(error.response.data.message);
-                });
-            }
-        }).catch((error) => {
-            setLike(false);
-            showErrorToast(error.response.data.message);
-        })
-    }
-    const handleAddDisLikesOnPost = (e) => {
-        e.preventDefault();
-        const requestBody = {
-            postId: postData?.id,
-            pageAccessToken: postData?.page?.access_token
-        }
-
-        dispatch(dislikePostAction(requestBody)).then((response) => {
-            if (response.meta.requestStatus === "fulfilled") {
-
-                dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction)).then((response) => {
-                    if (response.meta.requestStatus === "fulfilled") {
-                        setLike(false);
-                    }
-                }).catch((error) => {
-                    setLike(true);
-                    showErrorToast(error.response.data.message);
-                });
-            }
-        }).catch((error) => {
-            setLike(true);
-            showErrorToast(error.response.data.message);
-        })
-    }
+    // const handleAddLikesOnPost = (e) => {
+    //     e.preventDefault();
+    //     const requestBody = {
+    //         postId: postData?.id,
+    //         pageAccessToken: postData?.page?.access_token
+    //     }
+    //
+    //     dispatch(likePostAction(requestBody)).then((response) => {
+    //         if (response.meta.requestStatus === "fulfilled") {
+    //             dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction)).then((response) => {
+    //                 if (response.meta.requestStatus === "fulfilled") {
+    //                     setLike(true);
+    //                 }
+    //             }).catch((error) => {
+    //                 setLike(false);
+    //                 showErrorToast(error.response.data.message);
+    //             });
+    //         }
+    //     }).catch((error) => {
+    //         setLike(false);
+    //         showErrorToast(error.response.data.message);
+    //     })
+    // }
+    // const handleAddDisLikesOnPost = (e) => {
+    //     e.preventDefault();
+    //     const requestBody = {
+    //         postId: postData?.id,
+    //         pageAccessToken: postData?.page?.access_token
+    //     }
+    //
+    //     dispatch(dislikePostAction(requestBody)).then((response) => {
+    //         if (response.meta.requestStatus === "fulfilled") {
+    //
+    //             dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction)).then((response) => {
+    //                 if (response.meta.requestStatus === "fulfilled") {
+    //                     setLike(false);
+    //                 }
+    //             }).catch((error) => {
+    //                 setLike(true);
+    //                 showErrorToast(error.response.data.message);
+    //             });
+    //         }
+    //     }).catch((error) => {
+    //         setLike(true);
+    //         showErrorToast(error.response.data.message);
+    //     })
+    // }
     const handleAddCommentOnPost = (e) => {
-
         e.preventDefault();
         const requestBody = {
             socialMediaType: postData?.socialMediaType,
@@ -251,13 +240,13 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                         {
                             commonFooterDataObject.total_likes === 1 && <>
                                 Liked / Reacted
-                                by <strong> {postPageData?.likes?.summary?.has_liked ? postData?.page?.name : postPageData?.reactions?.data[0]?.name}</strong>
+                                by <strong> {postSocioData?.likes?.summary?.has_liked ? postData?.page?.name : postSocioData?.reactions?.data[0]?.name}</strong>
                             </>
                         }
                         {
                             commonFooterDataObject.total_likes > 1 && <>
                                 Liked / Reacted
-                                by <strong>{postPageData?.reactions?.data[0]?.name}</strong> and <strong> {JSON.stringify(postPageData?.reactions?.summary?.total_count - 1)} Others</strong>
+                                by <strong>{postSocioData?.reactions?.data[0]?.name}</strong> and <strong> {JSON.stringify(postSocioData?.reactions?.summary?.total_count - 1)} Others</strong>
                             </>
                         }
                     </>
@@ -267,13 +256,13 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                         {
                             commonFooterDataObject.total_likes === 1 && <>
                                 Liked
-                                by <strong> {postPageData?.likesSummary?.likedByCurrentUser ? postData?.page?.name : commonFooterDataObject.total_likes + " Other"}</strong>
+                                by <strong> {postSocioData?.likesSummary?.likedByCurrentUser ? postData?.page?.name : commonFooterDataObject.total_likes + " Other"}</strong>
                             </>
                         }
                         {
                             commonFooterDataObject.total_likes > 1 && <>
                                 Liked
-                                by {postPageData?.likesSummary?.likedByCurrentUser ? postData?.page?.name + " and " + (commonFooterDataObject.total_likes - 1) + (commonFooterDataObject?.total_likes - 1 === 1 ? " other" : " others") : commonFooterDataObject.total_likes + " others"}
+                                by {postSocioData?.likesSummary?.likedByCurrentUser ? postData?.page?.name + " and " + (commonFooterDataObject.total_likes - 1) + (commonFooterDataObject?.total_likes - 1 === 1 ? " other" : " others") : commonFooterDataObject.total_likes + " others"}
                             </>
                         }
                     </>
@@ -310,32 +299,37 @@ const CommentFooter = ({postData, postPageData, isDirty, setDirty}) => {
                                     d="M11 15.4C9.372 15.4 7.975 14.509 7.205 13.2H5.368C6.248 15.455 8.437 17.05 11 17.05C13.563 17.05 15.752 15.455 16.632 13.2H14.795C14.025 14.509 12.628 15.4 11 15.4ZM10.989 0C4.917 0 0 4.928 0 11C0 17.072 4.917 22 10.989 22C17.072 22 22 17.072 22 11C22 4.928 17.072 0 10.989 0ZM11 19.8C6.138 19.8 2.2 15.862 2.2 11C2.2 6.138 6.138 2.2 11 2.2C15.862 2.2 19.8 6.138 19.8 11C19.8 15.862 15.862 19.8 11 19.8Z"
                                     fill="#323232"/>
                             </svg>
-                                <input value={comment} type="text"
-                                       className={addCommentOnPostActionData?.loading && comment ? "form-control opacity-50" : "form-control"}
-                                       onClick={() => {
-                                           setShowEmojiPicker(false)
-                                       }}
-                                       onChange={(e) => {
-                                           setShowEmojiPicker(false)
-                                           e.preventDefault();
-                                           setComment(e.target.value);
-                                       }} placeholder="Add comment..."
-                                       onKeyPress={(event)=>{
-                                           if (event.key === 'Enter') {
-                                               const element = document.getElementById('post-cmnt-btn');
-                                               if (element) {
-                                                   element.click();
-                                               }
-                                           }
-                                       }}
-                                />
-                                <button id={"post-cmnt-btn"} className={isNullOrEmpty(comment) ? "opacity-50" : ""}
-                                        disabled={addCommentOnPostActionData?.loading || isNullOrEmpty(comment)}
-                                        onClick={(e) => {
-                                            setShowEmojiPicker(false)
-                                            !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
-                                        }}>Post
-                                </button>
+                            <input
+                                value={comment}
+                                type="text"
+                                className={addCommentOnPostActionData?.loading && comment ? "form-control opacity-50" : "form-control"}
+                                onClick={() => {
+                                    setShowEmojiPicker(false)
+                                }}
+                                onChange={(e) => {
+                                    setShowEmojiPicker(false)
+                                    e.preventDefault();
+                                    setComment(e.target.value);
+                                }}
+                                placeholder="Add comment..."
+                                onKeyPress={(event) => {
+                                    if (event.key === 'Enter') {
+                                        const element = document.getElementById('post-cmnt-btn');
+                                        if (element) {
+                                            element.click();
+                                        }
+                                    }
+                                }}
+                            />
+                            <button
+                                id={"post-cmnt-btn"}
+                                className={isNullOrEmpty(comment) ? "opacity-50" : ""}
+                                disabled={addCommentOnPostActionData?.loading || isNullOrEmpty(comment)}
+                                onClick={(e) => {
+                                    setShowEmojiPicker(false)
+                                    !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
+                                }}>Post
+                            </button>
                         </>
                         : <>
                             <svg className="opacity-50" xmlns="http://www.w3.org/2000/svg"

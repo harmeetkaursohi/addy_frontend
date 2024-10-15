@@ -362,3 +362,13 @@ export const getInstagramPostDataWithInsights=async (data)=>{
         throw error;
     });
 }
+
+export const getInstagramPostSocioData=async (data)=>{
+    const apiUrl = `${fbBaseUrl}/${data?.postId}?access_token=${data?.pageAccessToken}&fields=id,caption,is_comment_enabled,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
+    return await baseAxios.get(apiUrl).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}

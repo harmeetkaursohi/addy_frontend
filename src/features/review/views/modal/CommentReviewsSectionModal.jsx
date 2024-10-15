@@ -3,9 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import img from '../../../../images/draft.png'
-import {Link} from "react-router-dom";
 import {
-    computeImageURL,
     getCommentCreationTime,
     handleSeparateCaptionHashtag,
 } from "../../../../utils/commonUtils";
@@ -17,7 +15,9 @@ import {resetReducers} from "../../../../app/actions/commonActions/commonActions
 import CommentFooter from "../comments/CommentFooter";
 import InstagramCommentsSection from "../comments/InstagramCommentsSection";
 import LinkedinCommentsSection from "../comments/LinkedinCommentsSection";
-import { MdCancel } from 'react-icons/md';
+import {MdCancel} from 'react-icons/md';
+import {useLazyGetPostSocioDataQuery} from "../../../../app/apis/postApi";
+import {usePostCommentMutation} from "../../../../app/apis/commentApi";
 
 
 const CommentReviewsSectionModal = ({
@@ -25,23 +25,40 @@ const CommentReviewsSectionModal = ({
                                         setOpenCommentReviewsSectionModal,
                                         postData,
                                         setPostData,
-                                        postPageInfoData,
                                         isDirty,
                                         setDirty,
                                         className
                                     }) => {
-    const [postPageData, setPostPageData] = useState(null);
+
     const dispatch = useDispatch();
+    const [postPageData, setPostPageData] = useState(null);
+    const [postSocioData, setPostSocioData] = useState(null);
+
+    const [getPostSocioData, getPostSocioDataApi] = useLazyGetPostSocioDataQuery()
+    const [postComment, postCommentApi] = usePostCommentMutation()
+
     const handleClose = () => setOpenCommentReviewsSectionModal(false);
 
+    console.log("postSocioData=====>", postSocioData)
+    console.log("typeof=====>",typeof postComment)
+    console.log("postData=====>", postData)
+
+
     useEffect(() => {
-        if (postData && postPageInfoData) {
-            setPostPageData(postData?.socialMediaType === "FACEBOOK" ? postPageInfoData[postData?.id] : postPageInfoData)
+        if (postData) {
+            getPostSocioData({
+                postId: postData?.id,
+                pageAccessToken: postData?.page?.access_token,
+                socialMediaType: postData?.socialMediaType,
+            })
         }
-    }, [postData, postPageInfoData])
+    }, [postData])
 
-
-
+    useEffect(() => {
+        if (getPostSocioDataApi?.data && !getPostSocioDataApi?.isLoading) {
+            setPostSocioData(postData?.socialMediaType === "FACEBOOK" ? getPostSocioDataApi?.data[postData?.id] : getPostSocioDataApi?.data)
+        }
+    }, [getPostSocioDataApi])
 
     useEffect(() => {
         return () => {
@@ -57,18 +74,18 @@ const CommentReviewsSectionModal = ({
     return (
         <>
             <div className='comment_review_container'>
-                <Modal   show={isOpenCommentReviewsSectionModal} onHide={handleClose} className={"modal-xl view_profile"}>
+                <Modal show={isOpenCommentReviewsSectionModal} onHide={handleClose} className={"modal-xl view_profile"}>
 
                     <Modal.Body>
                         <Row className="m-0">
                             <div className='md_cancel_outer'>
-                            <MdCancel  onClick={() => {
-                                                setOpenCommentReviewsSectionModal(false)
-                                            }}/>
+                                <MdCancel onClick={() => {
+                                    setOpenCommentReviewsSectionModal(false)
+                                }}/>
                             </div>
-                            <Col lg="6"  md="12" sm="12" className="p-0">
+                            <Col lg="6" md="12" sm="12" className="p-0">
                                 <div className='comment_review_wrapper'>
-                                  
+
                                     <CommonSlider files={postData?.attachments}
                                                   selectedFileType={null}
                                                   caption={null}
@@ -77,10 +94,10 @@ const CommentReviewsSectionModal = ({
                                                   isPublished={true}
                                                   viewSimilarToSocialMedia={false}
                                                   className={className}/>
-                                                 
+
                                 </div>
                             </Col>
-                            <Col lg="6"  md="12" sm="12" className="p-0">
+                            <Col lg="6" md="12" sm="12" className="p-0">
                                 <div className="comment_section">
                                     <div className="comments_messages pb-0">
                                         <div className="">
@@ -107,16 +124,25 @@ const CommentReviewsSectionModal = ({
 
 
                                         {
-                                            postData?.socialMediaType === "FACEBOOK" && <Comments  isDirty={isDirty} setDirty={setDirty} postData={postData} postPageData={postPageData}/>
+                                            postData?.socialMediaType === "FACEBOOK" &&
+                                            <Comments
+                                                postSocioData={postSocioData}
+                                                isDirty={isDirty}
+                                                setDirty={setDirty}
+                                                postData={postData}
+                                                postPageData={postPageData}
+                                            />
                                         }
 
                                         {
                                             postData?.socialMediaType === "INSTAGRAM" &&
-                                            <InstagramCommentsSection  isDirty={isDirty} setDirty={setDirty} postData={postData} postPageData={postPageData}/>
+                                            <InstagramCommentsSection isDirty={isDirty} setDirty={setDirty}
+                                                                      postData={postData} postPageData={postPageData}/>
                                         }
                                         {
                                             postData?.socialMediaType === "LINKEDIN" &&
-                                            <LinkedinCommentsSection  isDirty={isDirty} setDirty={setDirty} postData={postData} postPageData={postPageData}/>
+                                            <LinkedinCommentsSection isDirty={isDirty} setDirty={setDirty}
+                                                                     postData={postData} postPageData={postPageData}/>
                                         }
                                         {
                                             postData?.socialMediaType === "PINTEREST" &&
@@ -126,7 +152,9 @@ const CommentReviewsSectionModal = ({
                                                     click the link below to explore and engage with comments on
                                                     Pinterest. We appreciate your understanding.
                                                 </div>
-                                                <a title={"View on Pinterest"} href={`https://in.pinterest.com/pin/${postData?.id}/`} target={"_blank"}>
+                                                <a title={"View on Pinterest"}
+                                                   href={`https://in.pinterest.com/pin/${postData?.id}/`}
+                                                   target={"_blank"}>
                                                     View on Pinterest
                                                 </a>
 
@@ -137,8 +165,12 @@ const CommentReviewsSectionModal = ({
 
                                     {/*</div>*/}
                                     <CommentFooter
-                                        isDirty={isDirty} setDirty={setDirty}
-                                        postData={postData} postPageData={postPageData}  />
+
+                                        postSocioData={postSocioData}
+                                        isDirty={isDirty}
+                                        setDirty={setDirty}
+                                        postData={postData}
+                                    />
 
                                 </div>
 

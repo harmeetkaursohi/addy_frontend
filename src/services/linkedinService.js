@@ -262,3 +262,13 @@ export const getLinkedinPostEngagements = async (data) => {
         throw error;
     });
 }
+
+export const getLinkedinPostSocioData = async (data) => {
+    const apiUrl = `${baseUrl}/linkedin/socialActions/${data?.postId}`;
+    return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}

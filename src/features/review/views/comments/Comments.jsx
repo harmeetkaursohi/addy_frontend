@@ -29,16 +29,16 @@ import CommentText from "./CommentText";
 import default_user_icon from "../../../../images/default_user_icon.svg";
 import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommonLoader from "../../../common/components/CommonLoader";
+import {useLazyGetCommentsQuery, useLazyGetRepliesOnCommentsQuery} from "../../../../app/apis/commentApi";
 
-const Comments = ({postData, isDirty, setDirty, postPageData}) => {
+const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) => {
+
     const dispatch = useDispatch();
-    const getCommentsOnPostActionData = useSelector(state => state.post.getCommentsOnPostActionReducer)
-    const getRepliesOnCommentData = useSelector(state => state.post.getRepliesOnCommentReducer)
     const updateCommentsOnPostActionData = useSelector(state => state.post.updateCommentsOnPostActionReducer)
     const addCommentOnPostData = useSelector(state => state.post.addCommentOnPostActionReducer)
     const replyCommentOnPostData = useSelector(state => state.post.replyCommentOnPostActionReducer)
 
-    const [getFacebookComments, setGetFacebookComments] = useState(null);
+    const [triggerGetCommentsApi, setTriggerGetCommentsApi] = useState(false);
     const [facebookComments, setFacebookComments] = useState({
         data: null,
         nextCursor: null
@@ -54,7 +54,9 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
         message: ""
     })
     const [getReplyForComment, setGetReplyForComment] = useState({})
-    const [getReplies, setGetReplies] = useState(null);
+    const [getReplies, setGetReplies] = useState(false);
+
+
     const [updateComment, setUpdateComment] = useState({})
     const [baseQuery, setBaseQuery] = useState({
         socialMediaType: postData?.socialMediaType,
@@ -62,65 +64,114 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
     })
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
+    const [getComments, getCommentsApi] = useLazyGetCommentsQuery()
+    const [getRepliesOnComment, getRepliesOnCommentApi] = useLazyGetRepliesOnCommentsQuery()
+
+    console.log("getCommentsApi=====>", getCommentsApi)
+
+
+    // TODO:Comments this useEffect
+    // useEffect(() => {
+    //     if (postData && postPageData && postPageData?.comments?.summary?.total_count > 0 && facebookComments?.data === null) {
+    //         setGetFacebookComments(new Date().getMilliseconds())
+    //     }
+    // }, [postData, postPageData])
 
     useEffect(() => {
-        if (postData && postPageData && postPageData?.comments?.summary?.total_count > 0 && facebookComments?.data === null) {
-            setGetFacebookComments(new Date().getMilliseconds())
+        if (postData && postSocioData && postSocioData?.comments?.summary?.total_count > 0 && facebookComments?.data === null) {
+            setTriggerGetCommentsApi(true)
         }
-    }, [postData, postPageData])
+    }, [postData, postSocioData])
+
+    // TODO:Comments this useEffect
+    // useEffect(() => {
+    //     if (getFacebookComments !== null) {
+    //         setGetFacebookComments(null);
+    //         dispatch(getCommentsOnPostAction({
+    //             ...baseQuery,
+    //             id: postPageData?.id,
+    //             limit: 3,
+    //             next: facebookComments?.nextCursor
+    //         }))
+    //         setShowReplyBox([])
+    //         //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
+    //         dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
+    //     }
+    // }, [getFacebookComments])
 
     useEffect(() => {
-        if (getFacebookComments !== null) {
-            setGetFacebookComments(null);
-            dispatch(getCommentsOnPostAction({
+        if (triggerGetCommentsApi) {
+            setTriggerGetCommentsApi(false);
+            getComments({
                 ...baseQuery,
-                id: postPageData?.id,
+                id: postSocioData?.id,
                 limit: 3,
                 next: facebookComments?.nextCursor
-            }))
+            })
             setShowReplyBox([])
             //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
-            dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
+            // dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
         }
-    }, [getFacebookComments])
+    }, [triggerGetCommentsApi])
+
+    // TODO:Comments this useEffect
+    // useEffect(() => {
+    //     if (getCommentsOnPostActionData?.data !== undefined && !getCommentsOnPostActionData?.loading) {
+    //         const cursorToNextData = getCommentsOnPostActionData.data?.paging?.next === undefined ? null : getCommentsOnPostActionData.data?.paging?.cursors?.after
+    //         if (facebookComments?.data === null) {
+    //             setFacebookComments({
+    //                 data: getCommentsOnPostActionData?.data?.data,
+    //                 nextCursor: cursorToNextData
+    //             })
+    //         } else {
+    //             const updatedComments = [...facebookComments?.data, ...getCommentsOnPostActionData?.data?.data]
+    //             // const commentsWithoutDuplicates = removeDuplicatesObjectsFromArray(updatedComments, "id")
+    //             setFacebookComments({
+    //                 data: updatedComments,
+    //                 nextCursor: cursorToNextData
+    //             })
+    //         }
+    //         dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
+    //     }
+    // }, [getCommentsOnPostActionData])
 
     useEffect(() => {
-        if (getCommentsOnPostActionData?.data !== undefined && !getCommentsOnPostActionData?.loading) {
-            const cursorToNextData = getCommentsOnPostActionData.data?.paging?.next === undefined ? null : getCommentsOnPostActionData.data?.paging?.cursors?.after
+        if (getCommentsApi?.data !== undefined && !getCommentsApi?.isLoading && !getCommentsApi?.isFetching) {
+            const cursorToNextData = getCommentsApi.data?.paging?.next === undefined ? null : getCommentsApi.data?.paging?.cursors?.after
             if (facebookComments?.data === null) {
                 setFacebookComments({
-                    data: getCommentsOnPostActionData?.data?.data,
+                    data: getCommentsApi?.data?.data,
                     nextCursor: cursorToNextData
                 })
             } else {
-                const updatedComments = [...facebookComments?.data, ...getCommentsOnPostActionData?.data?.data]
+                const updatedComments = [...facebookComments?.data, ...getCommentsApi?.data?.data]
                 // const commentsWithoutDuplicates = removeDuplicatesObjectsFromArray(updatedComments, "id")
                 setFacebookComments({
                     data: updatedComments,
                     nextCursor: cursorToNextData
                 })
             }
-            dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
+            // dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
         }
-    }, [getCommentsOnPostActionData])
+    }, [getCommentsApi])
 
     useEffect(() => {
-        if (getReplies !== null && ((getReplyForComment?.reference === "SHOW_MORE_REPLIES" && getReplyForComment?.comment?.replyData === undefined) || (getReplyForComment?.reference === "LOAD_MORE"))) {
-            setGetReplies(null);
-            dispatch(getRepliesOnComment({
+        if (getReplies  && ((getReplyForComment?.reference === "SHOW_MORE_REPLIES" && getReplyForComment?.comment?.replyData === undefined) || (getReplyForComment?.reference === "LOAD_MORE"))) {
+            setGetReplies(false);
+            getRepliesOnComment({
                 ...baseQuery,
                 id: getReplyForComment?.comment?.id,
                 limit: 1,
                 next: getReplyForComment?.comment?.replyData?.nextCursor === undefined ? null : getReplyForComment?.comment?.replyData?.nextCursor
-            }))
+            })
         }
     }, [getReplies])
 
     useEffect(() => {
-        if (getRepliesOnCommentData?.data !== undefined && !getRepliesOnCommentData?.loading && getReplyForComment !== null && Object.keys(getReplyForComment)?.length > 0) {
-            const cursorToNext = getRepliesOnCommentData?.data?.paging?.next === undefined ? null : getRepliesOnCommentData?.data?.paging?.cursors?.after
+        if (getRepliesOnCommentApi?.data !== undefined && !getRepliesOnCommentApi?.isLoading && !getRepliesOnCommentApi?.isFetching && getReplyForComment !== null && Object.keys(getReplyForComment)?.length > 0) {
+            const cursorToNext = getRepliesOnCommentApi?.data?.paging?.next === undefined ? null : getRepliesOnCommentApi?.data?.paging?.cursors?.after
             let previousData = getValueOrDefault(getReplyForComment?.comment?.replyData?.data, []);
-            let updatedComments = removeDuplicatesObjectsFromArray([...previousData, ...getRepliesOnCommentData?.data?.data], "id")
+            let updatedComments = removeDuplicatesObjectsFromArray([...previousData, ...getRepliesOnCommentApi?.data?.data], "id")
             const updatedComment = {
                 ...getReplyForComment?.comment,
                 replyData: {
@@ -138,7 +189,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
             setGetReplyForComment({})
             dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
         }
-    }, [getRepliesOnCommentData])
+    }, [getRepliesOnCommentApi])
 
     useEffect(() => {
         if (addCommentOnPostData?.data !== undefined) {
@@ -539,17 +590,21 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
 
                                                 {
                                                     comment?.comment_count > 0 &&
-                                                    <p className="reply_toggle" onClick={() => {
+                                                    <p
+                                                        className="reply_toggle"
+                                                        onClick={() => {
                                                         if (!showReplyComments[index]) {
                                                             setGetReplyForComment({
                                                                 index: index,
                                                                 comment: comment,
                                                                 reference: "SHOW_MORE_REPLIES",
                                                             });
-                                                            setGetReplies(new Date().getMilliseconds());
+                                                            setGetReplies(true);
                                                         }
                                                         setShowReplyComments(handleShowCommentReplies(showReplyComments, index))
-                                                    }}>{!showReplyComments[index] ? "Show" : "Hide"} {comment?.comment_count} {comment?.comment_count > 1 ? "replies" : "reply"}</p>
+                                                    }}>
+                                                        {!showReplyComments[index] ? "Show" : "Hide"} {comment?.comment_count} {comment?.comment_count > 1 ? "replies" : "reply"}
+                                                    </p>
                                                 }
                                                 {
                                                     showReplyComments[index] && <>
@@ -792,7 +847,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
                                                             })
                                                         }
                                                         {
-                                                            (getRepliesOnCommentData?.loading && comment?.id === getReplyForComment?.comment?.id) ?
+                                                            ((getRepliesOnCommentApi?.isLoading || getRepliesOnCommentApi?.isFetching) && comment?.id === getReplyForComment?.comment?.id) ?
                                                                 <div className={" text-center z-index-1 mt-1"}>
                                                                     <RotatingLines strokeColor="#F07C33"
                                                                                    strokeWidth="5"
@@ -801,7 +856,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
                                                                                    visible={true}/>
                                                                 </div> : <>
                                                                     {
-                                                                        (comment?.comment_count > 0 && comment?.replyData?.nextCursor!==null) &&
+                                                                        (comment?.comment_count > 0 && comment?.replyData?.nextCursor !== null) &&
                                                                         <div
                                                                             className={" mb-1 load-more-replies-txt cursor-pointer"}
                                                                             onClick={() => {
@@ -810,7 +865,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
                                                                                     comment: comment,
                                                                                     reference: "LOAD_MORE",
                                                                                 });
-                                                                                setGetReplies(new Date().getMilliseconds())
+                                                                                setGetReplies(true)
                                                                             }}>Load more
                                                                         </div>
                                                                     }
@@ -900,19 +955,23 @@ const Comments = ({postData, isDirty, setDirty, postPageData}) => {
                     })
             }
             {
-                (getCommentsOnPostActionData?.loading && Array.isArray(facebookComments?.data)) ?
-                    <div className={" text-center z-index-1 mt-1"}><RotatingLines strokeColor="#F07C33"
-                                                                                  strokeWidth="5"
-                                                                                  animationDuration="0.75"
-                                                                                  width="30"
-                                                                                  visible={true}/>
+                ((getCommentsApi?.isLoading || getCommentsApi?.isFetching) && Array.isArray(facebookComments?.data)) ?
+                    <div className={" text-center z-index-1 mt-1"}>
+                        <RotatingLines
+                            strokeColor="#F07C33"
+                            strokeWidth="5"
+                            animationDuration="0.75"
+                            width="30"
+                            visible={true}/>
                     </div> :
                     <>
                         {
                             facebookComments?.nextCursor !== null &&
-                            <div className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"} onClick={() => {
-                                setGetFacebookComments(new Date().getMilliseconds())
-                            }}>Load more comments
+                            <div
+                                className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"}
+                                onClick={() => {
+                                    setTriggerGetCommentsApi(true)
+                                }}>Load more comments
                             </div>
                         }
                     </>

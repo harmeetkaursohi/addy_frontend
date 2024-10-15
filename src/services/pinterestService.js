@@ -178,3 +178,13 @@ export const getPinterestPostEngagements = async (data) => {
         throw error;
     });
 }
+
+export const getPinterestPostSocioData = async (data) => {
+    const apiUrl = `${baseUrl}/pinterest/pin-insights?ids=${data?.postId}`;
+    return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
