@@ -1030,9 +1030,7 @@ const SocialAccounts = ({}) => {
                 {/* end pinterest connect */}
             </div>
             {
-                enabledSocialMedia?.isFacebookEnabled && showFacebookModal && isNullOrEmpty(getAllFacebookPagesApi?.data || []) ?
-                    <NotFoundPopup show={true} setShow={setShowNoBusinessAccountModal}/>
-                    :
+                enabledSocialMedia?.isFacebookEnabled && showFacebookModal &&
                     <ConnectPagesModal
                         showModal={showFacebookModal}
                         setShowModal={setShowFacebookModal}

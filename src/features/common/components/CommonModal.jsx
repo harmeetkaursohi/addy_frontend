@@ -13,6 +13,7 @@ import {useGetSocialMediaReportQuery} from "../../../app/apis/insightApi";
 import {addyApi} from "../../../app/addyApi";
 import {useDispatch} from "react-redux";
 import NotFoundPopup from './NotFoundPopup.jsx';
+
 const CommonModal = ({
                          socialMediaAccountInfo,
                          showModal,
@@ -25,7 +26,7 @@ const CommonModal = ({
 
     const handleClose = () => setShowModal(false);
 
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
     const currentConnectedPages = connectedPagesList?.map(page => page?.pageId) || []
 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -38,10 +39,11 @@ const CommonModal = ({
     })
     const [connectPage, connectPageApi] = useConnectPageMutation()
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (pageData) => {
+        const data = isNullOrEmpty(pageData) ? mediaPageData : pageData
         await handleRTKQuery(
             async () => {
-                return await connectPage({data: mediaPageData, socialMediaAccountInfo: socialMediaAccountInfo}).unwrap()
+                return await connectPage({data: data, socialMediaAccountInfo: socialMediaAccountInfo}).unwrap()
             },
             () => {
                 dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
@@ -67,7 +69,8 @@ const CommonModal = ({
                                 <h2 className='cmn_text_style'>Please choose
                                     your {socialMediaType === SocialAccountProvider.PINTEREST ? "board" : "page"} to
                                     connect with Addy</h2>
-                                    <p className='planInfo'>You have Personal Plan, you can add only one page.&nbsp;  <span>Upgrade Plan</span></p>
+                                <p className='planInfo'>You have Personal Plan, you can add only one page.&nbsp;  <span>Upgrade Plan</span>
+                                </p>
                             </div>
 
 
@@ -137,8 +140,8 @@ const CommonModal = ({
                                                                                 <i className="fa fa-spinner fa-spin"/> :
                                                                                 <h4>
                                                                                     {
-                                                                                        socialMediaAccountInfo.provider === "PINTEREST"?
-                                                                                            getSocialMediaReportApi?.data?.[data?.id]?.Pin_Count?.lifeTime:
+                                                                                        socialMediaAccountInfo.provider === "PINTEREST" ?
+                                                                                            getSocialMediaReportApi?.data?.[data?.id]?.Pin_Count?.lifeTime :
                                                                                             getSocialMediaReportApi?.data?.[data?.id]?.Accounts_Reached?.lifeTime
                                                                                     }
                                                                                 </h4>
@@ -157,8 +160,11 @@ const CommonModal = ({
                                                             disabled={connectPageApi?.isLoading}
                                                             className={`cmn_connect_btn connect_btn connect_btn ${currentConnectedPages?.includes(data?.id) ? 'connected-button' : 'disconected_btn'}`}
                                                             onClick={(e) => {
-                                                                !connectPageApi?.isLoading && setMediaPageData(data);
-                                                                !connectPageApi?.isLoading && setShowConfirmModal(true);
+                                                                if (connectPageApi?.isLoading) return;
+                                                                setMediaPageData(data);
+                                                                const isPageConnected = currentConnectedPages.includes(data?.id);
+                                                                setShowConfirmModal(isPageConnected);
+                                                                !isPageConnected && handleSubmit(data);
                                                             }}>
                                                             {
                                                                 currentConnectedPages.includes(data?.id) ? "Disconnect" : "Connect"
@@ -184,16 +190,24 @@ const CommonModal = ({
 
             </section>
 
-            {showConfirmModal &&
+            {
+                showConfirmModal &&
                 <ConfirmModal
                     confirmModalAction={handleSubmit}
                     setShowConfirmModal={setShowConfirmModal}
                     showConfirmModal={showConfirmModal}
-                    icon={currentConnectedPages?.includes(mediaPageData?.id) ? "warning" : "success"}
+                    icon={"warning"}
                     title={"Are you sure ?"}
-                    confirmMessage={currentConnectedPages?.includes(mediaPageData?.id) ? DisconnectPageWarning : `You want to connect ${socialMediaType} page ?`}
-                />}
-                {showNoBusinessAccountModal &&  <NotFoundPopup show={showNoBusinessAccountModal}  setShow={setShowNoBusinessAccountModal}/>}
+                    confirmMessage={DisconnectPageWarning}
+                />
+            }
+            {
+                showNoBusinessAccountModal &&
+                <NotFoundPopup
+                    show={showNoBusinessAccountModal}
+                    setShow={setShowNoBusinessAccountModal}
+                />
+            }
         </>
     );
 }
