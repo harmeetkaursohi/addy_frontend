@@ -3,7 +3,7 @@ import {
     filterAndSumLinkedinOrgStatisticsDataFor,
     filterAndSumPinterestUserAnalyticsDataFor,
     filterGenderAgeDataFromFacebookDemographicData, getAttachmentsData,
-    getFormattedPostTime, getValueOrDefault,
+    getFormattedPostTime, getLinkedinIdTypeFromUrn, getValueOrDefault,
     isNullOrEmpty
 } from "./commonUtils";
 import {ErrorFetchingPost, SocialAccountProvider} from "./contantData";
@@ -620,4 +620,58 @@ export const mapUpdatePostDataToFormData=(data)=>{
         });
     }
     return formData;
+}
+
+export const getUpdateCommentMessage = (commentToUpdate, socialMediaType) => {
+    switch (socialMediaType) {
+        case "FACEBOOK": {
+            let updatedMessage = commentToUpdate?.message
+            if (commentToUpdate?.message_tags?.length === 0) {
+                return commentToUpdate?.message
+            }
+            const mentionedAccounts = commentToUpdate?.message_tags?.filter(tags => tags?.type === "user")
+            if (mentionedAccounts?.length === 0) {
+                return commentToUpdate?.message
+            } else {
+                mentionedAccounts?.map(accounts => {
+                    updatedMessage = updatedMessage?.replace(accounts?.name, `@[${accounts?.id}]`)
+                })
+            }
+            return updatedMessage
+        }
+        case "LINKEDIN": {
+            let updatedMessage = {
+                text: commentToUpdate?.updatedMessage,
+                actor: commentToUpdate?.comment?.actor,
+                commentId: commentToUpdate?.comment?.id,
+                parentObjectUrn: commentToUpdate?.comment?.hasOwnProperty("parentComment") ? commentToUpdate?.comment?.parentComment : commentToUpdate?.comment?.object,
+            }
+
+            if (commentToUpdate?.mentionedUsers?.length > 0) {
+                const currentMentionedUsers = commentToUpdate?.mentionedUsers?.filter(mentionedUser => commentToUpdate?.updatedMessage?.includes(mentionedUser?.name))
+                if (currentMentionedUsers?.length > 0) {
+                    updatedMessage = {
+                        ...updatedMessage,
+                        attributes: currentMentionedUsers?.map(mentionedUser => {
+                            const idType = getLinkedinIdTypeFromUrn(mentionedUser?.id);
+                            return {
+                                length: mentionedUser?.name?.length,
+                                start: commentToUpdate?.updatedMessage?.indexOf(mentionedUser?.name),
+                                value: {
+                                    [idType]: {
+                                        [idType]: mentionedUser?.id
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
+            }
+            return updatedMessage
+        }
+        default: {
+
+        }
+    }
+
 }

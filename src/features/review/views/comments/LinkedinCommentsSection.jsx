@@ -8,43 +8,49 @@ import CommonSlider from "../../../common/components/CommonSlider";
 import {
     extractCommentersProfileDataForLinkedin, extractIdFromLinkedinMessageAtrributes,
     extractMentionedUsernamesFromLinkedinComments, extractParameterFromUrl,
-    getCommentCreationTime, getLoggedInLinkedinActorObject, getMentionedUserCommentFormat, getUpdateCommentMessage,
+    getCommentCreationTime, getLoggedInLinkedinActorObject, getMentionedUserCommentFormat,
     handleShowCommentReplies,
     handleShowCommentReplyBox,
     isNullOrEmpty, isReplyCommentEmpty, removeDuplicatesObjectsFromArray
 } from "../../../../utils/commonUtils";
+import {
+    getUpdateCommentMessage
+} from "../../../../utils/dataFormatterUtils";
 import {RotatingLines} from "react-loader-spinner";
 import {BiSolidSend} from "react-icons/bi";
 import EmojiPicker, {EmojiStyle} from "emoji-picker-react";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
-import {
-    deleteCommentsOnPostAction,
-    getCommentsOnPostAction,
-    getPostPageInfoAction, getRepliesOnComment, replyCommentOnPostAction, updateCommentsOnPostAction
-} from "../../../../app/actions/postActions/postActions";
-import {getToken} from "../../../../app/auth/auth";
-import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommonLoader from "../../../common/components/CommonLoader";
+import {
+    useDeleteCommentMutation,
+    useLazyGetCommentsQuery,
+    useLazyGetRepliesOnCommentsQuery, useUpdateCommentMutation
+} from "../../../../app/apis/commentApi";
+import {handleRTKQuery} from "../../../../utils/RTKQueryUtils";
+import {addyApi} from "../../../../app/addyApi";
 
-const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) => {
-    const token = getToken();
+const LinkedinCommentsSection = ({
+                                     postData,
+                                     isDirty,
+                                     setDirty,
+                                     postCommentApi,
+                                     postSocioData,
+                                     onReply,
+                                     postReplyApi
+                                 }) => {
+
+    const linkedinBaseUrl = `${import.meta.env.VITE_APP_LINKEDIN_BASE_URL}`
     const dispatch = useDispatch();
-    const getCommentsOnPostActionData = useSelector(state => state.post.getCommentsOnPostActionReducer)
-    const replyCommentOnPostData = useSelector(state => state.post.replyCommentOnPostActionReducer)
-    const getRepliesOnCommentData = useSelector(state => state.post.getRepliesOnCommentReducer)
-    const addCommentOnPostData = useSelector(state => state.post.addCommentOnPostActionReducer)
-    const updateCommentsOnPostData = useSelector(state => state.post.updateCommentsOnPostActionReducer)
     const [linkedinComments, setLinkedinComments] = useState(null);
     const [startFrom, setStartFrom] = useState(0);
     const [baseQuery, setBaseQuery] = useState({
         socialMediaType: postData?.socialMediaType,
-        token: token
     })
     const [commentToDelete, setCommentToDelete] = useState(null);
     const [replyToComment, setReplyToComment] = useState(null);
     const [replyComment, setReplyComment] = useState({})
-    const [getLinkedinComments, setGetLinkedinComments] = useState(null);
+    const [triggerGetCommentsApi, setTriggerGetCommentsApi] = useState(false);
     const [getReplies, setGetReplies] = useState(null);
     const [deletedComments, setDeletedComments] = useState([]);
     const [getReplyForComment, setGetReplyForComment] = useState({})
@@ -53,111 +59,95 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
     const [showReplyBox, setShowReplyBox] = useState([])
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
-    useEffect(()=>{
-        if(postData && postPageData && postPageData?.commentsSummary?.totalFirstLevelComments>0 && (linkedinComments?.elements===undefined || linkedinComments?.elements===null)){
-            setGetLinkedinComments(new Date().getMilliseconds())
-        }
-    },[postData, postPageData])
+    const [getComments, getCommentsApi] = useLazyGetCommentsQuery()
+    const [getRepliesOnComment, getRepliesOnCommentApi] = useLazyGetRepliesOnCommentsQuery()
+    const [updateComments, updateCommentsApi] = useUpdateCommentMutation()
+    const [deleteComment, deleteCommentApi] = useDeleteCommentMutation()
 
     useEffect(() => {
-        if(getLinkedinComments!==null){
-            setGetLinkedinComments(null);
-            dispatch(getCommentsOnPostAction({
-                ...baseQuery,
-                id: postData?.id,
-                pageSize: 3,
-                start: startFrom
-            })).then(response => {
-                if (response.meta.requestStatus === "fulfilled") {
-                    setShowReplyBox([])
-                    if (response?.payload?.paging?.links?.filter(link => link.rel === "next")?.length === 0) {
-                        setStartFrom(null);
-                    } else {
-                        setStartFrom(parseInt(extractParameterFromUrl(`${import.meta.env.VITE_APP_LINKEDIN_BASE_URL}` + response?.payload.paging?.links?.filter(link => link.rel === "next")[0]?.href, "start")))
-                    }
+        if (postData && postSocioData && postSocioData?.commentsSummary?.totalFirstLevelComments > 0 && (linkedinComments?.elements === undefined || linkedinComments?.elements === null)) {
+            setTriggerGetCommentsApi(true)
+        }
+    }, [postData, postSocioData])
+
+    useEffect(() => {
+        if (triggerGetCommentsApi) {
+            setTriggerGetCommentsApi(false);
+
+            const handleGetComments = async () => {
+                const requestBody = {
+                    ...baseQuery,
+                    id: postData?.id,
+                    pageSize: 3,
+                    start: startFrom
                 }
-            })
-            //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
-            dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
-        }
-    }, [getLinkedinComments])
+                await handleRTKQuery(
+                    async () => {
+                        return await getComments(requestBody).unwrap();
+                    },
+                    (response) => {
+                        setShowReplyBox([])
+                        if (response?.paging?.links?.filter(link => link.rel === "next")?.length === 0) {
+                            setStartFrom(null);
+                        } else {
+                            setStartFrom(parseInt(extractParameterFromUrl(`${linkedinBaseUrl}` + response?.paging?.links?.filter(link => link.rel === "next")[0]?.href, "start")))
+                        }
+                    }
+                );
+            }
 
+            handleGetComments()
+        }
+    }, [triggerGetCommentsApi])
 
     useEffect(() => {
-        if (getCommentsOnPostActionData?.data !== undefined && !getCommentsOnPostActionData?.loading) {
+        if (getCommentsApi?.data !== undefined && !getCommentsApi?.isLoading && !getCommentsApi?.isFetching) {
             if (linkedinComments === null) {
-                setLinkedinComments(getCommentsOnPostActionData?.data)
+                setLinkedinComments(getCommentsApi?.data)
             } else {
-                const updatedComments = [...linkedinComments?.elements, ...getCommentsOnPostActionData?.data?.elements]
+                const updatedComments = [...linkedinComments?.elements, ...getCommentsApi?.data?.elements]
                 const commentsWithoutDuplicates = removeDuplicatesObjectsFromArray(updatedComments, "id")
                 setLinkedinComments({
-                    paging: getCommentsOnPostActionData?.data?.paging,
+                    paging: getCommentsApi?.data?.paging,
                     elements: commentsWithoutDuplicates
                 })
             }
-            dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
         }
-    }, [getCommentsOnPostActionData])
+    }, [getCommentsApi])
 
     useEffect(() => {
         if (commentToDelete !== null) {
-            const requestBody = {
-                ...baseQuery,
-                commentId: commentToDelete?.id,
-                parentObjectUrn: commentToDelete?.object,
-                orgId: commentToDelete?.actor
-            }
-            dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
-                if (response.meta.requestStatus === "fulfilled") {
-                    setDirty({
-                        ...isDirty,
-                        isDirty: true,
-                        action: {
-                            ...isDirty?.action,
-                            type: "DELETE",
-                            on: "COMMENT",
-                        }
-                    })
-                    setDeletedComments([...deletedComments, commentToDelete?.id])
-                    dispatch(getPostPageInfoAction({
-                        ...baseQuery,
-                        postIds: [postData?.id]
-                    }))
-                }
-                setCommentToDelete(null)
-            })
+            handleDeleteComment()
         }
     }, [commentToDelete])
 
     useEffect(() => {
-        if (addCommentOnPostData?.data !== undefined) {
+        if (postCommentApi?.data && !postCommentApi?.isLoading) {
             //Add Comment on the top of array
             let newComment = {
-                ...addCommentOnPostData?.data,
+                ...postCommentApi?.data,
                 "actor~": getLoggedInLinkedinActorObject("ORGANIZATION", postData?.page?.name, postData?.page?.imageUrl)
             }
             setStartFrom(startFrom + 1);
             setLinkedinComments({...linkedinComments, elements: [newComment, ...linkedinComments?.elements]})
-            dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
         }
-    }, [addCommentOnPostData])
-
+    }, [postCommentApi])
 
     useEffect(() => {
         if (getReplies !== null && ((getReplyForComment?.reference === "SHOW_MORE_BUTTON" && !getReplyForComment?.comment?.hasOwnProperty("reply")) || getReplyForComment?.reference === "LOAD_PREVIOUS_BUTTON")) {
-            dispatch(getRepliesOnComment({
+            const requestBody = {
                 ...baseQuery,
                 id: getReplyForComment?.comment["$URN"],
-                pageSize: 3,
-                start: getReplyForComment?.comment?.hasOwnProperty("reply") ? parseInt(extractParameterFromUrl(`${import.meta.env.VITE_APP_LINKEDIN_BASE_URL}` + getReplyForComment?.comment?.reply?.paging?.links?.filter(link => link.rel === "next")[0]?.href, "start")) : 0
-            }))
+                pageSize: 1,
+                start: getReplyForComment?.comment?.hasOwnProperty("reply") ? parseInt(extractParameterFromUrl(`${linkedinBaseUrl}` + getReplyForComment?.comment?.reply?.paging?.links?.filter(link => link.rel === "next")[0]?.href, "start")) : 0
+            }
+            getRepliesOnComment(requestBody)
         }
     }, [getReplies])
 
-
     useEffect(() => {
-        if (getRepliesOnCommentData?.data !== undefined && !getRepliesOnCommentData?.loading && getReplyForComment !== null && Object.keys(getReplyForComment)?.length > 0) {
-            let updatedElements = [...getRepliesOnCommentData?.data?.elements];
+        if (getRepliesOnCommentApi?.data !== undefined && !getRepliesOnCommentApi?.isLoading && !getRepliesOnCommentApi?.isFetching && getReplyForComment !== null && Object.keys(getReplyForComment)?.length > 0) {
+            let updatedElements = [...getRepliesOnCommentApi?.data?.elements];
             if (getReplyForComment?.comment?.hasOwnProperty("reply")) {
                 updatedElements = removeDuplicatesObjectsFromArray([...updatedElements, ...getReplyForComment?.comment?.reply?.elements], "id")
             }
@@ -165,7 +155,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                 ...getReplyForComment?.comment,
                 reply: {
                     ...getReplyForComment?.comment?.reply,
-                    paging: {...getRepliesOnCommentData?.data?.paging},
+                    paging: {...getRepliesOnCommentApi?.data?.paging},
                     elements: updatedElements
                 }
             }
@@ -173,43 +163,11 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
             updatedLinkedinComments[getReplyForComment?.index] = updatedComment
             setLinkedinComments({...linkedinComments, elements: [...updatedLinkedinComments]})
             setGetReplyForComment({})
-            dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
         }
-    }, [getRepliesOnCommentData])
-
-    const handleUpdateComment = (e) => {
-        e.preventDefault();
-        const requestBody = {
-            ...baseQuery,
-            ...getUpdateCommentMessage(updateComment, postData?.socialMediaType)
-
-        }
-        dispatch(updateCommentsOnPostAction(requestBody))
-        //     .then(response => {
-        //     if (response.meta.requestStatus === "fulfilled") {
-        //         setUpdateComment({})
-        //     }
-        // })
-    }
-
-    const handleReplyComment = (e) => {
-        e.preventDefault();
-        const requestBody = {
-            ...baseQuery,
-            ...getMentionedUserCommentFormat(replyComment, postData?.socialMediaType)
-        }
-
-        dispatch(replyCommentOnPostAction(requestBody)).then(response => {
-            if (response.meta.requestStatus === "fulfilled") {
-                setReplyComment({})
-                setShowReplyBox([])
-            }
-        });
-    }
-
+    }, [getRepliesOnCommentApi])
 
     useEffect(() => {
-        if (replyCommentOnPostData?.data !== undefined) {
+        if (postReplyApi?.data) {
             let updatedCommentsList = [...linkedinComments?.elements]
             let updatedComment = updatedCommentsList[replyToComment?.index]
             let updatedReplies;
@@ -217,7 +175,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                 let paging;
                 if (updatedComment?.hasOwnProperty("reply") && updatedComment?.reply?.paging?.links?.some(link => link.rel === "next")) {
                     //Has Replies and the replies are open
-                    const startFrom = parseInt(extractParameterFromUrl(`${import.meta.env.VITE_APP_LINKEDIN_BASE_URL}` + updatedComment?.reply?.paging?.links?.filter(link => link.rel === "next")[0]?.href, "start")) + 1
+                    const startFrom = parseInt(extractParameterFromUrl(`${linkedinBaseUrl}` + updatedComment?.reply?.paging?.links?.filter(link => link.rel === "next")[0]?.href, "start")) + 1
                     paging = {
                         ...updatedComment?.reply?.paging,
                         links: [{rel: "next", href: "/v2/socialActions?count=10&start=" + startFrom}]
@@ -233,7 +191,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                 updatedReplies = {
                     ...updatedComment?.reply,
                     elements: [...elements, {
-                        ...replyCommentOnPostData?.data,
+                        ...postReplyApi?.data,
                         "actor~": getLoggedInLinkedinActorObject("ORGANIZATION", postData?.page?.name, postData?.page?.imageUrl)
                     }],
                     paging: {...paging}
@@ -242,7 +200,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
             } else {
                 updatedReplies = {
                     elements: [{
-                        ...replyCommentOnPostData?.data,
+                        ...postReplyApi?.data,
                         "actor~": getLoggedInLinkedinActorObject("ORGANIZATION", postData?.page?.name, postData?.page?.imageUrl),
                     }],
                     paging: {
@@ -267,29 +225,103 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
             setShowReplyComments(showReply)
             setReplyComment({})
             setReplyToComment(null)
-            dispatch(resetReducers({sliceNames: ["replyCommentOnPostActionReducer"]}))
         }
-    }, [replyCommentOnPostData])
+    }, [postReplyApi])
 
     useEffect(() => {
-        if (updateCommentsOnPostData?.data !== undefined) {
-            let updatedComment = {...updateCommentsOnPostData?.data, "actor~": {...updateComment?.comment["actor~"]}}
+        if (updateCommentsApi?.data !== undefined && !updateCommentsApi?.isLoading) {
+            let updatedComment = {...updateCommentsApi?.data, "actor~": {...updateComment?.comment["actor~"]}}
             let updatedComments = [...linkedinComments?.elements]
             if (updateComment?.commentLevel === "FIRST") {
                 updatedComments[updateComment?.index] = updatedComment
             }
-            if(updateComment?.commentLevel === "SECOND"){
-                const index=updatedComments[updateComment?.index]?.reply?.elements?.findIndex(reply=>reply?.id===updatedComment?.id)
-                let updatedReplies=[...updatedComments[updateComment?.index]?.reply?.elements]
-                updatedReplies[index]=updatedComment
-                updatedComments[updateComment?.index] = {...updatedComments[updateComment?.index],reply:{...updatedComments[updateComment?.index]?.reply,elements:[...updatedReplies]}}
+            if (updateComment?.commentLevel === "SECOND") {
+                const index = updatedComments[updateComment?.index]?.reply?.elements?.findIndex(reply => reply?.id === updatedComment?.id)
+                let updatedReplies = [...updatedComments[updateComment?.index]?.reply?.elements]
+                updatedReplies[index] = updatedComment
+                updatedComments[updateComment?.index] = {
+                    ...updatedComments[updateComment?.index],
+                    reply: {...updatedComments[updateComment?.index]?.reply, elements: [...updatedReplies]}
+                }
 
             }
             setLinkedinComments({...linkedinComments, elements: [...updatedComments]})
             setUpdateComment({})
-            dispatch(resetReducers({sliceNames: ["updateCommentsOnPostActionReducer"]}))
         }
-    }, [updateCommentsOnPostData])
+    }, [updateCommentsApi])
+
+    const handleUpdateComment = (e) => {
+        e.preventDefault();
+        const requestBody = {
+            ...baseQuery,
+            ...getUpdateCommentMessage(updateComment, postData?.socialMediaType)
+        }
+        updateComments(requestBody)
+    }
+
+    const handleReplyComment = async (e) => {
+        e.preventDefault();
+        const requestBody = {
+            ...baseQuery,
+            ...getMentionedUserCommentFormat(replyComment, postData?.socialMediaType)
+        }
+        await handleRTKQuery(
+            async () => {
+                return await onReply(requestBody).unwrap();
+            },
+            () => {
+                setReplyComment({})
+                setShowReplyBox([])
+            }
+        );
+    }
+
+    const handleDeleteComment = async () => {
+        const requestBody = {
+            ...baseQuery,
+            commentId: commentToDelete?.comment?.id,
+            parentObjectUrn: commentToDelete?.comment?.object,
+            orgId: commentToDelete?.comment?.actor
+        }
+        await handleRTKQuery(
+            async () => {
+                return await deleteComment(requestBody).unwrap();
+            },
+            () => {
+                if (commentToDelete?.commentLevel === "SECOND") {
+                    let updatedLinkedinComments = {...linkedinComments}
+                    let updatedElements = [...updatedLinkedinComments.elements]
+                    const commentToUpdate = updatedElements[commentToDelete?.index]
+                    updatedElements[commentToDelete?.index] = {
+                        ...commentToUpdate,
+                        commentsSummary: {
+                            ...commentToUpdate.commentsSummary,
+                            aggregatedTotalComments: commentToUpdate.commentsSummary.aggregatedTotalComments - 1
+                        }
+                    }
+                    setLinkedinComments({
+                        ...linkedinComments,
+                        elements:updatedElements
+                    })
+                }
+                setDirty({
+                    ...isDirty,
+                    isDirty: true,
+                    action: {
+                        ...isDirty?.action,
+                        type: "DELETE",
+                        on: "COMMENT",
+                    }
+                })
+                setDeletedComments([...deletedComments, commentToDelete?.comment?.id])
+                dispatch(addyApi.util.invalidateTags(["getPostSocioDataApi"]));
+            },
+            null,
+            () => {
+                setCommentToDelete(null)
+            }
+        );
+    }
 
     function handleOnEmojiClick(emojiData) {
         setReplyComment({
@@ -314,9 +346,9 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                 !deletedComments.includes(comment?.id) &&
                                 <div key={index} className="comment_wrap">
                                     {
-                                        commentToDelete?.id === comment?.id ?
+                                        commentToDelete?.comment?.id === comment?.id ?
                                             <div className={"mb-3"}>
-                                                <Skeleton className={"mb-2"}></Skeleton>
+                                                <Skeleton className={"mb-2 h-20"}></Skeleton>
                                             </div> :
                                             <div className="user_card">
                                                 <div className="user_image">
@@ -343,7 +375,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                             {
                                                                                 comment?.actor === postData?.page?.pageId &&
                                                                                 <Dropdown.Item onClick={() => {
-                                                                                    !updateCommentsOnPostData?.loading && setUpdateComment({
+                                                                                    !updateCommentsApi?.isLoading && setUpdateComment({
                                                                                         index: index,
                                                                                         commentLevel: "FIRST",
                                                                                         comment: comment,
@@ -361,7 +393,12 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                             }
                                                                             <Dropdown.Item href="#/action-2"
                                                                                            onClick={() => {
-                                                                                               setCommentToDelete(comment)
+                                                                                               if (deleteCommentApi?.isLoading) return;
+                                                                                               setCommentToDelete({
+                                                                                                   commentLevel: "FIRST",
+                                                                                                   comment: comment,
+                                                                                                   index: index
+                                                                                               })
                                                                                                setDirty({
                                                                                                    ...isDirty,
                                                                                                    action: {
@@ -425,9 +462,9 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                     {/*    </>*/}
 
                                                                     {/*}*/}
-                                                                    <p className={postPageData?.commentsSummary?.commentsState === "OPEN" ? "cursor-pointer ms-3" : "disable-reply-comment ms-3"}
+                                                                    <p className={postSocioData?.commentsSummary?.commentsState === "OPEN" ? "cursor-pointer ms-3" : "disable-reply-comment ms-3"}
                                                                        onClick={() => {
-                                                                           if (postPageData?.commentsSummary?.commentsState === "OPEN") {
+                                                                           if (postSocioData?.commentsSummary?.commentsState === "OPEN") {
                                                                                setReplyToComment({
                                                                                    index: index,
                                                                                    comment: comment,
@@ -481,14 +518,14 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                            }}
                                                                     />
                                                                     <button
-                                                                        disabled={updateCommentsOnPostData?.loading || isNullOrEmpty(updateComment?.updatedMessage) || updateComment?.updatedMessage?.trim() === updateComment?.comment?.message?.text}
+                                                                        disabled={updateCommentsApi?.isLoading || isNullOrEmpty(updateComment?.updatedMessage) || updateComment?.updatedMessage?.trim() === updateComment?.comment?.message?.text}
                                                                         onClick={(e) => {
                                                                             !isNullOrEmpty(updateComment?.updatedMessage) && updateComment?.updatedMessage?.trim() !== updateComment?.comment?.message?.text && handleUpdateComment(e)
                                                                             setShowEmojiPicker(false)
                                                                         }}
-                                                                        className={(isNullOrEmpty(updateComment?.updatedMessage) || updateCommentsOnPostData?.loading || updateComment?.updatedMessage?.trim() === updateComment?.comment?.message?.text) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
+                                                                        className={(isNullOrEmpty(updateComment?.updatedMessage) || updateCommentsApi?.isLoading || updateComment?.updatedMessage?.trim() === updateComment?.comment?.message?.text) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
                                                                         {
-                                                                            updateCommentsOnPostData?.loading ?
+                                                                            updateCommentsApi?.isLoading ?
                                                                                 <RotatingLines strokeColor="white"
                                                                                                strokeWidth="5"
                                                                                                animationDuration="0.75"
@@ -543,7 +580,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                         }}>Load previous replies</p>
                                                     }
                                                     {
-                                                        getRepliesOnCommentData?.loading && showReplyComments[index] &&
+                                                        (getRepliesOnCommentApi?.isLoading || getRepliesOnCommentApi?.isFetching) && showReplyComments[index] &&
                                                         <div className={" text-center z-index-1 mt-1"}><RotatingLines
                                                             strokeColor="#F07C33"
                                                             strokeWidth="5"
@@ -561,10 +598,10 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                         !deletedComments.includes(childComment?.id) &&
                                                                         <div key={i} className="comment_wrap">
                                                                             {
-                                                                                commentToDelete?.id === childComment?.id ?
+                                                                                commentToDelete?.comment?.id === childComment?.id ?
                                                                                     <div className={"mb-3"}>
                                                                                         <Skeleton
-                                                                                            className={"mb-2"}></Skeleton>
+                                                                                            className={"mb-2 h-20"}></Skeleton>
                                                                                     </div> :
                                                                                     <div className="user_card">
                                                                                         <div className="user_image">
@@ -594,7 +631,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                                                                         comment?.actor === postData?.page?.pageId &&
                                                                                                                         <Dropdown.Item
                                                                                                                             onClick={() => {
-                                                                                                                                !updateCommentsOnPostData?.loading && setUpdateComment({
+                                                                                                                                !updateCommentsApi?.isLoading && setUpdateComment({
                                                                                                                                     index: index,
                                                                                                                                     commentLevel: "SECOND",
                                                                                                                                     comment: childComment,
@@ -613,7 +650,12 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                                                                     <Dropdown.Item
                                                                                                                         href="#/action-2"
                                                                                                                         onClick={() => {
-                                                                                                                            setCommentToDelete(childComment)
+                                                                                                                            if (deleteCommentApi?.isLoading) return;
+                                                                                                                            setCommentToDelete({
+                                                                                                                                commentLevel: "SECOND",
+                                                                                                                                comment: childComment,
+                                                                                                                                index: index
+                                                                                                                            })
                                                                                                                         }}>Delete</Dropdown.Item>
                                                                                                                 </Dropdown.Menu>
                                                                                                             </Dropdown>
@@ -665,9 +707,9 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                                                             {/*    </>*/}
 
                                                                                                             {/*}*/}
-                                                                                                            <p className={postPageData?.commentsSummary?.commentsState === "OPEN" ? "cursor-pointer" : "disable-reply-comment"}
+                                                                                                            <p className={postSocioData?.commentsSummary?.commentsState === "OPEN" ? "cursor-pointer" : "disable-reply-comment"}
                                                                                                                onClick={() => {
-                                                                                                                   if (postPageData?.commentsSummary?.commentsState === "OPEN") {
+                                                                                                                   if (postSocioData?.commentsSummary?.commentsState === "OPEN") {
                                                                                                                        setReplyToComment({
                                                                                                                            index: index,
                                                                                                                            comment: comment,
@@ -738,14 +780,14 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                                                                 }}
                                                                                                             />
                                                                                                             <button
-                                                                                                                disabled={updateCommentsOnPostData?.loading || isNullOrEmpty(updateComment?.updatedMessage) || updateComment?.updatedMessage?.trim() === updateComment?.comment?.message?.text}
+                                                                                                                disabled={updateCommentsApi?.isLoading || isNullOrEmpty(updateComment?.updatedMessage) || updateComment?.updatedMessage?.trim() === updateComment?.comment?.message?.text}
                                                                                                                 onClick={(e) => {
                                                                                                                     !isNullOrEmpty(updateComment?.updatedMessage) && updateComment?.updatedMessage?.trim() !== updateComment?.comment?.message?.text && handleUpdateComment(e)
                                                                                                                     setShowEmojiPicker(false)
                                                                                                                 }}
-                                                                                                                className={(isNullOrEmpty(updateComment?.updatedMessage) || updateCommentsOnPostData?.loading || updateComment?.updatedMessage?.trim() === updateComment?.comment?.message?.text) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
+                                                                                                                className={(isNullOrEmpty(updateComment?.updatedMessage) || updateCommentsApi?.isLoading || updateComment?.updatedMessage?.trim() === updateComment?.comment?.message?.text) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
                                                                                                                 {
-                                                                                                                    updateCommentsOnPostData?.loading ?
+                                                                                                                    updateCommentsApi?.isLoading ?
                                                                                                                         <RotatingLines
                                                                                                                             strokeColor="white"
                                                                                                                             strokeWidth="5"
@@ -824,15 +866,15 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                                                    }}
                                                             />
                                                             <button
-                                                                disabled={replyCommentOnPostData?.loading || isReplyCommentEmpty(replyComment)}
+                                                                disabled={postReplyApi?.isLoading || isReplyCommentEmpty(replyComment)}
                                                                 onClick={(e) => {
                                                                     !isReplyCommentEmpty(replyComment) && handleReplyComment(e);
                                                                     setShowEmojiPicker(false)
                                                                 }}
-                                                                className={isReplyCommentEmpty(replyComment) || replyCommentOnPostData?.loading ? "view_post_btn cmn_bg_btn px-2 opacity-50" : "view_post_btn cmn_bg_btn px-2"}>
+                                                                className={isReplyCommentEmpty(replyComment) || postReplyApi?.isLoading ? "view_post_btn cmn_bg_btn px-2 opacity-50" : "view_post_btn cmn_bg_btn px-2"}>
 
                                                                 {
-                                                                    (replyCommentOnPostData?.loading && !isReplyCommentEmpty(replyComment)) ?
+                                                                    (postReplyApi?.isLoading && !isReplyCommentEmpty(replyComment)) ?
                                                                         <RotatingLines strokeColor="white"
                                                                                        strokeWidth="5"
                                                                                        animationDuration="0.75"
@@ -872,7 +914,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                         })
                     }
                     {
-                        (getCommentsOnPostActionData?.loading && linkedinComments) ?
+                        ((getCommentsApi?.isLoading || getCommentsApi?.isFetching) && linkedinComments) ?
                             <div className={" text-center z-index-1 mt-1"}><RotatingLines strokeColor="#F07C33"
                                                                                           strokeWidth="5"
                                                                                           animationDuration="0.75"
@@ -883,7 +925,7 @@ const LinkedinCommentsSection = ({postData, postPageData, isDirty, setDirty}) =>
                                 {
                                     linkedinComments?.paging?.links?.filter(link => link.rel === "next")?.length > 0 &&
                                     <div className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"} onClick={() => {
-                                        setGetLinkedinComments(new Date().getMilliseconds())
+                                        setTriggerGetCommentsApi(true)
                                     }}>Load more comments
                                     </div>
                                 }

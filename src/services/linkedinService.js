@@ -15,7 +15,6 @@ import {SocialAccountProvider} from "../utils/contantData";
 import {getAuthHeader} from "../utils/RTKQueryUtils";
 import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils";
 import {showErrorToast} from "../features/common/components/Toast";
-import {getPinterestPostEngagements} from "./pinterestService";
 
 const baseUrl = `${import.meta.env.VITE_APP_API_BASE_URL}`
 
@@ -259,6 +258,93 @@ export const getLinkedinPostEngagements = async (data) => {
         return res?.data;
     }).catch((error) => {
         showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+
+export const getLinkedinPostSocioData = async (data) => {
+    const apiUrl = `${baseUrl}/linkedin/socialActions/${data?.postId}`;
+    return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const postLinkedinComment = async (data) => {
+    const apiUrl = `${baseUrl}/linkedin/comment`;
+    return baseAxios.post(apiUrl, {
+        actor: data?.pageId,
+        object: data?.id,
+        text: data?.data?.message,
+        parentObjectUrn: data?.id,
+    }, getAuthHeader()).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const getLinkedinComments = async (data) => {
+    const apiUrl = `${baseUrl}/linkedin/comments/${data.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
+    return baseAxios.get(apiUrl, getAuthHeader()).then((response) => {
+        return response?.data
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const getLinkedinRepliesOnComments = async (data) => {
+    const apiUrl = `${baseUrl}/linkedin/comments/${data?.id}?pageSize=${data?.pageSize}&start=${data?.start}`;
+    return baseAxios.get(apiUrl, getAuthHeader()).then((response) => {
+        return response?.data
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const postLinkedinReplyOnComment = async (data) => {
+    const apiUrl = `${baseUrl}/linkedin/comment`;
+    return baseAxios.post(apiUrl, {
+        actor: data?.actor,
+        object: data?.object,
+        text: data?.message,
+        parentComment: data?.parentComment,
+        parentObjectUrn: data?.parentComment,
+        attributes: data?.attributes,
+    }, getAuthHeader()).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const updateLinkedinComment = async (data) => {
+    const apiUrl = `${baseUrl}/linkedin/comment/${data?.commentId}`;
+    return baseAxios.put(apiUrl, {
+        text: data?.text,
+        actor: data?.actor,
+        parentObjectUrn: data?.parentObjectUrn,
+        attributes: data?.attributes,
+    }, getAuthHeader()).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const deleteLinkedinComment = async (data) => {
+    const apiUrl = `${baseUrl}/linkedin/comment?commentId=${data?.commentId}&parentObjectUrn=${data?.parentObjectUrn}&orgId=${data?.orgId}`;
+    return baseAxios.delete(apiUrl, getAuthHeader()).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
         throw error;
     });
 }

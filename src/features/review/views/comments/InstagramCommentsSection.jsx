@@ -3,28 +3,38 @@ import {Dropdown} from "react-bootstrap";
 import {PiDotsThreeVerticalBold} from "react-icons/pi";
 import {
     countCommonElementsFromArray,
-    getCommentCreationTime,  getValueOrDefault,
+    getCommentCreationTime, getValueOrDefault,
     handleShowCommentReplies,
     isNullOrEmpty, removeDuplicatesObjectsFromArray,
 } from "../../../../utils/commonUtils";
 import {LiaThumbsUpSolid} from "react-icons/lia";
 import {BiSolidSend} from "react-icons/bi";
 import EmojiPicker, {EmojiStyle} from "emoji-picker-react";
-import {
-    deleteCommentsOnPostAction, getCommentsOnPostAction,
-    getPostPageInfoAction, getRepliesOnComment,
-    replyCommentOnPostAction
-} from "../../../../app/actions/postActions/postActions";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import default_user_icon from "../../../../images/default_user_icon.svg"
 import Skeleton from "../../../loader/skeletonEffect/Skeleton";
 import {RotatingLines} from "react-loader-spinner";
 import CommentText from "./CommentText";
-import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommonLoader from "../../../common/components/CommonLoader";
+import {
+    useDeleteCommentMutation,
+    useLazyGetCommentsQuery,
+    useLazyGetRepliesOnCommentsQuery
+} from "../../../../app/apis/commentApi";
+import {handleRTKQuery} from "../../../../utils/RTKQueryUtils";
+import {addyApi} from "../../../../app/addyApi";
 
-const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) => {
+const InstagramCommentsSection = ({
+                                      postData,
+                                      isDirty,
+                                      setDirty,
+                                      postSocioData,
+                                      postCommentApi,
+                                      onReply,
+                                      postReplyApi
+                                  }) => {
+
     const dispatch = useDispatch();
     const [baseQuery, setBaseQuery] = useState({
         socialMediaType: postData?.socialMediaType,
@@ -36,84 +46,82 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
     });
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showReplies, setShowReplies] = useState([]);
-    const [getInstagramComments, setGetInstagramComments] = useState(null);
+    const [triggerGetCommentsApi, setTriggerGetCommentsApi] = useState(false);
 
 
     const [replyToComment, setReplyToComment] = useState(null);
     const [reply, setReply] = useState({parentId: null, message: null});
     const [getReplyForComment, setGetReplyForComment] = useState({})
-    const [getReplies, setGetReplies] = useState(null);
+    const [getReplies, setGetReplies] = useState(false);
     const [commentToDelete, setCommentToDelete] = useState(null);
     const [deletedCommentIds, setDeletedCommentIds] = useState([]);
 
-    const replyCommentOnPostData = useSelector(state => state.post.replyCommentOnPostActionReducer)
-    const getCommentsOnPostActionData = useSelector(state => state.post.getCommentsOnPostActionReducer)
-    const getRepliesOnCommentData = useSelector(state => state.post.getRepliesOnCommentReducer)
-    const addCommentOnPostData = useSelector(state => state.post.addCommentOnPostActionReducer)
+    const [getComments, getCommentsApi] = useLazyGetCommentsQuery()
+    const [getRepliesOnComment, getRepliesOnCommentApi] = useLazyGetRepliesOnCommentsQuery()
+    const [deleteComment, deleteCommentApi] = useDeleteCommentMutation()
 
     useEffect(() => {
-        if (postPageData) {
-            setShowReplies(showReplies.length === 0 ? new Array(postPageData?.comments?.data?.length).fill(false) : [...showReplies])
+        if (postSocioData) {
+            setShowReplies(showReplies.length === 0 ? new Array(postSocioData?.comments?.data?.length).fill(false) : [...showReplies])
         }
-    }, [postPageData])
+    }, [postSocioData])
 
     useEffect(() => {
-        if (postData && postPageData && postPageData?.comments_count > 0 && instagramComments?.data === null) {
-            setGetInstagramComments(new Date().getMilliseconds())
+        if (postData && postSocioData && postSocioData?.comments_count > 0 && instagramComments?.data === null) {
+            setTriggerGetCommentsApi(true)
         }
-    }, [postData, postPageData])
+    }, [postData, postSocioData])
 
     useEffect(() => {
-        if (getInstagramComments !== null) {
-            setGetInstagramComments(null);
-            dispatch(getCommentsOnPostAction({
+        if (triggerGetCommentsApi) {
+            setTriggerGetCommentsApi(false);
+            const requestBody = {
                 ...baseQuery,
-                id: postPageData?.id,
+                id: postSocioData?.id,
                 limit: 6,
                 next: instagramComments?.nextCursor
-            }))
-            //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
-            dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
+            }
+            getComments(requestBody)
         }
-    }, [getInstagramComments])
+    }, [triggerGetCommentsApi])
 
     useEffect(() => {
-        if (getCommentsOnPostActionData?.data !== undefined && !getCommentsOnPostActionData?.loading) {
-            const cursorToNextData = getCommentsOnPostActionData.data?.paging?.cursors?.after === undefined ? null : getCommentsOnPostActionData.data?.paging?.cursors?.after
+        if (getCommentsApi?.data !== undefined && !getCommentsApi?.isLoading && !getCommentsApi?.isFetching) {
+            const cursorToNextData = getCommentsApi.data?.paging?.cursors?.after === undefined ? null : getCommentsApi.data?.paging?.cursors?.after
             if (instagramComments?.data === null) {
                 setInstagramComments({
-                    data: getCommentsOnPostActionData?.data?.data,
+                    data: getCommentsApi?.data?.data,
                     nextCursor: cursorToNextData
                 })
             } else {
-                const updatedComments = [...instagramComments?.data, ...getCommentsOnPostActionData?.data?.data]
+                const updatedComments = [...instagramComments?.data, ...getCommentsApi?.data?.data]
                 // const commentsWithoutDuplicates = removeDuplicatesObjectsFromArray(updatedComments, "id")
                 setInstagramComments({
                     data: updatedComments,
                     nextCursor: cursorToNextData
                 })
             }
-            dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
         }
-    }, [getCommentsOnPostActionData])
+    }, [getCommentsApi])
 
     useEffect(() => {
-        if (getReplies !== null && ((getReplyForComment?.reference === "SHOW_MORE_REPLIES" && getReplyForComment?.comment?.replyData === undefined) || (getReplyForComment?.reference === "LOAD_MORE"))) {
-            setGetReplies(null);
-            dispatch(getRepliesOnComment({
+        if (getReplies && ((getReplyForComment?.reference === "SHOW_MORE_REPLIES" && getReplyForComment?.comment?.replyData === undefined) || (getReplyForComment?.reference === "LOAD_MORE"))) {
+            setGetReplies(false);
+            const requestBody = {
                 ...baseQuery,
                 id: getReplyForComment?.comment?.id,
                 limit: 6,
                 next: getReplyForComment?.comment?.replyData?.nextCursor === undefined ? null : getReplyForComment?.comment?.replyData?.nextCursor
-            }))
+            }
+            getRepliesOnComment(requestBody)
         }
     }, [getReplies])
 
     useEffect(() => {
-        if (getRepliesOnCommentData?.data !== undefined && !getRepliesOnCommentData?.loading && getReplyForComment !== null && Object.keys(getReplyForComment)?.length > 0) {
-            const cursorToNext = getRepliesOnCommentData?.data?.paging?.cursors?.after === undefined ? null : getRepliesOnCommentData?.data?.paging?.cursors?.after
+        if (getRepliesOnCommentApi?.data !== undefined && !getRepliesOnCommentApi?.isLoading && !getRepliesOnCommentApi?.isFetching && getReplyForComment !== null && Object.keys(getReplyForComment)?.length > 0) {
+            const cursorToNext = getRepliesOnCommentApi?.data?.paging?.cursors?.after === undefined ? null : getRepliesOnCommentApi?.data?.paging?.cursors?.after
             let previousData = getValueOrDefault(getReplyForComment?.comment?.replyData?.data, []);
-            let updatedComments =removeDuplicatesObjectsFromArray( [...previousData, ...getRepliesOnCommentData?.data?.data], "id")
+            let updatedComments = removeDuplicatesObjectsFromArray([...previousData, ...getRepliesOnCommentApi?.data?.data], "id")
             const updatedComment = {
                 ...getReplyForComment?.comment,
                 replyData: {
@@ -129,79 +137,52 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                 data: [...updatedInstagramComments]
             })
             setGetReplyForComment({})
-            dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
         }
-    }, [getRepliesOnCommentData])
+    }, [getRepliesOnCommentApi])
 
     useEffect(() => {
-        if (addCommentOnPostData?.data !== undefined) {
+        if (postCommentApi?.data && !postCommentApi?.isLoading) {
             //Add Comment on the top of array
-            let newComment = addCommentOnPostData?.data;
+            let newComment = postCommentApi?.data;
             const previousData = getValueOrDefault(instagramComments.data, []);
             setInstagramComments({
                 ...instagramComments,
                 data: [newComment, ...previousData]
             })
-            dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
         }
-    }, [addCommentOnPostData])
+    }, [postCommentApi])
 
     useEffect(() => {
-        if (replyCommentOnPostData?.data !== undefined) {
+        if (postReplyApi?.data) {
             let updatedCommentsList = [...instagramComments?.data]
             let updatedComment = updatedCommentsList[replyToComment?.index]
             updatedComment = {
                 ...updatedComment,
                 replies: {
                     ...updatedComment?.replies,
-                    data: [{id: replyCommentOnPostData?.data?.id}, ...getValueOrDefault(updatedComment?.replies?.data, [])]
+                    data: [{id: postReplyApi?.data?.id}, ...getValueOrDefault(updatedComment?.replies?.data, [])]
                 },
                 replyData: {
                     ...updatedComment?.replyData,
-                    data: replyToComment?.parentCommentLevel === "FIRST" ? [{...replyCommentOnPostData?.data},...getValueOrDefault(updatedComment?.replyData?.data,[])] : [...getValueOrDefault(updatedComment?.replyData?.data,[]),{...replyCommentOnPostData?.data}],
+                    data: replyToComment?.parentCommentLevel === "FIRST" ? [{...postReplyApi?.data}, ...getValueOrDefault(updatedComment?.replyData?.data, [])] : [...getValueOrDefault(updatedComment?.replyData?.data, []), {...postReplyApi?.data}],
                     nextCursor: updatedComment?.replyData?.nextCursor === undefined ? null : updatedComment?.replyData?.nextCursor
                 }
             }
             updatedCommentsList[replyToComment?.index] = updatedComment;
             setInstagramComments({
                 ...instagramComments,
-                data:updatedCommentsList
+                data: updatedCommentsList
             })
             let showReply = [...showReplies]
             showReply[replyToComment?.index] = true
             setShowReplies(showReply)
             setReplyToComment(null)
-            dispatch(resetReducers({sliceNames: ["replyCommentOnPostActionReducer"]}))
         }
-    }, [replyCommentOnPostData])
+    }, [postReplyApi])
 
     useEffect(() => {
         if (commentToDelete) {
-            const requestBody = {
-                ...baseQuery,
-                id: commentToDelete,
-            }
-            dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
-                if (response.meta.requestStatus === "fulfilled") {
-                    setDirty({
-                        ...isDirty,
-                        isDirty: true,
-                        action: {
-                            ...isDirty?.action,
-                            type: "DELETE",
-                            on: "COMMENT"
-                        }
-                    });
-                    setDeletedCommentIds([...deletedCommentIds, commentToDelete]);
-                    const getPostPageRequestBody = {
-                        ...baseQuery,
-                        postIds: [postData?.id]
-                    }
-                    dispatch(getPostPageInfoAction(getPostPageRequestBody));
-                }
-                setCommentToDelete(null)
-            })
-
+            handleDeleteComment()
         }
     }, [commentToDelete])
 
@@ -212,7 +193,38 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
         })
     }
 
-    const handleReplyCommentOnPost = (e) => {
+    const handleDeleteComment = async () => {
+        const requestBody = {
+            ...baseQuery,
+            id: commentToDelete,
+        }
+        await handleRTKQuery(
+            async () => {
+                return await deleteComment(requestBody).unwrap();
+            },
+            () => {
+                setDirty({
+                    ...isDirty,
+                    isDirty: true,
+                    action: {
+                        ...isDirty?.action,
+                        type: "DELETE",
+                        on: "COMMENT"
+                    }
+                });
+                setDeletedCommentIds([...deletedCommentIds, commentToDelete]);
+                dispatch(addyApi.util.invalidateTags(["getPostSocioDataApi"]));
+            },
+            null,
+            ()=>{
+                setCommentToDelete(null)
+            }
+        );
+
+
+
+    }
+    const handleReplyCommentOnPost = async (e) => {
         e.preventDefault();
         const requestBody = {
             ...baseQuery,
@@ -221,8 +233,11 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                 message: reply.message
             },
         }
-        dispatch(replyCommentOnPostAction(requestBody)).then(res => {
-            if (res.meta.requestStatus === "fulfilled") {
+        await handleRTKQuery(
+            async () => {
+                return await onReply(requestBody).unwrap();
+            },
+            () => {
                 setDirty({
                     ...isDirty,
                     isDirty: true,
@@ -236,22 +251,19 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                     parentId: null,
                     message: ""
                 })
-                dispatch(getPostPageInfoAction({
-                    ...baseQuery,
-                    postIds: [postData?.id]
-                }));
+                dispatch(addyApi.util.invalidateTags(["getPostSocioDataApi"]));
             }
-        })
+        );
     }
 
 
     return (
         <>
             {
-                postPageData?.comments_count === 0 && <div className={"no-cmnt-txt"}>No comments yet!</div>
+                postSocioData?.comments_count === 0 && <div className={"no-cmnt-txt"}>No comments yet!</div>
             }
             {
-                postPageData?.comments_count > 0 && instagramComments?.data === null ? <CommonLoader/> :
+                postSocioData?.comments_count > 0 && instagramComments?.data === null ? <CommonLoader/> :
                     instagramComments?.data?.map((comment, index) => {
                         return (
                             <>
@@ -281,16 +293,19 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                                         className={"comment-edit-del-icon"}/>
                                                                 </Dropdown.Toggle>
                                                                 <Dropdown.Menu>
-                                                                    <Dropdown.Item href="#/action-2" onClick={() => {
-                                                                        setCommentToDelete(comment?.id)
-                                                                        setDirty({
-                                                                            ...isDirty,
-                                                                            action: {
-                                                                                ...isDirty?.action,
-                                                                                reduceCommentCount: 1 + (comment?.hasOwnProperty("replies") ? comment?.replies?.data?.length : 0),
-                                                                            }
-                                                                        })
-                                                                    }}>Delete</Dropdown.Item>
+                                                                    <Dropdown.Item
+                                                                        href="#/action-2"
+                                                                        onClick={() => {
+                                                                            if (deleteCommentApi?.isLoading) return;
+                                                                            setCommentToDelete(comment?.id)
+                                                                            setDirty({
+                                                                                ...isDirty,
+                                                                                action: {
+                                                                                    ...isDirty?.action,
+                                                                                    reduceCommentCount: 1 + (comment?.hasOwnProperty("replies") ? comment?.replies?.data?.length : 0),
+                                                                                }
+                                                                            })
+                                                                        }}>Delete</Dropdown.Item>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
                                                         </div>
@@ -326,7 +341,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                         </div>
                                                     </>
                                                     {
-                                                        comment?.replies?.data?.length > 0 && comment?.replies?.data?.length> countCommonElementsFromArray(deletedCommentIds,comment?.replies?.data?.map(c=>c.id))  &&
+                                                        comment?.replies?.data?.length > 0 && comment?.replies?.data?.length > countCommonElementsFromArray(deletedCommentIds, comment?.replies?.data?.map(c => c.id)) &&
                                                         <p className="reply_toggle mb-2" onClick={() => {
                                                             if (!showReplies[index]) {
                                                                 setGetReplyForComment({
@@ -334,10 +349,10 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                                     comment: comment,
                                                                     reference: "SHOW_MORE_REPLIES",
                                                                 });
-                                                                setGetReplies(new Date().getMilliseconds());
+                                                                setGetReplies(true);
                                                             }
                                                             setShowReplies(handleShowCommentReplies(showReplies, index))
-                                                        }}>{!showReplies[index] ? "Show" : "Hide"} {comment?.replies?.data?.length - countCommonElementsFromArray(deletedCommentIds,comment?.replies?.data?.map(c=>c.id))} {comment?.replies?.data?.length -countCommonElementsFromArray(deletedCommentIds,comment?.replies?.data?.map(c=>c.id)) > 1 ? "replies" : "reply"}</p>
+                                                        }}>{!showReplies[index] ? "Show" : "Hide"} {comment?.replies?.data?.length - countCommonElementsFromArray(deletedCommentIds, comment?.replies?.data?.map(c => c.id))} {comment?.replies?.data?.length - countCommonElementsFromArray(deletedCommentIds, comment?.replies?.data?.map(c => c.id)) > 1 ? "replies" : "reply"}</p>
                                                     }
                                                     {
                                                         showReplies[index] && <>
@@ -377,6 +392,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                                                                             <Dropdown.Item
                                                                                                                 href="#/action-2"
                                                                                                                 onClick={() => {
+                                                                                                                    if (deleteCommentApi?.isLoading) return;
                                                                                                                     setCommentToDelete(childComment?.id)
                                                                                                                     setDirty({
                                                                                                                         ...isDirty,
@@ -470,7 +486,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                                                                                        }
                                                                                                                    }
                                                                                                                }}
-                                                                                                               className={replyCommentOnPostData?.loading ? "form-control opacity-50" : "form-control "}
+                                                                                                               className={postReplyApi?.isLoading ? "form-control opacity-50" : "form-control "}
                                                                                                                onChange={(e) => {
                                                                                                                    setShowEmojiPicker(false)
                                                                                                                    e.preventDefault();
@@ -482,15 +498,15 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                                                                         />
                                                                                                         <button
                                                                                                             id={"post-reply-to-parent-btn"}
-                                                                                                            disabled={replyCommentOnPostData?.loading || isNullOrEmpty(reply?.message)}
+                                                                                                            disabled={postReplyApi?.isLoading || isNullOrEmpty(reply?.message)}
                                                                                                             onClick={(e) => {
                                                                                                                 setShowEmojiPicker(false)
                                                                                                                 !isNullOrEmpty(reply?.message) && handleReplyCommentOnPost(e)
 
                                                                                                             }}
-                                                                                                            className={replyCommentOnPostData?.loading || isNullOrEmpty(reply?.message) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
+                                                                                                            className={postReplyApi?.isLoading || isNullOrEmpty(reply?.message) ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
                                                                                                             {
-                                                                                                                replyCommentOnPostData?.loading ?
+                                                                                                                postReplyApi?.isLoading ?
                                                                                                                     <RotatingLines
                                                                                                                         strokeColor="white"
                                                                                                                         strokeWidth="5"
@@ -534,7 +550,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                                 })
                                                             }
                                                             {
-                                                                (getRepliesOnCommentData?.loading && comment?.id === getReplyForComment?.comment?.id) ?
+                                                                ((getRepliesOnCommentApi?.isLoading || getRepliesOnCommentApi?.isFetching) && comment?.id === getReplyForComment?.comment?.id) ?
                                                                     <div className={" text-center z-index-1 mt-1"}>
                                                                         <RotatingLines strokeColor="#F07C33"
                                                                                        strokeWidth="5"
@@ -552,7 +568,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                                                         comment: comment,
                                                                                         reference: "LOAD_MORE",
                                                                                     });
-                                                                                    setGetReplies(new Date().getMilliseconds())
+                                                                                    setGetReplies(true)
                                                                                 }}>Load more
                                                                             </div>
                                                                         }
@@ -586,7 +602,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                                    onClick={() => {
                                                                        setShowEmojiPicker(false)
                                                                    }}
-                                                                   className={replyCommentOnPostData?.loading ? "form-control opacity-50" : "form-control "}
+                                                                   className={postReplyApi?.isLoading ? "form-control opacity-50" : "form-control "}
                                                                    onChange={(e) => {
                                                                        e.preventDefault();
                                                                        setShowEmojiPicker(false)
@@ -603,13 +619,13 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                                                             />
                                                             <button
                                                                 id={"post-reply-to-child-btn"}
-                                                                disabled={replyCommentOnPostData?.loading || isNullOrEmpty(reply.message)}
+                                                                disabled={postReplyApi?.isLoading || isNullOrEmpty(reply.message)}
                                                                 onClick={(e) => {
                                                                     setShowEmojiPicker(false)
                                                                     !isNullOrEmpty(reply.message) && handleReplyCommentOnPost(e);
                                                                 }}
-                                                                className={replyCommentOnPostData?.loading || isNullOrEmpty(reply.message) ? "view_post_btn cmn_bg_btn px-2 opacity-50" : "view_post_btn cmn_bg_btn px-2"}>{
-                                                                replyCommentOnPostData?.loading ?
+                                                                className={postReplyApi?.isLoading || isNullOrEmpty(reply.message) ? "view_post_btn cmn_bg_btn px-2 opacity-50" : "view_post_btn cmn_bg_btn px-2"}>{
+                                                                postReplyApi?.isLoading ?
                                                                     <RotatingLines strokeColor="white"
                                                                                    strokeWidth="5"
                                                                                    animationDuration="0.75" width="20"
@@ -649,7 +665,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                     })
             }
             {
-                (getCommentsOnPostActionData?.loading && Array.isArray(instagramComments?.data)) ?
+                ((getCommentsApi?.isLoading || getCommentsApi?.isFetching) && Array.isArray(instagramComments?.data)) ?
                     <div className={" text-center z-index-1 mt-1"}><RotatingLines strokeColor="#F07C33"
                                                                                   strokeWidth="5"
                                                                                   animationDuration="0.75"
@@ -660,7 +676,7 @@ const InstagramCommentsSection = ({postData, postPageData, isDirty, setDirty}) =
                         {
                             instagramComments?.nextCursor !== null &&
                             <div className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"} onClick={() => {
-                                setGetInstagramComments(new Date().getMilliseconds())
+                                setTriggerGetCommentsApi(true)
                             }}>Load more comments
                             </div>
                         }

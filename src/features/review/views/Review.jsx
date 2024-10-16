@@ -10,10 +10,7 @@ import {
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
 import CommonLoader from "../../common/components/CommonLoader";
-import {useDispatch, useSelector} from "react-redux";
-import {
-    getPostPageInfoAction,
-} from "../../../app/actions/postActions/postActions";
+import {useDispatch} from "react-redux";
 import {getToken} from "../../../app/auth/auth";
 import {RotatingLines} from "react-loader-spinner";
 import Select from "react-select";
@@ -23,14 +20,16 @@ import {MdDelete} from "react-icons/md";
 import notConnected_img from "../../../images/no_acc_connect_img.svg";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
-import {useDeletePostFromPagesByPageIdsMutation, useGetPublishedPostsQuery} from "../../../app/apis/postApi";
+import {
+    useDeletePostFromPagesByPageIdsMutation,
+    useLazyGetPublishedPostsQuery
+} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 
 const Review = () => {
 
     const {sidebar} = useAppContext();
-    const token = getToken();
     const dispatch = useDispatch();
 
     const [searchQuery, setSearchQuery] = useState({
@@ -55,10 +54,15 @@ const Review = () => {
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
-    const postsApi = useGetPublishedPostsQuery(searchQuery, {skip: searchQuery.offSet < 0})
+    const [getPosts,postApi] = useLazyGetPublishedPostsQuery()
     const [deletePostFromPagesByPageIds, deletePostFromPagesApi] = useDeletePostFromPagesByPageIdsMutation()
 
-    const postPageInfoData = useSelector((state) => state.post.getPostPageInfoReducer.data);
+
+    useEffect(() => {
+        if(searchQuery?.offSet>=0){
+            getPosts(searchQuery)
+        }
+    }, [searchQuery]);
 
     useEffect(() => {
         if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
@@ -67,15 +71,15 @@ const Review = () => {
     }, [getConnectedSocialAccountApi, getAllConnectedPagesApi]);
 
     useEffect(() => {
-        if (postsApi?.data && !postsApi?.isLoading && !postsApi?.isFetching) {
+        if (postApi?.data && !postApi?.isLoading ) {
             if (searchQuery?.offSet === 0) {
-                setPostsList([...postsApi?.data?.data])
+                setPostsList([...postApi?.data?.data])
             }
             if (searchQuery?.offSet > 0) {
-                setPostsList([...postsList, ...postsApi?.data?.data])
+                setPostsList([...postsList, ...postApi?.data?.data])
             }
         }
-    }, [postsApi?.data]);
+    }, [postApi?.data]);
 
     useEffect(() => {
         if (deletePostPageInfo !== null && deletePostPageInfo !== undefined) {
@@ -92,18 +96,6 @@ const Review = () => {
             }
         }
     }, [getConnectedSocialAccountApi, getAllConnectedPagesApi, searchQuery]);
-
-    useEffect(() => {
-        if (postData) {
-            const requestBody = {
-                token: token,
-                postIds: [postData?.id],
-                pageAccessToken: postData?.page?.access_token,
-                socialMediaType: postData?.socialMediaType,
-            };
-            dispatch(getPostPageInfoAction(requestBody));
-        }
-    }, [postData]);
 
     useEffect(() => {
         if (isDirty?.isDirty) {
@@ -168,10 +160,10 @@ const Review = () => {
     const intObserver = useRef();
     const lastPostRef = useCallback(
         (post) => {
-            if (postsApi?.isLoading || postsApi?.isFetching) return;
+            if (postApi?.isLoading) return;
             if (intObserver.current) intObserver.current.disconnect();
             intObserver.current = new IntersectionObserver((posts) => {
-                if (posts[0].isIntersecting && postsApi?.data?.hasNext && !postsApi?.isError) {
+                if (posts[0].isIntersecting && postApi?.data?.hasNext && !postApi?.isError) {
                     setSearchQuery({
                         ...searchQuery,
                         offSet: postsList?.length - removedPosts?.length,
@@ -179,7 +171,7 @@ const Review = () => {
                 }
             });
             if (post) intObserver.current.observe(post);
-        }, [postsApi?.isLoading, postsApi?.isFetching, postsApi?.data?.hasNext, postsList]);
+        }, [postApi?.isLoading,  postApi?.data?.hasNext, postsList]);
 
     return (
         <>
@@ -202,7 +194,7 @@ const Review = () => {
                                             className={"review-pages-media-dropdown"}
                                             isMulti
                                             value={selectedDropdownOptions?.pages}
-                                            isDisabled={ postsApi?.isLoading || postsApi?.isFetching}
+                                            isDisabled={ postApi?.isLoading || postApi?.isFetching}
                                             options={createOptionListForSelectTag(pageDropdown, "name", "pageId")}
                                             onChange={(val) => {
                                                 setSelectedDropDownOptions({
@@ -225,7 +217,7 @@ const Review = () => {
                                                 value: null,
                                             }])}
                                             value={selectedDropdownOptions?.socialMediaType}
-                                            isDisabled={ postsApi?.isLoading || postsApi?.isFetching}
+                                            isDisabled={ postApi?.isLoading || postApi?.isFetching}
                                             onChange={(val) => {
                                                 setSelectedDropDownOptions({
                                                     ...selectedDropdownOptions,
@@ -253,7 +245,7 @@ const Review = () => {
                                         <div className="review_outer">
 
                                             {
-                                                !postsApi?.isLoading && !postsApi?.isFetching && postsList !== null && postsList?.length === 0 ?
+                                                !postApi?.isLoading && !postApi?.isFetching && postsList !== null && postsList?.length === 0 ?
                                                     <div>
                                                         <div className="W-100 text-center no_post_review_outer">
                                                             <div className={"no-post-review acc_not_connected_heading"}>
@@ -288,34 +280,28 @@ const Review = () => {
                                                                                             setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal);
                                                                                         }}
                                                                                     >
-                                                                                        {post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
+                                                                                        {
+                                                                                            post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
                                                                                             <video
                                                                                                 style={{objectFit: "fill"}}
                                                                                                 className="bg_img"
                                                                                                 src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
-                                                                                            ></video>
-                                                                                            :
-                                                                                            <img
-                                                                                                src={
-                                                                                                    post?.attachments[0]?.imageURL ||
-                                                                                                    noImageAvailable
-                                                                                                }
-                                                                                                className="bg_img"
                                                                                             />
+                                                                                            :
+                                                                                            <img src={post?.attachments[0]?.imageURL || noImageAvailable} className="bg_img"/>
                                                                                         }
                                                                                         <div
                                                                                             className="review_social_media_outer">
-                                                                                            <img
-                                                                                                src={computeImageURL(
-                                                                                                    post?.socialMediaType
-                                                                                                )}
-                                                                                            />
+                                                                                            <img src={computeImageURL(post?.socialMediaType)}/>
                                                                                         </div>
                                                                                     </div>
 
                                                                                     <div className="review_content">
                                                                                         <p className="nunito_font">
-                                                                                            {post?.page?.name}{" "}
+                                                                                            {/*{post?.page?.name}{" "}*/}
+                                                                                            {
+                                                                                                post?.message
+                                                                                            }
                                                                                         </p>
                                                                                         <div
                                                                                             className="d-flex  review_likes_list">
@@ -352,9 +338,7 @@ const Review = () => {
                                                                                         className="review_social_media_outer">
                                                                                         <img
                                                                                             className={"me-2 review-post-icon"}
-                                                                                            src={computeImageURL(
-                                                                                                post?.socialMediaType
-                                                                                            )}
+                                                                                            src={computeImageURL(post?.socialMediaType)}
                                                                                         />
                                                                                     </div>
                                                                                 </div>
@@ -390,7 +374,7 @@ const Review = () => {
                                                                                     className={"disabled-table-grid "}>
                                                                                     <MdDelete
                                                                                         onClick={() => {
-                                                                                            if (!postsApi?.isFetching && !postsApi?.isLoading) {
+                                                                                            if (!postApi?.isFetching && !postApi?.isLoading) {
                                                                                                 setDeletePostPageInfo(post);
                                                                                             }
                                                                                         }}
@@ -569,7 +553,7 @@ const Review = () => {
 
 
                                         {
-                                            (postsApi?.isLoading || postsApi?.isFetching) &&
+                                            (postApi?.isLoading || postApi?.isFetching) &&
                                             <div className="d-flex justify-content-center RotatingLines-loader mt-4">
                                                 <RotatingLines
                                                     strokeColor="#F07C33"
@@ -598,18 +582,18 @@ const Review = () => {
 
                 </div>
 
-                {isOpenCommentReviewsSectionModal && (
+                {
+                    isOpenCommentReviewsSectionModal &&
                     <CommentReviewsSectionModal
                         isOpenCommentReviewsSectionModal={isOpenCommentReviewsSectionModal}
                         setOpenCommentReviewsSectionModal={setOpenCommentReviewsSectionModal}
                         postData={postData}
                         setPostData={setPostData}
-                        postPageInfoData={postPageInfoData}
                         setDirty={setDirty}
                         isDirty={isDirty}
                         className={"comment_review_outer"}
                     />
-                )}
+                }
 
             </section>
         </>

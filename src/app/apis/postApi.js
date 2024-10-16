@@ -11,10 +11,10 @@ import {
 } from "../../services/postToGetService";
 import {showErrorToast, showSuccessToast, showWarningToast} from "../../features/common/components/Toast";
 import {mapCreatePostDataToFormData, mapUpdatePostDataToFormData} from "../../utils/dataFormatterUtils";
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {baseAxios} from "../../utils/commonUtils";
-import {setAuthenticationHeader, setAuthenticationHeaderWithMultipart} from "../auth/auth";
-import {SocialAccountProvider} from "../../utils/contantData";
+import {getFacebookPostSocioData} from "../../services/facebookService";
+import {getInstagramPostSocioData} from "../../services/instagramService";
+import {getLinkedinPostSocioData} from "../../services/linkedinService";
+import {getPinterestPostSocioData} from "../../services/pinterestService";
 
 
 const baseUrl = `${import.meta.env.VITE_APP_API_BASE_URL}`
@@ -96,7 +96,7 @@ export const postApi = addyApi.injectEndpoints({
                     headers: getAuthorizationHeader(),
                 };
             },
-            invalidatesTags:["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi","getPostDataWithInsightsApi"],
+            invalidatesTags: ["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"],
             async onQueryStarted(requestBody, {queryFulfilled,}) {
                 queryFulfilled.then(res => {
                     if (requestBody.postStatus === "DRAFT") {
@@ -136,11 +136,11 @@ export const postApi = addyApi.injectEndpoints({
             providesTags: ["getPostByPageIdAndPostStatusApi"],
         }),
         getPostsById: build.query({
-            query:(id)=> {
+            query: (id) => {
                 return {
                     url: `${baseUrl}/posts/${id}`,
                     method: 'GET',
-                    headers:getAuthorizationHeader()
+                    headers: getAuthorizationHeader()
                 };
             },
             providesTags: ["getPostsByIdApi"],
@@ -149,16 +149,16 @@ export const postApi = addyApi.injectEndpoints({
             },
         }),
         updatePostById: build.mutation({
-            query:(requestBody)=> {
-                const formData= mapUpdatePostDataToFormData(requestBody)
+            query: (requestBody) => {
+                const formData = mapUpdatePostDataToFormData(requestBody)
                 return {
                     url: `${baseUrl}/posts/${requestBody?.id}`,
                     method: 'PUT',
-                    headers:getAuthorizationHeader(),
-                    body:formData
+                    headers: getAuthorizationHeader(),
+                    body: formData
                 };
             },
-            invalidatesTags:["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi","getPostDataWithInsightsApi"],
+            invalidatesTags: ["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"],
             async onQueryStarted(requestBody, {queryFulfilled,}) {
                 queryFulfilled.then(res => {
                     if (requestBody.updatePostRequestDTO.postStatus === "DRAFT") {
@@ -180,6 +180,36 @@ export const postApi = addyApi.injectEndpoints({
                 await handleQueryError(queryFulfilled)
             },
         }),
+        getPostSocioData: build.query({
+            async queryFn(data) {
+                let result;
+                switch (data?.socialMediaType) {
+                    case "FACEBOOK": {
+                        result = await getFacebookPostSocioData(data)
+                        break;
+                    }
+                    case  "INSTAGRAM": {
+                        result = await getInstagramPostSocioData(data)
+                        break;
+                    }
+                    case  "LINKEDIN": {
+                        result = await getLinkedinPostSocioData(data)
+                        break;
+                    }
+                    case  "PINTEREST": {
+                        result = await getPinterestPostSocioData(data)
+                        break;
+                    }
+                    default : {
+                    }
+                }
+                return {data: result};
+            },
+            providesTags:["getPostSocioDataApi"],
+            async onQueryStarted(requestBody, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
     }),
 });
 
@@ -188,7 +218,7 @@ export const {
     useGetSocialMediaPostsByCriteriaQuery,
     useGetPostsForPlannerQuery,
     useGetPlannerPostsCountQuery,
-    useGetPublishedPostsQuery,
+    useLazyGetPublishedPostsQuery,
     useGetPostByPageIdAndPostStatusQuery,
     useDeletePostByIdMutation,
     useDeletePostFromPagesByPageIdsMutation,
@@ -196,4 +226,5 @@ export const {
     useCreatePostMutation,
     useGetPostsByIdQuery,
     useUpdatePostByIdMutation,
+    useLazyGetPostSocioDataQuery,
 } = postApi
