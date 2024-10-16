@@ -114,8 +114,8 @@ h4.hiddenNumber {
 }
 
 .users_profile img {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
 }
 
 div.modal-content {
@@ -186,9 +186,8 @@ p.planInfo span {
     padding: 47px 34px;
 }
 .users_profile img {
-    border-radius: 24px;
-    height: 100px;
-    width: 100px;
+    border-radius: 15px;
+ 
 }
 
 .connect_btn_outer button {
@@ -240,19 +239,12 @@ button, .modal_inner_content.disconnect_wrapper
 
 /*media QUERY*/
 @media (min-width: 1900px) {
-    .users_profile img {
-        height: 70px;
-        width: 70px;
-    }
     .users_name h2 {
         font-size: 20px;
     }
 }
 @media (max-width: 1699px) {
-    .users_profile img {
-        height: 70px;
-        width: 70px;
-    }
+ 
 
     .users_name h2 {
         font-size: 18px;
@@ -265,9 +257,14 @@ button, .modal_inner_content.disconnect_wrapper
         width: 60px;
         border-radius: 10px;
     }
-
+    .modal_inner_content{
+        margin-top: 12px;
+    }
     .users_name h2 {
         font-size: 17px;
+    }
+    .modal-body.cmn_body{
+        padding: 30px;
     }
 }
 @media (max-width: 1280px) {

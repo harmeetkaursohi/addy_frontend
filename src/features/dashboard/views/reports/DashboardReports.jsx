@@ -20,6 +20,7 @@ import {DashBoardReportLoader} from "./DashBoardReportLoader";
 import default_user_icon from "../../../../images/default_user_icon.svg"
 import avg_bar from "../../../../images/avg_bar.svg"
 import followers_bar from "../../../../images/followers_bar.svg"
+import Arrow_angle from "../../../../images/arrow_angle.svg"
 import {
     useGetAllFacebookPagesQuery,
     useGetAllInstagramBusinessAccountsQuery, useGetAllLinkedinPagesQuery, useGetAllPinterestBoardsQuery,
@@ -121,17 +122,25 @@ export const DashboardReports = () => {
 
         <>
 
-            <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer">
+            <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer ps-0 ps-0">
                 {
                     getConnectedSocialAccountApi?.isLoading  || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching || getAllInstagramPagesApi?.isLoading || getAllInstagramPagesApi?.isFetching || getAllPinterestPagesApi?.isLoading || getAllPinterestPagesApi?.isFetching || getAllLinkedinPagesApi?.isLoading || getAllLinkedinPagesApi?.isFetching ?
                         <div className="cmn_background p-5 text-center account_not_connect_imcontainer ">
                             <CommonLoader classname={"cmn_loader_outer"}/>
                         </div> :
 
-                        (getConnectedSocialAccountApi?.data === null || (Array.isArray(getConnectedSocialAccountApi?.data) && getConnectedSocialAccountApi?.data.filter(c => c.provider !== "GOOGLE").length === 0))
+                        ( getConnectedSocialAccountApi?.data === null || (Array.isArray(getConnectedSocialAccountApi?.data) && getConnectedSocialAccountApi?.data.filter(c => c.provider !== "GOOGLE").length === 0))
                             ?
-                            <div className="cmn_background p-5 text-center account_not_connect_imcontainer">
+                            <div className="cmn_background p-4 text-center account_not_connect_imcontainer">
+                               <div className="text-end">
+                               <img src={Arrow_angle} alt="" className="img-fluid"/>
+                               </div>
+                               <div className="not_account_content">
+                                <h6>No Account is Connected yet!</h6>
+                                <h5>Click on Connect Button to add your pages in Addy.</h5>
                                 <img src={noAccountData} alt="" className="img-fluid"/>
+                               </div>
+
                             </div>
                             :
                             // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
@@ -305,18 +314,18 @@ export const DashboardReports = () => {
                                                                         ["INSTAGRAM", "PINTEREST"].includes(reportSelectedAccountType) &&
 
                                                                         <>
-                                                                            <br/>
+                                                                            {/* <br/>
                                                                             <span
-                                                                                className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 90 days)' : ''}  </span>
+                                                                                className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 90 days)' : ''}  </span> */}
 
                                                                         </>
                                                                     }
                                                                     {
                                                                         ["FACEBOOK"].includes(reportSelectedAccountType) &&
                                                                         <>
-                                                                            <br/>
+                                                                            {/* <br/>
                                                                             <span
-                                                                                className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 2 years)' : ''}  </span>
+                                                                                className={"90-day-txt"}> {curKey !== 'Followers' ? '(last 2 years)' : ''}  </span> */}
                                                                         </>
                                                                     }
 
@@ -355,7 +364,7 @@ export const DashboardReports = () => {
                                                 <h3 className="cmn_white_text instagram_overview_heading">{SocialAccountProvider[reportSelectedAccountType]?.charAt(0)?.toUpperCase() + SocialAccountProvider[reportSelectedAccountType]?.slice(1)} Overview</h3>
                                             </div>
                                             <div className="days_outer">
-                                                <select className=" dropdown_days box_shadow"
+                                                <select className=" dropdown_days box_shadow form-select"
                                                         value={graphDaysSelected}
                                                         onChange={(e) => setGraphDaysSelected(e?.target?.value || 8)}
                                                         disabled={getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching || socialMediaGraphReportApi?.isLoading || socialMediaGraphReportApi?.isFetching}>

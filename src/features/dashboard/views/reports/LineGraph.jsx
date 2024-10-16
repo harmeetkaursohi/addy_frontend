@@ -52,6 +52,11 @@ export const LineGraph = ({reportData}) => {
             legend: {
                 position: 'bottom',
             },
+            labels: {
+                font: {
+                  family: "'Nunito', sans-serif", // Update this with your desired font family
+                },
+              },
         },
         scales: {
             y: {

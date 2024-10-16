@@ -1,6 +1,5 @@
 .sidebar_wrapper {
-    /*width: 280px;*/
-    width: 224px;
+    width: 240px;
     box-shadow: 2px 0px 50px 0px rgba(226, 232, 240, 0.68);
     z-index: 2;
     position: fixed;
@@ -24,7 +23,7 @@ img.addy_logo {
     transition: all 0.7s ease-in;
 }
 .sidebar_inner_content svg path {
-    color:#f07c33;
+    stroke:#000;
 }
 .notification-count-sidebar{
     z-index: 1;
@@ -80,7 +79,10 @@ i.bar_icon {
     cursor: pointer;
 }
 
-
+.sidebar_item_outers.profile_link {
+    padding-top: 21px;
+    border-top: 1px solid rgba(209, 217, 226, 1);
+}
 
 .sidebar_item_outer a {
     color: #97A1AD;
@@ -109,7 +111,9 @@ i.bar_icon {
     width: 19px;
     color: #767177;
 }
-
+.sidebar_item li.sidebar_container_items svg{
+    color: #000;
+}
 .sidebar_container_items {
     border-radius: 10px;
     overflow: hidden;
@@ -166,7 +170,7 @@ a.active {
 
 .sidebar_inner_content {
  
-    background: #FCF2EC;
+    background: rgba(244, 244, 244, 1);
     padding: 12px 19px;
     gap: 10px;
     display: flex;
@@ -179,7 +183,7 @@ a.active {
 .sidebar_inner_content h6 {
     font-size: 16px;
     font-weight: 600;
-    color: #F07C33;;
+    color: #000;;
     white-space: nowrap;
 }
 
@@ -296,11 +300,11 @@ div.sidebar_item_outers {
         font-size: 22px;
 }
 
-.sidebar_inner_content svg path{
-        stroke: #E05905;
-}
-.sidebar_item{
+
+.sidebar_item {
     margin-top: 10px;
+    border-top: 1px solid rgba(244, 244, 244, 1);
+    padding-top: 2px;
 }
 
     ul.sidebar_item li:last-child{
@@ -308,6 +312,28 @@ div.sidebar_item_outers {
     position: fixed;
     margin-bottom: 10px;
     }
+    .profile_info {
+        display: flex;
+        gap: 10px;
+        align-self: center;
+    }
+    
+    .sidebar_item_outers .profile_info img {
+        width: 40px;
+        height: 40px;
+        border-radius: 9px;
+    }
+    
+    .profile_info h3 {
+        font-size: 15px;
+        color: #000;
+        font-weight: 500;
+    }
+    
+    .profile_info h4 {
+        font-size: 14px;
+    }
+    /* media query starts here */
 @media screen and (min-width:1499px){
     div.sidebar_item_outers {
         padding: 10px 20px;

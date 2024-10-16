@@ -41,7 +41,8 @@ const Layout = () => {
     const token = getToken();
     const dispatch = useDispatch();
 
-    const getUserInfoApi = useGetUserInfoQuery("")
+    const getUserInfoApi = useGetUserInfoQuery("");
+    console.log("getUserInfoApi",getUserInfoApi)
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
@@ -152,7 +153,7 @@ const Layout = () => {
 
 
                     </div>
-                    <div className={"d-flex align-items-center"}>
+                    {/* <div className={"d-flex align-items-center"}>
                         <div
                             className={`user_info_outer ${sidebar ? "px-3 py-2" : ""} ${location.pathname === "/profile" ? "active_bg_color" : ""}`}
                             onClick={() => {
@@ -174,7 +175,7 @@ const Layout = () => {
                         </div>
 
 
-                    </div>
+                    </div> */}
                     <ul className={sidebar ? "sidebar_item Sidebar_containerbox mt-3" : "sidebar_item "}>
                         {SidebarMenuItems &&
                             SidebarMenuItems?.map((item, index) => (
@@ -242,9 +243,21 @@ const Layout = () => {
                                 </OverlayTrigger>
                             ) : (
                                 <>
-                                    <div className="sidebar_item_outers " onClick={LogOut}>
-                                        <img src={logout_img}/>
-                                        <h6 className="red_color">Logout</h6>
+                                    <div className="sidebar_item_outers profile_link" onClick={LogOut}>
+                                    {
+                                getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
+                                    <SkeletonEffect count={1}/> :
+                                    getUserInfoApi.data !== undefined &&
+                                    <div className="profile_info">
+                                        <img
+                                            src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
+                                            className='profile_img'/>
+                                     <div>
+                                     <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
+                                     <h4 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.email.slice(0,15) + "..." || "email"}</h4>
+                                     </div>
+                                    </div>
+                                      }   <img src={logout_img}/>
                                     </div>
                                 </>
                             )}

@@ -147,18 +147,18 @@ element.style {
 
 .followers_wrapper h5 {
     color: #232934;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     line-height: 18px;
     letter-spacing: 0.024px;
     background: #F4F4F4;
-    padding: 16px 20px;
+    padding: 15px;
     font-family: "Nunito";
-    min-height: 70px;
+    /* min-height: 70px; */
 }
 
 .followers_inner_content {
-    padding: 16px 20px;
+    padding: 15px;
 }
 
 .followers_wrapper h2 {
@@ -178,7 +178,7 @@ element.style {
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 13px;
+    font-size: 12px;
     cursor: auto;
 }
 
@@ -187,6 +187,7 @@ element.style {
     gap: 7px;
     margin-top: 12px;
     align-items: center;
+    justify-content: space-between;
 }
 .monthly_growth .cmn_followers_btn{
     cursor: auto;
@@ -372,23 +373,24 @@ button.facebook_connect {
 
 
 .dropdown_days {
-    font-size: 16px;
-    background: white;
-    border: none;
+    font-size: 13px;
     color: #5F6D7E;
     font-family: "Nunito";
     font-style: normal;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 24px;
     letter-spacing: 0.015px;
-    padding: 10px;
-    min-width: 180px;
-    height: 45px;
+    padding: 6px 10px;
+    min-width: 143px;
+    height: 38px;
     border-radius: 10px;
     border: 1px solid #F3F7FD;
     box-shadow: 2px 2px 2px 0px #f5f4f4;
 }
-
+.dropdown_days:focus{
+    box-shadow: unset;
+    outline: unset;
+}
 select.page_title_options {
     padding: 6px 2px 6px 0px;
     border: none;
@@ -565,6 +567,27 @@ width: 100%;
   background-position:  right 10px center;
   position: relative;
 }
+.not_account_content h6 {
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Nunito';
+    margin-top: 3em;
+    padding-bottom: 15px;
+    color: #000;
+}
+.account_not_connect_imcontainer {
+    min-height: calc(100vh - 170px);
+}
+.not_account_content h5 {
+    font-size: 22px;
+    font-weight: 600;
+    padding-bottom: 2em;
+    color: #000;
+}
+.account_info canvas {
+    width: 100% !important;
+}
+/* media query starts here */
 
 @media screen and (min-width:2560px){
     .followers_outer {
@@ -619,15 +642,15 @@ width: 100%;
     .postdata_wrapper h5 {
         font-size: 19px;
     }
+    .followers_wrapper h5{
+        font-size: 14px;
+    }
     
 }
-@media screen and (max-width:1279px){
-    .followers_outer {
-        flex-wrap: wrap;
-    }
-}
+
 @media screen and (max-width: 1024px) {
-    .social_media_content{
+
+    .social_media_content,  .followers_outer {
         flex-wrap: wrap;
         }
         .upcomingPostBtn_Outer{
@@ -639,6 +662,7 @@ width: 100%;
    
     .followers_wrapper {
         margin-top: 15px;
+        
     }
     .connectDisconnect_btn_outer {
         gap: 14px;

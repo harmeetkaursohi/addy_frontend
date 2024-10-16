@@ -35,6 +35,7 @@ const FacebookAuthorizedModal = ({
                 show={show}
                 onHide={handleCloseInstagramGuideModal}
                 className="choose_page_outer notfound_popup instaGuide"
+                centered
             >
                 <div
                     className="pop_up_cross_icon_outer  cursor-pointer"
@@ -49,7 +50,7 @@ const FacebookAuthorizedModal = ({
                                 <img src={no_page_connect_img}/>
                                 <div className="facebook_content_outer">
                                     <h2 className="disconnect_title">
-                                        Authorize on Facebook for Instagram{" "}
+                                        Authorize on Facebook for Instagram
                                     </h2>
                                     <p className="disconnect_paragraph">
                                         Grant Addy permission from Facebook to access and post

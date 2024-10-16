@@ -317,7 +317,7 @@ const Planner = () => {
                     <div className='cmn_outer'>
                         <div
                             className={`planner_outer  white_bg_color cmn_height_outer ${isDraftPost ? "" : "planner_container"}`}>
-                            <div className='planner_header_outer'>
+                            <div className='planner_header_outer mb-3'>
                                 <div className='planner_header'>
                                     <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
                                     <h6>{isDraftPost ? jsondata.draft_heading : jsondata.post_shecdule_heading}</h6>

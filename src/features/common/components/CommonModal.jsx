@@ -53,7 +53,7 @@ const CommonModal = ({
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="lg" show={showModal} onHide={handleClose} className='choose_page_outer'>
+                <Modal size="lg" show={showModal} onHide={handleClose} className='choose_page_outer' centered>
                     <div
                         className='pop_up_cross_icon_outer  cursor-pointer'
                         onClick={(e) => {
