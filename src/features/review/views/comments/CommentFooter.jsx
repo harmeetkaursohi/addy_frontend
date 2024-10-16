@@ -1,43 +1,26 @@
 import {TbShare3} from "react-icons/tb";
 import {FaRegSave} from "react-icons/fa";
-import {AiFillHeart, AiOutlineHeart} from "react-icons/ai";
 import {getFormattedDate, isNullOrEmpty} from "../../../../utils/commonUtils";
 import EmojiPicker, {EmojiStyle} from "emoji-picker-react";
-import {
-    addCommentOnPostAction,
-    dislikePostAction, getCommentsOnPostAction,
-    getPostPageInfoAction,
-    likePostAction
-} from "../../../../app/actions/postActions/postActions";
-import {showErrorToast} from "../../../common/components/Toast";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import {RotatingLines} from "react-loader-spinner";
-import {getToken} from "../../../../app/auth/auth";
+import {handleRTKQuery} from "../../../../utils/RTKQueryUtils";
+import {addyApi} from "../../../../app/addyApi";
 
-const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFunction}) => {
+const CommentFooter = ({postData, isDirty, setDirty, postSocioData, onPostComment, postCommentApi}) => {
 
-    const token = getToken();
-    const [comment, setComment] = useState("");
     const dispatch = useDispatch();
-    const [like, setLike] = useState(false);
-    const likePostReducerData = useSelector(state => state.post.likePostReducer)
-    const disLikePostReducerData = useSelector(state => state.post.dislikePostReducer)
-    const [baseQueryForGetPostPageInfoAction, setBaseQueryForGetPostPageInfoAction] = useState({
-        token: token,
-        postIds: null,
-        pageAccessToken: null,
-        socialMediaType: null
-    });
+
+    const [comment, setComment] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    const addCommentOnPostActionData = useSelector(state => state.post.addCommentOnPostActionReducer)
     const [commonFooterDataObject, setCommonFooterDataObject] = useState({
         total_likes: null,
         total_comments: null,
         total_shares: null,
         can_comment: null,
-
     })
+
 
     useEffect(() => {
         if (postData && postSocioData) {
@@ -94,67 +77,7 @@ const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFu
         );
     }
 
-    useEffect(() => {
-        if (postData && postSocioData) {
-            setBaseQueryForGetPostPageInfoAction({
-                ...baseQueryForGetPostPageInfoAction,
-                postIds: [postData?.id],
-                pageAccessToken: postData?.page?.access_token,
-                socialMediaType: postData?.socialMediaType
-            })
-            postData?.socialMediaType === "FACEBOOK" && setLike(postSocioData?.likes?.summary?.has_liked)
-        }
-    }, [postData, postSocioData])
-
-
-    // const handleAddLikesOnPost = (e) => {
-    //     e.preventDefault();
-    //     const requestBody = {
-    //         postId: postData?.id,
-    //         pageAccessToken: postData?.page?.access_token
-    //     }
-    //
-    //     dispatch(likePostAction(requestBody)).then((response) => {
-    //         if (response.meta.requestStatus === "fulfilled") {
-    //             dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction)).then((response) => {
-    //                 if (response.meta.requestStatus === "fulfilled") {
-    //                     setLike(true);
-    //                 }
-    //             }).catch((error) => {
-    //                 setLike(false);
-    //                 showErrorToast(error.response.data.message);
-    //             });
-    //         }
-    //     }).catch((error) => {
-    //         setLike(false);
-    //         showErrorToast(error.response.data.message);
-    //     })
-    // }
-    // const handleAddDisLikesOnPost = (e) => {
-    //     e.preventDefault();
-    //     const requestBody = {
-    //         postId: postData?.id,
-    //         pageAccessToken: postData?.page?.access_token
-    //     }
-    //
-    //     dispatch(dislikePostAction(requestBody)).then((response) => {
-    //         if (response.meta.requestStatus === "fulfilled") {
-    //
-    //             dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction)).then((response) => {
-    //                 if (response.meta.requestStatus === "fulfilled") {
-    //                     setLike(false);
-    //                 }
-    //             }).catch((error) => {
-    //                 setLike(true);
-    //                 showErrorToast(error.response.data.message);
-    //             });
-    //         }
-    //     }).catch((error) => {
-    //         setLike(true);
-    //         showErrorToast(error.response.data.message);
-    //     })
-    // }
-    const handleAddCommentOnPost = (e) => {
+    const handleAddCommentOnPost = async (e) => {
         e.preventDefault();
         const requestBody = {
             socialMediaType: postData?.socialMediaType,
@@ -162,13 +85,14 @@ const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFu
             data: {
                 message: comment
             },
-            token: token,
             pageId: postData?.page?.pageId,
             pageAccessToken: postData?.page?.access_token,
         }
-
-        dispatch(addCommentOnPostAction(requestBody)).then(response => {
-            if (response.meta.requestStatus === "fulfilled") {
+        await handleRTKQuery(
+            async () => {
+                return await onPostComment(requestBody).unwrap();
+            },
+            () => {
                 setDirty({
                     ...isDirty,
                     isDirty: true,
@@ -179,10 +103,9 @@ const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFu
                     }
                 })
                 setComment("")
-                dispatch(getPostPageInfoAction(baseQueryForGetPostPageInfoAction))
-
+                dispatch(addyApi.util.invalidateTags(["getPostSocioDataApi"]));
             }
-        });
+        );
     }
 
 
@@ -207,32 +130,6 @@ const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFu
 
             </div>
             <div className={"hr-line-2"}></div>
-
-            {/*<ul className="d-flex">*/}
-            {/*    {*/}
-            {/*        !like  &&*/}
-            {/*        <li className="w-100" onClick={(e) => {*/}
-            {/*            !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  setLike(true)*/}
-            {/*            !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  handleAddLikesOnPost(e);*/}
-            {/*        }}>*/}
-            {/*            <AiOutlineHeart className={"me-2 "}*/}
-            {/*                            style={{color: "red", fontSize: "24px"}}/>Like*/}
-            {/*        </li>*/}
-            {/*    }*/}
-
-            {/*    {*/}
-            {/*        like  &&*/}
-            {/*        <li className="w-100" onClick={(e) => {*/}
-            {/*            !likePostReducerData?.loading && !disLikePostReducerData?.loading && setLike(false)*/}
-            {/*            !likePostReducerData?.loading && !disLikePostReducerData?.loading &&  handleAddDisLikesOnPost(e);*/}
-            {/*        }}>*/}
-            {/*            <AiFillHeart className={"me-2 animated-icon"}*/}
-            {/*                         style={{color: "red", fontSize: "24px"}}/>Dislike*/}
-            {/*        </li>*/}
-            {/*    }*/}
-
-            {/*    <li className="w-100"><i className="fa fa-comment me-2"/>Comment</li>*/}
-            {/*</ul>*/}
 
             <p className="liked_by padding-x-20 ">
                 {
@@ -272,7 +169,7 @@ const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFu
             <p className="comment_date padding-x-20">{getFormattedDate(postData?.feedPostDate)}</p>
             <div className="comment_msg ">
                 {
-                    addCommentOnPostActionData?.loading && comment &&
+                    postCommentApi?.isLoading && comment &&
                     <div className={"post-comment-loader z-index-1 mt-1"}><RotatingLines strokeColor="#F07C33"
                                                                                          strokeWidth="5"
                                                                                          animationDuration="0.75"
@@ -302,7 +199,7 @@ const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFu
                             <input
                                 value={comment}
                                 type="text"
-                                className={addCommentOnPostActionData?.loading && comment ? "form-control opacity-50" : "form-control"}
+                                className={postCommentApi?.isLoading && comment ? "form-control opacity-50" : "form-control"}
                                 onClick={() => {
                                     setShowEmojiPicker(false)
                                 }}
@@ -324,7 +221,7 @@ const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFu
                             <button
                                 id={"post-cmnt-btn"}
                                 className={isNullOrEmpty(comment) ? "opacity-50" : ""}
-                                disabled={addCommentOnPostActionData?.loading || isNullOrEmpty(comment)}
+                                disabled={postCommentApi?.isLoading || isNullOrEmpty(comment)}
                                 onClick={(e) => {
                                     setShowEmojiPicker(false)
                                     !isNullOrEmpty(comment) && handleAddCommentOnPost(e);
@@ -355,7 +252,8 @@ const CommentFooter = ({postData, isDirty, setDirty, postSocioData,postCommentFu
 
                 <div className={"emoji-picker-outer"}>
                     {
-                        showEmojiPicker && <EmojiPicker
+                        showEmojiPicker &&
+                        <EmojiPicker
                             onEmojiClick={(value) => {
                                 handleOnEmojiClick(value)
                             }}

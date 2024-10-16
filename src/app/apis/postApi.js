@@ -205,6 +205,7 @@ export const postApi = addyApi.injectEndpoints({
                 }
                 return {data: result};
             },
+            providesTags:["getPostSocioDataApi"],
             async onQueryStarted(requestBody, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },

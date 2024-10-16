@@ -14,7 +14,12 @@ import {
 import {getFormattedDemographicData} from "../utils/dataFormatterUtils";
 import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils"
 import {showErrorToast} from "../features/common/components/Toast";
-import {ErrorFetchingPost, SocialAccountProvider, SomethingWentWrong} from "../utils/contantData";
+import {
+    ErrorFetchingPost,
+    SocialAccountProvider,
+    SomethingWentWrong,
+    UpdateCommentFailedMsg
+} from "../utils/contantData";
 
 const fbBaseUrl = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`
 
@@ -384,11 +389,11 @@ export const getFacebookPostSocioData = async (data) => {
 
 export const getFacebookComments = async (data) => {
     const apiUrl = `${fbBaseUrl}/${data.id}/comments?${objectToQueryString({
-        access_token:data?.pageAccessToken,
-        order:"reverse_chronological",
-        limit:data?.limit,
-        fields:"id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags",
-        after:data?.next
+        access_token: data?.pageAccessToken,
+        order: "reverse_chronological",
+        limit: data?.limit,
+        fields: "id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,to,created_time,attachment,comment_count,can_comment,message_tags",
+        after: data?.next
     })}`;
     return baseAxios.get(apiUrl).then((response) => {
         return response?.data
@@ -400,11 +405,11 @@ export const getFacebookComments = async (data) => {
 
 export const getFacebookRepliesOnComments = async (data) => {
     const apiUrl = `${fbBaseUrl}/${data.id}/comments?${objectToQueryString({
-        access_token:data?.pageAccessToken,
-        order:"chronological",
-        limit:data?.limit,
-        fields:"id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent{id},to,created_time,attachment,comment_count,can_comment,message_tags",
-        after:data?.next
+        access_token: data?.pageAccessToken,
+        order: "chronological",
+        limit: data?.limit,
+        fields: "id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent{id},to,created_time,attachment,comment_count,can_comment,message_tags",
+        after: data?.next
     })}`;
     return baseAxios.get(apiUrl).then((response) => {
         return response?.data
@@ -419,6 +424,35 @@ export const postFacebookComment = async (data) => {
     return baseAxios.post(apiUrl, data?.data).then((response) => {
         return response.data;
     }).catch((error) => {
+        throw error;
+    });
+}
+
+export const postFacebookReplyOnComment = async (data) => {
+    const apiUrl = `${fbBaseUrl}/${data.id}/comments?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent{id},created_time,attachment,comment_count,can_comment,message_tags`;
+    return baseAxios.post(apiUrl, data?.data).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        throw error;
+    });
+}
+
+export const deleteFacebookComment = async (data) => {
+    const apiUrl = `${fbBaseUrl}/${data.id}?access_token=${data?.pageAccessToken}`;
+    return baseAxios.delete(apiUrl).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const updateFacebookComment = async (data) => {
+    const apiUrl = `${fbBaseUrl}/${data.id}?access_token=${data?.pageAccessToken}&fields=id,like_count,user_likes,can_like,message,can_remove,from{id,name,picture},parent,created_time,attachment,comment_count,can_comment,message_tags`;
+    return baseAxios.post(apiUrl, data?.data).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(UpdateCommentFailedMsg);
         throw error;
     });
 }

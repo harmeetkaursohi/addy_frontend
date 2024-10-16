@@ -3,7 +3,7 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import addy_logo from "../../../images/addylogoo.png";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
-import { getToken} from "../../../app/auth/auth";
+import {getToken} from "../../../app/auth/auth";
 import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
 import {useAppContext} from "../../common/components/AppProvider.jsx";
@@ -19,7 +19,6 @@ import {
     getUpdatedNameAndImageUrlForConnectedPages, isNullOrEmpty,
     isPageInfoAvailableFromSocialMediaFor
 } from "../../../utils/commonUtils";
-import {updatePageAccessTokenByIds} from "../../../app/actions/pageAccessTokenAction/pageAccessTokenAction";
 import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 import {
     useGetAllFacebookPagesQuery,
@@ -27,7 +26,7 @@ import {
     useGetAllPinterestBoardsQuery,
     useGetConnectedSocialAccountQuery
 } from "../../../app/apis/socialAccount";
-import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
+import {useGetAllConnectedPagesQuery, useUpdatePageByIdsMutation} from "../../../app/apis/pageAccessTokenApi";
 import {enabledSocialMedia} from "../../../utils/contantData";
 import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils";
 
@@ -38,14 +37,14 @@ const Layout = () => {
     const location = useLocation();
     const {pathname} = location;
     const splitLocation = pathname.split("/");
-    const token = getToken();
     const dispatch = useDispatch();
 
+    const [updatePageByIds, updatePageByIdsApi] = useUpdatePageByIdsMutation("")
     const getUserInfoApi = useGetUserInfoQuery("")
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
-    const connectedSocialAccount =  getConnectedSocialMediaAccount(getConnectedSocialAccountApi?.data || [])
+    const connectedSocialAccount = getConnectedSocialMediaAccount(getConnectedSocialAccountApi?.data || [])
 
     const getAllFacebookPagesApi = useGetAllFacebookPagesQuery({
         providerId: connectedSocialAccount?.facebook?.providerId,
@@ -93,11 +92,12 @@ const Layout = () => {
                         return getUpdatedNameAndImageUrlForConnectedPages(page, pageInfoFromSocialMedia)
                     }
                 ).filter(page => page?.isPageUpdated)
-                pageImagesToUpdate?.length > 0 && dispatch(updatePageAccessTokenByIds({
-                    token: token,
+
+                const requestBody = {
                     ids: pageImagesToUpdate?.map(page => page.id).join(","),
                     data: pageImagesToUpdate
-                }))
+                }
+                pageImagesToUpdate?.length > 0 && updatePageByIds(requestBody)
             }
         }
     }, [getAllConnectedPagesApi, getConnectedSocialAccountApi])
@@ -106,7 +106,7 @@ const Layout = () => {
         Swal.fire({
             title: `Logout`,
             imageUrl: logout_image,
-            html:`<p class="modal_heading">Are you sure you want to logout?</p>`,
+            html: `<p class="modal_heading">Are you sure you want to logout?</p>`,
             showCancelButton: true,
             cancelButtonText: "Cancel",
             confirmButtonText: "Log out",
@@ -116,7 +116,7 @@ const Layout = () => {
             customClass: {
                 confirmButton: 'confirmButton',
                 cancelButton: 'cancelButton',
-                popup:"animated-popup small_swal_popup logout_popup",
+                popup: "animated-popup small_swal_popup logout_popup",
 
             }
         }).then((result) => {

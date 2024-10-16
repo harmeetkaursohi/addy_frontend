@@ -2,14 +2,14 @@ import {
     baseAxios,
     calculatePercentageGrowth,
     computeAndReturnSummedDateValues, extractParameterFromUrl,
-    generateUnixTimestampFor, getFormattedPostTime, objectToQueryString
+    generateUnixTimestampFor, getFormattedPostTime, isErrorInInstagramMention, objectToQueryString
 } from "../utils/commonUtils";
 import {
     getFormattedAccountReachAndEngagementData,
     getFormattedDemographicData,
     getFormattedInsightsForProfileViews, getFormattedPostWithInsightsApiResponse
 } from "../utils/dataFormatterUtils";
-import {SocialAccountProvider} from "../utils/contantData";
+import {CouldNotPostComment, SocialAccountProvider} from "../utils/contantData";
 import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils";
 import {showErrorToast} from "../features/common/components/Toast";
 
@@ -239,7 +239,7 @@ export const getDashBoardInstagramGraphReport = async (page, query) => {
 export const getInstagramProfileInsightsInfo = async (data) => {
     try {
         const profile_count_info = `${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}/${data?.pageId}?fields=name,followers_count,follows_count,media_count,profile_picture_url,biography&access_token=${data?.pageAccessToken}`;
-        const res=await baseAxios.get(profile_count_info)
+        const res = await baseAxios.get(profile_count_info)
         return getFormattedInsightProfileInfo(res.data, "INSTAGRAM")
     } catch (error) {
         showErrorToast(error.response.data.error.message);
@@ -291,7 +291,7 @@ export const getInstagramDemographicData = async (data) => {
     try {
         const baseUrl = `${fbBaseUrl}/${data?.pageId}/insights?metric=follower_demographics&period=lifetime&metric_type=total_value&access_token=${data?.pageAccessToken}`;
         const countryDemographicDataApiUrl = baseUrl + "&breakdown=country";
-        const  countryDemographicData=await baseAxios.get(countryDemographicDataApiUrl)
+        const countryDemographicData = await baseAxios.get(countryDemographicDataApiUrl)
         return {
             ...formattedApiResponse,
             country: getFormattedDemographicData(countryDemographicData, "COUNTRY", "INSTAGRAM")
@@ -352,7 +352,7 @@ export const getInstagramAccountReachAndEngagement = async (data) => {
     })
 }
 
-export const getInstagramPostDataWithInsights=async (data)=>{
+export const getInstagramPostDataWithInsights = async (data) => {
     const postIds = data.postIds.map(id => id).join(',');
     const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,insights.metric(reach,shares),caption,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
     return await baseAxios.get(apiUrl).then(res => {
@@ -363,12 +363,62 @@ export const getInstagramPostDataWithInsights=async (data)=>{
     });
 }
 
-export const getInstagramPostSocioData=async (data)=>{
+export const getInstagramPostSocioData = async (data) => {
     const apiUrl = `${fbBaseUrl}/${data?.postId}?access_token=${data?.pageAccessToken}&fields=id,caption,is_comment_enabled,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
     return await baseAxios.get(apiUrl).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const getInstagramComments = async (data) => {
+    const apiUrl = `${fbBaseUrl}/${data.id}/comments?${objectToQueryString({
+        access_token: data?.pageAccessToken,
+        limit: data?.limit,
+        fields: "id,text,timestamp,like_count,from{id,username},user{profile_picture_url},replies{id}",
+        after: data?.next
+    })}`;
+    return baseAxios.get(apiUrl, null).then((response) => {
+        return response?.data
+    }).catch((error) => {
+        showErrorToast(error.response.data.message);
+        throw error;
+    });
+}
+
+export const postInstagramComment = async (data) => {
+    const apiUrl = `${fbBaseUrl}/${data.id}/comments?&access_token=${data?.pageAccessToken}&fields=id,text,timestamp,like_count,from{id,username},user{id,profile_picture_url},replies`;
+    return baseAxios.post(apiUrl, data?.data).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(isErrorInInstagramMention( error) ? CouldNotPostComment : error.response.data.error.message);
+        throw error;
+    });
+}
+
+export const getInstagramRepliesOnComments = async (data) => {
+    const apiUrl = `${fbBaseUrl}/${data.id}/replies?${objectToQueryString({
+        access_token:data?.pageAccessToken,
+        limit:data?.limit,
+        fields:"id,text,timestamp,like_count,from{id,username},user{profile_picture_url},parent_id",
+        after:data?.next
+    })}`;
+    return baseAxios.get(apiUrl, null).then((response) => {
+        return response?.data
+    }).catch((error) => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+
+export const postInstagramReplyOnComment = async (data) => {
+    const apiUrl = `${fbBaseUrl}/${data.id}/replies?access_token=${data?.pageAccessToken}&fields=id,text,timestamp,like_count,from{id,username},user{id,profile_picture_url},parent_id`;
+    return baseAxios.post(apiUrl, data?.data).then((response) => {
+        return response.data;
+    }).catch((error) => {
+        showErrorToast(isErrorInInstagramMention( error) ? CouldNotPostComment : error.response.data.error.message);
         throw error;
     });
 }

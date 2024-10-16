@@ -8,16 +8,14 @@ import {
     handleSeparateCaptionHashtag,
 } from "../../../../utils/commonUtils";
 import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
 import CommonSlider from "../../../common/components/CommonSlider";
 import Comments from "../comments/Comments";
-import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommentFooter from "../comments/CommentFooter";
 import InstagramCommentsSection from "../comments/InstagramCommentsSection";
 import LinkedinCommentsSection from "../comments/LinkedinCommentsSection";
 import {MdCancel} from 'react-icons/md';
 import {useLazyGetPostSocioDataQuery} from "../../../../app/apis/postApi";
-import {usePostCommentMutation} from "../../../../app/apis/commentApi";
+import {usePostCommentMutation, usePostReplyMutation} from "../../../../app/apis/commentApi";
 
 
 const CommentReviewsSectionModal = ({
@@ -30,18 +28,12 @@ const CommentReviewsSectionModal = ({
                                         className
                                     }) => {
 
-    const dispatch = useDispatch();
-    const [postPageData, setPostPageData] = useState(null);
     const [postSocioData, setPostSocioData] = useState(null);
-
     const [getPostSocioData, getPostSocioDataApi] = useLazyGetPostSocioDataQuery()
     const [postComment, postCommentApi] = usePostCommentMutation()
+    const [postReply, postReplyApi] = usePostReplyMutation()
 
     const handleClose = () => setOpenCommentReviewsSectionModal(false);
-
-    console.log("postSocioData=====>", postSocioData)
-    console.log("typeof=====>",typeof postComment)
-    console.log("postData=====>", postData)
 
 
     useEffect(() => {
@@ -62,11 +54,6 @@ const CommentReviewsSectionModal = ({
 
     useEffect(() => {
         return () => {
-            dispatch(resetReducers({sliceNames: ["getPostPageInfoReducer"]}))
-            dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
-            dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
-            dispatch(resetReducers({sliceNames: ["replyCommentOnPostActionReducer"]}))
-            dispatch(resetReducers({sliceNames: ["updateCommentsOnPostActionReducer"]}))
             setPostData(null);
         }
     }, [])
@@ -112,7 +99,6 @@ const CommentReviewsSectionModal = ({
                                                     </p>
                                                     <p>
                                                         {getCommentCreationTime(postData?.feedPostDate)}
-
                                                     </p>
                                                 </div>
                                             </div>
@@ -126,23 +112,39 @@ const CommentReviewsSectionModal = ({
                                         {
                                             postData?.socialMediaType === "FACEBOOK" &&
                                             <Comments
+                                                onReply={postReply}
+                                                postReplyApi={postReplyApi}
+                                                postCommentApi={postCommentApi}
                                                 postSocioData={postSocioData}
                                                 isDirty={isDirty}
                                                 setDirty={setDirty}
                                                 postData={postData}
-                                                postPageData={postPageData}
                                             />
                                         }
 
                                         {
                                             postData?.socialMediaType === "INSTAGRAM" &&
-                                            <InstagramCommentsSection isDirty={isDirty} setDirty={setDirty}
-                                                                      postData={postData} postPageData={postPageData}/>
+                                            <InstagramCommentsSection
+                                                isDirty={isDirty}
+                                                setDirty={setDirty}
+                                                postData={postData}
+                                                postCommentApi={postCommentApi}
+                                                postSocioData={postSocioData}
+                                                onReply={postReply}
+                                                postReplyApi={postReplyApi}
+                                            />
                                         }
                                         {
                                             postData?.socialMediaType === "LINKEDIN" &&
-                                            <LinkedinCommentsSection isDirty={isDirty} setDirty={setDirty}
-                                                                     postData={postData} postPageData={postPageData}/>
+                                            <LinkedinCommentsSection
+                                                isDirty={isDirty}
+                                                setDirty={setDirty}
+                                                postData={postData}
+                                                postCommentApi={postCommentApi}
+                                                postSocioData={postSocioData}
+                                                onReply={postReply}
+                                                postReplyApi={postReplyApi}
+                                            />
                                         }
                                         {
                                             postData?.socialMediaType === "PINTEREST" &&
@@ -165,7 +167,8 @@ const CommentReviewsSectionModal = ({
 
                                     {/*</div>*/}
                                     <CommentFooter
-
+                                        onPostComment={postComment}
+                                        postCommentApi={postCommentApi}
                                         postSocioData={postSocioData}
                                         isDirty={isDirty}
                                         setDirty={setDirty}

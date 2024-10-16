@@ -10,10 +10,7 @@ import {
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
 import CommonLoader from "../../common/components/CommonLoader";
-import {useDispatch, useSelector} from "react-redux";
-import {
-    getPostPageInfoAction,
-} from "../../../app/actions/postActions/postActions";
+import {useDispatch} from "react-redux";
 import {getToken} from "../../../app/auth/auth";
 import {RotatingLines} from "react-loader-spinner";
 import Select from "react-select";
@@ -33,7 +30,6 @@ import {addyApi} from "../../../app/addyApi";
 const Review = () => {
 
     const {sidebar} = useAppContext();
-    const token = getToken();
     const dispatch = useDispatch();
 
     const [searchQuery, setSearchQuery] = useState({

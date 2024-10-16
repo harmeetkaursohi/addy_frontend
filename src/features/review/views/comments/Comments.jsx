@@ -1,7 +1,6 @@
 import img from "../../../../images/draft.png";
 import {
     getCommentCreationTime,
-    getUpdateCommentMessage,
     getMentionedUserCommentFormat,
     handleShowCommentReplies,
     handleShowCommentReplyBox,
@@ -10,13 +9,12 @@ import {
     getValueOrDefault,
     removeDuplicatesObjectsFromArray,
 } from "../../../../utils/commonUtils";
-import {useEffect, useState} from "react";
 import {
-    deleteCommentsOnPostAction, dislikePostAction,
-    getCommentsOnPostAction, getPostPageInfoAction, getRepliesOnComment,
-    likePostAction, replyCommentOnPostAction, updateCommentsOnPostAction
-} from "../../../../app/actions/postActions/postActions";
-import {useDispatch, useSelector} from "react-redux";
+    getUpdateCommentMessage
+} from "../../../../utils/dataFormatterUtils";
+
+import {useEffect, useState} from "react";
+import {useDispatch} from "react-redux";
 import CommonSlider from "../../../common/components/CommonSlider";
 import {LiaThumbsUpSolid} from "react-icons/lia";
 import {BiSolidSend} from "react-icons/bi";
@@ -27,16 +25,26 @@ import Skeleton from "../../../loader/skeletonEffect/Skeleton";
 import {RotatingLines} from "react-loader-spinner";
 import CommentText from "./CommentText";
 import default_user_icon from "../../../../images/default_user_icon.svg";
-import {resetReducers} from "../../../../app/actions/commonActions/commonActions";
 import CommonLoader from "../../../common/components/CommonLoader";
-import {useLazyGetCommentsQuery, useLazyGetRepliesOnCommentsQuery} from "../../../../app/apis/commentApi";
+import {
+    useDeleteCommentMutation,
+    useLazyGetCommentsQuery,
+    useLazyGetRepliesOnCommentsQuery, useUpdateCommentMutation,
+} from "../../../../app/apis/commentApi";
+import {handleRTKQuery} from "../../../../utils/RTKQueryUtils";
+import {addyApi} from "../../../../app/addyApi";
 
-const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) => {
+const Comments = ({
+                      postData,
+                      isDirty,
+                      setDirty,
+                      postSocioData,
+                      postCommentApi,
+                      onReply,
+                      postReplyApi
+                  }) => {
 
     const dispatch = useDispatch();
-    const updateCommentsOnPostActionData = useSelector(state => state.post.updateCommentsOnPostActionReducer)
-    const addCommentOnPostData = useSelector(state => state.post.addCommentOnPostActionReducer)
-    const replyCommentOnPostData = useSelector(state => state.post.replyCommentOnPostActionReducer)
 
     const [triggerGetCommentsApi, setTriggerGetCommentsApi] = useState(false);
     const [facebookComments, setFacebookComments] = useState({
@@ -55,49 +63,22 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
     })
     const [getReplyForComment, setGetReplyForComment] = useState({})
     const [getReplies, setGetReplies] = useState(false);
-
-
     const [updateComment, setUpdateComment] = useState({})
     const [baseQuery, setBaseQuery] = useState({
         socialMediaType: postData?.socialMediaType,
         pageAccessToken: postData?.page?.access_token,
     })
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
     const [getComments, getCommentsApi] = useLazyGetCommentsQuery()
     const [getRepliesOnComment, getRepliesOnCommentApi] = useLazyGetRepliesOnCommentsQuery()
-
-    console.log("getCommentsApi=====>", getCommentsApi)
-
-
-    // TODO:Comments this useEffect
-    // useEffect(() => {
-    //     if (postData && postPageData && postPageData?.comments?.summary?.total_count > 0 && facebookComments?.data === null) {
-    //         setGetFacebookComments(new Date().getMilliseconds())
-    //     }
-    // }, [postData, postPageData])
+    const [deleteComment, deleteCommentApi] = useDeleteCommentMutation()
+    const [updateComments, updateCommentsApi] = useUpdateCommentMutation()
 
     useEffect(() => {
         if (postData && postSocioData && postSocioData?.comments?.summary?.total_count > 0 && facebookComments?.data === null) {
             setTriggerGetCommentsApi(true)
         }
     }, [postData, postSocioData])
-
-    // TODO:Comments this useEffect
-    // useEffect(() => {
-    //     if (getFacebookComments !== null) {
-    //         setGetFacebookComments(null);
-    //         dispatch(getCommentsOnPostAction({
-    //             ...baseQuery,
-    //             id: postPageData?.id,
-    //             limit: 3,
-    //             next: facebookComments?.nextCursor
-    //         }))
-    //         setShowReplyBox([])
-    //         //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
-    //         dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
-    //     }
-    // }, [getFacebookComments])
 
     useEffect(() => {
         if (triggerGetCommentsApi) {
@@ -109,31 +90,8 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                 next: facebookComments?.nextCursor
             })
             setShowReplyBox([])
-            //Add Comment reducer is reset as we need to push the latest comment in array no need to hit new api
-            // dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
         }
     }, [triggerGetCommentsApi])
-
-    // TODO:Comments this useEffect
-    // useEffect(() => {
-    //     if (getCommentsOnPostActionData?.data !== undefined && !getCommentsOnPostActionData?.loading) {
-    //         const cursorToNextData = getCommentsOnPostActionData.data?.paging?.next === undefined ? null : getCommentsOnPostActionData.data?.paging?.cursors?.after
-    //         if (facebookComments?.data === null) {
-    //             setFacebookComments({
-    //                 data: getCommentsOnPostActionData?.data?.data,
-    //                 nextCursor: cursorToNextData
-    //             })
-    //         } else {
-    //             const updatedComments = [...facebookComments?.data, ...getCommentsOnPostActionData?.data?.data]
-    //             // const commentsWithoutDuplicates = removeDuplicatesObjectsFromArray(updatedComments, "id")
-    //             setFacebookComments({
-    //                 data: updatedComments,
-    //                 nextCursor: cursorToNextData
-    //             })
-    //         }
-    //         dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
-    //     }
-    // }, [getCommentsOnPostActionData])
 
     useEffect(() => {
         if (getCommentsApi?.data !== undefined && !getCommentsApi?.isLoading && !getCommentsApi?.isFetching) {
@@ -151,12 +109,11 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                     nextCursor: cursorToNextData
                 })
             }
-            // dispatch(resetReducers({sliceNames: ["getCommentsOnPostActionReducer"]}))
         }
     }, [getCommentsApi])
 
     useEffect(() => {
-        if (getReplies  && ((getReplyForComment?.reference === "SHOW_MORE_REPLIES" && getReplyForComment?.comment?.replyData === undefined) || (getReplyForComment?.reference === "LOAD_MORE"))) {
+        if (getReplies && ((getReplyForComment?.reference === "SHOW_MORE_REPLIES" && getReplyForComment?.comment?.replyData === undefined) || (getReplyForComment?.reference === "LOAD_MORE"))) {
             setGetReplies(false);
             getRepliesOnComment({
                 ...baseQuery,
@@ -187,25 +144,23 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                 data: [...updatedFacebookComments]
             })
             setGetReplyForComment({})
-            dispatch(resetReducers({sliceNames: ["getRepliesOnCommentReducer"]}))
         }
     }, [getRepliesOnCommentApi])
 
     useEffect(() => {
-        if (addCommentOnPostData?.data !== undefined) {
+        if (postCommentApi?.data && !postCommentApi?.isLoading) {
             //Add Comment on the top of array
-            let newComment = addCommentOnPostData?.data;
+            let newComment = postCommentApi?.data;
             const previousData = getValueOrDefault(facebookComments.data, []);
             setFacebookComments({
                 ...facebookComments,
                 data: [newComment, ...previousData]
             })
-            dispatch(resetReducers({sliceNames: ["addCommentOnPostActionReducer"]}))
         }
-    }, [addCommentOnPostData])
+    }, [postCommentApi]);
 
     useEffect(() => {
-        if (replyCommentOnPostData?.data !== undefined) {
+        if (postReplyApi?.data) {
             let updatedCommentsList = [...facebookComments?.data]
             let updatedComment = updatedCommentsList[replyToComment?.index]
             updatedComment = {
@@ -213,7 +168,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                 comment_count: updatedComment.comment_count + 1,
                 replyData: {
                     ...updatedComment?.replyData,
-                    data: replyToComment?.parentCommentLevel === "FIRST" ? [{...replyCommentOnPostData?.data}, ...getValueOrDefault(updatedComment?.replyData?.data, [])] : [...getValueOrDefault(updatedComment?.replyData?.data, []), {...replyCommentOnPostData?.data}],
+                    data: replyToComment?.parentCommentLevel === "FIRST" ? [{...postReplyApi?.data}, ...getValueOrDefault(updatedComment?.replyData?.data, [])] : [...getValueOrDefault(updatedComment?.replyData?.data, []), {...postReplyApi?.data}],
                     nextCursor: updatedComment?.replyData?.nextCursor === undefined ? null : updatedComment?.replyData?.nextCursor
                 }
             }
@@ -228,56 +183,22 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
             setShowReplyComments(showReply)
             setReplyToComment(null)
             setReplyComment("")
-            dispatch(resetReducers({sliceNames: ["replyCommentOnPostActionReducer"]}))
         }
-    }, [replyCommentOnPostData])
+    }, [postReplyApi])
 
     useEffect(() => {
         if (commentToDelete) {
-            const requestBody = {
-                ...baseQuery,
-                id: commentToDelete?.comment?.id,
-            }
-            dispatch(deleteCommentsOnPostAction(requestBody)).then(response => {
-                if (response.meta.requestStatus === "fulfilled") {
-                    if (commentToDelete?.commentLevel === "SECOND") {
-                        let updatedFacebookComments = [...facebookComments?.data]
-                        updatedFacebookComments[commentToDelete?.index] = {
-                            ...updatedFacebookComments[commentToDelete?.index],
-                            comment_count: updatedFacebookComments[commentToDelete?.index].comment_count - 1
-                        }
-                        setFacebookComments({
-                            ...facebookComments,
-                            data: updatedFacebookComments
-                        })
-                    }
-                    setDeletedCommentIds([...deletedCommentIds, commentToDelete?.comment?.id])
-                    setDirty({
-                        ...isDirty,
-                        isDirty: true,
-                        action: {
-                            ...isDirty?.action,
-                            type: "DELETE",
-                            on: "COMMENT",
-                        }
-                    })
-                    setCommentToDelete(null)
-                    dispatch(getPostPageInfoAction({
-                        ...baseQuery,
-                        postIds: [postData?.id]
-                    }))
-                }
-            })
+            handleDeleteComment()
         }
     }, [commentToDelete])
 
     useEffect(() => {
-        if (updateCommentsOnPostActionData?.data !== undefined && !updateCommentsOnPostActionData?.loading) {
+        if (updateCommentsApi?.data !== undefined && !updateCommentsApi?.isLoading) {
             let updatedFacebookComments = [...facebookComments?.data]
             if (updateComment?.commentLevel === "FIRST") {
                 let updatedComment = updatedFacebookComments[updateComment?.index]
                 updatedComment = {
-                    ...updateCommentsOnPostActionData?.data,
+                    ...updateCommentsApi?.data,
                     comment_count: updatedComment?.comment_count,
                     replyData: updatedComment?.replyData
 
@@ -287,7 +208,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
             if (updateComment?.commentLevel === "SECOND") {
                 let parentComment = updatedFacebookComments[updateComment?.parentCommentIndex]
                 parentComment.replyData.data[updateComment?.index] = {
-                    ...updateCommentsOnPostActionData?.data
+                    ...updateCommentsApi?.data
                 }
                 updatedFacebookComments[updateComment?.parentCommentIndex] = parentComment
             }
@@ -296,9 +217,8 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                 data: updatedFacebookComments
             });
             setUpdateComment({})
-            dispatch(resetReducers({sliceNames: ["updateCommentsOnPostActionReducer"]}))
         }
-    }, [updateCommentsOnPostActionData])
+    }, [updateCommentsApi])
 
     const handleUpdateComment = () => {
         const requestBody = {
@@ -308,8 +228,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                 message: getUpdateCommentMessage(updateComment?.comment, postData?.socialMediaType)
             }
         }
-        dispatch(updateCommentsOnPostAction(requestBody))
-
+        updateComments(requestBody)
     }
 
     const handleReplyCommentOnPost = (e) => {
@@ -321,45 +240,43 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                 message: getMentionedUserCommentFormat(replyComment, postData?.socialMediaType)
             },
         }
-        dispatch(replyCommentOnPostAction(requestBody))
+        onReply(requestBody)
     }
-
-    const handleGetComments = (objectId) => {
+    const handleDeleteComment = async () => {
         const requestBody = {
             ...baseQuery,
-            id: objectId,
+            id: commentToDelete?.comment?.id,
         }
-        dispatch(getCommentsOnPostAction(requestBody)).then(response => {
-            if (response.meta.requestStatus === "fulfilled") {
-                setShowReplyBox([])
-                // !isGetChildComments && setShowReplyComments(new Array(response.payload.length).fill(false))
-                // showReplyBox.length === 0 && setShowReplyComments(new Array(response.payload.length).fill(false))
+        await handleRTKQuery(
+            async () => {
+                return await deleteComment(requestBody).unwrap();
+            },
+            () => {
+                if (commentToDelete?.commentLevel === "SECOND") {
+                    let updatedFacebookComments = [...facebookComments?.data]
+                    updatedFacebookComments[commentToDelete?.index] = {
+                        ...updatedFacebookComments[commentToDelete?.index],
+                        comment_count: updatedFacebookComments[commentToDelete?.index].comment_count - 1
+                    }
+                    setFacebookComments({
+                        ...facebookComments,
+                        data: updatedFacebookComments
+                    })
+                }
+                setDeletedCommentIds([...deletedCommentIds, commentToDelete?.comment?.id])
+                setDirty({
+                    ...isDirty,
+                    isDirty: true,
+                    action: {
+                        ...isDirty?.action,
+                        type: "DELETE",
+                        on: "COMMENT",
+                    }
+                })
+                setCommentToDelete(null)
+                dispatch(addyApi.util.invalidateTags(["getPostSocioDataApi"]));
             }
-        })
-    }
-
-    const handleLikeComment = (commentId) => {
-        const requestBody = {
-            postId: commentId,
-            pageAccessToken: postData?.page?.access_token
-        }
-
-        dispatch(likePostAction(requestBody)).then((response) => {
-            if (response.meta.requestStatus === "fulfilled") {
-                handleGetComments(postData?.id)
-            }
-        })
-    }
-    const handleDisLikeComment = (commentId) => {
-        const requestBody = {
-            postId: commentId,
-            pageAccessToken: postData?.page?.access_token
-        }
-        dispatch(dislikePostAction(requestBody)).then((response) => {
-            if (response.meta.requestStatus === "fulfilled") {
-                handleGetComments(postData?.id)
-            }
-        })
+        );
     }
 
     function handleOnEmojiClick(emojiData) {
@@ -369,24 +286,62 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
         })
     }
 
+    // const handleGetComments = (objectId) => {
+    //     const requestBody = {
+    //         ...baseQuery,
+    //         id: objectId,
+    //     }
+    //     dispatch(getCommentsOnPostAction(requestBody)).then(response => {
+    //         if (response.meta.requestStatus === "fulfilled") {
+    //             setShowReplyBox([])
+    //             // !isGetChildComments && setShowReplyComments(new Array(response.payload.length).fill(false))
+    //             // showReplyBox.length === 0 && setShowReplyComments(new Array(response.payload.length).fill(false))
+    //         }
+    //     })
+    // }
+    // const handleLikeComment = (commentId) => {
+    //     const requestBody = {
+    //         postId: commentId,
+    //         pageAccessToken: postData?.page?.access_token
+    //     }
+    //
+    //     dispatch(likePostAction(requestBody)).then((response) => {
+    //         if (response.meta.requestStatus === "fulfilled") {
+    //             handleGetComments(postData?.id)
+    //         }
+    //     })
+    // }
+    // const handleDisLikeComment = (commentId) => {
+    //     const requestBody = {
+    //         postId: commentId,
+    //         pageAccessToken: postData?.page?.access_token
+    //     }
+    //     dispatch(dislikePostAction(requestBody)).then((response) => {
+    //         if (response.meta.requestStatus === "fulfilled") {
+    //             handleGetComments(postData?.id)
+    //         }
+    //     })
+    // }
+
 
     return (
         <>
             {
-                postPageData?.comments?.summary?.total_count === 0 &&
+                postSocioData?.comments?.summary?.total_count === 0 &&
                 <div className={"no-cmnt-txt"}>No comments yet!</div>
             }
             {
-                postPageData?.comments?.summary?.total_count > 0 && facebookComments?.data === null ? <CommonLoader/> :
+                postSocioData?.comments?.summary?.total_count > 0 && facebookComments?.data === null ? <CommonLoader/> :
                     facebookComments?.data?.map((comment, index) => {
                         return (
                             <div key={index} className="comment_wrap">
                                 {
-                                    commentToDelete?.comment?.id === comment?.id ?
+                                    commentToDelete?.comment?.id === comment?.id  ?
                                         <div className={"mb-3"}>
-                                            <Skeleton className={"mb-2"}/>
+                                            <Skeleton className={"mb-2 h-20"}/>
                                         </div> :
-                                        !deletedCommentIds?.includes(comment?.id) && <div className="user_card">
+                                        !deletedCommentIds?.includes(comment?.id) &&
+                                        <div className="user_card">
                                             <div className="user_image">
                                                 <img src={comment?.from?.picture?.data?.url || default_user_icon}
                                                      alt=""/>
@@ -410,7 +365,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                                                                         {
                                                                             comment?.from?.id === postData?.page?.pageId &&
                                                                             <Dropdown.Item onClick={() => {
-                                                                                !updateCommentsOnPostActionData?.loading && setUpdateComment({
+                                                                                !updateCommentsApi?.isLoading && setUpdateComment({
                                                                                     comment: comment,
                                                                                     index: index,
                                                                                     commentLevel: "FIRST"
@@ -422,6 +377,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                                                                             comment?.can_remove &&
                                                                             <Dropdown.Item href="#/action-2"
                                                                                            onClick={() => {
+                                                                                               if (deleteCommentApi?.isLoading) return;
                                                                                                setCommentToDelete({
                                                                                                    comment: comment,
                                                                                                    commentLevel: "FIRST",
@@ -550,14 +506,14 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                                                                        }}
                                                                 />
                                                                 <button
-                                                                    disabled={updateCommentsOnPostActionData?.loading || isNullOrEmpty(updateComment?.comment?.message)}
+                                                                    disabled={updateCommentsApi?.isLoading || isNullOrEmpty(updateComment?.comment?.message)}
                                                                     onClick={(e) => {
                                                                         !isNullOrEmpty(updateComment?.comment?.message) && handleUpdateComment()
                                                                         setShowEmojiPicker(false)
                                                                     }}
-                                                                    className={isNullOrEmpty(updateComment?.comment?.message) || updateCommentsOnPostActionData?.loading ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
+                                                                    className={isNullOrEmpty(updateComment?.comment?.message) || updateCommentsApi?.isLoading ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
                                                                     {
-                                                                        updateCommentsOnPostActionData?.loading ?
+                                                                        updateCommentsApi?.isLoading ?
                                                                             <RotatingLines strokeColor="white"
                                                                                            strokeWidth="5"
                                                                                            animationDuration="0.75"
@@ -593,16 +549,16 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                                                     <p
                                                         className="reply_toggle"
                                                         onClick={() => {
-                                                        if (!showReplyComments[index]) {
-                                                            setGetReplyForComment({
-                                                                index: index,
-                                                                comment: comment,
-                                                                reference: "SHOW_MORE_REPLIES",
-                                                            });
-                                                            setGetReplies(true);
-                                                        }
-                                                        setShowReplyComments(handleShowCommentReplies(showReplyComments, index))
-                                                    }}>
+                                                            if (!showReplyComments[index]) {
+                                                                setGetReplyForComment({
+                                                                    index: index,
+                                                                    comment: comment,
+                                                                    reference: "SHOW_MORE_REPLIES",
+                                                                });
+                                                                setGetReplies(true);
+                                                            }
+                                                            setShowReplyComments(handleShowCommentReplies(showReplyComments, index))
+                                                        }}>
                                                         {!showReplyComments[index] ? "Show" : "Hide"} {comment?.comment_count} {comment?.comment_count > 1 ? "replies" : "reply"}
                                                     </p>
                                                 }
@@ -646,7 +602,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                                                                                                                     childComment?.from?.id === postData?.page?.pageId &&
                                                                                                                     <Dropdown.Item
                                                                                                                         onClick={() => {
-                                                                                                                            !updateCommentsOnPostActionData?.loading && setUpdateComment({
+                                                                                                                            !updateCommentsApi?.isLoading && setUpdateComment({
                                                                                                                                 comment: childComment,
                                                                                                                                 parentCommentIndex: index,
                                                                                                                                 index: i,
@@ -660,6 +616,7 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                                                                                                                     <Dropdown.Item
                                                                                                                         href="#/action-2"
                                                                                                                         onClick={() => {
+                                                                                                                            if (deleteCommentApi?.isLoading) return;
                                                                                                                             setCommentToDelete({
                                                                                                                                 comment: childComment,
                                                                                                                                 commentLevel: "SECOND",
@@ -798,14 +755,14 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                                                                                                                }}
                                                                                                         />
                                                                                                         <button
-                                                                                                            disabled={updateCommentsOnPostActionData?.loading || isNullOrEmpty(updateComment?.comment?.message)}
+                                                                                                            disabled={updateCommentsApi?.isLoading || isNullOrEmpty(updateComment?.comment?.message)}
                                                                                                             onClick={(e) => {
                                                                                                                 !isNullOrEmpty(updateComment?.comment?.message) && handleUpdateComment()
                                                                                                                 setShowEmojiPicker(false)
                                                                                                             }}
-                                                                                                            className={isNullOrEmpty(updateComment?.comment?.message) || updateCommentsOnPostActionData?.loading ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
+                                                                                                            className={isNullOrEmpty(updateComment?.comment?.message) || updateCommentsApi?.isLoading ? " update_comment_btn px-2 opacity-50" : " update_comment_btn px-2 "}>
                                                                                                             {
-                                                                                                                updateCommentsOnPostActionData?.loading ?
+                                                                                                                updateCommentsApi?.isLoading ?
                                                                                                                     <RotatingLines
                                                                                                                         strokeColor="white"
                                                                                                                         strokeWidth="5"
@@ -908,15 +865,15 @@ const Comments = ({postData, isDirty, setDirty, postPageData, postSocioData}) =>
                                                                }}
                                                         />
                                                         <button
-                                                            disabled={replyCommentOnPostData?.loading || isReplyCommentEmpty(replyComment)}
+                                                            disabled={postReplyApi?.isLoading || isReplyCommentEmpty(replyComment)}
                                                             onClick={(e) => {
                                                                 !isReplyCommentEmpty(replyComment) && handleReplyCommentOnPost(e);
                                                                 setShowEmojiPicker(false)
                                                             }}
-                                                            className={isReplyCommentEmpty(replyComment) || replyCommentOnPostData?.loading ? "view_post_btn cmn_bg_btn px-2 opacity-50" : "view_post_btn cmn_bg_btn px-2"}>
+                                                            className={isReplyCommentEmpty(replyComment) || postReplyApi?.isLoading ? "view_post_btn cmn_bg_btn px-2 opacity-50" : "view_post_btn cmn_bg_btn px-2"}>
 
                                                             {
-                                                                (replyCommentOnPostData?.loading && !isReplyCommentEmpty(replyComment)) ?
+                                                                (postReplyApi?.isLoading && !isReplyCommentEmpty(replyComment)) ?
                                                                     <RotatingLines strokeColor="white"
                                                                                    strokeWidth="5"
                                                                                    animationDuration="0.75" width="20"
