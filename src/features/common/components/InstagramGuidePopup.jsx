@@ -84,7 +84,7 @@ const InstagramGuidePopup = ({
                                         </li>
                                     </ol>
                                     <div>
-                                        <img src={instaGuid} className="img-fluid"/>
+                                        <img src="/assets/instaguid.svg" className="img-fluid"/>
                                     </div>
                                     <div className="confirm_btn mt-2">
                                         <button

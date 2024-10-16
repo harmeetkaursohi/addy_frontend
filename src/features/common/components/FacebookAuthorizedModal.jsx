@@ -47,7 +47,7 @@ const FacebookAuthorizedModal = ({
                     <div className="">
                         <div className="">
                             <div className="text-center pt-3">
-                                <img src={no_page_connect_img}/>
+                                <img src="/assets/facebook_authorized.svg"/>
                                 <div className="facebook_content_outer">
                                     <h2 className="disconnect_title">
                                         Authorize on Facebook for Instagram
