@@ -12,7 +12,7 @@ import {unProtectedUrls} from "../utils/contantData";
 // import Draft from "../features/unPublishedPages/Draft";
 // import SelectPlan from "../features/selectplan/views/SelectPlan";
 // import BillingForm from "../features/billingInfo/views/BillingForm";
-import Dashboard from "../features/dashboard/views/Dashboard";
+// import Dashboard from "../features/dashboard/views/Dashboard";
 // import Planner from "../features/planner/views/Planner";
 // import CreatePost from "../features/planner/views/CreatePost";
 // import UpdatePost from "../features/planner/views/UpdatePost";
@@ -32,7 +32,7 @@ import Dashboard from "../features/dashboard/views/Dashboard";
 // import AddressInfo  from "../features/signup/views/tabs/AddressInfo"
 
 const NeedHelpComponent = lazy(() => import('../features/needHelp/NeedHelpComponent'));
-// const Dashboard = lazy(() => import('../features/dashboard/views/Dashboard.jsx'));
+const Dashboard = lazy(() => import('../features/dashboard/views/Dashboard.jsx'));
 const Planner = lazy(() => import('../features/planner/views/Planner.jsx'));
 const SideBar = lazy(() => import('../features/sidebar/views/Layout'));
 const CommonLoader = lazy(() => import('../features/common/components/CommonLoader'));

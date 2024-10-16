@@ -32,7 +32,7 @@ export const pageAccessTokenApi = addyApi.injectEndpoints({
                     headers:getAuthorizationHeader()
                 };
             },
-            invalidatesTags:["getAllConnectedPagesApi"],
+            invalidatesTags:["getAllConnectedPagesApi","getSocialMediaPostsByCriteriaApi","getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"],
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },
