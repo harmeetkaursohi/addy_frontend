@@ -102,16 +102,25 @@ i.bar_icon {
 
 .sidebar_item li {
     cursor: pointer;
-padding: 0px 10px;
+padding: 2px 10px;
 }
 .sidebar_item_outers.Profile_Img_outer a {
     gap: 10px;
     line-height: 0px;
 }
+.sidebar_content.sidebar_wrapper .sidebar_inner_content, .sidebar_content.sidebar_wrapper .sidebar_item_outers {
+    padding-left: 0;
+    padding-right: 0px;
+    text-align: center;
+    justify-content: center;
+}
 .sidebar_item li svg {
     height: 19px;
     width: 19px;
     color: #767177;
+}
+.sidebar_item_outers img.profile_img.mobile_profile {
+    border-radius: 50%;
 }
 .sidebar_item li.sidebar_container_items svg{
     color: #000;
@@ -293,7 +302,7 @@ i.bar_icon {
     position: relative;
 }
 div.sidebar_item_outers {
-        padding: 6px 20px;
+        padding: 8px 20px;
         gap: 21px;
 
         display: flex;
@@ -348,7 +357,7 @@ div.sidebar_item_outers {
     /* media query starts here */
 @media screen and (min-width:1499px){
     div.sidebar_item_outers {
-        padding: 10px 20px;
+        padding: 8px 20px;
     }
 }
 @media screen and (max-width:1280px) {
@@ -359,10 +368,7 @@ div.sidebar_item_outers {
     .user_info_outer h3 {
         font-size: 15px;
     }
-    div.sidebar_item_outers {
-        padding: 4px 16px;
-    }
-    .sidebar_inner_content {
+     .sidebar_inner_content {
         padding: 12px 15px;
     }
     .sidebar_item_outers h6 {

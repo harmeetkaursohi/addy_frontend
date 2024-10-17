@@ -27,7 +27,9 @@
     margin-top: 14px;
     cursor: auto
 }
-
+.menu_items li:first-child {
+    margin-top: 0px;
+}
 button#dropdown-facebook.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active {
     background: white !important;
     border-color: unset !important;
@@ -56,7 +58,6 @@ button.ConnectBtn {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 14px;
 }
 
 .user_Details h4 {

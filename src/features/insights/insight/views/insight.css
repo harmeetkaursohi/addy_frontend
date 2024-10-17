@@ -113,7 +113,9 @@ button.instagram_dropdown::after {
 }
 button.instagram_dropdown {
     font-size: 17px !important;
-    padding: 10px 23px 10px 0px !important;
+    padding: 10px 23px 10px 10px !important;
+    display: flex;
+    align-items: center;
 }
 
 .Content_Container_box {

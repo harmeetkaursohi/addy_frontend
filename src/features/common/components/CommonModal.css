@@ -142,7 +142,10 @@ div.modal-content {
 div.commonmodal_header {
     width: 100%;
 }
-
+.pop_up_cross_icon_outer {
+    padding-top: 6px;
+    padding-right: 4px;
+}
 .users_name h2 {
     font-size: 22px;
     line-height: initial;
@@ -167,8 +170,8 @@ div.commonmodal_header {
 }
 .facebook_title h2 {
     font-size: 22px;
-    /* padding-bottom: 9px; */
     color:#000;
+    letter-spacing: 0.01px;
 }
 p.planInfo {
     font-size: 16px;
@@ -258,7 +261,7 @@ button, .modal_inner_content.disconnect_wrapper
         border-radius: 10px;
     }
     .modal_inner_content{
-        margin-top: 12px;
+        margin-top: 10px;
     }
     .users_name h2 {
         font-size: 17px;

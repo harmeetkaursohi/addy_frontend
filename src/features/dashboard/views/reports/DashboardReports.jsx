@@ -129,7 +129,7 @@ export const DashboardReports = () => {
                             <CommonLoader classname={"cmn_loader_outer"}/>
                         </div> :
 
-                        ( getConnectedSocialAccountApi?.data === null || (Array.isArray(getConnectedSocialAccountApi?.data) && getConnectedSocialAccountApi?.data.filter(c => c.provider !== "GOOGLE").length === 0))
+                        ( isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) || getConnectedSocialAccountApi?.data === null || (Array.isArray(getConnectedSocialAccountApi?.data) && getConnectedSocialAccountApi?.data.filter(c => c.provider !== "GOOGLE").length === 0))
                             ?
                             <div className="cmn_background p-4 text-center account_not_connect_imcontainer">
                                <div className="text-end">
@@ -144,16 +144,16 @@ export const DashboardReports = () => {
                             </div>
                             :
                             // allAvailablePages?.filter(c => c.isConnected === true).length === 0 ?
-                            isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
-                                <div className=" p-5 text-center no_acc_container cmn_background">
-                                    <h6 className="no_acc_title">No Page is Connected yet!</h6>
-                                    <h3 className="connected_heading mt-3">Click on Connect to add your <br></br>pages
-                                        in
-                                        Addy.</h3>
-                                    <img src={noPageData} className="img-fluid mt-5" alt=""/>
-                                </div>
+                            // isNullOrEmpty(connectedPagesToSelectedSocialMediaAccount) ?
+                            //     <div className=" p-5 text-center no_acc_container cmn_background">
+                            //         <h6 className="no_acc_title">No Page is Connected yet!</h6>
+                            //         <h3 className="connected_heading mt-3">Click on Connect to add your <br></br>pages
+                            //             in
+                            //             Addy.</h3>
+                            //         <img src={noPageData} className="img-fluid mt-5" alt=""/>
+                            //     </div>
 
-                                :
+                            //     :
 
                                 <div className="post_activity_outer mx-2">
 
