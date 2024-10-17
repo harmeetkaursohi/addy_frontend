@@ -17,6 +17,7 @@ const NotFoundPopup = ({show, setShow,isInstagramGuideModal=false,setShowInstagr
                 show={show}
                 onHide={handleClose}
                 className="choose_page_outer notfound_popup"
+                centered
             >
                 <div
                     className="pop_up_cross_icon_outer  cursor-pointer"

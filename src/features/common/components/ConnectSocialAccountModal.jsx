@@ -27,7 +27,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="md" show={showModal} onHide={handleClose} backdrop="static" className="Account_not_connect_wrapper">
+                <Modal centered size="md" show={showModal} onHide={handleClose} backdrop="static" className="Account_not_connect_wrapper">
                     <Modal.Header closeButton>
                         <Modal.Title className="commonmodal_header">
                         <div className='pop_up_cross_icon_outer text-end' onClick={(e) => {

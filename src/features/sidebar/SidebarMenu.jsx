@@ -8,18 +8,11 @@ export const SidebarMenuItems = [
 
         "name": "Dashboard",
         "path": "/dashboard",
-        "icon": <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10.5 3.5H3.5V10.5H10.5V3.5Z" stroke="#7E7C7F" strokeWidth="2" strokeLinecap="round"
-                  strokeLinejoin="round"/>
-            <path d="M21.5 3.5H14.5V10.5H21.5V3.5Z" stroke="#7E7C7F" strokeWidth="2" strokeLinecap="round"
-                  strokeLinejoin="round"/>
-            <path d="M21.5 14.5H14.5V21.5H21.5V14.5Z" stroke="#7E7C7F" strokeWidth="2" strokeLinecap="round"
-                  strokeLinejoin="round"/>
-            <path d="M10.5 14.5H3.5V21.5H10.5V14.5Z" stroke="#7E7C7F" strokeWidth="2" strokeLinecap="round"
-                  strokeLinejoin="round"/>
+        "icon": <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.4166 10.1614V11.3656C17.4166 14.4538 17.4166 15.9979 16.4891 16.9572C15.5617 17.9167 14.0688 17.9167 11.0833 17.9167H7.91665C4.93108 17.9167 3.43831 17.9167 2.51081 16.9572C1.58331 15.9979 1.58331 14.4538 1.58331 11.3656V10.1614C1.58331 8.34976 1.58331 7.44392 1.99435 6.693C2.40538 5.94208 3.15631 5.47602 4.65817 4.54393L6.2415 3.56127C7.82908 2.57597 8.62289 2.08333 9.49998 2.08333C10.3771 2.08333 11.1709 2.57597 12.7585 3.56127L14.3418 4.54392C15.8437 5.47602 16.5946 5.94208 17.0056 6.693" stroke="black" stroke-width="2" stroke-linecap="round"/>
+        <path d="M11.875 14.75H7.125" stroke="black" stroke-width="2" stroke-linecap="round"/>
         </svg>
-
-    },
+      },
     {
         "name": "Planner",
         "path": "/planner",
