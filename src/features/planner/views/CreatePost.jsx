@@ -274,17 +274,17 @@ const CreatePost = () => {
             boostPost: boostPost,
             scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
         };
-
-        await handleRTKQuery(
-            async () => {
-                if (postStatus === "DRAFT" || isCreatePostRequestValid(requestBody, files)) {
+        if(postStatus === "DRAFT" || isCreatePostRequestValid(requestBody, files)){
+            await handleRTKQuery(
+                async () => {
                     return await createPosts(requestBody).unwrap();
+                },
+                () => {
+                    navigate("/planner");
                 }
-            },
-            () => {
-                navigate("/planner");
-            }
-        );
+            );
+        }
+
     };
 
     const handlePostSubmit = (e) => {

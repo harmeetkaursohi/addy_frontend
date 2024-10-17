@@ -298,10 +298,7 @@ const Review = () => {
 
                                                                                     <div className="review_content">
                                                                                         <p className="nunito_font">
-                                                                                            {/*{post?.page?.name}{" "}*/}
-                                                                                            {
-                                                                                                post?.message
-                                                                                            }
+                                                                                            {post?.page?.name}{" "}
                                                                                         </p>
                                                                                         <div
                                                                                             className="d-flex  review_likes_list">

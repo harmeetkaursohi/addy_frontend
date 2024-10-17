@@ -4,7 +4,6 @@ import React, {useEffect, useState} from "react";
 import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
 import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {useDispatch} from "react-redux";
 import {Dropdown} from 'react-bootstrap'
 import {BiSolidEditAlt, BiUser} from "react-icons/bi";
@@ -344,18 +343,18 @@ const UpdatePost = () => {
                         scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
                     },
                 };
-                await handleRTKQuery(
-                    async () => {
-                        if (postStatus === "DRAFT" || isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files,oldAttachmentsFileObject)) {
-                            return await updatePostById(requestBody).unwrap();
-                        }
-                    },
-                    () => {
-                        navigate("/planner");
-                        dispatch(addyApi.util.invalidateTags("getPostsByIdApi"));
-                    }
-                );
 
+                if(postStatus === "DRAFT" || isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files,oldAttachmentsFileObject)){
+                    await handleRTKQuery(
+                        async () => {
+                            return await updatePostById(requestBody).unwrap();
+                        },
+                        () => {
+                            navigate("/planner");
+                            dispatch(addyApi.util.invalidateTags("getPostsByIdApi"));
+                        }
+                    );
+                }
             }
         ;
 
