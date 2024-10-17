@@ -8,7 +8,7 @@ import {FiThumbsUp} from "react-icons/fi";
 import {FaRegComment} from "react-icons/fa";
 import {PiShareFat} from "react-icons/pi";
 import "./common.css"
-
+import { Image } from "react-bootstrap";
 function FacebookPostModal() {
 
     const [show1, setShow1] = useState(false);
@@ -37,7 +37,7 @@ function FacebookPostModal() {
 
                         <div className="individual_post_header">
                             <div className="individual_post_info_outer d-flex align-items-center gap-3">
-                                <img src={men_img} height={"40px"} width={"40px"}/>
+                                <Image src={men_img} alt="men image" height={"40px"} width={"40px"}/>
                                 <h3 className="cmn_text_style">Username</h3>
                             </div>
                             <div className={""}>
@@ -47,7 +47,7 @@ function FacebookPostModal() {
                         </div>
                     </div>
                     <Modal.Body className="individual_post_content">
-                        <img src={men_img} className="individual_post_image"/>
+                        <Image src={men_img} alt="men image" className="individual_post_image"/>
                         <div className="like_comment_outer">
                             <div className="d-flex align-items-center gap-2 facebook_post_modal_outer">
                                 <FiThumbsUp/>

@@ -3,7 +3,7 @@ import {RxCross2} from "react-icons/rx";
 import Modal from "react-bootstrap/Modal";
 import instaGuid from "../../../images/instaguid.png";
 import FacebookAuthorizedModal from "./FacebookAuthorizedModal";
-
+import { Image } from "react-bootstrap";
 const InstagramGuidePopup = ({
                                  show,
                                  setShow,
@@ -63,10 +63,7 @@ const InstagramGuidePopup = ({
                         <div className="">
                             <div className="">
                                 <div className="text-center pt-3">
-                                    {/* <img
-                  src={no_page_connect_img}
-                /> */}
-                                    <div className="facebook_content_outer">
+                                   <div className="facebook_content_outer">
                                         <h2 className="disconnect_title">Connect Instagram Page</h2>
                                         <p className="disconnect_paragraph">
                                             Please confirm that you've completed the steps below to
@@ -84,7 +81,7 @@ const InstagramGuidePopup = ({
                                         </li>
                                     </ol>
                                     <div>
-                                        <img src="/assets/instaguid.svg" className="img-fluid"/>
+                                        <Image src="/assets/instaguid.svg" alt="Instagram Guide image" className="img-fluid"/>
                                     </div>
                                     <div className="confirm_btn mt-2">
                                         <button

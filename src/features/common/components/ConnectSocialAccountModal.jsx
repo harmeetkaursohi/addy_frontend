@@ -1,7 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import not_connected from "../../../images/pagenotConnect.svg"
 import React, {useState} from "react";
-import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import './common.css'
 import { RxCross2 } from "react-icons/rx";
@@ -9,6 +8,7 @@ import {
     useGetConnectedSocialAccountQuery,
 } from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
+import { Image } from "react-bootstrap";
 const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
 
     const navigate = useNavigate();
@@ -27,7 +27,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="md" show={showModal} onHide={handleClose} backdrop="static" className="Account_not_connect_wrapper">
+                <Modal centered size="md" show={showModal} onHide={handleClose} backdrop="static" className="Account_not_connect_wrapper">
                     <Modal.Header closeButton>
                         <Modal.Title className="commonmodal_header">
                         <div className='pop_up_cross_icon_outer text-end' onClick={(e) => {
@@ -39,7 +39,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                         <div className='facebook_content_outer'>
                             
                             <div className='text-center'>
-                                <img className={"acc-not-connected-error-svg mb-3 "} src={not_connected}></img>
+                                <Image className={"acc-not-connected-error-svg mb-3 "} alt="acc-not-connected-error-svg" src={not_connected}/>
                                
                                 <div className='facebook_title'>
 

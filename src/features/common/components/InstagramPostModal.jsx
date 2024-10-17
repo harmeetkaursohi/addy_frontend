@@ -8,7 +8,7 @@ import send_img from "../../../images/send_img.svg";
 import men_img from "../../../images/men.png";
 import "./common.css";
 import {RxCross2} from "react-icons/rx";
-
+import { Image } from "react-bootstrap";
 function InstagramPostModal({show, setShow, data}) {
     const [show1, setShow1] = useState(false);
 
@@ -35,22 +35,22 @@ function InstagramPostModal({show, setShow, data}) {
                         </div>
                         <div className="individual_post_header">
                             <div className="individual_post_info_outer d-flex align-items-center gap-3">
-                                <img src={men_img} height={"40px"} width={"40px"}/>
+                                <Image src={men_img} alt="men image" height={"40px"} width={"40px"}/>
                                 <h3 className="cmn_text_style">Username</h3>
                             </div>
 
                         </div>
                     </div>
                     <Modal.Body className="individual_post_content">
-                        <img src={men_img} className="individual_post_image"/>
+                        <Image src={men_img} alt="men image" className="individual_post_image"/>
                         <div className="like_comment_outer instagram_like">
                             <div className="flex-grow-1">
-                                <img src={like_img}/>
-                                <img src={comment_img} className=" ms-4 me-4"/>
-                                <img src={send_img}/>
+                                <Image src={like_img} alt="like image"/>
+                                <Image src={comment_img} alt="comment image" className=" ms-4 me-4"/>
+                                <Image src={send_img} alt="send_image"/>
                             </div>
                             <div>
-                                <img src={save_img}/>
+                                <Image src={save_img} alt="save image"/>
                             </div>
                         </div>
                         <div className={""}>

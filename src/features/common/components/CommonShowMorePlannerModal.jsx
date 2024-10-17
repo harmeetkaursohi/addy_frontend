@@ -24,7 +24,7 @@ import {
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {DeletedSuccessfully} from "../../../utils/contantData";
 import {addyApi} from "../../../app/addyApi";
-
+import { Image } from 'react-bootstrap';
 
 const CommonShowMorePlannerModal = ({
                                         showCommonShowMorePlannerModal,
@@ -194,11 +194,11 @@ const CommonShowMorePlannerModal = ({
                                                                                                     >
                                                                                                         <div
                                                                                                             className="plan_tag_img position-relative">
-                                                                                                            <img
+                                                                                                            <Image
                                                                                                                 className="plan_image"
                                                                                                                 src={curPage?.imageURL || default_user_icon}
                                                                                                                 alt="fb"/>
-                                                                                                            <img
+                                                                                                            <Image
                                                                                                                 className="plan_social_img"
                                                                                                                 src={computeImageURL(curPage?.socialMediaType)}
                                                                                                                 alt="fb"/>
