@@ -11,7 +11,7 @@ import {useState} from 'react';
 import {useRef} from 'react';
 import "./common.css"
 import { RxCross2 } from 'react-icons/rx';
-
+import { Image } from 'react-bootstrap';
 const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFileSize, setCropImgUrl}) => {
 
 
@@ -161,8 +161,8 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
                             onComplete={onCropComplete}
                             onChange={onCropChange}>
 
-                            <img src={file.url ? file?.url : "data:image/jpeg; base64," + file?.attachmentSource}
-                                 alt="Selected" height="400px" width="400px" onLoad={onImageLoaded}/>
+                            <Image src={file.url ? file?.url : "data:image/jpeg; base64," + file?.attachmentSource}
+                                 alt="Selected Image" height="400px" width="400px" onLoad={onImageLoaded}/>
                         </ReactCrop>
                     }
                     <ul className='aspect_ratio_outer'>

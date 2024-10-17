@@ -9,6 +9,7 @@ import {FaLinkedin} from "react-icons/fa"
 import { SlLike } from "react-icons/sl";
 import "./common.css"
 import {TiWorld}  from "react-icons/ti"
+import { Image } from "react-bootstrap";
 const LinkedinFeedpreview = ({
                                   previewTitle,
                                   pageName,
@@ -29,10 +30,10 @@ const LinkedinFeedpreview = ({
             <div className='preview_wrapper '>
                 <div>
                 <div className='user_profile_info'>
-                <img style={{background:"white"}} src={pageImage?pageImage:default_user_icon} height="30px" width="30px"/>
+                <Image style={{background:"white"}} src={pageImage?pageImage:default_user_icon} alt="default image" height="30px" width="30px"/>
                     <div>
                         <h3 className='create_post_text user_name boost_post_text'>{pageName} <FaLinkedin className="FaLinkedin_icon"/></h3>
-                        <h6 className='status create_post_text'><img src={ellipse_img} className="ms-1"/> just now
+                        <h6 className='status create_post_text'><Image src={ellipse_img} alt="ellipse image" className="ms-1"/> just now
                             
                             <TiWorld className="world_icon ms-1"/>
                         </h6>
@@ -44,10 +45,10 @@ const LinkedinFeedpreview = ({
                         
                     
                         <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag} ></CommonSlider>
-                        {/*<img src={noImageAvailable} width="100%"/>*/}
+                        {/*<Image src={noImageAvailable} width="100%"/>*/}
                         <div className=' linkedin_post_likes'>
                         <div className="linkedin_dropdown">
-                            <img src={pageImage?pageImage:default_user_icon} height="30px" width="30px"/>
+                            <Image src={pageImage?pageImage:default_user_icon} alt="social icon" height="30px" width="30px"/>
                         <IoMdArrowDropdown />
                     </div>
                     <div className="linkedin_likes">

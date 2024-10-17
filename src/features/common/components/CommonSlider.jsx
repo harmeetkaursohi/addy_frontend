@@ -6,7 +6,7 @@ import noImageAvailable from "../../../images/no_img_posted.png"
 import ReactPlayer from "react-player";
 import CommentText from "../../review/views/comments/CommentText";
 import './common.css'
-
+import { Image } from "react-bootstrap";
 const CommonSlider = ({
                           files,
                           selectedFileType = "",
@@ -50,7 +50,7 @@ const CommonSlider = ({
 
                             files?.map((file, index) => {
                                 return (<div key={index}>
-                                    <img src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
+                                    <Image src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
                                          alt={`Image ${index}`} className='post_img'/>
                                 </div>)
                             })
@@ -84,13 +84,13 @@ const CommonSlider = ({
                     <Slider {...settings}>
 
                         {
-                            files?.length === 0 && <img src={noImageAvailable} alt={`Image 23F`} className='post_img mb-2'/>
+                            files?.length === 0 && <Image src={noImageAvailable} alt={`Image 23F`} className='post_img mb-2'/>
                         }
 
                         {
                             enableShowPlannerModel === true && Array.isArray(files) && files.length > 0 && files[0].mediaType === "IMAGE" &&
 
-                            <img
+                            <Image
                                 src={(files[0].postStatus && files[0].postStatus === "SCHEDULED") ? "data:image/jpeg; base64," + files[0]?.imageURL : files[0]?.imageURL}
                                 alt={`Image`} className='post_img'/>
                         }
@@ -114,7 +114,7 @@ const CommonSlider = ({
 
                                     {file?.mediaType === "IMAGE" || showThumbnail  || !file.sourceURL?
                                         <div className={className ? className : "post_image_outerwrapper"}>
-                                            <img
+                                            <Image
                                                 src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
                                                 alt={`Image ${index}`} className='post_img'/></div>
                                         :
