@@ -67,9 +67,8 @@ const CommonModal = ({
                                 <h3>
                                     <img src="./Addy_icon.svg" className="addy_icon "/></h3>
                                 <h2 className='cmn_text_style'>Please choose
-                                    your {socialMediaType === SocialAccountProvider.PINTEREST ? "board" : "page"} to
-                                    connect with Addy</h2>
-                                <p className='planInfo'>You have Personal Plan, you can add only one page.&nbsp;  <span>Upgrade Plan</span>
+                                    your {socialMediaType === SocialAccountProvider.PINTEREST ? "board" : "page"} to connect with Addy</h2>
+                                <p className='planInfo'>You have Personal Plan, you can add only one page.&nbsp;<span>Upgrade Plan</span>
                                 </p>
                             </div>
 

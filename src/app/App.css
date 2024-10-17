@@ -492,9 +492,8 @@ button.facebook_connect.connect_buttoon {
   border: 1px solid #D9D9D9;
 }
 .pop_up_cross_icon_outer svg{
-  font-size: 24px;
+  font-size: 18px;
   color: #6D6D6D;
-  margin-right: 6px;
   cursor: pointer;
   z-index: 999;
 }
@@ -512,6 +511,9 @@ button.facebook_connect.connect_buttoon {
   font-size: 16px;
   color: #000;
   padding-top: 8px;
+  max-width: 449px;
+  font-weight: 500;
+  line-height: 20px;
 }
 .Account_not_connect_wrapper .modal-header .btn-close{
   display: none;
@@ -625,9 +627,9 @@ line-height: 20px;
 }
 .pop_up_cross_icon_outer.cursor-pointer {
   position: absolute;
-  right: 21px;
-  top: 25px;
-  z-index: 999;
+    right: 21px;
+    top: 15px;
+    z-index: 999;
 }
 .dropdown_btn .dropdown-item.disabled, .dropdown-item:disabled {
 
@@ -1107,7 +1109,7 @@ ul.slick-dots li button:before {
   border: unset;
 }
 .Account_not_connect_wrapper .modal-body{
-  padding: 0px 0px 42px!important;
+  padding: 0px 0px 30px;
 }
 .facebook_title h2 h2#swal2-title {}
 

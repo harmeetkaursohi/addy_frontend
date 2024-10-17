@@ -231,10 +231,18 @@ const Layout = () => {
                             {sidebar ? (
                                 <OverlayTrigger
                                     placement="right"
-                                    overlay={<Tooltip id="button-tooltip">Logout</Tooltip>}
+                                    overlay={<Tooltip id="button-tooltip">Profile</Tooltip>}
                                 >
                                     <div className="sidebar_item_outers" onClick={LogOut}>
-                                        <img src={logout_img}/>
+                                    {
+                                getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
+                                    <SkeletonEffect count={1}/> :
+                                    getUserInfoApi.data !== undefined &&
+                                        <img
+                                            src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
+                                            className='profile_img mobile_profile'/>
+                                     
+                                      } 
 
                                     </div>
                                 </OverlayTrigger>
