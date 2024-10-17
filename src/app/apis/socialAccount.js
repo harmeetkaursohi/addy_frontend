@@ -106,6 +106,7 @@ export const socialAccount = addyApi.injectEndpoints({
                     headers:getAuthorizationHeader()
                 };
             },
+            invalidatesTags:["getAllConnectedPagesApi","getSocialMediaPostsByCriteriaApi","getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"],
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },

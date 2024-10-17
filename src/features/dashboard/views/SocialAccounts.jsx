@@ -105,38 +105,12 @@ const SocialAccounts = ({}) => {
     }, {skip: !enabledSocialMedia?.isLinkedinEnabled || isNullOrEmpty(connectedSocialAccount.linkedin),});
 
     useEffect(() => {
-        if (
-            enabledSocialMedia?.isLinkedinEnabled &&
-            getAllConnectedPagesApi?.data &&
-            Array.isArray(getAllConnectedPagesApi?.data) &&
-            !isNullOrEmpty(getAllLinkedinPagesApi?.data)
-        ) {
-            const connectedLinkedinSocialAccount =
-                getConnectedSocialAccountApi?.data?.filter(
-                    (socialAccount) => socialAccount?.provider === "LINKEDIN"
-                )[0];
-            const connectedLinkedinPages = getAllConnectedPagesApi?.data?.filter(
-                (pageData) =>
-                    pageData?.socialMediaAccountId === connectedLinkedinSocialAccount?.id
-            );
-            const linkedinPages =
-                getAllLinkedinPagesApi?.data?.results === null ||
-                getAllLinkedinPagesApi?.data?.results === undefined
-                    ? {}
-                    : getAllLinkedinPagesApi?.data?.results;
-            const currentConnectedLinkedinPagesIds = Object.keys(
-                linkedinPages
-            )?.filter((LinkedinPageId) =>
-                connectedLinkedinPages?.some(
-                    (linkedinPage) =>
-                        linkedinPage?.pageId ===
-                        getLinkedInUrnId(LinkedinPageId, Linkedin_URN_Id_Types.ORGANIZATION)
-                )
-            );
-            const currentConnectedLinkedinPages =
-                currentConnectedLinkedinPagesIds?.map((pageId) => {
-                    return getFormattedLinkedinObject(pageId, linkedinPages[pageId]);
-                });
+        if (enabledSocialMedia?.isLinkedinEnabled && getAllConnectedPagesApi?.data && Array.isArray(getAllConnectedPagesApi?.data) && !isNullOrEmpty(getAllLinkedinPagesApi?.data)) {
+            const connectedLinkedinSocialAccount = getConnectedSocialAccountApi?.data?.filter((socialAccount) => socialAccount?.provider === "LINKEDIN")[0];
+            const connectedLinkedinPages = getAllConnectedPagesApi?.data?.filter((pageData) => pageData?.socialMediaAccountId === connectedLinkedinSocialAccount?.id);
+            const linkedinPages = getAllLinkedinPagesApi?.data?.results === null || getAllLinkedinPagesApi?.data?.results === undefined ? {} : getAllLinkedinPagesApi?.data?.results;
+            const currentConnectedLinkedinPagesIds = Object.keys(linkedinPages)?.filter((LinkedinPageId) => connectedLinkedinPages?.some((linkedinPage) => linkedinPage?.pageId === getLinkedInUrnId(LinkedinPageId, Linkedin_URN_Id_Types.ORGANIZATION)));
+            const currentConnectedLinkedinPages = currentConnectedLinkedinPagesIds?.map((pageId) => {return getFormattedLinkedinObject(pageId, linkedinPages[pageId]);});
             setCurrentConnectedLinkedinPages(currentConnectedLinkedinPages || null);
         }
     }, [getAllConnectedPagesApi?.data, getAllLinkedinPagesApi?.data]);

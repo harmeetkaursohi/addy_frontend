@@ -3,7 +3,6 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import addy_logo from "../../../images/addylogoo.png";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
-import {getToken} from "../../../app/auth/auth";
 import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
 import {useAppContext} from "../../common/components/AppProvider.jsx";
@@ -70,7 +69,7 @@ const Layout = () => {
     }, []);
 
     useEffect(() => {
-        if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
+        if (getConnectedSocialAccountApi?.data?.length > 0 && !getConnectedSocialAccountApi?.isLoading && !getConnectedSocialAccountApi?.isFetching && getAllConnectedPagesApi?.data?.length > 0 && !getAllConnectedPagesApi?.isLoading && !getAllConnectedPagesApi?.isFetching ) {
             // First Map -> Insert socialMediaType in each page
             // Second Map -> Getting latest imageUrl if Updated or url expired
             // Third Filter -> Filter all the pages whose images we need to updated
@@ -90,8 +89,7 @@ const Layout = () => {
             if (isPageInfoAvailableFromSocialMediaFor(connectedSocialMediaTypes, pageInfoFromSocialMedia)) {
                 let pageImagesToUpdate = allConnectedPages?.map(page => {
                         return getUpdatedNameAndImageUrlForConnectedPages(page, pageInfoFromSocialMedia)
-                    }
-                ).filter(page => page?.isPageUpdated)
+                    }).filter(page => page?.isPageUpdated)
 
                 const requestBody = {
                     ids: pageImagesToUpdate?.map(page => page.id).join(","),
