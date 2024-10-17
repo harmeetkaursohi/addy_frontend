@@ -313,8 +313,12 @@ div.sidebar_item_outers {
 }
 .cmn_forward_arrow{    
         padding: 10px 10px 0px 0px;
-        cursor: pointer;
+      
         margin-left: 10px;
+
+}
+.cmn_forward_arrow svg{   
+cursor: pointer;
 
 }
 .cross_icon{

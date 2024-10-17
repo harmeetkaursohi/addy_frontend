@@ -32,6 +32,7 @@ import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {useCreatePostMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
+import { GoChevronDown } from "react-icons/go";
 
 const CreatePost = () => {
 
@@ -415,6 +416,7 @@ const CreatePost = () => {
                                                         <Dropdown.Toggle id="instagram"
                                                                          className="instagram_dropdown tabs_grid"
                                                                          disabled={allOptions.flatMap((group) => group.allOptions).length <= 0}>
+                                                                            <GoChevronDown className='dropdown_chevron'/>
                                                             {selectedAllDropdownData.length > 0 ?
                                                                 (
                                                                     selectedAllDropdownData.map((data, index) => (

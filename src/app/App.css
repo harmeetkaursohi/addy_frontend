@@ -117,7 +117,7 @@ button.clear_all_button_outer:hover{
   padding: 20px;
 }
 .cmn_wrapper_outer {
-  padding: 0px 30px 30px;
+  padding: 19px;
 }
 
 .form-control {
@@ -341,7 +341,7 @@ h2.openEye {
   font-style: normal;
 }
 div:where(.swal2-container).swal2-center>.swal2-popup {
-  padding-bottom: 42px !important;
+  padding-bottom: 30px !important;
   border-radius: 30px;
 
 }
@@ -514,6 +514,7 @@ button.facebook_connect.connect_buttoon {
   max-width: 449px;
   font-weight: 500;
   line-height: 20px;
+  margin: auto !important; 
 }
 .Account_not_connect_wrapper .modal-header .btn-close{
   display: none;
@@ -1077,7 +1078,7 @@ img.acc_not_connected_img.mt-0 {
 .createPost_outer .insta_dropdown_btn button#instagram {
   max-height: 100px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .fc-daygrid-body.fc-daygrid-body-unbalanced, .fc-daygrid-body.fc-daygrid-body-unbalanced table, table.fc-col-header {
   height: 100% !important;
@@ -1457,9 +1458,7 @@ margin-top: 10px;
 .connect_btn {
 margin-top: 10px;
 }
-.cmn_wrapper_outer {
-padding: 0px 24px 30px;
-}
+
 
 
 .animated-popup img{
@@ -1495,9 +1494,7 @@ min-width: 180px;
 .cmn_outer {
 padding: 14px;
 }
-.cmn_wrapper_outer {
-padding: 0px 15px 30px;
-}
+
 .cmn_text_overflow{
 width: 100%;
 }
@@ -1659,9 +1656,7 @@ font-size: 14px;
 .acc_not_connected_heading {
 font-size: 12px;
 }
-.cmn_wrapper_outer{
-padding: 0px 13px 30px;
-}
+
 div#swal2-html-container {
 font-size: 14px;
 line-height: 22px;

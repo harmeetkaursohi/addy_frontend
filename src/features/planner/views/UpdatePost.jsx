@@ -35,7 +35,7 @@ import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount
 import {useGetPostsByIdQuery, useUpdatePostByIdMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
-
+import { GoChevronDown } from "react-icons/go";
 const UpdatePost = () => {
 
         const dispatch = useDispatch();
@@ -484,6 +484,7 @@ const UpdatePost = () => {
                                                 <Dropdown className='insta_dropdown_btn mt-2'>
                                                     <Dropdown.Toggle id="instagram"
                                                                      className="instagram_dropdown tabs_grid">
+                                                                        <GoChevronDown/>
                                                         {selectedAllDropdownData.length > 0 ?
                                                             (
                                                                 selectedAllDropdownData.map((data, index) => (

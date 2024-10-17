@@ -136,10 +136,10 @@ const Layout = () => {
                 >
 
                     <div
-                        onClick={show_sidebar}
+                        
                         className={`cmn_forward_arrow ${sidebar ? "text-center" : "text-end"}`}
                     >
-                        {sidebar ? <FaBars/> : <RxCross2 className="cross_icon"/>}
+                        {sidebar ? <FaBars onClick={show_sidebar}/> : <RxCross2 onClick={show_sidebar} className="cross_icon"/>}
 
                     </div>
                     <div className="user_profile_outer">
