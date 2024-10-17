@@ -9,6 +9,7 @@
     scrollbar-width: none;
     background-color: white;
     transition: all ease-in 0.4s;
+    border-top-right-radius: 22px;
 }
 img.addy_logo {
     height: 45px;
@@ -82,6 +83,7 @@ i.bar_icon {
 .sidebar_item_outers.profile_link {
     padding-top: 21px;
     border-top: 1px solid rgba(209, 217, 226, 1);
+    padding-left: 10px;
 }
 
 .sidebar_item_outer a {
@@ -100,7 +102,7 @@ i.bar_icon {
 
 .sidebar_item li {
     cursor: pointer;
-
+padding: 0px 10px;
 }
 .sidebar_item_outers.Profile_Img_outer a {
     gap: 10px;
@@ -115,9 +117,19 @@ i.bar_icon {
     color: #000;
 }
 .sidebar_container_items {
-    border-radius: 10px;
+    /* border-radius: 10px; */
     overflow: hidden;
 
+}
+li.sidebar_container_items.sidebar_item_outer::before {
+    position: absolute;
+    left: 0px;
+    width: 4px;
+    height: 46px;
+    background: #f57e3b;
+    content: "";
+    border-radius: unset;
+    top: 0;
 }
 
 h4.icon {
@@ -177,7 +189,7 @@ a.active {
     align-items: center;
     color: #2A2D37;
     cursor: pointer;
-
+    border-radius: 12px;
 }
 
 .sidebar_inner_content h6 {

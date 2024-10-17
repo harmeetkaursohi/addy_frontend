@@ -827,7 +827,7 @@ width: 100%;
 }
 
 .addy_icon{
-    width: 50px;
+    width: 67px;
     height: auto;
     margin-bottom: 8px;
     margin-top: 5px;
@@ -843,13 +843,17 @@ width: 100%;
     /*overflow: hidden;*/
     text-overflow: ellipsis;
 }
-
+.post_activity_outer .dropdown_btn .dropdown-menu a:first-child {
+    border-top: unset !important;
+}
 .dropdown_btn .dropdown-menu.show {
     min-width: 193px;
     width: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 .dropdown_btn .dropdown-item{
-    padding: 9px 20px 15px;
+    padding: 10px;
     border-bottom: 1px solid #ededed;
     color: #5F6D7E !important;
     font-weight: 500;
