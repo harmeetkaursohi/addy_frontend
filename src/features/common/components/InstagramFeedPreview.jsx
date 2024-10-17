@@ -7,7 +7,8 @@ import like_img from "../../../images/like.svg"
 import comment_img from "../../../images/comment.svg"
 import save_img from "../../../images/save.svg"
 import send_img from "../../../images/send_img.svg"
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDotsVertical } from "react-icons/bs"
+import { Image } from "react-bootstrap";
 import "./common.css"
 
 const InstagramFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType, pageImage,caption, hashTag}) => {
@@ -20,12 +21,14 @@ const[showContent,setShowContent]=useState(false)
             <div className='preview_wrapper'>
                 <div className='user_profile_info  align-items-center d-flex justify-content-between'>
                     <div className="d-flex align-items-center gap-2">
-                    <img src={pageImage ? pageImage : default_user_icon}
+                    <Image src={pageImage ? pageImage : default_user_icon}
                          height="36px"
-                         width="36px"/>
+                         width="36px"
+                         alt="user image"
+                         />
                     <div>
                         <h3 className='create_post_text user_name boost_post_text mt-1'>{pageName}</h3>
-                        <h6 className='status create_post_text'> <img src={ellipse_img} className="ms-1" /> just now
+                        <h6 className='status create_post_text'> <Image src={ellipse_img} alt="ellipse image" className="ms-1" /> just now
                             
                         </h6>
                     </div>
@@ -39,13 +42,13 @@ const[showContent,setShowContent]=useState(false)
  
                 <div className='like_comment_outer instagram_like'>
                    <div className="flex-grow-1">
-                    <img src={like_img} />
-                       <img src={comment_img} className=" ms-4 me-4" />
-                       <img src={send_img} />
+                    <Image src={like_img} alt="like image"/>
+                       <Image src={comment_img} alt="comment image" className=" ms-4 me-4" />
+                       <Image src={send_img} alt="send image"/>
                       
                    </div>
                     <div>
-                    <img src={save_img} />
+                    <Image src={save_img} alt="save image" />
                     </div>
                 </div>
                 <div className={`ms-2  ${showContent ?"feed_preview_Caption_outer":"Caption_outer instagram_caption_outer " }`}>

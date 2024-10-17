@@ -56,7 +56,7 @@ import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi
 import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils";
 import NotFoundPopup from "../../common/components/NotFoundPopup";
 import InstagramGuidePopup from "../../common/components/InstagramGuidePopup";
-
+import { Image } from "react-bootstrap";
 const SocialAccounts = ({}) => {
     const dispatch = useDispatch();
     // const [checkForDisablePages, setCheckForDisablePages] = useState(true);
@@ -253,7 +253,7 @@ const SocialAccounts = ({}) => {
             html: `
                <div class="swal_content">
                 <div class="swal_images">
-                <img src="${imageUrl}" alt="Image 2" class="facebook_img" />
+                <Image src="${imageUrl}" alt="Image 2" class="facebook_img" />
                 </div>
                 <h2 class="disconnect_title">Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account</h2>
                 <p class="disconnect_paragraph">${formatMessage(DisconnectAccountWarning, [getInitialLetterCap(SocialAccountProvider[socialMediaType])])}</p>
@@ -373,7 +373,7 @@ const SocialAccounts = ({}) => {
                                                         onClick={() => setFacebookDropDown(!facebookDropDown)}
                                                     >
                                                         <div className={"social_media_icon"}>
-                                                            <img className="cmn_width" src={fb_img}/>
+                                                            <Image className="cmn_width" src={fb_img} alt="fb_image"/>
 
                                                             <h2 className={`pagecount ${currentConnectedFacebookPages?.length === undefined ? "blink" : ""}`}>
                                                                 {
@@ -444,13 +444,14 @@ const SocialAccounts = ({}) => {
                                                                                 <li key={index}>
                                                                                     <div className="user_profileInfo_wrapper">
                                                                                         <div className="user_Details">
-                                                                                            <img
+                                                                                            <Image
                                                                                                 src={
                                                                                                     data?.picture?.data?.url ||
                                                                                                     default_user_icon
                                                                                                 }
                                                                                                 height="30px"
                                                                                                 width="30px"
+                                                                                                alt="profile picture addy"
                                                                                             />
                                                                                             <h4 className="cmn_text_style">
                                                                                                 {data.name}
@@ -541,7 +542,7 @@ const SocialAccounts = ({}) => {
                                                             }
                                                         </h2>
 
-                                                        {/*<img className="cmn_width " src={fb_img}/>*/}
+                                                        {/*<Image className="cmn_width " src={fb_img}/>*/}
                                                         <div className="text-start flex-grow-1">
                                                             <h5 className="userName">
                                                                 {
@@ -605,13 +606,14 @@ const SocialAccounts = ({}) => {
                                                                                         <div
                                                                                             className="user_profileInfo_wrapper">
                                                                                             <div className="user_Details">
-                                                                                                <img
+                                                                                                <Image
                                                                                                     src={
                                                                                                         data.profile_picture_url ||
                                                                                                         default_user_icon
                                                                                                     }
                                                                                                     height="30px"
                                                                                                     width="30px"
+                                                                                                    alt="profile picture"
                                                                                                 />
                                                                                                 <h4 className="cmn_text_style">
                                                                                                     {data.name}
@@ -787,10 +789,11 @@ const SocialAccounts = ({}) => {
                                                                                     <li key={index}>
                                                                                         <div className="user_profileInfo_wrapper">
                                                                                             <div className="user_Details">
-                                                                                                <img
+                                                                                                <Image
                                                                                                     src={data?.logo_url || default_user_icon}
                                                                                                     height="30px"
                                                                                                     width="30px"
+                                                                                                    alt="profile pricture"
                                                                                                 />
                                                                                                 <h4 className="cmn_text_style">
                                                                                                     {data?.name}
@@ -955,10 +958,11 @@ const SocialAccounts = ({}) => {
                                                                                             <div
                                                                                                 className="user_profileInfo_wrapper">
                                                                                                 <div className="user_Details">
-                                                                                                    <img
+                                                                                                    <Image
                                                                                                         src={data.media?.image_cover_url || default_user_icon}
                                                                                                         height="30px"
                                                                                                         width="30px"
+                                                                                                        alt="profile picture"
                                                                                                     />
                                                                                                     <h4 className="cmn_text_style">
                                                                                                         {data.name}

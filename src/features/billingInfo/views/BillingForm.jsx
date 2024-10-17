@@ -3,7 +3,7 @@ import './BillingForm.css'
 import paypal_img from "../../../images/paypal.png"
 import vector_img from "../../../images/vector.svg"
 import jsondata from "../../../locales/data/initialdata.json"
-
+import { Image } from "react-bootstrap"
 const BillingForm = () => {
     return (
         <>
@@ -14,7 +14,7 @@ const BillingForm = () => {
                             <div className='addy_container bg_color'>
                                 <div className='login_outer'>
                                     <div className='reach_user_outer'>
-                                        <img src={atm_img} className='w-100'/>
+                                        <Image src={atm_img} className='w-100'/>
                                         <h2 className='mt-5'>Reach your users with new tools.</h2>
                                     </div>
                                 </div>
@@ -37,7 +37,7 @@ const BillingForm = () => {
                                                 <label style={{fontSize: "18px"}}>{jsondata.paymentMethod}</label>
                                                 <div className="payment_outer mt-2">
                                                     <div>
-                                                        <img src={paypal_img} className="paypal_img"/>
+                                                        <Image src={paypal_img} className="paypal_img"/>
                                                         <label htmlFor="" className="ps-3"
                                                                style={{color: "#9DA1A6"}}>{jsondata.paypal}</label>
                                                     </div>
@@ -49,7 +49,7 @@ const BillingForm = () => {
                                             <div className='form-group'>
                                                 <div className="payment_outer">
                                                     <div>
-                                                        <img src={vector_img} className="paypal_img"/>
+                                                        <Image src={vector_img} className="paypal_img"/>
                                                         <label htmlFor="" className="ps-3">{jsondata.credit}</label>
                                                     </div>
                                                     <input className=" mt-1" type='radio' name="radio"

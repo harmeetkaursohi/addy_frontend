@@ -13,7 +13,7 @@ import {useGetSocialMediaReportQuery} from "../../../app/apis/insightApi";
 import {addyApi} from "../../../app/addyApi";
 import {useDispatch} from "react-redux";
 import NotFoundPopup from './NotFoundPopup.jsx';
-
+import { Image } from 'react-bootstrap';
 const CommonModal = ({
                          socialMediaAccountInfo,
                          showModal,
@@ -65,7 +65,7 @@ const CommonModal = ({
                         <div className='d-flex  pt-3 pb-4'>
                             <div className='facebook_title flex-grow-1 header_border pb-4'>
                                 <h3>
-                                    <img src="./Addy_icon.svg" className="addy_icon "/></h3>
+                                    <Image src="./Addy_icon.svg" alt='addy icon' className="addy_icon "/></h3>
                                 <h2 className='cmn_text_style'>Please choose
                                     your {socialMediaType === SocialAccountProvider.PINTEREST ? "board" : "page"} to connect with Addy</h2>
                                 <p className='planInfo'>You have Personal Plan, you can add only one page.&nbsp;<span>Upgrade Plan</span>
@@ -79,7 +79,7 @@ const CommonModal = ({
                                 {/* {
                                     isNullOrEmpty(allPagesList) &&
                                     <div className='text-center'>
-                                        <img src={no_page_connect_img} className='no_page_connect_img'/>
+                                        <Image src={no_page_connect_img} className='no_page_connect_img'/>
                                     </div>
                                 } */}
 
@@ -93,20 +93,20 @@ const CommonModal = ({
                                                         <div className='users_profile'>
                                                             {
                                                                 socialMediaType === SocialAccountProvider.FACEBOOK &&
-                                                                <img src={data.picture.data.url || default_user_icon}/>
+                                                                <Image src={data.picture.data.url || default_user_icon} alt='social media logo'/>
                                                             }
                                                             {
                                                                 socialMediaType === SocialAccountProvider.INSTAGRAM &&
-                                                                <img src={data.profile_picture_url || default_user_icon}/>
+                                                                <Image src={data.profile_picture_url || default_user_icon} alt='social media logo'/>
                                                             }
                                                             {
                                                                 socialMediaType === SocialAccountProvider.PINTEREST &&
-                                                                <img
-                                                                    src={data.media?.image_cover_url || default_user_icon}/>
+                                                                <Image
+                                                                    src={data.media?.image_cover_url || default_user_icon} alt='social media logo'/>
                                                             }
                                                             {
                                                                 socialMediaType === SocialAccountProvider.LINKEDIN &&
-                                                                <img src={data?.logo_url || default_user_icon}/>
+                                                                <Image src={data?.logo_url || default_user_icon} alt='social media logo'/>
                                                             }
 
                                                         </div>

@@ -7,7 +7,7 @@ import {PiShareFat} from "react-icons/pi";
 import React from "react";
 import { FaRegComment } from "react-icons/fa";
 import { TiWorld } from "react-icons/ti";
-
+import { Image } from "react-bootstrap";
 const FacebookFeedPreview = ({previewTitle, pageName, userData, files, selectedFileType, caption, pageImage,hashTag}) => {
     return (
         <>
@@ -15,10 +15,10 @@ const FacebookFeedPreview = ({previewTitle, pageName, userData, files, selectedF
 
             <div className='preview_wrapper' style={{ border: "1px solid transparent"}}>
                 <div className='user_profile_info'>
-                    <img src={pageImage ?  pageImage : default_user_icon} height="36px" width="36px"/>
+                    <Image src={pageImage ?  pageImage : default_user_icon} alt="user image" height="36px" width="36px"/>
                     <div>
                         <h3 className='create_post_text user_name boost_post_text'>{pageName}</h3>
-                        <h6 className='status create_post_text'> <img src={ellipse_img} className="ms-1"/> just now
+                        <h6 className='status create_post_text'> <Image src={ellipse_img} alt="ellipse image" className="ms-1"/> just now
                             
                             <TiWorld className="world_icon ms-1"/>
                         </h6>
