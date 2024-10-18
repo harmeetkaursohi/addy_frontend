@@ -5,7 +5,7 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
     computeImageURL,
     concatenateString,
-    createOptionListForSelectTag, formatMessage, getCommentCreationTime,
+    createOptionListForSelectTag, formatMessage, getCommentCreationTime, isNullOrEmpty,
 } from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
@@ -57,13 +57,6 @@ const Review = () => {
     const postApi = useGetPublishedPostsQuery(searchQuery, {skip: searchQuery?.offSet < 0})
     const [deletePostFromPagesByPageIds, deletePostFromPagesApi] = useDeletePostFromPagesByPageIdsMutation()
 
-
-    useEffect(() => {
-        if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
-            setSearchQuery({...searchQuery, offSet: 0});
-        }
-    }, [refresh]);
-
     useEffect(() => {
         if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
             setSearchQuery({...searchQuery, offSet: 0});
@@ -71,7 +64,7 @@ const Review = () => {
     }, [getConnectedSocialAccountApi, getAllConnectedPagesApi]);
 
     useEffect(() => {
-        if (postApi?.data && !postApi?.isLoading && !postApi?.isFetching) {
+        if (postApi?.data && !postApi?.isLoading && !postApi?.isFetching && !refresh) {
             if (searchQuery?.offSet === 0) {
                 setPostsList([...postApi?.data?.data])
             }
@@ -79,7 +72,7 @@ const Review = () => {
                 setPostsList([...postsList, ...postApi?.data?.data])
             }
         }
-    }, [postApi?.data]);
+    }, [postApi,refresh]);
 
     useEffect(() => {
         if (deletePostPageInfo !== null && deletePostPageInfo !== undefined) {
@@ -125,15 +118,13 @@ const Review = () => {
     }, [isDirty]);
 
     useEffect(() => {
-        return () => {
-            if (removedPosts.length > 0) {
-                dispatch(addyApi.util.invalidateTags(["getPublishedPostsApi"]))
-                setRemovedPosts([]);
-            }
-
-        };
-
-    }, [removedPosts]);
+        if (refresh) {
+            setTimeout(() => {
+                setRefresh(false)
+                dispatch(addyApi.util.invalidateTags(['getPublishedPostsApi']));
+            }, 1000);
+        }
+    }, [refresh]);
 
     const handleDeletePostFromPage = async () => {
         await handleRTKQuery(
@@ -171,7 +162,7 @@ const Review = () => {
                 }
             });
             if (post) intObserver.current.observe(post);
-        }, [postApi?.isLoading,postApi?.isFetching, postApi?.data?.hasNext, postsList]);
+        }, [postApi?.isLoading, postApi?.isFetching, removedPosts, postApi?.data?.hasNext, postsList]);
 
     return (
         <>
@@ -189,12 +180,16 @@ const Review = () => {
                                 </div>
                                 <GenericButtonWithLoader
                                     label={"Refresh"}
-                                    isDisabled={postApi?.isLoading || postApi?.isFetching}
-                                    onClick={()=>{
-                                        dispatch(addyApi.util.invalidateTags(["getPublishedPostsApi"]))
+                                    isDisabled={postApi?.isLoading || postApi?.isFetching || refresh}
+                                    onClick={() => {
+                                        setSearchQuery({
+                                            ...searchQuery,
+                                            offSet: 0
+                                        })
+                                        setRefresh(true)
                                         setRemovedPosts([])
                                         setDeletePostPageInfo(null)
-                                        setPostsList([])
+                                        setPostsList(null)
 
                                     }}
                                     className={"cmn_btn_color cmn_connect_btn yes_btn"}
@@ -206,7 +201,7 @@ const Review = () => {
                                             className={"review-pages-media-dropdown"}
                                             isMulti
                                             value={selectedDropdownOptions?.pages}
-                                            isDisabled={postApi?.isLoading || postApi?.isFetching}
+                                            isDisabled={postApi?.isLoading || postApi?.isFetching || refresh}
                                             options={createOptionListForSelectTag(pageDropdown, "name", "pageId")}
                                             onChange={(val) => {
                                                 setSelectedDropDownOptions({
@@ -229,7 +224,7 @@ const Review = () => {
                                                 value: null,
                                             }])}
                                             value={selectedDropdownOptions?.socialMediaType}
-                                            isDisabled={postApi?.isLoading || postApi?.isFetching}
+                                            isDisabled={postApi?.isLoading || postApi?.isFetching || refresh}
                                             onChange={(val) => {
                                                 setSelectedDropDownOptions({
                                                     ...selectedDropdownOptions,
@@ -314,6 +309,9 @@ const Review = () => {
                                                                                     <div className="review_content">
                                                                                         <p className="nunito_font">
                                                                                             {post?.page?.name}{" "}
+                                                                                            {
+                                                                                                post.message
+                                                                                            }
                                                                                         </p>
                                                                                         <div
                                                                                             className="d-flex  review_likes_list">
@@ -565,7 +563,7 @@ const Review = () => {
 
 
                                         {
-                                            (postApi?.isLoading || postApi?.isFetching) &&
+                                            (postApi?.isLoading || postApi?.isFetching || refresh) &&
                                             <div className="d-flex justify-content-center RotatingLines-loader mt-4">
                                                 <RotatingLines
                                                     strokeColor="#F07C33"
