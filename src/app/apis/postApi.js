@@ -218,7 +218,7 @@ export const {
     useGetSocialMediaPostsByCriteriaQuery,
     useGetPostsForPlannerQuery,
     useGetPlannerPostsCountQuery,
-    useLazyGetPublishedPostsQuery,
+    useGetPublishedPostsQuery,
     useGetPostByPageIdAndPostStatusQuery,
     useDeletePostByIdMutation,
     useDeletePostFromPagesByPageIdsMutation,

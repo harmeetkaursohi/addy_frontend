@@ -1,7 +1,7 @@
 import "./Review.css";
 import jsondata from "../../../locales/data/initialdata.json";
 import {ErrorFetchingPost, NotConnected, PostAlreadyDeleted, SocialAccountProvider} from "../../../utils/contantData";
-import {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
     computeImageURL,
     concatenateString,
@@ -11,7 +11,6 @@ import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
 import CommonLoader from "../../common/components/CommonLoader";
 import {useDispatch} from "react-redux";
-import {getToken} from "../../../app/auth/auth";
 import {RotatingLines} from "react-loader-spinner";
 import Select from "react-select";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
@@ -21,11 +20,11 @@ import notConnected_img from "../../../images/no_acc_connect_img.svg";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {
-    useDeletePostFromPagesByPageIdsMutation,
-    useLazyGetPublishedPostsQuery
+    useDeletePostFromPagesByPageIdsMutation, useGetPublishedPostsQuery,
 } from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
+import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 
 const Review = () => {
 
@@ -41,6 +40,7 @@ const Review = () => {
     });
 
     const [isDirty, setDirty] = useState({isDirty: false});
+    const [refresh, setRefresh] = useState(false);
     const [postsList, setPostsList] = useState(null)
     const [removedPosts, setRemovedPosts] = useState([]);
     const [deletePostPageInfo, setDeletePostPageInfo] = useState(null);
@@ -54,15 +54,15 @@ const Review = () => {
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
-    const [getPosts,postApi] = useLazyGetPublishedPostsQuery()
+    const postApi = useGetPublishedPostsQuery(searchQuery, {skip: searchQuery?.offSet < 0})
     const [deletePostFromPagesByPageIds, deletePostFromPagesApi] = useDeletePostFromPagesByPageIdsMutation()
 
 
     useEffect(() => {
-        if(searchQuery?.offSet>=0){
-            getPosts(searchQuery)
+        if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
+            setSearchQuery({...searchQuery, offSet: 0});
         }
-    }, [searchQuery]);
+    }, [refresh]);
 
     useEffect(() => {
         if (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) {
@@ -71,7 +71,7 @@ const Review = () => {
     }, [getConnectedSocialAccountApi, getAllConnectedPagesApi]);
 
     useEffect(() => {
-        if (postApi?.data && !postApi?.isLoading ) {
+        if (postApi?.data && !postApi?.isLoading && !postApi?.isFetching) {
             if (searchQuery?.offSet === 0) {
                 setPostsList([...postApi?.data?.data])
             }
@@ -126,7 +126,7 @@ const Review = () => {
 
     useEffect(() => {
         return () => {
-            if(removedPosts.length > 0){
+            if (removedPosts.length > 0) {
                 dispatch(addyApi.util.invalidateTags(["getPublishedPostsApi"]))
                 setRemovedPosts([]);
             }
@@ -160,7 +160,7 @@ const Review = () => {
     const intObserver = useRef();
     const lastPostRef = useCallback(
         (post) => {
-            if (postApi?.isLoading) return;
+            if (postApi?.isLoading || postApi?.isFetching) return;
             if (intObserver.current) intObserver.current.disconnect();
             intObserver.current = new IntersectionObserver((posts) => {
                 if (posts[0].isIntersecting && postApi?.data?.hasNext && !postApi?.isError) {
@@ -171,7 +171,7 @@ const Review = () => {
                 }
             });
             if (post) intObserver.current.observe(post);
-        }, [postApi?.isLoading,  postApi?.data?.hasNext, postsList]);
+        }, [postApi?.isLoading,postApi?.isFetching, postApi?.data?.hasNext, postsList]);
 
     return (
         <>
@@ -187,6 +187,18 @@ const Review = () => {
                                         {jsondata.review_post_heading}
                                     </h6>
                                 </div>
+                                <GenericButtonWithLoader
+                                    label={"Refresh"}
+                                    isDisabled={postApi?.isLoading || postApi?.isFetching}
+                                    onClick={()=>{
+                                        dispatch(addyApi.util.invalidateTags(["getPublishedPostsApi"]))
+                                        setRemovedPosts([])
+                                        setDeletePostPageInfo(null)
+                                        setPostsList([])
+
+                                    }}
+                                    className={"cmn_btn_color cmn_connect_btn yes_btn"}
+                                />
                                 {
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                     <>
@@ -194,7 +206,7 @@ const Review = () => {
                                             className={"review-pages-media-dropdown"}
                                             isMulti
                                             value={selectedDropdownOptions?.pages}
-                                            isDisabled={ postApi?.isLoading || postApi?.isFetching}
+                                            isDisabled={postApi?.isLoading || postApi?.isFetching}
                                             options={createOptionListForSelectTag(pageDropdown, "name", "pageId")}
                                             onChange={(val) => {
                                                 setSelectedDropDownOptions({
@@ -217,7 +229,7 @@ const Review = () => {
                                                 value: null,
                                             }])}
                                             value={selectedDropdownOptions?.socialMediaType}
-                                            isDisabled={ postApi?.isLoading || postApi?.isFetching}
+                                            isDisabled={postApi?.isLoading || postApi?.isFetching}
                                             onChange={(val) => {
                                                 setSelectedDropDownOptions({
                                                     ...selectedDropdownOptions,
@@ -237,7 +249,7 @@ const Review = () => {
                                 }
                             </div>
                             {
-                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching ||getAllConnectedPagesApi?.isFetching ||  getAllConnectedPagesApi?.isLoading) ?
+                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
                                     <CommonLoader classname={"cmn_loader_outer"}></CommonLoader>
                                     :
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
@@ -282,17 +294,20 @@ const Review = () => {
                                                                                     >
                                                                                         {
                                                                                             post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
-                                                                                            <video
-                                                                                                style={{objectFit: "fill"}}
-                                                                                                className="bg_img"
-                                                                                                src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
-                                                                                            />
-                                                                                            :
-                                                                                            <img src={post?.attachments[0]?.imageURL || noImageAvailable} className="bg_img"/>
+                                                                                                <video
+                                                                                                    style={{objectFit: "fill"}}
+                                                                                                    className="bg_img"
+                                                                                                    src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
+                                                                                                />
+                                                                                                :
+                                                                                                <img
+                                                                                                    src={post?.attachments[0]?.imageURL || noImageAvailable}
+                                                                                                    className="bg_img"/>
                                                                                         }
                                                                                         <div
                                                                                             className="review_social_media_outer">
-                                                                                            <img src={computeImageURL(post?.socialMediaType)}/>
+                                                                                            <img
+                                                                                                src={computeImageURL(post?.socialMediaType)}/>
                                                                                         </div>
                                                                                     </div>
 
