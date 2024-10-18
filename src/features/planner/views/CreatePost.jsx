@@ -33,6 +33,7 @@ import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi
 import {useCreatePostMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import { GoChevronDown } from "react-icons/go";
+import PostNowModal from "../../common/components/PostNowModal";
 
 const CreatePost = () => {
 
@@ -47,6 +48,7 @@ const CreatePost = () => {
     const [pinDestinationUrl, setPinDestinationUrl] = useState("");
     const [scheduleDate, setScheduleDate] = useState("");
     const [scheduleTime, setScheduleTime] = useState("");
+    const [showScheduleDateAndTimeBox, setShowScheduleDateAndTimeBox] = useState(false);
     const [boostPost, setBoostPost] = useState(false);
     const [socialAccountData, setSocialAccountData] = useState([]);
     const [files, setFiles] = useState([]);
@@ -55,6 +57,7 @@ const CreatePost = () => {
     const [disableImage, setDisableImage] = useState(false);
     const [disableVideo, setDisableVideo] = useState(false);
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
+    const [showPublishPostConfirmationBox, setShowPublishPostConfirmationBox] = useState(false)
 
     const {data: userData} = useGetUserInfoQuery("")
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
@@ -244,21 +247,8 @@ const CreatePost = () => {
         setFiles(updatedFiles);
     };
 
-    const createPost = async (e, postStatus, scheduleDate, scheduleTime) => {
-        e.preventDefault();
-        const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
-        if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
-            if (!scheduleDate && !scheduleTime) {
-                showErrorToast("Please enter scheduleDate and scheduleTime!!");
-                return;
-            }
-            if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
-                showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
-                return;
-            }
-        }
-
-        const requestBody = {
+    const getRequestBodyToCreatePost=(postStatus,isScheduledTimeProvided)=>{
+        return {
             postPageInfos: allOptions?.flatMap(obj => {
                 const provider = obj.group;
                 const selectedOptionsData = obj.allOptions
@@ -275,12 +265,12 @@ const CreatePost = () => {
             boostPost: boostPost,
             scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
         };
+    }
 
+    const createPost = async ( requestBody) => {
         await handleRTKQuery(
             async () => {
-                if (postStatus === "DRAFT" || isCreatePostRequestValid(requestBody, files)) {
-                    return await createPosts(requestBody).unwrap();
-                }
+                return await createPosts(requestBody).unwrap();
             },
             () => {
                 navigate("/planner");
@@ -288,16 +278,39 @@ const CreatePost = () => {
         );
     };
 
-    const handlePostSubmit = (e) => {
-        createPost(e, 'PUBLISHED');
+    const handlePostSubmit = () => {
+        const requestBody=getRequestBodyToCreatePost("PUBLISHED",false)
+        createPost( requestBody);
     };
 
-    const handleDraftPost = (e) => {
-        createPost(e, 'DRAFT', scheduleDate, scheduleTime);
+    const handleDraftPost = () => {
+        const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+        if ( isScheduledTimeProvided) {
+            if (!scheduleDate && !scheduleTime) {
+                showErrorToast("Please enter scheduleDate and scheduleTime!!");
+                return;
+            }
+            if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
+                showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
+                return;
+            }
+        }
+        const requestBody=getRequestBodyToCreatePost("DRAFT",isScheduledTimeProvided)
+        createPost( requestBody);
     };
 
-    const handleSchedulePost = (e) => {
-        createPost(e, 'SCHEDULED', scheduleDate, scheduleTime);
+    const handleSchedulePost = () => {
+        const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+        if (!scheduleDate && !scheduleTime) {
+            showErrorToast("Please enter scheduleDate and scheduleTime!!");
+            return;
+        }
+        if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
+            showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
+            return;
+        }
+        const requestBody=getRequestBodyToCreatePost("SCHEDULED",isScheduledTimeProvided)
+        isCreatePostRequestValid(requestBody, files) && createPost(  requestBody);
     };
 
 
@@ -404,7 +417,6 @@ const CreatePost = () => {
                                             className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
                                             <form onSubmit={(e) => {
                                                 e.preventDefault();
-                                                handlePostSubmit(e);
                                             }}>
 
                                                 {/* select platform */}
@@ -784,49 +796,48 @@ const CreatePost = () => {
 
                                                     <div className='schedule_btn_outer'>
                                                         <h5 className='create_post_text post_heading'>{jsondata.setSchedule}</h5>
-                                                        <div className='schedule_btn_wrapper d-flex'>
-
-                                                            <GenericButtonWithLoader label={jsondata.schedule}
-                                                                                     onClick={(e) => {
-                                                                                         setReference("Scheduled")
-                                                                                         handleSchedulePost(e);
-                                                                                     }}
-                                                                                     isDisabled={createPostApi?.isLoading && reference !== "Scheduled"} // Disable if not null and not "Scheduled"
-                                                                                     className={"cmn_bg_btn schedule_btn loading"}
-                                                                                     isLoading={reference === "Scheduled" && createPostApi?.isLoading}
-
+                                                        <div
+                                                            className="d-flex align-items-center gap-2 ps-0 form-switch">
+                                                            <i
+                                                                className={`fa ${showScheduleDateAndTimeBox ? "fa-toggle-on" : "fa-toggle-off"}`}
+                                                                style={{fontSize: "24px", color: "#0d6efd"}}
+                                                                onClick={() => {
+                                                                    setShowScheduleDateAndTimeBox(!showScheduleDateAndTimeBox);
+                                                                }}
+                                                                aria-hidden="true"
                                                             />
                                                         </div>
                                                     </div>
+                                                    {
+                                                        showScheduleDateAndTimeBox &&
+                                                        <div className='schedule_date_outer'>
 
+                                                            <div className='date_time_outer'>
+                                                                <h6 className='create_post_text'>{jsondata.setdate}</h6>
+                                                                <input type='date' placeholder='set date'
+                                                                       className='form-control mt-2 date_input'
+                                                                       value={scheduleDate}
+                                                                       onChange={(e) => {
+                                                                           e.preventDefault();
+                                                                           setScheduleDate(e.target.value);
+                                                                       }}
+                                                                />
+                                                            </div>
 
-                                                    <div className='schedule_date_outer'>
+                                                            <div className='date_time_outer'>
+                                                                <h6 className='create_post_text'>{jsondata.settime}</h6>
+                                                                <input type='time' placeholder="set time"
+                                                                       className='mt-2 form-control time_input'
+                                                                       value={scheduleTime}
+                                                                       onChange={(e) => {
+                                                                           e.preventDefault();
+                                                                           setScheduleTime(e.target.value);
+                                                                       }}
+                                                                />
+                                                            </div>
 
-                                                        <div className='date_time_outer'>
-                                                            <h6 className='create_post_text'>{jsondata.setdate}</h6>
-                                                            <input type='date' placeholder='set date'
-                                                                   className='form-control mt-2 date_input'
-                                                                   value={scheduleDate}
-                                                                   onChange={(e) => {
-                                                                       e.preventDefault();
-                                                                       setScheduleDate(e.target.value);
-                                                                   }}
-                                                            />
                                                         </div>
-
-                                                        <div className='date_time_outer'>
-                                                            <h6 className='create_post_text'>{jsondata.settime}</h6>
-                                                            <input type='time' placeholder="set time"
-                                                                   className='mt-2 form-control time_input'
-                                                                   value={scheduleTime}
-                                                                   onChange={(e) => {
-                                                                       e.preventDefault();
-                                                                       setScheduleTime(e.target.value);
-                                                                   }}
-                                                            />
-                                                        </div>
-
-                                                    </div>
+                                                    }
                                                 </div>
 
                                                 {/* boost post */}
@@ -913,22 +924,36 @@ const CreatePost = () => {
 
                                 {/* draft and publish now section  */}
                                 <div className='draft_publish_outer cmn_outer'>
-                                    <GenericButtonWithLoader label={jsondata.saveasdraft}
-                                                             onClick={(e) => {
-                                                                 setReference("Draft")
-                                                                 handleDraftPost(e);
-                                                             }}
-                                                             isDisabled={createPostApi?.isLoading && reference !== "Draft"} // Disable if not null and not "Scheduled"
-                                                             className={"save_btn cmn_bg_btn loading"}
-                                                             isLoading={reference === "Draft" && createPostApi?.isLoading}/>
+                                    <div className={"flex-grow-1"}>
+                                        <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                                 onClick={() => {
+                                                                     setReference("Draft")
+                                                                     handleDraftPost();
+                                                                 }}
+                                                                 isDisabled={createPostApi?.isLoading && reference !== "Draft"} // Disable if not null and not "Scheduled"
+                                                                 className={"save_btn cmn_bg_btn loading"}
+                                                                 isLoading={reference === "Draft" && createPostApi?.isLoading}/>
+                                    </div>
+
+
+
                                     <GenericButtonWithLoader label={jsondata.publishnow}
-                                                             onClick={(e) => {
-                                                                 setReference("Published")
-                                                                 handlePostSubmit(e);
+                                                             onClick={() => {
+                                                                 const requestBody = getRequestBodyToCreatePost("PUBLISHED",false)
+                                                                 if(! isCreatePostRequestValid(requestBody, files))  return
+                                                                 setShowPublishPostConfirmationBox(true)
                                                              }}
                                                              isDisabled={createPostApi?.isLoading && reference !== "Published"}
-                                                             className={"publish_btn cmn_bg_btn loading"}
-                                                             isLoading={reference === "Published" && createPostApi?.isLoading}/>
+                                                             className={"publish_btn cmn_bg_btn loading"}/>
+                                    <GenericButtonWithLoader label={jsondata.schedule}
+                                                             onClick={(e) => {
+                                                                 setReference("Scheduled")
+                                                                 handleSchedulePost(e);
+                                                             }}
+                                                             isDisabled={(createPostApi?.isLoading && reference !== "Scheduled") || !showScheduleDateAndTimeBox} // Disable if not null and not "Scheduled"
+                                                             className={"cmn_bg_btn schedule_btn loading"}
+                                                             isLoading={reference === "Scheduled" && createPostApi?.isLoading}
+                                    />
 
                                 </div>
                             </div>
@@ -938,15 +963,20 @@ const CreatePost = () => {
 
 
             {
-                aiGenerateImageModal && <AI_ImageModal
+                aiGenerateImageModal &&
+                <AI_ImageModal
                     aiGenerateImageModal={aiGenerateImageModal}
-                    setAIGenerateImageModal={setAIGenerateImageModal} files={files} setFiles={setFiles}/>
+                    setAIGenerateImageModal={setAIGenerateImageModal}
+                    files={files}
+                    setFiles={setFiles}/>
             }
 
             {
-                aiGenerateCaptionModal && <AiCaptionModal
+                aiGenerateCaptionModal &&
+                <AiCaptionModal
                     aiGenerateCaptionModal={aiGenerateCaptionModal}
-                    setAIGenerateCaptionModal={setAIGenerateCaptionModal} addCaption={setCaption}/>
+                    setAIGenerateCaptionModal={setAIGenerateCaptionModal}
+                    addCaption={setCaption}/>
             }
 
             {
@@ -957,27 +987,45 @@ const CreatePost = () => {
                     setAIGenerateHashTagModal={setAIGenerateHashTagModal}/>
             }
             {
-                showConnectAccountModal && <ConnectSocialAccountModal showModal={showConnectAccountModal}
-                                                                      setShowModal={setShowConnectAccountModal}></ConnectSocialAccountModal>
+                showConnectAccountModal &&
+                <ConnectSocialAccountModal
+                    showModal={showConnectAccountModal}
+                    setShowModal={setShowConnectAccountModal}/>
             }
 
-            {showEditImageModal &&
+            {
+                showEditImageModal &&
                 <EditImageModal
                     showEditImageModal={showEditImageModal}
                     setShowEditImageModal={setShowEditImageModal}
                     file={imgFile}
                     setFileSize={setFileSize}
                     setCropImgUrl={setCropImgUrl}
-                />}
+                />
+            }
 
-            {showEditVideoModal &&
+            {
+                showEditVideoModal &&
                 <EditVideoModal
                     showEditVideoModal={showEditVideoModal}
                     setTrimmedVideoUrl={setTrimmedVideoUrl}
                     setShowEditVideoModal={setShowEditVideoModal}
                     videoInfo={videoFile}
                     setBlobVideo={setBlobVideo}
-                />}
+                />
+            }
+            {
+                showPublishPostConfirmationBox &&
+                <PostNowModal
+                    show={showPublishPostConfirmationBox}
+                    setShow={setShowPublishPostConfirmationBox}
+                    onSubmit={(e)=>{
+                        setReference("Published")
+                        handlePostSubmit(e);
+                    }}
+                    isOnSubmitRunning={reference === "Published" && createPostApi?.isLoading}
+                />
+            }
         </>)
 }
 export default CreatePost

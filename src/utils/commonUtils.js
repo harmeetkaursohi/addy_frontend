@@ -1701,6 +1701,7 @@ export const isCreatePostRequestValid = (requestBody, files) => {
 
         }
     });
+    console.log("isCreatePostRequestValid======>",!shouldBreak)
     return !shouldBreak;
 }
 export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => {

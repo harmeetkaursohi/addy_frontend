@@ -4,7 +4,6 @@ import React, {useEffect, useState} from "react";
 import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
 import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
-import {decodeJwtToken, getToken} from "../../../app/auth/auth.js";
 import {useDispatch} from "react-redux";
 import {Dropdown} from 'react-bootstrap'
 import {BiSolidEditAlt, BiUser} from "react-icons/bi";
@@ -19,7 +18,7 @@ import {
     convertSentenceToHashtags,
     convertToUnixTimestamp, convertUnixTimestampToDateTime,
     getEnumValue, getFileFromAttachmentSource, getVideoDurationById,
-    groupByKey,  isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
+    groupByKey, isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import {showErrorToast} from "../../common/components/Toast";
@@ -36,6 +35,8 @@ import {useGetPostsByIdQuery, useUpdatePostByIdMutation} from "../../../app/apis
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 import { GoChevronDown } from "react-icons/go";
+import PostNowModal from "../../common/components/PostNowModal";
+
 const UpdatePost = () => {
 
         const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const UpdatePost = () => {
         const [aiGenerateCaptionModal, setAIGenerateCaptionModal] = useState(false);
         const [aiGenerateHashTagModal, setAIGenerateHashTagModal] = useState(false);
 
+
         const [oldAttachmentsFileObject, setOldAttachmentsFileObject] = useState([]);
         const [hashTag, setHashTag] = useState("");
         const [caption, setCaption] = useState("");
@@ -59,7 +61,7 @@ const UpdatePost = () => {
         const [scheduleDate, setScheduleDate] = useState("");
         const [scheduleTime, setScheduleTime] = useState("");
 
-
+        const [showScheduleDateAndTimeBox, setShowScheduleDateAndTimeBox] = useState(false);
         const [boostPost, setBoostPost] = useState(false);
         const [socialAccountData, setSocialAccountData] = useState([]);
         const [files, setFiles] = useState([]);
@@ -68,6 +70,7 @@ const UpdatePost = () => {
         const [disableImage, setDisableImage] = useState(false);
         const [disableVideo, setDisableVideo] = useState(false);
         const [postStatus, setPostStatus] = useState("DRAFT");
+        const [showPublishPostConfirmationBox, setShowPublishPostConfirmationBox] = useState(false)
 
 
         const [allOptions, setAllOptions] = useState([]);
@@ -163,6 +166,7 @@ const UpdatePost = () => {
                 setHashTag(postData?.hashTag || "");
                 setPostStatus(postData?.postStatus)
                 setFiles(postData?.attachments || []);
+                setShowScheduleDateAndTimeBox(postData?.postStatus === "SCHEDULED")
             }
         }, [allOptions, postsByIdApi?.data]);
 
@@ -305,70 +309,80 @@ const UpdatePost = () => {
                 });
         }
 
-        const updatePost = async (e, postStatus, scheduleDate, scheduleTime) => {
-                e.preventDefault();
-                const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
-                if (postStatus === 'SCHEDULED' || isScheduledTimeProvided) {
+        const getRequestBodyToUpdatePost = (postStatus, isScheduledTimeProvided) => {
+            return {
+                id: id,
+                updatePostRequestDTO: {
+                    postPageInfos: selectedOptions?.map((obj) => ({
+                        pageId: obj,
+                        id: postsByIdApi?.data.postPageInfos && postsByIdApi?.data.postPageInfos?.find(c => c.pageId === obj)?.id || null,
+                        provider: selectedAllDropdownData?.find(c => c?.selectOption?.pageId === obj)?.group || null
+                    })),
+                    caption: isNullOrEmpty(caption) ? "" : caption.toString().trim(),
+                    hashTag: isNullOrEmpty(hashTag) ? "" : hashTag.toString().trim(),
+                    pinTitle: isNullOrEmpty(pinTitle) ? "" : pinTitle.toString().trim(),
+                    destinationUrl: isNullOrEmpty(pinDestinationUrl) ? "" : pinDestinationUrl.toString().trim(),
+                    attachments: files?.map((file) => ({
+                        mediaType: file?.mediaType,
+                        file: file?.file || null,
+                        fileName: file.fileName,
+                        id: file?.id || null,
+                        gridFsId: file?.gridFsId || null
+                    })),
+                    postStatus: postStatus,
+                    boostPost: boostPost,
+                    scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
+                },
+            };
+        }
 
-                    if (!scheduleDate && !scheduleTime) {
-                        showErrorToast("Please enter scheduleDate or scheduleTime!!");
-                        return;
-                    }
-
-                    if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
-                        showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
-                        return;
-                    }
+        const updatePost = async (requestBody) => {
+            await handleRTKQuery(
+                async () => {
+                    return await updatePostById(requestBody).unwrap();
+                },
+                () => {
+                    navigate("/planner");
+                    setShowPublishPostConfirmationBox(false)
+                    dispatch(addyApi.util.invalidateTags("getPostsByIdApi"));
                 }
-                const requestBody = {
-                    id: id,
-                    updatePostRequestDTO: {
-                        postPageInfos: selectedOptions?.map((obj) => ({
-                            pageId: obj,
-                            id: postsByIdApi?.data.postPageInfos && postsByIdApi?.data.postPageInfos?.find(c => c.pageId === obj)?.id || null,
-                            provider: selectedAllDropdownData?.find(c => c?.selectOption?.pageId === obj)?.group || null
-                        })),
-                        caption: isNullOrEmpty(caption) ? "" : caption.toString().trim(),
-                        hashTag: isNullOrEmpty(hashTag) ? "" : hashTag.toString().trim(),
-                        pinTitle: isNullOrEmpty(pinTitle) ? "" : pinTitle.toString().trim(),
-                        destinationUrl: isNullOrEmpty(pinDestinationUrl) ? "" : pinDestinationUrl.toString().trim(),
-                        attachments: files?.map((file) => ({
-                            mediaType: file?.mediaType,
-                            file: file?.file || null,
-                            fileName: file.fileName,
-                            id: file?.id || null,
-                            gridFsId: file?.gridFsId || null
-                        })),
-                        postStatus: postStatus,
-                        boostPost: boostPost,
-                        scheduledPostDate: (postStatus === 'SCHEDULED' || isScheduledTimeProvided) ? convertToUnixTimestamp(scheduleDate, scheduleTime) : null,
-                    },
-                };
-                await handleRTKQuery(
-                    async () => {
-                        if (postStatus === "DRAFT" || isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files,oldAttachmentsFileObject)) {
-                            return await updatePostById(requestBody).unwrap();
-                        }
-                    },
-                    () => {
-                        navigate("/planner");
-                        dispatch(addyApi.util.invalidateTags("getPostsByIdApi"));
-                    }
-                );
+            );
+        };
 
+        const handlePostSubmit = () => {
+            const requestBody = getRequestBodyToUpdatePost("PUBLISHED", false)
+            updatePost(requestBody);
+        };
+
+        const handleDraftPost = () => {
+            const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+            if (isScheduledTimeProvided) {
+                if (!scheduleDate && !scheduleTime) {
+                    showErrorToast("Please enter scheduleDate or scheduleTime!!");
+                    return;
+                }
+                if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
+                    showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
+                    return;
+                }
             }
-        ;
-
-        const handlePostSubmit = (e) => {
-            updatePost(e, 'PUBLISHED');
+            const requestBody = getRequestBodyToUpdatePost("DRAFT", isScheduledTimeProvided)
+            updatePost(requestBody);
         };
 
-        const handleDraftPost = (e) => {
-            updatePost(e, 'DRAFT', scheduleDate, scheduleTime);
-        };
+        const handleSchedulePost = () => {
+            const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
+            if (!scheduleDate && !scheduleTime) {
+                showErrorToast("Please enter scheduleDate or scheduleTime!!");
+                return;
+            }
+            if (!validateScheduleDateAndTime(scheduleDate, scheduleTime)) {
+                showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
+                return;
+            }
+            const requestBody = getRequestBodyToUpdatePost("SCHEDULED", isScheduledTimeProvided)
+            isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject) && updatePost(requestBody);
 
-        const handleSchedulePost = (e) => {
-            updatePost(e, 'SCHEDULED', scheduleDate, scheduleTime);
         };
 
         const handleRemoveSelectFile = (attachmentReferenceNameToRemove, id) => {
@@ -866,16 +880,16 @@ const UpdatePost = () => {
                                                 <div className='schedule_btn_outer'>
                                                     <h5 className='create_post_text post_heading'>{jsondata.setSchedule}</h5>
                                                     <div className='schedule_btn_wrapper d-flex'>
-
-                                                        <GenericButtonWithLoader label={jsondata.schedule}
-                                                                                 onClick={(e) => {
-                                                                                     setReference("Scheduled")
-                                                                                     handleSchedulePost(e);
-                                                                                 }}
-
-                                                                                 className={"cmn_bg_btn schedule_btn loading"}
-                                                                                 isLoading={reference === "Scheduled" && updatePostByIdApi?.isLoading}/>
-
+                                                        <div className="form-check form-switch">
+                                                            <input className="form-check-input"
+                                                                   type="checkbox"
+                                                                   id="flexSwitchCheckChecked"
+                                                                   checked={showScheduleDateAndTimeBox}
+                                                                   onChange={() => {
+                                                                       setShowScheduleDateAndTimeBox(!showScheduleDateAndTimeBox);
+                                                                   }}
+                                                            />
+                                                        </div>
                                                         {/* <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                                  onClick={(e) => {
                                                                                      setReference("Draft")
@@ -888,33 +902,36 @@ const UpdatePost = () => {
                                                 </div>
 
 
-                                                <div className='schedule_date_outer'>
+                                                {
+                                                    showScheduleDateAndTimeBox &&
+                                                    <div className='schedule_date_outer'>
 
-                                                    <div className='date_time_outer'>
-                                                        <h6 className='create_post_text'>{jsondata.setdate}</h6>
-                                                        <input type='date' placeholder='set date'
-                                                               className='form-control mt-2 date_input'
-                                                               value={scheduleDate}
-                                                               onChange={(e) => {
-                                                                   e.preventDefault();
-                                                                   setScheduleDate(e.target.value);
-                                                               }}
-                                                        />
+                                                        <div className='date_time_outer'>
+                                                            <h6 className='create_post_text'>{jsondata.setdate}</h6>
+                                                            <input type='date' placeholder='set date'
+                                                                   className='form-control mt-2 date_input'
+                                                                   value={scheduleDate}
+                                                                   onChange={(e) => {
+                                                                       e.preventDefault();
+                                                                       setScheduleDate(e.target.value);
+                                                                   }}
+                                                            />
+                                                        </div>
+
+                                                        <div className='date_time_outer'>
+                                                            <h6 className='create_post_text'>{jsondata.settime}</h6>
+                                                            <input type='time' placeholder="set time"
+                                                                   className='mt-2 form-control time_input'
+                                                                   value={scheduleTime}
+                                                                   onChange={(e) => {
+                                                                       e.preventDefault();
+                                                                       setScheduleTime(e.target.value);
+                                                                   }}
+                                                            />
+                                                        </div>
+
                                                     </div>
-
-                                                    <div className='date_time_outer'>
-                                                        <h6 className='create_post_text'>{jsondata.settime}</h6>
-                                                        <input type='time' placeholder="set time"
-                                                               className='mt-2 form-control time_input'
-                                                               value={scheduleTime}
-                                                               onChange={(e) => {
-                                                                   e.preventDefault();
-                                                                   setScheduleTime(e.target.value);
-                                                               }}
-                                                        />
-                                                    </div>
-
-                                                </div>
+                                                }
                                             </div>
 
                                             {/* boost post */}
@@ -985,23 +1002,35 @@ const UpdatePost = () => {
 
                             <div className='draft_publish_outer cmn_outer'>
 
-                                <GenericButtonWithLoader label={jsondata.saveasdraft}
-                                                         onClick={(e) => {
-                                                             setReference("Draft")
-                                                             handleDraftPost(e);
-                                                         }}
+                                <div className={"flex-grow-1"}>
+                                    <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                             onClick={(e) => {
+                                                                 setReference("Draft")
+                                                                 handleDraftPost(e);
+                                                             }}
 
-                                                         className={"save_btn cmn_bg_btn loading"}
-                                                         isLoading={reference === "Draft" && updatePostByIdApi?.isLoading}/>
+                                                             className={"save_btn cmn_bg_btn loading"}
+                                                             isLoading={reference === "Draft" && updatePostByIdApi?.isLoading}/>
+                                </div>
+
 
                                 <GenericButtonWithLoader label={jsondata.publishnow}
                                                          onClick={(e) => {
-                                                             setReference("Published")
-                                                             handlePostSubmit(e);
+                                                             const requestBody = getRequestBodyToUpdatePost("PUBLISHED",false)
+                                                             if(! isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject))  return
+                                                             setShowPublishPostConfirmationBox(true)
                                                          }}
                                                          isDisabled={false}
-                                                         className={"publish_btn cmn_bg_btn loading"}
-                                                         isLoading={reference === "Published" && updatePostByIdApi?.isLoading}/>
+                                                         className={"publish_btn cmn_bg_btn loading"}/>
+                                <GenericButtonWithLoader
+                                    label={jsondata.schedule}
+                                    onClick={(e) => {
+                                        setReference("Scheduled")
+                                        handleSchedulePost(e);
+                                    }}
+                                    isDisabled={!showScheduleDateAndTimeBox}
+                                    className={"cmn_bg_btn schedule_btn loading"}
+                                    isLoading={reference === "Scheduled" && updatePostByIdApi?.isLoading}/>
                             </div>
                         </div>
                     </div>
@@ -1041,7 +1070,8 @@ const UpdatePost = () => {
 
                 }
 
-                {showEditVideoModal &&
+                {
+                    showEditVideoModal &&
                     <EditVideoModal
                         isReuired={true}
                         showEditVideoModal={showEditVideoModal}
@@ -1049,7 +1079,20 @@ const UpdatePost = () => {
                         setShowEditVideoModal={setShowEditVideoModal}
                         videoInfo={videoFile}
                         setVideoBlob={setVideoBlob}
-                    />}
+                    />
+                }
+                {
+                    showPublishPostConfirmationBox &&
+                    <PostNowModal
+                        show={showPublishPostConfirmationBox}
+                        setShow={setShowPublishPostConfirmationBox}
+                        onSubmit={(e) => {
+                            setReference("Published")
+                            handlePostSubmit(e);
+                        }}
+                        isOnSubmitRunning={reference === "Published" && updatePostByIdApi?.isLoading}
+                    />
+                }
             </>)
     }
 ;
