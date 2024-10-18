@@ -316,7 +316,7 @@ const SocialAccounts = ({}) => {
 
 
     return (
-        <div className="col-lg-5 col-xl-4 col-sm-12">
+        <div className="col-lg-5 col-xl-4 col-sm-12  pe-0">
             {/* social media */}
             <div className="cmn_background social_media_wrapper">
                 <div className="social_media_account">

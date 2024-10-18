@@ -315,15 +315,72 @@ const Planner = () => {
             <section>
                 <div className={sidebar ? 'cmn_container' : "cmn_Padding"}>
                     <div className='cmn_outer'>
-                        <div
-                            className={`planner_outer  white_bg_color cmn_height_outer ${isDraftPost ? "" : "planner_container"}`}>
-                            <div className='planner_header_outer mb-3'>
-                                <div className='planner_header'>
+                            <div className='planner_header_outer mb-3 align-items-center gap-2'>
+                                <div className='planner_header flex-grow-1'>
                                     <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
                                     <h6>{isDraftPost ? jsondata.draft_heading : jsondata.post_shecdule_heading}</h6>
                                 </div>
+                                <GenericButtonWithLoader
+                                                        label={
+                                                            isDraftPost
+                                                                ? jsondata.backToPlanner
+                                                                : jsondata.draftPost
+                                                        }
+                                                        className={"draft_btn  cmn_white_text"}
+                                                        onClick={handleDraft}
+                                                        isDisabled={false}
+                                                    />
+                                                    {
+                                                        (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching) ?
+                                                            <span
+                                                                className=" create_post_btn cmn_white_text cursor-pointer text-center"><Loader
+                                                                className="create-post-loader"/></span>
+                                                            :
+                                                            <button
+                                                                onClick={handleCreatePost}
+                                                                className="cmn_btn_color create_post_btn cmn_white_text cursor-pointer"
+                                                            >
+                                                                {jsondata.createpost}
+                                                            </button>
+                                                    }
 
                             </div>
+                            <div className="planner_post_track_outer">
+                                                  {isDraftPost === false && <ul className="schdeuled_post_list">
+
+                                                    {(getPlannerPostsCountApi?.data && Object.keys(getPlannerPostsCountApi.data)) ? (<></>) : (<>
+
+                                                        <li>
+                                                            <h4><Loader/></h4>
+                                                            <h3><SkeletonEffect count={1}></SkeletonEffect></h3>
+                                                            </li>
+                                                        <li>
+                                                            <h4><Loader/></h4>
+                                                            <h3><SkeletonEffect count={1}></SkeletonEffect></h3>
+                                                            </li>
+                                                        <li>
+                                                            <h4><Loader/></h4>
+                                                            <h3 ><SkeletonEffect count={1}></SkeletonEffect></h3>
+                                                            </li>
+               
+                                                    </>)}
+                                                    {getPlannerPostsCountApi?.data && Object.keys(getPlannerPostsCountApi.data).map((key, index) => {
+
+                                                        return (
+                                                            <li key={index}>
+                                                               <div className='planner_info'>
+                                                               <h4>{getPlannerPostsCountApi.data[key]}</h4>
+                                                               <h3>{key}</h3>
+                                                               </div>
+                                                                </li>
+                                                        )              
+                                                    })}
+
+                                                </ul>}
+                                            </div>
+
+                        <div
+                            className={`planner_outer   cmn_height_outer ${isDraftPost ? "" : "planner_container"}`}>
 
 
                             <div className='calender_outer_wrapper'>
@@ -361,8 +418,8 @@ const Planner = () => {
                                 </div>
                             } */}
                                 {/* new code planner */}
-                                <div className="row ">
-                                    <div className="col-lg-9 col-md-12 col-sm-12">
+                                <div className=" ">
+                                    <div className="">
                                         <div
                                             className={`${isDraftPost ? "calendar-container hidden" : "CalenderOuter_Wrapper"}`}>
                                             <FullCalendar
@@ -420,7 +477,7 @@ const Planner = () => {
                                             />
                                         </div>
                                     </div>
-                                    <div className="col-lg-3 col-md-12 col-sm-12">
+                                    {/* <div className="col-lg-3 col-md-12 col-sm-12">
                                         <div className={`${isDraftPost ? " d-none" : "planner_create_post_container"}`}>
                                             <div className="planner_create_post">
                                                 <h3 className="planner_create_post_heading">Create a post </h3>
@@ -454,35 +511,7 @@ const Planner = () => {
                                                 </div>
 
                                             </div>
-                                            <div className="planner_post_track_outer">
-                                                <h3 className="planner_create_post_heading pb-2">Post Track</h3>
-                                                {isDraftPost === false && <ul className="schdeuled_post_list">
-
-                                                    {(getPlannerPostsCountApi?.data && Object.keys(getPlannerPostsCountApi.data)) ? (<></>) : (<>
-
-                                                        <li>
-                                                            <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
-                                                            <h3><Loader/></h3></li>
-                                                        <li>
-                                                            <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
-                                                            <h3><Loader/></h3></li>
-                                                        <li>
-                                                            <h4><SkeletonEffect count={1}></SkeletonEffect></h4>
-                                                            <h3><Loader/></h3></li>
-
-                                                    </>)}
-                                                    {getPlannerPostsCountApi?.data && Object.keys(getPlannerPostsCountApi.data).map((key, index) => {
-
-                                                        return (
-                                                            <li key={index}>
-                                                                <h4>{key}</h4>
-                                                                <h3>{getPlannerPostsCountApi.data[key]}</h3></li>
-                                                        )
-                                                    })}
-
-                                                </ul>}
-                                            </div>
-
+                                       
 
                                             <div className="planner_post_track_outer">
                                                 <div className={"d-flex pb-2 align-items-center"}>
@@ -521,7 +550,7 @@ const Planner = () => {
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
 
 

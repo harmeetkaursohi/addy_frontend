@@ -102,7 +102,7 @@ button.DisConnectBtn {
     border: 1px solid #D1D9E2;
     background: #E6E9EC !important;
     color: #393939;
-    min-width: 111px;
+    /* min-width: 111px; */
     height: 39px;
 }
 
@@ -166,27 +166,28 @@ element.style {
     color: var(--gray-500, #2E3646);
     font-size: 28px;
     font-weight: 700;
-    line-height: 38px;
-    letter-spacing: -0.28px;
 }
 
-.cmn_followers_btn {
-    border-radius: 5px;
-    background: #00A3FF;
-    border: none;
-    color: #F2F6FC;
-    padding: 2px 8px;
+
+span.cmn_followers_btn {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(240, 124, 51, 1);
+}
+.dashboard_row {
     display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    cursor: auto;
+    gap: 30px;
 }
-
+.dashboardReport_outer {
+    flex-grow: 1;
+}
+.social_account_outer {
+    width: 381px;
+}
 .monthly_growth {
     display: flex;
     gap: 7px;
-    margin-top: 12px;
+    margin-top: 10px;
     align-items: center;
     justify-content: space-between;
 }
@@ -410,6 +411,8 @@ select.page_title_options {
     border: transparent;
     width: 100%;
     padding: 0px;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 .Account_not_connect_wrapper div.modal-content {
@@ -607,6 +610,9 @@ width: 100%;
     .social_media_outer {
       gap: 5px;
     }
+    .dashboard_row {
+        gap: 15px;
+    }
     .upcomingPostBtn_Outer {
         gap: 13px;
     }
@@ -643,8 +649,9 @@ width: 100%;
     .postdata_wrapper h5 {
         font-size: 19px;
     }
-    .followers_wrapper h5{
-        font-size: 14px;
+    .followers_wrapper h5, .followers_inner_content{
+        font-size: 13px;
+        padding: 10px;
     }
     
 }

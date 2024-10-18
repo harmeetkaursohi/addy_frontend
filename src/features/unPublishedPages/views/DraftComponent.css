@@ -37,7 +37,6 @@
     cursor: pointer;
     align-items: center;
     flex-shrink: 1;
-    min-width: 148px;
 }
 .page_tags {
     display: flex;

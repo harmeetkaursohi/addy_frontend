@@ -117,7 +117,7 @@ button.clear_all_button_outer:hover{
   padding: 20px;
 }
 .cmn_wrapper_outer {
-  padding: 0px 30px 30px;
+  padding: 19px;
 }
 
 .form-control {
@@ -341,7 +341,7 @@ h2.openEye {
   font-style: normal;
 }
 div:where(.swal2-container).swal2-center>.swal2-popup {
-  padding-bottom: 42px !important;
+  padding-bottom: 30px !important;
   border-radius: 30px;
 
 }
@@ -514,6 +514,7 @@ button.facebook_connect.connect_buttoon {
   max-width: 449px;
   font-weight: 500;
   line-height: 20px;
+  margin: auto !important; 
 }
 .Account_not_connect_wrapper .modal-header .btn-close{
   display: none;
@@ -696,11 +697,7 @@ img.post_img {
   justify-content: space-between;
   
 }
-.planner_outer {
-  padding: 24px;
 
- 
-}
 span.highlight {
 
   color: #00A3FF;
@@ -854,7 +851,7 @@ button.fc--button.fc-button.fc-button-primary {
 .fc .fc-toolbar-title {
   color: #292929;
   font-family: "Nunito";
-  font-size: 22px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 700;
   line-height: 38px;
@@ -1085,7 +1082,7 @@ img.acc_not_connected_img.mt-0 {
 .createPost_outer .insta_dropdown_btn button#instagram {
   max-height: 100px;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .fc-daygrid-body.fc-daygrid-body-unbalanced, .fc-daygrid-body.fc-daygrid-body-unbalanced table, table.fc-col-header {
   height: 100% !important;
@@ -1465,9 +1462,7 @@ margin-top: 10px;
 .connect_btn {
 margin-top: 10px;
 }
-.cmn_wrapper_outer {
-padding: 0px 24px 30px;
-}
+
 
 
 .animated-popup img{
@@ -1494,18 +1489,14 @@ padding-top: 12px ;
 .connected_heading{
 font-size: 19px;
 }
-.planner_outer {
-padding: 20px;
-}
+
 button#dropdown-basic {
 min-width: 180px;
 }
 .cmn_outer {
 padding: 14px;
 }
-.cmn_wrapper_outer {
-padding: 0px 15px 30px;
-}
+
 .cmn_text_overflow{
 width: 100%;
 }
@@ -1530,12 +1521,8 @@ width: 20px;
 .fc .fc-col-header-cell-cushion {
 font-size: 11px;
 }
-.planner_outer {
-padding: 24px 20px;
-}
-.planner_header_outer {
-display: block;
-}
+
+
 .cmn_text_style {
 font-size: 17px;
 }
@@ -1650,9 +1637,7 @@ padding: 10px;
 .fc .fc-col-header-cell-cushion {
 font-size: 9px;
 }
-.planner_outer {
-padding: 15px;
-}
+
 button#dropdown-basic{
 font-size: 13px;
 
@@ -1667,9 +1652,7 @@ font-size: 14px;
 .acc_not_connected_heading {
 font-size: 12px;
 }
-.cmn_wrapper_outer{
-padding: 0px 13px 30px;
-}
+
 div#swal2-html-container {
 font-size: 14px;
 line-height: 22px;

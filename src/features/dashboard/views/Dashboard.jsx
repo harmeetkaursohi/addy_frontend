@@ -39,7 +39,7 @@ const Dashboard = () => {
                         <Header userData={userData} setShowConnectAccountModal={setShowConnectAccountModal}/>
                         <div className="dashboard_outer">
 
-                            <div className="row">
+                            <div className="row m-0">
                                 <DashboardReports/>
                                 <SocialAccounts/>
                             </div>

@@ -16,6 +16,14 @@
     padding: 26px 28px;
 
 }
+svg.dropdown_chevron {
+    position: absolute;
+    right: 11px;
+}
+
+.createPost_outer .insta_dropdown_btn button#instagram::after {
+    display: none;
+}
 .date_input , .time_input::-webkit-calendar-picker-indicator{
     margin-top: 8px;
 }
@@ -184,7 +192,7 @@ white-space: nowrap;
 .createPost_outer button.tabs_grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
 }
 
@@ -212,14 +220,12 @@ white-space: nowrap;
     border-radius: 7px;
     border: 1px solid #DCDCDC;
     background: #FFF;
-    padding: 7px;
-    margin-left: 10px;
-
-    display: flex;
+    padding: 7px; display: flex;
     align-items: center;
     gap: 5px;
 
 }
+
 
 .selectedPages {
     border: 1px solid #048709;

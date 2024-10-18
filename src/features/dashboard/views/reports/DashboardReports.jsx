@@ -122,7 +122,7 @@ export const DashboardReports = () => {
 
         <>
 
-            <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer ps-0 ps-0">
+            <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer ps-0">
                 {
                     getConnectedSocialAccountApi?.isLoading  || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching || getAllInstagramPagesApi?.isLoading || getAllInstagramPagesApi?.isFetching || getAllPinterestPagesApi?.isLoading || getAllPinterestPagesApi?.isFetching || getAllLinkedinPagesApi?.isLoading || getAllLinkedinPagesApi?.isFetching ?
                         <div className="cmn_background p-5 text-center account_not_connect_imcontainer ">
@@ -155,7 +155,7 @@ export const DashboardReports = () => {
 
                             //     :
 
-                                <div className="post_activity_outer mx-2">
+                                <div className="post_activity_outer">
 
                                     <div
                                         className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container">
@@ -302,7 +302,7 @@ export const DashboardReports = () => {
                                                         </ul>
                                                     </div>
                                                 }
-                                                <div className="followers_outer mt-4">
+                                                <div className="followers_outer mt-3">
 
                                                     {
                                                         socialMediaReportApi?.data &&
@@ -337,13 +337,13 @@ export const DashboardReports = () => {
                                                                         }
                                                                     </h2>
                                                                     <div className="monthly_growth">
-                                                                        <button className="cmn_followers_btn">
-                                                                            <img src={polygon_img}
-                                                                                 className="polygon_img"/>
+                                                                        <span className="cmn_followers_btn">
+                                                                            {/* <img src={polygon_img}
+                                                                                 className="polygon_img"/> */}
                                                                             {
                                                                                 socialMediaReportApi?.data[curKey]?.month || 0
                                                                             }
-                                                                        </button>
+                                                                        </span>
                                                                         <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6>
                                                                     </div>
                                                                 </div>
