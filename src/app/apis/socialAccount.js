@@ -11,6 +11,35 @@ const baseUrl=`${import.meta.env.VITE_APP_API_BASE_URL}`
 const fbBaseUrl=`${import.meta.env.VITE_APP_FACEBOOK_BASE_URL}`
 export const socialAccount = addyApi.injectEndpoints({
     endpoints: (build) => ({
+        connectSocialAccount: build.mutation({
+            query: (requestBody) => {
+                return {
+                    url: `${baseUrl}/social-account`,
+                    method: 'POST',
+                    body:requestBody,
+                    headers:getAuthorizationHeader()
+                };
+            },
+            invalidatesTags:["getConnectedSocialAccountApi","getAllConnectedPagesApi","getSocialMediaPostsByCriteriaApi","getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"],
+            async onQueryStarted(_, {queryFulfilled,}) {
+                queryFulfilled.catch(error => {
+                    error.meta.response.status!==409 && showErrorToast(error.error.data.message);
+                })
+            },
+        }),
+        disconnectSocialAccount: build.mutation({
+            query: (socialMediaAccountId) => {
+                return {
+                    url: `${baseUrl}/social-account/${socialMediaAccountId}`,
+                    method: 'DELETE',
+                    headers:getAuthorizationHeader()
+                };
+            },
+            invalidatesTags:["getConnectedSocialAccountApi","getAllConnectedPagesApi","getSocialMediaPostsByCriteriaApi","getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"],
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
         getConnectedSocialAccount: build.query({
             query: () => {
                 return {
@@ -79,34 +108,6 @@ export const socialAccount = addyApi.injectEndpoints({
                     headers:getAuthorizationHeader()
                 };
             },
-            async onQueryStarted(_, {queryFulfilled,}) {
-                await handleQueryError(queryFulfilled)
-            },
-        }),
-        connectSocialAccount: build.mutation({
-            query: (requestBody) => {
-                return {
-                    url: `${baseUrl}/social-account`,
-                    method: 'POST',
-                    body:requestBody,
-                    headers:getAuthorizationHeader()
-                };
-            },
-            async onQueryStarted(_, {queryFulfilled,}) {
-                queryFulfilled.catch(error => {
-                    error.meta.response.status!==409 && showErrorToast(error.error.data.message);
-                })
-            },
-        }),
-        disconnectSocialAccount: build.mutation({
-            query: (socialMediaAccountId) => {
-                return {
-                    url: `${baseUrl}/social-account/${socialMediaAccountId}`,
-                    method: 'DELETE',
-                    headers:getAuthorizationHeader()
-                };
-            },
-            invalidatesTags:["getAllConnectedPagesApi","getSocialMediaPostsByCriteriaApi","getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"],
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },
