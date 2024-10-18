@@ -689,11 +689,7 @@ img.post_img {
   justify-content: space-between;
   
 }
-.planner_outer {
-  padding: 24px;
 
- 
-}
 span.highlight {
 
   color: #00A3FF;
@@ -847,7 +843,7 @@ button.fc--button.fc-button.fc-button-primary {
 .fc .fc-toolbar-title {
   color: #292929;
   font-family: "Nunito";
-  font-size: 22px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 700;
   line-height: 38px;
@@ -1485,9 +1481,7 @@ padding-top: 12px ;
 .connected_heading{
 font-size: 19px;
 }
-.planner_outer {
-padding: 20px;
-}
+
 button#dropdown-basic {
 min-width: 180px;
 }
@@ -1519,12 +1513,8 @@ width: 20px;
 .fc .fc-col-header-cell-cushion {
 font-size: 11px;
 }
-.planner_outer {
-padding: 24px 20px;
-}
-.planner_header_outer {
-display: block;
-}
+
+
 .cmn_text_style {
 font-size: 17px;
 }
@@ -1639,9 +1629,7 @@ padding: 10px;
 .fc .fc-col-header-cell-cushion {
 font-size: 9px;
 }
-.planner_outer {
-padding: 15px;
-}
+
 button#dropdown-basic{
 font-size: 13px;
 
