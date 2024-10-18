@@ -56,7 +56,8 @@ import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi
 import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils";
 import NotFoundPopup from "../../common/components/NotFoundPopup";
 import InstagramGuidePopup from "../../common/components/InstagramGuidePopup";
-import { Image } from "react-bootstrap";
+import {Image} from "react-bootstrap";
+
 const SocialAccounts = ({}) => {
     const dispatch = useDispatch();
     // const [checkForDisablePages, setCheckForDisablePages] = useState(true);
@@ -110,7 +111,9 @@ const SocialAccounts = ({}) => {
             const connectedLinkedinPages = getAllConnectedPagesApi?.data?.filter((pageData) => pageData?.socialMediaAccountId === connectedLinkedinSocialAccount?.id);
             const linkedinPages = getAllLinkedinPagesApi?.data?.results === null || getAllLinkedinPagesApi?.data?.results === undefined ? {} : getAllLinkedinPagesApi?.data?.results;
             const currentConnectedLinkedinPagesIds = Object.keys(linkedinPages)?.filter((LinkedinPageId) => connectedLinkedinPages?.some((linkedinPage) => linkedinPage?.pageId === getLinkedInUrnId(LinkedinPageId, Linkedin_URN_Id_Types.ORGANIZATION)));
-            const currentConnectedLinkedinPages = currentConnectedLinkedinPagesIds?.map((pageId) => {return getFormattedLinkedinObject(pageId, linkedinPages[pageId]);});
+            const currentConnectedLinkedinPages = currentConnectedLinkedinPagesIds?.map((pageId) => {
+                return getFormattedLinkedinObject(pageId, linkedinPages[pageId]);
+            });
             setCurrentConnectedLinkedinPages(currentConnectedLinkedinPages || null);
         }
     }, [getAllConnectedPagesApi?.data, getAllLinkedinPagesApi?.data]);
@@ -200,7 +203,7 @@ const SocialAccounts = ({}) => {
                 break;
             }
             case SocialAccountProvider.LINKEDIN: {
-                (isNullOrEmpty(getAllLinkedinPagesApi?.data) || isNullOrEmpty(getAllPinterestPagesApi?.data?.results)) ? setShowNoBusinessAccountModal(true) : setShowLinkedinModal(true)
+                isNullOrEmpty(getAllLinkedinPagesApi?.data)  ? setShowNoBusinessAccountModal(true) : setShowLinkedinModal(true)
                 break;
             }
             case SocialAccountProvider.PINTEREST: {
@@ -364,7 +367,7 @@ const SocialAccounts = ({}) => {
                                                 />
                                             </LoginSocialFacebook>
                                         </div>
-                                     :
+                                        :
                                         <div className=" cmn_drop_down dropdown">
                                             <div className="dropdown_header">
                                                 <div className="social_media_outer cursor-pointer">
@@ -390,15 +393,6 @@ const SocialAccounts = ({}) => {
                                                             </h5>
                                                             <h4 className="connect_text">Connected</h4>
                                                         </div>
-                                                        {
-                                                            (!getAllFacebookPagesApi?.isLoading || !getAllFacebookPagesApi?.isFetching || !getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || !getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) && currentConnectedFacebookPages?.length === 0 &&
-                                                            <button
-                                                                className="DisConnectBtn cmn_connect_btn w-auto"
-                                                                onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}
-                                                            >
-                                                                Disconnect
-                                                            </button>
-                                                        }
                                                         <div className={facebookDropDown ? "upside-down" : ""}>
                                                             <svg
                                                                 width="14"
@@ -428,70 +422,68 @@ const SocialAccounts = ({}) => {
                                                                 : currentConnectedFacebookPages?.length === 0 ?
                                                                     <div className={"no-page-connected-outer text-center"}>
                                                                         <div>No active connections at the moment.</div>
-                                                                        <button
-                                                                            className={" cursor-pointer connect-page-btn clear_all_button_outer mt-3"}
-                                                                            onClick={() => {
-                                                                                handleShowModal(SocialAccountProvider.FACEBOOK)
-                                                                            }}>
-                                                                            Connect now
-                                                                        </button>
                                                                     </div>
                                                                     :
                                                                     <>
                                                                         {
                                                                             currentConnectedFacebookPages?.map((data, index) => {
-                                                                            return (
-                                                                                <li key={index}>
-                                                                                    <div className="user_profileInfo_wrapper">
-                                                                                        <div className="user_Details">
-                                                                                            <Image
-                                                                                                src={
-                                                                                                    data?.picture?.data?.url ||
-                                                                                                    default_user_icon
-                                                                                                }
-                                                                                                height="30px"
-                                                                                                width="30px"
-                                                                                                alt="profile picture addy"
-                                                                                            />
-                                                                                            <h4 className="cmn_text_style">
-                                                                                                {data.name}
-                                                                                            </h4>
+                                                                                return (
+                                                                                    <li key={index}>
+                                                                                        <div
+                                                                                            className="user_profileInfo_wrapper">
+                                                                                            <div className="user_Details">
+                                                                                                <Image
+                                                                                                    src={
+                                                                                                        data?.picture?.data?.url ||
+                                                                                                        default_user_icon
+                                                                                                    }
+                                                                                                    height="30px"
+                                                                                                    width="30px"
+                                                                                                    alt="profile picture addy"
+                                                                                                />
+                                                                                                <h4 className="cmn_text_style">
+                                                                                                    {data.name}
+                                                                                                </h4>
+                                                                                            </div>
+                                                                                            <h4 className={"connect_text"}>Connected</h4>
                                                                                         </div>
-                                                                                        <h4 className={"connect_text"}>Connected</h4>
-                                                                                    </div>
-                                                                                </li>
-                                                                            );
-                                                                        })
+                                                                                    </li>
+                                                                                );
+                                                                            })
                                                                         }
 
-                                                                        <li>
-                                                                            {
-                                                                                getAllFacebookPagesApi?.data && Array.isArray(getAllFacebookPagesApi?.data) &&
-                                                                                <div className="connectDisconnect_btn_outer">
-                                                                                    <button
-                                                                                        className="DisConnectBtn cmn_connect_btn"
-                                                                                        onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}
-                                                                                    >
-                                                                                        Disconnect
-                                                                                    </button>
-                                                                                    <button
-                                                                                        className="ConnectBtn cmn_connect_btn"
-                                                                                        onClick={() => {
-                                                                                            handleShowModal(SocialAccountProvider.FACEBOOK)
-                                                                                        }}>
-                                                                                        Manage Pages
-                                                                                    </button>
-                                                                                </div>
 
-                                                                            }
-                                                                        </li>
                                                                     </>
                                                         }
+                                                        <li>
+                                                            {
+                                                                getAllFacebookPagesApi?.data && Array.isArray(getAllFacebookPagesApi?.data) &&
+                                                                <div className="connectDisconnect_btn_outer">
+                                                                    <button
+                                                                        className="DisConnectBtn cmn_connect_btn"
+                                                                        onClick={() => disConnectSocialMediaAccountToCustomer("FACEBOOK")}
+                                                                    >
+                                                                        Disconnect
+                                                                    </button>
+                                                                    <button
+                                                                        className="ConnectBtn cmn_connect_btn"
+                                                                        onClick={() => {
+                                                                            handleShowModal(SocialAccountProvider.FACEBOOK)
+                                                                        }}>
+                                                                        {
+                                                                            currentConnectedFacebookPages?.length === 0 ? "Connect Now" : "Manage Pages"
+                                                                        }
+
+                                                                    </button>
+                                                                </div>
+
+                                                            }
+                                                        </li>
                                                     </ul>
                                                 }
                                             </div>
                                         </div>
-                                    }
+                            }
                         </>
                     )}
                 {/*facebook connect ends */}
@@ -551,15 +543,6 @@ const SocialAccounts = ({}) => {
                                                             </h5>
                                                             <h4 className="connect_text">Connected</h4>
                                                         </div>
-                                                        {
-                                                            (!getAllFacebookPagesApi?.isLoading || !getAllFacebookPagesApi?.isFetching || !getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || !getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) && currentConnectedInstagramPages?.length === 0 &&
-                                                            <button
-                                                                className="DisConnectBtn cmn_connect_btn w-auto"
-                                                                onClick={() => disConnectSocialMediaAccountToCustomer("INSTAGRAM")}
-                                                            >
-                                                                Disconnect
-                                                            </button>
-                                                        }
                                                         <div className={instagramDropDown ? "upside-down" : ""}>
                                                             <svg
                                                                 width="14"
@@ -589,13 +572,6 @@ const SocialAccounts = ({}) => {
                                                                 : currentConnectedInstagramPages?.length === 0 ?
                                                                     <div className={"no-page-connected-outer text-center"}>
                                                                         <div>No active connections at the moment.</div>
-                                                                        <button
-                                                                            className={"cursor-pointer connect-page-btn clear_all_button_outer mt-3"}
-                                                                            onClick={() => {
-                                                                                handleShowModal(SocialAccountProvider.INSTAGRAM)
-                                                                            }}>
-                                                                            Connect now
-                                                                        </button>
                                                                     </div>
                                                                     :
                                                                     <>
@@ -627,34 +603,38 @@ const SocialAccounts = ({}) => {
                                                                                 );
                                                                             }
                                                                         )}
-                                                                        <li>
-                                                                            {getAllInstagramPagesApi?.data &&
-                                                                                Array.isArray(getAllInstagramPagesApi?.data) && (
-                                                                                    <div
-                                                                                        className="connectDisconnect_btn_outer">
-                                                                                        <button
-                                                                                            className="DisConnectBtn cmn_connect_btn"
-                                                                                            onClick={() =>
-                                                                                                disConnectSocialMediaAccountToCustomer(
-                                                                                                    "INSTAGRAM"
-                                                                                                )
-                                                                                            }
-                                                                                        >
-                                                                                            Disconnect
-                                                                                        </button>
-                                                                                        <button
-                                                                                            className="ConnectBtn cmn_connect_btn"
-                                                                                            onClick={() => {
-                                                                                                handleShowModal(SocialAccountProvider.INSTAGRAM)
-                                                                                            }}
-                                                                                        >
-                                                                                            Manage Pages
-                                                                                        </button>
-                                                                                    </div>
-                                                                                )}
-                                                                        </li>
+
                                                                     </>
                                                         }
+                                                        <li>
+                                                            {getAllInstagramPagesApi?.data &&
+                                                                Array.isArray(getAllInstagramPagesApi?.data) && (
+                                                                    <div
+                                                                        className="connectDisconnect_btn_outer">
+                                                                        <button
+                                                                            className="DisConnectBtn cmn_connect_btn"
+                                                                            onClick={() =>
+                                                                                disConnectSocialMediaAccountToCustomer(
+                                                                                    "INSTAGRAM"
+                                                                                )
+                                                                            }
+                                                                        >
+                                                                            Disconnect
+                                                                        </button>
+                                                                        <button
+                                                                            className="ConnectBtn cmn_connect_btn"
+                                                                            onClick={() => {
+                                                                                handleShowModal(SocialAccountProvider.INSTAGRAM)
+                                                                            }}
+                                                                        >
+                                                                            {
+                                                                                currentConnectedInstagramPages?.length === 0 ? "Connect Now" : "Manage Pages"
+                                                                            }
+
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                        </li>
                                                     </ul>
                                                 }
                                             </div>
@@ -731,18 +711,7 @@ const SocialAccounts = ({}) => {
                                                             </h5>
                                                             <h4 className="connect_text">Connected</h4>
                                                         </div>
-                                                        {
-                                                            (!getAllFacebookPagesApi?.isLoading || !getAllFacebookPagesApi?.isFetching || !getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || !getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) &&
-                                                            currentConnectedLinkedinPages?.length === 0 &&
-                                                            <button
-                                                                className="DisConnectBtn cmn_connect_btn w-auto"
-                                                                onClick={() =>
-                                                                    disConnectSocialMediaAccountToCustomer("LINKEDIN")
-                                                                }
-                                                            >
-                                                                Disconnect
-                                                            </button>
-                                                        }
+
 
                                                         <div className={linkedinDropDown ? "upside-down" : ""}>
                                                             <svg
@@ -773,13 +742,6 @@ const SocialAccounts = ({}) => {
                                                                 : currentConnectedLinkedinPages?.length === 0 ?
                                                                     <div className={"no-page-connected-outer text-center"}>
                                                                         <div>No active connections at the moment.</div>
-                                                                        <button
-                                                                            className={"cursor-pointer connect-page-btn clear_all_button_outer mt-3"}
-                                                                            onClick={() => {
-                                                                                handleShowModal(SocialAccountProvider.LINKEDIN)
-                                                                            }}>
-                                                                            Connect now
-                                                                        </button>
                                                                     </div>
                                                                     :
                                                                     <>
@@ -787,7 +749,8 @@ const SocialAccounts = ({}) => {
                                                                             currentConnectedLinkedinPages?.map((data, index) => {
                                                                                 return (
                                                                                     <li key={index}>
-                                                                                        <div className="user_profileInfo_wrapper">
+                                                                                        <div
+                                                                                            className="user_profileInfo_wrapper">
                                                                                             <div className="user_Details">
                                                                                                 <Image
                                                                                                     src={data?.logo_url || default_user_icon}
@@ -805,28 +768,32 @@ const SocialAccounts = ({}) => {
                                                                                 );
                                                                             })
                                                                         }
-                                                                        <li>
-                                                                            {
-                                                                                getAllLinkedinPagesApi?.data && getAllLinkedinPagesApi?.data?.results && Object.keys(getAllLinkedinPagesApi?.data?.results)?.length > 0 &&
-                                                                                <div className="connectDisconnect_btn_outer">
-                                                                                    <button
-                                                                                        className="DisConnectBtn cmn_connect_btn"
-                                                                                        onClick={() => disConnectSocialMediaAccountToCustomer("LINKEDIN")}
-                                                                                    >
-                                                                                        Disconnect
-                                                                                    </button>
-                                                                                    <button
-                                                                                        className="ConnectBtn cmn_connect_btn"
-                                                                                        onClick={() => {
-                                                                                            handleShowModal(SocialAccountProvider.LINKEDIN)
-                                                                                        }}>
-                                                                                        Manage Pages
-                                                                                    </button>
-                                                                                </div>
-                                                                            }
-                                                                        </li>
+
                                                                     </>
                                                         }
+                                                        <li>
+                                                            {
+                                                                getAllLinkedinPagesApi?.data && getAllLinkedinPagesApi?.data?.results && Object.keys(getAllLinkedinPagesApi?.data?.results)?.length > 0 &&
+                                                                <div className="connectDisconnect_btn_outer">
+                                                                    <button
+                                                                        className="DisConnectBtn cmn_connect_btn"
+                                                                        onClick={() => disConnectSocialMediaAccountToCustomer("LINKEDIN")}
+                                                                    >
+                                                                        Disconnect
+                                                                    </button>
+                                                                    <button
+                                                                        className="ConnectBtn cmn_connect_btn"
+                                                                        onClick={() => {
+                                                                            handleShowModal(SocialAccountProvider.LINKEDIN)
+                                                                        }}>
+                                                                        {
+                                                                            currentConnectedLinkedinPages?.length === 0 ? "Connect Now" : "Manage Pages"
+                                                                        }
+
+                                                                    </button>
+                                                                </div>
+                                                            }
+                                                        </li>
                                                     </ul>
                                                 }
                                             </div>
@@ -843,7 +810,7 @@ const SocialAccounts = ({}) => {
                             {
                                 getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching ?
                                     <SkeletonEffect count={1}/>
-                                    : getConnectedSocialAccountApi?.data?.filter((c) => c.provider === "PINTEREST").length === 0 ? (
+                                    : getConnectedSocialAccountApi?.data?.filter((c) => c.provider === "PINTEREST").length === 0 ?
                                         <div className="social_media_outer">
                                             <div className="social_media_content">
                                                 <i
@@ -880,7 +847,7 @@ const SocialAccounts = ({}) => {
                                                 />
                                             </LoginSocialPinterest>
                                         </div>
-                                    ) : (
+                                        :
                                         <div className=" cmn_drop_down dropdown">
                                             <div className="dropdown_header">
                                                 <div className="social_media_outer cursor-pointer">
@@ -902,15 +869,6 @@ const SocialAccounts = ({}) => {
                                                             </h5>
                                                             <h4 className="connect_text">Connected</h4>
                                                         </div>
-                                                        {
-                                                            (!getAllFacebookPagesApi?.isLoading || !getAllFacebookPagesApi?.isFetching || !getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || !getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) && currentConnectedPinterestPages?.length === 0 &&
-                                                            <button
-                                                                className="DisConnectBtn cmn_connect_btn w-auto"
-                                                                onClick={() => disConnectSocialMediaAccountToCustomer("PINTEREST")}
-                                                            >
-                                                                Disconnect
-                                                            </button>
-                                                        }
                                                         <div className={pinterestDropDown ? "upside-down" : ""}>
                                                             <svg
                                                                 width="14"
@@ -940,13 +898,6 @@ const SocialAccounts = ({}) => {
                                                                 : currentConnectedPinterestPages?.length === 0 ?
                                                                     <div className={"no-page-connected-outer text-center"}>
                                                                         <div>No active connections at the moment.</div>
-                                                                        <button
-                                                                            className={"cursor-pointer connect-page-btn clear_all_button_outer mt-3"}
-                                                                            onClick={() => {
-                                                                                handleShowModal(SocialAccountProvider.PINTEREST)
-                                                                            }}>
-                                                                            Connect now
-                                                                        </button>
                                                                     </div>
                                                                     :
                                                                     <>
@@ -957,7 +908,8 @@ const SocialAccounts = ({}) => {
                                                                                         <li key={index}>
                                                                                             <div
                                                                                                 className="user_profileInfo_wrapper">
-                                                                                                <div className="user_Details">
+                                                                                                <div
+                                                                                                    className="user_Details">
                                                                                                     <Image
                                                                                                         src={data.media?.image_cover_url || default_user_icon}
                                                                                                         height="30px"
@@ -976,48 +928,52 @@ const SocialAccounts = ({}) => {
                                                                                     );
                                                                                 })
                                                                         }
-                                                                        <li>
-                                                                            {
-                                                                                getAllPinterestPagesApi?.data && getAllPinterestPagesApi?.data?.items && Array.isArray(getAllPinterestPagesApi?.data?.items) &&
-                                                                                <div className="connectDisconnect_btn_outer">
-                                                                                    <button
-                                                                                        className="DisConnectBtn cmn_connect_btn"
-                                                                                        onClick={() => disConnectSocialMediaAccountToCustomer("PINTEREST")}
-                                                                                    >
-                                                                                        Disconnect
-                                                                                    </button>
-                                                                                    <button
-                                                                                        className="ConnectBtn cmn_connect_btn"
-                                                                                        onClick={() => {
-                                                                                            handleShowModal(SocialAccountProvider.PINTEREST)
-                                                                                        }}>
-                                                                                        Manage Pages
-                                                                                    </button>
-                                                                                </div>
-                                                                            }
-                                                                        </li>
+
                                                                     </>
                                                         }
+                                                        <li>
+                                                            {
+                                                                getAllPinterestPagesApi?.data && getAllPinterestPagesApi?.data?.items && Array.isArray(getAllPinterestPagesApi?.data?.items) &&
+                                                                <div className="connectDisconnect_btn_outer">
+                                                                    <button
+                                                                        className="DisConnectBtn cmn_connect_btn"
+                                                                        onClick={() => disConnectSocialMediaAccountToCustomer("PINTEREST")}
+                                                                    >
+                                                                        Disconnect
+                                                                    </button>
+                                                                    <button
+                                                                        className="ConnectBtn cmn_connect_btn"
+                                                                        onClick={() => {
+                                                                            handleShowModal(SocialAccountProvider.PINTEREST)
+                                                                        }}>
+                                                                        {
+                                                                            currentConnectedPinterestPages?.length === 0 ? "Connect Now":"Manage Pages"
+                                                                        }
+
+                                                                    </button>
+                                                                </div>
+                                                            }
+                                                        </li>
                                                     </ul>
                                                 }
                                             </div>
                                         </div>
-                                    )}
+                            }
                         </>
                     )}
                 {/* end pinterest connect */}
             </div>
             {
                 enabledSocialMedia?.isFacebookEnabled && showFacebookModal &&
-                    <ConnectPagesModal
-                        showModal={showFacebookModal}
-                        setShowModal={setShowFacebookModal}
-                        allPagesList={getAllFacebookPagesApi?.data || []}
-                        connectedPagesList={getAllConnectedPagesApi?.data}
-                        noPageFoundMessage={"No Page Found, Please connect another account."}
-                        socialMediaType={SocialAccountProvider.FACEBOOK}
-                        socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter((account) => account.provider === "FACEBOOK")[0]}
-                    />
+                <ConnectPagesModal
+                    showModal={showFacebookModal}
+                    setShowModal={setShowFacebookModal}
+                    allPagesList={getAllFacebookPagesApi?.data || []}
+                    connectedPagesList={getAllConnectedPagesApi?.data}
+                    noPageFoundMessage={"No Page Found, Please connect another account."}
+                    socialMediaType={SocialAccountProvider.FACEBOOK}
+                    socialMediaAccountInfo={getConnectedSocialAccountApi?.data?.filter((account) => account.provider === "FACEBOOK")[0]}
+                />
 
             }
             {

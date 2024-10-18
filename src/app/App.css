@@ -532,6 +532,13 @@ button.facebook_connect.connect_buttoon {
   font-weight: 700;
 
 }
+
+.yes_btn {
+  font-size: 14px;
+  border: none;
+  color: #fff;
+  font-weight: 600
+}
 .cmn_modal_cancelbtn{
     border: 1px solid #263238;
     background-color: white;
@@ -677,6 +684,7 @@ line-height: 20px;
   border-radius: 5px;
   height: 36px;
   width: 110px
+
 }
 img.post_img {
   height: 300px;
