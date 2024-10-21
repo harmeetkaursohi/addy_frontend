@@ -57,6 +57,7 @@ import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils"
 import NotFoundPopup from "../../common/components/NotFoundPopup";
 import InstagramGuidePopup from "../../common/components/InstagramGuidePopup";
 import {Image} from "react-bootstrap";
+import {Skeleton} from "antd";
 
 const SocialAccounts = ({}) => {
     const dispatch = useDispatch();
@@ -322,13 +323,12 @@ const SocialAccounts = ({}) => {
                 <div className="social_media_account">
                     <h3>{jsondata.socialAccount}</h3>
                 </div>
-
                 {/*facebook connect starts */}
                 {
                     enabledSocialMedia?.isFacebookEnabled && (
                         <>
                             {
-                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching) ?
+                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching ) ?
                                     <SkeletonEffect count={1}/>
                                     : getConnectedSocialAccountApi?.data?.filter((c) => c?.provider === "FACEBOOK")?.length === 0 ?
                                         <div className="social_media_outer">
@@ -493,7 +493,7 @@ const SocialAccounts = ({}) => {
                     enabledSocialMedia?.isInstagramEnabled && (
                         <>
                             {
-                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching) ?
+                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching  ) ?
                                     <SkeletonEffect count={1}/>
                                     : getConnectedSocialAccountApi?.data?.filter((c) => c.provider === "INSTAGRAM").length === 0 ?
                                         <div className="social_media_outer">

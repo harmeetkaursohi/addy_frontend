@@ -1,4 +1,4 @@
-const Skeleton = ({className}) => {
+const Skeleton = ({className=""}) => {
     return <div className={`skeleton ${className}`} style={{height:"20px"}}>
     </div>;
 }
