@@ -466,39 +466,42 @@ const UpdatePost = () => {
                 <div className={`cmn_container ${sidebar ? "" : "cmn_Padding"}`}>
                     <div className="Container">
                         <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
-                            <div className='preview_btn_outer cmn_border cmn_outer'>
+                           
+                            <div className="row m-0">
+                                <div
+                                    className={showPreview ? "col-lg-6 col-md-12 col-sm-12 p-0" : "col-lg-12 col-md-12 col-sm-12 p-0"}>
+                                         <div className=' cmn_outer'>
                                 <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
 
-                                {
-                                    selectedAllDropdownData?.length > 0 && showPreview ?
-                                        <button className='preview_btn' onClick={() => {
-                                            setShowPreview(false)
-                                        }}><RxCross2/></button> :
-
-                                        selectedAllDropdownData?.length > 0 &&
-                                        <button className='preview_btn ' onClick={() => {
-                                            setShowPreview(true)
-                                        }}><AiOutlineEye/></button>
-                                }
 
                             </div>
-                            <div className="row">
-                                <div
-                                    className={showPreview ? "col-lg-6 col-md-12 col-sm-12" : "col-lg-12 col-md-12 col-sm-12"}>
 
-                                    <div className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
+                                    <div className={`create_post_content   ${showPreview ? "cmn_outer " : " edit_post_content"} `}>
 
-
-                                        <form onSubmit={null}>
+                             
+                                        <form onSubmit={(e)=>{e.preventDefault()}}>
                                             {/* select media pages */}
-                                            <div className="createPost_outer media_outer">
-                                                <label className='create_post_label'>{jsondata.mediaPlatform} *</label>
-
-                                                {/*    dropdown select platform=====*/}
+                                            <div className="createPost_outer">
+                                            <div className='d-flex align-items-center '>
+                                            <label className='create_post_label flex-grow-1'>{jsondata.mediaPlatform} *</label>
+                                                   
+                                                   {
+                                                       selectedAllDropdownData?.length > 0 && showPreview ?
+                                                           <button className='preview_btn' onClick={() => {
+                                                               setShowPreview(false)
+                                                           }}><RxCross2/></button> :
+                   
+                                                           selectedAllDropdownData?.length > 0 &&
+                                                           <button className='preview_btn ' onClick={() => {
+                                                               setShowPreview(true)
+                                                           }}><AiOutlineEye/></button>
+                                                   }
+                                                      
+                                                </div>             {/*    dropdown select platform=====*/}
                                                 <Dropdown className='insta_dropdown_btn mt-2'>
                                                     <Dropdown.Toggle id="instagram"
                                                                      className="instagram_dropdown tabs_grid">
-                                                                        <GoChevronDown/>
+                                                                        <GoChevronDown className='dropdown_chevron'/>
                                                         {selectedAllDropdownData.length > 0 ?
                                                             (
                                                                 selectedAllDropdownData.map((data, index) => (
@@ -637,13 +640,16 @@ const UpdatePost = () => {
                                             </div>
                                             {/* add media */}
                                             <div
-                                                className={`media_outer dashed_border  ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
+                                                className={`media_outer ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
+                                               <div className="col-12">
+                                               <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
+                                               <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+                                               </div>
                                                 <div
                                                     className={showPreview ? "" : 'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
 
                                                     <div className="post_content_wrapper">
-                                                        <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
-                                                        <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+                                                     
 
 
                                                         {
@@ -961,14 +967,46 @@ const UpdatePost = () => {
                                             </div>
 
                                         </form>
+                                        <div className='draft_publish_outer mt-3'>
+
+                                            <div className={"flex-grow-1"}>
+                                                <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                                        onClick={(e) => {
+                                                                            setReference("Draft")
+                                                                            handleDraftPost(e);
+                                                                        }}
+
+                                                                        className={"save_btn cmn_bg_btn loading"}
+                                                                        isLoading={reference === "Draft" && updatePostByIdApi?.isLoading}/>
+                                            </div>
+
+
+                                            <GenericButtonWithLoader label={jsondata.publishnow}
+                                                                    onClick={(e) => {
+                                                                        const requestBody = getRequestBodyToUpdatePost("PUBLISHED",false)
+                                                                        if(! isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject))  return
+                                                                        setShowPublishPostConfirmationBox(true)
+                                                                    }}
+                                                                    isDisabled={false}
+                                                                    className={"publish_btn cmn_bg_btn loading"}/>
+                                            <GenericButtonWithLoader
+                                                label={jsondata.schedule}
+                                                onClick={(e) => {
+                                                    setReference("Scheduled")
+                                                    handleSchedulePost(e);
+                                                }}
+                                                isDisabled={!showScheduleDateAndTimeBox}
+                                                className={"cmn_bg_btn schedule_btn loading"}
+                                                isLoading={reference === "Scheduled" && updatePostByIdApi?.isLoading}/>
+                                            </div>
                                     </div>
                                 </div>
                                 {
                                     showPreview && files.length > 0 &&
-                                    <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
-                                        <div className='cmn_outer create_post_container'>
-                                            <div className='post_preview_outer'>
-                                                <h3 className='Post_Preview_heading'>Post Preview</h3>
+                                    <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container p-0">
+                                        <div className='cmn_outer create_post_container post_preview_outer'>
+                                        
+                                                {/* <h3 className='Post_Preview_heading'>Post Preview</h3> */}
                                                 <div className='CommonFeedPreview_container'>
                                                     {
                                                         allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
@@ -994,44 +1032,13 @@ const UpdatePost = () => {
                                                         })
                                                     }
                                                 </div>
-                                            </div>
+                                           
                                         </div>
                                     </div>
                                 }
                             </div>
 
-                            <div className='draft_publish_outer cmn_outer'>
-
-                                <div className={"flex-grow-1"}>
-                                    <GenericButtonWithLoader label={jsondata.saveasdraft}
-                                                             onClick={(e) => {
-                                                                 setReference("Draft")
-                                                                 handleDraftPost(e);
-                                                             }}
-
-                                                             className={"save_btn cmn_bg_btn loading"}
-                                                             isLoading={reference === "Draft" && updatePostByIdApi?.isLoading}/>
-                                </div>
-
-
-                                <GenericButtonWithLoader label={jsondata.publishnow}
-                                                         onClick={(e) => {
-                                                             const requestBody = getRequestBodyToUpdatePost("PUBLISHED",false)
-                                                             if(! isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject))  return
-                                                             setShowPublishPostConfirmationBox(true)
-                                                         }}
-                                                         isDisabled={false}
-                                                         className={"publish_btn cmn_bg_btn loading"}/>
-                                <GenericButtonWithLoader
-                                    label={jsondata.schedule}
-                                    onClick={(e) => {
-                                        setReference("Scheduled")
-                                        handleSchedulePost(e);
-                                    }}
-                                    isDisabled={!showScheduleDateAndTimeBox}
-                                    className={"cmn_bg_btn schedule_btn loading"}
-                                    isLoading={reference === "Scheduled" && updatePostByIdApi?.isLoading}/>
-                            </div>
+                         
                         </div>
                     </div>
 

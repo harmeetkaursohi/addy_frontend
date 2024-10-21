@@ -301,10 +301,10 @@ social_inner_content h6 {
 }
 
 .media_outer {
-    border-radius: 20px;
+    border-radius: 3px;
     background: #F4F7FC;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.05);
-    padding: 17px 24px;
+    padding: 19px 24px;
     margin-top: 30px;
 }
 .dashed_border{
@@ -470,6 +470,7 @@ button.ai_btn {
 .caption_header {
     display: flex;
     justify-content: space-between;
+    padding-bottom: 10px;
 }
 
 .textarea {
@@ -594,17 +595,20 @@ button.ai_btn {
     background-color: #1C2B33;
     border-color: #1C2B33;
 }
-
+.post_preview_outer .CommonFeedPreview_container {
+    max-width: 441px;
+    margin: auto;
+}
 .preview_wrapper {
-    border-radius: 30px;
     background: #FFF;
     box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.05);
-    padding: 30px;
+    border-radius: 3px;
+    overflow: hidden;
 }
 
 .status {
     color: #898383;
-    font-weight: 700;
+    font-weight: 400;
     font-size: 12px;
 }
 
@@ -616,7 +620,7 @@ button.ai_btn {
 .user_profile_info {
     display: flex;
     gap: 10px;
-
+    padding: 16px 11px;
 }
 
 .user_profile_info img {
@@ -635,11 +639,10 @@ button.ai_btn {
 .like_comment_outer {
     display: flex;
     justify-content: space-between;
-    padding: 14px 0px;
+    padding: 14px 23px;
     border-top: 1px solid #dad6d6;
     border-bottom: 1px solid #dad6d6;
     align-items: center;
-   
 }
 
 .like_img {
@@ -650,17 +653,16 @@ button.ai_btn {
     animation-name: fadeInLeft;
     animation-duration: 3s;
     animation-timing-function: all ease 0.7s;
-    background: #F4F7FC;
+    background: rgba(30, 30, 30, 1);
     padding: 3em;
-    height: 100%;
-    border-radius: 10px;
 }
 .post_preview_container {
-    margin-top: 30px !important;
+    /* margin-top: 30px !important; */
 }
 .post_caption_outer{
     display: flex;
     gap: 30px;
+    flex-direction: column;
 }
 .feed_preview {
     font-size: 22px;
@@ -677,7 +679,7 @@ h3.Post_Preview_heading {
     display: flex;
 }
 .facebookFeedpreview_text {
-    padding-top: 40px
+color: #fff;
 }
 
 .fb_likes h3 {
@@ -835,9 +837,6 @@ button.delete_upload {
     object-position: top;
 }
 
-.darg_navs.file_outer .add_media_outer {
-    padding: 10px;
-}
 
 .file_outer.dragable_files {
     justify-content: space-between;
@@ -900,8 +899,26 @@ button.loading {
 }
 .create_post_content {
     padding: 20px;
+    max-width: 531px;
+    margin: auto;
 }
-
+i.fa.fa-toggle-on {
+    color: orange;
+}
+.create_post_content.edit_post_content {
+    max-width: unset;
+}
+.create_post_content i.fa.fa-toggle-off {
+    color: rgba(49, 49, 49, 1);
+}
+.no_perview .create_post_content{
+    max-width: unset;
+}
+.create_post_content label.cmn_headings {
+    min-width: 122px;
+    text-align: center;
+}
+/* media query starts here */
 @media screen and (min-width:2000px){
     .post_preview_outer{
         padding: 3rem 15rem;
@@ -990,9 +1007,7 @@ button.loading {
     .get_messages_outer {
         display: block;
     }
-    .preview_wrapper{
-        padding: 20px;
-    }
+ 
     .media_outer{
      padding: 17px;
     }
@@ -1120,10 +1135,7 @@ button.loading {
         font-size: 12px;
         padding: 7px;
     }
-    .darg_navs.file_outer .add_media_outer {
-        padding: 0px;
-    }
-    .add_media_outer label i {
+       .add_media_outer label i {
         margin-right: 7px;
     }
     button.save_button {
@@ -1197,11 +1209,7 @@ button.loading {
         gap: 5px;
         display: block;
     }
-    .preview_wrapper {
-        border-radius: 15px;
-        padding: 10px;
-    
-    }
+ 
     .like_comment_outer{
         padding: 9px 5px
     }

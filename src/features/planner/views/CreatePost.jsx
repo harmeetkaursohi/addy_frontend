@@ -34,7 +34,7 @@ import {useCreatePostMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import { GoChevronDown } from "react-icons/go";
 import PostNowModal from "../../common/components/PostNowModal";
-
+import ai_icon  from "../../../images/ai_icon.svg"
 const CreatePost = () => {
 
     const navigate = useNavigate();
@@ -395,24 +395,15 @@ const CreatePost = () => {
                         <CommonLoader></CommonLoader> :
                         <div className="Container">
                             <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
-                                <div className='preview_btn_outer cmn_border cmn_outer'>
-                                    <h2 className='creare_post_heading'>{jsondata.createpost}</h2>
-                                    {
-                                        (selectedAllDropdownData?.length > 0 && (files?.length > 0 || !isNullOrEmpty(caption) || !isNullOrEmpty(hashTag)) && showPreview) ?
-                                            <button className='preview_btn' onClick={() => {
-                                                setShowPreview(false)
-                                            }}><RxCross2/></button> :
+                               
+                                   
 
-                                            (selectedAllDropdownData?.length > 0 && (files?.length > 0 || !isNullOrEmpty(caption) || !isNullOrEmpty(hashTag))) &&
-                                            <button className='preview_btn' onClick={() => {
-                                                setShowPreview(true)
-                                            }}><AiOutlineEye/></button>
-                                    }
-
-                                </div>
-                                <div className="row">
+                              
+                                <div className="row m-0">
                                     <div
-                                        className={showPreview ? "col-lg-6 col-md-12 col-sm-12" : "col-lg-12 col-md-12 col-sm-12"}>
+                                        className={showPreview ? "col-lg-6 col-md-12 col-sm-12 p-0 " : "col-lg-12 col-md-12 col-sm-12 p-0 no_perview"}>
+                                             <h2 className='creare_post_heading pt-4'>{jsondata.createpost}</h2>
+                                
                                         <div
                                             className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
                                             <form onSubmit={(e) => {
@@ -420,7 +411,7 @@ const CreatePost = () => {
                                             }}>
 
                                                 {/* select platform */}
-                                                <div className="createPost_outer media_outer">
+                                                <div className="createPost_outer">
                                                     <label
                                                         className='create_post_label'>{jsondata.mediaPlatform} *</label>
 
@@ -554,13 +545,28 @@ const CreatePost = () => {
 
                                                 {/* add media */}
                                                 <div
-                                                    className={`media_outer dashed_border ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
+                                                    className={`media_outer ${showPreview ? "" : "mt-4 mx-0 "} `}>
                                                     <div
-                                                        className={showPreview ? "" : 'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
-                                                        <div className="post_content_wrapper">
+                                                        className={showPreview ? "" : 'media_inner_content'}>
+                                                        <div className="post_content_wrapper w-100">
 
-                                                            <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
-                                                            <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+                                                           <div className='d-flex align-items-center '>
+                                                           <div className='flex-grow-1'>
+                                                           <h5 className='post_heading create_post_text pb-1'>{jsondata.media}</h5>
+                                                           <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+                                                           </div>
+                                                            {
+                                                                (selectedAllDropdownData?.length > 0 && (files?.length > 0 || !isNullOrEmpty(caption) || !isNullOrEmpty(hashTag)) && showPreview) ?
+                                                                    <button className='preview_btn' onClick={() => {
+                                                                        setShowPreview(false)
+                                                                    }}><RxCross2/></button> :
+
+                                                                    (selectedAllDropdownData?.length > 0 && (files?.length > 0 || !isNullOrEmpty(caption) || !isNullOrEmpty(hashTag))) &&
+                                                                    <button className='preview_btn' onClick={() => {
+                                                                        setShowPreview(true)
+                                                                    }}><AiOutlineEye/></button>
+                                                            }
+                                                           </div>
 
                                                             <div className={`drag_scroll`}>
 
@@ -624,12 +630,11 @@ const CreatePost = () => {
                                                     </div>
 
                                                     <div
-                                                        className={showPreview ? "" : "col-lg-6 col-sm-12 col-md-12 p-0"}>
+                                                        className={showPreview ? "" : "p-0"}>
 
-                                                        <div className="darg_navs file_outer">
+                                                        <div className="darg_navs file_outer gap-3">
                                                             {
-                                                                disableImage === false && <div
-                                                                    className={" add_media_outer"}>
+                                                                disableImage === false && <>
                                                                     <input type="file" id='image'
                                                                            className='file'
                                                                            multiple
@@ -644,15 +649,15 @@ const CreatePost = () => {
                                                                     />
                                                                     <label htmlFor='image'
                                                                            className='cmn_headings cmn_blue_border'>
-                                                                        <i className="fa fa-image"
+                                                                        <i className="fa fa-image me-2"
                                                                            style={{marginTop: "2px"}}/>{"Add Photo"}
                                                                     </label>
-                                                                </div>
+                                                                </>
                                                             }
 
                                                             {
                                                                 disableVideo === false &&
-                                                                <div className=" add_media_outer">
+                                                                <>
                                                                     <input
                                                                         type="file"
                                                                         id='video'
@@ -665,10 +670,10 @@ const CreatePost = () => {
                                                                         }}/>
                                                                     <label htmlFor='video'
                                                                            className='cmn_headings cmn_blue_border'>
-                                                                        <i className="fa fa-video-camera"
+                                                                        <i className="fa fa-video-camera me-2"
                                                                            style={{marginTop: "2px"}}/>{files?.length > 0 ? "Change Video" : "Add Video"}
                                                                     </label>
-                                                                </div>
+                                                                </>
                                                             }
                                                         </div>
 
@@ -739,14 +744,14 @@ const CreatePost = () => {
                                                             <h5 className='post_heading create_post_text'>Add
                                                                 Caption </h5>
 
-                                                            {/*<button className="ai_btn cmn_white_text"*/}
-                                                            {/*        onClick={(e) => {*/}
-                                                            {/*            e.preventDefault();*/}
-                                                            {/*            setAIGenerateCaptionModal(true);*/}
-                                                            {/*        }}>*/}
-                                                            {/*    <img src={ai_icon}*/}
-                                                            {/*         className='ai_icon me-2'/>{jsondata.generateCaptionAi}*/}
-                                                            {/*</button>*/}
+                                                            {/* <button className="ai_btn cmn_white_text"
+                                                               onClick={(e) => {
+                                                                    e.preventDefault();
+                                                                     setAIGenerateCaptionModal(true);
+                                                                 }}>
+                                                               <img src={ai_icon}
+                                                                 className='ai_icon me-2'/>{jsondata.generateCaptionAi}
+                                                           </button> */}
 
                                                         </div>
                                                         <div className='textarea_outer'>
@@ -800,7 +805,7 @@ const CreatePost = () => {
                                                             className="d-flex align-items-center gap-2 ps-0 form-switch">
                                                             <i
                                                                 className={`fa ${showScheduleDateAndTimeBox ? "fa-toggle-on" : "fa-toggle-off"}`}
-                                                                style={{fontSize: "24px", color: "#0d6efd"}}
+                                                                // style={{fontSize: "24px", color: "#0d6efd"}}
                                                                 onClick={() => {
                                                                     setShowScheduleDateAndTimeBox(!showScheduleDateAndTimeBox);
                                                                 }}
@@ -846,7 +851,7 @@ const CreatePost = () => {
 
                                                         <i
                                                             className={`fa ${boostPost ? "fa-toggle-on" : "fa-toggle-off"}`}
-                                                            style={{fontSize: "24px", color: "#0d6efd"}}
+                                                            // style={{fontSize: "24px", color: "#0d6efd"}}
                                                             onClick={(e) => {
                                                                 e.preventDefault();
                                                                 setBoostPost(!boostPost);
@@ -878,52 +883,8 @@ const CreatePost = () => {
                                                 </div>
 
                                             </form>
-                                        </div>
-                                    </div>
-                                    {
-                                        showPreview && files.length > 0 &&
-                                        <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container">
-                                            <div className='cmn_outer create_post_container'>
-                                                <div className='post_preview_outer'>
-                                                    <h3 className='Post_Preview_heading'>Post Preview</h3>
-                                                    <div className='CommonFeedPreview_container'>
-                                                        {
-                                                            allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
-                                                                let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
-
-                                                                return (<span key={index}>
-                                                    {
-                                                        selectedPageData &&
-                                                        <CommonFeedPreview
-                                                            socialMediaType={option.group}
-                                                            previewTitle={`${getEnumValue(option.group)} feed Preview`}
-                                                            pageName={selectedPageData?.name}
-                                                            pageImageUrl={selectedPageData?.imageUrl}
-                                                            userData={userData}
-                                                            cropImage={cropImgUrl !== null ? cropImgUrl : ""}
-                                                            files={files}
-                                                            selectedFileType={selectedFileType}
-                                                            caption={caption}
-                                                            hashTag={hashTag}
-                                                            destinationUrl={pinDestinationUrl}
-                                                            pinTitle={pinTitle}
-                                                        />
-                                                    }
-
-                                                </span>
-                                                                )
-                                                            })
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    }
-                                </div>
-
-                                {/* draft and publish now section  */}
-                                <div className='draft_publish_outer cmn_outer'>
+                                          {/* draft and publish now section  */}
+                                <div className='draft_publish_outer mt-3'>
                                     <div className={"flex-grow-1"}>
                                         <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                  onClick={() => {
@@ -956,6 +917,50 @@ const CreatePost = () => {
                                     />
 
                                 </div>
+                                        </div>
+                                    </div>
+                                    {
+                                        showPreview && files.length > 0 &&
+                                        <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container p-0">
+                                            <div className='cmn_outer create_post_container post_preview_outer'>
+                                                                                                   {/* <h3 className='Post_Preview_heading'>Post Preview</h3> */}
+                                                    <div className='CommonFeedPreview_container'>
+                                                        {
+                                                            allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
+                                                                let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
+
+                                                                return (<span key={index}>
+                                                    {
+                                                        selectedPageData &&
+                                                        <CommonFeedPreview
+                                                            socialMediaType={option.group}
+                                                            previewTitle={`${getEnumValue(option.group)} feed Preview`}
+                                                            pageName={selectedPageData?.name}
+                                                            pageImageUrl={selectedPageData?.imageUrl}
+                                                            userData={userData}
+                                                            cropImage={cropImgUrl !== null ? cropImgUrl : ""}
+                                                            files={files}
+                                                            selectedFileType={selectedFileType}
+                                                            caption={caption}
+                                                            hashTag={hashTag}
+                                                            destinationUrl={pinDestinationUrl}
+                                                            pinTitle={pinTitle}
+                                                        />
+                                                    }
+
+                                                </span>
+                                                                )
+                                                            })
+                                                        }
+                                                    </div>
+                                             
+                                            </div>
+
+                                        </div>
+                                    }
+                                </div>
+
+                              
                             </div>
                         </div>
                 }

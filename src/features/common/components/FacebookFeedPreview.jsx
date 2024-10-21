@@ -13,7 +13,7 @@ const FacebookFeedPreview = ({previewTitle, pageName, userData, files, selectedF
         <>
             <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>{previewTitle}</h2>
 
-            <div className='preview_wrapper' style={{ border: "1px solid transparent"}}>
+            <div className='preview_wrapper'>
                 <div className='user_profile_info'>
                     <Image src={pageImage ?  pageImage : default_user_icon} alt="user image" height="36px" width="36px"/>
                     <div>
