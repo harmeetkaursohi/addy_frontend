@@ -388,6 +388,7 @@ const UpdatePost = () => {
         const handleRemoveSelectFile = (attachmentReferenceNameToRemove, id) => {
             const updatedFiles = files.filter((file) => file.fileName !== attachmentReferenceNameToRemove);
             setFiles(updatedFiles);
+            updatedFiles?.length ===0 && setShowPreview(false)
             if (id !== undefined && id !== null) {
                 const updatedOldAttachments = oldAttachmentsFileObject?.filter(attachment => attachment?.id !== id);
                 setOldAttachmentsFileObject(updatedOldAttachments);

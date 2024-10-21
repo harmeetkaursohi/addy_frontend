@@ -5,7 +5,6 @@ import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import Swal from "sweetalert2";
-import {useAppContext} from "../../common/components/AppProvider.jsx";
 import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import {FaBars} from "react-icons/fa";
 import {RxCross2} from "react-icons/rx";
@@ -28,6 +27,7 @@ import {
 import {useGetAllConnectedPagesQuery, useUpdatePageByIdsMutation} from "../../../app/apis/pageAccessTokenApi";
 import {enabledSocialMedia} from "../../../utils/contantData";
 import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils";
+import {useAppContext} from "../../common/components/AppProvider";
 
 const Layout = () => {
 
