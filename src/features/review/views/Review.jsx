@@ -283,15 +283,7 @@ const Review = () => {
                                                                                     <></>
                                                                                 ) : post.errorInfo === undefined || post.errorInfo === null ? (
                                                                                     <tr key={index}   ref={index === postsList?.length - 1 ? lastPostRef : null}>
-                                                                                        <td className="text-center"  onClick={(e) => {
-                                                                                            setPostData(post);
-                                                                                            setDirty({
-                                                                                                ...isDirty,
-                                                                                                index: index,
-                                                                                                socialMediaType: post?.socialMediaType,
-                                                                                            });
-                                                                                            setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal);
-                                                                                        }}>
+                                                                                        <td className="text-center" >
                                                                                         {
                                                                                             post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
                                                                                                 <video
@@ -315,7 +307,15 @@ const Review = () => {
                                                                                         <td className="text-center">  {post?.comments} Comments</td>
                                                                                         <td className="text-center">   {post?.shares}{" "}{post?.socialMediaType === "PINTEREST" ? "Save" : "Share"}</td>
                                                                                         <td className="text-center">
-                                                                                            <button className="cmn_btn_color cmn_connect_btn yes_btn">View Post</button>
+                                                                                            <button className="cmn_btn_color cmn_connect_btn yes_btn"  onClick={(e) => {
+                                                                                            setPostData(post);
+                                                                                            setDirty({
+                                                                                                ...isDirty,
+                                                                                                index: index,
+                                                                                                socialMediaType: post?.socialMediaType,
+                                                                                            });
+                                                                                            setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal);
+                                                                                        }}>View Post</button>
                                                                                             </td>
                                                                                     </tr>
                                                                                 ) : 
