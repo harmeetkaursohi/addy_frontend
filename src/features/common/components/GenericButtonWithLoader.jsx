@@ -15,7 +15,8 @@ function GenericButtonWithLoader({
                 style={{
                     // opacity: isDisabled ? "0.6" : "1.0",
                     cursor: isDisabled ? "not-allowed" : "",
-                    background: isDisabled ? "#A2A2A2" : ""
+                    background: isDisabled ? "#A2A2A2" : "",
+                      borderColor: isDisabled ? "#A2A2A2" : ""
                 }}>
             {
                 isLoading ?

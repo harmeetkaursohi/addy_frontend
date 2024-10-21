@@ -1103,6 +1103,7 @@ ul.slick-dots {
 ul.slick-dots li button:before {
   opacity: 1;
   color: #a69b9b;
+  font-size: 10px;
 }
 .Account_not_connect_wrapper .modal-header{
   border-bottom: unset;
@@ -1405,7 +1406,9 @@ img.acc_not_connected_img.mt-0 {
     font-size: 13px;
     width: 124px;
   }
-
+  button#dropdown-basic{
+    font-size: 14px;
+  }
 
 }
 @media screen and (max-width:1280px){

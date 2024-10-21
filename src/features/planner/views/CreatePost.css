@@ -727,17 +727,18 @@ html {
     border: 1px solid transparent;
     background: #f07c32;
     color: white;
-    padding: 2px 6px;
     border-radius: 30px;
-    height: 30px;
-    width: 30px;
+    height: 25px;
+    width: 25px;
+    line-height: 8px;
+    text-align: center;
 
 }
 .black_bg_color{
     background-color: #000;
 }
 .preview_btn svg{
-   transform:translate(1px, -2px);
+    transform: translate(-2px, 0px);
 }
 .preview_btn:hover {
     background: white;

@@ -56,7 +56,7 @@ const Draft = () => {
                 {/*<SideBar/>*/}
                 <div className={sidebar ? "cmn_container" : "cmn_Padding"}>
                     <div className="cmn_outer">
-                        <div className="planner_outer white_bg_color cmn_height_outer">
+                        <div className="planner_outer white_bg_color cmn_height_outer cmn_outer">
                             <div className="planner_header_outer  align-items-center">
                                 <div className="planner_header">
                                     <h2>{jsondata.sidebarContent.draft}</h2>

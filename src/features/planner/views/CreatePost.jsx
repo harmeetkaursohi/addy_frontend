@@ -244,6 +244,7 @@ const CreatePost = () => {
 
     const handleRemoveSelectFile = (fileToRemove) => {
         const updatedFiles = files.filter((file) => file.url !== fileToRemove.url);
+        updatedFiles?.length ===0 && setShowPreview(false)
         setFiles(updatedFiles);
     };
 

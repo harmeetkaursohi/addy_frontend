@@ -40,7 +40,8 @@ const[showContent,setShowContent]=useState(false)
 
                 <CommonSlider isrequired={true} files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
  
-                <div className='like_comment_outer instagram_like'>
+             <div className="comment_wrapper">
+             <div className='like_comment_outer instagram_like'>
                    <div className="flex-grow-1">
                     <Image src={like_img} alt="like image"/>
                        <Image src={comment_img} alt="comment image" className=" ms-4 me-4" />
@@ -51,7 +52,7 @@ const[showContent,setShowContent]=useState(false)
                     <Image src={save_img} alt="save image" />
                     </div>
                 </div>
-                <div className={`ms-2  ${showContent ?"feed_preview_Caption_outer":"Caption_outer instagram_caption_outer " }`}>
+                <div className={`${showContent ?"feed_preview_Caption_outer":"Caption_outer instagram_caption_outer " }`}>
                
                <div className={showContent?"feed_preview_Caption_outer":"Caption_outer"}>
               {(caption.length > 0 || hashTag.length > 0) || (caption.length > 0 && hashTag.length > 0)   ? <h2 className=" mt-2">{pageName}</h2>:"" }  
@@ -61,6 +62,7 @@ const[showContent,setShowContent]=useState(false)
                </div>
 
                     </div>
+             </div>
                      
                 
             </div>
