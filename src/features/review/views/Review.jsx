@@ -315,7 +315,7 @@ const Review = () => {
                                                                                         <td className="text-center">  {post?.comments} Comments</td>
                                                                                         <td className="text-center">   {post?.shares}{" "}{post?.socialMediaType === "PINTEREST" ? "Save" : "Share"}</td>
                                                                                         <td className="text-center">
-                                                                                            <button className="createPost_btn crate_btn cmn_btn_color cursor-pointer">View Post</button>
+                                                                                            <button className="cmn_btn_color cmn_connect_btn yes_btn">View Post</button>
                                                                                             </td>
                                                                                     </tr>
                                                                                 ) : 
