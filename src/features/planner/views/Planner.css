@@ -402,11 +402,17 @@ a.fc-daygrid-dot-event:hover {
 .comment_wrapper{
     padding: 14px 23px;
 }
+ul.review_list table tbody tr td {
+    vertical-align: middle;
+}
 .CommonFeedPreview_container {
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
+
+
+
 @media screen and (max-width:1280px){
     .create_post_btn_Wrapper{
         flex-wrap: wrap;

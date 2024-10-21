@@ -25,7 +25,7 @@ import {
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
-
+import Table from 'react-bootstrap/Table';
 const Review = () => {
 
     const {sidebar} = useAppContext();
@@ -249,7 +249,7 @@ const Review = () => {
                                     :
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                     <>
-                                        <div className="review_outer">
+                                        <div className="review_outer mt-0">
 
                                             {
                                                 !postApi?.isLoading && !postApi?.isFetching && postsList !== null && postsList?.length === 0 ?
@@ -262,7 +262,121 @@ const Review = () => {
                                                         </div>
                                                     </div> :
                                                     <ul className="review_list">
-                                                        {
+                                                            <Table>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th className="text-center">Post</th>
+                                                                                <th className="text-center">Social Media</th>
+                                                                                <th className="text-center">Likes</th>
+                                                                                <th className="text-center">Comments</th>
+                                                                                <th className="text-center">Share</th>
+                                                                                <th className="text-center"><span className="opacity-0">Actions</span></th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {postsList?.map((post, index) => {
+                                                                                return removedPosts?.some(
+                                                                                    (removedPost) =>
+                                                                                        removedPost?.postId === post.id &&
+                                                                                        removedPost?.pageId === post.page.pageId
+                                                                                ) ? (
+                                                                                    <></>
+                                                                                ) : post.errorInfo === undefined || post.errorInfo === null ? (
+                                                                                    <tr key={index}   ref={index === postsList?.length - 1 ? lastPostRef : null}>
+                                                                                        <td className="text-center"  onClick={(e) => {
+                                                                                            setPostData(post);
+                                                                                            setDirty({
+                                                                                                ...isDirty,
+                                                                                                index: index,
+                                                                                                socialMediaType: post?.socialMediaType,
+                                                                                            });
+                                                                                            setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal);
+                                                                                        }}>
+                                                                                        {
+                                                                                            post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
+                                                                                                <video
+                                                                                                    style={{objectFit: "fill"}}
+                                                                                                    className="bg_img"
+                                                                                                    src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
+                                                                                                />
+                                                                                                :
+                                                                                                <img
+                                                                                                    src={post?.attachments[0]?.imageURL || noImageAvailable}
+                                                                                                    className="bg_img"/>
+                                                                                        }
+                                                                                       
+                                                                                        </td>
+                                                                                        <td className="text-center"> <div
+                                                                                            className="">
+                                                                                            <img
+                                                                                                src={computeImageURL(post?.socialMediaType)}/>
+                                                                                        </div></td>
+                                                                                        <td className="text-center">  {post?.likes} Likes {post?.socialMediaType === "FACEBOOK" ? "/ Reactions" : ""}</td>
+                                                                                        <td className="text-center">  {post?.comments} Comments</td>
+                                                                                        <td className="text-center">   {post?.shares}{" "}{post?.socialMediaType === "PINTEREST" ? "Save" : "Share"}</td>
+                                                                                        <td className="text-center">
+                                                                                            <button className="createPost_btn crate_btn cmn_btn_color cursor-pointer">View Post</button>
+                                                                                            </td>
+                                                                                    </tr>
+                                                                                ) : 
+                                                                                <tr class="demo" key={index}   ref={index === postsList?.length - 1 ? lastPostRef : null}>
+                                                                                        <td className="text-center">
+                                                                                        {
+                                                                                            post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
+                                                                                                <video
+                                                                                                    style={{objectFit: "fill"}}
+                                                                                                    className="bg_img"
+                                                                                                    src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
+                                                                                                />
+                                                                                                :
+                                                                                                <img
+                                                                                                    src={post?.attachments[0]?.imageURL || noImageAvailable}
+                                                                                                    className="bg_img"/>
+                                                                                        }
+                                                                                       
+                                                                                        </td>
+                                                                                        <td className="text-center"> <div
+                                                                                            className="">
+                                                                                            <img
+                                                                                                src={computeImageURL(post?.socialMediaType)}/>
+                                                                                        </div></td>
+                                                                                      
+                                                                                       <td colSpan={3}> {
+                                                                                    post.errorInfo.isDeletedFromSocialMedia ?
+                                                                                        <div
+                                                                                            className={"review-errorMessage d-flex"}>
+                                                                                            {PostAlreadyDeleted}
+                                                                                        </div>
+                                                                                        :
+                                                                                        <div
+                                                                                            className={"review-errorMessage "}>
+                                                                                            {ErrorFetchingPost}
+                                                                                        </div>
+                                                                                }</td>
+                                                                                        <td className="text-center">
+                                                                                           {
+                                                                                                    post.errorInfo.isDeletedFromSocialMedia &&
+                                                                                                    <div
+                                                                                                        className={"disabled-table-grid "}>
+                                                                                                        <MdDelete
+                                                                                                            onClick={() => {
+                                                                                                                if (!postApi?.isFetching && !postApi?.isLoading) {
+                                                                                                                    setDeletePostPageInfo(post);
+                                                                                                                }
+                                                                                                            }}
+                                                                                                            className={
+                                                                                                                "ms-2 cursor-pointer font-size-20"
+                                                                                                            }
+                                                                                                            title={"Delete From Addy"}
+                                                                                                        />
+                                                                                                    </div>
+                                                                                                }
+                                                                                            </td>
+                                                                                    </tr>;
+                                                                            })}
+                                                                        </tbody>
+                                                                    </Table>
+                                                                                                                            {/* {
                                                             postsList?.map((post, index) => {
                                                                 return removedPosts?.some((removedPost) => removedPost?.postId === post.id && removedPost?.pageId === post.page.pageId) ?
                                                                     <></>
@@ -395,7 +509,7 @@ const Review = () => {
                                                                         </div>
 
                                                             })
-                                                        }
+                                                        } */}
                                                     </ul>
                                             }
                                         </div>

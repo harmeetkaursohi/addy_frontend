@@ -164,8 +164,8 @@ img.acc_not_connected_img {
     font-weight: bold;
 }
 .bg_img {
-    width: 150px;
-    height: 100px;
+    width: 100px;
+    height: 80px;
     border-radius: 6px;
     object-fit: cover;
 }
@@ -356,6 +356,50 @@ p.disable-reply-comment {
     font-weight: 500;
     font-size: 20px;
 }
+/* table css start shere */
+ul.review_list thead tr th {
+    background: rgba(244, 247, 252, 1);
+}
+
+ul.review_list table thead tr th {
+    background: rgba(244, 247, 252, 1);
+    border: unset;
+    height: 66px;
+    vertical-align: middle;
+    font-size: 16px;
+}
+ul.review_list table thead tr{
+    border-bottom: 20px solid #fff;
+}
+ul.review_list table tbody tr:nth-child(odd) td {
+    background: rgb(244 247 252) !important;
+    --bs-table-bg-type: unset;
+}
+
+ul.review_list table tbody tr td {
+    vertical-align: middle;
+    font-weight: 600;
+    color: rgba(82, 82, 84, 1);
+}
+
+    ul.review_list table thead tr th:first-child, 
+    ul.review_list table tbody tr td:first-child {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+    ul.review_list table thead tr th:last-child , 
+    ul.review_list table tbody tr td:last-child 
+        {border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        ul.review_list table {
+            border-collapse: separate;
+            border-spacing: 0 21px;
+            border: solid transparent;
+        }
+        ul.review_list table tr{
+            box-shadow: 0px 0px 8px rgba(0,0,0,5%);
+        }
 @media screen and (min-width:1600px) {
     .acc_not_connected_outer img{
         width: 600px;
