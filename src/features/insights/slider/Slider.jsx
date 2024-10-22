@@ -1,23 +1,22 @@
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
 import Card from "react-bootstrap/Card";
 import calender_icon from "../../../images/calender_icon2.svg";
 import "./slider.css";
 import {
-    concatenateString,
+    concatenateString, getEmptyArrayOfSize,
     getFormattedPostTime, getValueOrDefault, isNullOrEmpty,
 } from "../../../utils/commonUtils";
 import {
     getFormattedPostDataForSlider,
 } from "../../../utils/dataFormatterUtils";
-import CommonLoader from "../../common/components/CommonLoader";
 import CommonSlider from "../../common/components/CommonSlider";
 import {FaGreaterThan, FaLessThan} from "react-icons/fa";
 import {ErrorFetchingPost, PostAlreadyDeleted, SocialAccountProvider} from "../../../utils/contantData";
 import {useAppContext} from "../../common/components/AppProvider";
 import {useGetPostByPageIdAndPostStatusQuery} from "../../../app/apis/postApi";
 import {useGetPostDataWithInsightsQuery} from "../../../app/apis/insightApi";
+import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 
 
 const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) => {
@@ -79,9 +78,57 @@ const DisplayPosts = ({selectedPage, postStackPageNumber, setPostStackPageNumber
                     </button>
                 </>
             }
+
             {
                 (postDataWithInsightsApi?.isLoading || postDataWithInsightsApi?.isFetching || postByPageIdAndPostStatusApi?.isLoading || postByPageIdAndPostStatusApi?.isFetching) ?
-                    <CommonLoader></CommonLoader> :
+                    <div className="row">
+                        {
+                            getEmptyArrayOfSize(3).map((_, i) => {
+                                return <div key={i} className={sidebar ? "col-lg-4 col-md-6 col-sm-12" : "col-lg-4 col-md-12 col-sm-12"}>
+                                    <Card className="card_body_content">
+                                        <Card.Body className="p-0">
+                                            <div className="caresoul_inner_content_outer">
+                                                <SkeletonEffect className={"post-stack-image-loader"} count={1}/>
+
+                                            </div>
+                                            <ul className="top_city_list acountReach_content_container mt-2">
+                                                <li>
+                                                    <h4 className="cmn_small_heading">
+                                                        Account Reach
+                                                    </h4>
+                                                    <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
+                                                </li>
+                                                <li>
+                                                    <h4 className="cmn_small_heading">Total Likes</h4>
+                                                    <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
+                                                </li>
+                                                <li>
+                                                    <h4 className="cmn_small_heading">
+                                                        Total Comments
+                                                    </h4>
+                                                    <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
+                                                </li>
+                                                {
+                                                    selectedPage?.socialMediaType === "PINTEREST" ?
+                                                        <li>
+                                                            <h4 className="cmn_small_heading">Total
+                                                                Save</h4>
+                                                            <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
+                                                        </li>
+                                                        :
+                                                        <li>
+                                                            <h4 className="cmn_small_heading">Total
+                                                                Share</h4>
+                                                            <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
+                                                        </li>
+                                                }
+                                            </ul>
+                                        </Card.Body>
+                                    </Card>
+                                </div>
+                            })
+                        }
+                    </div> :
                     isNullOrEmpty(postByPageIdAndPostStatusApi?.data?.data?.[0]) ?
                         <div className={"text-center select-account-txt mt-3"}>
                             No posts to display
@@ -96,7 +143,7 @@ const DisplayPosts = ({selectedPage, postStackPageNumber, setPostStackPageNumber
                                             postDataWithInsightsApi?.data?.[key],
                                             selectedPage?.socialMediaType
                                         );
-                                        const deletedPostData = formattedData?.hasError ? postByPageIdAndPostStatusApi?.data?.data?.[0]?.[selectedPage?.pageId]?.filter(post=>post?.postPageInfos[0]?.socialMediaPostId===key)[0] : {}
+                                        const deletedPostData = formattedData?.hasError ? postByPageIdAndPostStatusApi?.data?.data?.[0]?.[selectedPage?.pageId]?.filter(post => post?.postPageInfos[0]?.socialMediaPostId === key)[0] : {}
                                         return formattedData?.hasError ?
                                             <div
                                                 className={sidebar ? "col-lg-4 col-md-6 col-sm-12" : "col-lg-4 col-md-12 col-sm-12"}
@@ -208,7 +255,6 @@ const DisplayPosts = ({selectedPage, postStackPageNumber, setPostStackPageNumber
                                     }
                                 )}
                         </div>
-
             }
         </>
     );

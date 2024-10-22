@@ -48,6 +48,7 @@ import {
     useGetProfileInsightsInfoQuery,
     useGetProfileVisitsInsightsQuery
 } from "../../../../app/apis/insightApi";
+import SkeletonEffect from "../../../loader/skeletonEffect/SkletonEffect";
 
 const Insight = () => {
 
@@ -101,10 +102,10 @@ const Insight = () => {
     const pinClicksApi = useGetPinClicksQuery(selectedDaysForPinClicks, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(selectedDaysForPinClicks) || selectedPage?.socialMediaType !== "PINTEREST"})
 
     const postEngagementsApi = useGetPostEngagementsQuery({
-        socialMediaType:selectedPage?.socialMediaType,
+        socialMediaType: selectedPage?.socialMediaType,
         pageId: selectedPage?.pageId,
-        query:createPostEngagementInsightsQuery({
-            days:selectedDaysForPostEngagement,
+        query: createPostEngagementInsightsQuery({
+            days: selectedDaysForPostEngagement,
             access_token: selectedPage?.access_token,
             pageId: selectedPage?.pageId
         }, selectedPage?.socialMediaType)
@@ -134,16 +135,16 @@ const Insight = () => {
         setSelectedPage({...page, socialMediaType: socialMediaType})
     }
 
-    return  ( getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
-        <CommonLoader classname={sidebar ? "loader_siderbar_open" : "loader_siderbar_close"}></CommonLoader>
-        :(
-        <section>
-            <div className={`insight_wrapper ${sidebar ? "cmn_container" : "cmn_Padding"}`}>
-                <div className="cmn_outer">
-                    <div className="insight_outer  cmn_wrapper_outer white_bg_color cmn_height_outer">
-                        <h2 className="insight_heading cmn_text_style">Insights</h2>
-                        <h6 className="cmn_small_heading">{jsondata.insight_heading}</h6>
-                        {
+    return (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
+        <CommonLoader classname={sidebar ? "loader_siderbar_open" : "loader_siderbar_close"}/>
+        : (
+            <section>
+                <div className={`insight_wrapper ${sidebar ? "cmn_container" : "cmn_Padding"}`}>
+                    <div className="cmn_outer">
+                        <div className="insight_outer  cmn_wrapper_outer white_bg_color cmn_height_outer">
+                            <h2 className="insight_heading cmn_text_style">Insights</h2>
+                            <h6 className="cmn_small_heading">{jsondata.insight_heading}</h6>
+                            {
                                 getConnectedSocialAccountApi?.data?.length > 0 &&
                                 <div className="insight_inner_content">
                                     <h5 className="Choose_platform_title">Choose PlatForm</h5>
@@ -345,82 +346,90 @@ const Insight = () => {
                                                 <div className="row mt-4">
                                                     <div className="col-lg-4 col-md-12 col-sm-12">
                                                         {/* visitors demographics section starts here */}
-                                                        {selectedPage.socialMediaType === 'LINKEDIN' ?
-                                                            <div
-                                                                className="cmn_shadow  insight_followers_outer visitors_container">
-                                                                <div className="d-flex cmn_border visitors_outer">
-                                                                    <h3>Visitors Demographics</h3>
-
-                                                                </div>
-                                                                {(demographicsInsightApi?.data?.country === null || selectedPage.socialMediaType === "PINTEREST")
-                                                                    ?
-                                                                    <div className={"no_data_available text-center"}>
-                                                                        <img className="no_data_available_img"
-                                                                             src={no_data_available}
-                                                                             alt={"coming soon!"}/>
-                                                                    </div>
-                                                                    :
-                                                                    <DonutChart chartData={demographicsInsightApi}
-                                                                                socialMediaType={selectedPage?.socialMediaType}/>}
-                                                            </div>
-
-                                                            :
-                                                            <div className="user_profile_card_outer cmn_shadow">
-
+                                                        {
+                                                            selectedPage.socialMediaType === 'LINKEDIN' ?
                                                                 <div
-                                                                    className="user_profile_card_wrapper text-center mt-3">
-                                                                    {
-                                                                        (profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
-                                                                            <i
-                                                                                style={{fontSize: "60px"}}
-                                                                                className="fa fa-spinner fa-spin"/> :
-                                                                            <img
-                                                                                src={profileInsightsApi?.data?.imageUrl || default_user_icon}/>
-                                                                    }
-                                                                    <h3 className="cmn_text_style pt-4">{profileInsightsApi?.data?.name}</h3>
-                                                                    <h6 className="cmn_text pt-2">
-                                                                        {
-                                                                            profileInsightsApi?.data?.about || ""
-                                                                        }
-                                                                    </h6>
+                                                                    className="cmn_shadow  insight_followers_outer visitors_container">
+                                                                    <div className="d-flex cmn_border visitors_outer">
+                                                                        <h3>Visitors Demographics</h3>
+
+                                                                    </div>
+                                                                    {(demographicsInsightApi?.data?.country === null || selectedPage.socialMediaType === "PINTEREST")
+                                                                        ?
+                                                                        <div
+                                                                            className={"no_data_available text-center"}>
+                                                                            <img className="no_data_available_img"
+                                                                                 src={no_data_available}
+                                                                                 alt={"coming soon!"}/>
+                                                                        </div>
+                                                                        :
+                                                                        <DonutChart chartData={demographicsInsightApi}
+                                                                                    socialMediaType={selectedPage?.socialMediaType}/>}
                                                                 </div>
 
-                                                                {
-                                                                    selectedPage?.socialMediaType === "FACEBOOK" &&
-                                                                    <ul className="d-flex mt-4 user_info_list">
-                                                                        <li>
-                                                                            <h3 className="cmn_text">Likes</h3>
-                                                                            <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.likes}</h4>
-                                                                        </li>
-                                                                        <li>
-                                                                            <h3 className="cmn_text">Followers</h3>
-                                                                            <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.followers}</h4>
-                                                                        </li>
-                                                                    </ul>
-                                                                }
-                                                                {
-                                                                    selectedPage?.socialMediaType !== "FACEBOOK" &&
-                                                                    <ul className="d-flex mt-4 user_info_list">
-                                                                        <li>
-                                                                            <h3 className="cmn_text">Post</h3>
-                                                                            <h4 className="">{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.total_posts}</h4>
-                                                                        </li>
-                                                                        <li>
-                                                                            <h3 className="cmn_text">Followers</h3>
-                                                                            <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.followers}</h4>
-                                                                        </li>
-                                                                        <li>
-                                                                            <h3 className="cmn_text">Following</h3>
-                                                                            <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
-                                                                                <i className="fa fa-spinner fa-spin"/> : profileInsightsApi?.data?.following}</h4>
-                                                                        </li>
-                                                                    </ul>
-                                                                }
-                                                            </div>}
+                                                                :
+                                                                <div className="user_profile_card_outer cmn_shadow">
+
+                                                                    <div
+                                                                        className="user_profile_card_wrapper text-center mt-3">
+                                                                        {
+                                                                            (profileInsightsApi.isLoading || profileInsightsApi?.isFetching ) ?
+                                                                                <>
+                                                                                    <SkeletonEffect count={1} className={"profile-insight-img-loader m-auto"}/>
+                                                                                    <SkeletonEffect count={1} className={"w-50 mt-2 m-auto"}/>
+                                                                                    <SkeletonEffect count={1} className={"w-75 mt-2 m-auto"}/>
+                                                                                </>
+                                                                                :
+                                                                                <>
+                                                                                    <img src={profileInsightsApi?.data?.imageUrl || default_user_icon}/>
+                                                                                    <h3 className="cmn_text_style pt-4">{profileInsightsApi?.data?.name}</h3>
+                                                                                    <h6 className="cmn_text pt-2">{profileInsightsApi?.data?.about || ""}</h6>
+                                                                                </>
+                                                                        }
+
+                                                                    </div>
+
+                                                                    {
+                                                                        selectedPage?.socialMediaType === "FACEBOOK" &&
+                                                                        <ul className="d-flex mt-4 user_info_list">
+                                                                            <li>
+                                                                                <h3 className="cmn_text">Likes</h3>
+                                                                                <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching ) ?
+                                                                                    <SkeletonEffect count={1} className={"mt-2 "}/>
+                                                                                    : profileInsightsApi?.data?.likes}</h4>
+                                                                            </li>
+                                                                            <li>
+                                                                                <h3 className="cmn_text">Followers</h3>
+                                                                                <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
+                                                                                    <SkeletonEffect count={1} className={"w-50 m-auto   mt-2 "}/>
+                                                                                    : profileInsightsApi?.data?.followers}</h4>
+                                                                            </li>
+                                                                        </ul>
+                                                                    }
+                                                                    {
+                                                                        selectedPage?.socialMediaType !== "FACEBOOK" &&
+                                                                        <ul className="d-flex mt-4 user_info_list">
+                                                                            <li>
+                                                                                <h3 className="cmn_text">Post</h3>
+                                                                                <h4 className="">{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching ) ?
+                                                                                    <SkeletonEffect count={1} className={"mt-2 "}/>
+                                                                                    : profileInsightsApi?.data?.total_posts}</h4>
+                                                                            </li>
+                                                                            <li>
+                                                                                <h3 className="cmn_text">Followers</h3>
+                                                                                <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching ) ?
+                                                                                    <SkeletonEffect count={1} className={"w-50 m-auto mt-2 "}/>
+                                                                                    : profileInsightsApi?.data?.followers}</h4>
+                                                                            </li>
+                                                                            <li>
+                                                                                <h3 className="cmn_text">Following</h3>
+                                                                                <h4>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching ) ?
+                                                                                    <SkeletonEffect count={1} className={"w-50 m-auto mt-2 "}/>
+                                                                                    : profileInsightsApi?.data?.following}</h4>
+                                                                            </li>
+                                                                        </ul>
+                                                                    }
+                                                                </div>}
 
                                                     </div>
                                                     <div className="col-lg-8 col-md-12 col-sm-12">
@@ -732,8 +741,8 @@ const Insight = () => {
                                                                 <select
                                                                     value={selectedDaysForPostEngagement}
                                                                     className=" days_option box_shadow"
-                                                                    onChange={(e)=>{
-                                                                      setSelectedDaysForPostEngagement(e.target.value)
+                                                                    onChange={(e) => {
+                                                                        setSelectedDaysForPostEngagement(e.target.value)
                                                                     }}
                                                                 >
                                                                     <option value={7}>Last 7 days</option>
@@ -745,7 +754,7 @@ const Insight = () => {
                                                         </div>
                                                         <div className="interaction_graph_outer">
                                                             {
-                                                                (postEngagementsApi?.isLoading || postEngagementsApi?.isFetching) ?
+                                                                (postEngagementsApi?.isLoading || postEngagementsApi?.isFetching ) ?
                                                                     <div
                                                                         className="d-flex justify-content-center profile-visit-graph ">
                                                                         <RotatingLines
@@ -786,20 +795,21 @@ const Insight = () => {
                                     }
                                 </div>
 
-                        }
-                        {
-                            getConnectedSocialAccountApi?.data?.length === 0 &&
-                            <div className={"no-account-connected-insights-outer mt-4 mb-3"}>
-                                <ConnectSocialMediaAccount image={notConnected_img} message={EmptyInsightGridMessage}/>
-                            </div>
-                        }
+                            }
+                            {
+                                getConnectedSocialAccountApi?.data?.length === 0 &&
+                                <div className={"no-account-connected-insights-outer mt-4 mb-3"}>
+                                    <ConnectSocialMediaAccount image={notConnected_img}
+                                                               message={EmptyInsightGridMessage}/>
+                                </div>
+                            }
 
 
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    );
+            </section>
+        );
 };
 
 export default Insight;
