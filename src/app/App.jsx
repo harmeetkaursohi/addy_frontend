@@ -70,7 +70,7 @@ const App = () => {
             <AppProvider>
                 <BrowserRouter>
                     {
-                        getToken() && !unProtectedUrls.includes(window.location.pathname) ?<SideBar/> :<></>
+                        getToken() && !unProtectedUrls.includes(window.location.pathname) ? <SideBar/> :<></>
                     }
                     <Suspense fallback={<CommonLoader classname={!unProtectedUrls.includes(window.location.pathname)?"fallback_loader_outer":"auth_loader_outer"}/>}>
                         <Routes>

@@ -1,11 +1,15 @@
 import {useAppContext} from "../common/components/AppProvider";
 import "./Notification.css"
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
-import {RotatingLines} from "react-loader-spinner";
 import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAccount";
 import CommonLoader from "../common/components/CommonLoader";
-import {getCommentCreationTime, isNullOrEmpty, removeObjectFromArray} from "../../utils/commonUtils";
+import {
+    getCommentCreationTime,
+    getEmptyArrayOfSize,
+    isNullOrEmpty,
+    removeObjectFromArray
+} from "../../utils/commonUtils";
 import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 import jsondata from "../../locales/data/initialdata.json"
 import notConnected_img from "../../images/no_acc_connect_img.svg";
@@ -60,7 +64,7 @@ const Notification = () => {
                 offSet: 0
             })
         }
-    }, []);
+    }, [getConnectedSocialAccountApi,getAllConnectedPagesApi]);
     useEffect(() => {
         if (notificationsList?.length===0 && unSeenNotificationsList?.length===0 && baseSearchQuery?.offSet>=0) {
             setBaseSearchQuery({
@@ -91,7 +95,6 @@ const Notification = () => {
     }, [unseenNotificationsApi]);
     useEffect(() => {
         if (searchNotificationsApi?.data?.data?.length > 0 && !searchNotificationsApi?.isLoading && !searchNotificationsApi?.isFetching) {
-            console.log("searchNotificationsApi====>",searchNotificationsApi)
             setNotificationsList([...notificationsList, ...searchNotificationsApi?.data?.data])
         }
     }, [searchNotificationsApi]);
@@ -128,7 +131,9 @@ const Notification = () => {
 
     }
 
-    return (
+    return (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching) ?
+        <CommonLoader classname={sidebar ? "loader_siderbar_open" : "loader_siderbar_close"}></CommonLoader>
+        : (
         <>
             <section>
                 <div className={sidebar ? "comment_container" : "cmn_Padding"}>
@@ -152,8 +157,6 @@ const Notification = () => {
                                 }
                             </div>
                             {
-                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching) ?
-                                    <CommonLoader classname={"cmn_loader_outer"}></CommonLoader> :
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                     <>
                                         <div className=" align-items-center mt-4">
@@ -171,7 +174,6 @@ const Notification = () => {
                                             {
                                                 !isAllNotificationsCleared && unSeenNotificationsList?.length > 0 &&
                                                 unSeenNotificationsList?.map((notification, index) => {
-                                                    // return deletedNotifications?.includes(notification?.id) ? <></> : (
                                                     return (
                                                         <span key={index}>
                                                              <NotificationComponent notification={notification}
@@ -188,7 +190,6 @@ const Notification = () => {
                                             {
                                                 !isAllNotificationsCleared && notificationsList?.length > 0 &&
                                                 notificationsList?.map((notification, index) => {
-                                                    // return deletedNotifications?.includes(notification?.id) ? <></> : (
                                                     return (
                                                         <span key={index}>
                                                              <NotificationComponent notification={notification}
@@ -204,15 +205,16 @@ const Notification = () => {
                                         </div>
                                         {
                                             (searchNotificationsApi?.isLoading || searchNotificationsApi?.isFetching || unseenNotificationsApi?.isLoading || unseenNotificationsApi?.isFetching) ?
-                                                <div className="d-flex justify-content-center  ">
-                                                    <RotatingLines
-                                                        strokeColor="#F07C33"
-                                                        strokeWidth="5"
-                                                        animationDuration="0.75"
-                                                        width="70"
-                                                        visible={true}
-                                                    />
-                                                </div> :
+                                                <>
+                                                    {
+                                                        getEmptyArrayOfSize(4).map((_, i) => {
+                                                            return <div className={"notifications_layout"}>
+                                                                <SkeletonEffect count={1}/>
+                                                                <SkeletonEffect count={1} className={"w-25 mt-2"}/>
+                                                            </div>
+                                                        })
+                                                    }
+                                                </>:
                                                 searchNotificationsApi?.data?.hasNext &&
                                                 <div
                                                     className={" load-more-not-btn-outer " + ((searchNotificationsApi?.isLoading || searchNotificationsApi?.isFetching || deleteNotificationByIdApi?.isFetching || setNotificationsToSeenApi?.isLoading) ? "disable_btn" : "")}>

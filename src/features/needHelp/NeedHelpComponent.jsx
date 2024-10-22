@@ -20,6 +20,7 @@ import {
 } from "../../utils/commonUtils";
 import {ChatOpenMessage} from "../../utils/contantData";
 import {useGetUserInfoQuery} from "../../app/apis/userApi";
+import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 
 function NeedHelpComponent() {
 
@@ -200,8 +201,13 @@ function NeedHelpComponent() {
                                             </div>
                                         }
                                         {
-                                            searchMessageApi?.loading ?
-                                                <div className={"text-center mb-2"}><Loader/></div> :
+                                            searchMessageApi?.loading  ?
+                                                <div className={"text-center mb-2"}>
+                                                    <SkeletonEffect count={1} className={"w-25  mb-2"}></SkeletonEffect>
+                                                    <SkeletonEffect count={1} className={"w-50  mb-2"}></SkeletonEffect>
+                                                    <SkeletonEffect count={1} className={"w-25  mb-2 ml-auto"}></SkeletonEffect>
+                                                    <SkeletonEffect count={1} className={"w-50  mb-2 ml-auto"}></SkeletonEffect>
+                                                </div> :
                                                 searchMessageApi?.data?.hasNext &&
                                                 <div className={"load-more-msg-txt mb-2 cursor-pointer"} onClick={()=>{setTriggerSearchMessageApi(true)}}>load previous messages...</div>
                                         }
