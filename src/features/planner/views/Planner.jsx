@@ -511,7 +511,7 @@ const Planner = () => {
                                             />
                                         </div>
                                     </div>
-                                    <div className="col-lg-3 col-md-12 col-sm-12">
+                                    {/* <div className="col-lg-3 col-md-12 col-sm-12">
                                         <div className={`${isDraftPost ? " d-none" : "planner_create_post_container"}`}>
                                             <div className="planner_create_post">
                                                 <h3 className="planner_create_post_heading">Create a post </h3>
@@ -584,7 +584,7 @@ const Planner = () => {
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
 
 
