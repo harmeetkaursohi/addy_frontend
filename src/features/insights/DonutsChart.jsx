@@ -3,6 +3,7 @@ import {PieChart, Pie, Legend, Cell, ResponsiveContainer} from 'recharts';
 import "./Chart.css"
 import {RotatingLines} from "react-loader-spinner";
 import {Country} from 'country-state-city';
+import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 
 const DonutsChart = ({chartData = null, socialMediaType}) => {
 
@@ -66,15 +67,13 @@ const DonutsChart = ({chartData = null, socialMediaType}) => {
 
 
     return (
-        (chartData?.isLoading || chartData?.isFetching) ? <div className="d-flex justify-content-center profile-visit-graph ">
-                <RotatingLines
-                    strokeColor="#F07C33"
-                    strokeWidth="5"
-                    animationDuration="0.75"
-                    width="70"
-                    visible={true}
-                />
-            </div> :
+        (chartData?.isLoading || chartData?.isFetching ) ?
+            <>
+                <SkeletonEffect count={1} className={"demographic-data-loader  "}/>
+                <SkeletonEffect count={1} className={" mt-4 w-75 m-auto mt-2"}/>
+                <SkeletonEffect count={1} className={" w-75 m-auto mt-2"}/>
+            </>
+            :
             <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                     <Pie

@@ -7,6 +7,20 @@
     font-family: "Nunito";
 
 }
+.profile-insight-img-loader{
+    height: 80px;
+    border-radius: 50%;
+    width: 80px;
+}
+.demographic-data-loader{
+    height: 150px;
+    border-radius: 50%;
+    width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
 .profile-visit-text{
     color: #263238;
     background-color: transparent;

@@ -35,6 +35,9 @@ button.slider_btn {
 .caresoul_inner_content_outer {
     position: relative;
 }
+.post-stack-image-loader{
+    height: 300px;
+}
 .deleted-post-from-socialMedia{
     font-family: "Nunito";
     font-style: normal;

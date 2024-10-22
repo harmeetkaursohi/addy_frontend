@@ -30,7 +30,7 @@ import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import Image from 'react-bootstrap/Image';
 import {useNavigate} from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { CgChevronDown } from "react-icons/cg";
+import {CgChevronDown} from "react-icons/cg";
 
 const Review = () => {
 
@@ -134,8 +134,8 @@ const Review = () => {
     }, [refresh]);
 
     useEffect(() => {
-        return ()=>{
-            if(!isNullOrEmpty(removedPosts)){
+        return () => {
+            if (!isNullOrEmpty(removedPosts)) {
                 dispatch(addyApi.util.invalidateTags(['getPublishedPostsApi']));
             }
         }
@@ -179,7 +179,7 @@ const Review = () => {
             if (post) intObserver.current.observe(post);
         }, [postApi?.isLoading, postApi?.isFetching, removedPosts, postApi?.data?.hasNext, postsList]);
 
-    return ( getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
+    return (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
         <CommonLoader classname={sidebar ? "loader_siderbar_open" : "loader_siderbar_close"}></CommonLoader>
         :
         (
@@ -262,38 +262,40 @@ const Review = () => {
 
                                             <Dropdown className="cmn_dropdown">
                                                 <Dropdown.Toggle>
-                                                    {selectedDropdownOptions?.socialMediaType?.label || 'Filter'} <CgChevronDown />
+                                                    {selectedDropdownOptions?.socialMediaType?.label || 'Filter'}
+                                                    <CgChevronDown/>
                                                 </Dropdown.Toggle>
 
                                                 <Dropdown.Menu>
                                                     {/* Assuming createOptionListForSelectTag generates an array of options */}
-                                                    {createOptionListForSelectTag(SocialAccountProvider, null, null, [{
-                                                    label: "All",
-                                                    value: null,
-                                                    }]).map((option, index) => (
-                                                    <Dropdown.Item
-                                                        key={index}
-                                                        onClick={() => {
-                                                        setSelectedDropDownOptions({
-                                                            ...selectedDropdownOptions,
-                                                            socialMediaType: option,
-                                                            pages: [],
-                                                        });
-                                                        setPostsList([]);
-                                                        setSearchQuery({
-                                                            ...searchQuery,
-                                                            socialMediaType: option.value?.toUpperCase(),
-                                                            pageIds: [],
-                                                            offSet: 0,
-                                                        });
-                                                        }}
-                                                        active={selectedDropdownOptions?.socialMediaType?.value === option.value}
-                                                    >
-                                                        {option.label}
-                                                    </Dropdown.Item>
-                                                    ))}
+                                                    {
+                                                        createOptionListForSelectTag(SocialAccountProvider, null, null, [{
+                                                            label: "All",
+                                                            value: null,
+                                                        }]).map((option, index) => (
+                                                            <Dropdown.Item
+                                                                key={index}
+                                                                onClick={() => {
+                                                                    setSelectedDropDownOptions({
+                                                                        ...selectedDropdownOptions,
+                                                                        socialMediaType: option,
+                                                                        pages: [],
+                                                                    });
+                                                                    setPostsList([]);
+                                                                    setSearchQuery({
+                                                                        ...searchQuery,
+                                                                        socialMediaType: option.value?.toUpperCase(),
+                                                                        pageIds: [],
+                                                                        offSet: 0,
+                                                                    });
+                                                                }}
+                                                                active={selectedDropdownOptions?.socialMediaType?.value === option.value}
+                                                            >
+                                                                {option.label}
+                                                            </Dropdown.Item>
+                                                        ))}
                                                 </Dropdown.Menu>
-                                                </Dropdown>
+                                            </Dropdown>
                                         </>
                                     }
                                 </div>
@@ -308,10 +310,10 @@ const Review = () => {
                                                         <div className="W-100 text-center no_post_review_outer">
                                                             <div className={"no-post-review acc_not_connected_heading"}>
                                                                 <Image src={NopostFound} alt={"No Post Found"}/>
-                                                               <h3 className={"mb-3 mt-4"}>
-                                                                   Oops! It seems there are no posts to display at the
-                                                                   moment.
-                                                               </h3>
+                                                                <h3 className={"mb-3 mt-4"}>
+                                                                    Oops! It seems there are no posts to display at the
+                                                                    moment.
+                                                                </h3>
                                                                 <GenericButtonWithLoader
                                                                     label={"Create Post"}
                                                                     onClick={() => {
@@ -341,7 +343,7 @@ const Review = () => {
                                                                 (postApi?.isLoading || postApi?.isFetching || refresh) &&
                                                                 getEmptyArrayOfSize(4).map((_, i) => {
                                                                     return <tr key={i}>
-                                                                    <td className="text-center"><SkeletonEffect
+                                                                        <td className="text-center"><SkeletonEffect
                                                                             count={1}
                                                                             className={"w-50 m-auto post-image-skeleton"}/>
                                                                         </td>
