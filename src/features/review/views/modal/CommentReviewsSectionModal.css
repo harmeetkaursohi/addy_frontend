@@ -295,7 +295,7 @@ p.post_hashtags {
     padding: 20px;
     height: 399px;
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
    
 }
 .comment_msg {

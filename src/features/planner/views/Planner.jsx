@@ -428,6 +428,9 @@ const Planner = () => {
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
+                                            <li>    <h4>Select All</h4><input type={"checkbox"}
+                                                                                    checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
+                                                                                    onChange={(e) => handleSocialMediaFilters("all")}/></li>
                                         {Object.keys(SocialAccountProvider).map((curKey, ind) => {
 
                                             return (
@@ -508,7 +511,7 @@ const Planner = () => {
                                             />
                                         </div>
                                     </div>
-                                    {/* <div className="col-lg-3 col-md-12 col-sm-12">
+                                    <div className="col-lg-3 col-md-12 col-sm-12">
                                         <div className={`${isDraftPost ? " d-none" : "planner_create_post_container"}`}>
                                             <div className="planner_create_post">
                                                 <h3 className="planner_create_post_heading">Create a post </h3>
@@ -581,7 +584,7 @@ const Planner = () => {
                                                 </ul>
                                             </div>
                                         </div>
-                                    </div> */}
+                                    </div>
                                 </div>
 
 

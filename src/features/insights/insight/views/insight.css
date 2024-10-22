@@ -170,8 +170,8 @@ button.instagram_dropdown {
     background-color: transparent !important;
 }
 .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
-    /* width: 100%; */
-    width: 297px;
+    width: 100%;
+    /* width: 297px; */
     padding: 0px;
     border: 1px solid #F4F4F4;
     background: #FFF;
@@ -520,7 +520,7 @@ img.no_data_available_img {
     color: #263238;
     font-size: 13px;
     font-weight: 600;
-    background: #F3F3F3;
+    background: #fff !important;
     border: 1px solid #E8E8E8;
     min-width: 110px;
 }

@@ -1,5 +1,7 @@
 .planner_container .fc-header-toolbar.fc-toolbar{
     padding: 0px;
+    border-radius:15px;
+    overflow: hidden;
 }
 .planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-left::before,.planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-right::before {
     color: rgba(95, 109, 126, 1);
@@ -16,6 +18,7 @@ ul.schdeuled_post_list li {
     width: 100%;
     margin: 0;
     text-align: center;
+    padding: 0 10px;
 }
 
 ul.schdeuled_post_list li h4 {
@@ -414,18 +417,19 @@ ul.review_list table tbody tr td {
 
 ul.schdeuled_post_list li:first-child .planner_info {
     position: relative;
-    left: -33px;
+    left: -45px;
 }
 .calender_outer_wrapper .dropdown-menu li input {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    cursor: pointer;
+  margin-left: auto;
 }
-
+.calender_outer_wrapper .dropdown-menu li {
+    position: relative;
+    padding: 10px 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+}
 .calender_outer_wrapper .dropdown-menu li {
     position: relative;
     padding: 10px 10px;
@@ -438,10 +442,11 @@ ul.schdeuled_post_list li:first-child .planner_info {
     right: 0px;
 }
 
-.calender_outer_wrapper .cmn_dropdown.dropdown button{
+.calender_outer_wrapper .cmn_dropdown.dropdown button {
     min-width: 162px;
-    padding: 12px;
-    
+    padding: 12px 23px;
+    border: unset;
+    border-radius: 15px;
 }
 @media screen and (max-width:1280px){
     .create_post_btn_Wrapper{
@@ -469,6 +474,9 @@ ul.schdeuled_post_list li:first-child .planner_info {
         padding:6px 4px;
         margin-top: 4px;
     
+    }
+    ul.schdeuled_post_list li:first-child .planner_info{
+        left: 0;
     }
 }
 @media screen and (max-width:1024px) {

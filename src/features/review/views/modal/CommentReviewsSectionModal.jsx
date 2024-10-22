@@ -62,7 +62,7 @@ const CommentReviewsSectionModal = ({
     return (
         <>
             <div className='comment_review_container'>
-                <Modal show={isOpenCommentReviewsSectionModal} onHide={handleClose} className={"modal-lg view_profile"}>
+                <Modal centered show={isOpenCommentReviewsSectionModal} onHide={handleClose} className={"modal-lg view_profile"}>
 
                     <Modal.Body>
                         <Row className="m-0">
