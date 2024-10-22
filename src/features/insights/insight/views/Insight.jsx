@@ -535,7 +535,7 @@ const Insight = () => {
 
                                                         <h3 className="overview_title">Overview</h3>
 
-                                                        <select className=" days_option box_shadow"
+                                                        <select className=" dropdown_days box_shadow form-select w-auto"
                                                                 value={selectedPeriodForReachAndEngagement}
                                                                 onChange={handleSelectedPeriodForReachAndEngagement}>
                                                             <option value={7}>Last 7 days</option>
@@ -740,7 +740,7 @@ const Insight = () => {
                                                             {
                                                                 <select
                                                                     value={selectedDaysForPostEngagement}
-                                                                    className=" days_option box_shadow"
+                                                                    className=" dropdown_days box_shadow form-select w-auto"
                                                                     onChange={(e) => {
                                                                         setSelectedDaysForPostEngagement(e.target.value)
                                                                     }}

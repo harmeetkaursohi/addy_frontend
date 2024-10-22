@@ -17,6 +17,8 @@ import {useAppContext} from "../../common/components/AppProvider";
 import {useGetPostByPageIdAndPostStatusQuery} from "../../../app/apis/postApi";
 import {useGetPostDataWithInsightsQuery} from "../../../app/apis/insightApi";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
+import { LuChevronLeft } from "react-icons/lu";
+import { LuChevronRight } from "react-icons/lu";
 
 
 const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) => {
@@ -65,7 +67,7 @@ const DisplayPosts = ({selectedPage, postStackPageNumber, setPostStackPageNumber
                             setPostStackPageNumber(postStackPageNumber - 1)
                         }}
                     >
-                        <FaLessThan/>
+                        <LuChevronLeft />
                     </button>
                     <button
                         disabled={postByPageIdAndPostStatusApi?.loading || postByPageIdAndPostStatusApi?.isFetching || postByPageIdAndPostStatusApi?.data?.isLast}
@@ -74,7 +76,7 @@ const DisplayPosts = ({selectedPage, postStackPageNumber, setPostStackPageNumber
                             setPostStackPageNumber(postStackPageNumber + 1)
                         }}
                     >
-                        <FaGreaterThan/>
+                        <LuChevronRight />
                     </button>
                 </>
             }

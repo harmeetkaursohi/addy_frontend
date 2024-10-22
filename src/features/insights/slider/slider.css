@@ -17,7 +17,7 @@ div.card_body_content{
     /* width: 33.3%; */
 }
 button.slider_btn {
-    border-radius: 12px;
+    border-radius: 50%;
     border: 1px solid #E8E8E8;
     background: #FFF;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
@@ -70,6 +70,10 @@ button.slider_btn {
     color: black;
     font-size: 18px;
 }
+.slider_outer_container button svg {
+    position: relative;
+    bottom: 2px;
+}
 .slider_outer_container {
     margin-top: 28px;
     padding-bottom: 38px;
@@ -91,6 +95,7 @@ button.slider_btn {
     align-items: center;
     width: 165px;
     height: 31px;
+    gap: 5px;
 }
 .post_date{
     color: #000;

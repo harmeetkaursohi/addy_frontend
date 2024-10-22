@@ -100,7 +100,7 @@
 }
 
 select.days_option {
-    border-radius: 12px;
+    /* border-radius: 12px;
     border: 1px solid #E8E8E8;
     background: #FFF;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
@@ -110,9 +110,9 @@ select.days_option {
     appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url("../../../../images/down_arrow.svg") !important; /* Specify path to your arrow image */
+  background-image: url("../../../../images/down_arrow.svg") !important; 
   background-repeat: no-repeat;
-  background-position: calc(100% - 9px) center;
+  background-position: calc(100% - 9px) center; */
 
  
 }
@@ -260,14 +260,6 @@ ul.overview_tabs.nav.nav-tabs {
     gap: 15px;
     border-bottom: unset;
 }
-
-.overview_tabs_outer {
-    margin-top: 50px;
-
-   
-
-}
-
 .account_reach_overview_outer {
     border-radius: 7px;
     box-shadow: 2px 2px 12px #d3dada;
@@ -554,9 +546,9 @@ img.no_data_available_img {
         flex-wrap: wrap;
     }
    
-    select.days_option {
+    /* select.days_option {
         font-size: 18px;
-    }
+    } */
     .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
         width: 215px;
     }
@@ -739,10 +731,10 @@ img.no_data_available_img {
     ul.Social_media_wrapper{
         margin: 0px;
     }
-    select.days_option{
+    /* select.days_option{
         font-size: 12px;
         margin-top: 10px;
-    }
+    } */
     .account_reach_overview_outer {
         margin-top: 15px;
     }

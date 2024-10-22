@@ -48,6 +48,9 @@
 .warning_outer{
     text-align: center;
 }
+.insight_wrapper .video_player_outer {
+    height: 300px !important;
+}
 .video_player_outer {
     height: 270px !important;
 
