@@ -132,9 +132,7 @@ img.acc_not_connected_img {
     display: flex;
     align-items: center;
 }
-.h-20{
-    height: 20px;
-}
+
 .animated-icon{
     animation-name: popUp;
     animation-duration: 0.3s;

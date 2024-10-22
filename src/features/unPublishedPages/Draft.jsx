@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import {ParentDraftComponent} from "./views/ParentDraftComponent";
-import { useRef, useState} from "react";
+import React, { useRef, useState} from "react";
 import instagram_img from "../../images/instagram.png";
 import linkedin from "../../images/linkedin.svg";
 import ConnectSocialAccountModal from "../common/components/ConnectSocialAccountModal";
@@ -11,6 +11,7 @@ import {useAppContext} from "../common/components/AppProvider";
 import Dropdown from "react-bootstrap/Dropdown";
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../app/apis/pageAccessTokenApi";
+import CommonLoader from "../common/components/CommonLoader";
 
 const Draft = () => {
 
@@ -50,10 +51,11 @@ const Draft = () => {
         }
     };
 
-    return (
+    return( getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
+        <CommonLoader classname={sidebar ? "loader_siderbar_open" : "loader_siderbar_close"}></CommonLoader>
+        : (
         <>
             <section>
-                {/*<SideBar/>*/}
                 <div className={sidebar ? "cmn_container" : "cmn_Padding"}>
                     <div className="cmn_outer">
                         <div className="planner_outer white_bg_color cmn_height_outer cmn_outer">

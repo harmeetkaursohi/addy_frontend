@@ -134,7 +134,9 @@ const Insight = () => {
         setSelectedPage({...page, socialMediaType: socialMediaType})
     }
 
-    return (
+    return  ( getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
+        <CommonLoader classname={sidebar ? "loader_siderbar_open" : "loader_siderbar_close"}></CommonLoader>
+        :(
         <section>
             <div className={`insight_wrapper ${sidebar ? "cmn_container" : "cmn_Padding"}`}>
                 <div className="cmn_outer">
@@ -142,8 +144,6 @@ const Insight = () => {
                         <h2 className="insight_heading cmn_text_style">Insights</h2>
                         <h6 className="cmn_small_heading">{jsondata.insight_heading}</h6>
                         {
-                            (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading) ?
-                                <CommonLoader></CommonLoader> :
                                 getConnectedSocialAccountApi?.data?.length > 0 &&
                                 <div className="insight_inner_content">
                                     <h5 className="Choose_platform_title">Choose PlatForm</h5>

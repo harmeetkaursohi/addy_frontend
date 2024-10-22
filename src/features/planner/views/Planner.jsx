@@ -211,8 +211,7 @@ const Planner = () => {
     const customHeaderClick = (eventType) => {
         if (eventType === "Prev") {
             calendarRef?.current?.getApi().prev();
-        }
-        else if (eventType === "Next") {
+        } else if (eventType === "Next") {
             calendarRef?.current?.getApi().next();
         }
         let inst = new Date(calendarRef?.current?.getApi()?.currentData?.viewTitle.toString());
@@ -315,69 +314,69 @@ const Planner = () => {
             <section>
                 <div className={sidebar ? 'cmn_container' : "cmn_Padding"}>
                     <div className='cmn_outer'>
-                            <div className='planner_header_outer mb-3 align-items-center gap-2'>
-                                <div className='planner_header flex-grow-1'>
-                                    <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
-                                    <h6>{isDraftPost ? jsondata.draft_heading : jsondata.post_shecdule_heading}</h6>
-                                </div>
-                                <GenericButtonWithLoader
-                                                        label={
-                                                            isDraftPost
-                                                                ? jsondata.backToPlanner
-                                                                : jsondata.draftPost
-                                                        }
-                                                        className={"draft_btn  cmn_white_text"}
-                                                        onClick={handleDraft}
-                                                        isDisabled={false}
-                                                    />
-                                                    {
-                                                        (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching) ?
-                                                            <span
-                                                                className=" create_post_btn cmn_white_text cursor-pointer text-center"><Loader
-                                                                className="create-post-loader"/></span>
-                                                            :
-                                                            <button
-                                                                onClick={handleCreatePost}
-                                                                className="cmn_btn_color create_post_btn cmn_white_text cursor-pointer"
-                                                            >
-                                                                {jsondata.createpost}
-                                                            </button>
-                                                    }
-
+                        <div className='planner_header_outer mb-3 align-items-center gap-2'>
+                            <div className='planner_header flex-grow-1'>
+                                <h2>{isDraftPost ? jsondata.sidebarContent.draft : jsondata.sidebarContent.planner}</h2>
+                                <h6>{isDraftPost ? jsondata.draft_heading : jsondata.post_shecdule_heading}</h6>
                             </div>
-                            <div className="planner_post_track_outer">
-                                                  {isDraftPost === false && <ul className="schdeuled_post_list">
+                            <GenericButtonWithLoader
+                                label={
+                                    isDraftPost
+                                        ? jsondata.backToPlanner
+                                        : jsondata.draftPost
+                                }
+                                className={"draft_btn  cmn_white_text"}
+                                onClick={handleDraft}
+                                isDisabled={false}
+                            />
+                            <button
+                                disabled={getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching}
+                                onClick={handleCreatePost}
+                                className={`cmn_btn_color create_post_btn cmn_white_text`}
+                            >
+                                {jsondata.createpost}
+                            </button>
 
-                                                    {(getPlannerPostsCountApi?.data && Object.keys(getPlannerPostsCountApi.data)) ? (<></>) : (<>
+                        </div>
+                        <div className="planner_post_track_outer">
+                            {
+                                isDraftPost === false &&
+                                <ul className="schdeuled_post_list">
+                                    {
+                                        ( getPlannerPostsCountApi?.isLoading || getPlannerPostsCountApi?.isFetching) &&
+                                        <>
+                                            <li>
+                                                <h4><SkeletonEffect count={1} className={"w-25 m-auto "}/></h4>
+                                                <h3><SkeletonEffect count={1} className={"w-75 m-auto mt-2"}/></h3>
+                                            </li>
+                                            <li>
+                                                <h4><SkeletonEffect count={1} className={"w-25 m-auto"}/></h4>
+                                                <h3><SkeletonEffect count={1} className={"w-75 m-auto mt-2"}/></h3>
+                                            </li>
+                                            <li>
+                                                <h4><SkeletonEffect count={1} className={"w-25 m-auto"}/></h4>
+                                                <h3><SkeletonEffect count={1} className={"w-75 m-auto mt-2"}/></h3>
+                                            </li>
+                                        </>
 
-                                                        <li>
-                                                            <h4><Loader/></h4>
-                                                            <h3><SkeletonEffect count={1}></SkeletonEffect></h3>
-                                                            </li>
-                                                        <li>
-                                                            <h4><Loader/></h4>
-                                                            <h3><SkeletonEffect count={1}></SkeletonEffect></h3>
-                                                            </li>
-                                                        <li>
-                                                            <h4><Loader/></h4>
-                                                            <h3 ><SkeletonEffect count={1}></SkeletonEffect></h3>
-                                                            </li>
-               
-                                                    </>)}
-                                                    {getPlannerPostsCountApi?.data && Object.keys(getPlannerPostsCountApi.data).map((key, index) => {
+                                    }
 
-                                                        return (
-                                                            <li key={index}>
-                                                               <div className='planner_info'>
-                                                               <h4>{getPlannerPostsCountApi.data[key]}</h4>
-                                                               <h3>{key}</h3>
-                                                               </div>
-                                                                </li>
-                                                        )              
-                                                    })}
+                                    {
+                                        !getPlannerPostsCountApi?.isLoading && !getPlannerPostsCountApi?.isFetching && getPlannerPostsCountApi?.data && Object.keys(getPlannerPostsCountApi.data).map((key, index) => {
+                                            return (
+                                                <li key={index}>
+                                                    <div className='planner_info'>
+                                                        <h4>{getPlannerPostsCountApi.data[key]}</h4>
+                                                        <h3>{key}</h3>
+                                                    </div>
+                                                </li>
+                                            )
+                                        })
+                                    }
 
-                                                </ul>}
-                                            </div>
+                                </ul>
+                            }
+                        </div>
 
                         <div
                             className={`planner_outer   cmn_height_outer ${isDraftPost ? "" : "planner_container"}`}>
@@ -558,7 +557,7 @@ const Planner = () => {
 
                             {
                                 isDraftPost === true &&
-                                <ParentDraftComponent searchQuery={draftSearchQuery} />
+                                <ParentDraftComponent searchQuery={draftSearchQuery}/>
                             }
 
 

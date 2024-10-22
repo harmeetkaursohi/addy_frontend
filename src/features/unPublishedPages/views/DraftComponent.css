@@ -20,7 +20,9 @@
 .no-draft-img{
     height: 300px;
 }
- 
+ .draft-post-social-media-skeleton{
+     margin-top: 0px !important;
+ }
 
 .selected-option p{
 
@@ -167,6 +169,10 @@ span.post_caption {
     font-style: normal;
     font-weight: 500;
   
+}
+.draft-post-img-skeleton{
+    height :250px!important;
+    margin-top: 0px !important;
 }
 
 h3.caption {

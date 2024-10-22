@@ -4,7 +4,7 @@ import {ErrorFetchingPost, NotConnected, PostAlreadyDeleted, SocialAccountProvid
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
     computeImageURL,
-    createOptionListForSelectTag, formatMessage
+    createOptionListForSelectTag, formatMessage, getEmptyArrayOfSize, isNullOrEmpty
 } from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
@@ -57,7 +57,6 @@ const Review = () => {
         pages: [],
     });
 
-    console.log("removedPosts=====>",removedPosts)
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
     const postApi = useGetPublishedPostsQuery(searchQuery, {skip: searchQuery?.offSet < 0})
@@ -132,6 +131,14 @@ const Review = () => {
         }
     }, [refresh]);
 
+    useEffect(() => {
+        return ()=>{
+            if(!isNullOrEmpty(removedPosts)){
+                dispatch(addyApi.util.invalidateTags(['getPublishedPostsApi']));
+            }
+        }
+    }, [removedPosts]);
+
     const handleDeletePostFromPage = async () => {
         await handleRTKQuery(
             async () => {
@@ -170,8 +177,8 @@ const Review = () => {
             if (post) intObserver.current.observe(post);
         }, [postApi?.isLoading, postApi?.isFetching, removedPosts, postApi?.data?.hasNext, postsList]);
 
-    return (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
-        <CommonLoader classname={"cmn_loader_outer"}></CommonLoader>
+    return ( getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
+        <CommonLoader classname={sidebar ? "loader_siderbar_open" : "loader_siderbar_close"}></CommonLoader>
         :
         (
             <>
@@ -294,7 +301,7 @@ const Review = () => {
 
                                                             {
                                                                 (postApi?.isLoading || postApi?.isFetching || refresh || true) &&
-                                                                Array(4).fill(null).map((_, i) => {
+                                                                getEmptyArrayOfSize(4).map((_, i) => {
                                                                     return <tr key={i}>
                                                                     <td className="text-center"><SkeletonEffect
                                                                             count={1}

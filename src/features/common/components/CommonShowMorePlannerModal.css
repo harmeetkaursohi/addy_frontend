@@ -16,7 +16,7 @@
     flex: 0 0 125px;
 }
 
-.plan_grid_img img {
+.plan_grid_img img, .more_plans .planner-show-more-img-skeleton {
     width: 100%;
     height: 114px;
 
@@ -154,6 +154,7 @@ img.plan_social_img {
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
 .disable_more_plans_grid{
     opacity: 0.6!important;
     pointer-events: none !important;

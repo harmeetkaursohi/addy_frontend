@@ -2254,3 +2254,7 @@ export const isValidCreateMessageRequest = (data) => {
 export const removeObjectFromArray = (array, object, keyToCompare) => {
     return array.filter(item => item[keyToCompare] !== object[keyToCompare]);
 };
+
+export const getEmptyArrayOfSize=(size)=>{
+   return Array(size).fill(null);
+}
