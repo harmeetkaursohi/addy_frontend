@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import DraftComponent from "./DraftComponent";
 import notConnected_img from "../../../images/no_acc_connect_img.svg";
@@ -8,7 +8,13 @@ import linkedin_img from "../../../images/linkedin.svg";
 
 import nature_img from "../../../images/download.jpg";
 
-import {formatMessage, isNullOrEmpty, sortByKey} from "../../../utils/commonUtils";
+import {
+    computeImageURL,
+    formatMessage, getEmptyArrayOfSize,
+    handleSeparateCaptionHashtag,
+    isNullOrEmpty,
+    sortByKey
+} from "../../../utils/commonUtils";
 import CommonLoader from "../../common/components/CommonLoader";
 import noDraftPosts from "../../../images/no_draft_posts.png";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
@@ -17,6 +23,9 @@ import {NoPostInDraft, NotConnected} from "../../../utils/contantData";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {useGetSocialMediaPostsByCriteriaQuery} from "../../../app/apis/postApi";
+import {formatDate} from "@fullcalendar/core";
+import CommonSlider from "../../common/components/CommonSlider";
+import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 
 export const ParentDraftComponent = ({searchQuery}) => {
 
@@ -68,26 +77,53 @@ export const ParentDraftComponent = ({searchQuery}) => {
             {/*        </div>*/}
             {/*    </div>*/}
             {/*</div>*/}
-            {
-                (getConnectedSocialAccountApi?.isLoading ||getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || draftPostsApi?.isLoading || draftPostsApi?.isFetching) ?
-                    <CommonLoader classname={"cmn_loader_outer"}/> :
-                    getConnectedSocialAccountApi?.data?.length === 0 ?
-                        <ConnectSocialMediaAccount image={notConnected_img}
-                                                   message={formatMessage(NotConnected, ["posts", "social media"])}/> :
-                        getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 ?
-                            <ConnectSocialMediaAccount image={notConnected_img}
-                                                       message={formatMessage(NotConnected, ["posts", "social media pages"])}/> :
-                            (drafts !== null && Array.isArray(drafts) && drafts?.length === 0) ?
-                                <div className="noDraftPosts_outer p-5 text-center mt-3">
-                                    <img src={noDraftPosts} alt={"No Drafts"} className=" no-draft-img"/>
-                                    <h2 className="acc_not_connected_heading">{NoPostInDraft}</h2>
-                                </div>
-                                :
-                                drafts !== null && Array.isArray(drafts) && drafts?.length > 0 &&
-                                sortByKey(drafts, "createdAt").map((curDraftPost, index) => {
-                                    return  <DraftComponent postData={curDraftPost}/>
 
-                                })
+            {
+                ( draftPostsApi?.isLoading || draftPostsApi?.isFetching) ?
+                    getEmptyArrayOfSize(4).map((_,i)=> {
+                        return <div className={"col-lg-3 col-sm-12 col-md-12"} key={i}>
+                            <div
+                                className={"draft_wrapper_box"}>
+                                <div className={"draft_img_wrapper cursor-pointer"}>
+                                    <SkeletonEffect count={1} className={"draft-post-img-skeleton"}/>
+                                </div>
+
+                                <div className={"draft_page_outer mt-2"}>
+                                    <div className={"caption_outer_containter"}>
+                                        <h3>Caption:</h3>
+                                        <h4 className={`caption `}><SkeletonEffect count={1} className={"w-75"}/></h4>
+                                    </div>
+                                    <div className="social_media_page_outer w-100">
+                                        <SkeletonEffect count={1} className={"draft-post-social-media-skeleton"}/>
+                                        <SkeletonEffect count={1} className={"mt-2"}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    })
+
+                    :
+                    (drafts !== null && Array.isArray(drafts) && drafts?.length === 0) ?
+                        <div className="noDraftPosts_outer p-5 text-center mt-3">
+                            <img src={noDraftPosts} alt={"No Drafts"} className=" no-draft-img"/>
+                            <h2 className="acc_not_connected_heading">{NoPostInDraft}</h2>
+                        </div>
+                        :
+                        drafts !== null && Array.isArray(drafts) && drafts?.length > 0 &&
+                        sortByKey(drafts, "createdAt").map((curDraftPost, index) => {
+                            return <DraftComponent postData={curDraftPost}/>
+                        })
+            }
+            {
+                getConnectedSocialAccountApi?.data?.length === 0 &&
+                <ConnectSocialMediaAccount image={notConnected_img}
+                                           message={formatMessage(NotConnected, ["posts", "social media"])}/>
+
+            }
+            {
+                getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
+                <ConnectSocialMediaAccount image={notConnected_img}
+                                           message={formatMessage(NotConnected, ["posts", "social media pages"])}/>
             }
         </div>
     )

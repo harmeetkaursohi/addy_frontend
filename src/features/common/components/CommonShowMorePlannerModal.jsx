@@ -1,7 +1,7 @@
 import Modal from 'react-bootstrap/Modal';
 import './CommonShowMorePlannerModal.css'
 import {
-    computeImageURL, formatMessage,
+    computeImageURL, formatMessage, getEmptyArrayOfSize,
     handleSeparateCaptionHashtag, isNullOrEmpty,
     isPlannerPostEditable,
     sortByKey
@@ -11,7 +11,7 @@ import CommonLoader from "./CommonLoader";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
-import { showSuccessToast} from "./Toast";
+import {showSuccessToast} from "./Toast";
 import Swal from "sweetalert2";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import default_user_icon from "../../../images/default_user_icon.svg"
@@ -24,7 +24,7 @@ import {
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {DeletedSuccessfully} from "../../../utils/contantData";
 import {addyApi} from "../../../app/addyApi";
-import { Image } from 'react-bootstrap';
+import {Image} from 'react-bootstrap';
 
 const CommonShowMorePlannerModal = ({
                                         showCommonShowMorePlannerModal,
@@ -100,6 +100,7 @@ const CommonShowMorePlannerModal = ({
             });
         }
     }
+
     const handleDeletePostFromPage = async () => {
         await handleRTKQuery(
             async () => {
@@ -122,11 +123,11 @@ const CommonShowMorePlannerModal = ({
     }
 
     const getUpdatedPlannerData = () => {
-        dispatch(addyApi.util.invalidateTags(["getPostsForPlannerApi", "getPlannerPostsCountApi","getSocialMediaPostsByCriteriaApi"]))
+        dispatch(addyApi.util.invalidateTags(["getPostsForPlannerApi", "getPlannerPostsCountApi", "getSocialMediaPostsByCriteriaApi"]))
     }
 
     const handleCloseModal = () => {
-        if(deletedPostsIds.length > 0 || removedPostPages.length > 0){
+        if (deletedPostsIds.length > 0 || removedPostPages.length > 0) {
             getUpdatedPlannerData();
         }
         setShowCommonShowMorePlannerModal(false);
@@ -148,19 +149,38 @@ const CommonShowMorePlannerModal = ({
 
                             <div className="more_plans">
                                 <h2 className="text-center">{eventDate}</h2>
-                                <div className={postsApi?.isLoading || postsApi?.isFetching ? "" : "more_plans_wrapper"}>
+                                <div className={"more_plans_wrapper"}>
                                     {/*map starts here for gird*/}
                                     {
-                                        postsApi?.isLoading || postsApi?.isFetching ? <CommonLoader/> :
+                                        postsApi?.isLoading || postsApi?.isFetching ?
+                                            getEmptyArrayOfSize(3).map((_, i) => {
+                                                return <div key={i} className={"more_plans_grid mb-3 "}>
+                                                    <div className="plan_grid_img">
+                                                        <SkeletonEffect count={1}
+                                                                        className={"planner-show-more-img-skeleton"}/>
+
+                                                    </div>
+
+                                                    <div className="plan_grid_content">
+                                                        <SkeletonEffect count={1} className={"mb-4 w-75"}/>
+                                                        <div className="plan_content_header justify-start ">
+
+                                                        </div>
+                                                        <SkeletonEffect count={1} className={"mt-4 w-25"}/>
+                                                        <SkeletonEffect count={1} className={"mt-1 w-25"}/>
+                                                    </div>
+                                                </div>
+                                            })
+                                            :
                                             sortByKey(posts, "feedPostDate")?.map((plannerPost, index) => {
 
                                                 return deletedPostsIds.includes(plannerPost?.id) ? <></> :
-
                                                     <div
                                                         className={"more_plans_grid mb-3 " + (postToDeleteId === plannerPost?.id ? "disable_more_plans_grid" : "")}
                                                         key={index}>
                                                         <div className="plan_grid_img">
-                                                            {plannerPost?.attachments &&
+                                                            {
+                                                                plannerPost?.attachments &&
                                                                 <CommonSlider files={plannerPost?.attachments}
                                                                               selectedFileType={null} caption={null}
                                                                               hashTag={null}
@@ -182,30 +202,29 @@ const CommonShowMorePlannerModal = ({
                                                                             plannerPost?.postPages.map((curPage, index) => {
                                                                                 return removedPostPages?.some(removedPostPages => removedPostPages?.postId === plannerPost?.id && removedPostPages?.pageId === curPage?.pageId) ? <></> : (
                                                                                     (postPageToRemove?.postId === plannerPost.id && postPageToRemove?.pageId === curPage?.pageId) ?
-                                                                                        <SkeletonEffect count={1}></SkeletonEffect>
+                                                                                        <SkeletonEffect count={1}/>
                                                                                         : <div key={index}
                                                                                                className={"planner_tag_container"}>
                                                                                             {
-                                                                                                postToDeleteId === plannerPost?.id ?
-                                                                                                    <SkeletonEffect
-                                                                                                        count={1}></SkeletonEffect> :
+                                                                                                // postToDeleteId === plannerPost?.id || true  ?
+                                                                                                //     <SkeletonEffect count={1}/> :
+                                                                                                <div
+                                                                                                    className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}
+                                                                                                >
                                                                                                     <div
-                                                                                                        className={`plan_tags ${curPage.socialMediaType.toLowerCase()}`}
-                                                                                                    >
-                                                                                                        <div
-                                                                                                            className="plan_tag_img position-relative">
-                                                                                                            <Image
-                                                                                                                className="plan_image"
-                                                                                                                src={curPage?.imageURL || default_user_icon}
-                                                                                                                alt="fb"/>
-                                                                                                            <Image
-                                                                                                                className="plan_social_img"
-                                                                                                                src={computeImageURL(curPage?.socialMediaType)}
-                                                                                                                alt="fb"/>
+                                                                                                        className="plan_tag_img position-relative">
+                                                                                                        <Image
+                                                                                                            className="plan_image"
+                                                                                                            src={curPage?.imageURL || default_user_icon}
+                                                                                                            alt="fb"/>
+                                                                                                        <Image
+                                                                                                            className="plan_social_img"
+                                                                                                            src={computeImageURL(curPage?.socialMediaType)}
+                                                                                                            alt="fb"/>
 
-                                                                                                        </div>
-                                                                                                        <p className="mb-0">{curPage?.pageName}</p>
                                                                                                     </div>
+                                                                                                    <p className="mb-0">{curPage?.pageName}</p>
+                                                                                                </div>
                                                                                             }
                                                                                             {
                                                                                                 (postToDeleteId !== plannerPost?.id && curPage?.errorInfo?.isDeletedFromSocialMedia) &&
@@ -260,19 +279,12 @@ const CommonShowMorePlannerModal = ({
 
                                                                 </div>
                                                             </div>
-                                                            {
-                                                                postToDeleteId === plannerPost?.id ?
-                                                                    <SkeletonEffect count={1}></SkeletonEffect> :
-                                                                    <>
-                                                                        <p className="mt-2 mb-1">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.caption || "" : ""}</p>
-                                                                        <p className="hasTags">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.hashtag || "" : ""}</p>
-                                                                    </>
-                                                            }
+
+                                                            <p className="mt-2 mb-1">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.caption || "" : ""}</p>
+                                                            <p className="hasTags">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.hashtag || "" : ""}</p>
 
                                                         </div>
                                                     </div>
-
-
                                             })
                                     }
 
