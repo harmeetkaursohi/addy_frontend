@@ -32,6 +32,7 @@ import {
     useGetSocialMediaGraphReportByPageQuery,
     useGetSocialMediaReportByPageQuery
 } from "../../../../app/apis/insightApi";
+import SkeletonEffect from "../../../loader/skeletonEffect/SkletonEffect";
 
 export const DashboardReports = () => {
 
@@ -124,8 +125,12 @@ export const DashboardReports = () => {
 
             <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer ps-0">
                 {
-                    getConnectedSocialAccountApi?.isLoading  || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching || getAllInstagramPagesApi?.isLoading || getAllInstagramPagesApi?.isFetching || getAllPinterestPagesApi?.isLoading || getAllPinterestPagesApi?.isFetching || getAllLinkedinPagesApi?.isLoading || getAllLinkedinPagesApi?.isFetching ?
+                   getConnectedSocialAccountApi?.isLoading  || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching || getAllInstagramPagesApi?.isLoading || getAllInstagramPagesApi?.isFetching || getAllPinterestPagesApi?.isLoading || getAllPinterestPagesApi?.isFetching || getAllLinkedinPagesApi?.isLoading || getAllLinkedinPagesApi?.isFetching ?
                         <div className="cmn_background p-5 text-center account_not_connect_imcontainer ">
+                            {/*<SkeletonEffect count={1} className={"w-50"}/>*/}
+                            {/*<SkeletonEffect count={1} />*/}
+                            {/*<SkeletonEffect count={1} />*/}
+                            {/*<SkeletonEffect count={1} className={"graph-loader mt-4"} />*/}
                             <CommonLoader classname={"cmn_loader_outer"}/>
                         </div> :
 

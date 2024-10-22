@@ -13,7 +13,9 @@
     border: 1px solid #C3C3C3;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
 }
-
+.post-image-skeleton{
+    height: 60px !important;
+}
 
 
 .acc_not_connected_outer img {
@@ -81,7 +83,9 @@ img.acc_not_connected_img {
     font-size: 15px;
 }
 .no-post-review{
-    font-size:20px;
+    font-size: 20px;
+    max-width: 450px;
+    margin: auto;
 }
 .hr-line-2{
     /*display: inline-block;*/

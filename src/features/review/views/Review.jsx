@@ -4,8 +4,7 @@ import {ErrorFetchingPost, NotConnected, PostAlreadyDeleted, SocialAccountProvid
 import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
     computeImageURL,
-    concatenateString,
-    createOptionListForSelectTag, formatMessage, getCommentCreationTime, isNullOrEmpty,
+    createOptionListForSelectTag, formatMessage
 } from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
@@ -17,6 +16,7 @@ import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMedi
 import {useAppContext} from "../../common/components/AppProvider";
 import {MdDelete} from "react-icons/md";
 import notConnected_img from "../../../images/no_acc_connect_img.svg";
+import NopostFound from "../../../images/nopostFound.svg";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {
@@ -26,10 +26,15 @@ import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import Table from 'react-bootstrap/Table';
+import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
+import Image from 'react-bootstrap/Image';
+import {useNavigate} from "react-router-dom";
+
 const Review = () => {
 
     const {sidebar} = useAppContext();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [searchQuery, setSearchQuery] = useState({
         socialMediaType: null,
@@ -52,6 +57,7 @@ const Review = () => {
         pages: [],
     });
 
+    console.log("removedPosts=====>",removedPosts)
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
     const postApi = useGetPublishedPostsQuery(searchQuery, {skip: searchQuery?.offSet < 0})
@@ -72,7 +78,7 @@ const Review = () => {
                 setPostsList([...postsList, ...postApi?.data?.data])
             }
         }
-    }, [postApi,refresh]);
+    }, [postApi, refresh]);
 
     useEffect(() => {
         if (deletePostPageInfo !== null && deletePostPageInfo !== undefined) {
@@ -164,89 +170,89 @@ const Review = () => {
             if (post) intObserver.current.observe(post);
         }, [postApi?.isLoading, postApi?.isFetching, removedPosts, postApi?.data?.hasNext, postsList]);
 
-    return (
-        <>
-            <section>
-                <div className={sidebar ? "comment_container" : "cmn_Padding"}>
+    return (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
+        <CommonLoader classname={"cmn_loader_outer"}></CommonLoader>
+        :
+        (
+            <>
+                <section>
+                    <div className={sidebar ? "comment_container" : "cmn_Padding"}>
 
-                    <div className="cmn_outer">
-                        <div className="review_wrapper cmn_wrapper_outer  white_bg_color cmn_height_outer">
-                            <div className="review_header align-items-center gap-3">
-                                <div className="review_heading flex-grow-1">
-                                    <h2 className="cmn_text_heading">Published Posts</h2>
-                                    <h6 className="cmn_small_heading ">
-                                        {jsondata.review_post_heading}
-                                    </h6>
+                        <div className="cmn_outer">
+                            <div className="review_wrapper cmn_wrapper_outer  white_bg_color cmn_height_outer">
+                                <div className="review_header align-items-center gap-3">
+                                    <div className="review_heading flex-grow-1">
+                                        <h2 className="cmn_text_heading">Published Posts</h2>
+                                        <h6 className="cmn_small_heading ">
+                                            {jsondata.review_post_heading}
+                                        </h6>
+                                    </div>
+                                    {
+                                        getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
+                                        <>
+                                            <GenericButtonWithLoader
+                                                label={"Refresh"}
+                                                isDisabled={postApi?.isLoading || postApi?.isFetching || refresh}
+                                                onClick={() => {
+                                                    setSearchQuery({
+                                                        ...searchQuery,
+                                                        offSet: 0
+                                                    })
+                                                    setRefresh(true)
+                                                    setRemovedPosts([])
+                                                    setDeletePostPageInfo(null)
+                                                    setPostsList(null)
+
+                                                }}
+                                                className={"cmn_btn_color cmn_connect_btn yes_btn"}
+                                            />
+                                            <Select
+                                                className={"review-pages-media-dropdown"}
+                                                isMulti
+                                                value={selectedDropdownOptions?.pages}
+                                                isDisabled={postApi?.isLoading || postApi?.isFetching || refresh}
+                                                options={createOptionListForSelectTag(pageDropdown, "name", "pageId")}
+                                                onChange={(val) => {
+                                                    setSelectedDropDownOptions({
+                                                        ...selectedDropdownOptions,
+                                                        pages: val,
+                                                    });
+                                                    setPostsList([]);
+                                                    setSearchQuery({
+                                                        ...searchQuery,
+                                                        offSet: 0,
+                                                        pageIds: val?.map((cur) => cur?.value),
+                                                    })
+                                                }}
+                                            />
+
+                                            <Select
+                                                className={"review-social-media-dropdown"}
+                                                options={createOptionListForSelectTag(SocialAccountProvider, null, null, [{
+                                                    label: "All",
+                                                    value: null,
+                                                }])}
+                                                value={selectedDropdownOptions?.socialMediaType}
+                                                isDisabled={postApi?.isLoading || postApi?.isFetching || refresh}
+                                                onChange={(val) => {
+                                                    setSelectedDropDownOptions({
+                                                        ...selectedDropdownOptions,
+                                                        socialMediaType: val,
+                                                        pages: [],
+                                                    });
+                                                    setPostsList([]);
+                                                    setSearchQuery({
+                                                        ...searchQuery,
+                                                        socialMediaType: val?.value?.toUpperCase(),
+                                                        pageIds: [],
+                                                        offSet: 0
+                                                    })
+                                                }}
+                                            />
+                                        </>
+                                    }
                                 </div>
-                                <GenericButtonWithLoader
-                                    label={"Refresh"}
-                                    isDisabled={postApi?.isLoading || postApi?.isFetching || refresh}
-                                    onClick={() => {
-                                        setSearchQuery({
-                                            ...searchQuery,
-                                            offSet: 0
-                                        })
-                                        setRefresh(true)
-                                        setRemovedPosts([])
-                                        setDeletePostPageInfo(null)
-                                        setPostsList(null)
-
-                                    }}
-                                    className={"cmn_btn_color cmn_connect_btn yes_btn"}
-                                />
                                 {
-                                    getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
-                                    <>
-                                        <Select
-                                            className={"review-pages-media-dropdown"}
-                                            isMulti
-                                            value={selectedDropdownOptions?.pages}
-                                            isDisabled={postApi?.isLoading || postApi?.isFetching || refresh}
-                                            options={createOptionListForSelectTag(pageDropdown, "name", "pageId")}
-                                            onChange={(val) => {
-                                                setSelectedDropDownOptions({
-                                                    ...selectedDropdownOptions,
-                                                    pages: val,
-                                                });
-                                                setPostsList([]);
-                                                setSearchQuery({
-                                                    ...searchQuery,
-                                                    offSet: 0,
-                                                    pageIds: val?.map((cur) => cur?.value),
-                                                })
-                                            }}
-                                        />
-
-                                        <Select
-                                            className={"review-social-media-dropdown"}
-                                            options={createOptionListForSelectTag(SocialAccountProvider, null, null, [{
-                                                label: "All",
-                                                value: null,
-                                            }])}
-                                            value={selectedDropdownOptions?.socialMediaType}
-                                            isDisabled={postApi?.isLoading || postApi?.isFetching || refresh}
-                                            onChange={(val) => {
-                                                setSelectedDropDownOptions({
-                                                    ...selectedDropdownOptions,
-                                                    socialMediaType: val,
-                                                    pages: [],
-                                                });
-                                                setPostsList([]);
-                                                setSearchQuery({
-                                                    ...searchQuery,
-                                                    socialMediaType: val?.value?.toUpperCase(),
-                                                    pageIds: [],
-                                                    offSet: 0
-                                                })
-                                            }}
-                                        />
-                                    </>
-                                }
-                            </div>
-                            {
-                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
-                                    <CommonLoader classname={"cmn_loader_outer"}></CommonLoader>
-                                    :
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                     <>
                                         <div className="review_outer mt-0">
@@ -256,58 +262,94 @@ const Review = () => {
                                                     <div>
                                                         <div className="W-100 text-center no_post_review_outer">
                                                             <div className={"no-post-review acc_not_connected_heading"}>
-                                                                Oops! It seems there are no posts to display at the
-                                                                moment.
+                                                                <Image src={NopostFound} alt={"No Post Found"}/>
+                                                               <h3 className={"mb-3 mt-4"}>
+                                                                   Oops! It seems there are no posts to display at the
+                                                                   moment.
+                                                               </h3>
+                                                                <GenericButtonWithLoader
+                                                                    label={"Create Post"}
+                                                                    onClick={() => {
+                                                                        navigate("/planner/post")
+                                                                    }}
+                                                                    className={"cmn_btn_color cmn_connect_btn yes_btn"}
+                                                                />
                                                             </div>
                                                         </div>
                                                     </div> :
+
                                                     <ul className="review_list">
-                                                            <Table>
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th className="text-center">Post</th>
-                                                                                <th className="text-center">Social Media</th>
-                                                                                <th className="text-center">Likes</th>
-                                                                                <th className="text-center">Comments</th>
-                                                                                <th className="text-center">Share</th>
-                                                                                <th className="text-center"><span className="opacity-0">Actions</span></th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            {postsList?.map((post, index) => {
-                                                                                return removedPosts?.some(
-                                                                                    (removedPost) =>
-                                                                                        removedPost?.postId === post.id &&
-                                                                                        removedPost?.pageId === post.page.pageId
-                                                                                ) ? (
-                                                                                    <></>
-                                                                                ) : post.errorInfo === undefined || post.errorInfo === null ? (
-                                                                                    <tr key={index}   ref={index === postsList?.length - 1 ? lastPostRef : null}>
-                                                                                        <td className="text-center" >
-                                                                                        {
-                                                                                            post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
-                                                                                                <video
-                                                                                                    style={{objectFit: "fill"}}
-                                                                                                    className="bg_img"
-                                                                                                    src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
-                                                                                                />
-                                                                                                :
-                                                                                                <img
-                                                                                                    src={post?.attachments[0]?.imageURL || noImageAvailable}
-                                                                                                    className="bg_img"/>
-                                                                                        }
-                                                                                       
-                                                                                        </td>
-                                                                                        <td className="text-center"> <div
-                                                                                            className="">
+                                                        <Table>
+                                                            <thead>
+                                                            <tr>
+                                                                <th className="text-center">Post</th>
+                                                                <th className="text-center">Social Media</th>
+                                                                <th className="text-center">Likes</th>
+                                                                <th className="text-center">Comments</th>
+                                                                <th className="text-center">Share</th>
+                                                                <th className="text-center">Actions</th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                            {
+                                                                (postApi?.isLoading || postApi?.isFetching || refresh || true) &&
+                                                                Array(4).fill(null).map((_, i) => {
+                                                                    return <tr key={i}>
+                                                                    <td className="text-center"><SkeletonEffect
+                                                                            count={1}
+                                                                            className={"w-50 m-auto post-image-skeleton"}/>
+                                                                        </td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                    </tr>
+                                                                })
+                                                            }
+                                                            {
+                                                                postsList?.map((post, index) => {
+                                                                    return removedPosts?.some((removedPost) =>
+                                                                        removedPost?.postId === post.id && removedPost?.pageId === post.page.pageId
+                                                                    ) ? <></>
+                                                                        : (post.errorInfo === undefined || post.errorInfo === null) ?
+                                                                            <tr key={index}
+                                                                                ref={index === postsList?.length - 1 ? lastPostRef : null}>
+                                                                                <td className="text-center">
+                                                                                    {
+                                                                                        post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
+                                                                                            <video
+                                                                                                style={{objectFit: "fill"}}
+                                                                                                className="bg_img"
+                                                                                                src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
+                                                                                            />
+                                                                                            :
                                                                                             <img
-                                                                                                src={computeImageURL(post?.socialMediaType)}/>
-                                                                                        </div></td>
-                                                                                        <td className="text-center">  {post?.likes} Likes {post?.socialMediaType === "FACEBOOK" ? "/ Reactions" : ""}</td>
-                                                                                        <td className="text-center">  {post?.comments} Comments</td>
-                                                                                        <td className="text-center">   {post?.shares}{" "}{post?.socialMediaType === "PINTEREST" ? "Save" : "Share"}</td>
-                                                                                        <td className="text-center">
-                                                                                            <button className="cmn_btn_color cmn_connect_btn yes_btn"  onClick={(e) => {
+                                                                                                src={post?.attachments[0]?.imageURL || noImageAvailable}
+                                                                                                className="bg_img"/>
+                                                                                    }
+
+                                                                                </td>
+                                                                                <td className="text-center">
+                                                                                    <div
+                                                                                        className="">
+                                                                                        <img
+                                                                                            src={computeImageURL(post?.socialMediaType)}/>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td className="text-center">  {post?.likes} Likes {post?.socialMediaType === "FACEBOOK" ? "/ Reactions" : ""}</td>
+                                                                                <td className="text-center">  {post?.comments} Comments</td>
+                                                                                <td className="text-center">   {post?.shares}{" "}{post?.socialMediaType === "PINTEREST" ? "Save" : "Share"}</td>
+                                                                                <td className="text-center">
+                                                                                    <button
+                                                                                        className="cmn_btn_color cmn_connect_btn yes_btn"
+                                                                                        onClick={(e) => {
                                                                                             setPostData(post);
                                                                                             setDirty({
                                                                                                 ...isDirty,
@@ -315,68 +357,76 @@ const Review = () => {
                                                                                                 socialMediaType: post?.socialMediaType,
                                                                                             });
                                                                                             setOpenCommentReviewsSectionModal(!isOpenCommentReviewsSectionModal);
-                                                                                        }}>View Post</button>
-                                                                                            </td>
-                                                                                    </tr>
-                                                                                ) : 
-                                                                                <tr class="demo" key={index}   ref={index === postsList?.length - 1 ? lastPostRef : null}>
-                                                                                        <td className="text-center">
-                                                                                        {
-                                                                                            post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
-                                                                                                <video
-                                                                                                    style={{objectFit: "fill"}}
-                                                                                                    className="bg_img"
-                                                                                                    src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
-                                                                                                />
-                                                                                                :
-                                                                                                <img
-                                                                                                    src={post?.attachments[0]?.imageURL || noImageAvailable}
-                                                                                                    className="bg_img"/>
-                                                                                        }
-                                                                                       
-                                                                                        </td>
-                                                                                        <td className="text-center"> <div
-                                                                                            className="">
+                                                                                        }}>View Post
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+
+                                                                            :
+                                                                            <tr class="demo" key={index}
+                                                                                ref={index === postsList?.length - 1 ? lastPostRef : null}>
+                                                                                <td className="text-center">
+                                                                                    {
+                                                                                        post?.attachments[0]?.imageURL === null && post?.attachments[0]?.mediaType === "VIDEO" ?
+                                                                                            <video
+                                                                                                style={{objectFit: "fill"}}
+                                                                                                className="bg_img"
+                                                                                                src={post?.attachments[0]?.sourceURL || post?.attachments[0]?.imageURL}
+                                                                                            />
+                                                                                            :
                                                                                             <img
-                                                                                                src={computeImageURL(post?.socialMediaType)}/>
-                                                                                        </div></td>
-                                                                                      
-                                                                                       <td colSpan={3}> {
-                                                                                    post.errorInfo.isDeletedFromSocialMedia ?
+                                                                                                src={post?.attachments[0]?.imageURL || noImageAvailable}
+                                                                                                className="bg_img"/>
+                                                                                    }
+
+                                                                                </td>
+                                                                                <td className="text-center">
+                                                                                    <div
+                                                                                        className="">
+                                                                                        <img
+                                                                                            src={computeImageURL(post?.socialMediaType)}/>
+                                                                                    </div>
+                                                                                </td>
+
+                                                                                <td colSpan={3}>
+                                                                                    {
+                                                                                        post.errorInfo.isDeletedFromSocialMedia ?
+                                                                                            <div
+                                                                                                className={"review-errorMessage d-flex"}>
+                                                                                                {PostAlreadyDeleted}
+                                                                                            </div>
+                                                                                            :
+                                                                                            <div
+                                                                                                className={"review-errorMessage "}>
+                                                                                                {ErrorFetchingPost}
+                                                                                            </div>
+                                                                                    }
+                                                                                </td>
+                                                                                <td className="text-center">
+                                                                                    {
+                                                                                        post.errorInfo.isDeletedFromSocialMedia &&
                                                                                         <div
-                                                                                            className={"review-errorMessage d-flex"}>
-                                                                                            {PostAlreadyDeleted}
-                                                                                        </div>
-                                                                                        :
-                                                                                        <div
-                                                                                            className={"review-errorMessage "}>
-                                                                                            {ErrorFetchingPost}
-                                                                                        </div>
-                                                                                }</td>
-                                                                                        <td className="text-center">
-                                                                                           {
-                                                                                                    post.errorInfo.isDeletedFromSocialMedia &&
-                                                                                                    <div
-                                                                                                        className={"disabled-table-grid "}>
-                                                                                                        <MdDelete
-                                                                                                            onClick={() => {
-                                                                                                                if (!postApi?.isFetching && !postApi?.isLoading) {
-                                                                                                                    setDeletePostPageInfo(post);
-                                                                                                                }
-                                                                                                            }}
-                                                                                                            className={
-                                                                                                                "ms-2 cursor-pointer font-size-20"
-                                                                                                            }
-                                                                                                            title={"Delete From Addy"}
-                                                                                                        />
-                                                                                                    </div>
+                                                                                            className={"disabled-table-grid "}>
+                                                                                            <MdDelete
+                                                                                                onClick={() => {
+                                                                                                    if (!postApi?.isFetching && !postApi?.isLoading) {
+                                                                                                        setDeletePostPageInfo(post);
+                                                                                                    }
+                                                                                                }}
+                                                                                                className={
+                                                                                                    "ms-2 cursor-pointer font-size-20"
                                                                                                 }
-                                                                                            </td>
-                                                                                    </tr>;
-                                                                            })}
-                                                                        </tbody>
-                                                                    </Table>
-                                                                                                                            {/* {
+                                                                                                title={"Delete From Addy"}
+                                                                                            />
+                                                                                        </div>
+                                                                                    }
+                                                                                </td>
+                                                                            </tr>;
+                                                                })
+                                                            }
+                                                            </tbody>
+                                                        </Table>
+                                                        {/* {
                                                             postsList?.map((post, index) => {
                                                                 return removedPosts?.some((removedPost) => removedPost?.postId === post.id && removedPost?.pageId === post.page.pageId) ?
                                                                     <></>
@@ -672,52 +722,39 @@ const Review = () => {
                                         {/*    }*/}
                                         {/*</div>*/}
 
-
-                                        {
-                                            (postApi?.isLoading || postApi?.isFetching || refresh) &&
-                                            <div className="d-flex justify-content-center RotatingLines-loader mt-4">
-                                                <RotatingLines
-                                                    strokeColor="#F07C33"
-                                                    strokeWidth="5"
-                                                    animationDuration="0.75"
-                                                    width="96"
-                                                    visible={true}
-                                                />
-                                            </div>
-                                        }
                                     </>
 
-                            }
-                            {
-                                getConnectedSocialAccountApi?.data?.length === 0 &&
-                                <ConnectSocialMediaAccount image={notConnected_img}
-                                                           message={formatMessage(NotConnected, ["posts", "social media"])}/>
-                            }
-                            {
-                                getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
-                                <ConnectSocialMediaAccount image={notConnected_img}
-                                                           message={formatMessage(NotConnected, ["posts", "social media pages"])}/>
-                            }
+                                }
+                                {
+                                    getConnectedSocialAccountApi?.data?.length === 0 &&
+                                    <ConnectSocialMediaAccount image={notConnected_img}
+                                                               message={formatMessage(NotConnected, ["posts", "social media"])}/>
+                                }
+                                {
+                                    getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
+                                    <ConnectSocialMediaAccount image={notConnected_img}
+                                                               message={formatMessage(NotConnected, ["posts", "social media pages"])}/>
+                                }
+                            </div>
                         </div>
+
                     </div>
 
-                </div>
+                    {
+                        isOpenCommentReviewsSectionModal &&
+                        <CommentReviewsSectionModal
+                            isOpenCommentReviewsSectionModal={isOpenCommentReviewsSectionModal}
+                            setOpenCommentReviewsSectionModal={setOpenCommentReviewsSectionModal}
+                            postData={postData}
+                            setPostData={setPostData}
+                            setDirty={setDirty}
+                            isDirty={isDirty}
+                            className={"comment_review_outer"}
+                        />
+                    }
 
-                {
-                    isOpenCommentReviewsSectionModal &&
-                    <CommentReviewsSectionModal
-                        isOpenCommentReviewsSectionModal={isOpenCommentReviewsSectionModal}
-                        setOpenCommentReviewsSectionModal={setOpenCommentReviewsSectionModal}
-                        postData={postData}
-                        setPostData={setPostData}
-                        setDirty={setDirty}
-                        isDirty={isDirty}
-                        className={"comment_review_outer"}
-                    />
-                }
-
-            </section>
-        </>
-    );
+                </section>
+            </>
+        );
 };
 export default Review;

@@ -262,12 +262,18 @@ input::-webkit-inner-spin-button {
   width: 100%;
   overflow: hidden;
   border-radius: 4px;
-  background-color: #d8dbde !important;
   color: transparent !important;
   border-color: #ccced1 !important;
   user-select: none;
   cursor: default;
   margin-top: 10px;
+}
+.skeleton_wrapper .skeleton::after {
+  background-image: linear-gradient(90deg, rgba(252, 236, 236, 0) 0, rgb(117 113 113 / 20%) 20%, rgb(255 255 255 / 26%) 60%, rgb(255 255 255 / 0%));
+}
+
+.skeleton_wrapper .skeleton {
+  background-color: #f4f4f4 !important;
 }
 .login_form .form-group select{
   appearance: none;
