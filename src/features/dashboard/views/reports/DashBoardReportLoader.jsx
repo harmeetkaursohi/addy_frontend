@@ -12,7 +12,7 @@ export const DashBoardReportLoader = () => {
                     <h2><i className="fa fa-spinner fa-spin"/></h2>
                     <div className="monthly_growth">
                         <button className="cmn_followers_btn">
-                            <img src={polygon_img} className="polygon_img"/>
+                            {/* <img src={polygon_img} className="polygon_img"/> */}
                             <i className="fa fa-spinner fa-spin"/>
                         </button>
                     </div>
@@ -26,7 +26,7 @@ export const DashBoardReportLoader = () => {
                     <h2><i className="fa fa-spinner fa-spin"/></h2>
                     <div className="monthly_growth">
                         <button className="cmn_followers_btn">
-                            <img src={polygon_img} className="polygon_img"/>
+                            {/* <img src={polygon_img} className="polygon_img"/> */}
                             <i className="fa fa-spinner fa-spin"/>
                         </button>
                         {/* <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6> */}
@@ -40,7 +40,7 @@ export const DashBoardReportLoader = () => {
                     <h2><i className="fa fa-spinner fa-spin"/></h2>
                     <div className="monthly_growth">
                         <button className="cmn_followers_btn">
-                            <img src={polygon_img} className="polygon_img"/>
+                            {/* <img src={polygon_img} className="polygon_img"/> */}
                             <i className="fa fa-spinner fa-spin"/>
                         </button>
                     </div>

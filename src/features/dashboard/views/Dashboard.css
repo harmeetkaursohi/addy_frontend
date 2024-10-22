@@ -193,6 +193,10 @@ span.cmn_followers_btn {
 }
 .monthly_growth .cmn_followers_btn{
     cursor: auto;
+    background: transparent;
+    border: transparent;
+    text-align: left;
+    padding: 0;
 }
 .social_media_account {
     display: flex;

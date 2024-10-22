@@ -29,7 +29,8 @@ import Table from 'react-bootstrap/Table';
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import Image from 'react-bootstrap/Image';
 import {useNavigate} from "react-router-dom";
-
+import Dropdown from 'react-bootstrap/Dropdown';
+import { CgChevronDown } from "react-icons/cg";
 const Review = () => {
 
     const {sidebar} = useAppContext();
@@ -131,6 +132,13 @@ const Review = () => {
             }, 1000);
         }
     }, [refresh]);
+    useEffect(() => {
+        return ()=>{
+            if(!isNullOrEmpty(removedPosts)){
+                dispatch(addyApi.util.invalidateTags(['getPublishedPostsApi']));
+            }
+        }
+    }, [removedPosts]);
 
     const handleDeletePostFromPage = async () => {
         await handleRTKQuery(
@@ -174,7 +182,7 @@ const Review = () => {
         <CommonLoader classname={"cmn_loader_outer"}></CommonLoader>
         :
         (
-            <>
+            <> 
                 <section>
                     <div className={sidebar ? "comment_container" : "cmn_Padding"}>
 
@@ -225,6 +233,7 @@ const Review = () => {
                                                     })
                                                 }}
                                             />
+                                            {/* 
 
                                             <Select
                                                 className={"review-social-media-dropdown"}
@@ -248,7 +257,42 @@ const Review = () => {
                                                         offSet: 0
                                                     })
                                                 }}
-                                            />
+                                            /> */}
+                                            
+                                            <Dropdown className="cmn_dropdown">
+                                                <Dropdown.Toggle>
+                                                    {selectedDropdownOptions?.socialMediaType?.label || 'Filter'} <CgChevronDown />
+                                                </Dropdown.Toggle>
+
+                                                <Dropdown.Menu>
+                                                    {/* Assuming createOptionListForSelectTag generates an array of options */}
+                                                    {createOptionListForSelectTag(SocialAccountProvider, null, null, [{
+                                                    label: "All",
+                                                    value: null,
+                                                    }]).map((option, index) => (
+                                                    <Dropdown.Item
+                                                        key={index}
+                                                        onClick={() => {
+                                                        setSelectedDropDownOptions({
+                                                            ...selectedDropdownOptions,
+                                                            socialMediaType: option,
+                                                            pages: [],
+                                                        });
+                                                        setPostsList([]);
+                                                        setSearchQuery({
+                                                            ...searchQuery,
+                                                            socialMediaType: option.value?.toUpperCase(),
+                                                            pageIds: [],
+                                                            offSet: 0,
+                                                        });
+                                                        }}
+                                                        active={selectedDropdownOptions?.socialMediaType?.value === option.value}
+                                                    >
+                                                        {option.label}
+                                                    </Dropdown.Item>
+                                                    ))}
+                                                </Dropdown.Menu>
+                                                </Dropdown>
                                         </>
                                     }
                                 </div>
@@ -293,7 +337,7 @@ const Review = () => {
                                                             <tbody>
 
                                                             {
-                                                                (postApi?.isLoading || postApi?.isFetching || refresh || true) &&
+                                                                (postApi?.isLoading || postApi?.isFetching || refresh ) &&
                                                                 Array(4).fill(null).map((_, i) => {
                                                                     return <tr key={i}>
                                                                     <td className="text-center"><SkeletonEffect

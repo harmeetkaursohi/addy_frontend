@@ -1,7 +1,6 @@
 .review_header {
     display: flex;
     justify-content: space-between;
-    padding-top: 22px;
 }
 
 .filter_select_btn {
@@ -403,6 +402,13 @@ ul.review_list table tbody tr td {
         }
         ul.review_list table tr{
             box-shadow: 0px 0px 8px rgba(0,0,0,5%);
+            border-radius: 10px;
+        }
+      .review_header   .cmn_dropdown .dropdown-menu a.active {
+            background: #f57e3b;
+        }
+        .cmn_dropdown svg path {
+            fill: rgba(95, 109, 126, 1);
         }
 @media screen and (min-width:1600px) {
     .acc_not_connected_outer img{

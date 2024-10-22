@@ -13,7 +13,8 @@ import Comments from "../comments/Comments";
 import CommentFooter from "../comments/CommentFooter";
 import InstagramCommentsSection from "../comments/InstagramCommentsSection";
 import LinkedinCommentsSection from "../comments/LinkedinCommentsSection";
-import {MdCancel} from 'react-icons/md';
+import { RxCross2 } from "react-icons/rx";
+
 import {useLazyGetPostSocioDataQuery} from "../../../../app/apis/postApi";
 import {usePostCommentMutation, usePostReplyMutation} from "../../../../app/apis/commentApi";
 
@@ -61,12 +62,12 @@ const CommentReviewsSectionModal = ({
     return (
         <>
             <div className='comment_review_container'>
-                <Modal show={isOpenCommentReviewsSectionModal} onHide={handleClose} className={"modal-xl view_profile"}>
+                <Modal show={isOpenCommentReviewsSectionModal} onHide={handleClose} className={"modal-lg view_profile"}>
 
                     <Modal.Body>
                         <Row className="m-0">
                             <div className='md_cancel_outer'>
-                                <MdCancel onClick={() => {
+                                <RxCross2 size={18}  onClick={() => {
                                     setOpenCommentReviewsSectionModal(false)
                                 }}/>
                             </div>

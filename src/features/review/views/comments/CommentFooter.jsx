@@ -166,7 +166,7 @@ const CommentFooter = ({postData, isDirty, setDirty, postSocioData, onPostCommen
                 }
 
             </p>
-            <p className="comment_date padding-x-20">{getFormattedDate(postData?.feedPostDate)}</p>
+            <p className="comment_date p-1 ps-3">{getFormattedDate(postData?.feedPostDate)}</p>
             <div className="comment_msg ">
                 {
                     postCommentApi?.isLoading && comment &&

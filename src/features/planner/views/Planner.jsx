@@ -27,6 +27,8 @@ import {
     useGetPlannerPostsCountQuery,
     useGetPostsForPlannerQuery,
 } from "../../../app/apis/postApi";
+import Dropdown from 'react-bootstrap/Dropdown';
+import { CgChevronDown } from "react-icons/cg";
 
 const Planner = () => {
 
@@ -420,6 +422,36 @@ const Planner = () => {
                                 {/* new code planner */}
                                 <div className=" ">
                                     <div className="">
+                                    <Dropdown className='cmn_dropdown'>
+                                        <Dropdown.Toggle>
+                                          Filter <CgChevronDown />
+
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                        {Object.keys(SocialAccountProvider).map((curKey, ind) => {
+
+                                            return (
+                                                <li key={ind}>
+                                                    <div className="d-flex gap-2 align-items-center ">
+                                                        <img src={computeImageURL(curKey)} height="20px"
+                                                            width="20px"/>
+                                                        <h4>{SocialAccountProvider[curKey]}</h4>
+                                                    </div>
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={baseSearchQuery.socialMediaTypes && baseSearchQuery.socialMediaTypes.includes(curKey)}
+                                                        value={curKey}
+                                                        onChange={(e) => handleSocialMediaFilters(curKey)}
+                                                    />
+
+
+                                                </li>
+                                            )
+                                            }
+                                            )}
+                                        </Dropdown.Menu>
+                                        </Dropdown>
                                         <div
                                             className={`${isDraftPost ? "calendar-container hidden" : "CalenderOuter_Wrapper"}`}>
                                             <FullCalendar
