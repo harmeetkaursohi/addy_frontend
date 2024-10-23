@@ -423,7 +423,7 @@ const Planner = () => {
                                     <div className="">
                                     <Dropdown className='cmn_dropdown'>
                                         <Dropdown.Toggle>
-                                          Filter <CgChevronDown />
+                                          Filters <CgChevronDown />
 
                                         </Dropdown.Toggle>
 

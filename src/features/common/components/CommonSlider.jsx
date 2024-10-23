@@ -38,9 +38,9 @@ const CommonSlider = ({
 
             {viewSimilarToSocialMedia ?
                 <div>
-                    <div className={`ms-2   ${showText ? "feed_preview_Caption_outer" : `Caption_outer ${className}`}`}>
+                    <div className={`ms-2   ${showText ? "feed_preview_Caption_outer" : ` ${className}`}`}>
                         {isrequired ? "" : <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
-                                                        className={"highlight cursor-pointer"} setShowText={setShowText}
+                                                        className={"highlight cursor-pointer Caption_outer"} setShowText={setShowText}
                                                         showText={showText}/>}
                     </div>
                     <Slider {...settings} >

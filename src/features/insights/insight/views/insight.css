@@ -168,6 +168,7 @@ button.instagram_dropdown {
 }
 .insight_outer .dropdown-item{
     background-color: transparent !important;
+    padding: 0;
 }
 .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
     width: 100%;

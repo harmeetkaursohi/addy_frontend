@@ -306,7 +306,9 @@ p.disable-reply-comment {
 .RotatingLines-loader{
     height: calc(100vh - 319px);
 }
-
+img.social_icons_review {
+    width: 24px;
+}
 .review_list li{
     display: flex;
     gap: 10px;

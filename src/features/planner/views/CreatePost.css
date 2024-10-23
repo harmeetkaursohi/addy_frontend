@@ -141,7 +141,7 @@ white-space: nowrap;
     border-radius: 20px;
 }
 .user_caption_wrapper h6{
-    color: black;
+    color: #fff;
 }
 
 
@@ -595,9 +595,19 @@ button.ai_btn {
     background-color: #1C2B33;
     border-color: #1C2B33;
 }
+.comment_wrapper {
+    padding: 0px 15px;
+}
+.upcoming_post_outer 
+ p.social-media-page-name {
+    white-space: nowrap;
+}
 .post_preview_outer .CommonFeedPreview_container {
     max-width: 441px;
     margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
 }
 .preview_wrapper {
     background: #FFF;

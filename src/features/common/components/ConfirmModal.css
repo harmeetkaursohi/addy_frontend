@@ -9,12 +9,11 @@
     color: white;
     font-weight: 600;
 }
-.success_img{
-    height: 120px;
-    width: 100%;
-}
+
 .alert_modal_body div.modal-content {
-    border-radius: 12px;
+    border: unset;
+    border-radius: 30px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 10%);
 }
 
 .confirm_text {
@@ -24,29 +23,20 @@
     font-size: 20px;
 }
 
-.confirm_container h2 {
-    font-size: 28px;
-    font-weight: 800;
-}
+
 
 
 
 
 @media screen and (max-width:1280px){
 
-    .confirm_container h2 {
-        font-size: 24px;
-    }
+ 
     .confirm_text{
         font-size: 18px;
     }
 }
 
-@media screen and (max-width:991px){
-    .confirm_container h2{
-        font-size: 28px;
-    }
-}
+
 @media screen and (max-width:767px){
     .confirm_text {
         font-size: 15px;
@@ -54,11 +44,4 @@
     .yes_btn{
         font-size: 14px;
       }
-    .confirm_container h2 {
-        font-size: 24px;
-    }
-  
-    .success_img {
-        height: 90px;
-    }
 }

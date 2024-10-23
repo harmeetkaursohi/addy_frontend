@@ -124,7 +124,9 @@ const Layout = () => {
             }
         });
     };
-
+const Profile =() =>{
+    window.location.href = "/profile"
+}
     return (
         <>
             <section className="sidebar_container">
@@ -233,7 +235,7 @@ const Layout = () => {
                                     placement="right"
                                     overlay={<Tooltip id="button-tooltip">Profile</Tooltip>}
                                 >
-                                    <div className="sidebar_item_outers" onClick={LogOut}>
+                                    <div className="sidebar_item_outers" onClick={Profile}>
                                     {
                                 getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
                                     <SkeletonEffect count={1}/> :

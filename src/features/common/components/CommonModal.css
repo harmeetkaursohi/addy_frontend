@@ -2,12 +2,11 @@
     display: flex;
     justify-content: space-between;
     gap: 20px;
-    /*padding: 20px 0px;*/
-    /*border-bottom: 1px solid #CBCBCB;*/
     align-items: center;
-    margin-top: 17px;
     box-shadow:1px 2px 4px 0 rgba(0, 0, 0, 0.17);
-
+    border-radius: 19px;
+    padding: 10px;
+margin-top: 10px;
 }
 img.no_page_connect_img {
     margin: 6px 0px 20px;
@@ -33,7 +32,7 @@ img.no_page_connect_img {
     gap: 16px;                    /* Space between the items */
     font-size: 16px;
     color: #555;
-    margin-top: 9px;
+    margin-top: 6px;
 }
 
 .account-detail {
@@ -44,6 +43,7 @@ img.no_page_connect_img {
     font-size: 13px;
     color: #999999;
     font-weight: 500;
+    padding-bottom: 2px;
 }
 .follower_reach_container{
     border-right: 1px solid #c6bcbc;
@@ -59,6 +59,7 @@ border-bottom: 2px solid rgba(203, 203, 203, 1);
 .users_profile {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 25%);
     overflow: hidden;
+    display: inline-block;
     border-radius: 15px;
 }
 h4.hiddenNumber {
@@ -89,9 +90,6 @@ h4.hiddenNumber {
     margin-top: 0;
 }
 
-.modal_inner_content:last-child {
-    /*border-bottom: unset;*/
-}
 
 
 .facebook_content_outer button{
@@ -113,10 +111,6 @@ h4.hiddenNumber {
     margin-bottom: 0px;
 }
 
-.users_profile img {
-    width: 70px;
-    height: 70px;
-}
 
 div.modal-content {
     border-radius: 30px;
@@ -147,7 +141,7 @@ div.commonmodal_header {
     padding-right: 4px;
 }
 .users_name h2 {
-    font-size: 22px;
+    font-size: 17px;
     line-height: initial;
     font-weight: 700;
 }
@@ -233,26 +227,16 @@ button, .modal_inner_content.disconnect_wrapper
     opacity: 0.41;
 }
 .choose_page_container{
-    max-height: 400px;
-    overflow-y: scroll;
+    max-height: 300px;
+    overflow-y: auto;
     scrollbar-width: none;
     padding: 0px 5px;
     margin: 0px -5px;
 }
 
 /*media QUERY*/
-@media (min-width: 1900px) {
-    .users_name h2 {
-        font-size: 20px;
-    }
-}
-@media (max-width: 1699px) {
- 
 
-    .users_name h2 {
-        font-size: 18px;
-    }
-}
+
 
 @media (max-width: 1440px) {
     .users_profile img {
@@ -260,19 +244,18 @@ button, .modal_inner_content.disconnect_wrapper
         width: 60px;
         border-radius: 10px;
     }
-    .modal_inner_content{
-        margin-top: 10px;
-    }
+
     .users_name h2 {
         font-size: 17px;
     }
-    .modal-body.cmn_body{
-        padding: 30px;
-    }
+   
 }
 @media (max-width: 1280px) {
     .facebook_content_outer h6 {
         font-size: 16px;
+    }
+    .modal-body.cmn_body{
+        padding: 25px;
     }
 }
 @media (max-width: 991px) {
@@ -280,11 +263,10 @@ button, .modal_inner_content.disconnect_wrapper
         height: 50px;
         width: 50px;
     }
-
-    .users_name h2 {
-        font-size: 16px;
-        line-height: initial;
+    .modal-body.cmn_body{
+        padding: 20px;
     }
+   
     .facebook_title h2 {
         font-size: 18px;
     }
@@ -299,17 +281,16 @@ button, .modal_inner_content.disconnect_wrapper
         width: 100%;
     }
     .modal_inner_content {
-        padding-bottom: 15px;
         align-items: start;
     }
- .users_name h2{
-font-size: 12px;
-margin-top: 12px;
- }
+
     .user_info_container {
       display: block;
         width: 100%;
         
+    }
+    .followers-reach{
+        justify-content: start;
     }
     .facebook_title h2 {
         font-size: 15px;
@@ -322,6 +303,9 @@ margin-top: 12px;
         font-size: 13px;
         line-height: 19px;
         padding: 0px 14px;
+    }
+    .modal-body.cmn_body{
+        padding: 15px;
     }
 }
 

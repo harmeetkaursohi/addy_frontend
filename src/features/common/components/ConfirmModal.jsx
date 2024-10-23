@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import './ConfirmModal.css'
-import success_img from "../../../images/success_img.svg"
+import success_img from "../../../images/confirm_modal_image.jpg"
 import {RxCross2} from "react-icons/rx"
 import { Image } from 'react-bootstrap';
 const ConfirmModal = ({
@@ -42,8 +42,8 @@ const ConfirmModal = ({
                             }
 
                             <div className="confirm_container">
-                                <h2 className="cmn_text_heading confirm_text">{title}</h2>
-                                <p className="confirm_text">{confirmMessage}</p>
+                                <h2 className="cmn_text_style">{title}</h2>
+                                <p className="disconnect_paragraph">{confirmMessage}</p>
                             </div>
 
                             <div className="confirm_btn ">

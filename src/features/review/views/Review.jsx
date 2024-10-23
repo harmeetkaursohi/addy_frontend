@@ -387,7 +387,7 @@ const Review = () => {
                                                                                     <div
                                                                                         className="">
                                                                                         <img
-                                                                                            src={computeImageURL(post?.socialMediaType)}/>
+                                                                                            src={computeImageURL(post?.socialMediaType)} className="social_icons_review"/>
                                                                                     </div>
                                                                                 </td>
                                                                                 <td className="text-center">  {post?.likes} Likes {post?.socialMediaType === "FACEBOOK" ? "/ Reactions" : ""}</td>

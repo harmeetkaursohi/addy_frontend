@@ -3,7 +3,6 @@
     display: flex;
     justify-content: space-between;
     border-top: 1px solid #ece3e3;
-    margin: 12px 10px 0px;
 }
 .linkedin_dropdown {
    cursor: pointer;

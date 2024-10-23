@@ -930,7 +930,7 @@ const CreatePost = () => {
                                                             allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
                                                                 let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                                return (<span key={index}>
+                                                                return (<div key={index}>
                                                     {
                                                         selectedPageData &&
                                                         <CommonFeedPreview
@@ -949,7 +949,7 @@ const CreatePost = () => {
                                                         />
                                                     }
 
-                                                </span>
+                                                </div>
                                                                 )
                                                             })
                                                         }

@@ -178,7 +178,7 @@ const Insight = () => {
                                                                             handleSelectPage("FACEBOOK", page)
                                                                         }}>
                                                                             <div className="Social_media_platform">
-                                                                                <i className={`fa-brands fa-facebook me-3  `}
+                                                                                <i className={`fa-brands fa-facebook   `}
                                                                                    style={{
                                                                                        color: "#0866ff",
                                                                                        fontSize: "20px"
@@ -271,7 +271,7 @@ const Insight = () => {
                                                                             handleSelectPage("PINTEREST", board)
                                                                         }}>
                                                                             <div className="Social_media_platform">
-                                                                                <i className={`fa-brands fa-pinterest me-3 `}
+                                                                                <i className={`fa-brands fa-pinterest  `}
                                                                                    style={{
                                                                                        color: "#e60023",
                                                                                        fontSize: "20px"
