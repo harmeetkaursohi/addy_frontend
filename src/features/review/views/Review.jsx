@@ -338,28 +338,6 @@ const Review = () => {
                                                             </tr>
                                                             </thead>
                                                             <tbody>
-
-                                                            {
-                                                                (postApi?.isLoading || postApi?.isFetching || refresh) &&
-                                                                getEmptyArrayOfSize(4).map((_, i) => {
-                                                                    return <tr key={i}>
-                                                                        <td className="text-center"><SkeletonEffect
-                                                                            count={1}
-                                                                            className={"w-50 m-auto post-image-skeleton"}/>
-                                                                        </td>
-                                                                        <td className="text-center"><SkeletonEffect
-                                                                            count={1} className={"w-50 m-auto"}/></td>
-                                                                        <td className="text-center"><SkeletonEffect
-                                                                            count={1} className={"w-50 m-auto"}/></td>
-                                                                        <td className="text-center"><SkeletonEffect
-                                                                            count={1} className={"w-50 m-auto"}/></td>
-                                                                        <td className="text-center"><SkeletonEffect
-                                                                            count={1} className={"w-50 m-auto"}/></td>
-                                                                        <td className="text-center"><SkeletonEffect
-                                                                            count={1} className={"w-50 m-auto"}/></td>
-                                                                    </tr>
-                                                                })
-                                                            }
                                                             {
                                                                 postsList?.map((post, index) => {
                                                                     return removedPosts?.some((removedPost) =>
@@ -469,6 +447,27 @@ const Review = () => {
                                                                                     }
                                                                                 </td>
                                                                             </tr>;
+                                                                })
+                                                            }
+                                                            {
+                                                                (postApi?.isLoading || postApi?.isFetching || refresh) &&
+                                                                getEmptyArrayOfSize(4).map((_, i) => {
+                                                                    return <tr key={i}>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1}
+                                                                            className={"w-50 m-auto post-image-skeleton"}/>
+                                                                        </td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                        <td className="text-center"><SkeletonEffect
+                                                                            count={1} className={"w-50 m-auto"}/></td>
+                                                                    </tr>
                                                                 })
                                                             }
                                                             </tbody>
