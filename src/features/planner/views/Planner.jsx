@@ -29,7 +29,8 @@ import {
 } from "../../../app/apis/postApi";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { CgChevronDown } from "react-icons/cg";
-
+import ScheduledPost from './ScheduledPost';
+import Test from './Test'
 const Planner = () => {
 
     const {sidebar} = useAppContext();
@@ -509,8 +510,12 @@ const Planner = () => {
                                                 fixedWeekCount={false}
                                                 showNonCurrentDates={false}
                                             />
+                                            <div className={"scheduled_posts"}>
+                                                        <ScheduledPost/>
+                                            </div>
                                         </div>
                                     </div>
+                                   
                                     {/* <div className="col-lg-3 col-md-12 col-sm-12">
                                         <div className={`${isDraftPost ? " d-none" : "planner_create_post_container"}`}>
                                             <div className="planner_create_post">

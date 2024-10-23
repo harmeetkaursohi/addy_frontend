@@ -1,0 +1,38 @@
+.CalenderOuter_Wrapper {
+    display: flex;
+    width: 100%;
+    gap: 12px;
+}
+
+.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard {
+    width: 100%;
+}
+
+.scheduled_posts {
+    width: 350px;
+    padding: 13px;
+    border-radius: 15px;
+    background: #fff;
+    margin-top: 53px;
+}
+
+table.fc-col-header {
+    border-radius: unset;
+    background: rgba(244, 244, 244, 1);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.schedule_header span {
+    font-size: 18px;
+    line-height: 38px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 1);
+}
+
+.schedule_header {
+    gap: 10px;
+}
+
+.schedule_header svg path{
+    fill:rgba(95, 109, 126, 1);
+}
