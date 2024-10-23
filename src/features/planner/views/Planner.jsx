@@ -30,7 +30,6 @@ import {
 import Dropdown from 'react-bootstrap/Dropdown';
 import { CgChevronDown } from "react-icons/cg";
 import ScheduledPost from './ScheduledPost';
-import Test from './Test'
 const Planner = () => {
 
     const {sidebar} = useAppContext();
