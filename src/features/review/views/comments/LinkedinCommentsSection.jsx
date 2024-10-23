@@ -8,7 +8,7 @@ import CommonSlider from "../../../common/components/CommonSlider";
 import {
     extractCommentersProfileDataForLinkedin, extractIdFromLinkedinMessageAtrributes,
     extractMentionedUsernamesFromLinkedinComments, extractParameterFromUrl,
-    getCommentCreationTime, getLoggedInLinkedinActorObject, getMentionedUserCommentFormat,
+    getCommentCreationTime, getEmptyArrayOfSize, getLoggedInLinkedinActorObject, getMentionedUserCommentFormat,
     handleShowCommentReplies,
     handleShowCommentReplyBox,
     isNullOrEmpty, isReplyCommentEmpty, removeDuplicatesObjectsFromArray
@@ -21,7 +21,6 @@ import {BiSolidSend} from "react-icons/bi";
 import EmojiPicker, {EmojiStyle} from "emoji-picker-react";
 import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
-import CommonLoader from "../../../common/components/CommonLoader";
 import {
     useDeleteCommentMutation,
     useLazyGetCommentsQuery,
@@ -29,6 +28,7 @@ import {
 } from "../../../../app/apis/commentApi";
 import {handleRTKQuery} from "../../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../../app/addyApi";
+import SkeletonEffect from "../../../loader/skeletonEffect/SkletonEffect";
 
 const LinkedinCommentsSection = ({
                                      postData,
@@ -301,7 +301,7 @@ const LinkedinCommentsSection = ({
                     }
                     setLinkedinComments({
                         ...linkedinComments,
-                        elements:updatedElements
+                        elements: updatedElements
                     })
                 }
                 setDirty({
@@ -332,7 +332,15 @@ const LinkedinCommentsSection = ({
 
     return (
         linkedinComments === null ?
-            <CommonLoader/>
+            getEmptyArrayOfSize(3).map((_, i) => {
+                return <div className={"d-flex gap-2 mt-3"} key={i}>
+                    <SkeletonEffect count={1} className={"comment-profile-pic-loader mt-2 "}/>
+                    <div className={"w-100"}>
+                        <SkeletonEffect count={1} className={"mt-2 w-25"}/>
+                        <SkeletonEffect count={1} className={"mt-2 w-75"}/>
+                    </div>
+                </div>
+            })
             :
             (linkedinComments?.elements && linkedinComments?.elements?.length === 0)
                 ? <div className={"no-cmnt-txt"}>No comments yet!</div> :
@@ -369,6 +377,12 @@ const LinkedinCommentsSection = ({
                                                                             className={"comment-edit-del-button"}
                                                                             variant="success" id="dropdown-basic">
                                                                             <PiDotsThreeVerticalBold
+                                                                                onClick={() => {
+                                                                                    setReplyToComment(null)
+                                                                                    setShowReplyBox([])
+                                                                                    setUpdateComment({})
+                                                                                    setReplyComment({})
+                                                                                }}
                                                                                 className={"comment-edit-del-icon"}/>
                                                                         </Dropdown.Toggle>
                                                                         <Dropdown.Menu>
@@ -624,6 +638,12 @@ const LinkedinCommentsSection = ({
                                                                                                                     variant="success"
                                                                                                                     id="dropdown-basic">
                                                                                                                     <PiDotsThreeVerticalBold
+                                                                                                                        onClick={() => {
+                                                                                                                            setReplyToComment(null)
+                                                                                                                            setShowReplyBox([])
+                                                                                                                            setUpdateComment({})
+                                                                                                                            setReplyComment({})
+                                                                                                                        }}
                                                                                                                         className={"comment-edit-del-icon"}/>
                                                                                                                 </Dropdown.Toggle>
                                                                                                                 <Dropdown.Menu>
@@ -915,21 +935,22 @@ const LinkedinCommentsSection = ({
                     }
                     {
                         ((getCommentsApi?.isLoading || getCommentsApi?.isFetching) && linkedinComments) ?
-                            <div className={" text-center z-index-1 mt-1"}><RotatingLines strokeColor="#F07C33"
-                                                                                          strokeWidth="5"
-                                                                                          animationDuration="0.75"
-                                                                                          width="30"
-                                                                                          visible={true}></RotatingLines>
-                            </div> :
-                            <>
-                                {
-                                    linkedinComments?.paging?.links?.filter(link => link.rel === "next")?.length > 0 &&
-                                    <div className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"} onClick={() => {
-                                        setTriggerGetCommentsApi(true)
-                                    }}>Load more comments
+                            getEmptyArrayOfSize(2).map((_, i) => {
+                                return <div className={"d-flex gap-2 mt-3"} key={i}>
+                                    <SkeletonEffect count={1} className={"comment-profile-pic-loader mt-2 "}/>
+                                    <div className={"w-100"}>
+                                        <SkeletonEffect count={1} className={"mt-2 w-25"}/>
+                                        <SkeletonEffect count={1} className={"mt-2 w-75"}/>
                                     </div>
-                                }
-                            </>
+                                </div>
+                            })
+                            :
+                            linkedinComments?.paging?.links?.filter(link => link.rel === "next")?.length > 0 &&
+                            <div className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"}
+                                 onClick={() => {
+                                     setTriggerGetCommentsApi(true)
+                                 }}>Load more comments
+                            </div>
                     }
 
 

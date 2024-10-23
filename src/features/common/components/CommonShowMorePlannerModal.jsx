@@ -262,7 +262,7 @@ const CommonShowMorePlannerModal = ({
                                                                         disabled={!isPlannerPostEditable("EDIT", plannerPost)}
                                                                         onClick={(e) => {
                                                                             e.preventDefault();
-                                                                            navigate(`/post/${plannerPost?.id}`)
+                                                                            navigate(`/planner/post/${plannerPost?.id}`)
                                                                         }}>
                                                                         <i className="fa fa-pencil"
                                                                            aria-hidden="true"/>

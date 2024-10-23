@@ -7,7 +7,7 @@ import {
     isNullOrEmpty,
     isReplyCommentEmpty,
     getValueOrDefault,
-    removeDuplicatesObjectsFromArray,
+    removeDuplicatesObjectsFromArray, getEmptyArrayOfSize,
 } from "../../../../utils/commonUtils";
 import {
     getUpdateCommentMessage
@@ -25,7 +25,6 @@ import Skeleton from "../../../loader/skeletonEffect/Skeleton";
 import {RotatingLines} from "react-loader-spinner";
 import CommentText from "./CommentText";
 import default_user_icon from "../../../../images/default_user_icon.svg";
-import CommonLoader from "../../../common/components/CommonLoader";
 import {
     useDeleteCommentMutation,
     useLazyGetCommentsQuery,
@@ -33,6 +32,7 @@ import {
 } from "../../../../app/apis/commentApi";
 import {handleRTKQuery} from "../../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../../app/addyApi";
+import SkeletonEffect from "../../../loader/skeletonEffect/SkletonEffect";
 
 const Comments = ({
                       postData,
@@ -118,7 +118,7 @@ const Comments = ({
             getRepliesOnComment({
                 ...baseQuery,
                 id: getReplyForComment?.comment?.id,
-                limit: 1,
+                limit: 3,
                 next: getReplyForComment?.comment?.replyData?.nextCursor === undefined ? null : getReplyForComment?.comment?.replyData?.nextCursor
             })
         }
@@ -331,12 +331,22 @@ const Comments = ({
                 <div className={"no-cmnt-txt"}>No comments yet!</div>
             }
             {
-                postSocioData?.comments?.summary?.total_count > 0 && facebookComments?.data === null ? <CommonLoader/> :
+                postSocioData?.comments?.summary?.total_count > 0 && facebookComments?.data === null ?
+                    getEmptyArrayOfSize(3).map((_, i) => {
+                        return <div className={"d-flex gap-2 mt-3"} key={i}>
+                            <SkeletonEffect count={1} className={"comment-profile-pic-loader mt-2 "}/>
+                            <div className={"w-100"}>
+                                <SkeletonEffect count={1} className={"mt-2 w-25"}/>
+                                <SkeletonEffect count={1} className={"mt-2 w-75"}/>
+                            </div>
+                        </div>
+                    })
+                    :
                     facebookComments?.data?.map((comment, index) => {
                         return (
                             <div key={index} className="comment_wrap">
                                 {
-                                    commentToDelete?.comment?.id === comment?.id  ?
+                                    commentToDelete?.comment?.id === comment?.id ?
                                         <div className={"mb-3"}>
                                             <Skeleton className={"mb-2 h-20"}/>
                                         </div> :
@@ -356,22 +366,29 @@ const Comments = ({
                                                                 </p>
                                                                 <Dropdown>
                                                                     <Dropdown.Toggle
+
                                                                         className={"comment-edit-del-button"}
                                                                         variant="success" id="dropdown-basic">
                                                                         <PiDotsThreeVerticalBold
-                                                                            className={"comment-edit-del-icon"}/>
+                                                                            className={"comment-edit-del-icon"}
+                                                                            onClick={() => {
+                                                                                setUpdateComment({})
+                                                                                setShowReplyBox([])
+                                                                            }}/>
                                                                     </Dropdown.Toggle>
                                                                     <Dropdown.Menu>
                                                                         {
                                                                             comment?.from?.id === postData?.page?.pageId &&
-                                                                            <Dropdown.Item onClick={() => {
-                                                                                !updateCommentsApi?.isLoading && setUpdateComment({
-                                                                                    comment: comment,
-                                                                                    index: index,
-                                                                                    commentLevel: "FIRST"
-                                                                                })
-                                                                            }
-                                                                            }>Edit</Dropdown.Item>
+                                                                            <Dropdown.Item
+                                                                                onClick={() => {
+                                                                                    if (updateCommentsApi?.isLoading) return
+                                                                                    setUpdateComment({
+                                                                                        comment: comment,
+                                                                                        index: index,
+                                                                                        commentLevel: "FIRST"
+                                                                                    })
+                                                                                }
+                                                                                }>Edit</Dropdown.Item>
                                                                         }
                                                                         {
                                                                             comment?.can_remove &&
@@ -591,18 +608,25 @@ const Comments = ({
                                                                                                         </p>
                                                                                                         <Dropdown>
                                                                                                             <Dropdown.Toggle
+
                                                                                                                 className={"comment-edit-del-button"}
                                                                                                                 variant="success"
                                                                                                                 id="dropdown-basic">
                                                                                                                 <PiDotsThreeVerticalBold
-                                                                                                                    className={"comment-edit-del-icon"}/>
+                                                                                                                    className={"comment-edit-del-icon"}
+                                                                                                                    onClick={() => {
+                                                                                                                        setUpdateComment({})
+                                                                                                                        setShowReplyBox([])
+                                                                                                                    }}/>
                                                                                                             </Dropdown.Toggle>
                                                                                                             <Dropdown.Menu>
                                                                                                                 {
                                                                                                                     childComment?.from?.id === postData?.page?.pageId &&
                                                                                                                     <Dropdown.Item
                                                                                                                         onClick={() => {
-                                                                                                                            !updateCommentsApi?.isLoading && setUpdateComment({
+                                                                                                                            if (updateCommentsApi?.isLoading) return
+
+                                                                                                                            setUpdateComment({
                                                                                                                                 comment: childComment,
                                                                                                                                 parentCommentIndex: index,
                                                                                                                                 index: i,
@@ -913,25 +937,23 @@ const Comments = ({
             }
             {
                 ((getCommentsApi?.isLoading || getCommentsApi?.isFetching) && Array.isArray(facebookComments?.data)) ?
-                    <div className={" text-center z-index-1 mt-1"}>
-                        <RotatingLines
-                            strokeColor="#F07C33"
-                            strokeWidth="5"
-                            animationDuration="0.75"
-                            width="30"
-                            visible={true}/>
-                    </div> :
-                    <>
-                        {
-                            facebookComments?.nextCursor !== null &&
-                            <div
-                                className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"}
-                                onClick={() => {
-                                    setTriggerGetCommentsApi(true)
-                                }}>Load more comments
+                    getEmptyArrayOfSize(2).map((_, i) => {
+                        return <div className={"d-flex gap-2 mt-3"} key={i}>
+                            <SkeletonEffect count={1} className={"comment-profile-pic-loader mt-2 "}/>
+                            <div className={"w-100"}>
+                                <SkeletonEffect count={1} className={"mt-2 w-25"}/>
+                                <SkeletonEffect count={1} className={"mt-2 w-75"}/>
                             </div>
-                        }
-                    </>
+                        </div>
+                    })
+                    :
+                    facebookComments?.nextCursor !== null &&
+                    <div
+                        className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"}
+                        onClick={() => {
+                            setTriggerGetCommentsApi(true)
+                        }}>Load more comments
+                    </div>
             }
 
         </>
