@@ -329,7 +329,7 @@ const SocialAccounts = ({}) => {
                         <>
                             {
                                 (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching ) ?
-                                    <SkeletonEffect count={1}/>
+                                    <SkeletonEffect count={1} className={"mt-2"}/>
                                     : getConnectedSocialAccountApi?.data?.filter((c) => c?.provider === "FACEBOOK")?.length === 0 ?
                                         <div className="social_media_outer">
                                             <div className="social_media_content">
@@ -418,7 +418,7 @@ const SocialAccounts = ({}) => {
                                                     <ul className="menu_items">
                                                         {
                                                             (getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching) ?
-                                                                <SkeletonEffect count={3}/>
+                                                                <SkeletonEffect count={3} className={"mt-2"}/>
                                                                 : currentConnectedFacebookPages?.length === 0 ?
                                                                     <div className={"no-page-connected-outer text-center"}>
                                                                         <div>No active connections at the moment.</div>
@@ -494,7 +494,7 @@ const SocialAccounts = ({}) => {
                         <>
                             {
                                 (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching  ) ?
-                                    <SkeletonEffect count={1}/>
+                                    <SkeletonEffect count={1} className={"mt-2"}/>
                                     : getConnectedSocialAccountApi?.data?.filter((c) => c.provider === "INSTAGRAM").length === 0 ?
                                         <div className="social_media_outer">
                                             <div className="social_media_content">
@@ -568,7 +568,7 @@ const SocialAccounts = ({}) => {
                                                     <ul className="menu_items">
                                                         {
                                                             (getAllInstagramPagesApi?.isLoading || getAllInstagramPagesApi?.isFetching) ?
-                                                                <SkeletonEffect count={3}/>
+                                                                <SkeletonEffect count={3} className={"mt-2"}/>
                                                                 : currentConnectedInstagramPages?.length === 0 ?
                                                                     <div className={"no-page-connected-outer text-center"}>
                                                                         <div>No active connections at the moment.</div>
@@ -651,7 +651,7 @@ const SocialAccounts = ({}) => {
                         <>
                             {
                                 (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching) ?
-                                    <SkeletonEffect count={1}/>
+                                    <SkeletonEffect count={1} className={"mt-2"}/>
                                     : getConnectedSocialAccountApi?.data?.filter((c) => c.provider === "LINKEDIN").length === 0 ?
                                         <div className="social_media_outer">
                                             <div className="social_media_content">
@@ -738,7 +738,7 @@ const SocialAccounts = ({}) => {
                                                     <ul className="menu_items">
                                                         {
                                                             (getAllLinkedinPagesApi?.isLoading || getAllLinkedinPagesApi?.isFetching) ?
-                                                                <SkeletonEffect count={3}/>
+                                                                <SkeletonEffect count={3} className={"mt-2"}/>
                                                                 : currentConnectedLinkedinPages?.length === 0 ?
                                                                     <div className={"no-page-connected-outer text-center"}>
                                                                         <div>No active connections at the moment.</div>
@@ -809,7 +809,7 @@ const SocialAccounts = ({}) => {
                         <>
                             {
                                 getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching ?
-                                    <SkeletonEffect count={1}/>
+                                    <SkeletonEffect count={1} className={"mt-2"}/>
                                     : getConnectedSocialAccountApi?.data?.filter((c) => c.provider === "PINTEREST").length === 0 ?
                                         <div className="social_media_outer">
                                             <div className="social_media_content">
@@ -894,7 +894,7 @@ const SocialAccounts = ({}) => {
                                                     <ul className="menu_items">
                                                         {
                                                             (getAllPinterestPagesApi?.isLoading || getAllPinterestPagesApi?.isFetching) ?
-                                                                <SkeletonEffect count={3}/>
+                                                                <SkeletonEffect count={3} className={"mt-2"}/>
                                                                 : currentConnectedPinterestPages?.length === 0 ?
                                                                     <div className={"no-page-connected-outer text-center"}>
                                                                         <div>No active connections at the moment.</div>

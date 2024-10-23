@@ -369,6 +369,12 @@ const LinkedinCommentsSection = ({
                                                                             className={"comment-edit-del-button"}
                                                                             variant="success" id="dropdown-basic">
                                                                             <PiDotsThreeVerticalBold
+                                                                                onClick={()=>{
+                                                                                    setReplyToComment(null)
+                                                                                    setShowReplyBox([])
+                                                                                    setUpdateComment({})
+                                                                                    setReplyComment({})
+                                                                                }}
                                                                                 className={"comment-edit-del-icon"}/>
                                                                         </Dropdown.Toggle>
                                                                         <Dropdown.Menu>
@@ -624,6 +630,12 @@ const LinkedinCommentsSection = ({
                                                                                                                     variant="success"
                                                                                                                     id="dropdown-basic">
                                                                                                                     <PiDotsThreeVerticalBold
+                                                                                                                        onClick={()=>{
+                                                                                                                            setReplyToComment(null)
+                                                                                                                            setShowReplyBox([])
+                                                                                                                            setUpdateComment({})
+                                                                                                                            setReplyComment({})
+                                                                                                                        }}
                                                                                                                         className={"comment-edit-del-icon"}/>
                                                                                                                 </Dropdown.Toggle>
                                                                                                                 <Dropdown.Menu>

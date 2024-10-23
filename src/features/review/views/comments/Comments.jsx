@@ -356,16 +356,23 @@ const Comments = ({
                                                                 </p>
                                                                 <Dropdown>
                                                                     <Dropdown.Toggle
+
                                                                         className={"comment-edit-del-button"}
                                                                         variant="success" id="dropdown-basic">
                                                                         <PiDotsThreeVerticalBold
-                                                                            className={"comment-edit-del-icon"}/>
+                                                                            className={"comment-edit-del-icon"}
+                                                                            onClick={()=>{
+                                                                                setUpdateComment({})
+                                                                                setShowReplyBox([])
+                                                                            }}/>
                                                                     </Dropdown.Toggle>
                                                                     <Dropdown.Menu>
                                                                         {
                                                                             comment?.from?.id === postData?.page?.pageId &&
-                                                                            <Dropdown.Item onClick={() => {
-                                                                                !updateCommentsApi?.isLoading && setUpdateComment({
+                                                                            <Dropdown.Item
+                                                                                onClick={() => {
+                                                                                    if(updateCommentsApi?.isLoading)return
+                                                                                    setUpdateComment({
                                                                                     comment: comment,
                                                                                     index: index,
                                                                                     commentLevel: "FIRST"
@@ -591,18 +598,25 @@ const Comments = ({
                                                                                                         </p>
                                                                                                         <Dropdown>
                                                                                                             <Dropdown.Toggle
+
                                                                                                                 className={"comment-edit-del-button"}
                                                                                                                 variant="success"
                                                                                                                 id="dropdown-basic">
                                                                                                                 <PiDotsThreeVerticalBold
-                                                                                                                    className={"comment-edit-del-icon"}/>
+                                                                                                                    className={"comment-edit-del-icon"}
+                                                                                                                    onClick={()=>{
+                                                                                                                        setUpdateComment({})
+                                                                                                                        setShowReplyBox([])
+                                                                                                                    }}/>
                                                                                                             </Dropdown.Toggle>
                                                                                                             <Dropdown.Menu>
                                                                                                                 {
                                                                                                                     childComment?.from?.id === postData?.page?.pageId &&
                                                                                                                     <Dropdown.Item
                                                                                                                         onClick={() => {
-                                                                                                                            !updateCommentsApi?.isLoading && setUpdateComment({
+                                                                                                                            if(updateCommentsApi?.isLoading)return
+
+                                                                                                                            setUpdateComment({
                                                                                                                                 comment: childComment,
                                                                                                                                 parentCommentIndex: index,
                                                                                                                                 index: i,
