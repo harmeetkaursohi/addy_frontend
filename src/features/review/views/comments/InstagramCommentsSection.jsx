@@ -3,7 +3,7 @@ import {Dropdown} from "react-bootstrap";
 import {PiDotsThreeVerticalBold} from "react-icons/pi";
 import {
     countCommonElementsFromArray,
-    getCommentCreationTime, getValueOrDefault,
+    getCommentCreationTime, getEmptyArrayOfSize, getValueOrDefault,
     handleShowCommentReplies,
     isNullOrEmpty, removeDuplicatesObjectsFromArray,
 } from "../../../../utils/commonUtils";
@@ -16,7 +16,6 @@ import default_user_icon from "../../../../images/default_user_icon.svg"
 import Skeleton from "../../../loader/skeletonEffect/Skeleton";
 import {RotatingLines} from "react-loader-spinner";
 import CommentText from "./CommentText";
-import CommonLoader from "../../../common/components/CommonLoader";
 import {
     useDeleteCommentMutation,
     useLazyGetCommentsQuery,
@@ -24,6 +23,7 @@ import {
 } from "../../../../app/apis/commentApi";
 import {handleRTKQuery} from "../../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../../app/addyApi";
+import SkeletonEffect from "../../../loader/skeletonEffect/SkletonEffect";
 
 const InstagramCommentsSection = ({
                                       postData,
@@ -216,11 +216,10 @@ const InstagramCommentsSection = ({
                 dispatch(addyApi.util.invalidateTags(["getPostSocioDataApi"]));
             },
             null,
-            ()=>{
+            () => {
                 setCommentToDelete(null)
             }
         );
-
 
 
     }
@@ -263,7 +262,17 @@ const InstagramCommentsSection = ({
                 postSocioData?.comments_count === 0 && <div className={"no-cmnt-txt"}>No comments yet!</div>
             }
             {
-                postSocioData?.comments_count > 0 && instagramComments?.data === null ? <CommonLoader/> :
+                postSocioData?.comments_count > 0 && instagramComments?.data === null ?
+                    getEmptyArrayOfSize(3).map((_, i) => {
+                        return <div className={"d-flex gap-2 mt-3"} key={i}>
+                            <SkeletonEffect count={1} className={"comment-profile-pic-loader mt-2 "}/>
+                            <div className={"w-100"}>
+                                <SkeletonEffect count={1} className={"mt-2 w-25"}/>
+                                <SkeletonEffect count={1} className={"mt-2 w-75"}/>
+                            </div>
+                        </div>
+                    })
+                    :
                     instagramComments?.data?.map((comment, index) => {
                         return (
                             <>
@@ -290,7 +299,7 @@ const InstagramCommentsSection = ({
                                                                 <Dropdown.Toggle className={"comment-edit-del-button"}
                                                                                  variant="success" id="dropdown-basic">
                                                                     <PiDotsThreeVerticalBold
-                                                                        onClick={()=>{
+                                                                        onClick={() => {
                                                                             setReplyToComment(null)
                                                                             setReply({
                                                                                 parentId: null,
@@ -393,7 +402,7 @@ const InstagramCommentsSection = ({
                                                                                                             variant="success"
                                                                                                             id="dropdown-basic">
                                                                                                             <PiDotsThreeVerticalBold
-                                                                                                                onClick={()=>{
+                                                                                                                onClick={() => {
                                                                                                                     setReplyToComment(null)
                                                                                                                     setReply({
                                                                                                                         parentId: null,
@@ -680,21 +689,21 @@ const InstagramCommentsSection = ({
             }
             {
                 ((getCommentsApi?.isLoading || getCommentsApi?.isFetching) && Array.isArray(instagramComments?.data)) ?
-                    <div className={" text-center z-index-1 mt-1"}><RotatingLines strokeColor="#F07C33"
-                                                                                  strokeWidth="5"
-                                                                                  animationDuration="0.75"
-                                                                                  width="30"
-                                                                                  visible={true}/>
-                    </div> :
-                    <>
-                        {
-                            instagramComments?.nextCursor !== null &&
-                            <div className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"} onClick={() => {
-                                setTriggerGetCommentsApi(true)
-                            }}>Load more comments
+                    getEmptyArrayOfSize(2).map((_, i) => {
+                        return <div className={"d-flex gap-2 mt-3"} key={i}>
+                            <SkeletonEffect count={1} className={"comment-profile-pic-loader mt-2 "}/>
+                            <div className={"w-100"}>
+                                <SkeletonEffect count={1} className={"mt-2 w-25"}/>
+                                <SkeletonEffect count={1} className={"mt-2 w-75"}/>
                             </div>
-                        }
-                    </>
+                        </div>
+                    })
+                    :
+                    instagramComments?.nextCursor !== null &&
+                    <div className={"ms-2 mt-2 load-more-cmnt-txt cursor-pointer"} onClick={() => {
+                        setTriggerGetCommentsApi(true)
+                    }}>Load more comments
+                    </div>
             }
         </>
     )
