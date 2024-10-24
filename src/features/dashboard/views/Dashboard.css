@@ -131,9 +131,7 @@ button.DisConnectBtn {
     box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68)
 }
 
-.upcoming_post_outer {
-    padding: 15px 0px;
-}
+
 .upcoming_post_outer .draft-outer .post_image_outerwrapper {
     height: 196px;
 }

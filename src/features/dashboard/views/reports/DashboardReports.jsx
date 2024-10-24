@@ -160,7 +160,7 @@ export const DashboardReports = () => {
 
                             //     :
 
-                                <div className="post_activity_outer">
+                                <div className="post_activity_outer cmn_background p-3">
 
                                     <div
                                         className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container">

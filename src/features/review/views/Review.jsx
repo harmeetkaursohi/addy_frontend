@@ -185,10 +185,9 @@ const Review = () => {
         (
             <>
                 <section>
-                    <div className={sidebar ? "comment_container" : "cmn_Padding"}>
+                    <div className={sidebar ? "comment_container" : "cmn_Padding bg-transparent"}>
 
                         <div className="cmn_outer">
-                            <div className="review_wrapper cmn_wrapper_outer  white_bg_color cmn_height_outer">
                                 <div className="review_header align-items-center gap-3">
                                     <div className="review_heading flex-grow-1">
                                         <h2 className="cmn_text_heading">Published Posts</h2>
@@ -299,6 +298,7 @@ const Review = () => {
                                         </>
                                     }
                                 </div>
+                            <div className="review_wrapper cmn_height_outer">
                                 {
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                     <>

@@ -664,9 +664,6 @@ button.swal2-confirm.confirmButton.swal2-styled.swal2-default-outline {
   animation-name: fadeInLeft;
   animation-duration: 3s;
 }
-.Sidebar_containerbox li{
-  width: 60px !important;
-}
 
 .no_acc_title{
 font-family: "Nunito";
@@ -1225,7 +1222,7 @@ position: relative;
 .social_media_page_outer img {
   height: 20px;
   width: 22px;
-  margin-left: -10px;
+  margin-left: -4px;
 }
 
 

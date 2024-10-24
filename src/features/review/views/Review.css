@@ -484,7 +484,6 @@ ul.review_list table tbody tr td {
 @media screen and (max-width: 767px) {
     .review_header {
         display: block;
-        padding-top: 36px;
     }
     
     .review_content h3 {

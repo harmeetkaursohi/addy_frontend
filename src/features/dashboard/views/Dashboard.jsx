@@ -35,7 +35,7 @@ const Dashboard = () => {
         <>
             <div className={sidebar ? 'cmn_container' : "cmn_Padding"}>
                 <div className="cmn_outer">
-                    <div className="cmn_wrapper_outer white_bg_color">
+                    <div className="">
                         <Header userData={userData} setShowConnectAccountModal={setShowConnectAccountModal}/>
                         <div className="dashboard_outer">
 

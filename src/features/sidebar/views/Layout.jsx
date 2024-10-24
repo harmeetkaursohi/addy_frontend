@@ -100,7 +100,9 @@ const Layout = () => {
         }
     }, [getAllConnectedPagesApi, getConnectedSocialAccountApi])
 
-    const LogOut = () => {
+    const LogOut = (e) => {
+        e.stopPropagation()
+
         Swal.fire({
             title: `Logout`,
             imageUrl: logout_image,
@@ -152,123 +154,31 @@ const Profile =() =>{
 
 
                     </div>
-                    {/* <div className={"d-flex align-items-center"}>
-                        <div
-                            className={`user_info_outer ${sidebar ? "px-3 py-2" : ""} ${location.pathname === "/profile" ? "active_bg_color" : ""}`}
-                            onClick={() => {
-                                navigate("/profile");
-                            }}>
-
-
-                            {
-                                getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
-                                    <SkeletonEffect count={1}/> :
-                                    getUserInfoApi.data !== undefined &&
-                                    <>
-                                        <img
-                                            src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
-                                            className='profile_img'/>
-                                        <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
-                                    </>
-                            }
-                        </div>
-
-
-                    </div> */}
-                    <ul className={sidebar ? "sidebar_item Sidebar_containerbox mt-3" : "sidebar_item "}>
+                
+                    <ul className={sidebar ? "sidebar_item Sidebar_containerbox " : "sidebar_item "}>
                         {SidebarMenuItems &&
                             SidebarMenuItems?.map((item, index) => (
-                                <li
-                                    key={index}
-                                    className={
-                                        item.path === "/" + splitLocation[1]
-                                            ? "sidebar_container_items sidebar_item_outer"
-                                            : "sidebar_item_outer"
-                                    }
-                                    onClick={() => {
-                                        navigate(item.path);
-                                    }}
-                                >
-
-                                    {sidebar ? (
-                                        <OverlayTrigger
-                                            placement="right"
-                                            delay={{show: 400, hide: 300}}
-                                            overlay={
-                                                <Tooltip id="button-tooltip" className="ms-4">
-                                                    {item.name}
-                                                </Tooltip>
-                                            }
-                                        >
-                                            <div
-                                                className={item.path === "/" + splitLocation[1] ? "sidebar_inner_content" : "sidebar_item_outers"}>
-
-                                                {
-                                                    (item.name === "Notifications" && unseenNotifications > 0) &&
-                                                    <h2 className={"notification-count-sidebar "}>{unseenNotifications}</h2>
-                                                }
-                                                {/* <img src={item.icon}/> */}
-                                                {item.icon}
-
-                                            </div>
-
-                                        </OverlayTrigger>
-                                    ) : (
-                                        <div
-                                            className={item.path === "/" + splitLocation[1] ? "sidebar_inner_content" : "sidebar_item_outers"}>
-                                            {
-                                                (item.name === "Notifications" && unseenNotifications > 0) &&
-                                                <h2 className={"notification-count-sidebar "}>{unseenNotifications}</h2>
-                                            }
-                                            {item.icon}
-                                            <h6 className=''>{item.name} </h6>
-                                        </div>
-                                    )
-                                    }
-
-
+                                <li key={index} className={item.path === "/" + splitLocation[1] ? "sidebar_active" : ""}>
+                                    <Link to={item.path}>    {item.icon} <span>{item.name}</span></Link>
                                 </li>
+                               
                             ))}
-                        <li className=" sidebar_item_outer  sidebar_item_outer">
-                            {sidebar ? (
-                                <OverlayTrigger
-                                    placement="right"
-                                    overlay={<Tooltip id="button-tooltip">Profile</Tooltip>}
-                                >
-                                    <div className="sidebar_item_outers" onClick={Profile}>
-                                    {
-                                getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
+
+                             <li className="log_out">
+                                     {
+                                         getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
                                     <SkeletonEffect count={1}/> :
                                     getUserInfoApi.data !== undefined &&
+                                    <Link to="/profile">
                                         <img
                                             src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
                                             className='profile_img mobile_profile'/>
                                      
+                                        <span>   <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
+                                        <h4 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.email.slice(0,15) + "..." || "email"}</h4></span> <img onClick={(e)=>{LogOut(e)}} className="logout_icon" src={logout_img}/></Link>
                                       } 
-
-                                    </div>
-                                </OverlayTrigger>
-                            ) : (
-                                <>
-                                    <div className="sidebar_item_outers profile_link" onClick={LogOut}>
-                                    {
-                                getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
-                                    <SkeletonEffect count={1}/> :
-                                    getUserInfoApi.data !== undefined &&
-                                    <div className="profile_info">
-                                        <img
-                                            src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
-                                            className='profile_img'/>
-                                     <div>
-                                     <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
-                                     <h4 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.email.slice(0,15) + "..." || "email"}</h4>
-                                     </div>
-                                    </div>
-                                      }   <img src={logout_img}/>
-                                    </div>
-                                </>
-                            )}
-                        </li>
+                                </li>
+                       
                     </ul>
                 </div>
             </section>

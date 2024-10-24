@@ -1,429 +1,138 @@
 .sidebar_wrapper {
-    width: 240px;
-    box-shadow: 2px 0px 50px 0px rgba(226, 232, 240, 0.68);
-    z-index: 2;
     position: fixed;
-    overflow-y: scroll;
-    height: 100%;
-    overflow-x: hidden;
-    scrollbar-width: none;
-    background-color: white;
-    transition: all ease-in 0.4s;
-    border-top-right-radius: 22px;
-}
-img.addy_logo {
-    height: 45px;
-    object-fit: cover;
-    margin: 14px 7px 0px;
-}
-.cropped_logo_outer{
-    width: 154px;
-    margin: 14px 7px 0px;
-}
-.animation{
-    transition: all 0.7s ease-in;
-}
-.sidebar_inner_content svg path {
-    stroke:#000;
-}
-.notification-count-sidebar{
-    z-index: 1;
-    font-size: 11px;
-    color: white;
-    background: #f07c33;
-    border-radius: 20px;
-    height: 14px;
-    width: 14px;
-    text-align: center;
-    padding: 2px;
-    position: absolute;
-    left: 29px;
-    right: 0px;
-    top: 5px;
-    bottom: 0;
-    font-size: 10px;
-}
-
-.userimg{
-    height: 28px;
-    width: 28px;
-    border-radius: 100%;
-}
-.svg_color {
-    stroke: black;
-}
-
-
-::-webkit-scrollbar {
-    width: 5px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #e0dbdb;
-}
-
-::-webkit-scrollbar-track {
-  
-    background-color: #f1ecec;
-}
-
-/* .sc-JrDLc.gaTCvF.pro-sidebar {
-
-border-radius: 22px;
-background: #FFF;
-
-box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68);
-} */
-i.bar_icon {
-    display: flex;
-    justify-content: flex-end;
-    cursor: pointer;
-}
-
-.sidebar_item_outers.profile_link {
-    padding-top: 21px;
-    border-top: 1px solid rgba(209, 217, 226, 1);
-    padding-left: 10px;
-}
-
-.sidebar_item_outer a {
-    color: #97A1AD;
-    font-family: "Nunito";
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 37px; 
-    letter-spacing: -0.016px;
-    text-decoration: none;
-    gap: 20px;
-    display: flex;
-    align-items: center;
-}
-
-.sidebar_item li {
-    cursor: pointer;
-padding: 2px 10px;
-}
-.sidebar_item_outers.Profile_Img_outer a {
-    gap: 10px;
-    line-height: 0px;
-}
-.sidebar_content.sidebar_wrapper .sidebar_inner_content, .sidebar_content.sidebar_wrapper .sidebar_item_outers {
-    padding-left: 0;
-    padding-right: 0px;
-    text-align: center;
-    justify-content: center;
-}
-.sidebar_item li svg {
-    height: 19px;
-    width: 19px;
-    color: #767177;
-}
-.sidebar_item_outers img.profile_img.mobile_profile {
-    border-radius: 50%;
-}
-.sidebar_item li.sidebar_container_items svg{
-    color: #000;
-}
-.sidebar_container_items {
-    /* border-radius: 10px; */
-    overflow: hidden;
-
-}
-li.sidebar_container_items.sidebar_item_outer::before {
-    position: absolute;
-    left: 0px;
-    width: 4px;
-    height: 46px;
-    background: #f57e3b;
-    content: "";
-    border-radius: unset;
     top: 0;
+    inset-inline-start: 0;
+    z-index: 49;
+    height: 100%;
+    width: 15rem;
+    border-inline-end-width: 1px;
+    border-inline-end-color: hsla(0, 0%, 100%, .1);
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255);
+    font-family: Montserrat, sans-serif;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .15s;
+    transition-duration: .05s;
+    transition-timing-function: linear;
+    box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68);
 }
-
-h4.icon {
-    font-size: 18px;
-    color: #97A1AD;
+ul.sidebar_item {
+    border-top: 1px solid #ddd;
+    margin-top: 12px;
+    padding-top: 1.5px;
 }
-
-h4.active_icon {
-    color: #000;
-    font-size: 18px;
+.sidebar_content.sidebar_wrapper {
+    width: 4rem;
 }
-
-a.active {
-    color: #000;
-}
-
-.profile_img {
-    height: 80px;
-    width: 80px;
-}
-
-
-
-.sidebar_item_outers h6 {
-    color: #767177;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 27px;
+.sidebar_wrapper span {
+    position: relative;
     white-space: nowrap;
+    vertical-align: middle;
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 1;
+    overflow: hidden;
 }
-.sidebar_item_outers img{
-    height: 24px;
-    width: 24px;
-}
-.red_color{
-    color: #EB5757 !important;
-}
-
-.user_profile_outer h3 {
-    color: #000;
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 22px;
-    letter-spacing: -0.015px;
-}
-
-.Sidebar_containerbox li {
-    margin: 4px 0px;
-}
-
-.sidebar_inner_content {
- 
-    background: rgba(244, 244, 244, 1);
-    padding: 12px 19px;
-    gap: 10px;
-    display: flex;
-    align-items: center;
-    color: #2A2D37;
-    cursor: pointer;
-    border-radius: 12px;
-}
-
-.sidebar_inner_content h6 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #000;;
-    white-space: nowrap;
-}
-
-
-.user_profile_outer h4 {
-    color: #5F6D7E;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 20px;
-    letter-spacing: -0.014px;
-}
-
-.user_profile_wrapper {
-    display: flex;
-    padding: 12px 22px;
-    gap: 14px;
-    align-items: center;
-    border-top: 1px solid #D1D9E2;
-}
-
-.user_profile_outer {
-
-  text-align: center;
-  cursor: pointer;
-
-}
-
-.sidebar_container {
-    height: 100vh;
-    position: absolute;
-}
-
-/* i.bar_icon {
+.sidebar_content.sidebar_wrapper span {
     display: none;
-} */
-.profile_container{
-    word-wrap:break-word ;
-    max-width:150px
 }
-.user_profile_wrapper  img{
-    height: 64px;
-    width: 64px;
-border-radius: 20px;
+.sidebar_content.sidebar_wrapper li a {
+    padding: .75rem;
 }
-
-
-.user_info_outer{
+.sidebar_wrapper li a {
+    position: relative;
     display: flex;
     align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    padding: 12px 16px;
-    width: 100%;
-    margin: 15px 5px 0px;
-    border-radius: 9px;
+    border-radius: .5rem;
+    padding: .75rem;
+    font-size: .78rem;
+    font-weight: 600;
+    --tw-text-opacity: 1;
+    color: rgb(163 174 209 / var(--tw-text-opacity));
+    text-decoration-line: none;
 }
-.user_info_outer img {
-height: 25px;
-width: 25px;
-border-radius: 20px;
+.sidebar_wrapper li svg {
+    margin-inline-end: .625rem;
+    flex: 0 0 19px;
+    height: 19px;
 }
-.user_info_outer h3{
-    color: #2A2D37;
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 24px;
-    white-space: nowrap;
+.sidebar_wrapper li.log_out {
+    padding: 0 0.30rem;
 }
-.forward_arrow{
-    left: 3rem;
-    transition: all ease-in 0.5s;
+.sidebar_content.sidebar_wrapper li svg {
+    margin-inline-end: 0;
 }
-
-.bar svg{
-    scale: 1.2;
-}
-li.sidebar_item_outer:hover svg {
-    scale: 1.2;
-
-    transition: 0.4s;
-}
-.sidebar_content {
-        width: 59px;
-}
-.user_Profile_outer {
-     display: none;
-        
-}
-   
-i.bar_icon {
-        display: flex;
-        padding: 10px 16px;
-}
-.sidebar_item_outer{
+.sidebar_wrapper li {
+    padding: 0 .75rem;
     position: relative;
 }
-div.sidebar_item_outers {
-        padding: 8px 20px;
-        gap: 21px;
-
-        display: flex;
-        gap: 10px;
-        flex-grow: 1;
-        align-items: center;
-        color: #97A1AD;
+li.sidebar_active a {
+    color: #000;
 }
-.cmn_forward_arrow{    
-        padding: 10px 10px 0px 0px;
-      
-        margin-left: 10px;
-
+img.profile_img.mobile_profile {
+    width: 36px;
+    border-radius: 10px;
+    margin-right: 7px;
 }
-.cmn_forward_arrow svg{   
-cursor: pointer;
-
+li.log_out h3 {
+    font-size: 15px;
+    color: rgba(0, 0, 0, 1);
 }
-.cross_icon{
-        font-size: 22px;
+li.log_out h4 {
+    font-size: 14px;
+    margin-top: 2px;
 }
-
-
-.sidebar_item {
-    margin-top: 10px;
-    border-top: 1px solid rgba(244, 244, 244, 1);
-    padding-top: 2px;
+li.log_out span {
+    flex-grow: 1;
 }
-
-    ul.sidebar_item li:last-child{
+.sidebar_content.sidebar_wrapper li.log_out {
+width: 4rem !important;
+}
+li.log_out {
     bottom: 0;
     position: fixed;
-    margin-bottom: 10px;
-    }
-    .profile_info {
-        display: flex;
-        gap: 10px;
-        align-self: center;
-    }
-    
-    .sidebar_item_outers .profile_info img {
-        width: 40px;
-        height: 40px;
-        border-radius: 9px;
-    }
-    
-    .profile_info h3 {
-        font-size: 15px;
-        color: #000;
-        font-weight: 500;
-    }
-    
-    .profile_info h4 {
-        font-size: 14px;
-    }
-    /* media query starts here */
-@media screen and (min-width:1499px){
-    div.sidebar_item_outers {
-        padding: 8px 20px;
-    }
+    border-top: 1px solid rgba(209, 217, 226, 1);
+            padding-top:10px;
+    padding-bottom:10px;
+    width: 15rem;
 }
-@media screen and (max-width:1280px) {
-    .user_info_outer {
-        margin: 15px 5px 0px;
-        
-    }
-    .user_info_outer h3 {
-        font-size: 15px;
-    }
-     .sidebar_inner_content {
-        padding: 12px 15px;
-    }
-    .sidebar_item_outers h6 {
-        font-size: 15px;
-    }
-   
-
-    ul.sidebar_item {
-        margin-top: 0px !important;
-    }
+li.sidebar_active a {
+    background: rgba(244, 244, 244, 1);
 }
-@media screen and (max-width: 767px) {
-   
-
-    .notification-count-sidebar {
-        top: 0px;
-    }
-    .sidebar_item li{
-    margin-top: 8px;
-    }
-    /*.sidebar_content h2 {*/
-    /*    display: none;*/
-    /*}*/
-    .cmn_forward_arrow svg {
-        font-size: 20px;
-    }
-    .userimg{
-        height: 23px;
-        width: 23px;
-    }
-    .sidebar_item_outers.Profile_Img_outer a{
-        gap: 15px;
-    }
-    .cmn_container {
-        padding-left: 62px;
-    }
-
-    .sidebars_items {
-        width: 30px;
-    }
-    .user_profile_outer img{
-        margin-top: 10px !important;
-    }
-    /* .user_Profile_outer {
-        display: none;
-    } */
-    .cmn_forward_arrow{
-        top: 1rem;
-    }
-.connect_text {
-    line-height: 18px;
-    font-size: 13px;
+img.addy_logo {
+    width: 158px;
+    margin: auto;
 }
+.user_profile_outer a {
+    text-align: center;
+    display: block;
+}
+.sidebar_content.sidebar_wrapper .user_profile_outer {
+    width: 54px;
+    overflow: hidden;
+    padding-left: 6px;
+}
+.user_profile_outer {
+    padding-left: 5px;
+}
+.sidebar_content.sidebar_wrapper img.logout_icon {
+    display: none;
+}
+
+.sidebar_content.sidebar_wrapper img.profile_img.mobile_profile {
+    width: 32px;
+}
+
+.cmn_forward_arrow {
+    padding: 10px;
+}
+
+li.sidebar_active::before {
+    position: absolute;
+    content: "";
+    width: 3px;
+    height: 100%;
+    background: rgba(240, 124, 51, 1);
+    left: 0px;
 }
