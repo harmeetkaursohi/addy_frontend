@@ -1,5 +1,6 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import interactionPlugin from '@fullcalendar/interaction'
 import './Planner.css'
 import instagram_img from '../../../images/instagram.png'
 import linkedin from '../../../images/linkedin.svg'
@@ -10,7 +11,6 @@ import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {
     isPostDatesOnSameDayOrInFuture,
     computeAndReturnPlannerEvent,
-    dateFormat,
     computeImageURL, isNullOrEmpty
 } from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
@@ -18,7 +18,6 @@ import GenericButtonWithLoader from "../../common/components/GenericButtonWithLo
 import {ParentDraftComponent} from "../../unPublishedPages/views/ParentDraftComponent";
 import CommonShowMorePlannerModel from "../../common/components/CommonShowMorePlannerModal";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
-import Loader from '../../loader/Loader'
 import SkeletonEffect from '../../loader/skeletonEffect/SkletonEffect'
 import {useAppContext} from '../../common/components/AppProvider'
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
@@ -28,8 +27,11 @@ import {
     useGetPostsForPlannerQuery,
 } from "../../../app/apis/postApi";
 import Dropdown from 'react-bootstrap/Dropdown';
-import { CgChevronDown } from "react-icons/cg";
+import {CgChevronDown} from "react-icons/cg";
 import ScheduledPost from './ScheduledPost';
+import {formatDate, getDayStartInUTC, getDayStartInUTCFor} from "../../../utils/dateUtils";
+import {useSelector} from "react-redux";
+
 const Planner = () => {
 
     const {sidebar} = useAppContext();
@@ -57,6 +59,7 @@ const Planner = () => {
     const [isDraftPost, setDraftPost] = useState(false);
     const [showMorePlannerModel, setShowMorePlannerModel] = useState(false);
     const [eventDate, setEventDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(getDayStartInUTCFor(new Date()));
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
 
     const [events, setEvents] = useState([
@@ -92,10 +95,9 @@ const Planner = () => {
         }
     }, {skip: isNullOrEmpty(calendarRef) || isNullOrEmpty(baseSearchQuery) || isNullOrEmpty(startDate) || isNullOrEmpty(endDate) || isDraftPost})
 
-
     useEffect(() => {
         document.title = isDraftPost ? 'Draft' : 'Planner';
-    }, []);
+    }, [isDraftPost]);
 
     useEffect(() => {
         if (calendarRef?.current) {
@@ -111,7 +113,6 @@ const Planner = () => {
             setEvents(computeAndReturnPlannerEvent(getPostsForPlannerApi?.data));
         }
     }, [getPostsForPlannerApi]);
-
 
     const handleCreatePost = () => {
         const isAnyPageConnected = getAllConnectedPagesApi?.data?.length > 0
@@ -160,7 +161,7 @@ const Planner = () => {
                  style={{
                      backgroundColor: backgroundColor,
                      borderLeft: border,
-                     pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"
+                     // pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"
                  }}>
 
                 <div className="w-100 p-0 calendar_card">
@@ -168,9 +169,7 @@ const Planner = () => {
                     {
                         postOnSocialMedia !== null &&
                         <div className={"custom_event"}
-                             onClick={(e) => {
-                                 handleShowMorePostModal(event)
-                             }}>
+                        >
                             <img src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
                             <h3 style={{color: textColor}}
                                 className={`custom_event_heading${classname}`}>{postOnSocialMedia.title}</h3>
@@ -193,13 +192,10 @@ const Planner = () => {
                 {
                     !getPostsForPlannerApi?.isLoading && !getPostsForPlannerApi?.isFetching && !getPlannerPostsCountApi?.isLoading && !getPlannerPostsCountApi?.isFetching &&
                     <button className="createPost_btn crate_btn ms-0 p-0 w-100 planner_view_more_btn"
-                            onClick={(e) => handleShowMorePostModal(event)}
-                    >
-
-                        {
-                            (event?._def?.extendedProps?.showMoreContent > 0) &&
-                            "+ " + event?._def?.extendedProps?.showMoreContent
-                        }
+                    >{
+                        (event?._def?.extendedProps?.showMoreContent > 0) &&
+                        "+ " + event?._def?.extendedProps?.showMoreContent
+                    }
                     </button>
                 }
             </div>)
@@ -217,6 +213,8 @@ const Planner = () => {
             calendarRef?.current?.getApi().next();
         }
         let inst = new Date(calendarRef?.current?.getApi()?.currentData?.viewTitle.toString());
+        setSelectedDate(getDayStartInUTC(inst.getDate(), inst.getMonth(), inst.getFullYear()));
+
         inst.setDate(inst.getDate() + 10);
 
         const decodeJwt = decodeJwtToken(token);
@@ -239,37 +237,6 @@ const Planner = () => {
             ...draftSearchQuery,
             plannerCardDate: inst
         })
-    };
-
-    const handleShowMorePostModal = (event) => {
-        const startDate = event.start;
-        const targetDate = dateFormat(startDate);
-
-        setEventDate(new Intl.DateTimeFormat('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }).format(startDate));
-
-        const plannerPostList = {};
-        const batchIdList = [];
-
-        Object.keys(getPostsForPlannerApi?.data)?.filter((key) => {
-            const datePart = key.substring(0, 10);
-            if (datePart === targetDate.substring(0, 10)) {
-                plannerPostList.plannerPostData = getPostsForPlannerApi.data[key]
-            }
-        })
-        Object.keys(plannerPostList.plannerPostData)?.map((batchId) => {
-            batchIdList.push(batchId);
-        })
-        setShowMorePlannerModalSearchQuery({
-            ...showMorePlannerModalSearchQuery,
-            batchIds: batchIdList,
-            plannerCardDate: targetDate,
-            socialMediaTypes: baseSearchQuery?.socialMediaTypes || [],
-        })
-        setShowMorePlannerModel(true);
     };
 
     const handleSocialMediaFilters = (curKey) => {
@@ -322,11 +289,7 @@ const Planner = () => {
                                 <h6>{isDraftPost ? jsondata.draft_heading : jsondata.post_shecdule_heading}</h6>
                             </div>
                             <GenericButtonWithLoader
-                                label={
-                                    isDraftPost
-                                        ? jsondata.backToPlanner
-                                        : jsondata.draftPost
-                                }
+                                label={isDraftPost ? jsondata.backToPlanner : jsondata.draftPost}
                                 className={"draft_btn  cmn_white_text"}
                                 onClick={handleDraft}
                                 isDisabled={false}
@@ -345,7 +308,7 @@ const Planner = () => {
                                 isDraftPost === false &&
                                 <ul className="schdeuled_post_list">
                                     {
-                                        ( getPlannerPostsCountApi?.isLoading || getPlannerPostsCountApi?.isFetching) &&
+                                        (getPlannerPostsCountApi?.isLoading || getPlannerPostsCountApi?.isFetching) &&
                                         <>
                                             <li>
                                                 <h4><SkeletonEffect count={1} className={"w-25 m-auto "}/></h4>
@@ -421,62 +384,68 @@ const Planner = () => {
                                 {/* new code planner */}
                                 <div className=" ">
                                     <div className="">
-                                    <Dropdown className='cmn_dropdown'>
-                                        <Dropdown.Toggle>
-                                          Filters <CgChevronDown />
+                                        <Dropdown className='cmn_dropdown'>
+                                            <Dropdown.Toggle>
+                                                Filters <CgChevronDown/>
 
-                                        </Dropdown.Toggle>
+                                            </Dropdown.Toggle>
 
-                                        <Dropdown.Menu>
-                                            <li>    <h4>Select All</h4><input type={"checkbox"}
-                                                                                    checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
-                                                                                    onChange={(e) => handleSocialMediaFilters("all")}/></li>
-                                        {Object.keys(SocialAccountProvider).map((curKey, ind) => {
-
-                                            return (
-                                                <li key={ind}>
-                                                    <div className="d-flex gap-2 align-items-center ">
-                                                        <img src={computeImageURL(curKey)} height="20px"
-                                                            width="20px"/>
-                                                        <h4>{SocialAccountProvider[curKey]}</h4>
-                                                    </div>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={baseSearchQuery.socialMediaTypes && baseSearchQuery.socialMediaTypes.includes(curKey)}
-                                                        value={curKey}
-                                                        onChange={(e) => handleSocialMediaFilters(curKey)}
-                                                    />
-
-
+                                            <Dropdown.Menu>
+                                                <li><h4>Select All</h4><input type={"checkbox"}
+                                                                              checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
+                                                                              onChange={(e) => handleSocialMediaFilters("all")}/>
                                                 </li>
-                                            )
-                                            }
-                                            )}
-                                        </Dropdown.Menu>
+                                                {Object.keys(SocialAccountProvider).map((curKey, ind) => {
+
+                                                        return (
+                                                            <li key={ind}>
+                                                                <div className="d-flex gap-2 align-items-center ">
+                                                                    <img src={computeImageURL(curKey)} height="20px"
+                                                                         width="20px"/>
+                                                                    <h4>{SocialAccountProvider[curKey]}</h4>
+                                                                </div>
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={baseSearchQuery.socialMediaTypes && baseSearchQuery.socialMediaTypes.includes(curKey)}
+                                                                    value={curKey}
+                                                                    onChange={(e) => handleSocialMediaFilters(curKey)}
+                                                                />
+
+
+                                                            </li>
+                                                        )
+                                                    }
+                                                )}
+                                            </Dropdown.Menu>
                                         </Dropdown>
                                         <div
                                             className={`${isDraftPost ? "calendar-container hidden" : "CalenderOuter_Wrapper"}`}>
                                             <FullCalendar
+                                                dateClick={(arg) => {
+                                                    const localDate = new Date(arg.date);
+                                                    setSelectedDate(getDayStartInUTC(localDate.getDate(), localDate.getMonth(), localDate.getFullYear()));
+                                                }}
                                                 ref={calendarRef}
-                                                plugins={[dayGridPlugin]}
+                                                plugins={[dayGridPlugin, interactionPlugin]}
                                                 initialView="dayGridMonth"
                                                 weekends={true}
                                                 events={events}
                                                 eventContent={renderCalendarCards}
                                                 dayHeaderContent={customDayHeaderContent}
-                                                dayCellClassNames={(arg) => {
-                                                    if (arg?.isPast) {
-                                                        return "calendar_card_disable";
-                                                    }
-                                                }}
+                                                // dayCellClassNames={(arg) => {
+                                                //     if (arg?.isPast) {
+                                                //         return "calendar_card_disable";
+                                                //     }
+                                                // }}
                                                 headerToolbar={
-                                                    isDraftPost &&
-                                                    (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.data?.length === 0) ?
+                                                    isDraftPost && (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.data?.length === 0) ?
                                                         {
                                                             left: "  ",
                                                             center: "",
                                                             right: "",
-                                                        } : {
+                                                        }
+                                                        :
+                                                        {
                                                             left: "  prev",
                                                             center: "title",
                                                             right: "next,timeGridDay,",
@@ -510,11 +479,16 @@ const Planner = () => {
                                                 showNonCurrentDates={false}
                                             />
                                             <div className={"scheduled_posts"}>
-                                                        <ScheduledPost/>
+                                                <ScheduledPost
+                                                    selectedDate={selectedDate}
+                                                    setSelectedDate={setSelectedDate}
+                                                    selectedSocialMediaTypes={baseSearchQuery?.socialMediaTypes || []}
+                                                    plannerPosts={getPostsForPlannerApi}
+                                                />
                                             </div>
                                         </div>
                                     </div>
-                                   
+
                                     {/* <div className="col-lg-3 col-md-12 col-sm-12">
                                         <div className={`${isDraftPost ? " d-none" : "planner_create_post_container"}`}>
                                             <div className="planner_create_post">
