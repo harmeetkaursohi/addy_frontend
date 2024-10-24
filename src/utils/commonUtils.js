@@ -382,14 +382,6 @@ export function getEnumValue(providerType) {
     }
 }
 
-export const dateFormat = (date, appendURL) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const isoDateString = `${year}-${month}-${day}T00:00:00.000+00:00`;
-    return isoDateString;
-}
-
 
 export const notConnectedSocialMediaAccount = (provider, connectedList) => {
     if (connectedList === undefined || (Array.isArray(connectedList) && connectedList.filter(c => c.provider !== "GOOGLE").length === 0)) {

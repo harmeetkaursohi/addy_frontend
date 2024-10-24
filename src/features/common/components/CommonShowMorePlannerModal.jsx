@@ -33,6 +33,9 @@ const CommonShowMorePlannerModal = ({
                                         showMorePlannerModalSearchQuery,
                                     }) => {
 
+    console.log("eventDate=====>",eventDate)
+    console.log("showMorePlannerModalSearchQuery=====>",showMorePlannerModalSearchQuery)
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 

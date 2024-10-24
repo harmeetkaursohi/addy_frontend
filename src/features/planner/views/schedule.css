@@ -9,7 +9,7 @@
 }
 
 .scheduled_posts {
-    width: 350px;
+    width: 500px;
     padding: 13px;
     border-radius: 15px;
     background: #fff;
@@ -35,4 +35,15 @@ table.fc-col-header {
 
 .schedule_header svg path{
     fill:rgba(95, 109, 126, 1);
+}
+.posts-loader-outer{
+    border-radius: 10px;
+    border: 1px solid #d1d1d1;
+    background: #FFF;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.09);
+    padding: 10px ;
+}
+.planner-img-skeleton{
+    height: 90px;
+    width: 80%;
 }
