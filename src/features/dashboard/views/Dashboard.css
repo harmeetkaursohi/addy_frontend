@@ -7,6 +7,59 @@
     background-color: unset !important;
 }
 
+.dashboard-report-social-media {
+    height: 40px;
+}
+
+.dashboard-report-data-loader {
+    height: 30px;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8); /* Light white overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.loading-text {
+    font-size: 1.3rem;
+    font-family: "Nunito";
+    font-weight: 500;
+    color: #00000080;
+}
+
+@keyframes blink {
+    50% {
+        color: transparent
+    }
+}
+
+.loader__dot {
+    font-size: 50px;
+    animation: 1s blink infinite
+}
+
+.loader__dot:nth-child(2) {
+    animation-delay: 250ms
+}
+
+.loader__dot:nth-child(3) {
+    animation-delay: 500ms
+}
+
 .user_Details img {
     border-radius: 5px;
 }
@@ -27,9 +80,11 @@
     margin-top: 14px;
     cursor: auto
 }
+
 .menu_items li:first-child {
     margin-top: 0px;
 }
+
 button#dropdown-facebook.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active {
     background: white !important;
     border-color: unset !important;
@@ -107,11 +162,8 @@ button.DisConnectBtn {
 }
 
 
-
-
-
 .followers_outer {
- 
+
     display: flex;
     gap: 15px;
 }
@@ -172,16 +224,20 @@ span.cmn_followers_btn {
     font-weight: 500;
     color: rgba(240, 124, 51, 1);
 }
+
 .dashboard_row {
     display: flex;
     gap: 30px;
 }
+
 .dashboardReport_outer {
     flex-grow: 1;
 }
+
 .social_account_outer {
     width: 381px;
 }
+
 .monthly_growth {
     display: flex;
     gap: 7px;
@@ -189,13 +245,15 @@ span.cmn_followers_btn {
     align-items: center;
     justify-content: space-between;
 }
-.monthly_growth .cmn_followers_btn{
+
+.monthly_growth .cmn_followers_btn {
     cursor: auto;
     background: transparent;
     border: transparent;
     text-align: left;
     padding: 0;
 }
+
 .social_media_account {
     display: flex;
     justify-content: space-between;
@@ -220,11 +278,6 @@ span.cmn_followers_btn {
 }
 
 
-
-
-
-
-
 .social_media_wrapper {
     padding: 16px 20px;
 }
@@ -242,7 +295,8 @@ span.cmn_followers_btn {
 .social_media_outer:first-child {
     border-bottom: unset;
 }
-.pagecount{
+
+.pagecount {
     font-size: 13px;
     color: red;
     background: #f2ecec;
@@ -255,9 +309,11 @@ span.cmn_followers_btn {
     top: -9px;
     left: 11px;
 }
+
 .social_media_icon {
     position: relative;
 }
+
 .social_media_content {
     display: flex;
     gap: 12px;
@@ -269,25 +325,29 @@ span.cmn_followers_btn {
 .social_media_content svg {
     margin-left: auto;
 }
-.upcomingPostBtn_Outer{
+
+.upcomingPostBtn_Outer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-top: 1px solid #D1D9E2;
-    padding:20px;
+    padding: 20px;
     background-color: #F8F9FB;
     gap: 12px;
 
 }
-.upcoming_post_heading{
+
+.upcoming_post_heading {
     color: black;
     font-size: 12px;
     font-weight: 500;
     margin-bottom: 4px !important;
 }
-.upcomingPostBtn_Outer button.post_now.cmn_bg_btn, button.outline_btn.schedule_btn{
+
+.upcomingPostBtn_Outer button.post_now.cmn_bg_btn, button.outline_btn.schedule_btn {
     max-width: 202px;
 }
+
 .cmn_drop_down.dropdown svg {
     transform: rotate(-0deg);
 }
@@ -306,10 +366,10 @@ span.cmn_followers_btn {
     letter-spacing: -0.015px;
     font-family: "Nunito";
 }
+
 h5.userName {
     white-space: nowrap;
 }
-
 
 
 .account_info {
@@ -319,7 +379,7 @@ h5.userName {
     padding: 15px;
 }
 
-.no_acc_container img{
+.no_acc_container img {
     width: 80%;
 }
 
@@ -339,7 +399,6 @@ button.facebook_connect {
     height: 35px !important;
     margin: 0px !important;
 }
-
 
 
 .account_reached {
@@ -375,7 +434,6 @@ button.facebook_connect {
 }
 
 
-
 select.dropdown_days {
     font-size: 13px;
     color: #5F6D7E;
@@ -391,10 +449,12 @@ select.dropdown_days {
     border: 1px solid #F3F7FD;
     box-shadow: 2px 2px 2px 0px #f5f4f4;
 }
-.dropdown_days:focus{
+
+.dropdown_days:focus {
     box-shadow: unset;
     outline: unset;
 }
+
 select.page_title_options {
     padding: 6px 2px 6px 0px;
     border: none;
@@ -420,6 +480,7 @@ select.page_title_options {
 .Account_not_connect_wrapper div.modal-content {
     border-radius: 30px;
 }
+
 img.connection-error-svg {
     height: 130px;
     width: 100%;
@@ -451,19 +512,20 @@ img.connection-error-svg {
     display: flex;
     /*justify-content: space-between;*/
     align-items: center;
-    gap:
-    20px;
+    gap: 20px;
     cursor: pointer;
 }
 .connect-page-btn {
     color: #04a3ff;
     text-decoration: underline;
 }
-.linkedin-icon-color{
+
+.linkedin-icon-color {
     color: #004190;
     font-size: 24px;
 }
-div.upcomingPostBtn_Outer button{
+
+div.upcomingPostBtn_Outer button {
     flex-grow: 1;
     font-size: 14px;
     font-weight: 600;
@@ -491,7 +553,8 @@ div.upcomingPostBtn_Outer button{
     align-items: center;
 
 }
-.postdata_wrapper span{
+
+.postdata_wrapper span {
     color: #3C87E0;
     font-size: 12px;
     font-weight: 700;
@@ -555,6 +618,7 @@ width: 100%;
 .HiMiniArrowUpRight svg{
     vertical-align: middle;
 }
+
 .upcomingPostBtn_Outer .outline_btn {
     border: 1px solid #D1D9E2;
     background: #E6E9EC;
@@ -563,16 +627,18 @@ width: 100%;
 .upcomingPostBtn_Outer .post_now {
     background: #F07C33;
 }
-.custom_select_days{
+
+.custom_select_days {
     padding-right: 20px; /* Adjust the padding to create space from the right side */
-  appearance: none; /* Hide the default arrow in modern browsers */
-  -webkit-appearance: none; /* Hide the default arrow in older versions of Safari */
-  -moz-appearance: none; /* Hide the default arrow in older versions of Firefox */
-  background-image: url("../../../images/down_arrow.svg"); /* Optionally, replace the arrow with a custom image */
-  background-repeat: no-repeat;
-  background-position:  right 10px center;
-  position: relative;
+    appearance: none; /* Hide the default arrow in modern browsers */
+    -webkit-appearance: none; /* Hide the default arrow in older versions of Safari */
+    -moz-appearance: none; /* Hide the default arrow in older versions of Firefox */
+    background-image: url("../../../images/down_arrow.svg"); /* Optionally, replace the arrow with a custom image */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    position: relative;
 }
+
 .not_account_content h6 {
     font-size: 14px;
     font-weight: 600;
@@ -581,113 +647,134 @@ width: 100%;
     padding-bottom: 15px;
     color: #000;
 }
+
 .account_not_connect_imcontainer {
     min-height: calc(100vh - 170px);
 }
+
 .not_account_content h5 {
     font-size: 22px;
     font-weight: 600;
     padding-bottom: 2em;
     color: #000;
 }
+
 .account_info canvas {
     width: 100% !important;
 }
+
 /* media query starts here */
 
-@media screen and (min-width:2560px){
+@media screen and (min-width: 2560px) {
     .followers_outer {
         gap: 40px;
     }
-    .No_Upcoming_Outer img{
+
+    .No_Upcoming_Outer img {
         width: 37%;
     }
 }
- @media screen and (min-width:1499px){
+
+@media screen and (min-width: 1499px) {
     .upcoming_post_outer .draft-outer .post_image_outerwrapper {
         height: 350px;
     }
- }
+}
+
 @media screen and (max-width: 1280px) {
     .social_media_outer {
-      gap: 5px;
+        gap: 5px;
     }
+
     .dashboard_row {
         gap: 15px;
     }
+
     .upcomingPostBtn_Outer {
         gap: 13px;
     }
-    
+
     .social_media_content h5 {
         font-size: 13px;
     }
+
     .createPost_btn {
         margin-left: 9px;
         font-size: 12px;
     }
 
-    
-    .postActivity_InnerWrapper{
+
+    .postActivity_InnerWrapper {
         flex-wrap: wrap;
     }
-   
+
     button.facebook_connect {
         min-width: 77px !important;
         height: 33px !important;
     }
-    
+
 }
-@media screen and (max-width:1280px){
-    .post_performing_list{
+
+@media screen and (max-width: 1280px) {
+    .post_performing_list {
         flex-wrap: wrap;
     }
-    .post_performing_list h4{
+
+    .post_performing_list h4 {
         font-size: 15px;
     }
+
     .performing_post_heading {
         font-size: 17px;
     }
+
     .postdata_wrapper h5 {
         font-size: 19px;
     }
-    .followers_wrapper h5, .followers_inner_content{
+
+    .followers_wrapper h5, .followers_inner_content {
         font-size: 13px;
         padding: 10px;
     }
-    
+
 }
 
 @media screen and (max-width: 1024px) {
 
-    .social_media_content,  .followers_outer {
+    .social_media_content, .followers_outer {
         flex-wrap: wrap;
-        }
-        .upcomingPostBtn_Outer{
-            flex-wrap: wrap;
-        }
+    }
+
+    .upcomingPostBtn_Outer {
+        flex-wrap: wrap;
+    }
+
     .social_media_wrapper {
         padding: 16px;
     }
-   
+
     .followers_wrapper {
         margin-top: 15px;
-        
+
     }
+
     .connectDisconnect_btn_outer {
         gap: 14px;
     }
 
-   
+
     .followers_wrapper h2 {
         font-size: 20px;
     }
-    .dropdown_btn_Outer_container{
+
+    .dropdown_btn_Outer_container {
         flex-wrap: wrap;
     }
+
     .Performing_Post_container h3 {
         font-size: 20px;
     }
+
     .overview_heading {
         font-size: 16px;
     }
@@ -705,8 +792,8 @@ width: 100%;
     .social_media_wrapper {
         margin-top: 10px;
     }
-    
-    
+
+
 }
 
 @media screen and (max-width: 767px) {

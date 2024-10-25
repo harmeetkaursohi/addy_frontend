@@ -1,55 +1,75 @@
-import polygon_img from "../../../../images/polygon.svg";
+import SkeletonEffect from "../../../loader/skeletonEffect/SkletonEffect";
+import {LineGraph} from "./LineGraph";
 
-export const DashBoardReportLoader = () => {
+export const DashBoardReportLoader = ({isSocialMediaAccountLoading,isSocialMediaReportLoading,isGraphLoading}) => {
 
     return (
-
-        <div className="followers_outer mt-4">
-
-            <div className="followers_wrapper">
-                <h5>Followers</h5>
-                <div className="followers_inner_content">
-                    <h2><i className="fa fa-spinner fa-spin"/></h2>
-                    <div className="monthly_growth">
-                        <button className="cmn_followers_btn">
-                            {/* <img src={polygon_img} className="polygon_img"/> */}
-                            <i className="fa fa-spinner fa-spin"/>
-                        </button>
+        <div>
+            {
+                isSocialMediaAccountLoading &&
+                <div
+                    className="d-flex gap-3 align-items-center postActivity_InnerWrapper dropdown_btn_Outer_container w-100">
+                    <div className={"w-25"}><SkeletonEffect count={1}
+                                                            className={"w-100 dashboard-report-social-media"}/>
+                    </div>
+                    <div className={"w-25"}><SkeletonEffect count={1}
+                                                            className={"w-100 dashboard-report-social-media"}/>
                     </div>
                 </div>
-            </div>
+            }
+            {
+                isSocialMediaReportLoading &&
+                <div className="followers_outer mt-4">
 
 
-            <div className="followers_wrapper ">
-                <h5>Account Reached</h5>
-                <div className="followers_inner_content">
-                    <h2><i className="fa fa-spinner fa-spin"/></h2>
-                    <div className="monthly_growth">
-                        <button className="cmn_followers_btn">
-                            {/* <img src={polygon_img} className="polygon_img"/> */}
-                            <i className="fa fa-spinner fa-spin"/>
-                        </button>
-                        {/* <h6 className="cmn_headings">{jsondata.monthlyGrowth}</h6> */}
+                    <div className="followers_wrapper text-start">
+                        <h5>Followers</h5>
+                        <div className="followers_inner_content">
+                            <SkeletonEffect count={1} className={"w-25 dashboard-report-data-loader"}/>
+                            <SkeletonEffect count={1} className={"w-100 mt-3"}/>
+
+                        </div>
+                    </div>
+                    <div className="followers_wrapper text-start">
+                        <h5>Account Reached</h5>
+                        <div className="followers_inner_content">
+                            <SkeletonEffect count={1} className={"w-25 dashboard-report-data-loader"}/>
+                            <SkeletonEffect count={1} className={"w-100 mt-3"}/>
+
+                        </div>
+                    </div>
+
+                    <div className="followers_wrapper text-start">
+                        <h5>Post Activity</h5>
+                        <div className="followers_inner_content">
+                            <SkeletonEffect count={1} className={"w-25 dashboard-report-data-loader"}/>
+                            <SkeletonEffect count={1} className={"w-100 mt-3"}/>
+
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+            {
+                isGraphLoading &&
+                <div className="page_title_header mb-0">
+                    <div className="page_title_container">
+                        <div className="page_title_dropdown">
+                            <h3 className="cmn_white_text instagram_overview_heading"> Overview</h3>
+                        </div>
+                    </div>
+                    <div className="account_info mt-2">
+                        <LineGraph
+                            reportData={[]}
+                            isLoading={true}
+                        />
                     </div>
                 </div>
-            </div>
 
-            <div className="followers_wrapper ">
-                <h5>Post Activity</h5>
-                <div className="followers_inner_content">
-                    <h2><i className="fa fa-spinner fa-spin"/></h2>
-                    <div className="monthly_growth">
-                        <button className="cmn_followers_btn">
-                            {/* <img src={polygon_img} className="polygon_img"/> */}
-                            <i className="fa fa-spinner fa-spin"/>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            }
 
         </div>
-
-
     )
 
 }
