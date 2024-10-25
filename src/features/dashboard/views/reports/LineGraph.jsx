@@ -10,6 +10,7 @@ import {
 } from 'chart.js';
 import {Line} from 'react-chartjs-2';
 import {useEffect, useState} from "react";
+import "../Dashboard.css"
 
 ChartJS.register(
     CategoryScale,
@@ -22,29 +23,29 @@ ChartJS.register(
 );
 
 
-export const LineGraph = ({reportData}) => {
+export const LineGraph = ({reportData,isLoading}) => {
 
     const [labels, setLabels] = useState(['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']);
     const [dataSet, setDataSet] = useState([],)
     const [data, setData] = useState({labels, datasets: dataSet});
-  
+
     const [aspectRatio, setAspectRatio] = useState(true);
 
     useEffect(() => {
-      const handleResize = () => {
-        if(window.innerWidth <= 767){
-            setAspectRatio(false)
-        }
-       
-      };
-  
-      window.addEventListener('resize', handleResize);
-  
-      handleResize();
+        const handleResize = () => {
+            if (window.innerWidth <= 767) {
+                setAspectRatio(false)
+            }
 
-      return () => window.removeEventListener('resize', handleResize);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
-    
+
     const options = {
         responsive: true,
         maintainAspectRatio: aspectRatio,
@@ -72,7 +73,7 @@ export const LineGraph = ({reportData}) => {
 
 
     useEffect(() => {
-        if (reportData?.data && Array.isArray(reportData.data?.Accounts_Reached)) {
+        if (reportData?.data && Array.isArray(reportData.data?.Accounts_Reached) ) {
             setLabels(computeLabels(reportData?.data.Accounts_Reached));
             let dataSets = []
 
@@ -113,7 +114,24 @@ export const LineGraph = ({reportData}) => {
 
 
     return (
-        <Line options={options} data={data}/>
+        <div className="chart-container">
+            <Line options={options} data={data}/>
+
+            {
+                isLoading &&
+                <div className="loading-overlay">
+                <span className="loading-text">
+                    <div class="loader">Loading
+                        <span class="loader__dot">.</span>
+                        <span class="loader__dot">.</span>
+                        <span class="loader__dot">.</span>
+                    </div>
+                </span>
+                </div>
+            }
+        </div>
+
+
     )
 
 }
@@ -123,7 +141,7 @@ export const LineGraph = ({reportData}) => {
 // import {
 //         CategoryScale,
 //         Chart as ChartJS,
-    
+
 //         LinearScale,
 //         LineElement,
 //         PointElement,
@@ -137,9 +155,9 @@ export const LineGraph = ({reportData}) => {
 //         LineElement,
 //         Title,
 //         Tooltip,
-      
+
 //     );
-    
+
 // const data = {
 //     labels: ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'],
 //     datasets: [
@@ -149,7 +167,7 @@ export const LineGraph = ({reportData}) => {
 //         borderColor: '#00A3FF',
 //         fill: true,
 //       },
-     
+
 //     ],
 //   };
 //   export const   LineGraph = () => {  
@@ -168,11 +186,11 @@ export const LineGraph = ({reportData}) => {
 //             },
 //         },
 //     };
- 
+
 //         return (
 //             <Line data={data} options={options}/>
-        
-    
+
+
 //     )
 // }
 

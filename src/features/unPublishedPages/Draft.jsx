@@ -11,7 +11,6 @@ import {useAppContext} from "../common/components/AppProvider";
 import Dropdown from "react-bootstrap/Dropdown";
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../app/apis/pageAccessTokenApi";
-import CommonLoader from "../common/components/CommonLoader";
 
 const Draft = () => {
 
@@ -51,9 +50,7 @@ const Draft = () => {
         }
     };
 
-    return( getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
-        <CommonLoader classname={sidebar ? "loader_siderbar_open" : "loader_siderbar_close"}></CommonLoader>
-        : (
+    return (
         <>
             <section>
                 <div className={sidebar ? "cmn_container" : "cmn_Padding"}>

@@ -24,7 +24,6 @@ import {
     SocialAccountProvider
 } from "../../../../utils/contantData";
 import Loader from "../../../loader/Loader";
-import CommonLoader from "../../../common/components/CommonLoader";
 import notConnected_img from "../../../../images/no_acc_connect_img.svg";
 import ConnectSocialMediaAccount from "../../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../../common/components/AppProvider";
@@ -64,7 +63,6 @@ const Insight = () => {
     const [connectedInstagramPages, setConnectedInstagramPages] = useState(null);
     const [connectedLinkedinPages, setConnectedLinkedinPages] = useState(null);
     const [connectedPinterestBoards, setConnectedPinterestBoards] = useState(null);
-
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
 
@@ -111,6 +109,7 @@ const Insight = () => {
         }, selectedPage?.socialMediaType)
     }, {skip: isNullOrEmpty(selectedPage) || isNullOrEmpty(selectedDaysForPostEngagement) || selectedPage?.socialMediaType === "INSTAGRAM"})
 
+    const isAccountInfoLoading = getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading
 
     useEffect(() => {
         if (!getConnectedSocialAccountApi?.isLoading && getConnectedSocialAccountApi?.data !== null && getConnectedSocialAccountApi?.data !== undefined && getConnectedSocialAccountApi?.data?.length > 0) {
@@ -135,15 +134,26 @@ const Insight = () => {
         setSelectedPage({...page, socialMediaType: socialMediaType})
     }
 
-    return (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading) ?
-        <CommonLoader classname={sidebar ? "loader_siderbar_open" : "loader_siderbar_close"}/>
-        : (
+    return (
             <section>
                 <div className={`insight_wrapper ${sidebar ? "cmn_container" : "cmn_Padding"}`}>
                     <div className="cmn_outer">
                         <div className="insight_outer  cmn_wrapper_outer white_bg_color cmn_height_outer">
                             <h2 className="insight_heading cmn_text_style">Insights</h2>
                             <h6 className="cmn_small_heading">{jsondata.insight_heading}</h6>
+                            {
+                                isAccountInfoLoading  &&
+                                <div className={"mt-4"}>
+                                    <h5 className="Choose_platform_title">Choose PlatForm</h5>
+                                    <div className={"d-flex"}>
+                                        <SkeletonEffect count={1} className={"mt-3 h-40 w-75"}/>
+                                        <SkeletonEffect count={1} className={"mt-3 h-40 w-75"}/>
+                                        <SkeletonEffect count={1} className={"mt-3 h-40 w-75"}/>
+                                        <SkeletonEffect count={1} className={"mt-3 h-40 w-75"}/>
+                                    </div>
+                                </div>
+
+                            }
                             {
                                 getConnectedSocialAccountApi?.data?.length > 0 &&
                                 <div className="insight_inner_content">

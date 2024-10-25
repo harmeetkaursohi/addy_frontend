@@ -18,7 +18,6 @@ import GenericButtonWithLoader from "../../common/components/GenericButtonWithLo
 import {ParentDraftComponent} from "../../unPublishedPages/views/ParentDraftComponent";
 import CommonShowMorePlannerModel from "../../common/components/CommonShowMorePlannerModal";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
-import Loader from '../../loader/Loader'
 import SkeletonEffect from '../../loader/skeletonEffect/SkletonEffect'
 import {useAppContext} from '../../common/components/AppProvider'
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";

@@ -1,30 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
 import DraftComponent from "./DraftComponent";
 import notConnected_img from "../../../images/no_acc_connect_img.svg";
-import fb_img from "../../../images/fb.svg";
-import instagram_img from "../../../images/instagram.png";
-import linkedin_img from "../../../images/linkedin.svg";
-
-import nature_img from "../../../images/download.jpg";
-
 import {
-    computeImageURL,
     formatMessage, getEmptyArrayOfSize,
-    handleSeparateCaptionHashtag,
     isNullOrEmpty,
     sortByKey
 } from "../../../utils/commonUtils";
-import CommonLoader from "../../common/components/CommonLoader";
 import noDraftPosts from "../../../images/no_draft_posts.png";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
-import {useAppContext} from "../../common/components/AppProvider";
 import {NoPostInDraft, NotConnected} from "../../../utils/contantData";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {useGetSocialMediaPostsByCriteriaQuery} from "../../../app/apis/postApi";
-import {formatDate} from "@fullcalendar/core";
-import CommonSlider from "../../common/components/CommonSlider";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 
 export const ParentDraftComponent = ({searchQuery}) => {
@@ -37,6 +24,7 @@ export const ParentDraftComponent = ({searchQuery}) => {
         plannerCardDate: searchQuery?.plannerCardDate?.toISOString() || null
     }, {skip: isNullOrEmpty(searchQuery)})
 
+    const isAccountInfoLoading = getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading
 
     useEffect(() => {
         if (draftPostsApi?.data) {
@@ -79,8 +67,8 @@ export const ParentDraftComponent = ({searchQuery}) => {
             {/*</div>*/}
 
             {
-                ( draftPostsApi?.isLoading || draftPostsApi?.isFetching) ?
-                    getEmptyArrayOfSize(4).map((_,i)=> {
+                (isAccountInfoLoading || draftPostsApi?.isLoading || draftPostsApi?.isFetching) ?
+                    getEmptyArrayOfSize(4).map((_, i) => {
                         return <div className={"col-lg-3 col-sm-12 col-md-12"} key={i}>
                             <div
                                 className={"draft_wrapper_box"}>
@@ -103,6 +91,7 @@ export const ParentDraftComponent = ({searchQuery}) => {
                     })
 
                     :
+                    getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                     (drafts !== null && Array.isArray(drafts) && drafts?.length === 0) ?
                         <div className="noDraftPosts_outer p-5 text-center mt-3">
                             <img src={noDraftPosts} alt={"No Drafts"} className=" no-draft-img"/>
