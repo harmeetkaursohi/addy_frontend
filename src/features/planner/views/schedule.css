@@ -7,6 +7,14 @@
 .fc.fc-media-screen.fc-direction-ltr.fc-theme-standard {
     width: 100%;
 }
+.sechduled_post_outer img.post_img {
+    border-radius: 7px;
+
+}
+.sechduled_post_outer {
+    gap: 10px;
+}
+
 
 .scheduled_posts {
     width: 500px;
@@ -45,5 +53,4 @@ table.fc-col-header {
 }
 .planner-img-skeleton{
     height: 90px;
-    width: 80%;
 }

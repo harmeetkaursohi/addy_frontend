@@ -16,9 +16,9 @@ import CommonSlider from "../../common/components/CommonSlider";
 import {Image} from "react-bootstrap";
 import default_user_icon from "../../../images/default_user_icon.svg";
 import {RiDeleteBin7Line} from "react-icons/ri";
-import CommonFeedPreview from '../../common/components/CommonFeedPreview';
+import PostViewModal from './PostViewModal';
 
-const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes, plannerPosts,setIstrue}) => {
+const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes, plannerPosts,setIsPostApiLoading,isPostApiLoading}) => {
 
     const [searchQuery, setSearchQuery] = useState({
         postStatus: ["PUBLISHED", "SCHEDULED"],
@@ -29,8 +29,9 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
     });
     const [posts, setPosts] = useState([]);
     const [forceRender, setForceRender] = useState(null);
-    const [selectedPageData,setSelectedPageData] = useState(false)
-
+    const [showPostPerview,setShowPostPerview] = useState(false)
+    const handleClose = () => setShowPostPerview(false);
+    const handleShow = () => setShowPostPerview(true);
     const postsApi = useGetSocialMediaPostsByCriteriaQuery(searchQuery, {skip: isNullOrEmpty(searchQuery?.batchIds) || isNullOrEmpty(searchQuery?.plannerCardDate)})
 
     useEffect(() => {
@@ -65,6 +66,7 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
     }, [selectedDate, plannerPosts])
 
     useEffect(() => {
+        setIsPostApiLoading( postsApi?.isLoading || postsApi?.isFetching)
         if (forceRender && postsApi?.data && !postsApi?.isLoading && !postsApi?.isFetching) {
             setPosts(Object.values(postsApi?.data ))
         }
@@ -79,13 +81,6 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
         setSelectedDate(getNextDate(selectedDate))
     }
 
-    useEffect(() => {
-if((postsApi?.isLoading || postsApi?.isFetching)){
-    setIstrue(true)
-}else{
-    setIstrue(false)
-}
-    },[postsApi])
 
     return (
         <div className='scduler_outer'>
@@ -102,11 +97,11 @@ if((postsApi?.isLoading || postsApi?.isFetching)){
                     onClick={handleNextDay}
                 />
             </div>
-            <div className='mt-4'>
+            <div className='mt-4 sechduled_post_outer d-flex flex-column'>
                 {
                     (plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching) &&
                     getEmptyArrayOfSize(3).map((_, i) => {
-                        return <div className={"posts-loader-outer d-flex  mb-3 "}>
+                        return <div className={"posts-loader-outer d-flex  gap-2 mb-3 "}>
                             <div className="w-50">
                                 <SkeletonEffect count={1} className={"planner-img-skeleton"}/>
                             </div>
@@ -125,7 +120,7 @@ if((postsApi?.isLoading || postsApi?.isFetching)){
                 {
                     sortByKey(posts, "feedPostDate")?.map((plannerPost, index) => {
                         console.log(plannerPost,"this is the planner post")
-                        return <div className={"more_plans_grid mb-3 "} key={index} onClick={() => setSelectedPageData(true)}>
+                        return <div className={"more_plans_grid"} key={index} onClick={() => setShowPostPerview(true)}>
                             <div className="plan_grid_img">
                                 {
                                     plannerPost?.attachments &&
@@ -185,25 +180,6 @@ if((postsApi?.isLoading || postsApi?.isFetching)){
                                             }
                                         </div>
                                     </div>
-                                    <div className="plan_grid_navigations d-flex mt-2">
-                                        <button
-                                            className={isPlannerPostEditable("EDIT", plannerPost) ? "" : "disable_more_plans_grid"}
-                                            disabled={!isPlannerPostEditable("EDIT", plannerPost)}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                navigate(`/planner/post/${plannerPost?.id}`)
-                                            }}>
-                                            <i className="fa fa-pencil"
-                                               aria-hidden="true"/>
-                                        </button>
-                                        <button
-                                            className={isPlannerPostEditable("DELETE", plannerPost) ? "" : "disable_more_plans_grid"}
-                                            disabled={!isPlannerPostEditable("DELETE", plannerPost)}
-                                            >
-                                            <i className="fa fa-trash"
-                                               aria-hidden="true"/>
-                                        </button>
-                                    </div>
                                 </div>
                                 <p className="mt-2 mb-1">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.caption || "" : ""}</p>
                                 <p className="hasTags">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.hashtag || "" : ""}</p>
@@ -213,21 +189,8 @@ if((postsApi?.isLoading || postsApi?.isFetching)){
                 }
             </div>
             {
-            selectedPageData &&
-            <CommonFeedPreview
-            socialMediaType={option.group}
-            previewTitle={`${getEnumValue(option.group)} feed Preview`}
-            pageName={selectedPageData?.name}
-            pageImageUrl={selectedPageData?.imageUrl}
-            userData={userData}
-            cropImage={cropImgUrl !== null ? cropImgUrl : ""}
-            files={files}
-            selectedFileType={selectedFileType}
-            caption={caption}
-            hashTag={hashTag}
-            destinationUrl={pinDestinationUrl}
-            pinTitle={pinTitle}
-            />
+            showPostPerview &&
+           <PostViewModal showPostPerview={showPostPerview} setShowPostPerview={setShowPostPerview}/>
             }
         </div>
     )

@@ -10,7 +10,7 @@
 
 .plan_grid_img {
     width: 125px;
-    height: 114px;
+    height: 106px;
     overflow: hidden;
     border-radius: 6px;
     flex: 0 0 125px;
@@ -18,7 +18,7 @@
 
 .plan_grid_img img, .more_plans .planner-show-more-img-skeleton {
     width: 100%;
-    height: 114px;
+    height: 106px;
 
     object-fit: cover;
 }
@@ -48,7 +48,7 @@
     gap: 10px;
     position: relative;
     width: 100%;
-    min-height: 68px;
+    min-height: 53px;
 }
 
 .plans_tags_wrapper .d-flex.page_tags {
@@ -99,7 +99,7 @@
     font-family: "Nunito";
     font-size: 12px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .plan_tags.facebook {

@@ -51,8 +51,8 @@ const Planner = () => {
         socialMediaTypes: [],
         period: "DAY"
     });
-    const [isTrue,setIstrue] = useState(false)
-    console.log(isTrue,"this is the is true")
+    const [isPostApiLoading,setIsPostApiLoading] = useState(false)
+    // console.log(isTrue,"this is the is true")
     const [draftSearchQuery, setDraftSearchQuery] = useState({
         postStatus: ["DRAFT"],
         plannerCardDate: null,
@@ -424,11 +424,11 @@ const Planner = () => {
                                             className={`${isDraftPost ? "calendar-container hidden" : "CalenderOuter_Wrapper"}`}>
                                             <FullCalendar
                                                 dateClick={(arg) => {
-                                                    if(!isTrue){
+                                                    if(isPostApiLoading) return
                                                         const localDate = new Date(arg.date);
                                                         console.log(localDate,"localDate")
                                                         setSelectedDate(getDayStartInUTC(localDate.getDate(), localDate.getMonth(), localDate.getFullYear()));
-                                                    }
+                                                    
                                                 }}
                                                 ref={calendarRef}
                                                 plugins={[dayGridPlugin, interactionPlugin]}
@@ -489,7 +489,9 @@ const Planner = () => {
                                                     setSelectedDate={setSelectedDate}
                                                     selectedSocialMediaTypes={baseSearchQuery?.socialMediaTypes || []}
                                                     plannerPosts={getPostsForPlannerApi}
-                                                    setIstrue={setIstrue}
+                                                    setIsPostApiLoading={setIsPostApiLoading}
+                                                    isPostApiLoading={isPostApiLoading}
+
                                                 />
                                             </div>
                                         </div>
