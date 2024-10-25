@@ -16,8 +16,9 @@ import CommonSlider from "../../common/components/CommonSlider";
 import {Image} from "react-bootstrap";
 import default_user_icon from "../../../images/default_user_icon.svg";
 import {RiDeleteBin7Line} from "react-icons/ri";
+import CommonFeedPreview from '../../common/components/CommonFeedPreview';
 
-const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes, plannerPosts}) => {
+const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes, plannerPosts,setIstrue}) => {
 
     const [searchQuery, setSearchQuery] = useState({
         postStatus: ["PUBLISHED", "SCHEDULED"],
@@ -28,6 +29,7 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
     });
     const [posts, setPosts] = useState([]);
     const [forceRender, setForceRender] = useState(null);
+    const [selectedPageData,setSelectedPageData] = useState(false)
 
     const postsApi = useGetSocialMediaPostsByCriteriaQuery(searchQuery, {skip: isNullOrEmpty(searchQuery?.batchIds) || isNullOrEmpty(searchQuery?.plannerCardDate)})
 
@@ -77,6 +79,14 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
         setSelectedDate(getNextDate(selectedDate))
     }
 
+    useEffect(() => {
+if((postsApi?.isLoading || postsApi?.isFetching)){
+    setIstrue(true)
+}else{
+    setIstrue(false)
+}
+    },[postsApi])
+
     return (
         <div className='scduler_outer'>
             <div className='schedule_header d-flex align-items-center justify-content-center'>
@@ -114,7 +124,8 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                 }
                 {
                     sortByKey(posts, "feedPostDate")?.map((plannerPost, index) => {
-                        return <div className={"more_plans_grid mb-3 "} key={index}>
+                        console.log(plannerPost,"this is the planner post")
+                        return <div className={"more_plans_grid mb-3 "} key={index} onClick={() => setSelectedPageData(true)}>
                             <div className="plan_grid_img">
                                 {
                                     plannerPost?.attachments &&
@@ -201,6 +212,23 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                     })
                 }
             </div>
+            {
+            selectedPageData &&
+            <CommonFeedPreview
+            socialMediaType={option.group}
+            previewTitle={`${getEnumValue(option.group)} feed Preview`}
+            pageName={selectedPageData?.name}
+            pageImageUrl={selectedPageData?.imageUrl}
+            userData={userData}
+            cropImage={cropImgUrl !== null ? cropImgUrl : ""}
+            files={files}
+            selectedFileType={selectedFileType}
+            caption={caption}
+            hashTag={hashTag}
+            destinationUrl={pinDestinationUrl}
+            pinTitle={pinTitle}
+            />
+            }
         </div>
     )
 }

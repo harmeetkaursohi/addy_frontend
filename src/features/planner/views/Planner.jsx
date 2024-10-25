@@ -51,6 +51,8 @@ const Planner = () => {
         socialMediaTypes: [],
         period: "DAY"
     });
+    const [isTrue,setIstrue] = useState(false)
+    console.log(isTrue,"this is the is true")
     const [draftSearchQuery, setDraftSearchQuery] = useState({
         postStatus: ["DRAFT"],
         plannerCardDate: null,
@@ -422,8 +424,11 @@ const Planner = () => {
                                             className={`${isDraftPost ? "calendar-container hidden" : "CalenderOuter_Wrapper"}`}>
                                             <FullCalendar
                                                 dateClick={(arg) => {
-                                                    const localDate = new Date(arg.date);
-                                                    setSelectedDate(getDayStartInUTC(localDate.getDate(), localDate.getMonth(), localDate.getFullYear()));
+                                                    if(!isTrue){
+                                                        const localDate = new Date(arg.date);
+                                                        console.log(localDate,"localDate")
+                                                        setSelectedDate(getDayStartInUTC(localDate.getDate(), localDate.getMonth(), localDate.getFullYear()));
+                                                    }
                                                 }}
                                                 ref={calendarRef}
                                                 plugins={[dayGridPlugin, interactionPlugin]}
@@ -484,6 +489,7 @@ const Planner = () => {
                                                     setSelectedDate={setSelectedDate}
                                                     selectedSocialMediaTypes={baseSearchQuery?.socialMediaTypes || []}
                                                     plannerPosts={getPostsForPlannerApi}
+                                                    setIstrue={setIstrue}
                                                 />
                                             </div>
                                         </div>
