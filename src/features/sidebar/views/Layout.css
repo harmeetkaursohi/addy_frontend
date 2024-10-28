@@ -40,7 +40,8 @@ ul.sidebar_item {
 .sidebar_content.sidebar_wrapper li a {
     padding: .75rem;
 }
-.sidebar_wrapper li a {
+.sidebar_wrapper li a,
+.sidebar_wrapper li .profile_link {
     position: relative;
     display: flex;
     align-items: center;

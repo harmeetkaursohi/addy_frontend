@@ -206,10 +206,7 @@ button.edit_profile_btn {
 }
  
   
-  .cmn_select_box{
-    appearance: auto !important;
-    /* color: #9d9a9a !important; */
-  }
+
   .changeProfile_label:hover {
     background: white;
     color: #e97011;

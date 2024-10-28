@@ -25,6 +25,7 @@ const BillingForm = () => {
                         <div className="col-lg-6 col-md-12 col-sm-12">
                             <div className='addy_container'>
                                 <div className="addy_outer">
+                                <div className="form_wrapper">
                                     <div className="addy_img">
                                         <h2
                                             style={{fontSize: "32px"}}>{jsondata.billingAddress}</h2>
@@ -86,6 +87,7 @@ const BillingForm = () => {
                                         </form>
 
                                     </div>
+                                </div>
                                 </div>
 
                             </div>

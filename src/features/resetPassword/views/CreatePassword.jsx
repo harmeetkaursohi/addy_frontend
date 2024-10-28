@@ -62,12 +62,13 @@ const CreatePassword = () => {
             <div className="login_wrapper">
                 <div className="row">
                     <div className="col-lg-6 col-md-12 col-sm-12 ">
-                        <div className='addy_container bg_light_orange'>
+                        <div className='addy_container bg_light_orange min-vh-100'>
                             <div className='login_outer'>
 
                                 <div className='reach_user_outer'>
                                     <img src={frame} className='w-100'/>
                                     <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
+                                    <p>{jsondata.connect_audience_desc}</p>
                                 </div>
                             </div>
 
@@ -78,6 +79,7 @@ const CreatePassword = () => {
                     <div className="col-lg-6 col-md-12 col-sm-12">
                         <div className='addy_container'>
                             <div className="addy_outer">
+                            <div className="form_wrapper">
                                 <div className="addy_img">
                                     <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                     </div>
@@ -155,6 +157,7 @@ const CreatePassword = () => {
 
                                     </form>
                                 </div>
+                            </div>
                             </div>
 
                         </div>

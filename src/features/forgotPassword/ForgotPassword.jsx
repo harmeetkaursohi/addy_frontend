@@ -4,7 +4,7 @@ import {validationSchemas} from "../../utils/commonUtils"
 import jsondata from "../../locales/data/initialdata.json"
 import {Link, useNavigate} from 'react-router-dom';
 import addyads_img from "../../images/addylogo.png";
-import Frame from "../../images/forgotPassFrame.svg";
+import Frame from "../../images/signupFrame.svg";
 import {RotatingLines} from "react-loader-spinner";
 import {useForgotPasswordMutation} from "../../app/apis/authApi";
 import {handleRTKQuery} from "../../utils/RTKQueryUtils";
@@ -43,13 +43,14 @@ function ForgotPassword() {
             <div className="login_wrapper">
                 <div className="row">
                     <div className="col-lg-6 col-md-12 col-sm-12 ">
-                        <div className='addy_container bg_light_orange'>
+                        <div className='addy_container bg_light_orange min-vh-100'>
                             <div className='login_outer'>
 
 
                                 <div className='reach_user_outer text-center'>
                                     <img src={Frame} className=' w-100 mt-4'/>
                                     <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
+                                    <p>{jsondata.connect_audience_desc}</p>
                                 </div>
                             </div>
 
@@ -59,12 +60,13 @@ function ForgotPassword() {
                     </div>
                     <div className="col-lg-6 col-md-12 col-sm-12">
                         <div className='addy_container'>
-                            <div className="addy_outer">
+                            <div className="addy_outer d-flex align-items-center">
+                            <div className="form_wrapper ">
                                 <div className="addy_img">
                                     <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                     </div>
-                                    <h2>{jsondata.forgotPassword.forgotPassword}</h2>
-                                    <p>{jsondata.register_email_heading}</p>
+                                    <h2 className='text-center'>{jsondata.forgotPassword.forgotPassword}</h2>
+                                    <p className='forget_desc'>{jsondata.register_email_heading}</p>
 
                                 </div>
                                 <div className='login_form'>
@@ -100,14 +102,15 @@ function ForgotPassword() {
 
                                         </div>
                                     </form>
-                                    <h3>
+                                    {/* <h3>
                                         Back to
                                         <span className='gap'>&nbsp;</span>
                                         <Link to="/login">
                                             <span className='sign_up'>{jsondata.login}</span>
                                         </Link>
-                                    </h3>
+                                    </h3> */}
                                 </div>
+                            </div>
                             </div>
 
                         </div>

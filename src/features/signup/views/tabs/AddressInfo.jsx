@@ -7,7 +7,7 @@ import Button from "../../../common/components/Button"
 import React, {useEffect, useState} from "react";
 import {Country, State, City} from 'country-state-city';
 import Swal from "sweetalert2";
-import Frame from "../../../../images/signupFrame.svg";
+import Frame from "../../../../images/step_image.svg";
 import success_img from "../../../../images/right_img.svg";
 
 import {GrPrevious} from "react-icons/gr";
@@ -147,11 +147,11 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                         <div className="col-lg-6 col-md-12 col-sm-12 ">
 
 
-                            <div className='addy_container bg_light_orange'>
-                                <div className='login_outer'>
+                            <div className='addy_container bg_light_orange min-vh-100'>
+                                <div className='login_outer address_signup'>
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
+                                        <h2 className='mt-3'>{jsondata.address_audience_title}</h2>
                                     </div>
                                 </div>
 
@@ -159,17 +159,18 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                         </div>
                         <div className="col-lg-6 col-md-12 col-sm-12">
+
+
+                            <div className="addy_outer">
+                            <div className="form_wrapper">
                             <div className="gr_previous_outer cursor-pointer"
                                  onClick={(e) =>
                                      !signUpApi?.isLoading && handlePreviousTab(e)}><GrPrevious/>
                             </div>
-
-
-                            <div className="addy_outer">
                                 <div className="addy_img">
                                     <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                     </div>
-                                    <h2>{jsondata.oneStepAway}</h2>
+                                    <h2 className="text-center mt-0">{jsondata.oneStepAway}</h2>
                                     <p>{jsondata.address}</p>
                                 </div>
                                 <div className='login_form'>
@@ -207,7 +208,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                 onChange={handleCountryChange}
                                                 onBlur={formik.handleBlur}
                                                 value={formik.values.country}
-                                                className="form-control mt-1 cmn_select_box"
+                                                className="form-select mt-1 cmn_select_box"
                                             >
                                                 <option value="">{jsondata.select_country}</option>
                                                 {countries?.map((country) => (
@@ -237,7 +238,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                         onChange={handleStateChange}
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.state}
-                                                        className="form-control mt-1 cmn_select_box"
+                                                        className="form-select mt-1 cmn_select_box"
                                                     >
                                                         <option value="">{jsondata.select_state}</option>
                                                         {states?.map((state) => (
@@ -281,7 +282,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                                         onChange={formik.handleChange}
                                                         onBlur={formik.handleBlur}
                                                         value={formik.values.county}
-                                                        className="form-control mt-1 cmn_select_box"
+                                                        className="form-select mt-1 cmn_select_box"
                                                     >
                                                         <option value="">{jsondata.select_county}</option>
                                                         {cities?.map((city, index) => (
@@ -345,6 +346,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                                         </Link>
                                     </h3>
                                 </div>
+                            </div>
                             </div>
 
 

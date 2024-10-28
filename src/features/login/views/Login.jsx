@@ -7,7 +7,7 @@ import {useFormik} from 'formik';
 import {validationSchemas} from "../../../utils/commonUtils.js";
 import React, {useEffect, useState} from "react";
 import {showErrorToast} from "../../common/components/Toast";
-import Frame from "../../../images/loginFrame.svg";
+import Frame from "../../../images/signupFrame.svg";
 import {RotatingLines} from "react-loader-spinner";
 import {SomethingWentWrong} from "../../../utils/contantData";
 import {useLoginUserMutation} from "../../../app/apis/authApi";
@@ -54,13 +54,13 @@ const Login = () => {
                 <div className="login_wrapper">
                     <div className="row">
                         <div className="col-lg-6 col-md-12 col-sm-12 ">
-                            <div className='addy_container bg_light_orange'>
+                            <div className='addy_container bg_light_orange min-vh-100'>
                                 <div className='login_outer'>
 
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
                                         <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
-
+                                        <p>{jsondata.connect_audience_desc}</p>
                                     </div>
                                 </div>
 
@@ -70,13 +70,13 @@ const Login = () => {
                         </div>
                         <div className="col-lg-6 col-md-12 col-sm-12">
                             <div className='addy_container'>
-                                <div className="addy_outer">
+                                <div className="addy_outer d-flex align-items-center">
+                                <div className="form_wrapper">
                                     <div className="addy_img">
                                         <div className='logo_outer'>
                                             <img src={addyads_img} height="90px" width="238px"/>
                                         </div>
-                                        <h2>{jsondata.welcomeBack}</h2>
-                                        <p>{jsondata.welcome_back_heading}</p>
+                                        <h2>{jsondata.login}</h2>
                                     </div>
                                     <div className='login_form'>
                                         <form onSubmit={formik.handleSubmit}>
@@ -134,8 +134,8 @@ const Login = () => {
 
                                             </div>
 
-                                            <div className='rememberPass_outer mt-2'>
-                                                <div className='text-end mt-3'>
+                                            <div className='rememberPass_outer'>
+                                                <div className='text-end'>
                                                     <Link to="/forgot-password">
                                                         <label
                                                             className='forgotPass_heading cursor_pointer'>{jsondata.forgotpassword}</label>
@@ -185,6 +185,7 @@ const Login = () => {
                                             </Link>
                                         </h3>
                                     </div>
+                                </div>
                                 </div>
 
                             </div>

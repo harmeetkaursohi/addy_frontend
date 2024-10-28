@@ -221,8 +221,9 @@ element.style {
 
 span.cmn_followers_btn {
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 700;
     color: rgba(240, 124, 51, 1);
+    line-height: 18px;
 }
 
 .dashboard_row {
@@ -240,10 +241,10 @@ span.cmn_followers_btn {
 
 .monthly_growth {
     display: flex;
-    gap: 7px;
+    gap: 3px;
     margin-top: 10px;
-    align-items: center;
-    justify-content: space-between;
+    align-items: baseline;
+ 
 }
 
 .monthly_growth .cmn_followers_btn {

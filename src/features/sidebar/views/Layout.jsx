@@ -127,7 +127,7 @@ const Layout = () => {
         });
     };
 const Profile =() =>{
-    window.location.href = "/profile"
+    navigate('/profile')
 }
     return (
         <>
@@ -169,13 +169,14 @@ const Profile =() =>{
                                          getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
                                     <SkeletonEffect count={1}/> :
                                     getUserInfoApi.data !== undefined &&
-                                    <Link to="/profile">
-                                        <img
+                                    <div className="profile_link">
+                                        <img onClick={Profile}
                                             src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
                                             className='profile_img mobile_profile'/>
                                      
-                                        <span>   <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
-                                        <h4 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.email.slice(0,15) + "..." || "email"}</h4></span> <img onClick={(e)=>{LogOut(e)}} className="logout_icon" src={logout_img}/></Link>
+                                        <span onClick={Profile}>   <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
+                                        <h4 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.email.slice(0,15) + "..." || "email"}</h4></span> <img onClick={(e)=>{LogOut(e)}} className="logout_icon" src={logout_img}/>
+                                </div>
                                       } 
                                 </li>
                        

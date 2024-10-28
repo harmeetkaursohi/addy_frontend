@@ -562,7 +562,7 @@ const Profile = () => {
                                                                                     onBlur={formik.handleBlur}
                                                                                     defaultValue={formik.values.country}
                                                                                     disabled={!edit}
-                                                                                    className="form-control mt-1 cmn_select_box"
+                                                                                    className="form-select mt-1 cmn_select_box"
                                                                                 >
                                                                                     <option value="">Select Country
                                                                                     </option>
@@ -592,7 +592,7 @@ const Profile = () => {
                                                                                     onBlur={formik.handleBlur}
                                                                                     defaultValue={formik.values.state}
                                                                                     disabled={!edit}
-                                                                                    className="form-control mt-1 cmn_select_box"
+                                                                                    className="form-select mt-1 cmn_select_box"
                                                                                 >
                                                                                     <option value="">Select State
                                                                                     </option>
@@ -634,7 +634,7 @@ const Profile = () => {
                                                                                     onChange={edit ? formik.handleChange : undefined}
                                                                                     onBlur={formik.handleBlur}
                                                                                     value={formik.values.county}
-                                                                                    className="form-control mt-1 cmn_select_box"
+                                                                                    className="form-select mt-1 cmn_select_box"
                                                                                     disabled={!edit}
                                                                                 >
                                                                                     <option value="">Select County
