@@ -15,11 +15,15 @@ import {useGetSocialMediaPostsByCriteriaQuery} from "../../../app/apis/postApi";
 import CommonSlider from "../../common/components/CommonSlider";
 import {Image} from "react-bootstrap";
 import default_user_icon from "../../../images/default_user_icon.svg";
+import No_scheduled_post from "../../../images/no_scheduled_post.svg";
 import {RiDeleteBin7Line} from "react-icons/ri";
 import PostViewModal from './PostViewModal';
-
+import { useNavigate } from 'react-router-dom';
 const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes, plannerPosts,setIsPostApiLoading,isPostApiLoading}) => {
-
+    const navigate = useNavigate();
+    const handleCreatepost = () =>{
+        navigate('/planner/post')
+    }
     const [searchQuery, setSearchQuery] = useState({
         postStatus: ["PUBLISHED", "SCHEDULED"],
         batchIds: [],
@@ -115,7 +119,11 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                 }
                 {
                     !plannerPosts?.isLoading && !plannerPosts?.isFetching && !postsApi?.isLoading && !postsApi?.isFetching && plannerPosts?.data && isNullOrEmpty(plannerPosts?.data[formatDate(selectedDate, "ISOString")]) &&
-                    <div> No Post Available</div>
+                    <div className='No_scheduled_post'> <img src={No_scheduled_post} alt="No scheduled post" />
+                    <p>No Post is scheduled
+                    on this date</p>
+                    <button onClick={handleCreatepost} className='cmn_btn_color create_post_btn cmn_white_text'>Schedule Post</button>
+                    </div>
                 }
                 {
                     sortByKey(posts, "feedPostDate")?.map((plannerPost, index) => {
@@ -136,7 +144,7 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                             <div className="plan_grid_content">
                                 <div className="plan_content_header justify-start ">
                                     <div className="plans_tags_wrapper ">
-                                        <div className="d-flex page_tags position-absolute">
+                                        <div className={plannerPost?.postPages?.length > 1 ? "d-flex page_tags position-absolute gap-0 media_overlap" : "d-flex page_tags position-absolute"}>
                                             {
                                                 plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
                                                 plannerPost?.postPages.map((curPage, index) => {
@@ -156,7 +164,7 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                                                                         alt="fb"/>
 
                                                                 </div>
-                                                                <p className="mb-0">{curPage?.pageName}</p>
+                                                                <p className={plannerPost?.postPages?.length > 1 ? "mb-0 d-none" : "mb-0"}>{curPage?.pageName}</p>
                                                             </div>
                                                         }
                                                         {

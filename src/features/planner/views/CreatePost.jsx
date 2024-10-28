@@ -34,7 +34,6 @@ import {useCreatePostMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import { GoChevronDown } from "react-icons/go";
 import PostNowModal from "../../common/components/PostNowModal";
-import ai_icon  from "../../../images/ai_icon.svg"
 const CreatePost = () => {
 
     const navigate = useNavigate();

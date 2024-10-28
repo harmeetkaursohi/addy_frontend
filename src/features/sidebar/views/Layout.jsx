@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import addy_logo from "../../../images/addylogoo.png";
+import addy_logo from "../../../images/addylogoo.svg";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
 import {useDispatch, useSelector} from "react-redux";

@@ -895,7 +895,7 @@ button.fc--button.fc-button.fc-button-primary {
 }
 
 .calender_outer_wrapper table tbody tr td {
-  outline: 1px solid #ddd;
+  outline: unset;
   border: transparent;
   height: 100px;
 }

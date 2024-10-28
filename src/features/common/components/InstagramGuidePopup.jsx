@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import instaGuid from "../../../images/instaguid.png";
 import FacebookAuthorizedModal from "./FacebookAuthorizedModal";
 import { Image } from "react-bootstrap";
+import SVGComponent from "../../allImages";
 const InstagramGuidePopup = ({
                                  show,
                                  setShow,
@@ -12,10 +13,12 @@ const InstagramGuidePopup = ({
                                  setInstagramDropDown,
                                  setPinterestDropDown,
                                  setLinkedinDropDown,
-                                 connectSocialMediaAccountToCustomer
+                                 connectSocialMediaAccountToCustomer,
+                                 props
                              }) => {
 
     const [showFacebookAuthorizedModal, setShowFacebookAuthorizedModal] = useState(false);
+    console.log(SVGComponent,props,"SVGComponent")
 
 
     const handleFacebookAuthorizedModal = () => {
@@ -81,7 +84,8 @@ const InstagramGuidePopup = ({
                                         </li>
                                     </ol>
                                     <div>
-                                        <Image src="/assets/instaguid.svg" alt="Instagram Guide image" className="img-fluid"/>
+                                        <SVGComponent/>
+                                        {/* <Image  loading="auto" src="/assets/instaguid.svg" alt="Instagram Guide image" className="img-fluid"/> */}
                                     </div>
                                     <div className="confirm_btn mt-2">
                                         <button

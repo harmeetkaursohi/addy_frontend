@@ -337,6 +337,7 @@ const SocialAccounts = ({}) => {
                                                     className={`fa-brands fa-facebook`}
                                                     style={{color: "#0866ff", fontSize: "24px"}}
                                                 />
+                                            
                                                 <div>
                                                     <h5 className="">Facebook account</h5>
                                                     <h6 className="cmn_headings">www.facebook.com</h6>
@@ -375,7 +376,6 @@ const SocialAccounts = ({}) => {
                                                         className="social_media_content"
                                                         onClick={() => setFacebookDropDown(!facebookDropDown)}
                                                     >
-                                                        <div className={"social_media_icon"}>
                                                             <Image className="cmn_width" src={fb_img} alt="fb_image"/>
 
                                                             <h2 className={`pagecount ${currentConnectedFacebookPages?.length === undefined ? "blink" : ""}`}>
@@ -383,7 +383,7 @@ const SocialAccounts = ({}) => {
                                                                     (currentConnectedFacebookPages !== null && currentConnectedFacebookPages !== undefined) ? currentConnectedFacebookPages?.length : 0
                                                                 }
                                                             </h2>
-                                                        </div>
+                                                       
 
                                                         <div className="text-start flex-grow-1">
                                                             <h5 className="userName">
@@ -498,10 +498,8 @@ const SocialAccounts = ({}) => {
                                     : getConnectedSocialAccountApi?.data?.filter((c) => c.provider === "INSTAGRAM").length === 0 ?
                                         <div className="social_media_outer">
                                             <div className="social_media_content">
-                                                <i
-                                                    className="fa-brands fa-instagram"
-                                                    style={{color: "purple", fontSize: "24px"}}
-                                                />
+                                            <img src="/assets/instagram_logo.svg" alt="instagram logo"  />
+
                                                 <div>
                                                     <h5 className=""> Instagram account</h5>
                                                     <h6 className="cmn_headings">www.instagram.com</h6>
@@ -525,7 +523,7 @@ const SocialAccounts = ({}) => {
                                                         className="social_media_content"
                                                         onClick={() => setInstagramDropDown(!instagramDropDown)}
                                                     >
-                                                        <i className="fa-brands fa-instagram insta-icon"/>
+                                                       <img src="/assets/instagram_logo.svg" alt="instagram logo"  />
                                                         <h2
                                                             className={`pagecount ${currentConnectedInstagramPages?.length === undefined ? "blink" : ""}`}
                                                         >
@@ -655,7 +653,8 @@ const SocialAccounts = ({}) => {
                                     : getConnectedSocialAccountApi?.data?.filter((c) => c.provider === "LINKEDIN").length === 0 ?
                                         <div className="social_media_outer">
                                             <div className="social_media_content">
-                                                <i className="fa-brands fa-linkedin linkedin-icon-color"/>
+                                            <img src="/assets/linkedin_logo.svg" alt="instagram logo"  />
+
                                                 <div>
                                                     <h5 className=""> Linkedin account</h5>
                                                     <h6 className="cmn_headings">in.linkedin.com</h6>
@@ -696,7 +695,8 @@ const SocialAccounts = ({}) => {
                                                         className="social_media_content"
                                                         onClick={() => setLinkedinDropDown(!linkedinDropDown)}
                                                     >
-                                                        <i className="fa-brands fa-linkedin linkedin-icon-color font-size-24"/>
+                                                                                                   <img src="/assets/linkedin_logo.svg" alt="instagram logo"  />
+
                                                         <h2 className={`pagecount ${currentConnectedLinkedinPages?.length === undefined ? "blink" : ""}`}>
                                                             {
                                                                 currentConnectedLinkedinPages !== null ? currentConnectedLinkedinPages?.length : 0

@@ -117,7 +117,7 @@ button.ConnectBtn {
 
 .user_Details h4 {
     color: #5F6D7E;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .user_Details {
@@ -306,7 +306,7 @@ span.cmn_followers_btn {
     text-align: center;
     padding-top: 0px;
     position: absolute;
-    top: -9px;
+    top: 0px;
     left: 11px;
 }
 
@@ -360,7 +360,7 @@ span.cmn_followers_btn {
 
 .social_media_content h5 {
     color: #5F6D7E;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
     line-height: 22px;
     letter-spacing: -0.015px;
@@ -694,9 +694,7 @@ width: 100%;
         gap: 13px;
     }
 
-    .social_media_content h5 {
-        font-size: 13px;
-    }
+  
 
     .createPost_btn {
         margin-left: 9px;

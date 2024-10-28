@@ -1,6 +1,5 @@
 .more_plans_grid {
     display: flex;
-    gap: 15px;
     border-radius: 10px;
     border: 1px solid #d1d1d1;
     background: #FFF;
@@ -9,11 +8,11 @@
 }
 
 .plan_grid_img {
-    width: 125px;
+    width: 116px;
     height: 106px;
     overflow: hidden;
     border-radius: 6px;
-    flex: 0 0 125px;
+    flex: 0 0 116px;
 }
 
 .plan_grid_img img, .more_plans .planner-show-more-img-skeleton {
@@ -26,7 +25,17 @@
 .plan_grid_content {
     flex-grow: 1;
 }
+.media_overlap .planner_tag_container {
+    margin-left: -24px;
+}
 
+.media_overlap .planner_tag_container:first-child {
+    margin: 0;
+}
+
+.media_overlap {
+    padding-left: 6px;
+}
 .plan_content_header {
     display: flex;
     justify-content: space-between;
@@ -51,8 +60,9 @@
     min-height: 53px;
 }
 
-.plans_tags_wrapper .d-flex.page_tags {
+.plans_tags_wrapper .d-flex.page_tags, .plan_grid_content p {
     min-height: inherit;
+    padding-left: 15px;
 }
 
 .plans_tags_wrapper .d-flex {
@@ -90,7 +100,6 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    min-width: 130px;
     width: 100%;
 }
 
@@ -117,9 +126,10 @@
 img.plan_social_img {
     position: absolute;
     bottom: 0;
-    right: -7px;
     width: 15px;
     height: 15px;
+    left: -16px;
+    top: -10px;
 }
 
 .plan_tag_img img.plan_image {
