@@ -169,7 +169,7 @@ const Profile =() =>{
                                          getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
                                     <SkeletonEffect count={1}/> :
                                     getUserInfoApi.data !== undefined &&
-                                    <div className="profile_link">
+                                    <div className="profile_link cursor-pointer">
                                         <img onClick={Profile}
                                             src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
                                             className='profile_img mobile_profile'/>

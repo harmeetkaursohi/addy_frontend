@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {RxCross2} from "react-icons/rx";
 import Modal from "react-bootstrap/Modal";
-import no_page_connect_img from "../../../images/facebook_authorized.png";
+import no_page_connect_img from "../../../images/facebook_authorized.svg";
 import {computeAndSocialAccountJSON} from "../../../utils/commonUtils";
 import {commonConnectSocialAccountButtonStyle, SocialAccountProvider} from "../../../utils/contantData";
 import {FacebookLoginButton} from "react-social-login-buttons";
@@ -27,7 +27,7 @@ const FacebookAuthorizedModal = ({
 
     const handleClose = () => setShowModal(false);
     const handleCloseInstagramGuideModal = () => setShowInstagramGuideModal(false);
-
+console.log(no_page_connect_img,"no_page_connect_img");
     return (
         <section className="facebook_modal_outer">
             <Modal

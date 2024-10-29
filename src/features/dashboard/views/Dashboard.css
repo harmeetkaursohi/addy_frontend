@@ -18,7 +18,7 @@
 .chart-container {
     position: relative;
     width: 100%;
-    height: 400px;
+    /* height: 400px; */
 }
 
 .loading-overlay {
@@ -434,7 +434,11 @@ button.facebook_connect {
     width: 100%;
 }
 
-
+select.dropdown_days:focus{
+    box-shadow: unset;
+    outline: unset;
+    border: unset;
+}
 select.dropdown_days {
     font-size: 13px;
     color: #5F6D7E;

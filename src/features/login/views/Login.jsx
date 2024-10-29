@@ -69,7 +69,7 @@ const Login = () => {
 
                         </div>
                         <div className="col-lg-6 col-md-12 col-sm-12">
-                            <div className='addy_container'>
+                            <div className='addy_container form_mainwrapper'>
                                 <div className="addy_outer d-flex align-items-center">
                                 <div className="form_wrapper">
                                     <div className="addy_img">
@@ -87,7 +87,7 @@ const Login = () => {
                                                 <input
                                                     className="form-control mt-1"
                                                     type='text'
-                                                    placeholder='Enter your email'
+                                                    placeholder='Email'
                                                     name="username"
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}

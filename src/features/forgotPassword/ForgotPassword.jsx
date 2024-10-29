@@ -59,7 +59,7 @@ function ForgotPassword() {
 
                     </div>
                     <div className="col-lg-6 col-md-12 col-sm-12">
-                        <div className='addy_container'>
+                        <div className='addy_container form_mainwrapper'>
                             <div className="addy_outer d-flex align-items-center">
                             <div className="form_wrapper ">
                                 <div className="addy_img">
@@ -78,7 +78,7 @@ function ForgotPassword() {
                                                 <input
                                                     className="form-control mt-1"
                                                     type='email'
-                                                    placeholder='Enter your email'
+                                                    placeholder='Email'
                                                     name="email"
                                                     onChange={formik.handleChange}
                                                     onBlur={formik.handleBlur}

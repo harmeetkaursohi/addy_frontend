@@ -7,7 +7,7 @@ import Button from "../../../common/components/Button"
 import React, {useEffect, useState} from "react";
 import {Country, State, City} from 'country-state-city';
 import Swal from "sweetalert2";
-import Frame from "../../../../images/step_image.svg";
+import Frame from "../../../../images/signupFrame.svg";
 import success_img from "../../../../images/right_img.svg";
 
 import {GrPrevious} from "react-icons/gr";
@@ -144,24 +144,25 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
             <section>
                 <div className="login_wrapper">
                     <div className="row">
-                        <div className="col-lg-6 col-md-12 col-sm-12 ">
-
-
+                    <div className="col-lg-6 col-md-12 col-sm-12 ">
                             <div className='addy_container bg_light_orange min-vh-100'>
-                                <div className='login_outer address_signup'>
+                                <div className='login_outer'>
+
                                     <div className='reach_user_outer text-center'>
                                         <img src={Frame} className=' w-100 mt-4'/>
-                                        <h2 className='mt-3'>{jsondata.address_audience_title}</h2>
+                                        <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
+                                        <p>{jsondata.connect_audience_desc}</p>
                                     </div>
                                 </div>
 
                             </div>
 
+
                         </div>
                         <div className="col-lg-6 col-md-12 col-sm-12">
 
 
-                            <div className="addy_outer">
+                            <div className="addy_outer form_mainwrapper">
                             <div className="form_wrapper">
                             <div className="gr_previous_outer cursor-pointer"
                                  onClick={(e) =>

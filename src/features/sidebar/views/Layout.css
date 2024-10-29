@@ -33,6 +33,7 @@ ul.sidebar_item {
     line-height: 1;
     opacity: 1;
     overflow: hidden;
+    font-weight: 500;
 }
 .sidebar_content.sidebar_wrapper span {
     display: none;
@@ -49,8 +50,7 @@ ul.sidebar_item {
     padding: .75rem;
     font-size: .78rem;
     font-weight: 600;
-    --tw-text-opacity: 1;
-    color: rgb(163 174 209 / var(--tw-text-opacity));
+    color: rgba(151, 161, 173, 1);
     text-decoration-line: none;
 }
 .sidebar_wrapper li svg {

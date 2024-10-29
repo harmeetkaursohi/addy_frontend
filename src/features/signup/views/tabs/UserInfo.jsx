@@ -1,4 +1,4 @@
-import Frame from "../../../../images/step_image.svg";
+import Frame from "../../../../images/signupFrame.svg";
 import addyads_img from "../../../../images/addylogo.png";
 import { Link } from "react-router-dom";
 import jsondata from "../../../../locales/data/initialdata.json";
@@ -57,167 +57,173 @@ const UserInfo = ({ formData, setFormData, setShowTab }) => {
           <div className="row">
             <div className="col-lg-6 col-md-12 col-sm-12 ">
               <div className="addy_container bg_light_orange min-vh-100">
-                <div className="login_outer address_signup">
+                <div className="login_outer">
                   <div className="reach_user_outer text-center">
                     <img src={Frame} className=" w-100 mt-4" />
-                    <h2 className="mt-3">{jsondata.address_audience_title}</h2>
+                    <h2 className="mt-3">{jsondata.connect_audience_title}</h2>
+                    <p>{jsondata.connect_audience_desc}</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-12 col-sm-12">
-              <div className="addy_container">
+              <div className="addy_container form_mainwrapper">
                 <div className="addy_outer">
-                <div className="form_wrapper">
-                  <div className="addy_img">
-                    <div className="logo_outer">
-                      <img src={addyads_img} height="90px" width="238px" />
+                  <div className="form_wrapper">
+                    <div className="addy_img">
+                      <div className="logo_outer">
+                        <img src={addyads_img} height="90px" width="238px" />
+                      </div>
+                      <h2 className="text-center mt-0">
+                        {jsondata.create_account}
+                      </h2>
+                      <p>{jsondata.enter_details_heading}</p>
                     </div>
-                    <h2 className="text-center mt-0">
-                      {jsondata.create_account}
-                    </h2>
-                    <p>{jsondata.enter_details_heading}</p>
-                  </div>
-                  <div className="login_form">
-                    <form onSubmit={formik.handleSubmit}>
-                      <div className="form-group">
-                        <label>
-                          {jsondata.firstname} <span>*</span>{" "}
-                        </label>
-
-                        <input
-                          name="firstName"
-                          className="form-control mt-1"
-                          type="text"
-                          placeholder="Enter your firstname"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.firstName}
-                        />
-
-                        {formik.touched.firstName && formik.errors.firstName ? (
-                          <p className="error_message">
-                            {formik.errors.firstName}
-                          </p>
-                        ) : null}
-                      </div>
-                      <div className="form-group">
-                        <label>
-                          {jsondata.lastname} <span>*</span>{" "}
-                        </label>
-
-                        <input
-                          name="lastName"
-                          className="form-control mt-1"
-                          type="text"
-                          placeholder="Enter your lastname"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.lastName}
-                        />
-
-                        {formik.touched.lastName && formik.errors.lastName ? (
-                          <p className="error_message">
-                            {formik.errors.lastName}
-                          </p>
-                        ) : null}
-                      </div>
-
-                      <div className="form-group">
-                        <label>
-                          {jsondata.username} <span>*</span>
-                        </label>
-
-                        <input
-                          name="username"
-                          className="form-control mt-1"
-                          type="text"
-                          placeholder="Enter your username"
-                          onChange={(e) => {
-                            formik.handleChange({
-                              target: {
-                                name: e.target.name,
-                                value: e.target.value.replace(/\s/g, ""),
-                              },
-                            });
-                          }}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.username}
-                        />
-
-                        {formik.touched.username && formik.errors.username ? (
-                          <p className="error_message">
-                            {formik.errors.username}
-                          </p>
-                        ) : null}
-                      </div>
-
-                      <div className="form-group">
-                        <label>
-                          {jsondata.email} <span>*</span>
-                        </label>
-                        <input
-                          name="email"
-                          className="form-control mt-1"
-                          type="email"
-                          placeholder="Enter your email"
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          value={formik.values.email}
-                        />
-
-                        {formik.touched.email && formik.errors.email ? (
-                          <p className="error_message">{formik.errors.email}</p>
-                        ) : null}
-                      </div>
-
-                      <div className="rememberPass_outer mt-2">
+                    <div className="login_form">
+                      <form onSubmit={formik.handleSubmit}>
                         <div className="form-group">
-                          <label htmlFor="country">{jsondata.industry}</label>
-                          <select
-                            name="industry"
-                            className="form-select mt-1 cmn_select_box"
-                            onChange={formik.handleChange} // Use the custom onChange handler
-                            onBlur={formik.handleBlur}
-                            value={formik.values.industry}
-                          >
-                            <option value="">{jsondata.select_industry}</option>
-                            {Object.keys(Industries)?.map((key, index) => (
-                              <option key={index} value={Industries[key]}>
-                                {Industries[key]}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                          <label>
+                            {jsondata.firstname} <span>*</span>{" "}
+                          </label>
 
-                        <div className="form-group">
-                          <label>{jsondata.contactNo}</label>
                           <input
-                            name="contactNo"
+                            name="firstName"
                             className="form-control mt-1"
-                            type="number"
-                            onWheel={(e) => {
-                              e.target.blur();
-                            }}
-                            placeholder="Enter your contact no"
+                            type="text"
+                            placeholder="Enter your firstname"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            onKeyDown={blockInvalidChar}
-                            value={formik.values.contactNo}
+                            value={formik.values.firstName}
                           />
+
+                          {formik.touched.firstName &&
+                          formik.errors.firstName ? (
+                            <p className="error_message">
+                              {formik.errors.firstName}
+                            </p>
+                          ) : null}
+                        </div>
+                        <div className="form-group">
+                          <label>
+                            {jsondata.lastname} <span>*</span>{" "}
+                          </label>
+
+                          <input
+                            name="lastName"
+                            className="form-control mt-1"
+                            type="text"
+                            placeholder="Enter your lastname"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.lastName}
+                          />
+
+                          {formik.touched.lastName && formik.errors.lastName ? (
+                            <p className="error_message">
+                              {formik.errors.lastName}
+                            </p>
+                          ) : null}
                         </div>
 
-                        <Button type={"Submit"} text={jsondata.next} />
-                      </div>
-                    </form>
-                    <h3>
-                      {jsondata.alreadyAccount}{" "}
-                      <Link to={signUpApi?.isLoading ? "/sign-up" : "/"}>
-                        <span className="sign_up">{jsondata.login}</span>
-                      </Link>
-                    </h3>
+                        <div className="form-group">
+                          <label>
+                            {jsondata.username} <span>*</span>
+                          </label>
+
+                          <input
+                            name="username"
+                            className="form-control mt-1"
+                            type="text"
+                            placeholder="Enter your username"
+                            onChange={(e) => {
+                              formik.handleChange({
+                                target: {
+                                  name: e.target.name,
+                                  value: e.target.value.replace(/\s/g, ""),
+                                },
+                              });
+                            }}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.username}
+                          />
+
+                          {formik.touched.username && formik.errors.username ? (
+                            <p className="error_message">
+                              {formik.errors.username}
+                            </p>
+                          ) : null}
+                        </div>
+
+                        <div className="form-group">
+                          <label>
+                            {jsondata.email} <span>*</span>
+                          </label>
+                          <input
+                            name="email"
+                            className="form-control mt-1"
+                            type="email"
+                            placeholder="Enter your email"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values.email}
+                          />
+
+                          {formik.touched.email && formik.errors.email ? (
+                            <p className="error_message">
+                              {formik.errors.email}
+                            </p>
+                          ) : null}
+                        </div>
+
+                        <div className="rememberPass_outer mt-2">
+                          <div className="form-group">
+                            <label htmlFor="country">{jsondata.industry}</label>
+                            <select
+                              name="industry"
+                              className="form-select mt-1 cmn_select_box"
+                              onChange={formik.handleChange} // Use the custom onChange handler
+                              onBlur={formik.handleBlur}
+                              value={formik.values.industry}
+                            >
+                              <option value="">
+                                {jsondata.select_industry}
+                              </option>
+                              {Object.keys(Industries)?.map((key, index) => (
+                                <option key={index} value={Industries[key]}>
+                                  {Industries[key]}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+
+                          <div className="form-group">
+                            <label>{jsondata.contactNo}</label>
+                            <input
+                              name="contactNo"
+                              className="form-control mt-1"
+                              type="number"
+                              onWheel={(e) => {
+                                e.target.blur();
+                              }}
+                              placeholder="Enter your contact no"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                              onKeyDown={blockInvalidChar}
+                              value={formik.values.contactNo}
+                            />
+                          </div>
+
+                          <Button type={"Submit"} text={jsondata.next} />
+                        </div>
+                      </form>
+                      <h3>
+                        {jsondata.alreadyAccount}{" "}
+                        <Link to={signUpApi?.isLoading ? "/sign-up" : "/"}>
+                          <span className="sign_up">{jsondata.login}</span>
+                        </Link>
+                      </h3>
+                    </div>
                   </div>
-                </div>
                 </div>
               </div>
             </div>

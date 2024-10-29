@@ -65,25 +65,16 @@
     gap: 30px;
     margin-top: 20px;
 }
-/* .or_text::before{
-    border-top: 1px solid #CCCCCC;
-    display: block;
-    position: relative;
-    top: 9px;
-    width: 47%;
-    content: "";
+
+.form_mainwrapper .form_wrapper {
+    max-width: 466px;
+    width: 100%;
+    margin-right: auto;
 }
-.or_text::after{
-    border-top: 1px solid #CCCCCC;
-    display: block;
-    content: "";
-    position: absolute;
-    top: 9px;
-    width: 47%;
-    content: "";
-    left: auto;
-    right: 0px;
-} */
+
+.form_mainwrapper {
+    padding-left: 3.25rem;
+}
 .or_text{
     font-size: 14px;
     font-weight: 500;
@@ -101,22 +92,9 @@
     text-align: center;
     padding-top: 5px;
 }
-
-
-
-
-
-
-
 .Container {
 background-color: white;
 }
-
-
-
-
-
-
 
 .form-control:focus,.form-group .form-select:focus {
     background-color: var(--bs-body-bg);
@@ -124,19 +102,6 @@ background-color: white;
     outline: 0;
     box-shadow: unset !important;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 .check_box_outer {
     display: flex;
     justify-content: space-between;
@@ -152,22 +117,12 @@ background-color: white;
     font-size: 14px;
     font-weight: 500;
 }
-
-
-
 .login_google_btn {
     background-color: white;
     color: #626F80;
     border: 1px solid #C3C3C3;
     margin-top: 18px;
 }
-
-
-
-
-
-
-
 .cmn_heading {
     color: #5F6D7E;
     text-align: center;
@@ -180,7 +135,6 @@ background-color: white;
     margin-top: 27px;
 
 }
-
 
 .gr_previous_outer{
     height: 40px;
@@ -206,22 +160,15 @@ background-color: white;
     }
     
 }
-@media screen and (max-width: 767px) {
-    
-
-    
-
-    
-
-
-    .cmn_heading {
+@media(max-width: 767px) {
+.cmn_heading {
         font-size: 15px;
     }
-
-   
-    
-   
-    
-
-    
+    .addy_container.bg_light_orange {
+        display: none;
+    }
+    .addy_outer{
+        min-height: 100vh;
+        height: auto;
+    }
 }
