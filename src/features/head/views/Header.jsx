@@ -52,7 +52,7 @@ const Header = ({userData, setShowConnectAccountModal}) => {
                                         {
                                             (!getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) &&
                                             <div onClick={handleCreatePost}
-                                                 className={getConnectedSocialAccountApi?.data?.length > 0 ? "createPost_btn crate_btn cmn_btn_color cursor-pointer" : "createPost_btn crate_btn cmn_btn_color cursor-pointer not_connected"}>
+                                                 className={getConnectedSocialAccountApi?.data?.length === 0 ? "createPost_btn crate_btn cmn_btn_color cursor-pointer not_connected" : "createPost_btn crate_btn cmn_btn_color cursor-pointer "}>
                                                 {jsondata.createpost}
                                             </div>
                                         }
