@@ -30,6 +30,9 @@ p {
   border-radius: 6px;
   background: #f07c33 !important;
 }
+div.not_connected {
+  background: rgba(240, 124, 51, 0.5) !important;
+}
 .loader_siderbar_close {
   width: calc(100% - 280px);
   margin-left: auto;
@@ -1603,8 +1606,8 @@ font-size: 16px;
 .cmn_heading_class {
 font-size: 20px;
 }
-.addy_container {
-margin: 0px 0px 30px;
+div.form_mainwrapper {
+  padding-left: 0;
 }
 .cmn_text_heading{
 font-size: 22px;

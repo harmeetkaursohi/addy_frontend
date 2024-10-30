@@ -143,7 +143,7 @@ const Login = () => {
 
                                                 </div>
                                                 <button type={"submit"} className='login_btn'
-                                                        disabled={loginUserApi?.isLoading}>Log In
+                                                        disabled={loginUserApi?.isLoading}>Login
                                                     {
                                                         loginUserApi?.isLoading ?
                                                             <span

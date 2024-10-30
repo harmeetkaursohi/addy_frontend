@@ -153,10 +153,16 @@ background-color: white;
         right: -4px;
     }
 }
-@media screen and (max-width:991px){
-    
+@media(max-width:991px){
+    .bg_light_orange {
+        display: none;
+      }
     .gr_previous_outer {
         margin-left: 20px;
+    }
+    .form_mainwrapper .form_wrapper{
+        margin: auto;
+        padding-left: 0;
     }
     
 }

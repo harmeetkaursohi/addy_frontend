@@ -23,6 +23,7 @@ const Header = ({userData, setShowConnectAccountModal}) => {
 
     const navigate = useNavigate();
     const handleCreatePost = () => {
+        if(getConnectedSocialAccountApi?.data?.length === 0 ) return
         const isAnyPageConnected = getAllConnectedPagesApi?.data?.length > 0
         const isAnyAccountConnected = getConnectedSocialAccountApi?.data?.length > 0
         if (isAnyPageConnected && isAnyAccountConnected) {
@@ -31,6 +32,7 @@ const Header = ({userData, setShowConnectAccountModal}) => {
             setShowConnectAccountModal(true)
         }
     }
+    console.log(getAllConnectedPagesApi?.data?.length,"getAllConnectedPagesApi?.data?.length")
     return (
         <>
             <header>
@@ -47,21 +49,10 @@ const Header = ({userData, setShowConnectAccountModal}) => {
 
                                     
                                     <div className="create_Ad_outer">
-                                        {/*{*/}
-                                        {/*    (getAllConnectedPagesApi?.isLoading || getConnectedSocialAccountApi?.isLoading || getAllFacebookPagesApi?.isLoading || instagramBusinessAccountsData?.loading || pinterestBoardsData?.loading || getAllLinkedinPagesData?.loading) ?*/}
-                                        {/*        <div*/}
-                                        {/*            className="createPost_btn crate_btn cmn_btn_color cursor-pointer loader_btn_container">*/}
-                                        {/*            <Loader/>*/}
-                                        {/*        </div> :*/}
-                                        {/*        <div onClick={handleCreatePost}*/}
-                                        {/*             className="createPost_btn crate_btn cmn_btn_color cursor-pointer">*/}
-                                        {/*            {jsondata.createpost}*/}
-                                        {/*        </div>*/}
-                                        {/*}*/}
                                         {
                                             (!getAllConnectedPagesApi?.isLoading || !getAllConnectedPagesApi?.isFetching) &&
                                             <div onClick={handleCreatePost}
-                                                 className="createPost_btn crate_btn cmn_btn_color cursor-pointer">
+                                                 className={getConnectedSocialAccountApi?.data?.length > 0 ? "createPost_btn crate_btn cmn_btn_color cursor-pointer" : "createPost_btn crate_btn cmn_btn_color cursor-pointer not_connected"}>
                                                 {jsondata.createpost}
                                             </div>
                                         }

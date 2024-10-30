@@ -90,7 +90,7 @@ const UserInfo = ({ formData, setFormData, setShowTab }) => {
                             name="firstName"
                             className="form-control mt-1"
                             type="text"
-                            placeholder="Enter your firstname"
+                            placeholder="First Name"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             value={formik.values.firstName}
@@ -112,7 +112,7 @@ const UserInfo = ({ formData, setFormData, setShowTab }) => {
                             name="lastName"
                             className="form-control mt-1"
                             type="text"
-                            placeholder="Enter your lastname"
+                            placeholder="Last Name"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             value={formik.values.lastName}
@@ -134,7 +134,7 @@ const UserInfo = ({ formData, setFormData, setShowTab }) => {
                             name="username"
                             className="form-control mt-1"
                             type="text"
-                            placeholder="Enter your username"
+                            placeholder="Username"
                             onChange={(e) => {
                               formik.handleChange({
                                 target: {
@@ -162,7 +162,7 @@ const UserInfo = ({ formData, setFormData, setShowTab }) => {
                             name="email"
                             className="form-control mt-1"
                             type="email"
-                            placeholder="Enter your email"
+                            placeholder="Email"
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                             value={formik.values.email}
@@ -205,7 +205,7 @@ const UserInfo = ({ formData, setFormData, setShowTab }) => {
                               onWheel={(e) => {
                                 e.target.blur();
                               }}
-                              placeholder="Enter your contact no"
+                              placeholder="Contact Number"
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               onKeyDown={blockInvalidChar}
