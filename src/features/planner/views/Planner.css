@@ -2,6 +2,8 @@
     padding: 0px;
     border-radius:15px;
     overflow: hidden;
+    border: 1px solid #787878;
+    width: max-content;
 }
 .planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-left::before,.planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-right::before {
     color: rgba(95, 109, 126, 1);
@@ -352,12 +354,6 @@ button.planner_view_more_btn {
     font-weight: 700;
     font-family: 'Nunito';
 }
-div.fc .fc-daygrid-day-frame {
-
-    /* position: relative; */
-    /*min-height: 220px;*/
-}
-
 a.fc-daygrid-dot-event:hover {
     background: transparent;
 }
@@ -404,11 +400,7 @@ a.fc-daygrid-dot-event:hover {
 ul.review_list table tbody tr td {
     vertical-align: middle;
 }
-.CommonFeedPreview_container {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
+
 .calender_outer_wrapper .dropdown-menu h4 {
     font-size: 16px;
     text-transform: capitalize;
@@ -439,14 +431,15 @@ ul.schdeuled_post_list li:first-child .planner_info {
 
 .calender_outer_wrapper .cmn_dropdown {
     position: absolute;
-    right: 0px;
+    right: 12px;
 }
 
 .calender_outer_wrapper .cmn_dropdown.dropdown button {
     min-width: 162px;
-    padding: 12px 23px;
-    border: unset;
+    padding: 8px 15px;
+    border: 1px solid #787878;
     border-radius: 15px;
+    padding-right: 10px;
 }
 @media screen and (max-width:1280px){
     .create_post_btn_Wrapper{

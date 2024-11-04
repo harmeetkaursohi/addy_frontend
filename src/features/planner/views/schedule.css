@@ -32,7 +32,25 @@
     padding: 13px;
     border-radius: 15px;
     background: #fff;
-    margin-top: 53px;
+}
+
+
+.planner_calender {
+    position: relative;
+    border: 1px solid #DCDCDC;
+    padding: 12px;
+    box-shadow: 0px 0px 8px rgba(0,0,0,5%);
+    background: #fff;
+    border-radius: 15px;
+}
+
+
+table.fc-col-header th.fc-col-header-cell {
+    background: #fff;
+}
+
+table.fc-col-header th.fc-col-header-cell a {
+    font-size: 14px;
 }
 
 table.fc-col-header {

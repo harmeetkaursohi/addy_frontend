@@ -654,7 +654,7 @@ width: 100%;
 }
 
 .account_not_connect_imcontainer {
-    min-height: calc(100vh - 170px);
+    min-height: calc(100vh - 122px);
 }
 
 .not_account_content h5 {

@@ -14,6 +14,7 @@ import {addyApi} from "../../../app/addyApi";
 import {useDispatch} from "react-redux";
 import NotFoundPopup from './NotFoundPopup.jsx';
 import { Image } from 'react-bootstrap';
+import Skeleton from '../../loader/skeletonEffect/Skeleton.jsx';
 const CommonModal = ({
                          socialMediaAccountInfo,
                          showModal,
@@ -120,7 +121,7 @@ const CommonModal = ({
                                                                     {
                                                                         currentConnectedPages?.includes(data?.id) ?
                                                                             (getSocialMediaReportApi?.isLoading || getSocialMediaReportApi?.isFetching) ?
-                                                                                <i className="fa fa-spinner fa-spin"/> :
+                                                                               <Skeleton/> :
                                                                                 <h4>
                                                                                     {
                                                                                         getSocialMediaReportApi?.data?.[data?.id]?.Followers?.lifeTime
@@ -136,7 +137,7 @@ const CommonModal = ({
                                                                     {
                                                                         currentConnectedPages?.includes(data?.id) ?
                                                                             getSocialMediaReportApi?.isLoading || getSocialMediaReportApi?.isFetching ?
-                                                                                <i className="fa fa-spinner fa-spin"/> :
+                                                                            <Skeleton/> :
                                                                                 <h4>
                                                                                     {
                                                                                         socialMediaAccountInfo.provider === "PINTEREST" ?

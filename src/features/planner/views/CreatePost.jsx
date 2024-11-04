@@ -34,6 +34,11 @@ import {useCreatePostMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import { GoChevronDown } from "react-icons/go";
 import PostNowModal from "../../common/components/PostNowModal";
+import {FiThumbsUp} from "react-icons/fi";
+import {PiShareFat} from "react-icons/pi";
+import { FaRegComment } from "react-icons/fa";
+import { Image } from "react-bootstrap";
+
 const CreatePost = () => {
 
     const navigate = useNavigate();
@@ -394,14 +399,10 @@ const CreatePost = () => {
                     (getConnectedSocialAccountApi?.isLoading || getAllConnectedPagesApi?.isLoading) ?
                         <CommonLoader></CommonLoader> :
                         <div className="Container">
-                            <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
-                               
-                                   
-
-                              
-                                <div className="row m-0">
+                            <div className={"create_post_wrapper"}>
+                             <div className="row m-0">
                                     <div
-                                        className={showPreview ? "col-lg-6 col-md-12 col-sm-12 p-0 " : "col-lg-12 col-md-12 col-sm-12 p-0 no_perview"}>
+                                        className={"col-lg-6 col-md-12 col-sm-12 p-0 "}>
                                              <h2 className='creare_post_heading pt-4'>{jsondata.createpost}</h2>
                                 
                                         <div
@@ -920,11 +921,44 @@ const CreatePost = () => {
                                         </div>
                                     </div>
                                     {
-                                        showPreview && files.length > 0 &&
+                                        // showPreview && files.length > 0 &&
                                         <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container p-0">
                                             <div className='cmn_outer create_post_container post_preview_outer'>
                                                                                                    {/* <h3 className='Post_Preview_heading'>Post Preview</h3> */}
                                                     <div className='CommonFeedPreview_container'>
+                                                        {/*  */}
+                                                      <div className='blank_post d-none'>
+                                                      <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>Post Preview</h2>
+                                                         <div className='preview_wrapper'>
+                                                            <div className='user_profile_info'>
+                                                                {/* <Image src=""/> */}
+                                                                <div className='w-100'>
+                                                                    <h3 className='create_post_text user_name boost_post_text'>Your Page Name</h3>
+                                                                    <div className='text-center'>
+                                                                <Image src="/assets/blank_image.png" alt='blank_image'/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className='like_comment_outer'>
+                                                                <div className="fb_likes">
+                                                                    <FiThumbsUp/>
+                                                                    <h3 className="cmn_text_style">Likes</h3>
+                                                                </div>
+                                                                <div className="fb_likes">
+                                                                <FaRegComment className="fb_cmt_icon"/>
+                                                                    <h3 className="cmn_text_style">Comment</h3>
+                                                                </div>
+                                                                <div className="fb_likes">
+                                                                    <PiShareFat/>
+                                                                    <h3 className="cmn_text_style">Share</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                      </div>
+                                                  {/*  */}
+
+
                                                         {
                                                             allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
                                                                 let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));

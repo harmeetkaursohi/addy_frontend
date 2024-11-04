@@ -101,7 +101,7 @@ const ScheduledComponent = ({scheduledData}) => {
             {
                 scheduledData?.data && Object.keys(scheduledData?.data).length > 0 &&
                 <div className="cmn_outer pt-0">
-                    <div className="cmn_wrapper_outer white_bg_color ">
+                    <div className="">
 
 
                         <div className="upcoming_post_outer">

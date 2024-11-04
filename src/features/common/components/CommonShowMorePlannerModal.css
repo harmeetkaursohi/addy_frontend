@@ -26,13 +26,18 @@
     flex-grow: 1;
 }
 .media_overlap .planner_tag_container {
-    margin-left: -24px;
+    margin-left: -9px;
 }
 
 .media_overlap .planner_tag_container:first-child {
     margin: 0;
 }
-
+.ellips_text {
+    width: 170px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .media_overlap {
     padding-left: 6px;
 }
@@ -96,7 +101,7 @@
     border-radius: 8px;
     border: 1px solid rgba(254, 73, 160, 0.21);
     background: rgba(255, 88, 101, 0.18);
-    padding: 5px 10px;
+    padding: 7px 7px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -114,12 +119,12 @@
 .plan_tags.facebook {
     border-radius: 8px;
     border: 1px solid rgba(0, 130, 203, 0.50);
-    background: rgba(0, 130, 203, 0.04);
+    background: rgb(235 248 255);
 }
 
 .plan_tag_img {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
 }
 
