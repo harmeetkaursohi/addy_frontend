@@ -1,5 +1,4 @@
 import {baseAxios} from "../utils/commonUtils";
-import {SomethingWentWrong} from "../utils/contantData";
 import axios from "axios";
 
 export const sendChatSaveRequest = async (authToken, senderId, messageText) => {

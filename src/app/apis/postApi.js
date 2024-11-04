@@ -53,6 +53,19 @@ export const postApi = addyApi.injectEndpoints({
                 await handleQueryError(queryFulfilled)
             },
         }),
+        deletePostPageInfo: build.mutation({
+            query: (data) => {
+                return {
+                    url: `${baseUrl}/posts/post-page-info`,
+                    method: 'PUT',
+                    headers: getAuthorizationHeader(),
+                    body: data
+                };
+            },
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
         deletePostFromPagesByPageIds: build.mutation({
             query: (data) => {
                 return {
@@ -205,7 +218,7 @@ export const postApi = addyApi.injectEndpoints({
                 }
                 return {data: result};
             },
-            providesTags:["getPostSocioDataApi"],
+            providesTags: ["getPostSocioDataApi"],
             async onQueryStarted(requestBody, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },
@@ -227,4 +240,5 @@ export const {
     useGetPostsByIdQuery,
     useUpdatePostByIdMutation,
     useLazyGetPostSocioDataQuery,
+    useDeletePostPageInfoMutation,
 } = postApi
