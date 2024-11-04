@@ -189,8 +189,8 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                                         </div>
                                     </div>
                                 </div>
-                                <p className="mt-2 mb-1">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.caption || "" : ""}</p>
-                                <p className="hasTags">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.hashtag || "" : ""}</p>
+                                <p className="mt-2 mb-1 ellips_text">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.caption || "" : ""}</p>
+                                <p className="hasTags ellips_text">{plannerPost?.message !== null && plannerPost?.message !== "" ? handleSeparateCaptionHashtag(plannerPost?.message)?.hashtag || "" : ""}</p>
                             </div>
                         </div>
                     })

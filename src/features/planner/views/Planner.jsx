@@ -384,15 +384,16 @@ const Planner = () => {
                                 </div>
                             } */}
                                 {/* new code planner */}
-                                <div className=" ">
-                                    <div className="">
-                                        <Dropdown className='cmn_dropdown'>
+                             
+                                        
+                                        <div
+                                            className={`${isDraftPost ? "calendar-container hidden" : "CalenderOuter_Wrapper"}`}>
+                                            <div className="planner_calender w-100">
+                                            <Dropdown className='cmn_dropdown'>
                                             <Dropdown.Toggle>
                                                 Filters <CgChevronDown/>
-
-                                            </Dropdown.Toggle>
-
-                                            <Dropdown.Menu>
+                                             </Dropdown.Toggle>
+                                              <Dropdown.Menu>
                                                 <li><h4>Select All</h4><input type={"checkbox"}
                                                                               checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
                                                                               onChange={(e) => handleSocialMediaFilters("all")}/>
@@ -420,8 +421,6 @@ const Planner = () => {
                                                 )}
                                             </Dropdown.Menu>
                                         </Dropdown>
-                                        <div
-                                            className={`${isDraftPost ? "calendar-container hidden" : "CalenderOuter_Wrapper"}`}>
                                             <FullCalendar
                                                 dateClick={(arg) => {
                                                     if(isPostApiLoading) return
@@ -483,6 +482,7 @@ const Planner = () => {
                                                 fixedWeekCount={false}
                                                 showNonCurrentDates={false}
                                             />
+                                            </div>
                                             <div className={"scheduled_posts"}>
                                                 <ScheduledPost
                                                     selectedDate={selectedDate}
@@ -495,7 +495,7 @@ const Planner = () => {
                                                 />
                                             </div>
                                         </div>
-                                    </div>
+                                
 
                                     {/* <div className="col-lg-3 col-md-12 col-sm-12">
                                         <div className={`${isDraftPost ? " d-none" : "planner_create_post_container"}`}>
@@ -574,7 +574,7 @@ const Planner = () => {
                                 </div>
 
 
-                            </div>
+                     
 
                             {
                                 isDraftPost === true &&

@@ -82,7 +82,7 @@ ul {
 }
 
 .cmn_container {
-
+min-height: 100vh;
   padding-left: 63px;
   width: 100%;
   background-color: #fff6f2;
@@ -924,7 +924,21 @@ button.fc--button.fc-button.fc-button-primary {
   border: transparent;
   height: 100px;
 }
-
+.calender_outer_wrapper table.fc-scrollgrid-sync-table tbody td {
+  outline: 1px solid #E3E3E3;
+}
+table.fc-scrollgrid-sync-table tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+table.fc-scrollgrid-sync-table tr:first-child td:first-child {
+  border-top-left-radius: 10px;
+}
+table.fc-scrollgrid-sync-table tr:first-child td:last-child {
+  border-top-right-radius: 10px;
+}
+table.fc-scrollgrid-sync-table tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
 .fc .fc-button:focus {
   box-shadow: unset;
   outline: unset;

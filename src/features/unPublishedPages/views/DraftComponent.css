@@ -105,7 +105,16 @@
     border-top: 2px solid #D1D9E2;
 }
 
-
+.planner_calender  .fc-daygrid-day-top {
+    position: absolute;
+    z-index: 999;
+    width: 100%;
+    top: 0;
+    height:100%;
+}
+.planner_calender .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+    padding-top: 19px;
+}
 
 .fc-toolbar-chunk:last-child {
     background: white;
@@ -114,7 +123,7 @@
 }
 
 .fc-toolbar-chunk {
-    padding: 6px 0px;
+    padding: 1px 0px;
     background-color: white;
 }
 

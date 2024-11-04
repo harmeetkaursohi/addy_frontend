@@ -63,11 +63,8 @@ border-bottom: 2px solid rgba(203, 203, 203, 1);
     border-radius: 15px;
 }
 h4.hiddenNumber {
-    display: inline;
     filter: blur(3px);
 }
-
-
 .account-detail h4{
    font-weight: 600;
     color: black;
