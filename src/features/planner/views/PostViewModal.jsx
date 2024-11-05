@@ -1,14 +1,32 @@
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
+import { useState, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import { RxCross2 } from "react-icons/rx";
-import { BsPencil } from "react-icons/bs";
-import { FaTrash } from "react-icons/fa";
-import FacebookFeedPreview from "../../common/components/FacebookFeedPreview";
-function PostViewModal({ setShowPostPerview, showPostPerview,userId }) {
-    console.log(userId,"userId")
-  const handleClose = () => setShowPostPerview(false);
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
+import { FaChevronLeft } from "react-icons/fa6";
+import { FaChevronRight } from "react-icons/fa6";
 
+import FacebookFeedPreview from "../../common/components/FacebookFeedPreview";
+function PostViewModal({ setShowPostPerview, showPostPerview, userId }) {
+  console.log(userId, "userId");
+  const handleClose = () => setShowPostPerview(false);
+  const sliderRef = useRef(null);
+  const settings = {
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    dots: false,
+    arrows: false,
+  };
+  const nextSlide = () => {
+    sliderRef.current.slickNext();
+  };
+
+  const prevSlide = () => {
+    sliderRef.current.slickPrev();
+  };
   return (
     <>
       <Modal
@@ -27,48 +45,46 @@ function PostViewModal({ setShowPostPerview, showPostPerview,userId }) {
           <RxCross2 className="pop_up_cross_icon" />
         </div>
         <Modal.Body className="individual_post_content">
-            <FacebookFeedPreview
-            previewTitle={"test"} pageName={"test"} 
-            userData={"test"} files={[0,1]} selectedFileType={"test"} caption={"test"} pageImage={"test"}hashTag={"test"}
-            
+          <div className="slider-container">
+            {/* Custom prev and next buttons */}
+            <FaChevronLeft
+              size={24}
+              className="slick_btn"
+              onClick={prevSlide}
             />
-          {/* <div className="social_media_card">
-            <h2>Instagram Post Preview</h2>
-            <div className="social_header">
-              <div className="user_image">
-                <img src="" alt="" />
+            <Slider {...settings} ref={sliderRef}>
+              <div className="post_perview_card">
+                <FacebookFeedPreview
+                  previewTitle={"test"}
+                  pageName={"test"}
+                  userData={"test"}
+                  files={[0]}
+                  selectedFileType={"test"}
+                  caption={"test"}
+                  pageImage={"test"}
+                  hashTag={"test"}
+                />
               </div>
-              <div className="social_info">
-                <h4>Team Musafirrr</h4>
-                <p>
-                  just now <span className="status_media"></span>
-                </p>
+              <div className="post_perview_card">
+                <FacebookFeedPreview
+                  previewTitle={"test"}
+                  pageName={"test"}
+                  userData={"test"}
+                  files={[0]}
+                  selectedFileType={"test"}
+                  caption={"test"}
+                  pageImage={"test"}
+                  hashTag={"test"}
+                />
               </div>
-              <button className="social_nav_btn">
-                <BsPencil />
-              </button>
-              <button className="social_nav_btn">
-                <FaTrash />
-              </button>
-            </div>
-            <div className="post_image_perview">
-              <img src="" alt="" />
-            </div>
-            <div className="like_comment_outer">
-              <div className="fb_likes">
-                <FiThumbsUp />
-                <h3 className="cmn_text_style">Likes</h3>
-              </div>
-              <div className="fb_likes">
-                <FaRegComment className="fb_cmt_icon" />
-                <h3 className="cmn_text_style">Comment</h3>
-              </div>
-              <div className="fb_likes">
-                <PiShareFat />
-                <h3 className="cmn_text_style">Share</h3>
-              </div>
-            </div>
-          </div> */}
+            </Slider>
+
+            <FaChevronRight
+              className="slick_btn next_slide"
+              size={24}
+              onClick={nextSlide}
+            />
+          </div>
         </Modal.Body>
       </Modal>
     </>
