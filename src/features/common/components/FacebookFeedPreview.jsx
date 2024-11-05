@@ -25,7 +25,7 @@ const FacebookFeedPreview = ({previewTitle, pageName, userData, files, selectedF
                     </div>
                 </div>
 
-                <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
+                <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag} />
 
                 <div className='like_comment_outer'>
                     <div className="fb_likes">

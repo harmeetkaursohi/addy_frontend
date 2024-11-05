@@ -11,6 +11,7 @@ import {
 import {Line} from 'react-chartjs-2';
 import {useEffect, useState} from "react";
 import "../Dashboard.css"
+import GraphLoader from "../../../common/components/GraphLoader";
 
 ChartJS.register(
     CategoryScale,
@@ -116,91 +117,10 @@ export const LineGraph = ({reportData,isLoading}) => {
     return (
         <div className="chart-container">
             <Line options={options} data={data}/>
-
             {
                 isLoading &&
-                <div className="loading-overlay">
-                <span className="loading-text">
-                    <div class="loader">Loading
-                        <span class="loader__dot">.</span>
-                        <span class="loader__dot">.</span>
-                        <span class="loader__dot">.</span>
-                    </div>
-                </span>
-                </div>
+                <GraphLoader/>
             }
         </div>
-
-
     )
-
 }
-
-// import { Line } from 'react-chartjs-2';
-
-// import {
-//         CategoryScale,
-//         Chart as ChartJS,
-
-//         LinearScale,
-//         LineElement,
-//         PointElement,
-//         Title,
-//         Tooltip,
-//     } from 'chart.js';
-// ChartJS.register(
-//         CategoryScale,
-//         LinearScale,
-//         PointElement,
-//         LineElement,
-//         Title,
-//         Tooltip,
-
-//     );
-
-// const data = {
-//     labels: ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat'],
-//     datasets: [
-//       {
-//         label: 'uv',
-//         data: [4000, 3000, 2000, 2780, 1890, 2390, 3490],
-//         borderColor: '#00A3FF',
-//         fill: true,
-//       },
-
-//     ],
-//   };
-//   export const   LineGraph = () => {  
-
-
-//     const options = {
-//         responsive: true,
-//         scales: {
-//             y: {
-//                 beginAtZero: true,
-//                 ticks: {
-//                     callback: function (value, index, values) {
-//                         return value + "%";
-//                     },
-//                 },
-//             },
-//         },
-//     };
-
-//         return (
-//             <Line data={data} options={options}/>
-
-
-//     )
-// }
-
- 
-
-
- 
-
-
-
-
-    
-

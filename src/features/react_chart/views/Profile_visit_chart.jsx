@@ -2,24 +2,32 @@ import React, {useEffect, useState} from 'react'
 import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
 import {convertTimestampToDate} from "../../../utils/commonUtils";
 import {RotatingLines} from "react-loader-spinner";
+import {Line} from "react-chartjs-2";
+import GraphLoader from "../../common/components/GraphLoader";
 
-const ProfileVisitChart = ({graphData,socialMediaType}) => {
-    const [data, setData] = useState([{day: 'Mon', uv: 4000}, {day: 'Tue', uv: 3000}, {day: 'Wed', uv: 2000}, {day: 'Thur', uv: 2780}, {day: 'Fri', uv: 1890}, {day: 'Sat', uv: 2390}, {day: 'Sun', uv: 3490},])
+const ProfileVisitChart = ({graphData, socialMediaType}) => {
+    const [data, setData] = useState([{day: 'Mon', uv: 4000}, {day: 'Tue', uv: 3000}, {
+        day: 'Wed',
+        uv: 2000
+    }, {day: 'Thur', uv: 2780}, {day: 'Fri', uv: 1890}, {day: 'Sat', uv: 2390}, {day: 'Sun', uv: 3490},])
 
     useEffect(() => {
-        if (graphData.data && !graphData.isLoading && !graphData?.isFetching && Array.isArray(graphData.data) && socialMediaType!==null && socialMediaType!==undefined) {
-            switch(socialMediaType){
+        if (graphData.data && !graphData.isLoading && !graphData?.isFetching && Array.isArray(graphData.data) && socialMediaType !== null && socialMediaType !== undefined) {
+            switch (socialMediaType) {
                 case "FACEBOOK":
-                case "INSTAGRAM":{
+                case "INSTAGRAM": {
                     const dataSet = graphData.data.map((c => {
                         return {day: convertTimestampToDate(c?.end_time || new Date()), uv: c.value}
                     }))
                     setData(dataSet);
                     break;
                 }
-                case "LINKEDIN":{
+                case "LINKEDIN": {
                     const dataSet = graphData.data.map((c => {
-                        return {day: convertTimestampToDate(c?.timeRange?.start || new Date()), uv: c?.totalPageStatistics?.views?.allPageViews?.pageViews}
+                        return {
+                            day: convertTimestampToDate(c?.timeRange?.start || new Date()),
+                            uv: c?.totalPageStatistics?.views?.allPageViews?.pageViews
+                        }
                     }))
                     setData(dataSet);
                     break;
@@ -27,7 +35,7 @@ const ProfileVisitChart = ({graphData,socialMediaType}) => {
             }
 
         }
-    }, [graphData,socialMediaType]);
+    }, [graphData, socialMediaType]);
 
 
     const CustomTooltip = ({active, payload, label}) => {
@@ -65,26 +73,25 @@ const ProfileVisitChart = ({graphData,socialMediaType}) => {
         return null;
     };
     return (
-        (graphData?.isLoading || graphData?.isFetching)  ?
-            <div className="d-flex justify-content-center profile-visit-graph ">
-                <RotatingLines
-                    strokeColor="#F07C33"
-                    strokeWidth="5"
-                    animationDuration="0.75"
-                    width="70"
-                    visible={true}
-                />
-            </div> : <ResponsiveContainer width="100%" height={270}>
-                <AreaChart data={data}>
-                    <CartesianGrid strokeDasharray="3 3"/>
-                    <XAxis dataKey="day"
-                           tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
-                    <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
-                    <Tooltip content={<CustomTooltip/>}/>
-                    <Area type="monotone" dataKey="uv" stroke="#009FFC" fill="#D9F1FF"/>
-                </AreaChart>
-            </ResponsiveContainer>
+        <>
+            <div className="chart-container">
+                <ResponsiveContainer width="100%" height={270}>
+                    <AreaChart data={data}>
+                        <CartesianGrid strokeDasharray="3 3"/>
+                        <XAxis dataKey="day"
+                               tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
+                        <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
+                        <Tooltip content={<CustomTooltip/>}/>
+                        <Area type="monotone" dataKey="uv" stroke="#009FFC" fill="#D9F1FF"/>
+                    </AreaChart>
+                </ResponsiveContainer>
 
+                {
+                    (graphData?.isLoading || graphData?.isFetching ) &&
+                    <GraphLoader/>
+                }
+            </div>
+        </>
     )
 }
 

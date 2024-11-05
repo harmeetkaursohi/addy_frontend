@@ -14,7 +14,7 @@ import {useNavigate} from "react-router-dom";
 import {
     blobToFile,
     checkDimensions, convertSentenceToHashtags,
-    convertToUnixTimestamp, getEnumValue, isCreatePostRequestValid, isNullOrEmpty,
+    convertToUnixTimestamp, getEnumValue, isCreateDraftPostRequestValid, isCreatePostRequestValid, isNullOrEmpty,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
@@ -26,18 +26,14 @@ import CommonLoader from "../../common/components/CommonLoader";
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 import {useAppContext} from '../../common/components/AppProvider.jsx';
-import {AiOutlineEye} from 'react-icons/ai';
 import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {useCreatePostMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
-import { GoChevronDown } from "react-icons/go";
+import {GoChevronDown} from "react-icons/go";
 import PostNowModal from "../../common/components/PostNowModal";
-import {FiThumbsUp} from "react-icons/fi";
-import {PiShareFat} from "react-icons/pi";
-import { FaRegComment } from "react-icons/fa";
-import { Image } from "react-bootstrap";
+import DefaultFeedPreview from "../../common/components/DefaultFeedPreview";
 
 const CreatePost = () => {
 
@@ -74,8 +70,6 @@ const CreatePost = () => {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [selectedGroups, setSelectedGroups] = useState([]);
     const [selectedAllDropdownData, setSelectedAllDropdownData] = useState([]);
-    const [showPreview, setShowPreview] = useState(false)
-
 
     useEffect(() => {
         if (getAllConnectedPagesApi.isLoading) {
@@ -148,14 +142,9 @@ const CreatePost = () => {
 
     //handle single selector
     const handleCheckboxChange = (option) => {
-
         const {group, selectOption} = option;
         const updatedSelectedOptions = [...selectedOptions];
         const updatedSelectedGroups = [...selectedGroups];
-
-        updatedSelectedOptions.push(group);
-        updatedSelectedGroups.push(selectOption);
-
 
         const groupOptionIds = allOptions.find((cur) => cur.group === group).allOptions.map((opt) => opt.pageId);
 
@@ -167,15 +156,16 @@ const CreatePost = () => {
 
         const isGroupFullySelected = groupOptionIds.every((id) => updatedSelectedOptions.includes(id));
 
-
         if (isGroupFullySelected) {
             if (!updatedSelectedGroups.includes(group)) {
                 updatedSelectedGroups.push(group);
             }
         } else {
-            updatedSelectedGroups.splice(updatedSelectedGroups.indexOf(group), 1);
+            const index = updatedSelectedGroups.indexOf(group)
+            if (index !== -1) {
+                updatedSelectedGroups.splice(index, 1);
+            }
         }
-
         setSelectedOptions(updatedSelectedOptions);
         setSelectedGroups(updatedSelectedGroups);
 
@@ -248,11 +238,10 @@ const CreatePost = () => {
 
     const handleRemoveSelectFile = (fileToRemove) => {
         const updatedFiles = files.filter((file) => file.url !== fileToRemove.url);
-        updatedFiles?.length ===0 && setShowPreview(false)
         setFiles(updatedFiles);
     };
 
-    const getRequestBodyToCreatePost=(postStatus,isScheduledTimeProvided)=>{
+    const getRequestBodyToCreatePost = (postStatus, isScheduledTimeProvided) => {
         return {
             postPageInfos: allOptions?.flatMap(obj => {
                 const provider = obj.group;
@@ -272,7 +261,7 @@ const CreatePost = () => {
         };
     }
 
-    const createPost = async ( requestBody) => {
+    const createPost = async (requestBody) => {
         await handleRTKQuery(
             async () => {
                 return await createPosts(requestBody).unwrap();
@@ -284,13 +273,13 @@ const CreatePost = () => {
     };
 
     const handlePostSubmit = () => {
-        const requestBody=getRequestBodyToCreatePost("PUBLISHED",false)
-        createPost( requestBody);
+        const requestBody = getRequestBodyToCreatePost("PUBLISHED", false)
+        createPost(requestBody);
     };
 
     const handleDraftPost = () => {
         const isScheduledTimeProvided = !isNullOrEmpty(scheduleDate) || !isNullOrEmpty(scheduleTime);
-        if ( isScheduledTimeProvided) {
+        if (isScheduledTimeProvided) {
             if (!scheduleDate && !scheduleTime) {
                 showErrorToast("Please enter scheduleDate and scheduleTime!!");
                 return;
@@ -300,8 +289,8 @@ const CreatePost = () => {
                 return;
             }
         }
-        const requestBody=getRequestBodyToCreatePost("DRAFT",isScheduledTimeProvided)
-        createPost( requestBody);
+        const requestBody = getRequestBodyToCreatePost("DRAFT", isScheduledTimeProvided)
+        isCreateDraftPostRequestValid(requestBody) && createPost(requestBody);
     };
 
     const handleSchedulePost = () => {
@@ -314,8 +303,8 @@ const CreatePost = () => {
             showErrorToast("Schedule date and time must be at least 10 minutes in the future.");
             return;
         }
-        const requestBody=getRequestBodyToCreatePost("SCHEDULED",isScheduledTimeProvided)
-        isCreatePostRequestValid(requestBody, files) && createPost(  requestBody);
+        const requestBody = getRequestBodyToCreatePost("SCHEDULED", isScheduledTimeProvided)
+        isCreatePostRequestValid(requestBody, files) && createPost(requestBody);
     };
 
 
@@ -400,13 +389,13 @@ const CreatePost = () => {
                         <CommonLoader></CommonLoader> :
                         <div className="Container">
                             <div className={"create_post_wrapper"}>
-                             <div className="row m-0">
+                                <div className="row m-0">
                                     <div
                                         className={"col-lg-6 col-md-12 col-sm-12 p-0 "}>
-                                             <h2 className='creare_post_heading pt-4'>{jsondata.createpost}</h2>
-                                
+                                        <h2 className='creare_post_heading pt-4'>{jsondata.createpost}</h2>
+
                                         <div
-                                            className={`create_post_content  ${showPreview ? "cmn_outer" : "animation"} `}>
+                                            className={`create_post_content cmn_outer `}>
                                             <form onSubmit={(e) => {
                                                 e.preventDefault();
                                             }}>
@@ -420,7 +409,7 @@ const CreatePost = () => {
                                                         <Dropdown.Toggle id="instagram"
                                                                          className="instagram_dropdown tabs_grid"
                                                                          disabled={allOptions.flatMap((group) => group.allOptions).length <= 0}>
-                                                                            <GoChevronDown className='dropdown_chevron'/>
+                                                            <GoChevronDown className='dropdown_chevron'/>
                                                             {selectedAllDropdownData.length > 0 ?
                                                                 (
                                                                     selectedAllDropdownData.map((data, index) => (
@@ -546,28 +535,17 @@ const CreatePost = () => {
 
                                                 {/* add media */}
                                                 <div
-                                                    className={`media_outer ${showPreview ? "" : "mt-4 mx-0 "} `}>
+                                                    className={`media_outer `}>
                                                     <div
-                                                        className={showPreview ? "" : 'media_inner_content'}>
+                                                        className={""}>
                                                         <div className="post_content_wrapper w-100">
 
-                                                           <div className='d-flex align-items-center '>
-                                                           <div className='flex-grow-1'>
-                                                           <h5 className='post_heading create_post_text pb-1'>{jsondata.media}</h5>
-                                                           <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
-                                                           </div>
-                                                            {
-                                                                (selectedAllDropdownData?.length > 0 && (files?.length > 0 || !isNullOrEmpty(caption) || !isNullOrEmpty(hashTag)) && showPreview) ?
-                                                                    <button className='preview_btn' onClick={() => {
-                                                                        setShowPreview(false)
-                                                                    }}><RxCross2/></button> :
-
-                                                                    (selectedAllDropdownData?.length > 0 && (files?.length > 0 || !isNullOrEmpty(caption) || !isNullOrEmpty(hashTag))) &&
-                                                                    <button className='preview_btn' onClick={() => {
-                                                                        setShowPreview(true)
-                                                                    }}><AiOutlineEye/></button>
-                                                            }
-                                                           </div>
+                                                            <div className='d-flex align-items-center '>
+                                                                <div className='flex-grow-1'>
+                                                                    <h5 className='post_heading create_post_text pb-1'>{jsondata.media}</h5>
+                                                                    <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+                                                                </div>
+                                                            </div>
 
                                                             <div className={`drag_scroll`}>
 
@@ -631,7 +609,7 @@ const CreatePost = () => {
                                                     </div>
 
                                                     <div
-                                                        className={showPreview ? "" : "p-0"}>
+                                                        className={"" }>
 
                                                         <div className="darg_navs file_outer gap-3">
                                                             {
@@ -711,7 +689,7 @@ const CreatePost = () => {
 
 
                                                         </div>
-                                                        <div className={showPreview ? "" : 'post_caption_outer'}>
+                                                        <div className={"" }>
                                                             <div className='textarea_outer flex-grow-1'>
                                                                 <h6 className='create_post_text'>Pin Title*</h6>
                                                                 <input type={"text"} className='textarea mt-2'
@@ -723,7 +701,7 @@ const CreatePost = () => {
                                                             </div>
 
                                                             <div
-                                                                className={`textarea_outer  ${showPreview ? "mt-2" : "flex-grow-1"}`}>
+                                                                className={`textarea_outer  mt-2`}>
                                                                 <h6 className='create_post_text'>Destination Url*</h6>
                                                                 <input type={"text"} className='textarea mt-2'
                                                                        value={pinDestinationUrl}
@@ -739,7 +717,7 @@ const CreatePost = () => {
                                                 {/* post caption */}
 
                                                 <div
-                                                    className={`media_outer ${showPreview ? "" : "post_caption_outer"}`}>
+                                                    className={`media_outer`}>
                                                     <div className='flex-grow-1'>
                                                         <div className='caption_header'>
                                                             <h5 className='post_heading create_post_text'>Add
@@ -767,7 +745,7 @@ const CreatePost = () => {
                                                     </div>
                                                     <div className='flex-grow-1'>
                                                         <div
-                                                            className={`caption_header ${showPreview ? "hashtag_outer" : ""} `}>
+                                                            className={`caption_header hashtag_outer`}>
                                                             <h5 className='post_heading create_post_text'>Add
                                                                 Hashtag *</h5>
 
@@ -884,117 +862,90 @@ const CreatePost = () => {
                                                 </div>
 
                                             </form>
-                                          {/* draft and publish now section  */}
-                                <div className='draft_publish_outer mt-3'>
-                                    <div className={"flex-grow-1"}>
-                                        <GenericButtonWithLoader label={jsondata.saveasdraft}
-                                                                 onClick={() => {
-                                                                     setReference("Draft")
-                                                                     handleDraftPost();
-                                                                 }}
-                                                                 isDisabled={createPostApi?.isLoading && reference !== "Draft"} // Disable if not null and not "Scheduled"
-                                                                 className={"save_btn cmn_bg_btn loading"}
-                                                                 isLoading={reference === "Draft" && createPostApi?.isLoading}/>
-                                    </div>
+                                            {/* draft and publish now section  */}
+                                            <div className='draft_publish_outer mt-3'>
+                                                <div className={"flex-grow-1"}>
+                                                    <GenericButtonWithLoader label={jsondata.saveasdraft}
+                                                                             onClick={() => {
+                                                                                 setReference("Draft")
+                                                                                 handleDraftPost();
+                                                                             }}
+                                                                             isDisabled={createPostApi?.isLoading && reference !== "Draft"} // Disable if not null and not "Scheduled"
+                                                                             className={"save_btn cmn_bg_btn loading"}
+                                                                             isLoading={reference === "Draft" && createPostApi?.isLoading}/>
+                                                </div>
 
 
+                                                <GenericButtonWithLoader label={jsondata.publishnow}
+                                                                         onClick={() => {
+                                                                             const requestBody = getRequestBodyToCreatePost("PUBLISHED", false)
+                                                                             if (!isCreatePostRequestValid(requestBody, files)) return
+                                                                             setShowPublishPostConfirmationBox(true)
+                                                                         }}
+                                                                         isDisabled={createPostApi?.isLoading && reference !== "Published"}
+                                                                         className={"publish_btn cmn_bg_btn loading"}/>
+                                                <GenericButtonWithLoader label={jsondata.schedule}
+                                                                         onClick={(e) => {
+                                                                             setReference("Scheduled")
+                                                                             handleSchedulePost(e);
+                                                                         }}
+                                                                         isDisabled={(createPostApi?.isLoading && reference !== "Scheduled") || !showScheduleDateAndTimeBox} // Disable if not null and not "Scheduled"
+                                                                         className={"cmn_bg_btn schedule_btn loading"}
+                                                                         isLoading={reference === "Scheduled" && createPostApi?.isLoading}
+                                                />
 
-                                    <GenericButtonWithLoader label={jsondata.publishnow}
-                                                             onClick={() => {
-                                                                 const requestBody = getRequestBodyToCreatePost("PUBLISHED",false)
-                                                                 if(! isCreatePostRequestValid(requestBody, files))  return
-                                                                 setShowPublishPostConfirmationBox(true)
-                                                             }}
-                                                             isDisabled={createPostApi?.isLoading && reference !== "Published"}
-                                                             className={"publish_btn cmn_bg_btn loading"}/>
-                                    <GenericButtonWithLoader label={jsondata.schedule}
-                                                             onClick={(e) => {
-                                                                 setReference("Scheduled")
-                                                                 handleSchedulePost(e);
-                                                             }}
-                                                             isDisabled={(createPostApi?.isLoading && reference !== "Scheduled") || !showScheduleDateAndTimeBox} // Disable if not null and not "Scheduled"
-                                                             className={"cmn_bg_btn schedule_btn loading"}
-                                                             isLoading={reference === "Scheduled" && createPostApi?.isLoading}
-                                    />
-
-                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     {
-                                        // showPreview && files.length > 0 &&
                                         <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container p-0">
                                             <div className='cmn_outer create_post_container post_preview_outer'>
-                                                                                                   {/* <h3 className='Post_Preview_heading'>Post Preview</h3> */}
-                                                    <div className='CommonFeedPreview_container'>
-                                                        {/*  */}
-                                                      <div className='blank_post d-none'>
-                                                      <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>Post Preview</h2>
-                                                         <div className='preview_wrapper'>
-                                                            <div className='user_profile_info'>
-                                                                {/* <Image src=""/> */}
-                                                                <div className='w-100'>
-                                                                    <h3 className='create_post_text user_name boost_post_text'>Your Page Name</h3>
-                                                                    <div className='text-center'>
-                                                                <Image src="/assets/blank_image.png" alt='blank_image'/>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div className='like_comment_outer'>
-                                                                <div className="fb_likes">
-                                                                    <FiThumbsUp/>
-                                                                    <h3 className="cmn_text_style">Likes</h3>
-                                                                </div>
-                                                                <div className="fb_likes">
-                                                                <FaRegComment className="fb_cmt_icon"/>
-                                                                    <h3 className="cmn_text_style">Comment</h3>
-                                                                </div>
-                                                                <div className="fb_likes">
-                                                                    <PiShareFat/>
-                                                                    <h3 className="cmn_text_style">Share</h3>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                      </div>
-                                                  {/*  */}
-
-
-                                                        {
-                                                            allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
-                                                                let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
-
-                                                                return (<div key={index}>
+                                                <div className='CommonFeedPreview_container'>
                                                     {
-                                                        selectedPageData &&
-                                                        <CommonFeedPreview
-                                                            socialMediaType={option.group}
-                                                            previewTitle={`${getEnumValue(option.group)} feed Preview`}
-                                                            pageName={selectedPageData?.name}
-                                                            pageImageUrl={selectedPageData?.imageUrl}
-                                                            userData={userData}
-                                                            cropImage={cropImgUrl !== null ? cropImgUrl : ""}
-                                                            files={files}
-                                                            selectedFileType={selectedFileType}
+                                                        isNullOrEmpty(selectedOptions) &&
+                                                        <DefaultFeedPreview
                                                             caption={caption}
                                                             hashTag={hashTag}
-                                                            destinationUrl={pinDestinationUrl}
-                                                            pinTitle={pinTitle}
+                                                            files={files}
+                                                            selectedFileType={selectedFileType}
                                                         />
                                                     }
+                                                    {
+                                                        allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
+                                                            let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
+                                                            return (<div key={index}>
+                                                                    {
+                                                                        selectedPageData &&
+                                                                        <CommonFeedPreview
+                                                                            socialMediaType={option.group}
+                                                                            previewTitle={`${getEnumValue(option.group)} feed Preview`}
+                                                                            pageName={selectedPageData?.name}
+                                                                            pageImageUrl={selectedPageData?.imageUrl}
+                                                                            userData={userData}
+                                                                            cropImage={cropImgUrl !== null ? cropImgUrl : ""}
+                                                                            files={files}
+                                                                            selectedFileType={selectedFileType}
+                                                                            caption={caption}
+                                                                            hashTag={hashTag}
+                                                                            destinationUrl={pinDestinationUrl}
+                                                                            pinTitle={pinTitle}
+                                                                        />
+                                                                    }
+
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
                                                 </div>
-                                                                )
-                                                            })
-                                                        }
-                                                    </div>
-                                             
+
                                             </div>
 
                                         </div>
                                     }
                                 </div>
 
-                              
+
                             </div>
                         </div>
                 }
@@ -1058,7 +1009,7 @@ const CreatePost = () => {
                 <PostNowModal
                     show={showPublishPostConfirmationBox}
                     setShow={setShowPublishPostConfirmationBox}
-                    onSubmit={(e)=>{
+                    onSubmit={(e) => {
                         setReference("Published")
                         handlePostSubmit(e);
                     }}

@@ -1,9 +1,6 @@
 import {baseAxios} from "../utils/commonUtils";
 import {showErrorToast} from "../features/common/components/Toast";
-import {getAuthHeader} from "../utils/RTKQueryUtils";
-import {createAsyncThunk} from "@reduxjs/toolkit";
-import {setAuthenticationHeader} from "../app/auth/auth";
-import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils";
+import {getAuthHeader, getAuthorizationHeader} from "../utils/RTKQueryUtils";
 
 const baseUrl=`${import.meta.env.VITE_APP_API_BASE_URL}`
 // Planner Service
@@ -59,4 +56,3 @@ export const searchNotification=async (data)=>{
         throw error
     });
 }
-

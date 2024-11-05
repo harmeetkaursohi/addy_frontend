@@ -378,10 +378,20 @@ export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, s
     switch (socialMediaType) {
         case SocialAccountProvider?.FACEBOOK: {
             insightsData?.map(res => {
-                response = res.hasOwnProperty("error") ? {...response, [res?.id]: res} : {
-                    ...response,
-                    [res?.data?.id]: res?.data
-                }
+                response = res.hasOwnProperty("error") ? {
+                        ...response,
+                        [res?.id]: {
+                            ...res,
+                            error: {
+                                ...res.error,
+                                isDeletedFromSocialMedia: res.error.message.includes("Object does not exist")
+                            }
+                        }
+                    }
+                    : {
+                        ...response,
+                        [res?.data?.id]: res?.data
+                    }
             })
             return response;
         }
@@ -389,7 +399,7 @@ export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, s
             postIds?.map(postId => {
                 response = insightsData[postId] === undefined ? {
                     ...response,
-                    [postId]: {id: postId, error: {message: "Object does not exist"}}
+                    [postId]: {id: postId, error: {message: "Object does not exist", isDeletedFromSocialMedia: true}}
                 } : {...response, [postId]: insightsData[postId]}
             })
             return response;
@@ -398,7 +408,13 @@ export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, s
             postIds?.map(postId => {
                 response = insightsData[postId].hasOwnProperty("error") ? {
                     ...response,
-                    [postId]: {id: postId, error: insightsData[postId]}
+                    [postId]: {
+                        id: postId,
+                        error: {
+                            ...insightsData[postId],
+                            isDeletedFromSocialMedia: (insightsData?.[postId]?.status === "404" && insightsData?.[postId]?.error === "NOT_FOUND")
+                        }
+                    }
                 } : {...response, [postId]: insightsData[postId]}
             })
             return response;
@@ -407,7 +423,13 @@ export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, s
             postIds?.map(postId => {
                 response = insightsData[postId].hasOwnProperty("error") ? {
                     ...response,
-                    [postId]: {id: postId, error: insightsData[postId]?.error}
+                    [postId]: {
+                        id: postId,
+                        error: {
+                            ...insightsData[postId]?.error,
+                            isDeletedFromSocialMedia: insightsData[postId]?.error?.status === 404
+                        }
+                    }
                 } : {...response, [postId]: insightsData[postId]}
             })
             return response;
@@ -427,7 +449,7 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
                 return {
                     ...errorResponse,
                     errorInfo: {
-                        isDeletedFromSocialMedia: data?.error?.message?.includes("Object does not exist"),
+                        isDeletedFromSocialMedia: data?.error?.isDeletedFromSocialMedia,
                         errorMessage: data?.error?.message
                     }
                 }
@@ -447,7 +469,7 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
                 return {
                     ...errorResponse,
                     errorInfo: {
-                        isDeletedFromSocialMedia: data?.error?.message?.includes("Object does not exist"),
+                        isDeletedFromSocialMedia: data?.error?.isDeletedFromSocialMedia,
                         errorMessage: data?.error?.message
                     }
                 }
@@ -467,7 +489,7 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
                 return {
                     ...errorResponse,
                     errorInfo: {
-                        isDeletedFromSocialMedia: data?.error?.status === "404",
+                        isDeletedFromSocialMedia: data?.error?.isDeletedFromSocialMedia,
                         errorMessage: data?.error?.message
                     }
                 }
@@ -487,7 +509,7 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
                 return {
                     ...errorResponse,
                     errorInfo: {
-                        isDeletedFromSocialMedia: data?.error?.status === "404",
+                        isDeletedFromSocialMedia: data?.error?.isDeletedFromSocialMedia,
                         errorMessage: data?.error?.message || ErrorFetchingPost
                     }
                 }
@@ -513,7 +535,7 @@ export const getFormattedDataForPostEngagementGraph = (data, socialMediaType) =>
     let formattedData = []
     switch (socialMediaType) {
         case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
-            formattedData = data?.data[0]?.values?.map((cur) => {
+            formattedData = data?.data?.[0]?.values?.map((cur) => {
                 const date = new Date(cur.end_time)
                 const month = date.toLocaleString('default', {month: 'short'})
                 const day = date.getDate();
@@ -549,7 +571,7 @@ export const getFormattedDataForPostEngagementGraph = (data, socialMediaType) =>
 
 }
 
-export const mapCreatePostDataToFormData=(data)=>{
+export const mapCreatePostDataToFormData = (data) => {
     const formData = new FormData();
     if (data.caption !== null && data.caption !== "null") {
         formData.append('caption', data.caption);
@@ -578,7 +600,7 @@ export const mapCreatePostDataToFormData=(data)=>{
     return formData;
 }
 
-export const mapUpdatePostDataToFormData=(data)=>{
+export const mapUpdatePostDataToFormData = (data) => {
     const formData = new FormData();
     if (data.updatePostRequestDTO.caption !== null && data.updatePostRequestDTO.caption !== "null") {
         formData.append('caption', data.updatePostRequestDTO.caption);
