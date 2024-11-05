@@ -1,44 +1,36 @@
-import {defineConfig} from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
 import dotenv from 'dotenv';
-// import { customHeadersMiddleware } from './src/features/common/components/CustomHeaderMiddleware';
+import svgr from 'vite-plugin-svgr';
 
-// Load environment variables from the appropriate .env.local file
 dotenv.config({
-    path: `.env.${process.env.NODE_ENV || 'development'}`, 
+    path: `.env.${process.env.NODE_ENV || 'development'}`,
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5143;
 const VITE_HMR_HOST = process.env.VITE_HMR_HOST;
-const VITE_HMR_PORT = process.env.VITE_HMR_PORT;
-const VITE_HMR_PROTOCOL = process.env.VITE_HMR_PROTOCOL;
+const VITE_HMR_PORT = process.env.VITE_HMR_PORT || 3000;
+const VITE_HMR_PROTOCOL = process.env.VITE_HMR_PROTOCOL || 'ws';
 
-// https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         react(),
-        // customHeadersMiddleware()
+        svgr(), 
     ],
-   
-
+    
     server: {
-        port: Number(PORT || 5143),
+        port: Number(PORT),
         hmr: {
             host: VITE_HMR_HOST,
             port: Number(VITE_HMR_PORT),
             protocol: VITE_HMR_PROTOCOL,
         },
         watch: {
-            usePolling: true
+            usePolling: true, 
         },
-      
-        },
+    },
 
     build: {
-        watch: false
+        watch: false, 
     },
- 
-})
-
-
-
+});

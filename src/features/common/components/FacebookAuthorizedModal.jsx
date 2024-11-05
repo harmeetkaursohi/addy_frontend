@@ -9,6 +9,7 @@ import {LoginSocialFacebook} from "reactjs-social-login";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import NotFoundPopup from "./NotFoundPopup";
 import { Image } from "react-bootstrap";
+import ReactComponent  from "../../../images/attention.svg?react"
 const FacebookAuthorizedModal = ({
                                      show,
                                      setShowModal,
@@ -47,7 +48,8 @@ console.log(no_page_connect_img,"no_page_connect_img");
                     <div className="">
                         <div className="">
                             <div className="text-center pt-3">
-                                <Image src="/assets/facebook_authorized.svg" alt="facebook authorizes image"/>
+                                <ReactComponent />
+                                {/* <Image src="/assets/facebook_authorized.svg" alt="facebook authorizes image"/> */}
                                 <div className="facebook_content_outer">
                                     <h2 className="disconnect_title">
                                         Authorize on Facebook for Instagram
