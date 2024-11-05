@@ -922,7 +922,7 @@ button.fc--button.fc-button.fc-button-primary {
 .calender_outer_wrapper table tbody tr td {
   outline: unset;
   border: transparent;
-  height: 100px;
+  /* height: 100px; */
 }
 .calender_outer_wrapper table.fc-scrollgrid-sync-table tbody td {
   outline: 1px solid #E3E3E3;

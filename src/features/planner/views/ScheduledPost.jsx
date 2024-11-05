@@ -36,6 +36,7 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
     const [showPostPerview,setShowPostPerview] = useState(false)
     const handleClose = () => setShowPostPerview(false);
     const handleShow = () => setShowPostPerview(true);
+    const [userId, setUserId] = useState()
     const postsApi = useGetSocialMediaPostsByCriteriaQuery(searchQuery, {skip: isNullOrEmpty(searchQuery?.batchIds) || isNullOrEmpty(searchQuery?.plannerCardDate)})
 
     useEffect(() => {
@@ -128,7 +129,7 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                 {
                     sortByKey(posts, "feedPostDate")?.map((plannerPost, index) => {
                         console.log(plannerPost,"this is the planner post")
-                        return <div className={"more_plans_grid"} key={index} onClick={() => setShowPostPerview(true)}>
+                        return <div className={"more_plans_grid"} key={index} onClick={() => {setShowPostPerview(true);setUserId(plannerPost?.id)}}>
                             <div className="plan_grid_img">
                                 {
                                     plannerPost?.attachments &&
@@ -198,7 +199,7 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
             </div>
             {
             showPostPerview &&
-           <PostViewModal showPostPerview={showPostPerview} setShowPostPerview={setShowPostPerview}/>
+           <PostViewModal userId={userId} showPostPerview={showPostPerview} setShowPostPerview={setShowPostPerview}/>
             }
         </div>
     )
