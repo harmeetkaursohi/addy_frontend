@@ -3,6 +3,7 @@ import FacebookFeedPreview from "./FacebookFeedPreview";
 import InstagramFeedPreview from "./InstagramFeedPreview";
 import PinterestFeedPreview from "./PinterestFeedPreview";
 import LinkedinFeedpreview from "./LinkedinFeedPreview";
+import DefaultFeedPreview from "./DefaultFeedPreview";
 
 const CommonFeedPreview = ({
                                socialMediaType,

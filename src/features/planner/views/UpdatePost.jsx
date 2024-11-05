@@ -18,7 +18,7 @@ import {
     convertSentenceToHashtags,
     convertToUnixTimestamp, convertUnixTimestampToDateTime,
     getEnumValue, getFileFromAttachmentSource, getVideoDurationById,
-    groupByKey, isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
+    groupByKey, isCreateDraftPostRequestValid, isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import {showErrorToast} from "../../common/components/Toast";
@@ -34,8 +34,9 @@ import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount
 import {useGetPostsByIdQuery, useUpdatePostByIdMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
-import { GoChevronDown } from "react-icons/go";
+import {GoChevronDown} from "react-icons/go";
 import PostNowModal from "../../common/components/PostNowModal";
+import DefaultFeedPreview from "../../common/components/DefaultFeedPreview";
 
 const UpdatePost = () => {
 
@@ -84,6 +85,9 @@ const UpdatePost = () => {
 
         const {sidebar} = useAppContext()
 
+        console.log("selectedOptions======>", selectedOptions)
+        console.log("selectedGroups======>", selectedGroups)
+        console.log("allOptions======>", allOptions)
 
         useEffect(() => {
             if (files && files.length <= 0) {
@@ -259,7 +263,10 @@ const UpdatePost = () => {
                     updatedSelectedGroups.push(group);
                 }
             } else {
-                updatedSelectedGroups.splice(updatedSelectedGroups.indexOf(group), 1);
+                const index = updatedSelectedGroups.indexOf(group)
+                if (index !== -1) {
+                    updatedSelectedGroups.splice(index, 1);
+                }
             }
             setSelectedOptions(Array.from(new Set(updatedSelectedOptions)));
             setSelectedGroups(Array.from(new Set(updatedSelectedGroups)));
@@ -367,7 +374,7 @@ const UpdatePost = () => {
                 }
             }
             const requestBody = getRequestBodyToUpdatePost("DRAFT", isScheduledTimeProvided)
-            updatePost(requestBody);
+            isCreateDraftPostRequestValid(requestBody) && updatePost(requestBody);
         };
 
         const handleSchedulePost = () => {
@@ -388,7 +395,6 @@ const UpdatePost = () => {
         const handleRemoveSelectFile = (attachmentReferenceNameToRemove, id) => {
             const updatedFiles = files.filter((file) => file.fileName !== attachmentReferenceNameToRemove);
             setFiles(updatedFiles);
-            updatedFiles?.length ===0 && setShowPreview(false)
             if (id !== undefined && id !== null) {
                 const updatedOldAttachments = oldAttachmentsFileObject?.filter(attachment => attachment?.id !== id);
                 setOldAttachmentsFileObject(updatedOldAttachments);
@@ -460,49 +466,41 @@ const UpdatePost = () => {
             }
         }, [trimmedVideoUrl])
 
-        const [showPreview, setShowPreview] = useState(false)
         return (
             <>
                 {/*<SideBar/>*/}
                 <div className={`cmn_container ${sidebar ? "" : "cmn_Padding"}`}>
                     <div className="Container">
-                        <div className={`create_post_wrapper ${showPreview ? "" : "width_class"}`}>
-                           
+                        <div className={`create_post_wrapper `}>
+
                             <div className="row m-0">
                                 <div
-                                    className={showPreview ? "col-lg-6 col-md-12 col-sm-12 p-0" : "col-lg-12 col-md-12 col-sm-12 p-0"}>
-                                         <div className=' cmn_outer'>
-                                <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
+                                    className={"col-lg-6 col-md-12 col-sm-12 p-0"}>
+                                    <div className=' cmn_outer'>
+                                        <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
 
 
-                            </div>
+                                    </div>
 
-                                    <div className={`create_post_content   ${showPreview ? "cmn_outer " : " edit_post_content"} `}>
+                                    <div
+                                        className={`create_post_content  cmn_outer `}>
 
-                             
-                                        <form onSubmit={(e)=>{e.preventDefault()}}>
+
+                                        <form onSubmit={(e) => {
+                                            e.preventDefault()
+                                        }}>
                                             {/* select media pages */}
                                             <div className="createPost_outer">
-                                            <div className='d-flex align-items-center '>
-                                            <label className='create_post_label flex-grow-1'>{jsondata.mediaPlatform} *</label>
-                                                   
-                                                   {
-                                                       selectedAllDropdownData?.length > 0 && showPreview ?
-                                                           <button className='preview_btn' onClick={() => {
-                                                               setShowPreview(false)
-                                                           }}><RxCross2/></button> :
-                   
-                                                           selectedAllDropdownData?.length > 0 &&
-                                                           <button className='preview_btn ' onClick={() => {
-                                                               setShowPreview(true)
-                                                           }}><AiOutlineEye/></button>
-                                                   }
-                                                      
-                                                </div>             {/*    dropdown select platform=====*/}
+                                                <div className='d-flex align-items-center '>
+                                                    <label
+                                                        className='create_post_label flex-grow-1'>{jsondata.mediaPlatform} *</label>
+
+                                                </div>
+                                                {/*    dropdown select platform=====*/}
                                                 <Dropdown className='insta_dropdown_btn mt-2'>
                                                     <Dropdown.Toggle id="instagram"
                                                                      className="instagram_dropdown tabs_grid">
-                                                                        <GoChevronDown className='dropdown_chevron'/>
+                                                        <GoChevronDown className='dropdown_chevron'/>
                                                         {selectedAllDropdownData.length > 0 ?
                                                             (
                                                                 selectedAllDropdownData.map((data, index) => (
@@ -641,16 +639,15 @@ const UpdatePost = () => {
                                             </div>
                                             {/* add media */}
                                             <div
-                                                className={`media_outer ${showPreview ? "" : "row align-items-center mt-4 mx-0 "} `}>
-                                               <div className="col-12">
-                                               <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
-                                               <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
-                                               </div>
+                                                className={`media_outer `}>
+                                                <div className="col-12">
+                                                    <h5 className='post_heading create_post_text'>{jsondata.media}</h5>
+                                                    <h6 className='create_post_text'>{jsondata.sharephoto}</h6>
+                                                </div>
                                                 <div
-                                                    className={showPreview ? "" : 'media_inner_content col-lg-6 col-md-12 col-sm-12'}>
+                                                    className={""}>
 
                                                     <div className="post_content_wrapper">
-                                                     
 
 
                                                         {
@@ -716,7 +713,7 @@ const UpdatePost = () => {
 
                                                 </div>
 
-                                                <div className={showPreview ? "" : "col-lg-6 col-sm-12 col-md-12 p-0"}>
+                                                <div className={"" }>
 
                                                     <div className="darg_navs file_outer">
 
@@ -794,7 +791,7 @@ const UpdatePost = () => {
                                                         <h5 className='post_heading create_post_text mb-2'>Pinterest
                                                             Only *</h5>
                                                     </div>
-                                                    <div className={showPreview ? "" : 'post_caption_outer'}>
+                                                    <div className={"" }>
                                                         <div className='textarea_outer flex-grow-1'>
                                                             <h6 className='create_post_text'>Pin Title*</h6>
                                                             <input type={"text"} className='textarea mt-2'
@@ -806,7 +803,7 @@ const UpdatePost = () => {
                                                         </div>
 
                                                         <div
-                                                            className={`textarea_outer  ${showPreview ? "mt-2" : "flex-grow-1"}`}>
+                                                            className={`textarea_outer  mt-2`}>
                                                             <h6 className='create_post_text'>Destination Url*</h6>
                                                             <input type={"text"} className='textarea mt-2'
                                                                    value={pinDestinationUrl}
@@ -822,7 +819,7 @@ const UpdatePost = () => {
 
                                             {/* post caption */}
 
-                                            <div className={`media_outer ${showPreview ? "" : "post_caption_outer"}`}>
+                                            <div className={`media_outer `}>
                                                 <div className='flex-grow-1'>
                                                     <div className='caption_header'>
                                                         <h5 className='post_heading create_post_text'>Add
@@ -851,7 +848,7 @@ const UpdatePost = () => {
                                                 </div>
                                                 <div className='flex-grow-1'>
                                                     <div
-                                                        className={`caption_header ${showPreview ? "hashtag_outer" : ""} `}>
+                                                        className={`caption_header hashtag_outer `}>
                                                         <h5 className='post_heading create_post_text'>Add
                                                             Hashtag * </h5>
 
@@ -972,24 +969,24 @@ const UpdatePost = () => {
 
                                             <div className={"flex-grow-1"}>
                                                 <GenericButtonWithLoader label={jsondata.saveasdraft}
-                                                                        onClick={(e) => {
-                                                                            setReference("Draft")
-                                                                            handleDraftPost(e);
-                                                                        }}
+                                                                         onClick={(e) => {
+                                                                             setReference("Draft")
+                                                                             handleDraftPost(e);
+                                                                         }}
 
-                                                                        className={"save_btn cmn_bg_btn loading"}
-                                                                        isLoading={reference === "Draft" && updatePostByIdApi?.isLoading}/>
+                                                                         className={"save_btn cmn_bg_btn loading"}
+                                                                         isLoading={reference === "Draft" && updatePostByIdApi?.isLoading}/>
                                             </div>
 
 
                                             <GenericButtonWithLoader label={jsondata.publishnow}
-                                                                    onClick={(e) => {
-                                                                        const requestBody = getRequestBodyToUpdatePost("PUBLISHED",false)
-                                                                        if(! isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject))  return
-                                                                        setShowPublishPostConfirmationBox(true)
-                                                                    }}
-                                                                    isDisabled={false}
-                                                                    className={"publish_btn cmn_bg_btn loading"}/>
+                                                                     onClick={(e) => {
+                                                                         const requestBody = getRequestBodyToUpdatePost("PUBLISHED", false)
+                                                                         if (!isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, files, oldAttachmentsFileObject)) return
+                                                                         setShowPublishPostConfirmationBox(true)
+                                                                     }}
+                                                                     isDisabled={false}
+                                                                     className={"publish_btn cmn_bg_btn loading"}/>
                                             <GenericButtonWithLoader
                                                 label={jsondata.schedule}
                                                 onClick={(e) => {
@@ -999,22 +996,30 @@ const UpdatePost = () => {
                                                 isDisabled={!showScheduleDateAndTimeBox}
                                                 className={"cmn_bg_btn schedule_btn loading"}
                                                 isLoading={reference === "Scheduled" && updatePostByIdApi?.isLoading}/>
-                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 {
-                                    showPreview && files.length > 0 &&
+
                                     <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container p-0">
                                         <div className='cmn_outer create_post_container post_preview_outer'>
-                                        
-                                                {/* <h3 className='Post_Preview_heading'>Post Preview</h3> */}
-                                                <div className='CommonFeedPreview_container'>
-                                                    {
-                                                        allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
+                                            {
+                                                isNullOrEmpty(selectedOptions)  &&
+                                                <DefaultFeedPreview
+                                                    caption={caption}
+                                                    hashTag={hashTag}
+                                                    files={files}
+                                                    selectedFileType={selectedFileType}
+                                                />
+                                            }
+                                            {/* <h3 className='Post_Preview_heading'>Post Preview</h3> */}
+                                            <div className='CommonFeedPreview_container'>
+                                                {
+                                                    allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
 
-                                                            let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
+                                                        let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                            return (<span key={index}>
+                                                        return (<span key={index}>
                                                         {
                                                             selectedPageData && <CommonFeedPreview
                                                                 socialMediaType={option.group}
@@ -1029,17 +1034,17 @@ const UpdatePost = () => {
                                                             />
                                                         }
                                                     </span>
-                                                            )
-                                                        })
-                                                    }
-                                                </div>
-                                           
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+
                                         </div>
                                     </div>
                                 }
                             </div>
 
-                         
+
                         </div>
                     </div>
 

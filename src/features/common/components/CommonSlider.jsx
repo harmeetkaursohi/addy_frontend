@@ -6,7 +6,8 @@ import noImageAvailable from "../../../images/no_img_posted.png"
 import ReactPlayer from "react-player";
 import CommentText from "../../review/views/comments/CommentText";
 import './common.css'
-import { Image } from "react-bootstrap";
+import {Image} from "react-bootstrap";
+
 const CommonSlider = ({
                           files,
                           selectedFileType = "",
@@ -39,9 +40,17 @@ const CommonSlider = ({
             {viewSimilarToSocialMedia ?
                 <div>
                     <div className={`ms-2   ${showText ? "feed_preview_Caption_outer" : ` ${className}`}`}>
-                        {isrequired ? "" : <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
-                                                        className={"highlight cursor-pointer Caption_outer"} setShowText={setShowText}
-                                                        showText={showText}/>}
+                        {
+                            isrequired ? "" :
+                                <>
+                                    <p className="">{caption}</p>
+                                    <p className="post_hashtags">{hashTag}</p>
+                                </>
+                                // <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
+                                //              className={"highlight cursor-pointer Caption_outer"}
+                                //              setShowText={setShowText}
+                                //              showText={showText}/>
+                        }
                     </div>
                     <Slider {...settings} >
 
@@ -51,7 +60,7 @@ const CommonSlider = ({
                             files?.map((file, index) => {
                                 return (<div key={index}>
                                     <Image src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
-                                         alt={`Image ${index}`} className='post_img'/>
+                                           alt={`Image ${index}`} className='post_img'/>
                                 </div>)
                             })
                         }
@@ -61,7 +70,7 @@ const CommonSlider = ({
                             files?.map((file, index) => (
                                 <div key={index}>
                                     <ReactPlayer
-                                        height={height?height:"250px"}
+                                        height={height ? height : "250px"}
                                         width={"100%"}
                                         className='video_player_outer'
                                         url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
@@ -84,7 +93,8 @@ const CommonSlider = ({
                     <Slider {...settings}>
 
                         {
-                            files?.length === 0 && <Image src={noImageAvailable} alt={`Image 23F`} className='post_img'/>
+                            files?.length === 0 &&
+                            <Image src={noImageAvailable} alt={`Image 23F`} className='post_img'/>
                         }
 
                         {
@@ -112,7 +122,7 @@ const CommonSlider = ({
 
                                 return (<div key={index}>
 
-                                    {file?.mediaType === "IMAGE" || showThumbnail  || !file.sourceURL?
+                                    {file?.mediaType === "IMAGE" || showThumbnail || !file.sourceURL ?
                                         <div className={className ? className : "post_image_outerwrapper"}>
                                             <Image
                                                 src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}

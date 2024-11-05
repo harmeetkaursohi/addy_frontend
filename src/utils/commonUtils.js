@@ -11,7 +11,7 @@ import {
     NoBusinessAccountFound,
     OnlyImageOrVideoCanBePosted,
     PinterestImageLimitation,
-    SelectAtleastOnePage,
+    SelectAtleastOnePage, SelectAtLeastOnePageForDraft,
     SocialAccountProvider,
     SomethingWentWrongTryLater,
     VideoFormatNotSupported
@@ -163,7 +163,7 @@ export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider,setShow
                     refreshToken: jsonObj?.data?.refresh_token || null,
                 }
             }
-        } 
+        }
 
 
         case SocialAccountProvider.PINTEREST : {
@@ -1113,7 +1113,7 @@ export const getDatesForPinterest = (daysAgo) => {
     if (isNullOrEmpty(daysAgo.toString())) {
         return "";
     }
-    const date = daysAgo === "now" ? new Date() : new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+    const date = daysAgo === "now" ? new Date() : new Date(Date.now() - (daysAgo * 24 * 60 * 60 * 1000));
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -1488,7 +1488,13 @@ export const getFileFromAttachmentSource = (attachment) => {
         reader.readAsDataURL(file);
     });
 };
-
+export const isCreateDraftPostRequestValid = (requestBody) => {
+    if (requestBody?.postPageInfos===null || requestBody?.postPageInfos===undefined ||requestBody?.postPageInfos?.length === 0) {
+        showErrorToast(SelectAtLeastOnePageForDraft);
+        return false;
+    }
+    return true;
+}
 export const isCreatePostRequestValid = (requestBody, files) => {
     let shouldBreak = false;
     const hasAttachments = requestBody?.attachments?.length > 0;
@@ -1693,7 +1699,6 @@ export const isCreatePostRequestValid = (requestBody, files) => {
 
         }
     });
-    console.log("isCreatePostRequestValid======>",!shouldBreak)
     return !shouldBreak;
 }
 export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => {

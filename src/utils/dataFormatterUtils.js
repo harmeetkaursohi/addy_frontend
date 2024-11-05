@@ -535,7 +535,7 @@ export const getFormattedDataForPostEngagementGraph = (data, socialMediaType) =>
     let formattedData = []
     switch (socialMediaType) {
         case SocialAccountProvider.FACEBOOK?.toUpperCase(): {
-            formattedData = data?.data[0]?.values?.map((cur) => {
+            formattedData = data?.data?.[0]?.values?.map((cur) => {
                 const date = new Date(cur.end_time)
                 const month = date.toLocaleString('default', {month: 'short'})
                 const day = date.getDate();

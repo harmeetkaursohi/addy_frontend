@@ -446,8 +446,7 @@ const Insight = () => {
                                                         <div className="page_title_header mb-0 Profile_visit_container">
                                                             <div className="page_title_container ps-0">
                                                                 <div className="page_title_dropdown">
-                                                                    <div className={"profile-visit-text ms-4"}>Profile
-                                                                        Visit
+                                                                    <div className={"profile-visit-text ms-4"}>Profile Visit
                                                                     </div>
                                                                 </div>
                                                                 <div className="days_outer">
@@ -763,23 +762,11 @@ const Insight = () => {
                                                             }
                                                         </div>
                                                         <div className="interaction_graph_outer">
-                                                            {
-                                                                (postEngagementsApi?.isLoading || postEngagementsApi?.isFetching ) ?
-                                                                    <div
-                                                                        className="d-flex justify-content-center profile-visit-graph ">
-                                                                        <RotatingLines
-                                                                            strokeColor="#F07C33"
-                                                                            strokeWidth="5"
-                                                                            animationDuration="0.75"
-                                                                            width="70"
-                                                                            visible={true}
-                                                                        />
-                                                                    </div> :
-                                                                    <HorizontalBarChart
-                                                                        graphData={postEngagementsApi?.data}
-                                                                        socialMediaType={selectedPage?.socialMediaType}
-                                                                    />
-                                                            }
+                                                            <HorizontalBarChart
+                                                                isLoading={postEngagementsApi?.isLoading || postEngagementsApi?.isFetching}
+                                                                graphData={postEngagementsApi?.data}
+                                                                socialMediaType={selectedPage?.socialMediaType}
+                                                            />
                                                         </div>
 
                                                     </div>
