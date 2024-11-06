@@ -1,4 +1,5 @@
 import {useState} from 'react';
+import ReactDOMServer from 'react-dom/server'; 
 import Modal from 'react-bootstrap/Modal';
 import "./DraftComponent.css"
 import {RxCross1} from "react-icons/rx";
@@ -8,7 +9,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch, } from "react-redux";
 import { showSuccessToast} from "../../common/components/Toast";
 import Swal from "sweetalert2";
-import delete_img from "../../../images/deletePost.svg";
+import Delete_img from "../../../images/deletePost.svg?react";
 import CommonSlider from "../../common/components/CommonSlider";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {useDeletePostByIdMutation, usePublishedPostByIdMutation} from "../../../app/apis/postApi";
@@ -61,12 +62,22 @@ function DraftModal({
     }
 
     const handleDeletePost = () => {
-        setAction("DELETE")
-        setPostToDelete(postData?.id)
+        setAction("DELETE");
+        setPostToDelete(postData?.id);
+    
+        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Delete_img />);
+    
         Swal.fire({
-            imageUrl: delete_img,
-            title: `Delete Post`,
-            html: `<p class="modal_heading">Are you sure you want to delete this draft post?</p>`,
+            html: `
+                <div class="swal-content">
+                    <div class="swal-images">
+                        <img src="data:image/svg+xml;base64,${btoa(svgMarkup)}" alt="Delete Icon" class="delete-img" />
+                    </div>
+                    <h2 class="swal2-title" id="swal2-title">Delete Post</h2>
+                    <p class="modal_heading">Are you sure you want to delete this draft post?</p>
+                </div>
+            `,
+            // title: 'Delete Post',
             showCancelButton: true,
             cancelButtonText: 'Cancel',
             confirmButtonText: 'Delete',
@@ -76,34 +87,31 @@ function DraftModal({
             customClass: {
                 confirmButton: 'custom-confirm-button-class',
                 cancelButton: 'custom-cancel-button-class',
-                popup: "small_swal_popup cmnpopupWrapper"
-
+                popup: "small_swal_popup cmnpopupWrapper",
             }
         }).then(async (result) => {
             if (result.isConfirmed) {
                 await handleRTKQuery(
                     async () => {
-                        return await deletePostById(postData?.id).unwrap()
+                        return await deletePostById(postData?.id).unwrap();
                     },
                     () => {
-                        showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]))
-                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
-                        handleClose()
+                        showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]));
+                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]));
+                        handleClose();
                     },
                     null,
                     () => {
-                        setAction("")
-                        setPostToDelete(null)
+                        setAction("");
+                        setPostToDelete(null);
                     }
-                )
+                );
             } else {
-                setAction("")
-                setPostToDelete(null)
+                setAction("");
+                setPostToDelete(null);
             }
         });
-
-
-    }
+    };
     return (
         <>
             <Modal show={show} onHide={handleClose} className={"draft_modal_Wrapper"}>

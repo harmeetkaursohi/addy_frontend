@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import './ConfirmModal.css'
-import success_img from "../../../images/confirm_modal_image.jpg"
+import Success_img from "../../../images/confirm_modal_image.svg?react"
 import {RxCross2} from "react-icons/rx"
 import { Image } from 'react-bootstrap';
 const ConfirmModal = ({
@@ -34,11 +34,11 @@ const ConfirmModal = ({
                        
 
                             {
-                                icon === "warning" && <Image src={success_img} alt='success image' className='success_img'/>
+                                icon === "warning" && <Success_img className='Success_img'/>
                             }
 
                             {
-                                icon === "success" && <Image src={success_img} alt='success image' className='success_img'/>
+                                icon === "success" && <Success_img className='Success_img'/>
                             }
 
                             <div className="confirm_container">

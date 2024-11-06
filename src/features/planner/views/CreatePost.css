@@ -35,16 +35,18 @@ input.date_input::-webkit-calendar-picker-indicator{
     margin-top: 5px;
 }
 .img_container {
-    width: 300px;
-    height: 400px;
     position: relative;
-    border-radius: 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     overflow: hidden;
 }
 .img_container img{
-    height: 400px;
     object-fit: cover;
 }
+.slick-slide div {
+    display: block !important;
+}
+
 button.save_button {
     background: red;
     color: white;
@@ -56,31 +58,35 @@ button.save_button {
     margin-top: 18px;
     border:none
 }
-.img_footer_wrapper{
+
+span.blur {filter: blur(2px);margin-right: 3px;}
+
+.pintrest_comments {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+    padding-top: 8px;
 }
 .pin-title {
     color: #212529;
-    margin-top: 7px;
+    margin-top: 12px;
     font-size: 14px;
-    margin-left: 13px;
     width:290px;
     overflow: hidden;
     text-overflow: ellipsis;
-white-space: nowrap;
+    white-space: nowrap;
 
 }
-.img_footer{
-    position: absolute;
-    display: flex;
-    align-items: center;
-    bottom: 18px;
-
-    left: 0;
-    right: 0px;
-    margin: 0px 20px;
-    justify-content: space-evenly;
+span.blur {
+    filter: blur(2.8px);
+    margin-right: 3px;
+}
+.pintrest_footer {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 10px 15px;
 }
 .z-index-2{
     z-index:2;
@@ -118,8 +124,8 @@ white-space: nowrap;
  
 }
 .preview_img_container{
-    display: flex;
-    justify-content: center;
+    background-color: #fff;
+    border-radius: 10px;
 }
 .user_caption_heading{
     width: 126px;
@@ -132,18 +138,12 @@ white-space: nowrap;
 .user_caption_wrapper{
     display:flex;
     gap:10px;
-    margin-top: 10px;
-    margin-left: 13px;
     align-items: center;
 
 }
 .user_caption_wrapper img{
     border-radius: 20px;
 }
-.user_caption_wrapper h6{
-    color: #fff;
-}
-
 
 .instagramPages .checkbox-button_outer img {
     height: 34px;
@@ -176,8 +176,6 @@ white-space: nowrap;
     border-radius: 8px;
     align-items: center;
     padding: 4px 10px 4px 4px;
-
-    /*box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.19) inset;*/
     margin-top: 14px;
 }
 
@@ -188,6 +186,26 @@ white-space: nowrap;
     overflow-y: scroll;
     max-height: 360px;
 }
+/* width */
+.createPost_outer .dropdown-menu::-webkit-scrollbar
+ {
+    width: 5px;
+  }
+  
+  /* Track */
+  .createPost_outer .dropdown-menu::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  .createPost_outer .dropdown-menu::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  .createPost_outer .dropdown-menu::-webkit-scrollbar-thumb:hover {
+    background: #d3d3d3;
+  }
 
 .createPost_outer button.tabs_grid {
     display: flex;
@@ -660,9 +678,6 @@ button.ai_btn {
 }
 
 .post_preview_outer {
-    animation-name: fadeInLeft;
-    animation-duration: 3s;
-    animation-timing-function: all ease 0.7s;
     background: rgba(30, 30, 30, 1);
     padding: 3em;
 }
@@ -902,12 +917,12 @@ button.loading {
     height: 100%;
    
 }
-.CommonFeedPreview_container{
+/* .CommonFeedPreview_container{
     height: 958px;
     overflow-y: scroll;
     overflow-x: hidden;
     scrollbar-width: none;
-}
+} */
 .create_post_content {
     padding: 20px;
     max-width: 531px;
@@ -1128,13 +1143,7 @@ i.fa.fa-toggle-on {
     font-size: 18px !important;
     margin-bottom: 2px;
     }
-    .img_footer{
-    margin: 0px;
-    gap: 8px;
-    left: 47%;
-    flex-wrap: wrap;
-    transform: translate(-58%, -10px);
-    }
+
     .user_caption_heading {
         width: 103px;
     }

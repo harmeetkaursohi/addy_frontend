@@ -641,6 +641,7 @@ div#swal2-html-container {
   margin: 0px;
   padding: 2px 14px 0px;;
   /* line-height: 28px; */
+  overflow: unset;
 }
 
 div:where(.swal2-container) div:where(.swal2-actions){
@@ -755,7 +756,7 @@ line-height: 20px;
   width: 110px
 
 }
-img.post_img,.CommonFeedPreview_container .slick-slide div {
+img.post_img {
   height: 300px;
   object-fit: cover;
   object-position: center;

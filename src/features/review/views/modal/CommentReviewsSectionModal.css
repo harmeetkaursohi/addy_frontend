@@ -289,7 +289,7 @@ p.post_hashtags {
     font-size: 13px;
     color: #00A3FF;
     font-weight: 600;
-    margin-bottom: 20px !important;
+    padding-bottom: 10px;
 }
 .comments_messages {
     padding: 20px;

@@ -1,4 +1,5 @@
 import React, {useEffect} from "react";
+import ReactDOMServer from 'react-dom/server';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import addy_logo from "../../../images/addylogoo.svg";
 import "./Layout.css";
@@ -9,9 +10,9 @@ import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import {FaBars} from "react-icons/fa";
 import {RxCross2} from "react-icons/rx";
 import default_user_icon from '../../../images/default_user_icon.svg'
+import Logout from '../../../images/Logout.svg?react'
 import logout_img from '../../../images/log-out.svg'
 import {subscribeNotifications} from "../../../services/addyService";
-import logout_image from "../../../images/logout_img.png"
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect.jsx";
 import {
     getUpdatedNameAndImageUrlForConnectedPages, isNullOrEmpty,
@@ -101,12 +102,21 @@ const Layout = () => {
     }, [getAllConnectedPagesApi, getConnectedSocialAccountApi])
 
     const LogOut = (e) => {
-        e.stopPropagation()
-
+        e.stopPropagation();
+    
+        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Logout />);
+    
         Swal.fire({
-            title: `Logout`,
-            imageUrl: logout_image,
-            html:`<p class="modal_heading">Are you sure you want to logout?</p>`,
+            // title: `Logout`,
+            html: `
+                <div class="swal-content mt-2">
+                    <div class="swal-images">
+                        ${svgMarkup}
+                    </div>
+                    <h2 class="swal2-title mt-2" id="swal2-title" style="display: block;">Logout</h2>
+                    <p class="modal_heading">Are you sure you want to logout?</p>
+                </div>
+            `,
             showCancelButton: true,
             cancelButtonText: "Cancel",
             confirmButtonText: "Log out",
@@ -116,13 +126,12 @@ const Layout = () => {
             customClass: {
                 confirmButton: 'confirmButton',
                 cancelButton: 'cancelButton',
-                popup:"animated-popup small_swal_popup logout_popup",
-
+                popup: "animated-popup small_swal_popup logout_popup",
             }
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.removeItem("token");
-                window.location.href = "/login"
+                window.location.href = "/login";
             }
         });
     };
