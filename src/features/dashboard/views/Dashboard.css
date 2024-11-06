@@ -387,13 +387,19 @@ h5.userName {
 button.facebook_connect > div > div {
     display: none !important;
 }
-
+.confirm_btn  button.facebook_connect > div > div:last-child {
+font-size: 14px;
+}
 button.facebook_connect > div > div:last-child {
     display: block !important;
     text-align: center !important;
     font-weight: 500;
 }
 
+.confirm_btn  button.facebook_connect {
+min-width: 110px !important;
+height: 36px;
+}
 button.facebook_connect {
     min-width: 77px !important;
     text-align: center;

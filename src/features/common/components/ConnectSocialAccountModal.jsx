@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import not_connected from "../../../images/pagenotConnect.svg"
+import Not_connected from "../../../images/pagenotConnect.svg?react"
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import './common.css'
@@ -39,7 +39,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                         <div className='facebook_content_outer'>
                             
                             <div className='text-center'>
-                                <Image className={"acc-not-connected-error-svg mb-3 "} alt="acc-not-connected-error-svg" src={not_connected}/>
+                                <Not_connected className={"acc-not-connected-error-svg mb-3 "}/>
                                
                                 <div className='facebook_title'>
 

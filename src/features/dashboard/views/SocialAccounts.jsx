@@ -1,4 +1,5 @@
 import jsondata from "../../../locales/data/initialdata.json";
+import ReactDOMServer from 'react-dom/server';
 import {
     LoginSocialFacebook,
     LoginSocialLinkedin,
@@ -48,10 +49,10 @@ import {
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 
-import facebookImg from "../../../images/modal_facebook_image.svg";
-import linkedinImg from "../../../images/modal_linkedin_image.svg";
-import instagramImg from "../../../images/modal_instagram_image.svg";
-import pinterestImg from "../../../images/modal_pintrest_image.svg";
+import FacebookImg from "../../../images/modal_facebook_image.svg?react";
+import LinkedinImg from "../../../images/modal_linkedin_image.svg";
+import InstagramImg from "../../../images/modal_instagram_image.svg";
+import PinterestImg from "../../../images/modal_pintrest_image.svg";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils";
 import NotFoundPopup from "../../common/components/NotFoundPopup";
@@ -240,16 +241,16 @@ const SocialAccounts = ({}) => {
         );
         let imageUrl;
         if (socialMediaImg === "Linkedin") {
-            imageUrl = linkedinImg;
+            imageUrl = ReactDOMServer.renderToStaticMarkup(<LinkedinImg />);
         }
         if (socialMediaImg === "Facebook") {
-            imageUrl = facebookImg;
+            imageUrl = ReactDOMServer.renderToStaticMarkup(<FacebookImg />);
         }
         if (socialMediaImg === "Instagram") {
-            imageUrl = instagramImg;
+            imageUrl = ReactDOMServer.renderToStaticMarkup(<InstagramImg />);
         }
         if (socialMediaImg === "Pinterest") {
-            imageUrl = pinterestImg;
+            imageUrl = ReactDOMServer.renderToStaticMarkup(<PinterestImg />);
         }
         Swal.fire({
             // imageUrl: success_img,
@@ -257,7 +258,7 @@ const SocialAccounts = ({}) => {
             html: `
                <div class="swal_content">
                 <div class="swal_images">
-                <Image src="${imageUrl}" alt="Image 2" class="facebook_img" />
+                ${imageUrl}
                 </div>
                 <h2 class="disconnect_title">Disconnect ${getInitialLetterCap(SocialAccountProvider[socialMediaType])} Account</h2>
                 <p class="disconnect_paragraph">${formatMessage(DisconnectAccountWarning, [getInitialLetterCap(SocialAccountProvider[socialMediaType])])}</p>
@@ -376,6 +377,7 @@ const SocialAccounts = ({}) => {
                                                         className="social_media_content"
                                                         onClick={() => setFacebookDropDown(!facebookDropDown)}
                                                     >
+                                                        <div className={"social_media_icon"}>
                                                             <Image className="cmn_width" src={fb_img} alt="fb_image"/>
 
                                                             <h2 className={`pagecount ${currentConnectedFacebookPages?.length === undefined ? "blink" : ""}`}>
@@ -383,7 +385,7 @@ const SocialAccounts = ({}) => {
                                                                     (currentConnectedFacebookPages !== null && currentConnectedFacebookPages !== undefined) ? currentConnectedFacebookPages?.length : 0
                                                                 }
                                                             </h2>
-                                                       
+                                                        </div>
 
                                                         <div className="text-start flex-grow-1">
                                                             <h5 className="userName">
