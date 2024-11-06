@@ -18,12 +18,18 @@ import default_user_icon from "../../../images/default_user_icon.svg";
 import No_scheduled_post from "../../../images/no_scheduled_post.svg";
 import {RiDeleteBin7Line} from "react-icons/ri";
 import PostViewModal from './PostViewModal';
-import { useNavigate } from 'react-router-dom';
-const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes, plannerPosts,setIsPostApiLoading,isPostApiLoading}) => {
+import {useNavigate} from 'react-router-dom';
+import {getFormattedDataForPlannerPostPreviewModal} from "../../../utils/dataFormatterUtils";
+
+const ScheduledPost = ({
+                           selectedDate,
+                           setSelectedDate,
+                           selectedSocialMediaTypes,
+                           plannerPosts,
+                           setIsPostApiLoading,
+                       }) => {
     const navigate = useNavigate();
-    const handleCreatepost = () =>{
-        navigate('/planner/post')
-    }
+
     const [searchQuery, setSearchQuery] = useState({
         postStatus: ["PUBLISHED", "SCHEDULED"],
         batchIds: [],
@@ -33,15 +39,14 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
     });
     const [posts, setPosts] = useState([]);
     const [forceRender, setForceRender] = useState(null);
-    const [showPostPerview,setShowPostPerview] = useState(false)
-    const handleClose = () => setShowPostPerview(false);
-    const handleShow = () => setShowPostPerview(true);
-    const [userId, setUserId] = useState()
+    const [showPostPreview, setShowPostPreview] = useState(false)
+
+    const [postToPreview, setPostToPreview] = useState([])
     const postsApi = useGetSocialMediaPostsByCriteriaQuery(searchQuery, {skip: isNullOrEmpty(searchQuery?.batchIds) || isNullOrEmpty(searchQuery?.plannerCardDate)})
 
     useEffect(() => {
         setPosts([])
-    }, [selectedDate,selectedSocialMediaTypes]);
+    }, [selectedDate, selectedSocialMediaTypes]);
 
     useEffect(() => {
         if (selectedDate && !plannerPosts?.isLoading && !plannerPosts?.isFetching && plannerPosts?.data && !postsApi?.isLoading && !postsApi?.isFetching) {
@@ -71,19 +76,23 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
     }, [selectedDate, plannerPosts])
 
     useEffect(() => {
-        setIsPostApiLoading( postsApi?.isLoading || postsApi?.isFetching)
+        setIsPostApiLoading(postsApi?.isLoading || postsApi?.isFetching)
         if (forceRender && postsApi?.data && !postsApi?.isLoading && !postsApi?.isFetching) {
-            setPosts(Object.values(postsApi?.data ))
+            setPosts(Object.values(postsApi?.data))
         }
-    }, [postsApi,forceRender])
+    }, [postsApi, forceRender])
 
-    const handlePreviousDay=()=>{
-        if(plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching || isFirstDayOfMonth(selectedDate)) return
+    const handlePreviousDay = () => {
+        if (plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching || isFirstDayOfMonth(selectedDate)) return
         setSelectedDate(getPreviousDate(selectedDate))
     }
-    const handleNextDay=()=>{
-        if(plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching || isLastDayOfMonth(selectedDate)) return
+    const handleNextDay = () => {
+        if (plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching || isLastDayOfMonth(selectedDate)) return
         setSelectedDate(getNextDate(selectedDate))
+    }
+
+    const handleCreatePost = () => {
+        navigate('/planner/post')
     }
 
 
@@ -91,14 +100,14 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
         <div className='scduler_outer'>
             <div className='schedule_header d-flex align-items-center justify-content-center'>
                 <GoChevronLeft
-                    className={(plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching || isFirstDayOfMonth(selectedDate) ) ?" opacity-25":" cursor-pointer"}
+                    className={(plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching || isFirstDayOfMonth(selectedDate)) ? " opacity-25" : " cursor-pointer"}
                     onClick={handlePreviousDay}
                     size={24}
                 />
                 <span>{formatDate(selectedDate, "ddd, dd MMM")}</span>
                 <GoChevronRight
                     size={24}
-                    className={(plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching || isLastDayOfMonth(selectedDate) ) ?" opacity-25":" cursor-pointer"}
+                    className={(plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching || isLastDayOfMonth(selectedDate)) ? " opacity-25" : " cursor-pointer"}
                     onClick={handleNextDay}
                 />
             </div>
@@ -120,16 +129,22 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                 }
                 {
                     !plannerPosts?.isLoading && !plannerPosts?.isFetching && !postsApi?.isLoading && !postsApi?.isFetching && plannerPosts?.data && isNullOrEmpty(plannerPosts?.data[formatDate(selectedDate, "ISOString")]) &&
-                    <div className='No_scheduled_post'> <img src={No_scheduled_post} alt="No scheduled post" />
-                    <p>No Post is scheduled
-                    on this date</p>
-                    <button onClick={handleCreatepost} className='cmn_btn_color create_post_btn cmn_white_text'>Schedule Post</button>
+                    <div className='No_scheduled_post'><img src={No_scheduled_post} alt="No scheduled post"/>
+                        <p>No Post is scheduled on this date</p>
+                        <button onClick={handleCreatePost}
+                                className='cmn_btn_color create_post_btn cmn_white_text'>Schedule Post
+                        </button>
                     </div>
                 }
                 {
                     sortByKey(posts, "feedPostDate")?.map((plannerPost, index) => {
-                        console.log(plannerPost,"this is the planner post")
-                        return <div className={"more_plans_grid"} key={index} onClick={() => {setShowPostPerview(true);setUserId(plannerPost?.id)}}>
+                        return <div
+                            className={"more_plans_grid"}
+                            key={index}
+                            onClick={() => {
+                                setShowPostPreview(true);
+                                setPostToPreview(getFormattedDataForPlannerPostPreviewModal(plannerPost))
+                            }}>
                             <div className="plan_grid_img">
                                 {
                                     plannerPost?.attachments &&
@@ -145,7 +160,8 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                             <div className="plan_grid_content">
                                 <div className="plan_content_header justify-start ">
                                     <div className="plans_tags_wrapper ">
-                                        <div className={plannerPost?.postPages?.length > 1 ? "d-flex page_tags position-absolute gap-0 media_overlap" : "d-flex page_tags position-absolute"}>
+                                        <div
+                                            className={plannerPost?.postPages?.length > 1 ? "d-flex page_tags position-absolute gap-0 media_overlap" : "d-flex page_tags position-absolute"}>
                                             {
                                                 plannerPost?.postPages && Array.isArray(plannerPost?.postPages) &&
                                                 plannerPost?.postPages.map((curPage, index) => {
@@ -198,8 +214,11 @@ const ScheduledPost = ({selectedDate, setSelectedDate, selectedSocialMediaTypes,
                 }
             </div>
             {
-            showPostPerview &&
-           <PostViewModal userId={userId} showPostPerview={showPostPerview} setShowPostPerview={setShowPostPerview}/>
+                showPostPreview &&
+                <PostViewModal
+                    postToPreview={postToPreview}
+                    showPostPreview={showPostPreview}
+                    setShowPostPreview={setShowPostPreview}/>
             }
         </div>
     )

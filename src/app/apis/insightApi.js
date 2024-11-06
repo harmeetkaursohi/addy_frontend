@@ -6,7 +6,7 @@ import {
     getFacebookGraphReportByPage,
     getFacebookPageReports,
     getFacebookPostDataWithInsights,
-    getFacebookPostEngagements,
+    getFacebookPostEngagements, getFacebookPostInsights,
     getFacebookProfileInsightsInfo,
     getFacebookProfileVisits,
     getFacebookReportByPage
@@ -270,6 +270,37 @@ export const insightApi = addyApi.injectEndpoints({
                 await handleQueryError(queryFulfilled)
             },
         }),
+        // Only Like,comment and share count
+        getPostInsights: build.query({
+            async queryFn(data) {
+                let result;
+                switch (data?.socialMediaType) {
+                    case "FACEBOOK": {
+                        result = await getFacebookPostInsights(data)
+                        break;
+                    }
+                    case  "INSTAGRAM": {
+                        result = await getInstagramPostDataWithInsights(data)
+                        break;
+                    }
+                    case  "LINKEDIN": {
+                        result = await getLinkedinPostDataWithInsights(data)
+                        break;
+                    }
+                    case  "PINTEREST": {
+                        result = await getPinterestPostDataWithInsights(data)
+                        break;
+                    }
+                    default : {
+                    }
+                }
+                return {data: result};
+            },
+            providesTags:["getPostDataWithInsightsApi"],
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
         getPinClicks: build.query({
              query:(day) =>{
                  return {
@@ -320,6 +351,7 @@ export const {
     useGetProfileVisitsInsightsQuery,
     useGetAccountsReachAndEngagementQuery,
     useGetPostDataWithInsightsQuery,
+    useGetPostInsightsQuery,
     useGetPinClicksQuery,
     useGetPostEngagementsQuery,
 } = insightApi

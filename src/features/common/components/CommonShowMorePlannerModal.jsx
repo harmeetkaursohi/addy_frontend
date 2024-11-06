@@ -7,7 +7,6 @@ import {
     sortByKey
 } from "../../../utils/commonUtils";
 import CommonSlider from "./CommonSlider";
-import CommonLoader from "./CommonLoader";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
@@ -32,9 +31,6 @@ const CommonShowMorePlannerModal = ({
                                         eventDate,
                                         showMorePlannerModalSearchQuery,
                                     }) => {
-
-    console.log("eventDate=====>",eventDate)
-    console.log("showMorePlannerModalSearchQuery=====>",showMorePlannerModalSearchQuery)
 
     const navigate = useNavigate();
     const dispatch = useDispatch();

@@ -697,3 +697,21 @@ export const getUpdateCommentMessage = (commentToUpdate, socialMediaType) => {
     }
 
 }
+
+export const getFormattedDataForPlannerPostPreviewModal = (data) => {
+    let response = {...data, attachments: []};
+    response.hasOwnProperty("postPages") && delete response?.postPages
+    return data?.postPages?.map(postPage => {
+        return {
+            ...response,
+            socialMediaType: postPage.socialMediaType,
+            postPage: postPage,
+            attachments: data?.attachments?.filter(cur => cur.pageId === postPage.pageId)?.map(cur => {
+                return {
+                    ...cur,
+                    url: cur.mediaType==="IMAGE"? cur.imageURL :cur.sourceURL
+                }
+            })
+        }
+    })
+}

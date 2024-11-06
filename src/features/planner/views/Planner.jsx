@@ -52,7 +52,6 @@ const Planner = () => {
         period: "DAY"
     });
     const [isPostApiLoading,setIsPostApiLoading] = useState(false)
-    // console.log(isTrue,"this is the is true")
     const [draftSearchQuery, setDraftSearchQuery] = useState({
         postStatus: ["DRAFT"],
         plannerCardDate: null,
@@ -490,8 +489,6 @@ const Planner = () => {
                                                     selectedSocialMediaTypes={baseSearchQuery?.socialMediaTypes || []}
                                                     plannerPosts={getPostsForPlannerApi}
                                                     setIsPostApiLoading={setIsPostApiLoading}
-                                                    isPostApiLoading={isPostApiLoading}
-
                                                 />
                                             </div>
                                         </div>

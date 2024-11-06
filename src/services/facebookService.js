@@ -367,6 +367,17 @@ export const getFacebookPostDataWithInsights = async (data) => {
     });
 }
 
+export const getFacebookPostInsights = async (data) => {
+    const postIds = data?.postIds?.map(postId => postId).join(",");
+    const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,likes.summary(true).limit(1),reactions.summary(total_count).limit(1),comments.summary(true),shares,is_published`;
+    return await baseAxios.get(apiUrl).then(res => {
+        return res.data;
+    }).catch(async error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+
 export const getFacebookPostEngagements = async (data) => {
     let apiUrl = `${fbBaseUrl}/${data?.pageId}/insights/page_post_engagements?` + objectToQueryString(data.query)
     return await baseAxios.get(apiUrl).then((res) => {
