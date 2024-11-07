@@ -139,7 +139,18 @@ min-height: 100vh;
 }
 .cmn_height_outer{
   height: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 120px);
+}
+div.cmn_height_outer.noDraftPosts_outer {
+  min-height: calc(100vh - 175px);
+}
+.no_account_bg{
+  margin-top: 20px;
+  box-shadow: 0px 0px 8px rgba(0,0,0,5%);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .cmn_Padding{
   padding-left: 240px;
@@ -195,7 +206,16 @@ button.clear_all_button_outer:hover{
   background: #00a3ff;
   border: none;
 }
-
+.no-post-review{
+  font-size: 20px;
+  max-width: 450px;
+  margin: auto;
+}
+.no-post-review.acc_not_connected_heading h3 {
+  font-size: 17px;
+  color: #000;
+  line-height: 25px;
+}
 .cmn_blue_border {
   border-radius: 6px;
   border: 1px solid #00a3ff;
@@ -1052,10 +1072,7 @@ table.fc-col-header {
   background: rgb(240, 124, 51);
   min-width: 108px;
 }
-img.acc_not_connected_img.mt-0 {
-  width: 100%;
-  height: 350px;
-}
+
 .planner_header h6 {
   color: #5F6D7E;
   font-size: 16px;
@@ -1422,10 +1439,7 @@ draft_page_outer h4{
     max-width: 95%;
     margin: auto;
 }
-img.acc_not_connected_img.mt-0 {
-  height: 500px;
-  width: 100%;
-}
+
 }
 @media(min-width:1600px) 
 {.addy_outer {
@@ -1719,10 +1733,6 @@ font-size: 14px;
 .fc .fc-toolbar-title {
 font-size: 11px;
 
-}
-img.acc_not_connected_img.mt-0 {
-width: 100%;
-height: unset;
 }
 .current_date_outer{
 margin: 0px;

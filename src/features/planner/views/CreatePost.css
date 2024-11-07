@@ -561,10 +561,7 @@ button.ai_btn {
 }
 
 .file_outer {
-    display: flex;
-    /* gap: 20px; */
-    justify-content: center;
-    margin-top: 21px;
+ position: relative;
 }
 
 .add_media_outer {
@@ -608,10 +605,19 @@ button.ai_btn {
 .boost_post_text {
     color: #000;
 }
-
+button.delete_upload svg path {
+    fill: #C62929;
+}
+svg.add_media {
+    position: absolute;
+    stroke: #000;
+}
+.form-switch i {
+    font-size: 24px;
+}
 .form-check-input:checked {
-    background-color: #1C2B33;
-    border-color: #1C2B33;
+    background-color: #f07c33;
+    border-color: #f07c33;
 }
 .comment_wrapper {
     padding: 0px 15px;
@@ -849,29 +855,32 @@ button.disabledButton {
 }
 
 button.delete_upload {
-    padding: 5px 10px;
-    border-radius: 4px;
+    border-radius: 50%;
     background: white;
     border: 1px solid #dde1e4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    top: -6px;
+    right: -7px;
 }
 
 .upload_image {
     border-radius: 10px;
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 59px;
     object-fit: cover;
     object-position: top;
 }
 
 
 .file_outer.dragable_files {
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    transition: ease all .3s;
+  transition: ease all .3s;
     background: #fff;
     border-radius: 6px;
-    display: flex;
 
 }
 
@@ -892,11 +901,17 @@ button.delete_upload {
     max-height: 344px;
     overflow: auto;
     margin-top: 15px;
+    border: 0.8px solid #C3C3C3;
+    border-radius: 8px;
+    padding: 11px 14px;
+    background: #fff;
+    display: flex;
+    gap: 10px;
 }
-.delete_upload:hover{
+/* .delete_upload:hover{
     background: #00A3FF;
     color: white;
-}
+} */
 
 .drag_scroll .dragable_files:first-child {
     margin-top: 0;
@@ -929,7 +944,10 @@ button.loading {
     margin: auto;
 }
 i.fa.fa-toggle-on {
-    color: orange;
+    color: #F07C33;
+}
+.schedule_btn_outer i {
+    font-size: 25px;
 }
 .create_post_content.edit_post_content {
     max-width: unset;
@@ -941,8 +959,19 @@ i.fa.fa-toggle-on {
     max-width: unset;
 }
 .create_post_content label.cmn_headings {
-    min-width: 122px;
     text-align: center;
+}
+.darg_navs 
+ label.cmn_headings {
+    width: 70px;
+    height: 59px;
+    border: 1px solid #9C9C9C;
+    border-radius: 4px;
+}
+
+.darg_navs label.cmn_headings i {
+    color: #5F6D7E26;
+    font-size: 46px;
 }
 /* media query starts here */
 @media screen and (min-width:2000px){
@@ -1135,10 +1164,7 @@ i.fa.fa-toggle-on {
     .preview_img_container{
         display: block;
     }
-    button.delete_upload {
-        padding: 3px 6px;
-
-    }
+  
     .delete_upload  svg{
     font-size: 18px !important;
     margin-bottom: 2px;

@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import DraftComponent from "./DraftComponent";
-import notConnected_img from "../../../images/no_acc_connect_img.svg";
+import notConnected_img from "../../../images/noaccount_draft.svg";
+import Arrow_up_icon from "../../../images/arrow_up_icon.svg?react";
 import {
     formatMessage, getEmptyArrayOfSize,
     isNullOrEmpty,
@@ -34,7 +35,7 @@ export const ParentDraftComponent = ({searchQuery}) => {
 
     return (
 
-        <div className={"row draft_container_wrapper"}>
+        <div className={""}>
             {/*{draftModal && <DraftModal show={draftModal} setShow={setDraftModal}/>}*/}
             {/*<div className={"col-lg-3 col-sm-12 col-md-12"}>*/}
             {/*    <div className={"draft_wrapper_box"} onClick={()=>{setDraftModal(true)}}>*/}
@@ -65,6 +66,7 @@ export const ParentDraftComponent = ({searchQuery}) => {
             {/*        </div>*/}
             {/*    </div>*/}
             {/*</div>*/}
+            <div className="row draft_container_wrapper m-0">
 
             {
                 (isAccountInfoLoading || draftPostsApi?.isLoading || draftPostsApi?.isFetching) ?
@@ -93,9 +95,13 @@ export const ParentDraftComponent = ({searchQuery}) => {
                     :
                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                     (drafts !== null && Array.isArray(drafts) && drafts?.length === 0) ?
-                        <div className="noDraftPosts_outer p-5 text-center mt-3">
-                            <img src={noDraftPosts} alt={"No Drafts"} className=" no-draft-img"/>
-                            <h2 className="acc_not_connected_heading">{NoPostInDraft}</h2>
+                        <div className="review_wrapper cmn_height_outer no_account_bg white_bg_color noDraftPosts_outer text-center mt-3">
+                            <div className="no-post-review acc_not_connected_heading  text-center ">
+
+                            <img src={notConnected_img} alt={"No Drafts"} className=" no-draft-img"/>
+                            <h3 className="mt-4 position-relative" ><div dangerouslySetInnerHTML={{ __html: NoPostInDraft }}/><Arrow_up_icon className="arrow_up_icon"/></h3>
+                           
+                            </div>
                         </div>
                         :
                         drafts !== null && Array.isArray(drafts) && drafts?.length > 0 &&
@@ -103,17 +109,8 @@ export const ParentDraftComponent = ({searchQuery}) => {
                             return <DraftComponent postData={curDraftPost}/>
                         })
             }
-            {
-                getConnectedSocialAccountApi?.data?.length === 0 &&
-                <ConnectSocialMediaAccount image={notConnected_img}
-                                           message={formatMessage(NotConnected, ["posts", "social media"])}/>
-
-            }
-            {
-                getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
-                <ConnectSocialMediaAccount image={notConnected_img}
-                                           message={formatMessage(NotConnected, ["posts", "social media pages"])}/>
-            }
+            </div>
+          
         </div>
     )
 

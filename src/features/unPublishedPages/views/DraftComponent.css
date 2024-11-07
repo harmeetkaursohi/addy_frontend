@@ -436,6 +436,13 @@ button.outline_btn {
 .draft_container_wrapper {
     margin-top: 30px;
 }
+svg.arrow_up_icon {
+    position: absolute;
+    right: -62px;
+    bottom: -2px;
+    width: 19%;
+}
+/* madia query starts here */
 @media screen and (min-width:2560px){
     div.draft-outer .post_image_outerwrapper {
         height: 500px;

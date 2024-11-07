@@ -11,7 +11,10 @@ import {useAppContext} from "../common/components/AppProvider";
 import Dropdown from "react-bootstrap/Dropdown";
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../app/apis/pageAccessTokenApi";
-
+import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAccount";
+import notConnected_img from "../../images/noaccount_draft.svg";
+import { formatMessage } from "../../utils/commonUtils";
+import { NotConnected } from "../../utils/contantData";
 const Draft = () => {
 
     const {sidebar} = useAppContext();
@@ -54,9 +57,8 @@ const Draft = () => {
         <>
             <section>
                 <div className={sidebar ? "cmn_container" : "cmn_Padding"}>
-                    <div className="cmn_outer">
-                        <div className="planner_outer white_bg_color cmn_height_outer cmn_outer">
-                            <div className="planner_header_outer  align-items-center">
+                <div className="cmn_outer">
+                <div className="planner_header_outer  align-items-center mb-3">
                                 <div className="planner_header">
                                     <h2>{jsondata.sidebarContent.draft}</h2>
                                     <h6>{jsondata.draft_heading}</h6>
@@ -71,8 +73,31 @@ const Draft = () => {
                                     </button>
                                 </div>
                             </div>
+              {  getConnectedSocialAccountApi?.data?.length === 0  ||  getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 ?
 
-                            <div className="calender_outer_wrapper draft_component_outer mt-3">
+            (<div className="review_wrapper cmn_height_outer no_account_bg white_bg_color">
+
+            <div className="no-post-review acc_not_connected_heading no_draft">
+
+                        {
+                            getConnectedSocialAccountApi?.data?.length === 0 &&
+                            <ConnectSocialMediaAccount image={notConnected_img}
+                                                    message={formatMessage(NotConnected, ["posts", "social media"])}/>
+
+                        }
+                        {
+                            getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
+                            <ConnectSocialMediaAccount image={notConnected_img}
+                                                    message={formatMessage(NotConnected, ["posts", "social media pages"])}/>
+                        }
+                        </div>
+                        </div>)
+                        :
+
+
+                       ( <div className="planner_outer">
+
+                            <div className="calender_outer_wrapper draft_component_outer">
                                 {/* filter dropdown  */}
                                 {
                                     false && <Dropdown>
@@ -133,7 +158,8 @@ const Draft = () => {
                             </div>
 
                             <ParentDraftComponent searchQuery={baseSearchQuery}/>
-                        </div>
+                        </div>)
+                        }
                     </div>
                 </div>
 
