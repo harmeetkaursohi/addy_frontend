@@ -13,7 +13,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import {showErrorToast} from "../features/common/components/Toast";
 import {
     getFormattedAccountReachAndEngagementData,
-    getFormattedInsightProfileInfo,
+    getFormattedInsightProfileInfo, getFormattedPostWithInsightsApiData,
     getFormattedPostWithInsightsApiResponse
 } from "../utils/dataFormatterUtils";
 import axios from "axios";
@@ -164,6 +164,16 @@ export const getPinterestPostDataWithInsights = async (data) => {
     const apiUrl = `${baseUrl}/pinterest/pin-insights?ids=${postIds}`;
     return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
         return getFormattedPostWithInsightsApiResponse(res.data, data.postIds, SocialAccountProvider?.PINTEREST);
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+export const getPinterestPostInsights = async (data) => {
+    const postIds = data.postIds.map(id => id).join(',');
+    const apiUrl = `${baseUrl}/pinterest/pin-insights?ids=${postIds}`;
+    return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
+        return getFormattedPostWithInsightsApiData(res.data, data.socialMediaType);
     }).catch(error => {
         showErrorToast(error.response.data.error.message);
         throw error;

@@ -36,7 +36,7 @@ import {
     getPinterestAccountReachAndEngagement,
     getPinterestBoardReports,
     getPinterestGraphReportByPage,
-    getPinterestPostDataWithInsights, getPinterestPostEngagements,
+    getPinterestPostDataWithInsights, getPinterestPostEngagements, getPinterestPostInsights,
     getPinterestProfileInsightsInfo,
     getPinterestReportByPage
 } from "../../services/pinterestService";
@@ -288,7 +288,7 @@ export const insightApi = addyApi.injectEndpoints({
                         break;
                     }
                     case  "PINTEREST": {
-                        result = await getPinterestPostDataWithInsights(data)
+                        result = await getPinterestPostInsights(data)
                         break;
                     }
                     default : {
