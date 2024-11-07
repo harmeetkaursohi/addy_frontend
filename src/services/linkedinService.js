@@ -8,7 +8,7 @@ import {
 import {
     getFormattedAccountReachAndEngagementData,
     getFormattedDemographicData,
-    getFormattedInsightsForProfileViews, getFormattedPostWithInsightsApiResponse
+    getFormattedInsightsForProfileViews, getFormattedPostWithInsightsApiData, getFormattedPostWithInsightsApiResponse
 } from "../utils/dataFormatterUtils";
 import {getToken, setAuthenticationHeader} from "../app/auth/auth";
 import {SocialAccountProvider} from "../utils/contantData";
@@ -246,6 +246,17 @@ export const getLinkedinPostDataWithInsights = async (data) => {
     const apiUrl = `${baseUrl}/linkedin/post/insights?ids=${postIds}&orgId=${data?.pageId}`;
     return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
         return getFormattedPostWithInsightsApiResponse(res.data, data.postIds, SocialAccountProvider?.LINKEDIN);
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+
+export const getLinkedinPostInsights = async (data) => {
+    const postIds = data.postIds.map(id => id).join(',');
+    const apiUrl = `${baseUrl}/linkedin/shareStatistics?shares=${postIds}&organizationalEntity=${data?.pageId}`;
+    return await baseAxios.get(apiUrl, getAuthHeader()).then(res => {
+        return getFormattedPostWithInsightsApiData(res.data, data.socialMediaType,postIds);
     }).catch(error => {
         showErrorToast(error.response.data.error.message);
         throw error;

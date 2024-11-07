@@ -70,19 +70,21 @@ span.blur {filter: blur(2px);margin-right: 3px;}
     padding-top: 8px;
 }
 .pin-title {
-    color: #212529;
-    margin-top: 12px;
+    color: #000;
     font-size: 14px;
     width:290px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
+    text-transform: capitalize;
+    font-weight: 600;
 }
 h3.pin-url {
     font-size: 13px;
     font-weight: 400;
     color: #000;
+    text-transform: capitalize;
+    padding-top: 5px;
 }
 span.blur {
     filter: blur(2.8px);
@@ -144,6 +146,7 @@ span.blur {
     display:flex;
     gap:10px;
     align-items: center;
+    margin-bottom: 12px;
 
 }
 .user_caption_wrapper img{

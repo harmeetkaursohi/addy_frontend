@@ -25,9 +25,10 @@ import {addyApi} from "../../../app/addyApi";
 import {useDeletePostFromPagesByPageIdsMutation} from "../../../app/apis/postApi";
 import {useDispatch} from "react-redux";
 import PinterestFeedPreview from "../../common/components/PinterestFeedPreview";
+import LinkedinFeedpreview from "../../common/components/LinkedinFeedPreview";
 
 
-function PostViewModal({setShowPostPreview, showPostPreview, postToPreview,setPostToPreview}) {
+function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPreview, setPostToPreview}) {
 
     const dispatch = useDispatch()
     const sliderRef = useRef(null);
@@ -86,13 +87,14 @@ function PostViewModal({setShowPostPreview, showPostPreview, postToPreview,setPo
         }
     }, [deletePostPageInfo]);
 
-    useEffect(()=>{
-        return ()=>{
-            if(invalidateData){
+    useEffect(() => {
+        return () => {
+            if (invalidateData) {
+                setPosts([])
                 dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi"]));
             }
         }
-    },[invalidateData])
+    }, [invalidateData])
 
     const nextSlide = () => {
         const activePostIndex = currentActivePostIndex + 1
@@ -135,7 +137,7 @@ function PostViewModal({setShowPostPreview, showPostPreview, postToPreview,setPo
                         <img src="data:image/svg+xml;base64,${btoa(svgMarkup)}" alt="Delete Icon" class="delete-img" />
                     </div>
                     <h2 class="swal2-title" id="swal2-title">Delete Post</h2>
-                    <p class="modal_heading">${postToPreview?.length === 1 ? DeletePostConfirmationMessage : formatMessage(DeletePostFromPageConfirmationMessage,[postToPreview?.[currentActivePostIndex]?.postPage?.pageName])} </p>
+                    <p class="modal_heading">${postToPreview?.length === 1 ? DeletePostConfirmationMessage : formatMessage(DeletePostFromPageConfirmationMessage, [postToPreview?.[currentActivePostIndex]?.postPage?.pageName])} </p>
                 </div>
             `,
             showCancelButton: true,
@@ -156,26 +158,29 @@ function PostViewModal({setShowPostPreview, showPostPreview, postToPreview,setPo
                         return await deletePostFromPagesByPageIds(deletePostPageInfo).unwrap();
                     },
                     () => {
-                        setInvalidateData(true)
                         // If There is only one page in post and is removed then the whole post is removed
                         if (postToPreview?.length === 1) {
+                            dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi"]));
+                            setPosts([])
                             showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]))
                             handleClose()
                         }
                         // If user has opened last postPage and deleted it , then one postPage backward is selected
                         if (currentActivePostIndex + 1 === postToPreview?.length && postToPreview?.length > 1) {
                             showSuccessToast(PageRemovedFromPostSuccessfully)
-                            const updatedPostToPreview=deleteElementFromArrayAtIndex(postToPreview,currentActivePostIndex)
+                            const updatedPostToPreview = deleteElementFromArrayAtIndex(postToPreview, currentActivePostIndex)
                             prevSlide()
                             setPostToPreview(updatedPostToPreview)
+                            setInvalidateData(true)
 
                         }
                         // If user has opened any postPage and deleted it , then one postPage next is selected
                         if (currentActivePostIndex + 1 < postToPreview?.length && postToPreview?.length > 1) {
                             showSuccessToast(PageRemovedFromPostSuccessfully)                            // No Need to set fetchInsightsFor as delete is only available for scheduled posts and if post is still not posted, no insights will be there
-                            const updatedPostToPreview=deleteElementFromArrayAtIndex(postToPreview,currentActivePostIndex)
+                            const updatedPostToPreview = deleteElementFromArrayAtIndex(postToPreview, currentActivePostIndex)
                             setPostToPreview(updatedPostToPreview)
                             showSuccessToast(formatMessage(PageRemovedFromPostSuccessfully, []))
+                            setInvalidateData(true)
                         }
                     }
                 );
@@ -257,6 +262,7 @@ function PostViewModal({setShowPostPreview, showPostPreview, postToPreview,setPo
                                                 />
                                             }
                                             {
+                                                // If Pinterest has Published post status then filetype will only be IMAGE as for IMAGE it will be image and for video it will be image as no video link is given to us
                                                 post.socialMediaType === "PINTEREST" &&
                                                 <PinterestFeedPreview
                                                     reference={"PLANNER"}
@@ -268,11 +274,11 @@ function PostViewModal({setShowPostPreview, showPostPreview, postToPreview,setPo
                                                     pageName={post.postPage.pageName}
                                                     pageImage={post.postPage.imageURL}
                                                     files={post?.attachments}
-                                                    selectedFileType={post?.attachments?.[0]?.mediaType}
+                                                    selectedFileType={post?.postStatus === "PUBLISHED" ? "IMAGE" : post?.attachments?.[0]?.mediaType}
                                                     caption={caption}
                                                     hashTag={hashtags}
-                                                    destinationUrl={"destinationUrl"}
-                                                    pinTitle={"pinTitle"}
+                                                    destinationUrl={post?.pinDestinationUrl}
+                                                    pinTitle={post?.pinTitle}
                                                     setDeletePostPageInfo={setDeletePostPageInfo}
                                                     isDeletePostLoading={deletePostFromPagesByPageIdsApi?.isLoading}
                                                     postInsightsData={insights[post.postPage.socialMediaPostId]}
@@ -280,15 +286,23 @@ function PostViewModal({setShowPostPreview, showPostPreview, postToPreview,setPo
                                             }
                                             {
                                                 post.socialMediaType === "LINKEDIN" &&
-                                                <FacebookFeedPreview
+                                                <LinkedinFeedpreview
+                                                    reference={"PLANNER"}
                                                     previewTitle={"Linkedin Post Preview"}
-                                                    pageName={"test"}
-                                                    userData={"test"}
-                                                    files={[0]}
-                                                    selectedFileType={"test"}
-                                                    caption={"test"}
-                                                    pageImage={"test"}
-                                                    hashTag={"test"}
+                                                    postId={post?.id}
+                                                    pageId={post.postPage.pageId}
+                                                    feedPostDate={post.feedPostDate}
+                                                    postStatus={post?.postStatus}
+                                                    pageName={post.postPage.pageName}
+                                                    pageImage={post.postPage.imageURL}
+                                                    files={post?.attachments}
+                                                    selectedFileType={post?.attachments?.[0]?.mediaType}
+                                                    caption={caption}
+                                                    hashTag={hashtags}
+                                                    setDeletePostPageInfo={setDeletePostPageInfo}
+                                                    isDeletePostLoading={deletePostFromPagesByPageIdsApi?.isLoading}
+                                                    postInsightsData={insights[post.postPage.socialMediaPostId]}
+
                                                 />
                                             }
 

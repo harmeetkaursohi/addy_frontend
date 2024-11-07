@@ -27,7 +27,7 @@ import {
     getLinkedinGraphReportByPage,
     getLinkedinPageReports,
     getLinkedinPostDataWithInsights,
-    getLinkedinPostEngagements,
+    getLinkedinPostEngagements, getLinkedinPostInsights,
     getLinkedinProfileInsightsInfo,
     getLinkedinProfileVisits,
     getLinkedinReportByPage
@@ -36,7 +36,7 @@ import {
     getPinterestAccountReachAndEngagement,
     getPinterestBoardReports,
     getPinterestGraphReportByPage,
-    getPinterestPostDataWithInsights, getPinterestPostEngagements,
+    getPinterestPostDataWithInsights, getPinterestPostEngagements, getPinterestPostInsights,
     getPinterestProfileInsightsInfo,
     getPinterestReportByPage
 } from "../../services/pinterestService";
@@ -284,11 +284,11 @@ export const insightApi = addyApi.injectEndpoints({
                         break;
                     }
                     case  "LINKEDIN": {
-                        result = await getLinkedinPostDataWithInsights(data)
+                        result = await getLinkedinPostInsights(data)
                         break;
                     }
                     case  "PINTEREST": {
-                        result = await getPinterestPostDataWithInsights(data)
+                        result = await getPinterestPostInsights(data)
                         break;
                     }
                     default : {

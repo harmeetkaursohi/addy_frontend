@@ -184,21 +184,6 @@ const ScheduledPost = ({
                                                                 <p className={plannerPost?.postPages?.length > 1 ? "mb-0 d-none ps=0" : "mb-0 ps-0"}>{curPage?.pageName}</p>
                                                             </div>
                                                         }
-                                                        {
-                                                            curPage?.errorInfo?.isDeletedFromSocialMedia &&
-                                                            <>
-                                                                <div
-                                                                    className={"post-deleted-tag"}> Deleted
-                                                                    {
-                                                                        !plannerPost?.postPages?.every(postPage => postPage?.errorInfo?.isDeletedFromSocialMedia) &&
-                                                                        <RiDeleteBin7Line
-                                                                            title={"Delete From Addy"}
-                                                                            className={"cursor-pointer delete-from-addy-icon"}/>
-                                                                    }
-
-                                                                </div>
-                                                            </>
-                                                        }
 
                                                     </div>
                                                 })
@@ -216,6 +201,7 @@ const ScheduledPost = ({
             {
                 showPostPreview &&
                 <PostViewModal
+                    setPosts={setPosts}
                     postToPreview={postToPreview}
                     setPostToPreview={setPostToPreview}
                     showPostPreview={showPostPreview}

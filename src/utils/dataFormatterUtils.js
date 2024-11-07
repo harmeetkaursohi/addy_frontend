@@ -437,9 +437,8 @@ export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, s
     }
 }
 
-export const getFormattedPostWithInsightsApiData = (insightsData, socialMediaType) => {
-    console.log("insightsData======>", insightsData)
-    let responseObject = {reactions: 0, comments: 0, shares: 0};
+export const getFormattedPostWithInsightsApiData = (insightsData, socialMediaType,postIds) => {
+    let responseObject = {reactions: 0, comments: 0};
     let response = {}
     switch (socialMediaType?.toLowerCase()) {
         case SocialAccountProvider?.FACEBOOK: {
@@ -470,36 +469,46 @@ export const getFormattedPostWithInsightsApiData = (insightsData, socialMediaTyp
             })
             return response;
         }
-        // case SocialAccountProvider?.PINTEREST: {
-        //     postIds?.map(postId => {
-        //         response = insightsData[postId].hasOwnProperty("error") ? {
-        //             ...response,
-        //             [postId]: {
-        //                 id: postId,
-        //                 error: {
-        //                     ...insightsData[postId],
-        //                     isDeletedFromSocialMedia: (insightsData?.[postId]?.status === "404" && insightsData?.[postId]?.error === "NOT_FOUND")
-        //                 }
-        //             }
-        //         } : {...response, [postId]: insightsData[postId]}
-        //     })
-        //     return response;
-        // }
-        // case SocialAccountProvider?.LINKEDIN: {
-        //     postIds?.map(postId => {
-        //         response = insightsData[postId].hasOwnProperty("error") ? {
-        //             ...response,
-        //             [postId]: {
-        //                 id: postId,
-        //                 error: {
-        //                     ...insightsData[postId]?.error,
-        //                     isDeletedFromSocialMedia: insightsData[postId]?.error?.status === 404
-        //                 }
-        //             }
-        //         } : {...response, [postId]: insightsData[postId]}
-        //     })
-        //     return response;
-        // }
+        case SocialAccountProvider?.PINTEREST: {
+            Object?.values(insightsData || {})?.map(res => {
+                response = {
+                    ...response,
+                    [res?.id]: {
+                        ...responseObject,
+                        reactions: res?.pin_metrics?.lifetime_metrics?.reaction || 0,
+                        comments: res?.pin_metrics?.lifetime_metrics?.comment || 0,
+                        saves: res?.pin_metrics?.lifetime_metrics?.save || 0,
+                    }
+                }
+            })
+            return response;
+        }
+        case SocialAccountProvider?.LINKEDIN: {
+            insightsData?.elements?.forEach(stats=>{
+                response={
+                    ...response,
+                    [stats.share]:{
+                       ...responseObject,
+                        reactions:stats?.totalShareStatistics?.likeCount || 0,
+                        comments:stats?.totalShareStatistics?.commentCount || 0,
+                        shares:stats?.totalShareStatistics?.shareCount || 0,
+                    }
+                }
+            })
+            postIds.split(",")?.forEach(postId=>{
+                if(isNullOrEmpty(response[postId]) ){
+                    response={
+                        ...response,
+                        [postId]:{
+                            ...responseObject,
+                            shares:0
+                        }
+                    }
+                }
+            })
+            return response;
+
+        }
     }
 }
 
@@ -782,7 +791,15 @@ export const getFormattedDataForPlannerPostPreviewModal = (data) => {
                         url = cur.imageURL
                     }
                     if (cur.mediaType === "VIDEO") {
-                        url = (postPage.socialMediaType === "INSTAGRAM" && postPage?.postState === "IN_PROGRESS") ? `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id : cur.sourceURL
+                        if(postPage.socialMediaType === "INSTAGRAM" && postPage?.postState === "IN_PROGRESS"){
+                            url=`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id
+                        }
+                        else if(postPage.socialMediaType === "PINTEREST"){
+                            url = cur.imageURL
+                        }
+                        else{
+                            url =cur.sourceURL
+                        }
                     }
                 }
                 return {

@@ -12,6 +12,7 @@ import {Image} from "react-bootstrap";
 import "./common.css"
 import {isNullOrEmpty, isPostEditable} from "../../../utils/commonUtils";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
+import {useNavigate} from "react-router-dom";
 
 const InstagramFeedPreview = ({
                                   reference,
@@ -32,6 +33,7 @@ const InstagramFeedPreview = ({
                               }) => {
 
     const [showContent, setShowContent] = useState(false)
+    const navigate = useNavigate()
     return (
         <>
             <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>{previewTitle}</h2>
@@ -68,7 +70,8 @@ const InstagramFeedPreview = ({
                                                 pageIds: [pageId]
                                             })
                                         }}
-                                    >Delete</button>
+                                    >Delete
+                                    </button>
                                 </>
                             }
                         </div>
@@ -79,7 +82,8 @@ const InstagramFeedPreview = ({
 
                 </div>
 
-                <CommonSlider isrequired={true} files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
+                <CommonSlider isrequired={true} files={files} selectedFileType={selectedFileType} caption={caption}
+                              hashTag={hashTag}/>
                 {
                     reference === "PLANNER" && !isNullOrEmpty(postInsightsData) &&
                     <>
@@ -89,7 +93,7 @@ const InstagramFeedPreview = ({
                                 <>
                                     <>like {postInsightsData?.data?.reactions}</>
                                     <>Comment {postInsightsData?.data?.comments}</>
-                                    <>like {postInsightsData?.data?.shares}</>
+                                    <>shares {postInsightsData?.data?.shares}</>
                                 </>
                         }
                     </>
