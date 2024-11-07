@@ -6,28 +6,28 @@ import LinkedinFeedpreview from "./LinkedinFeedPreview";
 import DefaultFeedPreview from "./DefaultFeedPreview";
 
 const CommonFeedPreview = ({
+                               reference,
                                socialMediaType,
                                pageImageUrl,
                                previewTitle,
                                pageName,
-                               userData,
                                files,
                                selectedFileType,
                                caption,
                                hashTag,
-                               destinationUrl=null,
-                               pinTitle=null,
+                               destinationUrl = null,
+                               pinTitle = null,
                            }) => {
-                           
+
     return (
         <>
             {
                 socialMediaType === "FACEBOOK" &&
                 <FacebookFeedPreview
+                    reference={reference}
                     previewTitle={previewTitle}
                     pageName={pageName}
                     pageImage={pageImageUrl}
-                    userData={userData}
                     files={files}
                     selectedFileType={selectedFileType}
                     caption={caption}
@@ -38,10 +38,10 @@ const CommonFeedPreview = ({
             {
                 socialMediaType === "INSTAGRAM" &&
                 <InstagramFeedPreview
+                    reference={reference}
                     previewTitle={previewTitle}
                     pageName={pageName}
                     pageImage={pageImageUrl}
-                    userData={userData}
                     files={files}
                     selectedFileType={selectedFileType}
                     caption={caption}
@@ -52,10 +52,10 @@ const CommonFeedPreview = ({
             {
                 socialMediaType === "PINTEREST" &&
                 <PinterestFeedPreview
+                    reference={reference}
                     previewTitle={previewTitle}
                     pageName={pageName}
                     pageImage={pageImageUrl}
-                    userData={userData}
                     files={files}
                     selectedFileType={selectedFileType}
                     caption={caption}
@@ -67,10 +67,10 @@ const CommonFeedPreview = ({
             {
                 socialMediaType === "LINKEDIN" &&
                 <LinkedinFeedpreview
+                    reference={reference}
                     previewTitle={previewTitle}
                     pageName={pageName}
                     pageImage={pageImageUrl}
-                    userData={userData}
                     files={files}
                     selectedFileType={selectedFileType}
                     caption={caption}

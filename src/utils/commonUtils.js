@@ -1495,6 +1495,13 @@ export const isCreateDraftPostRequestValid = (requestBody) => {
     }
     return true;
 }
+export const isUpdateDraftPostRequestValid = (requestBody) => {
+    if (requestBody?.updatePostRequestDTO?.postPageInfos===null || requestBody?.updatePostRequestDTO?.postPageInfos===undefined ||requestBody?.updatePostRequestDTO?.postPageInfos?.length === 0) {
+        showErrorToast(SelectAtLeastOnePageForDraft);
+        return false;
+    }
+    return true;
+}
 export const isCreatePostRequestValid = (requestBody, files) => {
     let shouldBreak = false;
     const hasAttachments = requestBody?.attachments?.length > 0;
@@ -2251,7 +2258,20 @@ export const isValidCreateMessageRequest = (data) => {
 export const removeObjectFromArray = (array, object, keyToCompare) => {
     return array.filter(item => item[keyToCompare] !== object[keyToCompare]);
 };
+export const deleteElementFromArrayAtIndex=(array,index)=>{
+    if(isNullOrEmpty(array)) return array;
+    const newArray = [...array];
+    newArray.splice(index, 1);
+    return newArray;
 
+}
 export const getEmptyArrayOfSize=(size)=>{
    return Array(size).fill(null);
+}
+
+export const isPostEditable = ( feedPostDate ) => {
+    if (isNullOrEmpty(feedPostDate)) {
+        return false
+    }
+    return (new Date(feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0;
 }

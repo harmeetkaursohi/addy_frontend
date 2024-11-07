@@ -109,7 +109,7 @@ export const postApi = addyApi.injectEndpoints({
                     headers: getAuthorizationHeader(),
                 };
             },
-            invalidatesTags: ["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"],
+            invalidatesTags: ["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi","getPostsByIdApi"],
             async onQueryStarted(requestBody, {queryFulfilled,}) {
                 queryFulfilled.then(res => {
                     if (requestBody.postStatus === "DRAFT") {
@@ -171,7 +171,7 @@ export const postApi = addyApi.injectEndpoints({
                     body: formData
                 };
             },
-            invalidatesTags: ["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"],
+            invalidatesTags: ["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi","getPostsByIdApi"],
             async onQueryStarted(requestBody, {queryFulfilled,}) {
                 queryFulfilled.then(res => {
                     if (requestBody.updatePostRequestDTO.postStatus === "DRAFT") {

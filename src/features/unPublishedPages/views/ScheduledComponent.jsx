@@ -218,7 +218,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                                         "post_now nunito_font cmn_bg_btn loading"
                                                     }
                                                     label={"Change Post"}
-                                                    onClick={() => navigate("/post/" + curBatch?.id)}
+                                                    onClick={() => navigate("/planner/post/" + curBatch?.id)}
                                                     isDisabled={false}
                                                 />
                                             </div>

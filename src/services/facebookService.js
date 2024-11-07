@@ -9,7 +9,7 @@ import {
 import {
     getFormattedInsightsForProfileViews,
     getFormattedAccountReachAndEngagementData,
-    getFormattedPostWithInsightsApiResponse
+    getFormattedPostWithInsightsApiResponse, getFormattedPostWithInsightsApiData
 } from "../utils/dataFormatterUtils";
 import {getFormattedDemographicData} from "../utils/dataFormatterUtils";
 import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils"
@@ -369,9 +369,9 @@ export const getFacebookPostDataWithInsights = async (data) => {
 
 export const getFacebookPostInsights = async (data) => {
     const postIds = data?.postIds?.map(postId => postId).join(",");
-    const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,likes.summary(true).limit(1),reactions.summary(total_count).limit(1),comments.summary(true),shares,is_published`;
+    const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.accessToken}&fields=id,likes.summary(true).limit(1),reactions.summary(total_count).limit(1),comments.summary(true),shares,is_published`;
     return await baseAxios.get(apiUrl).then(res => {
-        return res.data;
+        return getFormattedPostWithInsightsApiData(res.data,data.socialMediaType)
     }).catch(async error => {
         showErrorToast(error.response.data.error.message);
         throw error;

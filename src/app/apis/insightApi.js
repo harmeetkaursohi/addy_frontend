@@ -16,7 +16,7 @@ import {
     getInstagramDemographicData,
     getInstagramGraphReportByPage,
     getInstagramPageReports,
-    getInstagramPostDataWithInsights,
+    getInstagramPostDataWithInsights, getInstagramPostInsights,
     getInstagramProfileInsightsInfo,
     getInstagramProfileVisits,
     getInstagramReportByPage
@@ -280,7 +280,7 @@ export const insightApi = addyApi.injectEndpoints({
                         break;
                     }
                     case  "INSTAGRAM": {
-                        result = await getInstagramPostDataWithInsights(data)
+                        result = await getInstagramPostInsights(data)
                         break;
                     }
                     case  "LINKEDIN": {

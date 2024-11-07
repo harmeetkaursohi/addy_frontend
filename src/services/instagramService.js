@@ -5,9 +5,9 @@ import {
     generateUnixTimestampFor, getFormattedPostTime, isErrorInInstagramMention, objectToQueryString
 } from "../utils/commonUtils";
 import {
-    getFormattedAccountReachAndEngagementData,
+    getFormattedAccountReachAndEngagementData, getFormattedDataForPlannerPostPreviewModal,
     getFormattedDemographicData,
-    getFormattedInsightsForProfileViews, getFormattedPostWithInsightsApiResponse
+    getFormattedInsightsForProfileViews, getFormattedPostWithInsightsApiData, getFormattedPostWithInsightsApiResponse
 } from "../utils/dataFormatterUtils";
 import {CouldNotPostComment, SocialAccountProvider} from "../utils/contantData";
 import {getFormattedInsightProfileInfo} from "../utils/dataFormatterUtils";
@@ -357,6 +357,17 @@ export const getInstagramPostDataWithInsights = async (data) => {
     const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,insights.metric(reach,shares),caption,comments_count,like_count,media_type,media_url,thumbnail_url,permalink,timestamp,username,children{id,media_type,media_url,thumbnail_url}`;
     return await baseAxios.get(apiUrl).then(res => {
         return getFormattedPostWithInsightsApiResponse(res.data, data.postIds, SocialAccountProvider?.INSTAGRAM);
+    }).catch(error => {
+        showErrorToast(error.response.data.error.message);
+        throw error;
+    });
+}
+
+export const getInstagramPostInsights = async (data) => {
+    const postIds = data.postIds.map(id => id).join(',');
+    const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.accessToken}&fields=id,insights.metric(shares),comments_count,like_count`;
+    return await baseAxios.get(apiUrl).then(res => {
+        return getFormattedPostWithInsightsApiData(res.data, data.socialMediaType);
     }).catch(error => {
         showErrorToast(error.response.data.error.message);
         throw error;

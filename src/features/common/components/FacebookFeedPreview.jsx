@@ -8,10 +8,16 @@ import React from "react";
 import {FaRegComment} from "react-icons/fa";
 import {TiWorld} from "react-icons/ti";
 import {Image} from "react-bootstrap";
-import {getCommentCreationTime} from "../../../utils/commonUtils";
+import {getCommentCreationTime, isNullOrEmpty, isPostEditable} from "../../../utils/commonUtils";
+import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
+import {useNavigate} from "react-router-dom";
+import {useDeletePostFromPagesByPageIdsMutation} from "../../../app/apis/postApi";
 
 
 const FacebookFeedPreview = ({
+                                 postId,
+                                 pageId,
+                                 reference,
                                  previewTitle,
                                  pageName,
                                  files,
@@ -19,8 +25,14 @@ const FacebookFeedPreview = ({
                                  caption,
                                  pageImage,
                                  hashTag,
-                                 feedPostDate
+                                 postStatus,
+                                 feedPostDate,
+                                 postInsightsData,
+                                 setDeletePostPageInfo,
+                                 isDeletePostLoading,
                              }) => {
+
+    const navigate = useNavigate();
     return (
         <>
             <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>{previewTitle}</h2>
@@ -30,15 +42,53 @@ const FacebookFeedPreview = ({
                     <Image src={pageImage ? pageImage : default_user_icon} alt="user image" height="36px" width="36px"/>
                     <div>
                         <h3 className='create_post_text user_name boost_post_text'>{pageName}</h3>
-                        <h6 className='status create_post_text'><Image src={ellipse_img} alt="ellipse image"
-                                                                       className="ms-1"/> {feedPostDate ? getCommentCreationTime(feedPostDate) : "just now"}
-
+                        <h6 className='status create_post_text'>
+                            <Image src={ellipse_img} alt="ellipse image" className="ms-1"/>
+                            {
+                                reference === "PLANNER" ? getCommentCreationTime(feedPostDate) : "just now"
+                            }
                             <TiWorld className="world_icon ms-1"/>
                         </h6>
+                        {
+                            reference === "PLANNER" && postStatus === "SCHEDULED" &&
+                            <>
+                                <button
+                                    disabled={!isPostEditable(feedPostDate)}
+                                    onClick={() => {
+                                        if (!isPostEditable(feedPostDate)) return
+                                        navigate(`/planner/post/${postId}`)
+                                    }}>Edit
+                                </button>
+                                <button
+                                    disabled={isDeletePostLoading}
+                                    onClick={() => {
+                                        setDeletePostPageInfo({
+                                            postId: postId,
+                                            pageIds: [pageId]
+                                        })
+                                    }}
+                                >Delete
+                                </button>
+                            </>
+                        }
                     </div>
                 </div>
 
                 <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
+                {
+                    reference === "PLANNER" && !isNullOrEmpty(postInsightsData) &&
+                    <>
+                        {
+                            postInsightsData?.isLoading ?
+                                <SkeletonEffect count={1}/> :
+                                <>
+                                    <>like {postInsightsData?.data?.reactions}</>
+                                    <>Comment {postInsightsData?.data?.comments}</>
+                                    <>like {postInsightsData?.data?.shares}</>
+                                </>
+                        }
+                    </>
+                }
 
                 <div className='like_comment_outer'>
                     <div className="fb_likes">

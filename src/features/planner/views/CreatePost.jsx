@@ -26,7 +26,6 @@ import CommonLoader from "../../common/components/CommonLoader";
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 import {useAppContext} from '../../common/components/AppProvider.jsx';
-import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {useCreatePostMutation} from "../../../app/apis/postApi";
@@ -59,7 +58,6 @@ const CreatePost = () => {
     const [showConnectAccountModal, setShowConnectAccountModal] = useState(false)
     const [showPublishPostConfirmationBox, setShowPublishPostConfirmationBox] = useState(false)
 
-    const {data: userData} = useGetUserInfoQuery("")
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
     const [createPosts, createPostApi] = useCreatePostMutation()
@@ -918,11 +916,11 @@ const CreatePost = () => {
                                                                     {
                                                                         selectedPageData &&
                                                                         <CommonFeedPreview
+                                                                            reference={"CREATE_POST"}
                                                                             socialMediaType={option.group}
                                                                             previewTitle={`${getEnumValue(option.group)} feed Preview`}
                                                                             pageName={selectedPageData?.name}
                                                                             pageImageUrl={selectedPageData?.imageUrl}
-                                                                            userData={userData}
                                                                             cropImage={cropImgUrl !== null ? cropImgUrl : ""}
                                                                             files={files}
                                                                             selectedFileType={selectedFileType}

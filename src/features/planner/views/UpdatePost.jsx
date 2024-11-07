@@ -16,9 +16,16 @@ import GenericButtonWithLoader from "../../common/components/GenericButtonWithLo
 import {
     checkDimensions,
     convertSentenceToHashtags,
-    convertToUnixTimestamp, convertUnixTimestampToDateTime,
-    getEnumValue, getFileFromAttachmentSource, getVideoDurationById,
-    groupByKey, isCreateDraftPostRequestValid, isNullOrEmpty, isUpdatePostRequestValid, urlToFile,
+    convertToUnixTimestamp,
+    convertUnixTimestampToDateTime,
+    getEnumValue,
+    getFileFromAttachmentSource,
+    getVideoDurationById,
+    groupByKey,
+    isNullOrEmpty,
+    isUpdateDraftPostRequestValid,
+    isUpdatePostRequestValid,
+    urlToFile,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import {showErrorToast} from "../../common/components/Toast";
@@ -27,9 +34,7 @@ import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantD
 import Loader from '../../loader/Loader.jsx';
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import {useAppContext} from '../../common/components/AppProvider.jsx';
-import {AiOutlineEye} from 'react-icons/ai';
 import EditVideoModal from '../../common/components/EditVideoModal.jsx';
-import {useGetUserInfoQuery} from "../../../app/apis/userApi";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetPostsByIdQuery, useUpdatePostByIdMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
@@ -44,7 +49,6 @@ const UpdatePost = () => {
         const navigate = useNavigate();
         const {id} = useParams();
 
-        const {data: userData} = useGetUserInfoQuery("")
         const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
         const postsByIdApi = useGetPostsByIdQuery(id, {skip: isNullOrEmpty(id)})
         const [updatePostById, updatePostByIdApi] = useUpdatePostByIdMutation()
@@ -84,10 +88,6 @@ const UpdatePost = () => {
         const [trimmedVideoUrl, setTrimmedVideoUrl] = useState()
 
         const {sidebar} = useAppContext()
-
-        console.log("selectedOptions======>", selectedOptions)
-        console.log("selectedGroups======>", selectedGroups)
-        console.log("allOptions======>", allOptions)
 
         useEffect(() => {
             if (files && files.length <= 0) {
@@ -374,7 +374,7 @@ const UpdatePost = () => {
                 }
             }
             const requestBody = getRequestBodyToUpdatePost("DRAFT", isScheduledTimeProvided)
-            isCreateDraftPostRequestValid(requestBody) && updatePost(requestBody);
+            isUpdateDraftPostRequestValid(requestBody) && updatePost(requestBody);
         };
 
         const handleSchedulePost = () => {
@@ -713,7 +713,7 @@ const UpdatePost = () => {
 
                                                 </div>
 
-                                                <div className={"" }>
+                                                <div className={""}>
 
                                                     <div className="darg_navs file_outer">
 
@@ -791,7 +791,7 @@ const UpdatePost = () => {
                                                         <h5 className='post_heading create_post_text mb-2'>Pinterest
                                                             Only *</h5>
                                                     </div>
-                                                    <div className={"" }>
+                                                    <div className={""}>
                                                         <div className='textarea_outer flex-grow-1'>
                                                             <h6 className='create_post_text'>Pin Title*</h6>
                                                             <input type={"text"} className='textarea mt-2'
@@ -1004,7 +1004,7 @@ const UpdatePost = () => {
                                     <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container p-0">
                                         <div className='cmn_outer create_post_container post_preview_outer'>
                                             {
-                                                isNullOrEmpty(selectedOptions)  &&
+                                                isNullOrEmpty(selectedOptions) &&
                                                 <DefaultFeedPreview
                                                     caption={caption}
                                                     hashTag={hashTag}
@@ -1021,12 +1021,13 @@ const UpdatePost = () => {
 
                                                         return (<span key={index}>
                                                         {
-                                                            selectedPageData && <CommonFeedPreview
+                                                            selectedPageData &&
+                                                            <CommonFeedPreview
+                                                                reference={"UPDATE_POST"}
                                                                 socialMediaType={option.group}
                                                                 previewTitle={`${getEnumValue(option.group)} feed Preview`}
                                                                 pageName={selectedPageData?.name}
                                                                 pageImageUrl={selectedPageData?.imageUrl}
-                                                                userData={userData}
                                                                 files={files || []}
                                                                 selectedFileType={selectedFileType}
                                                                 caption={caption}

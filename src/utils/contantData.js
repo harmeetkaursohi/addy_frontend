@@ -26,6 +26,9 @@ export const EmptyInsightGridMessage="Insights will appear here once you start u
 export const EmptyNotificationGridMessage="No items here yet. Let’s get started and make this list lively!"
 export const EnterMessageToStartChat="Please type message to start chat with Addy!"
 export const ChatOpenMessage="Hi. I'm your Addy Service Assistant. How can i help you?"
+export const DeletePostConfirmationMessage="Are you sure you want to delete this post?"
+export const DeletePostFromPageConfirmationMessage="Are you sure you want to remove this post from {0}?"
+export const PageRemovedFromPostSuccessfully="Post has been removed successfully"
 
 export const unProtectedUrls=["/login","/","/sign-up","/reset-password","/forgot-password","/auth-redirect"]
 

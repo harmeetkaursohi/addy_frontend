@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Modal from "react-bootstrap/Modal";
 import {RxCross2} from "react-icons/rx";
 import "slick-carousel/slick/slick.css";
@@ -7,16 +7,37 @@ import Slider from "react-slick";
 import {FaChevronLeft} from "react-icons/fa6";
 import {FaChevronRight} from "react-icons/fa6";
 import FacebookFeedPreview from "../../common/components/FacebookFeedPreview";
-import { isNullOrEmpty} from "../../../utils/commonUtils";
-import {useGetPostDataWithInsightsQuery, useGetPostInsightsQuery} from "../../../app/apis/insightApi";
+import {deleteElementFromArrayAtIndex, formatMessage, isNullOrEmpty} from "../../../utils/commonUtils";
+import {useGetPostInsightsQuery} from "../../../app/apis/insightApi";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
+import Delete_img from "../../../images/deletePost.svg?react";
+import InstagramFeedPreview from "../../common/components/InstagramFeedPreview";
+import ReactDOMServer from "react-dom/server";
+import Swal from "sweetalert2";
+import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
+import {showSuccessToast} from "../../common/components/Toast";
+import {
+    DeletedSuccessfully,
+    DeletePostConfirmationMessage,
+    DeletePostFromPageConfirmationMessage, PageRemovedFromPostSuccessfully
+} from "../../../utils/contantData";
+import {addyApi} from "../../../app/addyApi";
+import {useDeletePostFromPagesByPageIdsMutation} from "../../../app/apis/postApi";
+import {useDispatch} from "react-redux";
+import PinterestFeedPreview from "../../common/components/PinterestFeedPreview";
 
 
-function PostViewModal({setShowPostPreview, showPostPreview, postToPreview}) {
+function PostViewModal({setShowPostPreview, showPostPreview, postToPreview,setPostToPreview}) {
 
-    const [insights, setInsights] = useState(null)
-    const [fetchInsightsFor, setFetchInsightsFor] = useState(null)
+    const dispatch = useDispatch()
     const sliderRef = useRef(null);
+
+    const [insights, setInsights] = useState({})
+    const [invalidateData, setInvalidateData] = useState(false)
+    const [deletePostPageInfo, setDeletePostPageInfo] = useState(null)
+    const [currentActivePostIndex, setCurrentActivePostIndex] = useState(0)
+    const [fetchInsightsFor, setFetchInsightsFor] = useState(null)
+
     const settings = {
         infinite: false,
         speed: 500,
@@ -26,44 +47,143 @@ function PostViewModal({setShowPostPreview, showPostPreview, postToPreview}) {
         arrows: false,
     };
 
+    const [deletePostFromPagesByPageIds, deletePostFromPagesByPageIdsApi] = useDeletePostFromPagesByPageIdsMutation()
+
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
-    const insightsApi2 = useGetPostDataWithInsightsQuery({
-        socialMediaType: fetchInsightsFor?.socialMediaType,
-        pageAccessToken: fetchInsightsFor?.postPage?.accessToken,
-        pageId: fetchInsightsFor?.postPage?.pageId,
-        postIds: [fetchInsightsFor?.postPage?.socialMediaPostId]
-    }, {skip: isNullOrEmpty(fetchInsightsFor)})
     const insightsApi = useGetPostInsightsQuery({
         socialMediaType: fetchInsightsFor?.socialMediaType,
-        pageAccessToken: fetchInsightsFor?.postPage?.accessToken,
+        accessToken: fetchInsightsFor?.postPage?.accessToken,
         pageId: fetchInsightsFor?.postPage?.pageId,
         postIds: [fetchInsightsFor?.postPage?.socialMediaPostId]
     }, {skip: isNullOrEmpty(fetchInsightsFor)})
 
     useEffect(() => {
         if (Array.isArray(postToPreview) && !isNullOrEmpty(postToPreview)) {
+            // When Loaded will get the insights for first post
             const getInsightsFor = postToPreview?.[0]
-            const pageAccessToken = getAllConnectedPagesApi?.data?.find(cur => cur.pageId === getInsightsFor.postPage.pageId)
-            setFetchInsightsFor({
-                ...getInsightsFor,
-                postPage: {...getInsightsFor.postPage, accessToken: pageAccessToken.access_token}
-            })
+            getInsightsFor.postStatus === "PUBLISHED" && setFetchInsightsForPost(0, getInsightsFor)
         }
     }, [postToPreview]);
 
+    useEffect(() => {
+        if (insightsApi.data !== null && insightsApi.data !== undefined) {
+            Object.keys(insightsApi.data || {})?.map(socialMediaPostId => {
+                setInsights({
+                    ...insights,
+                    [socialMediaPostId]: {
+                        isLoading: false,
+                        data: insightsApi.data[socialMediaPostId]
+                    }
+                })
+            })
+        }
+    }, [insightsApi.data]);
+
+    useEffect(() => {
+        if (!isNullOrEmpty(deletePostPageInfo)) {
+            handleDeletePost()
+        }
+    }, [deletePostPageInfo]);
+
+    useEffect(()=>{
+        return ()=>{
+            if(invalidateData){
+                dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi"]));
+            }
+        }
+    },[invalidateData])
+
     const nextSlide = () => {
+        const activePostIndex = currentActivePostIndex + 1
+        if (activePostIndex >= postToPreview?.length) return
+        setCurrentActivePostIndex(activePostIndex)
+        const getInsightsFor = postToPreview?.[activePostIndex]
+        // When clicked on next button, for next post whose index is currentActivePostIndex + 1, insights will be fetched
+        getInsightsFor?.postStatus === "PUBLISHED" && setFetchInsightsForPost(activePostIndex, getInsightsFor)
         sliderRef.current.slickNext();
     };
     const prevSlide = () => {
+        if (currentActivePostIndex === 0) return
+        const activePostIndex = currentActivePostIndex - 1
+        setCurrentActivePostIndex(activePostIndex)
+        const getInsightsFor = postToPreview?.[activePostIndex]
+        // When clicked on previous button, for previous post whose index is fetchInsightsFor.indexForPost-1, insights will be fetched
+        getInsightsFor?.postStatus === "PUBLISHED" && setFetchInsightsForPost(activePostIndex, getInsightsFor)
         sliderRef.current.slickPrev();
     };
-    const handleClose = () => setShowPostPreview(false);
+    const setFetchInsightsForPost = (postIndex, getInsightsFor) => {
+        const pageAccessToken = getAllConnectedPagesApi?.data?.find(cur => cur.pageId === getInsightsFor.postPage.pageId)
+        setFetchInsightsFor({
+            ...getInsightsFor,
+            postPage: {...getInsightsFor.postPage, accessToken: pageAccessToken.access_token}
+        })
+        setInsights({
+            ...insights,
+            [getInsightsFor.postPage.socialMediaPostId]: {
+                isLoading: true,
+                data: null
+            }
+        })
+    }
+    const handleDeletePost = () => {
+        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Delete_img/>);
+        Swal.fire({
+            html: `
+                <div class="swal-content">
+                    <div class="swal-images">
+                        <img src="data:image/svg+xml;base64,${btoa(svgMarkup)}" alt="Delete Icon" class="delete-img" />
+                    </div>
+                    <h2 class="swal2-title" id="swal2-title">Delete Post</h2>
+                    <p class="modal_heading">${postToPreview?.length === 1 ? DeletePostConfirmationMessage : formatMessage(DeletePostFromPageConfirmationMessage,[postToPreview?.[currentActivePostIndex]?.postPage?.pageName])} </p>
+                </div>
+            `,
+            showCancelButton: true,
+            cancelButtonText: 'Cancel',
+            confirmButtonText: 'Delete',
+            confirmButtonColor: "#F07C33",
+            cancelButtonColor: "#E6E9EC",
+            reverseButtons: true,
+            customClass: {
+                confirmButton: 'custom-confirm-button-class',
+                cancelButton: 'custom-cancel-button-class',
+                popup: "small_swal_popup cmnpopupWrapper",
+            }
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await handleRTKQuery(
+                    async () => {
+                        return await deletePostFromPagesByPageIds(deletePostPageInfo).unwrap();
+                    },
+                    () => {
+                        setInvalidateData(true)
+                        // If There is only one page in post and is removed then the whole post is removed
+                        if (postToPreview?.length === 1) {
+                            showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]))
+                            handleClose()
+                        }
+                        // If user has opened last postPage and deleted it , then one postPage backward is selected
+                        if (currentActivePostIndex + 1 === postToPreview?.length && postToPreview?.length > 1) {
+                            showSuccessToast(PageRemovedFromPostSuccessfully)
+                            const updatedPostToPreview=deleteElementFromArrayAtIndex(postToPreview,currentActivePostIndex)
+                            prevSlide()
+                            setPostToPreview(updatedPostToPreview)
 
-    console.log("postToPreview=====>", postToPreview)
-    console.log("fetchInsightsFor====>", fetchInsightsFor)
-    console.log("getAllConnectedPagesApi====>", getAllConnectedPagesApi)
-    console.log("insightsApi====>", insightsApi)
+                        }
+                        // If user has opened any postPage and deleted it , then one postPage next is selected
+                        if (currentActivePostIndex + 1 < postToPreview?.length && postToPreview?.length > 1) {
+                            showSuccessToast(PageRemovedFromPostSuccessfully)                            // No Need to set fetchInsightsFor as delete is only available for scheduled posts and if post is still not posted, no insights will be there
+                            const updatedPostToPreview=deleteElementFromArrayAtIndex(postToPreview,currentActivePostIndex)
+                            setPostToPreview(updatedPostToPreview)
+                            showSuccessToast(formatMessage(PageRemovedFromPostSuccessfully, []))
+                        }
+                    }
+                );
+            }
+            setDeletePostPageInfo(null)
+        });
+    };
+    const handleClose = () => setShowPostPreview(false);
 
     return (
         <>
@@ -99,40 +219,63 @@ function PostViewModal({setShowPostPreview, showPostPreview, postToPreview}) {
                                             {
                                                 post.socialMediaType === "FACEBOOK" &&
                                                 <FacebookFeedPreview
-                                                    feedPostDate={post.feedPostDate}
+                                                    reference={"PLANNER"}
                                                     previewTitle={"Facebook Post Preview"}
+                                                    postId={post?.id}
+                                                    pageId={post.postPage.pageId}
+                                                    feedPostDate={post.feedPostDate}
                                                     pageName={post.postPage.pageName}
                                                     files={post?.attachments}
                                                     selectedFileType={post?.attachments?.[0]?.mediaType}
                                                     caption={caption}
+                                                    postStatus={post?.postStatus}
                                                     pageImage={post.postPage.imageURL}
                                                     hashTag={hashtags}
+                                                    postInsightsData={insights[post.postPage.socialMediaPostId]}
+                                                    setDeletePostPageInfo={setDeletePostPageInfo}
+                                                    isDeletePostLoading={deletePostFromPagesByPageIdsApi?.isLoading}
                                                 />
                                             }
                                             {
                                                 post.socialMediaType === "INSTAGRAM" &&
-                                                <FacebookFeedPreview
+                                                <InstagramFeedPreview
+                                                    reference={"PLANNER"}
                                                     previewTitle={"Instagram Post Preview"}
-                                                    pageName={"test"}
-                                                    userData={"test"}
-                                                    files={[0]}
-                                                    selectedFileType={"test"}
-                                                    caption={"test"}
-                                                    pageImage={"test"}
-                                                    hashTag={"test"}
+                                                    postId={post?.id}
+                                                    pageId={post.postPage.pageId}
+                                                    feedPostDate={post.feedPostDate}
+                                                    postStatus={post?.postStatus}
+                                                    pageName={post.postPage.pageName}
+                                                    pageImage={post.postPage.imageURL}
+                                                    files={post?.attachments}
+                                                    selectedFileType={post?.attachments?.[0]?.mediaType}
+                                                    caption={caption}
+                                                    hashTag={hashtags}
+                                                    setDeletePostPageInfo={setDeletePostPageInfo}
+                                                    isDeletePostLoading={deletePostFromPagesByPageIdsApi?.isLoading}
+                                                    postInsightsData={insights[post.postPage.socialMediaPostId]}
                                                 />
                                             }
                                             {
                                                 post.socialMediaType === "PINTEREST" &&
-                                                <FacebookFeedPreview
+                                                <PinterestFeedPreview
+                                                    reference={"PLANNER"}
                                                     previewTitle={"Pinterest Post Preview"}
-                                                    pageName={"test"}
-                                                    userData={"test"}
-                                                    files={[0]}
-                                                    selectedFileType={"test"}
-                                                    caption={"test"}
-                                                    pageImage={"test"}
-                                                    hashTag={"test"}
+                                                    postId={post?.id}
+                                                    pageId={post.postPage.pageId}
+                                                    feedPostDate={post.feedPostDate}
+                                                    postStatus={post?.postStatus}
+                                                    pageName={post.postPage.pageName}
+                                                    pageImage={post.postPage.imageURL}
+                                                    files={post?.attachments}
+                                                    selectedFileType={post?.attachments?.[0]?.mediaType}
+                                                    caption={caption}
+                                                    hashTag={hashtags}
+                                                    destinationUrl={"destinationUrl"}
+                                                    pinTitle={"pinTitle"}
+                                                    setDeletePostPageInfo={setDeletePostPageInfo}
+                                                    isDeletePostLoading={deletePostFromPagesByPageIdsApi?.isLoading}
+                                                    postInsightsData={insights[post.postPage.socialMediaPostId]}
                                                 />
                                             }
                                             {

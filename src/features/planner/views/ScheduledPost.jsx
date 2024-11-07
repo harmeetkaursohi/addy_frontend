@@ -217,8 +217,10 @@ const ScheduledPost = ({
                 showPostPreview &&
                 <PostViewModal
                     postToPreview={postToPreview}
+                    setPostToPreview={setPostToPreview}
                     showPostPreview={showPostPreview}
-                    setShowPostPreview={setShowPostPreview}/>
+                    setShowPostPreview={setShowPostPreview}
+                />
             }
         </div>
     )

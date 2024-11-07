@@ -437,6 +437,72 @@ export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, s
     }
 }
 
+export const getFormattedPostWithInsightsApiData = (insightsData, socialMediaType) => {
+    console.log("insightsData======>", insightsData)
+    let responseObject = {reactions: 0, comments: 0, shares: 0};
+    let response = {}
+    switch (socialMediaType?.toLowerCase()) {
+        case SocialAccountProvider?.FACEBOOK: {
+            Object?.values(insightsData || {})?.map(res => {
+                response = {
+                    ...response,
+                    [res?.id]: {
+                        ...responseObject,
+                        reactions: res?.reactions?.summary?.total_count || 0,
+                        comments: res?.comments?.summary?.total_count || 0,
+                        shares: res?.shares?.count || 0,
+                    }
+                }
+            })
+            return response;
+        }
+        case SocialAccountProvider?.INSTAGRAM: {
+            Object?.values(insightsData || {})?.map(res => {
+                response = {
+                    ...response,
+                    [res?.id]: {
+                        ...responseObject,
+                        reactions: res?.like_count || 0,
+                        comments: res?.comments_count || 0,
+                        shares: res?.insights?.data?.[0]?.values?.[0]?.value || 0,
+                    }
+                }
+            })
+            return response;
+        }
+        // case SocialAccountProvider?.PINTEREST: {
+        //     postIds?.map(postId => {
+        //         response = insightsData[postId].hasOwnProperty("error") ? {
+        //             ...response,
+        //             [postId]: {
+        //                 id: postId,
+        //                 error: {
+        //                     ...insightsData[postId],
+        //                     isDeletedFromSocialMedia: (insightsData?.[postId]?.status === "404" && insightsData?.[postId]?.error === "NOT_FOUND")
+        //                 }
+        //             }
+        //         } : {...response, [postId]: insightsData[postId]}
+        //     })
+        //     return response;
+        // }
+        // case SocialAccountProvider?.LINKEDIN: {
+        //     postIds?.map(postId => {
+        //         response = insightsData[postId].hasOwnProperty("error") ? {
+        //             ...response,
+        //             [postId]: {
+        //                 id: postId,
+        //                 error: {
+        //                     ...insightsData[postId]?.error,
+        //                     isDeletedFromSocialMedia: insightsData[postId]?.error?.status === 404
+        //                 }
+        //             }
+        //         } : {...response, [postId]: insightsData[postId]}
+        //     })
+        //     return response;
+        // }
+    }
+}
+
 export const getFormattedPostDataForSlider = (data, socialMediaType) => {
     if (data === null || data === undefined) {
         return []
@@ -707,9 +773,21 @@ export const getFormattedDataForPlannerPostPreviewModal = (data) => {
             socialMediaType: postPage.socialMediaType,
             postPage: postPage,
             attachments: data?.attachments?.filter(cur => cur.pageId === postPage.pageId)?.map(cur => {
+                let url = "";
+                if (data.postStatus === "SCHEDULED") {
+                    url = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id
+                }
+                if (data.postStatus === "PUBLISHED") {
+                    if (cur.mediaType === "IMAGE") {
+                        url = cur.imageURL
+                    }
+                    if (cur.mediaType === "VIDEO") {
+                        url = (postPage.socialMediaType === "INSTAGRAM" && postPage?.postState === "IN_PROGRESS") ? `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id : cur.sourceURL
+                    }
+                }
                 return {
                     ...cur,
-                    url: cur.mediaType==="IMAGE"? cur.imageURL :cur.sourceURL
+                    url: url
                 }
             })
         }

@@ -424,9 +424,7 @@ const Planner = () => {
                                                 dateClick={(arg) => {
                                                     if(isPostApiLoading) return
                                                         const localDate = new Date(arg.date);
-                                                        console.log(localDate,"localDate")
                                                         setSelectedDate(getDayStartInUTC(localDate.getDate(), localDate.getMonth(), localDate.getFullYear()));
-                                                    
                                                 }}
                                                 ref={calendarRef}
                                                 plugins={[dayGridPlugin, interactionPlugin]}

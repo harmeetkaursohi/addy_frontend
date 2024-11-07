@@ -13,14 +13,11 @@ import { Image } from "react-bootstrap";
 const LinkedinFeedpreview = ({
                                   previewTitle,
                                   pageName,
-                                  userData,
                                   files,
                                   selectedFileType,
                                   pageImage,
                                   caption,
-                                  pinTitle,
                                   hashTag,
-                                  destinationUrl = null
                               }) => {
                      
 
