@@ -25,6 +25,7 @@ import {addyApi} from "../../../app/addyApi";
 import {useDeletePostFromPagesByPageIdsMutation} from "../../../app/apis/postApi";
 import {useDispatch} from "react-redux";
 import PinterestFeedPreview from "../../common/components/PinterestFeedPreview";
+import LinkedinFeedpreview from "../../common/components/LinkedinFeedPreview";
 
 
 function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPreview, setPostToPreview}) {
@@ -215,7 +216,6 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                         <Slider {...settings} ref={sliderRef}>
                             {
                                 postToPreview?.map(post => {
-                                    console.log("post=========>", post)
                                     const index = post.message.indexOf('#');
                                     const caption = index !== -1 ? post.message.slice(0, index).trim() : post.message;
                                     const hashtags = index !== -1 ? post.message.slice(index).trim() : '';
@@ -286,15 +286,23 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                                             }
                                             {
                                                 post.socialMediaType === "LINKEDIN" &&
-                                                <FacebookFeedPreview
+                                                <LinkedinFeedpreview
+                                                    reference={"PLANNER"}
                                                     previewTitle={"Linkedin Post Preview"}
-                                                    pageName={"test"}
-                                                    userData={"test"}
-                                                    files={[0]}
-                                                    selectedFileType={"test"}
-                                                    caption={"test"}
-                                                    pageImage={"test"}
-                                                    hashTag={"test"}
+                                                    postId={post?.id}
+                                                    pageId={post.postPage.pageId}
+                                                    feedPostDate={post.feedPostDate}
+                                                    postStatus={post?.postStatus}
+                                                    pageName={post.postPage.pageName}
+                                                    pageImage={post.postPage.imageURL}
+                                                    files={post?.attachments}
+                                                    selectedFileType={post?.attachments?.[0]?.mediaType}
+                                                    caption={caption}
+                                                    hashTag={hashtags}
+                                                    setDeletePostPageInfo={setDeletePostPageInfo}
+                                                    isDeletePostLoading={deletePostFromPagesByPageIdsApi?.isLoading}
+                                                    postInsightsData={insights[post.postPage.socialMediaPostId]}
+
                                                 />
                                             }
 

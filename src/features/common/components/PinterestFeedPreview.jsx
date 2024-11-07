@@ -27,7 +27,6 @@ const PinterestFeedPreview = ({
                                   postInsightsData
                               }) => {
 
-    console.log("postInsightsData========>",postInsightsData)
     const mediatype = files.map((data) => data.mediaType)
     const navigate = useNavigate()
     return (

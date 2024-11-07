@@ -27,7 +27,7 @@ import {
     getLinkedinGraphReportByPage,
     getLinkedinPageReports,
     getLinkedinPostDataWithInsights,
-    getLinkedinPostEngagements,
+    getLinkedinPostEngagements, getLinkedinPostInsights,
     getLinkedinProfileInsightsInfo,
     getLinkedinProfileVisits,
     getLinkedinReportByPage
@@ -284,7 +284,7 @@ export const insightApi = addyApi.injectEndpoints({
                         break;
                     }
                     case  "LINKEDIN": {
-                        result = await getLinkedinPostDataWithInsights(data)
+                        result = await getLinkedinPostInsights(data)
                         break;
                     }
                     case  "PINTEREST": {

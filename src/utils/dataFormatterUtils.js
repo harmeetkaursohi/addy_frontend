@@ -437,8 +437,7 @@ export const getFormattedPostWithInsightsApiResponse = (insightsData, postIds, s
     }
 }
 
-export const getFormattedPostWithInsightsApiData = (insightsData, socialMediaType) => {
-    console.log("insightsData======>", insightsData)
+export const getFormattedPostWithInsightsApiData = (insightsData, socialMediaType,postIds) => {
     let responseObject = {reactions: 0, comments: 0};
     let response = {}
     switch (socialMediaType?.toLowerCase()) {
@@ -484,21 +483,32 @@ export const getFormattedPostWithInsightsApiData = (insightsData, socialMediaTyp
             })
             return response;
         }
-        // case SocialAccountProvider?.LINKEDIN: {
-        //     postIds?.map(postId => {
-        //         response = insightsData[postId].hasOwnProperty("error") ? {
-        //             ...response,
-        //             [postId]: {
-        //                 id: postId,
-        //                 error: {
-        //                     ...insightsData[postId]?.error,
-        //                     isDeletedFromSocialMedia: insightsData[postId]?.error?.status === 404
-        //                 }
-        //             }
-        //         } : {...response, [postId]: insightsData[postId]}
-        //     })
-        //     return response;
-        // }
+        case SocialAccountProvider?.LINKEDIN: {
+            insightsData?.elements?.forEach(stats=>{
+                response={
+                    ...response,
+                    [stats.share]:{
+                       ...responseObject,
+                        reactions:stats?.totalShareStatistics?.likeCount || 0,
+                        comments:stats?.totalShareStatistics?.commentCount || 0,
+                        shares:stats?.totalShareStatistics?.shareCount || 0,
+                    }
+                }
+            })
+            postIds.split(",")?.forEach(postId=>{
+                if(isNullOrEmpty(response[postId]) ){
+                    response={
+                        ...response,
+                        [postId]:{
+                            ...responseObject,
+                            shares:0
+                        }
+                    }
+                }
+            })
+            return response;
+
+        }
     }
 }
 

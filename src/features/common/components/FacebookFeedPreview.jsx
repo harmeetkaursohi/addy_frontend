@@ -84,7 +84,7 @@ const FacebookFeedPreview = ({
                                 <>
                                     <>like {postInsightsData?.data?.reactions}</>
                                     <>Comment {postInsightsData?.data?.comments}</>
-                                    <>like {postInsightsData?.data?.shares}</>
+                                    <>shares {postInsightsData?.data?.shares}</>
                                 </>
                         }
                     </>
