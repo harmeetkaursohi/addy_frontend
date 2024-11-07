@@ -13,6 +13,8 @@ import {RiDeleteBin5Fill} from "react-icons/ri";
 import {useNavigate, useParams} from "react-router-dom";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
+import { LuPlusCircle } from "react-icons/lu";
+
 import {
     checkDimensions,
     convertSentenceToHashtags,
@@ -668,13 +670,16 @@ const UpdatePost = () => {
                                                                             {/* <i className="fas fa-grip-vertical me-2"></i> */}
                                                                             {
                                                                                 file.mediaType === "IMAGE" &&
-                                                                                <img className={"upload_image me-3"}
+                                                                                <img  onClick={(e) => {
+                                                                                    e.preventDefault();
+                                                                                    editHandler(index, file);
+                                                                                }} className={"upload_image"}
                                                                                      src={file?.url || "data:image/jpeg; base64," + file?.attachmentSource}
                                                                                      alt={`Image ${index}`}/>
                                                                             }
                                                                             {
                                                                                 file.mediaType === "VIDEO" &&
-                                                                                <video className={"upload_image me-3"}
+                                                                                <video className={"upload_image"}
                                                                                        src={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
                                                                                        alt={`Videos ${index}`}
                                                                                        autoPlay={true}
@@ -683,7 +688,7 @@ const UpdatePost = () => {
                                                                             }
                                                                         </div>
 
-                                                                        {
+                                                                        {/* {
                                                                             file?.mediaType === "IMAGE" &&
                                                                             <button
                                                                                 className="edit_upload delete_upload me-2"
@@ -695,89 +700,78 @@ const UpdatePost = () => {
                                                                                     style={{fontSize: '24px'}}
                                                                                 />
                                                                             </button>
-                                                                        }
+                                                                        } */}
                                                                         <button className="delete_upload"
                                                                                 onClick={(e) => {
                                                                                     e.preventDefault();
                                                                                     handleRemoveSelectFile(file?.fileName, file?.id);
                                                                                 }}>
-                                                                            <RiDeleteBin5Fill
+                                                                            <RxCross2
                                                                                 style={{fontSize: '24px'}}
                                                                             />
                                                                         </button>
                                                                     </div>
                                                                 )
                                                             })}
+                                                             <div className="darg_navs file_outer d-flex gap-2">
+
+                                                                {disableImage === false &&
+                                                                    <div
+                                                                        className={""}>
+                                                                        <input type="file" id='image'
+                                                                            className='file'
+                                                                            multiple
+                                                                            name={'file'}
+                                                                            onClick={e => (e.target.value = null)}
+                                                                            accept={"image/png, image/jpeg"}
+                                                                            onChange={(e) => {
+                                                                                setSelectedFileType("IMAGE");
+                                                                                setDisableVideo(true);
+                                                                                handleSelectedImageFile(e);
+                                                                            }}
+                                                                        />
+                                                                        <label htmlFor='image'
+                                                                            className='cmn_headings d-flex align-items-center justify-content-center'>
+                                                                            <i className="fa fa-image"/>
+                                                                            <LuPlusCircle size={24} className='add_media'/>
+
+
+                                                                        </label>
+                                                                    </div>
+                                                                }
+
+                                                                {disableVideo === false &&
+                                                                    <div className=" ">
+                                                                        <input
+                                                                            type="file"
+                                                                            id='video'
+                                                                            onClick={e => (e.target.value = null)}
+                                                                            accept={"video/mp4,video/x-m4v,video/*"}
+                                                                            onChange={(e) => {
+                                                                                setSelectedFileType("VIDEO");
+                                                                                setDisableImage(true);
+                                                                                handleSelectedVideoFile(e);
+                                                                            }}/>
+                                                                        <label htmlFor='video'
+                                                                            className='cmn_headings d-flex align-items-center justify-content-center'>
+                                                                            <i className="fa fa-video-camera"/>
+                                                                            <LuPlusCircle size={24} className='add_media'/>
+
+
+                                                                            {/* {files?.length > 0 ? "Change Video" : "Add Video"} */}
+                                                                        </label>
+                                                                    </div>
+                                                                }
+
+                                                                </div>
                                                         </div>
                                                     </div>
 
                                                 </div>
 
-                                                <div className={"" }>
+                                            
 
-                                                    <div className="darg_navs file_outer">
-
-                                                        {disableImage === false &&
-                                                            <div
-                                                                className={" add_media_outer"}>
-                                                                <input type="file" id='image'
-                                                                       className='file'
-                                                                       multiple
-                                                                       name={'file'}
-                                                                       onClick={e => (e.target.value = null)}
-                                                                       accept={"image/png, image/jpeg"}
-                                                                       onChange={(e) => {
-                                                                           setSelectedFileType("IMAGE");
-                                                                           setDisableVideo(true);
-                                                                           handleSelectedImageFile(e);
-                                                                       }}
-                                                                />
-                                                                <label htmlFor='image'
-                                                                       className='cmn_blue_border cmn_headings'>
-                                                                    <i className="fa fa-image"
-                                                                       style={{marginTop: "2px"}}/>{"Add Photo"}
-                                                                </label>
-                                                            </div>
-                                                        }
-
-                                                        {disableVideo === false &&
-                                                            <div className=" add_media_outer">
-                                                                <input
-                                                                    type="file"
-                                                                    id='video'
-                                                                    onClick={e => (e.target.value = null)}
-                                                                    accept={"video/mp4,video/x-m4v,video/*"}
-                                                                    onChange={(e) => {
-                                                                        setSelectedFileType("VIDEO");
-                                                                        setDisableImage(true);
-                                                                        handleSelectedVideoFile(e);
-                                                                    }}/>
-                                                                <label htmlFor='video'
-                                                                       className='cmn_blue_border cmn_headings'>
-                                                                    <i className="fa fa-video-camera"
-                                                                       style={{marginTop: "2px"}}/>{files?.length > 0 ? "Change Video" : "Add Video"}
-                                                                </label>
-                                                            </div>
-                                                        }
-                                                    </div>
-
-                                                    {/*{*/}
-                                                    {/*    disableImage === false && <>*/}
-                                                    {/*        <h2 className='cmn_heading or_heading'>{jsondata.OR}</h2>*/}
-                                                    {/*        <div className="ai_outer_btn">*/}
-                                                    {/*            <button*/}
-                                                    {/*                className={`ai_btn cmn_white_text mt-2`}*/}
-                                                    {/*                onClick={(e) => {*/}
-                                                    {/*                    e.preventDefault();*/}
-                                                    {/*                    setAIGenerateImageModal(true);*/}
-                                                    {/*                }}>*/}
-                                                    {/*                <i className="fa-solid fa-robot ai_icon me-2"*/}
-                                                    {/*                   style={{fontSize: "15px"}}/> {jsondata.generateAi}*/}
-                                                    {/*            </button>*/}
-                                                    {/*        </div>*/}
-                                                    {/*    </>*/}
-                                                    {/*}*/}
-                                                </div>
+                                                   
 
                                             </div>
 
@@ -884,16 +878,24 @@ const UpdatePost = () => {
                                                 <div className='schedule_btn_outer'>
                                                     <h5 className='create_post_text post_heading'>{jsondata.setSchedule}</h5>
                                                     <div className='schedule_btn_wrapper d-flex'>
-                                                        <div className="form-check form-switch">
-                                                            <input className="form-check-input"
+                                                        {/* <div className="form-check form-switch"> */}
+                                                            {/* <input className="form-check-input"
                                                                    type="checkbox"
                                                                    id="flexSwitchCheckChecked"
                                                                    checked={showScheduleDateAndTimeBox}
                                                                    onChange={() => {
                                                                        setShowScheduleDateAndTimeBox(!showScheduleDateAndTimeBox);
                                                                    }}
+                                                            /> */}
+                                                             <i
+                                                                className={`fa ${showScheduleDateAndTimeBox ? "fa-toggle-on" : "fa-toggle-off"}`}
+                                                                // style={{fontSize: "24px", color: "#0d6efd"}}
+                                                                onClick={() => {
+                                                                    setShowScheduleDateAndTimeBox(!showScheduleDateAndTimeBox);
+                                                                }}
+                                                                aria-hidden="true"
                                                             />
-                                                        </div>
+                                                        {/* </div> */}
                                                         {/* <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                                  onClick={(e) => {
                                                                                      setReference("Draft")
@@ -941,19 +943,21 @@ const UpdatePost = () => {
                                             {/* boost post */}
                                             <div className='publish_post_outer media_outer'>
 
-                                                <div className="form-check form-switch">
-                                                    <input className="form-check-input"
-                                                           type="checkbox"
-                                                           id="flexSwitchCheckChecked"
-                                                           checked={boostPost}
-                                                           onChange={(e) => {
-                                                               e.preventDefault();
-                                                               setBoostPost(!boostPost);
-                                                           }}
-                                                    />
-                                                    <label
-                                                        className="form-check-label create_post_label boost_post_text"
-                                                        htmlFor="flexSwitchCheckChecked">Boost Post</label>
+                                            <div className="d-flex align-items-center gap-2 ps-0 form-switch">
+
+                                                <i
+                                                    className={`fa ${boostPost ? "fa-toggle-on" : "fa-toggle-off"}`}
+                                                    // style={{fontSize: "24px", color: "#0d6efd"}}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setBoostPost(!boostPost);
+                                                    }}
+                                                    aria-hidden="true"
+                                                />
+
+                                                <label
+                                                    className="form-check-label create_post_label boost_post_text"
+                                                    htmlFor="flexSwitchCheckChecked">Boost Post</label>
                                                 </div>
 
                                                 <div className='cancel_publish_btn_outer d-flex'>
@@ -1031,6 +1035,8 @@ const UpdatePost = () => {
                                                                 selectedFileType={selectedFileType}
                                                                 caption={caption}
                                                                 hashTag={hashTag}
+                                                                destinationUrl={pinDestinationUrl}
+                                                                pinTitle={pinTitle}
                                                             />
                                                         }
                                                     </span>

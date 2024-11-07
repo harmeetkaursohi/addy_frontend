@@ -1,5 +1,6 @@
 import {useAppContext} from "../common/components/AppProvider";
 import "./Notification.css"
+import ReactDOMServer from 'react-dom/server'; 
 import React, {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAccount";
@@ -13,7 +14,7 @@ import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 import jsondata from "../../locales/data/initialdata.json"
 import notConnected_img from "../../images/no_acc_connect_img.svg";
 import Swal from "sweetalert2";
-import notification_img from "../../images/clear_notification.svg"
+import Notification_img from "../../images/clear_notification.svg?react"
 import {EmptyNotificationGridMessage} from "../../utils/contantData";
 import no_notification_img from "../../images/no_notification_bg.svg"
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
@@ -29,6 +30,8 @@ import {unseenNotificationsCount} from "../../app/globalSlice/globalSlice";
 import {handleRTKQuery} from "../../utils/RTKQueryUtils";
 import {Dropdown} from "react-bootstrap";
 import {PiDotsThreeVerticalBold} from "react-icons/pi";
+import { RxCross2 } from "react-icons/rx";
+
 
 const Notification = () => {
 
@@ -102,10 +105,16 @@ const Notification = () => {
 
     const handleClearAllNotifications = (e) => {
         e.preventDefault();
+        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Notification_img />);
         Swal.fire({
-            imageUrl: notification_img,
-            title: `Clear Notifications`,
-            html: `<p class="modal_heading">Are you sure you want to clear notifications?</p>`,
+            html: `
+             <div class="swal-content mt-2">
+                    <div class="swal-images">
+                      <img src="data:image/svg+xml;base64,${btoa(svgMarkup)}" alt="Delete Icon" class="delete-img" />
+                    </div>
+                    <h2 class="swal2-title mt-2" id="swal2-title" style="display: block;">Clear Notifications</h2>
+                    <p class="modal_heading">Are you sure you want to clear notifications?</p>
+                </div>`,
             showCancelButton: true,
             confirmButtonText: 'Clear',
             cancelButtonText: 'Cancel',
@@ -138,13 +147,12 @@ const Notification = () => {
                 <div className={sidebar ? "comment_container" : "cmn_Padding"}>
                     <div className="cmn_outer">
 
-                        <div className="notification_wrapper cmn_wrapper_outer white_bg_color cmn_height_outer">
                             <div className="notification_header align-items-center gap-3">
-                                <h2 className="cmn_text_heading">{jsondata.notification}</h2>
+                               <div className="flex-grow-1">
+                               <h2 className="cmn_text_heading">{jsondata.notification}</h2>
 
-                            </div>
-                            <div className="d-flex justify-content-between">
-                                <h6 className={"cmn_small_heading "}>{jsondata.notification_heading}</h6>
+                            <h6 className={"cmn_small_heading"}>{jsondata.notification_heading}</h6>
+                               </div>
 
                                 {
                                     !isAllNotificationsCleared &&
@@ -155,9 +163,12 @@ const Notification = () => {
                                     >Clear all</button>
                                 }
                             </div>
+                       
+                           
+                        <div className="notification_wrapper cmn_height_outer">
                             {
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
-                                <div className=" align-items-center mt-4">
+                                <div className=" align-items-center">
                                     {
                                         (isAllNotificationsCleared ||
                                             (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
@@ -332,7 +343,11 @@ const NotificationComponent = ({
                                 className={"notification-creation-date"}>{getCommentCreationTime(notification.createdAt)}</div>
                         </div>
                         <div>
-                            <Dropdown className="notification_edit_button">
+                        <RxCross2  onClick={() => {
+                                            !deleteNotificationByIdApi?.isLoading && setNotificationToDelete(notification)
+                                        }}/>
+
+                            {/* <Dropdown className="notification_edit_button">
                                 <Dropdown.Toggle
                                     className={"comment-edit-del-button"}
                                     variant="success"
@@ -347,7 +362,7 @@ const NotificationComponent = ({
                                             !deleteNotificationByIdApi?.isLoading && setNotificationToDelete(notification)
                                         }}>Delete</Dropdown.Item>
                                 </Dropdown.Menu>
-                            </Dropdown>
+                            </Dropdown> */}
                         </div>
                     </>
             }

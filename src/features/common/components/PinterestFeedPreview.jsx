@@ -33,6 +33,7 @@ const mediatype=files.map((data)=>data.mediaType)
                     </div>
                     
                    {pinTitle && <h3 className={"pin-title"}>{pinTitle}</h3>}
+                   {destinationUrl && <h3 className={"pin-title"}>{destinationUrl}</h3>}
                    <div className="pintrest_comments">
                         <p><span className="blur">12</span>comments</p>
                         <p><span className="blur">1245 </span><FaRegHeart size={25} /></p>

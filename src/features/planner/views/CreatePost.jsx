@@ -6,9 +6,10 @@ import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
 import {Dropdown} from 'react-bootstrap'
 import {BiSolidEditAlt, BiUser} from "react-icons/bi";
-import {RxCross2} from "react-icons/rx";
+import { LuPlusCircle } from "react-icons/lu";
+
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
-import {RiDeleteBin5Fill} from "react-icons/ri";
+import { RxCross2 } from "react-icons/rx";
 import {showErrorToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
 import {
@@ -556,27 +557,28 @@ const CreatePost = () => {
                                                                             className={`file_outer dragable_files`}
                                                                             key={index}
                                                                         >
-                                                                            <div
-                                                                                className="flex-grow-1 d-flex align-items-center">
-                                                                                {/* <i className="fas fa-grip-vertical me-2"></i> */}
+                                                                            
                                                                                 {
                                                                                     file?.file?.type.startsWith('image/') &&
-                                                                                    <img className={"upload_image me-3"}
+                                                                                    <img onClick={(e) => {
+                                                                                        e.preventDefault();
+                                                                                        editHandler(index, file);
+                                                                                    }} className={"upload_image"}
                                                                                          src={file.url}
                                                                                          alt={`Image ${index}`}/>
                                                                                 }
                                                                                 {
                                                                                     file?.file?.type.startsWith('video/') &&
                                                                                     <video
-                                                                                        className={"upload_image me-3"}
+                                                                                        className={"upload_image"}
                                                                                         src={file.url}
                                                                                         alt={`Videos ${index}`}
                                                                                         autoPlay={false}
                                                                                     />
                                                                                 }
 
-                                                                            </div>
-                                                                            {
+                                                                     
+                                                                            {/* {
                                                                                 file?.mediaType === "IMAGE" &&
                                                                                 <button
                                                                                     className="edit_upload delete_upload me-2"
@@ -588,30 +590,21 @@ const CreatePost = () => {
                                                                                         style={{fontSize: '24px'}}
                                                                                     />
                                                                                 </button>
-                                                                            }
+                                                                            } */}
                                                                             <button className="delete_upload"
                                                                                     onClick={(e) => {
                                                                                         e.preventDefault();
                                                                                         handleRemoveSelectFile(file);
                                                                                     }}>
-                                                                                <RiDeleteBin5Fill
-                                                                                    style={{fontSize: '24px'}}
+                                                                                <RxCross2
+                                                                                   size={18}
                                                                                 />
                                                                             </button>
                                                                         </div>
                                                                     )
                                                                 })
                                                                 }
-                                                            </div>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div
-                                                        className={"" }>
-
-                                                        <div className="darg_navs file_outer gap-3">
+                                                                <div className="darg_navs file_outer gap-2 d-flex">
                                                             {
                                                                 disableImage === false && <>
                                                                     <input type="file" id='image'
@@ -627,9 +620,10 @@ const CreatePost = () => {
                                                                            }}
                                                                     />
                                                                     <label htmlFor='image'
-                                                                           className='cmn_headings cmn_blue_border'>
-                                                                        <i className="fa fa-image me-2"
-                                                                           style={{marginTop: "2px"}}/>{"Add Photo"}
+                                                                           className='cmn_headings d-flex align-items-center justify-content-center'>
+                                                                        <i className="fa fa-image"
+                                                                          />
+                                                                           <LuPlusCircle size={24} className='add_media'/>
                                                                     </label>
                                                                 </>
                                                             }
@@ -648,13 +642,20 @@ const CreatePost = () => {
                                                                             handleSelectedVideoFile(e);
                                                                         }}/>
                                                                     <label htmlFor='video'
-                                                                           className='cmn_headings cmn_blue_border'>
-                                                                        <i className="fa fa-video-camera me-2"
-                                                                           style={{marginTop: "2px"}}/>{files?.length > 0 ? "Change Video" : "Add Video"}
+                                                                           className='cmn_headings d-flex align-items-center justify-content-center'>
+                                                                        <i className="fa fa-video-camera"
+                                                                          />
+                                                                           <LuPlusCircle size={24} className='add_media'/>
+                                                                          {/* {files?.length > 0 ? "Change Video" : "Add Video"} */}
                                                                     </label>
                                                                 </>
                                                             }
                                                         </div>
+                                                            </div>
+                                                             </div>
+                                                         </div>
+
+                                                        
 
                                                         {/*{*/}
                                                         {/*    disableImage === false && <>*/}
@@ -672,7 +673,7 @@ const CreatePost = () => {
                                                         {/*        </div>*/}
                                                         {/*    </>*/}
                                                         {/*}*/}
-                                                    </div>
+                                               
 
                                                 </div>
 
@@ -899,7 +900,9 @@ const CreatePost = () => {
                                     </div>
                                     {
                                         <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container p-0">
-                                            <div className='cmn_outer create_post_container post_preview_outer'>
+                                            <div  className={`cmn_outer create_post_container post_preview_outer ${
+                                                    isNullOrEmpty(selectedOptions) ? "single_post_perview" : ""
+                                                }`}>
                                                 <div className='CommonFeedPreview_container'>
                                                     {
                                                         isNullOrEmpty(selectedOptions) &&

@@ -7,10 +7,10 @@ const ConnectSocialMediaAccount = ({image, message}) => {
         <div className="acc_not_connected_outer text-center">
             <Image className={"acc_not_connected_img mt-0"} src={image ? image : notConnected_img}
                  alt="notConnected_img"/>
-            <pre className="acc_not_connected_heading mt-4">{message}</pre>
+            <h3 className="mb-3 mt-4">{message}</h3>
             <button onClick={() => {
                 navigate("/dashboard")
-            }} className={"connection-error-close-btn mt-3"}>Connect Now
+            }} className={"connection-error-close-btn"}>Connect Now
             </button>
         </div>
     );

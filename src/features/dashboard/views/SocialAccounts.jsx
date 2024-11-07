@@ -50,9 +50,9 @@ import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 
 import FacebookImg from "../../../images/modal_facebook_image.svg?react";
-import LinkedinImg from "../../../images/modal_linkedin_image.svg";
-import InstagramImg from "../../../images/modal_instagram_image.svg";
-import PinterestImg from "../../../images/modal_pintrest_image.svg";
+import LinkedinImg from "../../../images/modal_linkedin_image.svg?react";
+import InstagramImg from "../../../images/modal_instagram_image.svg?react";
+import PinterestImg from "../../../images/modal_pintrest_image.svg?react";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {getConnectedSocialMediaAccount} from "../../../utils/dataFormatterUtils";
 import NotFoundPopup from "../../common/components/NotFoundPopup";

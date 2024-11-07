@@ -295,7 +295,9 @@ const Review = () => {
                                 </>
                             }
                         </div>
-                        <div className="review_wrapper cmn_height_outer">
+                        <div className={
+                            getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 || getConnectedSocialAccountApi?.data?.length === 0 ?
+                            "review_wrapper cmn_height_outer no_account_bg" : "review_wrapper cmn_height_outer"}>
                             {
 
                                 <div className="review_outer mt-0">
@@ -303,12 +305,11 @@ const Review = () => {
                                     {
                                         !postApi?.isLoading && !postApi?.isFetching && postsList !== null && postsList?.length === 0 ?
                                             <div>
-                                                <div className="W-100 text-center no_post_review_outer">
+                                                <div className="W-100 text-center no_post_review_outer no_account_bg white_bg">
                                                     <div className={"no-post-review acc_not_connected_heading"}>
                                                         <Image src={NopostFound} alt={"No Post Found"}/>
                                                         <h3 className={"mb-3 mt-4"}>
-                                                            Oops! It seems there are no posts to display at the
-                                                            moment.
+                                                        Looks like there are no posts available yet. Get started by posting on your social media accounts with Addy!
                                                         </h3>
                                                         <GenericButtonWithLoader
                                                             label={"Create Post"}
@@ -612,17 +613,32 @@ const Review = () => {
 
 
                             }
+                            <div className="no-post-review acc_not_connected_heading">
 
                             {
                                 getConnectedSocialAccountApi?.data?.length === 0 &&
-                                <ConnectSocialMediaAccount image={notConnected_img}
-                                                           message={formatMessage(NotConnected, ["posts", "social media"])}/>
+                                <ConnectSocialMediaAccount image={NopostFound}
+                                message={
+                                    <>
+                                      Connect your social media <br />
+                                      to see what’s happening on your posts!
+                                    </>
+                                  }
+                                                           />
                             }
                             {
                                 getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
-                                <ConnectSocialMediaAccount image={notConnected_img}
-                                                           message={formatMessage(NotConnected, ["posts", "social media pages"])}/>
+                                <ConnectSocialMediaAccount image={NopostFound}
+                                message={
+                                    <>
+                                      Connect your social media <br />
+                                      to see what’s happening on your posts!
+                                    </>
+                                  }
+                                
+                                />
                             }
+                            </div>
                         </div>
                     </div>
 
