@@ -390,7 +390,7 @@ const CreatePost = () => {
                             <div className={"create_post_wrapper"}>
                                 <div className="row m-0">
                                     <div
-                                        className={"col-lg-6 col-md-12 col-sm-12 p-0 "}>
+                                        className={"col-lg-6 col-md-12 col-sm-12 p-0 white_bg"}>
                                         <h2 className='creare_post_heading pt-4'>{jsondata.createpost}</h2>
 
                                         <div
@@ -824,7 +824,7 @@ const CreatePost = () => {
                                                 </div>
 
                                                 {/* boost post */}
-                                                <div className='publish_post_outer media_outer '>
+                                                {/* <div className='publish_post_outer media_outer '>
                                                     <div className="d-flex align-items-center gap-2 ps-0 form-switch">
 
                                                         <i
@@ -848,7 +848,7 @@ const CreatePost = () => {
                                                             resetForm(e);
                                                         }}>{jsondata.cancel}</button>
 
-                                                        {/* <GenericButtonWithLoader label={jsondata.publishnow}
+                                                         <GenericButtonWithLoader label={jsondata.publishnow}
                                                                                  onClick={(e) => {
                                                                                      setReference("Published")
                                                                                      handlePostSubmit(e);
@@ -856,9 +856,9 @@ const CreatePost = () => {
                                                             //  isDisabled={false}
                                                                                  isDisabled={createPostApi?.isLoading && reference !== "Published"}
                                                                                  className={"publish_btn cmn_bg_btn loading"}
-                                                                                 isLoading={reference === "Published" && createPostApi?.isLoading}/> */}
+                                                                                 isLoading={reference === "Published" && createPostApi?.isLoading}/> 
                                                     </div>
-                                                </div>
+                                                </div> */}
 
                                             </form>
                                             {/* draft and publish now section  */}
@@ -915,7 +915,7 @@ const CreatePost = () => {
                                                         allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
                                                             let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                            return (<div key={index}>
+                                                            return (<div key={index} className='perview_outer'>
                                                                     {
                                                                         selectedPageData &&
                                                                         <CommonFeedPreview

@@ -12,7 +12,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../app/apis/pageAccessTokenApi";
 import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAccount";
-import notConnected_img from "../../images/noaccount_draft.svg";
+import NotConnected_img from "../../images/noaccount_draft.svg?react";
 import { formatMessage } from "../../utils/commonUtils";
 import { NotConnected } from "../../utils/contantData";
 const Draft = () => {
@@ -81,13 +81,13 @@ const Draft = () => {
 
                         {
                             getConnectedSocialAccountApi?.data?.length === 0 &&
-                            <ConnectSocialMediaAccount image={notConnected_img}
+                            <ConnectSocialMediaAccount    image={<><NotConnected_img className="acc_not_connected_img"/></>}
                                                     message={formatMessage(NotConnected, ["posts", "social media"])}/>
 
                         }
                         {
                             getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
-                            <ConnectSocialMediaAccount image={notConnected_img}
+                            <ConnectSocialMediaAccount    image={<><NotConnected_img className="acc_not_connected_img"/></>}
                                                     message={formatMessage(NotConnected, ["posts", "social media pages"])}/>
                         }
                         </div>

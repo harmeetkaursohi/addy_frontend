@@ -6,7 +6,6 @@ import {DisconnectPageWarning, SocialAccountProvider} from "../../../utils/conta
 import {isNullOrEmpty} from "../../../utils/commonUtils.js";
 import default_user_icon from "../../../images/default_user_icon.svg"
 import {RxCross2} from 'react-icons/rx';
-import no_page_connect_img from "../../../images/error_img.svg"
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {useConnectPageMutation} from "../../../app/apis/pageAccessTokenApi";
 import {useGetSocialMediaReportQuery} from "../../../app/apis/insightApi";

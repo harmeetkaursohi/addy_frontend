@@ -19,7 +19,7 @@ import {
 import {exchangeForLongLivedToken, getAllFacebookConnectedSocialMediaAccounts} from "../services/facebookService.js";
 import {decodeJwtToken} from "../app/auth/auth.js";
 import fb from "../images/fb.svg";
-import instagram_img from "../images/instagram.png";
+import instagram_img from "../images/instagram_logo.svg";
 import linkedin from "../images/linkedin.svg";
 import Pinterest from "../images/pinterest_icon.svg";
 import axios from "axios";

@@ -1,7 +1,7 @@
 import React from "react";
 import {RxCross2} from "react-icons/rx";
 import Modal from "react-bootstrap/Modal";
-import attention from "../../../images/attention.svg";
+import Attention from "../../../images/attention.svg?react";
 import {Image} from "react-bootstrap";
 import GenericButtonWithLoader from "./GenericButtonWithLoader";
 import jsondata from "../../../locales/data/initialdata.json";
@@ -35,7 +35,7 @@ const PostNowModal = ({
                     <div className="">
                         <div className="">
                             <div className="text-center pt-3">
-                                <Image src={attention} alt="facebook authorizes image"/>
+                                <Attention/>
                                 <div className="facebook_content_outer">
                                     <h2 className="disconnect_title">
                                         Are you sure?

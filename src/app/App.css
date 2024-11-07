@@ -177,6 +177,9 @@ div.cmn_height_outer.noDraftPosts_outer {
 .loader_btn_container{
   height:36px
 }
+.white_bg{
+  background-color: #fff;
+}
 .clear_all_button_outer{
   border: none !important;
   color: white !important;
@@ -254,7 +257,7 @@ a {
 .cmn_bg_btn {
   color: #fff;
   font-family: "Nunito" ,sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -1222,6 +1225,11 @@ table.fc-col-header {
   max-height: 100px;
   overflow-x: hidden;
   overflow-y: auto;
+}
+.createPost_outer .insta_dropdown_btn button#instagram:focus,
+.createPost_outer .insta_dropdown_btn button#instagram:active{
+  box-shadow: unset;
+  border: 0.8px solid #C3C3C3;
 }
 .fc-daygrid-body.fc-daygrid-body-unbalanced, .fc-daygrid-body.fc-daygrid-body-unbalanced table, table.fc-col-header {
   height: 100% !important;

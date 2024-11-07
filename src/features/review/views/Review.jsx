@@ -14,7 +14,7 @@ import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMedi
 import {useAppContext} from "../../common/components/AppProvider";
 import {MdDelete} from "react-icons/md";
 import notConnected_img from "../../../images/no_acc_connect_img.svg";
-import NopostFound from "../../../images/nopostFound.svg";
+import NopostFound from "../../../images/nopostFound.svg?react";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 import {
@@ -182,7 +182,7 @@ const Review = () => {
     return (
         <>
             <section>
-                <div className={sidebar ? "comment_container" : "cmn_Padding bg-transparent"}>
+                <div className={sidebar ? "comment_container" : "cmn_Padding"}>
 
                     <div className="cmn_outer">
                         <div className="review_header align-items-center gap-3">
@@ -297,7 +297,7 @@ const Review = () => {
                         </div>
                         <div className={
                             getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 || getConnectedSocialAccountApi?.data?.length === 0 ?
-                            "review_wrapper cmn_height_outer no_account_bg" : "review_wrapper cmn_height_outer"}>
+                            "review_wrapper cmn_height_outer no_account_bg white_bg_color" : "review_wrapper cmn_height_outer"}>
                             {
 
                                 <div className="review_outer mt-0">
@@ -305,9 +305,9 @@ const Review = () => {
                                     {
                                         !postApi?.isLoading && !postApi?.isFetching && postsList !== null && postsList?.length === 0 ?
                                             <div>
-                                                <div className="W-100 text-center no_post_review_outer no_account_bg white_bg">
+                                                <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
                                                     <div className={"no-post-review acc_not_connected_heading"}>
-                                                        <Image src={NopostFound} alt={"No Post Found"}/>
+                                                        <NopostFound/>
                                                         <h3 className={"mb-3 mt-4"}>
                                                         Looks like there are no posts available yet. Get started by posting on your social media accounts with Addy!
                                                         </h3>
@@ -617,7 +617,8 @@ const Review = () => {
 
                             {
                                 getConnectedSocialAccountApi?.data?.length === 0 &&
-                                <ConnectSocialMediaAccount image={NopostFound}
+                                <ConnectSocialMediaAccount 
+                                image={<><NopostFound className="acc_not_connected_img"/></>}
                                 message={
                                     <>
                                       Connect your social media <br />
@@ -628,7 +629,8 @@ const Review = () => {
                             }
                             {
                                 getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
-                                <ConnectSocialMediaAccount image={NopostFound}
+                                <ConnectSocialMediaAccount
+                                image={<><NopostFound className="acc_not_connected_img"/></>}
                                 message={
                                     <>
                                       Connect your social media <br />

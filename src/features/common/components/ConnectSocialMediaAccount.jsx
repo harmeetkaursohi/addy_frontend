@@ -5,8 +5,9 @@ const ConnectSocialMediaAccount = ({image, message}) => {
     const navigate = useNavigate();
     return (
         <div className="acc_not_connected_outer text-center">
-            <Image className={"acc_not_connected_img mt-0"} src={image ? image : notConnected_img}
-                 alt="notConnected_img"/>
+            {/* <Image className={"acc_not_connected_img mt-0"} src={image ? image : notConnected_img}
+                 alt="notConnected_img"/> */}
+              {image}
             <h3 className="mb-3 mt-4">{message}</h3>
             <button onClick={() => {
                 navigate("/dashboard")

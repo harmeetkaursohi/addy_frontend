@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "../views/insight.css"
 import {Dropdown} from "react-bootstrap";
-import instagram_img from "../../../../images/instagram.png";
+import instagram_img from "../../../../images/instagram_logo.svg";
 import {FiArrowDownRight, FiArrowUpRight} from "react-icons/fi";
 import DonutChart from "../../DonutsChart";
 import HorizontalBarChart from "../../horizontalbar";
@@ -24,7 +24,7 @@ import {
     SocialAccountProvider
 } from "../../../../utils/contantData";
 import Loader from "../../../loader/Loader";
-import notConnected_img from "../../../../images/no_acc_connect_img.svg";
+import NotConnected_img from "../../../../images/no_insights.svg?react";
 import ConnectSocialMediaAccount from "../../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../../common/components/AppProvider";
 import default_user_icon from "../../../../images/default_user_icon.svg"
@@ -138,12 +138,13 @@ const Insight = () => {
             <section>
                 <div className={`insight_wrapper ${sidebar ? "cmn_container" : "cmn_Padding"}`}>
                     <div className="cmn_outer">
-                        <div className="insight_outer  cmn_wrapper_outer white_bg_color cmn_height_outer">
-                            <h2 className="insight_heading cmn_text_style">Insights</h2>
-                            <h6 className="cmn_small_heading">{jsondata.insight_heading}</h6>
+                            <h2 className="insight_heading cmn_text_style mb-3">Insights</h2>
+                        <div className={ getConnectedSocialAccountApi?.data?.length === 0  ? 
+                        "insight_outer  cmn_wrapper_outer white_bg_color cmn_height_outer d-flex align-items-center" : "insight_outer  cmn_wrapper_outer white_bg_color cmn_height_outer"}>
+                            {/* <h6 className="cmn_small_heading">{jsondata.insight_heading}</h6> */}
                             {
                                 isAccountInfoLoading  &&
-                                <div className={"mt-4"}>
+                                <>
                                     <h5 className="Choose_platform_title">Choose PlatForm</h5>
                                     <div className={"d-flex"}>
                                         <SkeletonEffect count={1} className={"mt-3 h-40 w-75"}/>
@@ -151,7 +152,7 @@ const Insight = () => {
                                         <SkeletonEffect count={1} className={"mt-3 h-40 w-75"}/>
                                         <SkeletonEffect count={1} className={"mt-3 h-40 w-75"}/>
                                     </div>
-                                </div>
+                                </>
 
                             }
                             {
@@ -795,8 +796,8 @@ const Insight = () => {
                             }
                             {
                                 getConnectedSocialAccountApi?.data?.length === 0 &&
-                                <div className={"no-account-connected-insights-outer mt-4 mb-3"}>
-                                    <ConnectSocialMediaAccount image={notConnected_img}
+                                <div className={"no-post-review acc_not_connected_heading text-center"}>
+                                    <ConnectSocialMediaAccount image={<><NotConnected_img className="acc_not_connected_img w-100 h-auto"/></>}
                                                                message={EmptyInsightGridMessage}/>
                                 </div>
                             }

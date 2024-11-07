@@ -941,7 +941,7 @@ const UpdatePost = () => {
                                             </div>
 
                                             {/* boost post */}
-                                            <div className='publish_post_outer media_outer'>
+                                            {/* <div className='publish_post_outer media_outer'>
 
                                             <div className="d-flex align-items-center gap-2 ps-0 form-switch">
 
@@ -966,7 +966,7 @@ const UpdatePost = () => {
                                                         resetForm(e);
                                                     }}>{jsondata.reset}</button>
                                                 </div>
-                                            </div>
+                                            </div> */}
 
                                         </form>
                                         <div className='draft_publish_outer mt-3'>
@@ -1023,7 +1023,7 @@ const UpdatePost = () => {
 
                                                         let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                        return (<span key={index}>
+                                                        return (<div key={index} className='perview_outer'>
                                                         {
                                                             selectedPageData &&
                                                             <CommonFeedPreview
@@ -1040,7 +1040,7 @@ const UpdatePost = () => {
                                                                 pinTitle={pinTitle}
                                                             />
                                                         }
-                                                    </span>
+                                                    </div>
                                                         )
                                                     })
                                                 }

@@ -181,7 +181,7 @@ const ScheduledPost = ({
                                                                         alt="fb"/>
 
                                                                 </div>
-                                                                <p className={plannerPost?.postPages?.length > 1 ? "mb-0 d-none" : "mb-0"}>{curPage?.pageName}</p>
+                                                                <p className={plannerPost?.postPages?.length > 1 ? "mb-0 d-none ps=0" : "mb-0 ps-0"}>{curPage?.pageName}</p>
                                                             </div>
                                                         }
                                                         {

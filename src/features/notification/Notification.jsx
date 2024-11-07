@@ -12,7 +12,7 @@ import {
 } from "../../utils/commonUtils";
 import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 import jsondata from "../../locales/data/initialdata.json"
-import notConnected_img from "../../images/no_acc_connect_img.svg";
+import NotConnected_img from "../../images/no_acc_connect_img.svg?react";
 import Swal from "sweetalert2";
 import Notification_img from "../../images/clear_notification.svg?react"
 import {EmptyNotificationGridMessage} from "../../utils/contantData";
@@ -165,21 +165,21 @@ const Notification = () => {
                             </div>
                        
                            
-                        <div className="notification_wrapper cmn_height_outer">
+                        
                             {
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                 <div className=" align-items-center">
                                     {
                                         (isAllNotificationsCleared ||
                                             (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
-                                        <div className="d-flex justify-content-center no_notification_wrapper">
+                                        <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
                                             <div>
                                                 <img src={no_notification_img}/>
-                                                <h4 className="no-notifications-text text-center mt-4">No New
-                                                    Notifications</h4>
+                                                <h4 className="no-notifications-text text-center mt-3 text-black">You're all set! No new notifications.</h4>
                                             </div>
                                         </div>
                                     }
+                                    <div className="notification_wrapper">
                                     {
                                         !isAllNotificationsCleared && unSeenNotificationsList?.length > 0 &&
                                         unSeenNotificationsList?.map((notification, index) => {
@@ -210,6 +210,7 @@ const Notification = () => {
                                             )
                                         })
                                     }
+                                         </div>
 
                                 </div>
                             }
@@ -244,12 +245,12 @@ const Notification = () => {
                             {
                                 (getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.data?.length === 0) &&
                                 <ConnectSocialMediaAccount
-                                    image={notConnected_img}
+                                image={<><NotConnected_img className="acc_not_connected_img"/></>}
                                     message={EmptyNotificationGridMessage}/>
                             }
 
 
-                        </div>
+                   
 
                     </div>
                 </div>

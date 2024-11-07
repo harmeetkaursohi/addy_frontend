@@ -15,12 +15,12 @@ import {useEffect, useState} from "react";
 import {showSuccessToast} from "../../common/components/Toast";
 import Swal from "sweetalert2";
 import {useAppContext} from "../../common/components/AppProvider";
-import delete_img from "../../../images/trash_img.svg";
+import Delete_img from "../../../images/deletePost.svg?react";
 import {useDeletePostByIdMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 import {DeletedSuccessfully} from "../../../utils/contantData";
-
+import ReactDOMServer from 'react-dom/server'; 
 const ScheduledComponent = ({scheduledData}) => {
     const {sidebar} = useAppContext();
 
@@ -44,10 +44,17 @@ const ScheduledComponent = ({scheduledData}) => {
 
     useEffect(() => {
         if (!isNullOrEmpty(postToDeleteId)) {
+            const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Delete_img />);
             Swal.fire({
-                imageUrl: delete_img,
-                title: `Delete Post`,
-                text: `Are you sure you want to delete this post?`,
+                html: `
+                <div class="swal-content">
+                    <div class="swal-images mt-3">
+                        <img src="data:image/svg+xml;base64,${btoa(svgMarkup)}" alt="Delete Icon" class="delete-img" />
+                    </div>
+                    <h2 class="swal2-title" id="swal2-title">Delete Post</h2>
+                    <p class="modal_heading">Are you sure you want to delete this draft post?</p>
+                </div>
+            `,
                 showCancelButton: true,
                 cancelButtonText: "Cancel",
                 confirmButtonText: "Delete",

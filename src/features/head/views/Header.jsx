@@ -43,7 +43,7 @@ const Header = ({userData, setShowConnectAccountModal}) => {
                                     <div className="header_container">
                                         <h2 className="">{typeof userData?.fullName !== "undefined" ? `${jsondata.heythere} ${userData?.fullName}!` :
                                             <SkeletonEffect count={1}></SkeletonEffect>}</h2>
-                                        <h6>{typeof userData?.fullName !== "undefined" ? jsondata.dashboard_heading :
+                                        <h6>{typeof userData?.fullName !== "undefined" ? jsondata.dashboard_login_heading :
                                             <SkeletonEffect count={1}></SkeletonEffect>}</h6>
                                     </div>
 

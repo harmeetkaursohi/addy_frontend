@@ -121,7 +121,20 @@
     border: 1px solid rgba(0, 130, 203, 0.50);
     background: rgb(235 248 255);
 }
+.plan_tags.linkedin {
+    background: #cde3ff;
+    border-color: #004191;
+}
 
+.plan_tags.pinterest {
+    background: #ffcfd0;
+    border-color: #cb2024;
+}
+
+.plan_tags.instagram {
+    background: #fdeaf9;
+    border-color: #ff67ca;
+}
 .plan_tag_img {
     width: 30px;
     height: 30px;

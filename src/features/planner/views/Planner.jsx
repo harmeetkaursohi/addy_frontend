@@ -2,7 +2,7 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import './Planner.css'
-import instagram_img from '../../../images/instagram.png'
+import instagram_img from '../../../images/instagram_logo.svg'
 import linkedin from '../../../images/linkedin.svg'
 import jsondata from '../../../locales/data/initialdata.json'
 import {useNavigate} from "react-router-dom";
