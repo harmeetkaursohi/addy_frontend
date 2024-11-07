@@ -480,19 +480,22 @@ const Planner = () => {
                                                 showNonCurrentDates={false}
                                             />
                                             </div>
-                                            <div className={"scheduled_posts"}>
-                                                <ScheduledPost
-                                                    selectedDate={selectedDate}
-                                                    setSelectedDate={setSelectedDate}
-                                                    selectedSocialMediaTypes={baseSearchQuery?.socialMediaTypes || []}
-                                                    plannerPosts={getPostsForPlannerApi}
-                                                    setIsPostApiLoading={setIsPostApiLoading}
-                                                />
-                                            </div>
+                                            {
+                                                !isDraftPost &&
+                                                <div className={"scheduled_posts"}>
+                                                    <ScheduledPost
+                                                        selectedDate={selectedDate}
+                                                        setSelectedDate={setSelectedDate}
+                                                        selectedSocialMediaTypes={baseSearchQuery?.socialMediaTypes || []}
+                                                        plannerPosts={getPostsForPlannerApi}
+                                                        setIsPostApiLoading={setIsPostApiLoading}
+                                                    />
+                                                </div>
+                                            }
                                         </div>
-                                
 
-                                    {/* <div className="col-lg-3 col-md-12 col-sm-12">
+
+                                {/* <div className="col-lg-3 col-md-12 col-sm-12">
                                         <div className={`${isDraftPost ? " d-none" : "planner_create_post_container"}`}>
                                             <div className="planner_create_post">
                                                 <h3 className="planner_create_post_heading">Create a post </h3>
