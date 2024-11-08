@@ -376,8 +376,7 @@ const UpdatePost = () => {
                 }
             }
             const requestBody = getRequestBodyToUpdatePost("DRAFT", isScheduledTimeProvided)
-            console.log("requestBody=======>",requestBody)
-            // isUpdateDraftPostRequestValid(requestBody) && updatePost(requestBody);
+            isUpdateDraftPostRequestValid(requestBody) && updatePost(requestBody);
         };
 
         const handleSchedulePost = () => {

@@ -1,18 +1,24 @@
-import {useState} from 'react';
-import ReactDOMServer from 'react-dom/server'; 
+import {useEffect, useState} from 'react';
+import ReactDOMServer from 'react-dom/server';
 import Modal from 'react-bootstrap/Modal';
 import "./DraftComponent.css"
 import {RxCross1} from "react-icons/rx";
 import {formatDate} from "@fullcalendar/core";
-import {computeImageURL, formatMessage, handleSeparateCaptionHashtag} from "../../../utils/commonUtils";
+import {
+    computeImageURL, convertToUnixTimestamp,
+    formatMessage,
+    getFileFromAttachmentSource, getValueOrDefault, getVideoDurationById,
+    handleSeparateCaptionHashtag,
+    isNullOrEmpty, isUpdatePostRequestValid
+} from "../../../utils/commonUtils";
 import {useNavigate} from "react-router-dom";
-import {useDispatch, } from "react-redux";
-import { showSuccessToast} from "../../common/components/Toast";
+import {useDispatch,} from "react-redux";
+import {showSuccessToast} from "../../common/components/Toast";
 import Swal from "sweetalert2";
 import Delete_img from "../../../images/deletePost.svg?react";
 import CommonSlider from "../../common/components/CommonSlider";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
-import {useDeletePostByIdMutation, usePublishedPostByIdMutation} from "../../../app/apis/postApi";
+import {useDeletePostByIdMutation, useGetPostsByIdQuery, usePublishedPostByIdMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 import {DeletedSuccessfully} from "../../../utils/contantData";
@@ -26,47 +32,108 @@ function DraftModal({
 
     const handleClose = () => setShow(false);
 
+    console.log("postData=====>", postData)
+
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [deletePostById, deletePostByIdApi] = useDeletePostByIdMutation()
     const [publishedPostById, publishedPostByIdApi] = usePublishedPostByIdMutation()
+    const postsByIdApi = useGetPostsByIdQuery(postData?.id, {skip: isNullOrEmpty(postData?.id)})
+    console.log("postsByIdApi=====>", postsByIdApi)
 
-
+    const [postAttachments, setPostAttachments] = useState([])
     const [postToDelete, setPostToDelete] = useState(null);
     const [postToPublish, setPostToPublish] = useState(null);
     const [action, setAction] = useState("")
     const [showCaption, setShowCaption] = useState(false)
     const [showHastag, setShowHashtag] = useState(false)
 
+    useEffect(() => {
+        if (postsByIdApi?.data && Object.keys(postsByIdApi?.data || {}).length > 0 && postsByIdApi?.data?.attachments?.length > 0) {
+            if (postsByIdApi?.data?.attachments[0]?.mediaType === "IMAGE") {
+                Promise.all(postsByIdApi?.data?.attachments?.map(attachment => getFileFromAttachmentSource(attachment)))
+                    .then((results) => {
+                        setPostAttachments(results);
+                    })
+
+            }
+            if (postsByIdApi?.data?.attachments[0]?.mediaType === "VIDEO") {
+                getVideoDurationById(postsByIdApi?.data?.attachments[0]?.id).then(res => {
+                    setPostAttachments([{
+                        id: postsByIdApi?.data?.attachments[0]?.id,
+                        mediaType: "VIDEO",
+                        fileName: postsByIdApi?.data?.attachments[0]?.fileName,
+                        duration: res.duration,
+                        fileSize: postsByIdApi?.data?.attachments[0]?.fileSize
+                    }]);
+                });
+            }
+        }
+
+    }, [postsByIdApi?.data]);
+
     const handlePublishedPost = async () => {
         setAction("POST")
         setPostToPublish(postData?.id)
-        await handleRTKQuery(
-            async () => {
-                return await publishedPostById(postData?.id).unwrap()
-            },
-            (res) => {
-                if (res?.some(cur => cur.success)) {
-                    dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
+        const requestBody = getRequestBodyToPost()
+        if (isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, postsByIdApi?.data?.attachments, postAttachments)) {
+            await handleRTKQuery(
+                async () => {
+                    return await publishedPostById(postData?.id).unwrap()
+                },
+                (res) => {
+                    if (res?.some(cur => cur.success)) {
+                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsByIdApi"]))
+                    }
+                    handleClose()
+                },
+                null,
+                () => {
+                    setAction("")
+                    setPostToPublish(null)
                 }
-                handleClose()
+            )
+        }
+    }
+
+    const getRequestBodyToPost = () => {
+        const postData=postsByIdApi?.data
+        return {
+            id: postData?.id,
+            updatePostRequestDTO: {
+                postPageInfos: postData?.postPageInfos?.map(cur=>{
+                    return {
+                        pageId: cur.pageId,
+                        id: cur.id,
+                        provider: cur.socialMediaType
+                    }
+                }),
+                caption: getValueOrDefault(postData?.caption, ""),
+                hashTag: getValueOrDefault(postData?.hashTag, ""),
+                pinTitle: getValueOrDefault(postData?.pinTitle, ""),
+                destinationUrl: getValueOrDefault(postData?.pinDestinationUrl, ""),
+                attachments:postData?.attachments?.map((file) => ({
+                    mediaType: file?.mediaType,
+                    file: file?.file || null,
+                    fileName: file.fileName,
+                    id: file?.id || null,
+                    gridFsId: file?.gridFsId || null
+                })),
+                postStatus: "PUBLISHED",
+                boostPost: false,
+                scheduledPostDate: null,
             },
-            null,
-            () => {
-                setAction("")
-                setPostToPublish(null)
-            }
-        )
+        };
     }
 
     const handleDeletePost = () => {
         setAction("DELETE");
         setPostToDelete(postData?.id);
-    
-        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Delete_img />);
-    
+
+        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Delete_img/>);
+
         Swal.fire({
             html: `
                 <div class="swal-content">
@@ -97,7 +164,7 @@ function DraftModal({
                     },
                     () => {
                         showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]));
-                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]));
+                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsByIdApi"]));
                         handleClose();
                     },
                     null,
@@ -175,11 +242,11 @@ function DraftModal({
                                 </div>
                             </div>
                             <div className={"modal_post_btn_outer"}>
-                                <GenericButtonWithLoader className={"post_now cmn_bg_btn"}
+                                <GenericButtonWithLoader className={`post_now cmn_bg_btn ${postsByIdApi?.isLoading  ? "pe-none":""}`}
                                                          label={"Post Now"}
                                                          isLoading={postData?.id === postToPublish && publishedPostByIdApi?.isLoading}
                                                          onClick={handlePublishedPost}
-                                                         isDisabled={action !== "POST" && deletePostByIdApi?.isLoading}
+                                                         isDisabled={(action !== "POST" && deletePostByIdApi?.isLoading) }
                                 />
                                 <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn"}
                                                          label={"Schedule Post/Edit"}
