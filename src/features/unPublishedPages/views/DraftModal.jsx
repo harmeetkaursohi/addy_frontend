@@ -162,7 +162,7 @@ function DraftModal({
                     },
                     () => {
                         showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]));
-                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsByIdApi"]));
+                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]));
                         handleClose();
                     },
                     null,
