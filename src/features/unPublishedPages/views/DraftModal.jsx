@@ -32,7 +32,6 @@ function DraftModal({
 
     const handleClose = () => setShow(false);
 
-    console.log("postData=====>", postData)
 
 
     const dispatch = useDispatch();
@@ -41,7 +40,6 @@ function DraftModal({
     const [deletePostById, deletePostByIdApi] = useDeletePostByIdMutation()
     const [publishedPostById, publishedPostByIdApi] = usePublishedPostByIdMutation()
     const postsByIdApi = useGetPostsByIdQuery(postData?.id, {skip: isNullOrEmpty(postData?.id)})
-    console.log("postsByIdApi=====>", postsByIdApi)
 
     const [postAttachments, setPostAttachments] = useState([])
     const [postToDelete, setPostToDelete] = useState(null);
