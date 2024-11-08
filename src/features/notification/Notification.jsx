@@ -12,11 +12,11 @@ import {
 } from "../../utils/commonUtils";
 import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 import jsondata from "../../locales/data/initialdata.json"
-import NotConnected_img from "../../images/no_acc_connect_img.svg?react";
+import NotConnected_img from "../../images/no_notification_bg.svg?react";
 import Swal from "sweetalert2";
 import Notification_img from "../../images/clear_notification.svg?react"
 import {EmptyNotificationGridMessage} from "../../utils/contantData";
-import no_notification_img from "../../images/no_notification_bg.svg"
+import No_notification_img from "../../images/no_notification_bg.svg?react"
 import {useGetConnectedSocialAccountQuery} from "../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../app/apis/pageAccessTokenApi";
 import {
@@ -151,7 +151,9 @@ const Notification = () => {
                                <div className="flex-grow-1">
                                <h2 className="cmn_text_heading">{jsondata.notification}</h2>
 
-                            <h6 className={"cmn_small_heading"}>{jsondata.notification_heading}</h6>
+                         {  !isAllNotificationsCleared &&
+                                    (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
+                                       <h6 className={"cmn_small_heading"}>{jsondata.notification_heading}</h6>}
                                </div>
 
                                 {
@@ -174,7 +176,7 @@ const Notification = () => {
                                             (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
                                         <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
                                             <div>
-                                                <img src={no_notification_img}/>
+                                                <No_notification_img className="w-100 h-auto" />
                                                 <h4 className="no-notifications-text text-center mt-3 text-black">You're all set! No new notifications.</h4>
                                             </div>
                                         </div>
@@ -242,11 +244,17 @@ const Notification = () => {
                                     </div>
                                 </div>
                             }
+                            
                             {
                                 (getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.data?.length === 0) &&
+                                <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
+
+                             <div className="no-post-review acc_not_connected_heading"> 
                                 <ConnectSocialMediaAccount
-                                image={<><NotConnected_img className="acc_not_connected_img"/></>}
+                                image={<><NotConnected_img className="acc_not_connected_img  h-auto"/></>}
                                     message={EmptyNotificationGridMessage}/>
+                            </div>
+                            </div>
                             }
 
 

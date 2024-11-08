@@ -163,7 +163,7 @@ height: 100%;
     font-weight: 500;
     padding: 5px 0px 0px 5px;
     font-family: 'Nunito', sans-serif;    color: #5F6D7E;
-
+    white-space: nowrap;
 }
 
 .card-body.post_card {

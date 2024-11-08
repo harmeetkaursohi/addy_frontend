@@ -80,15 +80,17 @@ span.blur {filter: blur(2px);margin-right: 3px;}
     font-weight: 600;
 }
 h3.pin-url {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     color: #000;
     text-transform: capitalize;
     padding-top: 5px;
+    padding-right: 10px;
+    line-height: 21px;
 }
 span.blur {
     filter: blur(2.8px);
-    margin-right: 3px;
+    margin-right: 5px;
 }
 .pintrest_footer {
     border-bottom-left-radius: 10px;

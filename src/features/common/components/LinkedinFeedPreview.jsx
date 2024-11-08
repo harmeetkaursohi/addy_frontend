@@ -6,6 +6,7 @@ import {BiRepost} from "react-icons/bi";
 import {IoIosSend, IoMdArrowDropdown} from "react-icons/io";
 import nature from "../../../images/nature.png"
 import {FaLinkedin} from "react-icons/fa"
+import {FaRegHeart} from "react-icons/fa";
 import {SlLike} from "react-icons/sl";
 import "./common.css"
 import {TiWorld} from "react-icons/ti"
@@ -97,7 +98,12 @@ const LinkedinFeedpreview = ({
                                 }
                             </>
                         }
-                        <div className=' linkedin_post_likes'>
+                          <div className="d-flex p-3 align-items-center">
+                            <p className="flex-grow-1"><FaRegHeart size={25}/><span className="blur ms-2">1245 </span></p>
+                        <p className="bold_text"><span className="blur">12</span>comments</p> <span className="dot_disc ms-2 me-2"></span>
+                        <p className="bold_text"><span className="blur">12</span>reposts</p>
+                        </div>
+                        {/* <div className=' linkedin_post_likes'>
                             <div className="linkedin_dropdown">
                                 <Image src={pageImage ? pageImage : default_user_icon} alt="social icon" height="30px"
                                        width="30px"/>
@@ -120,7 +126,7 @@ const LinkedinFeedpreview = ({
                                 <IoIosSend size={20}/>
                                 <h3 className="cmn_text_style">Send</h3>
                             </div>
-                        </div>
+                        </div> */}
 
                     </div>
 

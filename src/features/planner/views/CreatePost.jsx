@@ -391,6 +391,8 @@ const CreatePost = () => {
                                 <div className="row m-0">
                                     <div
                                         className={"col-lg-6 col-md-12 col-sm-12 p-0 white_bg"}>
+                                            <div className='post_main position-sticky top-0'>
+
                                         <h2 className='creare_post_heading pt-4'>{jsondata.createpost}</h2>
 
                                         <div
@@ -898,11 +900,12 @@ const CreatePost = () => {
 
                                             </div>
                                         </div>
+                                            </div>
                                     </div>
                                     {
                                         <div className="col-lg-6 col-md-12 col-sm-12 post_preview_container p-0">
                                             <div  className={`cmn_outer create_post_container post_preview_outer ${
-                                                    isNullOrEmpty(selectedOptions) ? "single_post_perview" : ""
+                                                    isNullOrEmpty(selectedOptions) ? "single_post_perview " : ""
                                                 }`}>
                                                 <div className='CommonFeedPreview_container'>
                                                     {

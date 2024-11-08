@@ -43,8 +43,8 @@ const CommonSlider = ({
                         {
                             isrequired ? "" :
                                 <>
-                                  {caption &&  <p className="">{caption}</p>}
-                                 {hashTag &&   <p className="post_hashtags">{hashTag}</p>}
+                                  {caption &&  <p className=" pe-2 caption_heading mb-1">{caption}</p>}
+                                 {hashTag &&   <p className="post_hashtags pe-2">{hashTag}</p>}
                                 </>
                                 // <CommentText socialMediaType={"INSTAGRAM"} comment={`${caption} ${hashTag}`}
                                 //              className={"highlight cursor-pointer Caption_outer"}

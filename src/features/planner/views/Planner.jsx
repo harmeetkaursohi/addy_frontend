@@ -351,7 +351,7 @@ const Planner = () => {
                                 <div
                                     className={`CalenderOuter_Wrapper`}>
                                     <div className="planner_calender w-100">
-                                        <Dropdown className='cmn_dropdown'>
+                                       <Dropdown className='cmn_dropdown'>
                                             <Dropdown.Toggle>
                                                 Filters <CgChevronDown/>
                                             </Dropdown.Toggle>
