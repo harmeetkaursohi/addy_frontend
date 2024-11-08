@@ -51,7 +51,7 @@
     height: 300px !important;
 }
 .video_player_outer {
-    height: 270px !important;
+    height: 250px !important;
 
 }
 .video_player_outer video {
@@ -61,8 +61,18 @@
     color: #0866ff;
      
    }
+   span.dot_disc {
+    width: 5px;
+    height: 5px;
+    background: #828282;
+    border-radius: 50%;
+}
    .linkedin_dropdown svg{
     color: gray;
+}
+.bold_text{
+    font-size: 14px;
+    font-weight: 600;
 }
 .linkedin_likes h3{
     font-size: 16px;

@@ -284,7 +284,11 @@ p.reply_toggle::after {
 
   
 }
-p.post_hashtags {
+.caption_heading{
+    font-size: 14px;
+    color: #000;
+}
+.post_hashtags {
     margin-top: 10px;
     font-size: 13px;
     color: #00A3FF;

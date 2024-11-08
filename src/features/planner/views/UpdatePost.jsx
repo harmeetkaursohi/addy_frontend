@@ -477,8 +477,9 @@ const UpdatePost = () => {
 
                             <div className="row m-0">
                                 <div
-                                    className={"col-lg-6 col-md-12 col-sm-12 p-0"}>
-                                    <div className=' cmn_outer'>
+                                    className={"col-lg-6 col-md-12 col-sm-12 p-0 white_bg"}>
+                                   <div className='post_main position-sticky top-0'>
+                                   <div className=' cmn_outer'>
                                         <h2 className='creare_post_heading'>{jsondata.updatepost}</h2>
 
 
@@ -1005,6 +1006,7 @@ const UpdatePost = () => {
                                                 isLoading={reference === "Scheduled" && updatePostByIdApi?.isLoading}/>
                                         </div>
                                     </div>
+                                   </div>
                                 </div>
                                 {
 

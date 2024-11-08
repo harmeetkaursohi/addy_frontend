@@ -351,7 +351,7 @@ const Planner = () => {
                                 <div
                                     className={`CalenderOuter_Wrapper`}>
                                     <div className="planner_calender w-100">
-                                       {selectedDate && <Dropdown className='cmn_dropdown'>
+                                       <Dropdown className='cmn_dropdown'>
                                             <Dropdown.Toggle>
                                                 Filters <CgChevronDown/>
                                             </Dropdown.Toggle>
@@ -387,7 +387,7 @@ const Planner = () => {
                                                     )
                                                 }
                                             </Dropdown.Menu>
-                                        </Dropdown>}
+                                        </Dropdown>
                                         <FullCalendar
                                             dateClick={(arg) => {
                                                 if (isPostApiLoading) return

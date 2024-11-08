@@ -151,7 +151,9 @@ const Notification = () => {
                                <div className="flex-grow-1">
                                <h2 className="cmn_text_heading">{jsondata.notification}</h2>
 
-                            <h6 className={"cmn_small_heading"}>{jsondata.notification_heading}</h6>
+                         {  !isAllNotificationsCleared &&
+                                    (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
+                                       <h6 className={"cmn_small_heading"}>{jsondata.notification_heading}</h6>}
                                </div>
 
                                 {
@@ -242,16 +244,18 @@ const Notification = () => {
                                     </div>
                                 </div>
                             }
-                            <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
-
-                             <div className="no-post-review acc_not_connected_heading"> 
+                            
                             {
                                 (getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.data?.length === 0) &&
+                                <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
+
+                             <div className="no-post-review acc_not_connected_heading"> 
                                 <ConnectSocialMediaAccount
                                 image={<><NotConnected_img className="acc_not_connected_img  h-auto"/></>}
                                     message={EmptyNotificationGridMessage}/>
-                            }</div>
                             </div>
+                            </div>
+                            }
 
 
                    
