@@ -311,6 +311,7 @@ h2.pagecount.fb_count {
     position: absolute;
     top: 0px;
     left: 11px;
+    line-height: 16px;
 }
 
 .social_media_icon {

@@ -304,7 +304,10 @@ border-radius: 12px;
   
 }
 
-
+svg.acc_not_connected_img.no_draft {
+  width: 50%;
+  height: auto;
+}
 textarea:focus-visible {
   outline: unset;
   border: 1px solid #00a3ff;

@@ -17,8 +17,9 @@
     letter-spacing: 0.024px;
     padding-top: 12px;
 }
-.no-draft-img{
-    height: 300px;
+.no-draft-img {
+    height: unset;
+    width: 50%;
 }
  .draft-post-social-media-skeleton{
      margin-top: 0px !important;

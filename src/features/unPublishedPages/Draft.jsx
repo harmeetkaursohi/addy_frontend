@@ -81,13 +81,13 @@ const Draft = () => {
 
                         {
                             getConnectedSocialAccountApi?.data?.length === 0 &&
-                            <ConnectSocialMediaAccount    image={<><NotConnected_img className="acc_not_connected_img"/></>}
+                            <ConnectSocialMediaAccount    image={<><NotConnected_img className="acc_not_connected_img no_draft"/></>}
                                                     message={formatMessage(NotConnected, ["posts", "social media"])}/>
 
                         }
                         {
                             getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
-                            <ConnectSocialMediaAccount    image={<><NotConnected_img className="acc_not_connected_img"/></>}
+                            <ConnectSocialMediaAccount    image={<><NotConnected_img className="acc_not_connected_img no_draft"/></>}
                                                     message={formatMessage(NotConnected, ["posts", "social media pages"])}/>
                         }
                         </div>
