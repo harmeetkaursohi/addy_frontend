@@ -4,15 +4,13 @@ import {Link, useLocation, useNavigate} from "react-router-dom";
 import addy_logo from "../../../images/addylogoo.svg";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import Swal from "sweetalert2";
-import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import {FaBars} from "react-icons/fa";
 import {RxCross2} from "react-icons/rx";
 import default_user_icon from '../../../images/default_user_icon.svg'
 import Logout from '../../../images/Logout.svg?react'
 import logout_img from '../../../images/log-out.svg'
-import {subscribeNotifications} from "../../../services/addyService";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect.jsx";
 import {
     getUpdatedNameAndImageUrlForConnectedPages, isNullOrEmpty,
@@ -62,12 +60,6 @@ const Layout = () => {
         role: "ADMINISTRATOR",
         state: "APPROVED"
     }, {skip: !enabledSocialMedia?.isLinkedinEnabled || isNullOrEmpty(connectedSocialAccount.linkedin)})
-
-    const unseenNotifications = useSelector(state => state.global.unseenNotificationsCount)
-
-    useEffect(() => {
-        subscribeNotifications(dispatch);
-    }, []);
 
     useEffect(() => {
         if (getConnectedSocialAccountApi?.data?.length > 0 && !getConnectedSocialAccountApi?.isLoading && !getConnectedSocialAccountApi?.isFetching && getAllConnectedPagesApi?.data?.length > 0 && !getAllConnectedPagesApi?.isLoading && !getAllConnectedPagesApi?.isFetching ) {

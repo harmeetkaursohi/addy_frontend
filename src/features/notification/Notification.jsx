@@ -2,7 +2,6 @@ import {useAppContext} from "../common/components/AppProvider";
 import "./Notification.css"
 import ReactDOMServer from 'react-dom/server'; 
 import React, {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
 import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAccount";
 import {
     getCommentCreationTime,
@@ -26,17 +25,13 @@ import {
      useSetNotificationsToSeenByCustomerIdMutation,
     useSetNotificationsToSeenMutation
 } from "../../app/apis/notificationApi";
-import {unseenNotificationsCount} from "../../app/globalSlice/globalSlice";
 import {handleRTKQuery} from "../../utils/RTKQueryUtils";
-import {Dropdown} from "react-bootstrap";
-import {PiDotsThreeVerticalBold} from "react-icons/pi";
 import { RxCross2 } from "react-icons/rx";
 
 
 const Notification = () => {
 
     const {sidebar} = useAppContext()
-    const dispatch = useDispatch();
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({
         offSet: -1,
@@ -93,7 +88,6 @@ const Notification = () => {
     }, [unseenNotificationsApi]);
     useEffect(() => {
         if (unseenNotificationsApi?.data?.length > 0 && !unseenNotificationsApi?.isLoading && !unseenNotificationsApi?.isFetching) {
-            dispatch(unseenNotificationsCount({count: 0}))
             setUnSeenNotificationsList([...unSeenNotificationsList, ...unseenNotificationsApi?.data])
         }
     }, [unseenNotificationsApi]);
