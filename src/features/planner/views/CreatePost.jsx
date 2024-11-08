@@ -562,7 +562,7 @@ const CreatePost = () => {
                                                                         >
                                                                             
                                                                                 {
-                                                                                    file?.file?.type.startsWith('image/') &&
+                                                                                    file?.file?.type?.startsWith('image/') &&
                                                                                     <img onClick={(e) => {
                                                                                         e.preventDefault();
                                                                                         editHandler(index, file);
@@ -571,7 +571,7 @@ const CreatePost = () => {
                                                                                          alt={`Image ${index}`}/>
                                                                                 }
                                                                                 {
-                                                                                    file?.file?.type.startsWith('video/') &&
+                                                                                    file?.file?.type?.startsWith('video/') &&
                                                                                     <video
                                                                                         className={"upload_image"}
                                                                                         src={file.url}

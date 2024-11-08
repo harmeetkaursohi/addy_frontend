@@ -29,7 +29,7 @@ const AiHashTagModal = ({aiGenerateHashTagModal, setAIGenerateHashTagModal, pare
                 const hashTagContent = choice.message.content;
                 const tagsArray = hashTagContent.split(/\s+|\n+/);
                 const updatedTags = tagsArray.map(tag => {
-                    if (tag.startsWith("#")) {
+                    if (tag?.startsWith("#")) {
                         return tag;
                     } else {
                         return `#${tag}`;

@@ -111,7 +111,7 @@ const CommonSlider = ({
                                 height={"114px"}
                                 width={"100%"}
                                 className=''
-                                url={files[0].sourceURL.startsWith("http") ? files[0].sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + files[0].sourceURL}
+                                url={files?.[0]?.sourceURL?.startsWith("http") ? files?.[0]?.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + files?.[0]?.sourceURL}
                                 controls={true}
                             />
                         }
