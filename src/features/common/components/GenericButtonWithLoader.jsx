@@ -16,14 +16,15 @@ function GenericButtonWithLoader({
                     // opacity: isDisabled ? "0.6" : "1.0",
                     cursor: isDisabled ? "not-allowed" : "",
                     background: isDisabled ? "#A2A2A2" : "",
+                    color: isDisabled ? "#fff" : "",
                       borderColor: isDisabled ? "#A2A2A2" : ""
                 }}>
             {
-                isLoading ?
+              isLoading ?
                     <>
-                        <span className={loaderClassName ? loaderClassName : "spinner-border spinner-border-sm me-1"}
-                              role="status" aria-hidden="true"/>
                         {contentText}
+                        <span className={loaderClassName ? loaderClassName : "spinner-border spinner-border-sm ms-1"}
+                              role="status" aria-hidden="true"/>
                     </>
                     :
                     label

@@ -641,14 +641,12 @@ svg.add_media {
     margin: auto;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    /* gap: 30px; */
 }
 .CommonFeedPreview_container .perview_outer {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
-.CommonFeedPreview_container .perview_outer:last-child{
-    margin: 0;
-}
+
 .preview_wrapper {
     background: #FFF;
     box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.05);

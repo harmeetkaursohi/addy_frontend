@@ -151,7 +151,7 @@ function DraftModal({
                             </div>
                             <div className={"draft_container_box"}>
                                 <h3 className={"small_font"}>Platforms: </h3>
-                                <div className={"social_media_page_outer"}>
+                                <div className={"social_media_page_outer ps-0"}>
                                     <div className="page_tags draft_page_tags">
 
                                         {

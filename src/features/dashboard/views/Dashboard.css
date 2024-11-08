@@ -296,7 +296,9 @@ span.cmn_followers_btn {
 .social_media_outer:first-child {
     border-bottom: unset;
 }
-
+h2.pagecount.fb_count {
+    top: -9px;
+}
 .pagecount {
     font-size: 13px;
     color: red;

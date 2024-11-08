@@ -361,7 +361,7 @@ ul.review_list thead tr th {
 }
 
 ul.review_list table thead tr th {
-    background: rgba(244, 247, 252, 1);
+    background: #fff;
     border: unset;
     height: 66px;
     vertical-align: middle;
@@ -371,7 +371,7 @@ ul.review_list table thead tr{
     border-bottom: 20px solid #fff;
 }
 ul.review_list table tbody tr:nth-child(odd) td {
-    background: rgb(244 247 252) !important;
+    background: #F1F1F1 !important;
     --bs-table-bg-type: unset;
 }
 
@@ -396,9 +396,10 @@ ul.review_list table tbody tr td {
             border-spacing: 0 21px;
             border: solid transparent;
         }
-        ul.review_list table tr{
-            box-shadow: 0px 0px 8px rgba(0,0,0,5%);
+        ul.review_list table tr {
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 5%);
             border-radius: 10px;
+            background-color: #fff;
         }
       .review_header   .cmn_dropdown .dropdown-menu a.active {
             background: #f57e3b;

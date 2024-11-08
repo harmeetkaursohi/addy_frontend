@@ -125,6 +125,7 @@
 .fc-toolbar-chunk {
     padding: 1px 0px;
     background-color: white;
+    border-radius: 10px;
 }
 
 button.fc-timeGridDay-button.fc-button.fc-button-primary {
@@ -138,10 +139,10 @@ button.fc-timeGridDay-button.fc-button.fc-button-primary {
 .post-image {
     width: 100%;
 }
-.upcoming_post_outer .draft-outer .post_image_outerwrapper img{
+.upcoming_post_outer .draft-outer img.post_img{
 width: 100%;
 object-fit: cover; 
-height: 100%; 
+height: 200px; 
 }
 .draft_container img.post_img {
     height: 270px;
@@ -169,6 +170,7 @@ height: 100%;
 .card-body.post_card {
 
     padding: 0px 20px 20px;
+    padding-top: 10px;
 }
 
 span.post_caption {
@@ -431,7 +433,7 @@ button.outline_btn {
     width: 100%;
 }
 .upcoming_post_outer .video_player_outer {
-    height: 196px !important;
+    height: 200px !important;
 }
 .draft_container_wrapper {
     margin-top: 30px;

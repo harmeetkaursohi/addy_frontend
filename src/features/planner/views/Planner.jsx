@@ -407,18 +407,18 @@ const Planner = () => {
                                             //     }
                                             // }}
                                             headerToolbar={
-                                                (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.data?.length === 0) ?
-                                                    {
-                                                        left: "  ",
-                                                        center: "",
-                                                        right: "",
-                                                    }
-                                                    :
-                                                    {
-                                                        left: "  prev",
-                                                        center: "title",
-                                                        right: "next,timeGridDay,",
-                                                    }
+                                                // (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.data?.length === 0) ?
+                                                {
+                                                    left: "  prev",
+                                                    center: "title",
+                                                    right: "next,timeGridDay,",
+                                                }
+                                                    // :
+                                                    // {
+                                                    //     left: "  prev",
+                                                    //     center: "title",
+                                                    //     right: "next,timeGridDay,",
+                                                    // }
                                             }
                                             customButtons={{
                                                 prev: {

@@ -172,6 +172,7 @@ div.cmn_height_outer.noDraftPosts_outer {
   padding-left: 63px;
   width: 100%;
   background-color: #fff6f2;
+  min-height: 100vh;
 
 }
 .loader_btn_container{
@@ -265,6 +266,9 @@ a {
   border: none;
   background-color: #f07c33;
   border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .generate_ai_container .modal-content{
 border-radius: 12px;
@@ -1346,6 +1350,10 @@ position: relative;
   padding: 13px 10px;
   background: white;
 }
+.draft_wrapper_box .slick-slide>div>div {
+  border: dimgray;
+  display: block !important;
+}
 draft_page_outer h3{
   font-size: 15px;
   color: black;
@@ -1397,7 +1405,6 @@ draft_page_outer h4{
  }
 .social_media_page_outer {
   padding-left: 9px;
-  border-left: 2px solid #d7d4d4;
 }
 .posted_date_outer {
   background: white;

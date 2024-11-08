@@ -921,7 +921,7 @@ const CreatePost = () => {
                                                         allOptions && Array.isArray(allOptions) && allOptions.length > 0 && allOptions.map((option, index) => {
                                                             let selectedPageData = option?.allOptions.find(c => selectedOptions.includes(c.pageId));
 
-                                                            return (<div key={index} className='perview_outer'>
+                                                            return (<div key={index} className=''>
                                                                     {
                                                                         selectedPageData &&
                                                                         <CommonFeedPreview

@@ -380,7 +380,7 @@ const SocialAccounts = ({}) => {
                                                         <div className={"social_media_icon"}>
                                                             <Image className="cmn_width" src={fb_img} alt="fb_image"/>
 
-                                                            <h2 className={`pagecount ${currentConnectedFacebookPages?.length === undefined ? "blink" : ""}`}>
+                                                            <h2 className={`pagecount fb_count ${currentConnectedFacebookPages?.length === undefined ? "blink" : ""}`}>
                                                                 {
                                                                     (currentConnectedFacebookPages !== null && currentConnectedFacebookPages !== undefined) ? currentConnectedFacebookPages?.length : 0
                                                                 }

@@ -35,7 +35,7 @@ const InstagramFeedPreview = ({
     const [showContent, setShowContent] = useState(false)
     const navigate = useNavigate()
     return (
-        <>
+        <div className="perview_outer">
             <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>{previewTitle}</h2>
 
             <div className='preview_wrapper'>
@@ -128,7 +128,7 @@ const InstagramFeedPreview = ({
 
 
             </div>
-        </>
+        </div>
     )
 }
 

@@ -115,7 +115,8 @@ const ScheduledComponent = ({scheduledData}) => {
                             <div className="">
                                 <h2>{jsondata.upcomingpost}</h2>
                             </div>
-                            {
+                           <div className="row">
+                           {
                                 scheduledPosts && Array.isArray(scheduledPosts) &&
                                 scheduledPosts.map((curBatch, index) => (
                                     <div
@@ -233,6 +234,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                     </div>
                                 ))
                             }
+                           </div>
                         </div>
                     </div>
                 </div>
