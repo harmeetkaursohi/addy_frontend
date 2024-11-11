@@ -51,7 +51,7 @@
     height: 300px !important;
 }
 .video_player_outer {
-    height: 250px !important;
+    height: 210px !important;
 
 }
 .video_player_outer video {
@@ -233,7 +233,12 @@ gap: 16px;
 }
 .coment_view_carousal video{
     object-fit: fill;
+    clip-path: inset(0 0 0 0 round 15px 15px 0 0);
 }
+.postcaption_modal_content_wrapper  .coment_view_carousal video{
+    clip-path: inset(0 0 0 0 round 14px 14px 0 0);
+}
+
 .pintereset_postpreview_container{
     margin-bottom: 0px ;
 }

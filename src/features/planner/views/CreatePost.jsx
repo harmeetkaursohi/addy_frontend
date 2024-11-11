@@ -907,7 +907,7 @@ const CreatePost = () => {
                                             <div  className={`cmn_outer create_post_container post_preview_outer ${
                                                     isNullOrEmpty(selectedOptions) ? "single_post_perview " : ""
                                                 }`}>
-                                                <div className='CommonFeedPreview_container'>
+                                                <div className='CommonFeedPreview_container post_main position-sticky'>
                                                     {
                                                         isNullOrEmpty(selectedOptions) &&
                                                         <DefaultFeedPreview

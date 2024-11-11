@@ -433,7 +433,6 @@ content: url("../../../images/down_arrow.svg");
 
 .create_post_wrapper {
     width: 100%;
-    overflow: hidden;
     background-color: rgba(30, 30, 30, 1);
   
 }
@@ -943,12 +942,9 @@ button.loading {
     height: 100%;
    
 }
-/* .CommonFeedPreview_container{
-    height: 958px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    scrollbar-width: none;
-} */
+ .CommonFeedPreview_container{
+  top: 30px;
+} 
 .create_post_content {
     padding: 20px;
     max-width: 531px;

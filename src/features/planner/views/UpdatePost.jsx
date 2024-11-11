@@ -1022,7 +1022,7 @@ const UpdatePost = () => {
                                                 />
                                             }
                                             {/* <h3 className='Post_Preview_heading'>Post Preview</h3> */}
-                                            <div className='CommonFeedPreview_container'>
+                                            <div className='CommonFeedPreview_container post_main position-sticky'>
                                                 {
                                                     allOptions && Array.isArray(allOptions) && allOptions?.length > 0 && allOptions?.map((option, index) => {
 

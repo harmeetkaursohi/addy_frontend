@@ -370,6 +370,17 @@ input::-webkit-inner-spin-button {
 .skeleton_wrapper .skeleton {
   background-color: #f4f4f4 !important;
 }
+.coment_view_carousal img {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px; 
+  }
+  .CommonFeedPreview_container .post_img{
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px; 
+    }
+    .CommonFeedPreview_container .preview_wrapper1.preview_img_container video{
+      clip-path: inset(0 0 0 0 round 3px 3px 0 0);
+    }
 /* .login_form .form-group select{
   appearance: none;
   -webkit-appearance: none;
