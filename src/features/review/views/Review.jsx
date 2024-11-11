@@ -389,7 +389,7 @@ const Review = () => {
                                                                     </tr>
 
                                                                     :
-                                                                    <tr class="demo" key={index}
+                                                                    <tr className="demo" key={index}
                                                                         ref={index === postsList?.length - 1 ? lastPostRef : null}>
                                                                         <td className="text-center">
                                                                             {

@@ -51,7 +51,7 @@ const ConnectSocialAccountModal = ({showModal, setShowModal}) => {
                                  <>
                                      {
                                          getAllConnectedPagesApi?.data !== undefined && getAllConnectedPagesApi?.data?.length === 0 ?
-                                         <h2 class="swal2-title page_not_connected" id="swal2-title">Page Not
+                                         <h2 className="swal2-title page_not_connected" id="swal2-title">Page Not
                                                  Connected</h2> : <></>
                                      }
                                  </>

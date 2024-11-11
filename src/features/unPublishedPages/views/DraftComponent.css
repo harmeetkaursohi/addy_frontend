@@ -190,7 +190,7 @@ span.post_caption {
 h3.caption {
     color: #5F6D7E;
     font-family: "Nunito";
-    font-size: 15px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 400;
     margin-bottom: 10px ;
@@ -639,9 +639,6 @@ button.outline_btn.schedule_btn{
     }
     h2.acc_not_connected_heading{
         font-size: 12px;
-    }
-    h3.caption{
-        font-size: 14px;
     }
    
 }

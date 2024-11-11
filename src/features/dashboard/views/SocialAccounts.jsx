@@ -320,7 +320,7 @@ const SocialAccounts = ({}) => {
     return (
         <div className="col-lg-5 col-xl-4 col-sm-12  pe-0">
             {/* social media */}
-            <div className="cmn_background social_media_wrapper">
+            <div className="cmn_background social_media_wrapper social_accounts">
                 <div className="social_media_account">
                     <h3>{jsondata.socialAccount}</h3>
                 </div>
