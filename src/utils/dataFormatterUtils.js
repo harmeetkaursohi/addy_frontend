@@ -781,7 +781,7 @@ export const getFormattedDataForPlannerPostPreviewModal = (data) => {
             ...response,
             socialMediaType: postPage.socialMediaType,
             postPage: postPage,
-            attachments: data?.attachments?.filter(cur => cur.pageId === postPage.pageId)?.map(cur => {
+            attachments: data?.attachments?.map(cur => {
                 let url = "";
                 if (data.postStatus === "SCHEDULED") {
                     url = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id

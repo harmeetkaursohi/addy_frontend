@@ -26,7 +26,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import {Linkedin_URN_Id_Types} from "./contantData.js";
 import default_user_icon from "../images/default_user_icon.svg"
-import {showErrorToast} from "../features/common/components/Toast";
+import {showErrorToast, showSuccessToast} from "../features/common/components/Toast";
 
 export const validationSchemas = {
 
@@ -112,7 +112,7 @@ export const validationSchemas = {
 };
 
 
-export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider,setShowNoBusinessAccountModal) => {
+export const computeAndSocialAccountJSON = async (jsonObj, tokenProvider, setShowNoBusinessAccountModal) => {
     const token = localStorage.getItem("token");
     const decodeJwt = decodeJwtToken(token);
     const response = {
@@ -613,6 +613,27 @@ export const getFormattedDate = (inputDate) => {
     const date = new Date(inputDate);
     const options = {year: 'numeric', month: 'short', day: 'numeric'};
     return date.toLocaleString(undefined, options);
+}
+
+export const urlToBlob = async (file) => {
+    if (isNullOrEmpty(file)) return null;
+
+    if (file?.mediaType?.startsWith('VIDEO')) {
+        const link = `${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${file?.id}`;
+        const response = await fetch(link);
+        if (response.ok) {
+            const blob = await response.blob();
+            return {
+                file: file,
+                url: URL.createObjectURL(blob),
+                mediaType: "VIDEO",
+                fileName: file?.fileName
+            }
+        } else {
+            console.error('Failed to fetch file:', link);
+            return null;
+        }
+    }
 }
 
 // Function to convert an image URL to a File object
@@ -1489,14 +1510,14 @@ export const getFileFromAttachmentSource = (attachment) => {
     });
 };
 export const isCreateDraftPostRequestValid = (requestBody) => {
-    if (requestBody?.postPageInfos===null || requestBody?.postPageInfos===undefined ||requestBody?.postPageInfos?.length === 0) {
+    if (requestBody?.postPageInfos === null || requestBody?.postPageInfos === undefined || requestBody?.postPageInfos?.length === 0) {
         showErrorToast(SelectAtLeastOnePageForDraft);
         return false;
     }
     return true;
 }
 export const isUpdateDraftPostRequestValid = (requestBody) => {
-    if (requestBody?.updatePostRequestDTO?.postPageInfos===null || requestBody?.updatePostRequestDTO?.postPageInfos===undefined ||requestBody?.updatePostRequestDTO?.postPageInfos?.length === 0) {
+    if (requestBody?.updatePostRequestDTO?.postPageInfos === null || requestBody?.updatePostRequestDTO?.postPageInfos === undefined || requestBody?.updatePostRequestDTO?.postPageInfos?.length === 0) {
         showErrorToast(SelectAtLeastOnePageForDraft);
         return false;
     }
@@ -1749,8 +1770,14 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                 if (isNullOrEmpty(requestBody.destinationUrl) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0) {
                     showErrorToast(formatMessage(IsRequired, ["Destination Url"]));
                     shouldBreak = true;
+                    break;
                 }
-                break;
+                const domainRegex =/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+                if (!domainRegex.test(requestBody.destinationUrl)) {
+                    showErrorToast("Pin Destination Url is not valid");
+                    shouldBreak = true;
+                    break;
+                }
             }
             case "attachments": {
                 if (hasAttachments) {
@@ -2258,18 +2285,18 @@ export const isValidCreateMessageRequest = (data) => {
 export const removeObjectFromArray = (array, object, keyToCompare) => {
     return array.filter(item => item[keyToCompare] !== object[keyToCompare]);
 };
-export const deleteElementFromArrayAtIndex=(array,index)=>{
-    if(isNullOrEmpty(array)) return array;
+export const deleteElementFromArrayAtIndex = (array, index) => {
+    if (isNullOrEmpty(array)) return array;
     const newArray = [...array];
     newArray.splice(index, 1);
     return newArray;
 
 }
-export const getEmptyArrayOfSize=(size)=>{
-   return Array(size).fill(null);
+export const getEmptyArrayOfSize = (size) => {
+    return Array(size).fill(null);
 }
 
-export const isPostEditable = ( feedPostDate ) => {
+export const isPostEditable = (feedPostDate) => {
     if (isNullOrEmpty(feedPostDate)) {
         return false
     }

@@ -40,16 +40,16 @@ const DraftComponent = ({postData}) => {
                         {
                             postData?.postPages && Array.isArray(postData?.postPages) &&
                             (() => {
+                                const uniqueSocialMedia = Array.from(new Set(postData.postPages.map(item => item.socialMediaType)));
                                 const uniquePageIds = Array.from(new Set(postData.postPages.map(item => item.pageId)));
-                                const uniquePages = uniquePageIds.map(id => postData.postPages.find(page => page.pageId === id));
-                                const count = uniquePages.length;
+                                const count = uniquePageIds.length;
                                 return (
                                     <>
                                         <div>
                                             {
-                                                uniquePages.map((curPage, key) => (
-                                                    <img key={key} className={"social-media-icon"}
-                                                         src={computeImageURL(curPage?.socialMediaType)}
+                                                uniqueSocialMedia.map((curPage, key) => (
+                                                    <img key={key} className={"social-media-icon me-1"}
+                                                         src={computeImageURL(curPage)}
                                                          alt={"social media icon"}/>
 
                                                 ))
