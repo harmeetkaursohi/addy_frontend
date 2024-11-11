@@ -45,12 +45,12 @@ const LinkedinFeedpreview = ({
                         <Image style={{background: "white"}} src={pageImage ? pageImage : default_user_icon}
                                alt="default image" height="30px" width="30px"/>
                         <div>
-                            <h3 className='create_post_text user_name boost_post_text'>{pageName} <FaLinkedin
-                                className="FaLinkedin_icon"/></h3>
-                            <h6 className='status create_post_text'><Image src={ellipse_img} alt="ellipse image"
-                                                                           className="ms-1"/> just now
-
-                                <TiWorld className="world_icon ms-1"/>
+                            <h3 className='create_post_text user_name boost_post_text'>{pageName} 
+                                {/* <FaLinkedin
+                                className="FaLinkedin_icon"/> */}
+                                </h3>
+                            <h6 className='status create_post_text'>just <Image src={ellipse_img} alt="ellipse image"
+                                                                           className="ms-1"/>
                             </h6>
                             {
                                 reference === "PLANNER" && postStatus === "SCHEDULED" &&

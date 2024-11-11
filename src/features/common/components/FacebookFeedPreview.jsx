@@ -43,10 +43,10 @@ const FacebookFeedPreview = ({
                     <div>
                         <h3 className='create_post_text user_name boost_post_text'>{pageName}</h3>
                         <h6 className='status create_post_text'>
-                            <Image src={ellipse_img} alt="ellipse image" className="me-1"/>
                             {
                                 reference === "PLANNER" ? getCommentCreationTime(feedPostDate) : "just now"
                             }
+                            <Image src={ellipse_img} alt="ellipse image" className="ms-1"/>
                             {/* <TiWorld className="world_icon ms-1"/> */}
                         </h6>
                         {

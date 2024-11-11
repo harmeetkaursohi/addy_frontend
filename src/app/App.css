@@ -371,10 +371,10 @@ input::-webkit-inner-spin-button {
   background-color: #f4f4f4 !important;
 }
 .coment_view_carousal img {
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px; 
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px; 
   }
-  .CommonFeedPreview_container .post_img{
+  .CommonFeedPreview_container .preview_img_container .post_img{
     border-top-left-radius: 3px;
     border-top-right-radius: 3px; 
     }
@@ -563,9 +563,7 @@ button.facebook_connect.connect_buttoon {
 
 
 .feed_preview_Caption_outer {
-  overflow-y: scroll;
-  height: 170px;
-  overflow-x: hidden;
+padding-bottom: 10px;
 }
 .feed_preview_Caption_outer span{
   font-size: 14px;
@@ -1390,7 +1388,7 @@ draft_page_outer h4{
  }
 .caption_outer_containter h3 {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: black;
 }
 .caption_outer_containter{
@@ -1515,9 +1513,7 @@ draft_page_outer h4{
     font-size:16px ;
  
 }
-  .caption_outer_containter h3 {
-     font-size: 12px;
-   }
+
 
   .caption_outer_containter h4 {
     font-size: 13px;

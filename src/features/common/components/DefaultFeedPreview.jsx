@@ -19,7 +19,7 @@ const DefaultFeedPreview = ({caption, hashTag, files, selectedFileType}) => {
                 <h2 className='cmn_white_text feed_preview facebookFeedpreview_text'>Post
                     Preview</h2>
                 <div className='preview_wrapper'>
-                    <div className='user_profile_info'>
+                    <div className='user_profile_info pb-0'>
                         {/* <Image src=""/> */}
                         <div className='w-100 '>
                             <div className={"d-flex align-items-center"}>
@@ -39,14 +39,16 @@ const DefaultFeedPreview = ({caption, hashTag, files, selectedFileType}) => {
                             <div className={"mt-2"}>{caption}</div>
                             <p className="post_hashtags">{hashTag}</p>
 
-                            {
+                           <div className="no_data_img">
+                           {
                                 isNullOrEmpty(files) ?
                                     <div className='text-center'>
-                                        <Image src="/assets/blank_image.png"
+                                        <Image src="/assets/blank_image.png" className="rounded-0"
                                                alt='blank_image'/>
                                     </div> :
                                     <CommonSlider files={files} selectedFileType={selectedFileType} isrequired={true}/>
                             }
+                           </div>
                         </div>
                     </div>
 

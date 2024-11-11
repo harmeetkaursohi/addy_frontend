@@ -48,8 +48,8 @@ const InstagramFeedPreview = ({
                         />
                         <div>
                             <h3 className='create_post_text user_name boost_post_text mt-1'>{pageName}</h3>
-                            <h6 className='status create_post_text'><Image src={ellipse_img} alt="ellipse image"
-                                                                           className="ms-1"/> just now
+                            <h6 className='status create_post_text'>just now <Image src={ellipse_img} alt="ellipse image"
+                                                                           className="ms-1"/> 
 
                             </h6>
                             {
@@ -78,7 +78,7 @@ const InstagramFeedPreview = ({
 
 
                     </div>
-                    <BsThreeDotsVertical/>
+                    {/* <BsThreeDotsVertical/> */}
 
                 </div>
 
