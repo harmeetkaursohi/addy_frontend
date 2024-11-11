@@ -163,18 +163,18 @@ const ScheduledComponent = ({scheduledData}) => {
                                                     Hashtags:{" "}
                                                 </h6>
 
-                                                <div
+                                                <h3
                                                     onClick={handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length > 40 ? () => {
                                                         hashTagHandler(index);
                                                     } : ""}
-                                                    className={`mb-2 ${handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length > 40 ? "cursor-pointer" : ""} ${showHashTagIndex === index && showHashTag ? "hash_tags_outer_container" : "cmn_text_overflow"}`}
+                                                    className={`mb-2 ${handleSeparateCaptionHashtag(curBatch?.message)?.hashtag.length > 40 ? "cursor-pointer" : ""} ${showHashTagIndex === index && showHashTag ? "hash_tags_outer_container" : "cmn_text_overflow d-flex"}`}
                                                 >
                                                                      <span className={"hash_tags "}>
                                                                          {
                                                                              curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.hashtag || "---No Tags---" : "---No Tags---"
                                                                          }
                                                                      </span>
-                                                </div>
+                                                </h3>
 
                                                 <div className={"draft-heading"}>
                                                     <h4 className={"posted-on-txt"}>Posted On : </h4>
