@@ -1542,7 +1542,6 @@ export const isCreatePostRequestValid = (requestBody, files) => {
             }
             case "caption":
             case "hashTag": {
-                // If posted on facebook or linkedin one among caption , hastag or image is required
                 if (isNullOrEmpty(requestBody.hashTag)) {
                     showErrorToast("Hashtag is required.");
                     shouldBreak = true;
@@ -1752,11 +1751,16 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
             }
             case "caption":
             case "hashTag": {
-                // If posted on facebook or linkedin one among caption , hashtag or image is required
-                if ((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
-                    showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" : ""} ${isPostedOnLinkedin ? " and Linkedin" : ""}, either Caption/HashTag or Image`]));
+                if (isNullOrEmpty(requestBody.hashTag)) {
+                    showErrorToast("Hashtag is required.");
                     shouldBreak = true;
+
                 }
+                // If posted on facebook or linkedin one among caption , hashtag or image is required
+                // if ((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
+                //     showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" : ""} ${isPostedOnLinkedin ? " and Linkedin" : ""}, either Caption/HashTag or Image`]));
+                //     shouldBreak = true;
+                // }
                 break;
             }
             case "pinTitle": {
@@ -1772,11 +1776,13 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                     shouldBreak = true;
                     break;
                 }
-                const domainRegex =/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-                if (!domainRegex.test(requestBody.destinationUrl)) {
-                    showErrorToast("Pin Destination Url is not valid");
-                    shouldBreak = true;
-                    break;
+                if(!isNullOrEmpty(requestBody.destinationUrl) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0){
+                    const domainRegex =/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+                    if (!domainRegex.test(requestBody.destinationUrl)) {
+                        showErrorToast("Pin Destination Url is not valid");
+                        shouldBreak = true;
+                        break;
+                    }
                 }
             }
             case "attachments": {
