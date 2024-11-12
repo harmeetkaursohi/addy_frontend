@@ -44,7 +44,7 @@ const Planner = () => {
   // const [selectedDate, setSelectedDate] = useState(getDayStartInUTCFor(new Date()));
   const [selectedDate, setSelectedDate] = useState(null);
   const [showConnectAccountModal, setShowConnectAccountModal] = useState(false);
-  const [highlightEvent, setHighlightEvent] = useState([]); 
+  const [highlightEvent, setHighlightEvent] = useState([]);
 
   const [events, setEvents] = useState([
     {
@@ -476,18 +476,13 @@ const Planner = () => {
                         const localDate = new Date(arg.date);
                         setSelectedDate(localDate);
 
-                        // Format the selected date as 'YYYY-MM-DD'
-                        const formattedDate = localDate
-                          .toISOString()
-                          .split("T")[0];
+                        const formattedDate = arg.dateStr; 
 
-                        // Set highlightEvent to highlight the selected date
                         setHighlightEvent([
                           {
                             start: formattedDate,
                             end: formattedDate,
-                            display: "background",
-                            backgroundColor: "red", // Customize highlight color
+                            border: "1px solid red", 
                           },
                         ]);
                       }}
@@ -495,7 +490,7 @@ const Planner = () => {
                       plugins={[dayGridPlugin, interactionPlugin]}
                       initialView="dayGridMonth"
                       weekends={true}
-                      events={[...events, ...highlightEvent]} // Combine existing events with highlightEvent
+                      events={[...events, ...highlightEvent]} 
                       eventContent={renderCalendarCards}
                       dayHeaderContent={customDayHeaderContent}
                       headerToolbar={{
@@ -515,9 +510,8 @@ const Planner = () => {
                       }}
                       dayCellContent={(arg) => {
                         const cellDate = new Date(arg.date);
-                        const selectedDateObj = new Date(selectedDate); // Get the selected date as Date object
+                        const selectedDateObj = new Date(selectedDate);
 
-                        // Check if the current cell's date matches the selected date
                         const isSelectedDate =
                           selectedDateObj.getDate() === cellDate.getDate() &&
                           selectedDateObj.getMonth() === cellDate.getMonth() &&
