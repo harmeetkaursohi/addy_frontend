@@ -596,10 +596,7 @@ svg.slick_btn.next_slide {
         border-radius: 5px;
     }
 
-    .selected-date {
-        border: 1px solid red !important; /* Red border for selected date */
-        border-radius: 5px; /* Optional: round the corners */
-    }
+
 
     
     

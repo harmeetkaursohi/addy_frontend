@@ -171,7 +171,7 @@ const Notification = () => {
                                         <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
                                             <div>
                                                 <No_notification_img className="w-100 h-auto" />
-                                                <h4 className="no-notifications-text text-center mt-3 text-black">You're all set! No new notifications.</h4>
+                                                <h4 className="no-notifications-text text-center mt-3 text-black">{EmptyNotificationGridMessage}</h4>
                                             </div>
                                         </div>
                                     }
@@ -242,12 +242,10 @@ const Notification = () => {
                             {
                                 (getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.data?.length === 0) &&
                                 <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
-
-                             <div className="no-post-review acc_not_connected_heading"> 
-                                <ConnectSocialMediaAccount
-                                image={<><NotConnected_img className="acc_not_connected_img  h-auto"/></>}
-                                    message={EmptyNotificationGridMessage}/>
-                            </div>
+                                <div>
+                                    <No_notification_img className="w-100 h-auto" />
+                                    <h4 className="no-notifications-text text-center mt-3 text-black">{EmptyNotificationGridMessage}</h4>
+                                </div>
                             </div>
                             }
 

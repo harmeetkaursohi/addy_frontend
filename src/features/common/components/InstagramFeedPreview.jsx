@@ -40,7 +40,7 @@ const InstagramFeedPreview = ({
 
             <div className='preview_wrapper'>
                 <div className='user_profile_info  align-items-center d-flex justify-content-between'>
-                    <div className="d-flex align-items-center gap-2">
+                    <div className="d-flex align-items-center gap-2 w-100">
                         <Image src={pageImage ? pageImage : default_user_icon}
                                height="36px"
                                width="36px"
@@ -107,7 +107,7 @@ const InstagramFeedPreview = ({
                 }
                 <div className="comment_wrapper">
                     <div className='like_comment_outer instagram_like'>
-                        <div className="flex-grow-1">
+                        <div className="flex-grow-1 d-flex">
                             <Image src={like_img} alt="like image"/>
                             <Image src={comment_img} alt="comment image" className=" ms-4 me-4"/>
                             <Image src={send_img} alt="send image"/>

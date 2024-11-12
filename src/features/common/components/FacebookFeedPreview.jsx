@@ -83,34 +83,45 @@ const FacebookFeedPreview = ({
 
                 <CommonSlider files={files} selectedFileType={selectedFileType} caption={caption} hashTag={hashTag}/>
                 {
-                    reference === "PLANNER" && !isNullOrEmpty(postInsightsData) &&
+                   ( reference === "PLANNER" && !isNullOrEmpty(postInsightsData))  ?
                     <>
                         {
                             postInsightsData?.isLoading ?
                                 <SkeletonEffect count={1}/> :
-                                <>
-                                    <>like {postInsightsData?.data?.reactions}</>
-                                    <>Comment {postInsightsData?.data?.comments}</>
-                                    <>shares {postInsightsData?.data?.shares}</>
-                                </>
-                        }
-                    </>
-                }
-
-                <div className='like_comment_outer'>
-                    <div className="fb_likes">
+                                <div className="like_comment_outer">
+                                    <div className="fb_likes">
                         <FiThumbsUp/>
-                        <h3 className="cmn_text_style">Likes</h3>
+                        <h3 className="cmn_text_style"> {postInsightsData?.data?.reactions}1</h3>
                     </div>
                     <div className="fb_likes">
                         <FaRegComment className="fb_cmt_icon"/>
-                        <h3 className="cmn_text_style">Comment</h3>
+                        <h3 className="cmn_text_style">{postInsightsData?.data?.comments}2</h3>
                     </div>
                     <div className="fb_likes">
                         <PiShareFat/>
-                        <h3 className="cmn_text_style">Share</h3>
+                        <h3 className="cmn_text_style">{postInsightsData?.data?.shares}3</h3>
                     </div>
-                </div>
+                                </div>
+                        }
+                    </>
+                    :
+               <div className="like_comment_outer ">
+                            <div className="fb_likes">
+                                <FiThumbsUp/>
+                                <h3 className="cmn_text_style">Likes</h3>
+                            </div>
+                            <div className="fb_likes">
+                                <FaRegComment className="fb_cmt_icon"/>
+                                <h3 className="cmn_text_style">Comment</h3>
+                            </div>
+                            <div className="fb_likes">
+                                <PiShareFat/>
+                                <h3 className="cmn_text_style">Share</h3>
+                            </div>
+                        </div>
+                }
+
+                
             </div>
         </div>
     )

@@ -8,7 +8,7 @@ import default_user_icon from "../../../images/default_user_icon.svg"
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import CommonSlider from "./CommonSlider";
 import {isNullOrEmpty} from "../../../utils/commonUtils";
-
+import AddyLogo from '../../../images/addy_face_logo.svg?react'
 const DefaultFeedPreview = ({caption, hashTag, files, selectedFileType}) => {
 
     const getUserInfoApi = useGetUserInfoQuery("")
@@ -22,22 +22,23 @@ const DefaultFeedPreview = ({caption, hashTag, files, selectedFileType}) => {
                     <div className='user_profile_info pb-0'>
                         {/* <Image src=""/> */}
                         <div className='w-100 '>
-                            <div className={"d-flex align-items-center"}>
+                            <div className={"d-flex align-items-center default_post_header"}>
                                 {
                                     (getUserInfoApi?.isLoading || getUserInfoApi?.isFetching) ?
                                         <SkeletonEffect count={1}></SkeletonEffect> :
                                         <>
-                                            < img className={"h-40 "}
+                                        <AddyLogo/>
+                                            {/* < img className={"h-40 "}
                                                   src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
-                                                  alt='blank_image'></img>
+                                                  alt='blank_image'/> */}
                                             <h3 className='create_post_text user_name boost_post_text ms-2'>Your
                                                 Page Name</h3>
                                         </>
                                 }
 
                             </div>
-                            <div className={"mt-2"}>{caption}</div>
-                            <p className="post_hashtags">{hashTag}</p>
+                            {caption && <div className={"mt-2"}>{caption}</div>}
+                          {hashTag &&  <p className="post_hashtags">{hashTag}</p>}
 
                            <div className="no_data_img">
                            {

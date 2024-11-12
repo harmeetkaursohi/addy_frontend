@@ -180,7 +180,7 @@ const Login = () => {
                                         </form>
 
                                         <h3>{jsondata.account}
-                                            <Link className="ms-2" to="/sign-up">
+                                            <Link className="ms-1" to="/sign-up">
                                                 <span className='sign_up'>{jsondata.signup}</span>
                                             </Link>
                                         </h3>
