@@ -6,7 +6,6 @@ import {
     handleSeparateCaptionHashtag,
     isNullOrEmpty,
 } from "../../../utils/commonUtils";
-import {formatDate} from "@fullcalendar/core";
 import CommonSlider from "../../common/components/CommonSlider";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
@@ -23,11 +22,11 @@ import {DeletedSuccessfully} from "../../../utils/contantData";
 import ReactDOMServer from 'react-dom/server'; 
 const ScheduledComponent = ({scheduledData}) => {
     const {sidebar} = useAppContext();
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [scheduledPosts, setScheduledPosts] = useState([]);
+    console.log(scheduledPosts,"hsdkfhsdjkfhsjkd")
     const [postToDeleteId, setPostToDeleteId] = useState(null);
 
     const [showCaption, setShowCaption] = useState(false);
@@ -102,6 +101,21 @@ const ScheduledComponent = ({scheduledData}) => {
         setHashTagIndex(index);
         setShowHashTag(!showHashTag);
     };
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return `${date.getDate()} ${date.toLocaleString('en-US', { month: 'long' })}, ${date.getFullYear()}`;
+    };
+    const formatYear = (dateString) => {
+        const date = new Date(dateString);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+        if (date.getTime() >= tomorrow.getTime() && date.getTime() < tomorrow.getTime() + 86400000) {
+            return "Tomorrow";
+        }
+        return `${date.getDate()} ${date.toLocaleString('en-US', { month: 'long' })}`;
+    };
 
     return (
         <>
@@ -112,10 +126,8 @@ const ScheduledComponent = ({scheduledData}) => {
 
 
                         <div className="upcoming_post_outer">
-                            <div className="">
-                                <h2>{jsondata.upcomingpost}</h2>
-                            </div>
-                           <div className="row">
+                                <h2>{jsondata.upcomingpost}</h2>                       
+                           <div className="row row-gap-4 mb-5">
                            {
                                 scheduledPosts && Array.isArray(scheduledPosts) &&
                                 scheduledPosts.map((curBatch, index) => (
@@ -123,7 +135,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                         className={sidebar ? "col-lg-4 col-md-6 col-sm-12 " : "col-lg-4 col-md-12 col-sm-12 "}
                                         key={index}
                                     >
-                                        <div className="draft-outer ">
+                                        <div className="draft-outer">
                                             <div className="post-image-outer">
                                                 {
                                                     curBatch?.attachments &&
@@ -135,23 +147,34 @@ const ScheduledComponent = ({scheduledData}) => {
                                                         viewSimilarToSocialMedia={false}
                                                     />
                                                 }
+                                                 <div className="upcoming_user_profile w-100 text-end">
+                                                   <span className="schedule_date"><svg width="13" height="14" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M2.0875 4.13281L5.8375 1.78906C6.24284 1.53573 6.75716 1.53573 7.1625 1.78906L10.9125 4.13281C11.278 4.36124 11.5 4.76182 11.5 5.19281V8.80719C11.5 9.23818 11.278 9.63877 10.9125 9.86719L7.1625 12.2109C6.75716 12.4643 6.24284 12.4643 5.8375 12.2109L2.0875 9.86719C1.72202 9.63877 1.5 9.23818 1.5 8.80719V5.19281C1.5 4.76182 1.72202 4.36124 2.0875 4.13281Z" stroke="white" stroke-width="1.33" stroke-linecap="round"/>
+                                                    </svg>
+                                                    {formatYear(curBatch?.feedPostDate)}</span>
+                                                 </div>
                                             </div>
 
                                             <div className="card-body post_card">
-                                                <div className={"mb-2"}>
-                                                                    <span
-                                                                        className={"hash_tags"}>{formatDate(curBatch?.feedPostDate)}</span>
+                                                <div className={"mb-2 d-flex align-items-center"}>
+                                                <span className="hash_tags flex-grow-1">
+                                                {formatDate(curBatch?.createdAt)}                                               
+                                            </span>
+                                           <div className="d-flex">
+                                           {curBatch?.postPages && curBatch?.postPages.map((curelem,index)=>{
+                                                return(
+                                                    <div className="pages_image" key={index}><img src={curelem?.imageURL} alt="page image" /></div>
+                                                )
+                                            })}
+                                           </div>
                                                 </div>
 
-                                                <div>
-                                                    <h6 className="upcoming_post_heading">
-                                                        Post Captions
-                                                    </h6>
-                                                    <h3
+                                                <div className="post_info_content">
+                                                 <h3
                                                         onClick={handleSeparateCaptionHashtag(curBatch?.message)?.caption.length > 40 ? () => {
                                                             captionHandler(index);
                                                         } : ""}
-                                                        className={` mb-2 caption ${handleSeparateCaptionHashtag(curBatch?.message)?.caption.length > 40 ? "cursor-pointer" : ""} ${showCaptionIndex === index && showCaption ? "upcoming_post_content" : "cmn_text_overflow"}`}
+                                                        className={`caption ${handleSeparateCaptionHashtag(curBatch?.message)?.caption.length > 40 ? "cursor-pointer" : ""} ${showCaptionIndex === index && showCaption ? "upcoming_post_content" : ""}`}
                                                     >
                                                         {
                                                             curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.caption || "---No Caption---" : "---No Caption---"
@@ -159,7 +182,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                                     </h3>
                                                 </div>
 
-                                                <h6 className="upcoming_post_heading">
+                                                {/* <h6 className="upcoming_post_heading">
                                                     Hashtags:{" "}
                                                 </h6>
 
@@ -174,9 +197,9 @@ const ScheduledComponent = ({scheduledData}) => {
                                                                              curBatch?.message !== null && curBatch?.message !== "" ? handleSeparateCaptionHashtag(curBatch?.message)?.hashtag || "---No Tags---" : "---No Tags---"
                                                                          }
                                                                      </span>
-                                                </h3>
+                                                </h3> */}
 
-                                                <div className={"draft-heading"}>
+                                                {/* <div className={"draft-heading"}>
                                                     <h4 className={"posted-on-txt"}>Posted On : </h4>
 
                                                     <div className="page_tags">
@@ -202,7 +225,7 @@ const ScheduledComponent = ({scheduledData}) => {
                                                                 </div>
                                                             ))}
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div className="upcomingPostBtn_Outer ">
                                                 <GenericButtonWithLoader
@@ -225,8 +248,8 @@ const ScheduledComponent = ({scheduledData}) => {
                                                     className={
                                                         "post_now nunito_font cmn_bg_btn loading"
                                                     }
-                                                    label={"Change Post"}
-                                                    onClick={() => navigate("/planner/post/" + curBatch?.id)}
+                                                    label={"Change Date"}
+                                                    onClick={() => navigate('/planner/post/' + curBatch?.id)}
                                                     isDisabled={false}
                                                 />
                                             </div>

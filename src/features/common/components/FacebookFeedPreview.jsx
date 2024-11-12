@@ -41,7 +41,7 @@ const FacebookFeedPreview = ({
                     <Image src={pageImage ? pageImage : default_user_icon} alt="user image" height="36px" width="36px"/>
                     <div className="flex-grow-1">
                         <h3 className='create_post_text user_name boost_post_text'>{pageName}</h3>
-                        <h6 className='status create_post_text'>
+                        <h6 className='status create_post_text d-flex'>
                             {
                                 reference === "PLANNER" ? getCommentCreationTime(feedPostDate) : "just now"
                             }

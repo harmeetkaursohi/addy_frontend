@@ -128,7 +128,9 @@ const CommonSlider = ({
 
                         {
                             files?.length === 0 &&
-                            <Image src={noImageAvailable} alt={`Image 23F`} className='post_img'/>
+                           <div className="default_image">
+                             <Image src={noImageAvailable} alt={`Image 23F`} className='post_img'/>
+                           </div>
                         }
 
                         {
