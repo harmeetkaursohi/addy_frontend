@@ -31,28 +31,28 @@ const CommonSlider = ({
         slidesToShow: 1,
         slidesToScroll: 1
     };
-    // const [attachment, setAttachments] = useState([]);
-    //
-    // console.log("files=====>", files)
-    //
-    // useEffect(() => {
-    //     const fetchDimensions = async () => {
-    //         if (!isNullOrEmpty(files)) {
-    //             if(selectedFileType === "IMAGE" || files.every(file => file.mediaType === "IMAGE")){
-    //                 setAttachments(files)
-    //             }
-    //             if(selectedFileType === "VIDEO" || files.every(file => file.mediaType === "VIDEO")){
-    //                 files?.map()
-    //             }
-    //             // Wait for all promises to resolve before logging the result
-    //             const dimensionResults = await Promise.all(files?.map(async (file) => await urlToBlob(file)));
-    //             console.log("dimensionResults=====>", dimensionResults);
-    //             setAttachments(dimensionResults)
-    //         }
-    //     };
-    //
-    //     fetchDimensions(); // Call the async function
-    // }, [files]);
+    const [attachment, setAttachments] = useState([]);
+
+    console.log("files=====>", files)
+
+    useEffect(() => {
+        const fetchDimensions = async () => {
+            if (!isNullOrEmpty(files)) {
+                if(selectedFileType === "IMAGE" || files.every(file => file.mediaType === "IMAGE")){
+                    setAttachments(files)
+                }
+                if(selectedFileType === "VIDEO" || files.every(file => file.mediaType === "VIDEO")){
+                    files?.map()
+                }
+                // Wait for all promises to resolve before logging the result
+                const dimensionResults = await Promise.all(files?.map(async (file) => await urlToBlob(file)));
+                console.log("dimensionResults=====>", dimensionResults);
+                setAttachments(dimensionResults)
+            }
+        };
+
+        fetchDimensions(); // Call the async function
+    }, [files]);
 
 
     const [showText, setShowText] = useState(false)

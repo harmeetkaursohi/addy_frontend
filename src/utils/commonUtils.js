@@ -1540,19 +1540,6 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                 }
                 break;
             }
-            case "caption":
-            case "hashTag": {
-                if (isNullOrEmpty(requestBody.hashTag)) {
-                    showErrorToast("Hashtag is required.");
-                    shouldBreak = true;
-
-                }
-                // if((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)){
-                //     showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" :""} ${isPostedOnLinkedin ? " and Linkedin" :""}, either Caption/HashTag or Image`]));
-                //     shouldBreak = true;
-                // }
-                break;
-            }
             case "pinTitle": {
                 if (isNullOrEmpty(requestBody.pinTitle) && isPostedOnPinterest) {
                     showErrorToast(formatMessage(IsRequired, ["Pin Title"]));
@@ -1567,6 +1554,20 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                 }
                 break;
             }
+            case "caption":
+            case "hashTag": {
+                if (isNullOrEmpty(requestBody.hashTag)) {
+                    showErrorToast("Hashtag is required.");
+                    shouldBreak = true;
+
+                }
+                // if((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)){
+                //     showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" :""} ${isPostedOnLinkedin ? " and Linkedin" :""}, either Caption/HashTag or Image`]));
+                //     shouldBreak = true;
+                // }
+                break;
+            }
+
             case "attachments": {
                 if (hasAttachments) {
                     if (files.some(file => file?.mediaType === "IMAGE") && files.some(file => file?.mediaType === "VIDEO")) {
@@ -1749,20 +1750,6 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                 }
                 break;
             }
-            case "caption":
-            case "hashTag": {
-                if (isNullOrEmpty(requestBody.hashTag)) {
-                    showErrorToast("Hashtag is required.");
-                    shouldBreak = true;
-
-                }
-                // If posted on facebook or linkedin one among caption , hashtag or image is required
-                // if ((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
-                //     showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" : ""} ${isPostedOnLinkedin ? " and Linkedin" : ""}, either Caption/HashTag or Image`]));
-                //     shouldBreak = true;
-                // }
-                break;
-            }
             case "pinTitle": {
                 if (isNullOrEmpty(requestBody.pinTitle) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0) {
                     showErrorToast(formatMessage(IsRequired, ["Pin Title"]));
@@ -1784,6 +1771,20 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                         break;
                     }
                 }
+            }
+            case "caption":
+            case "hashTag": {
+                if (isNullOrEmpty(requestBody.hashTag)) {
+                    showErrorToast("Hashtag is required.");
+                    shouldBreak = true;
+
+                }
+                // If posted on facebook or linkedin one among caption , hashtag or image is required
+                // if ((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
+                //     showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" : ""} ${isPostedOnLinkedin ? " and Linkedin" : ""}, either Caption/HashTag or Image`]));
+                //     shouldBreak = true;
+                // }
+                break;
             }
             case "attachments": {
                 if (hasAttachments) {

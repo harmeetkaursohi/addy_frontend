@@ -3,12 +3,10 @@ import DraftComponent from "./DraftComponent";
 import notConnected_img from "../../../images/noaccount_draft.svg";
 import Arrow_up_icon from "../../../images/arrow_up_icon.svg?react";
 import {
-    formatMessage, getEmptyArrayOfSize,
+     getEmptyArrayOfSize,
     isNullOrEmpty,
     sortByKey
 } from "../../../utils/commonUtils";
-import noDraftPosts from "../../../images/no_draft_posts.png";
-import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 import {NoPostInDraft, NotConnected} from "../../../utils/contantData";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
