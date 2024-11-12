@@ -589,6 +589,20 @@ svg.slick_btn.next_slide {
     .card-body.post_card{
         padding: 0px 12px 12px;
     }
+
+    .highlighted_date {
+        background-color: #4caf50; /* Example highlight color */
+        color: white; /* Change text color */
+        border-radius: 5px;
+    }
+
+    .selected-date {
+        border: 1px solid red !important; /* Red border for selected date */
+        border-radius: 5px; /* Optional: round the corners */
+    }
+
+    
+    
    
     .events_wrapper {
         display: block;

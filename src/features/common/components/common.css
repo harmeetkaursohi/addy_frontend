@@ -231,6 +231,10 @@ gap: 16px;
    font-size: 2.1rem;
 
 }
+.comment_review_wrapper .coment_view_carousal video{
+    object-fit: fill;
+    clip-path: unset;
+}
 .coment_view_carousal video{
     object-fit: fill;
     clip-path: inset(0 0 0 0 round 15px 15px 0 0);

@@ -48,7 +48,7 @@ const InstagramFeedPreview = ({
                         />
                         <div className="flex-grow-1">
                             <h3 className='create_post_text user_name boost_post_text mt-1'>{pageName}</h3>
-                            <h6 className='status create_post_text'>just now <Image src={ellipse_img} alt="ellipse image"
+                            <h6 className='status create_post_text d-flex'>just now <Image src={ellipse_img} alt="ellipse image"
                                                                            className="ms-1"/> 
 
                             </h6>
