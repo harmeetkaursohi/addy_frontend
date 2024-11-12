@@ -182,10 +182,25 @@ button.DisConnectBtn {
     min-height: 100%;
     box-shadow: 2px 0px 21px 0px rgba(226, 232, 240, 0.68)
 }
-
-
+.upcoming_post_outer .default_image,
+.upcoming_post_outer .post_image_outerwrapper {
+position: relative;
+}
+.upcoming_post_outer .default_image::before,
+.upcoming_post_outer .post_image_outerwrapper::before {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #00000045;
+    content: "";
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.upcoming_post_outer .slick-slide>div>div {
+    display: block !important;
+}
 .upcoming_post_outer .draft-outer .post_image_outerwrapper {
-    height: 196px;
+    height: 200px;
 }
 
 element.style {
@@ -340,12 +355,22 @@ h2.pagecount.fb_count {
     gap: 12px;
 
 }
+.upcoming_post_outer .draft-outer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 
-.upcoming_post_heading {
-    color: black;
-    font-size: 14px;
-    font-weight: 600;
-    padding-bottom: 4px;
+.upcoming_post_outer .card-body.post_card {
+    flex-grow: 1;
+    flex-shrink: 1;
+    height: 100%;
+    padding-bottom: 0;
+}
+
+.upcoming_post_outer h3.caption {
+    line-height: 20px;
+
 }
 .social_accounts {
     max-height: calc(100vh - 122px);
@@ -709,9 +734,7 @@ width: 100%;
 }
 
 @media screen and (min-width: 1499px) {
-    .upcoming_post_outer .draft-outer .post_image_outerwrapper {
-        height: 350px;
-    }
+  
 }
 
 @media screen and (max-width: 1280px) {

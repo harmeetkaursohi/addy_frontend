@@ -145,6 +145,26 @@ width: 100%;
 object-fit: cover; 
 height: 200px; 
 }
+.upcoming_user_profile {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    top: 0;
+    padding: 10px;
+    justify-content: end;
+}
+
+span.schedule_date {
+    background: #f57e3b;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 8px;
+    line-height: 20px;
+    border-radius: 5px;
+}
 .draft_container img.post_img {
     height: 270px;
 }
@@ -169,11 +189,18 @@ height: 200px;
 }
 
 .card-body.post_card {
-
-    padding: 0px 20px 20px;
+    padding: 0px 15px 10px;
     padding-top: 10px;
 }
+.pages_image img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
 
+.pages_image {
+    margin-left: -8px;
+}
 span.post_caption {
     color: #000;
     font-family: "Nunito";

@@ -48,7 +48,7 @@ const DraftComponent = ({postData}) => {
                                         <div>
                                             {
                                                 uniqueSocialMedia.map((curPage, key) => (
-                                                    <img key={key} className={"social-media-icon me-1"}
+                                                    <img key={key} className={"social-media-icon"}
                                                          src={computeImageURL(curPage)}
                                                          alt={"social media icon"}/>
 

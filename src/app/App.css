@@ -370,6 +370,10 @@ input::-webkit-inner-spin-button {
 .skeleton_wrapper .skeleton {
   background-color: #f4f4f4 !important;
 }
+.comment_review_wrapper .coment_view_carousal img {
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px; 
+}
 .coment_view_carousal img {
   border-top-left-radius: 15px;
   border-top-right-radius: 15px; 
@@ -1351,7 +1355,7 @@ position: relative;
 .social_media_page_outer img {
   height: 20px;
   width: 22px;
-  margin-left: -4px;
+  margin-left: -8px;
 }
 
 
