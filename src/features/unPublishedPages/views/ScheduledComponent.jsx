@@ -20,6 +20,7 @@ import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 import {DeletedSuccessfully} from "../../../utils/contantData";
 import ReactDOMServer from 'react-dom/server'; 
+import default_user_icon from '../../../images/default_user_icon.svg'
 const ScheduledComponent = ({scheduledData}) => {
     const {sidebar} = useAppContext();
     const navigate = useNavigate();
@@ -163,8 +164,9 @@ const ScheduledComponent = ({scheduledData}) => {
                                            <div className="d-flex">
                                            {curBatch?.postPages && curBatch?.postPages.map((curelem,index)=>{
                                                 return(
-                                                    <div className="pages_image" key={index}><img src={curelem?.imageURL} alt="page image" /></div>
+                                                    <div className="pages_image" key={index}><img src={curelem?.imageURL || default_user_icon} alt="page image" /></div>
                                                 )
+                                             
                                             })}
                                            </div>
                                                 </div>

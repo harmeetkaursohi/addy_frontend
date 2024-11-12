@@ -82,13 +82,21 @@ const Draft = () => {
                         {
                             getConnectedSocialAccountApi?.data?.length === 0 &&
                             <ConnectSocialMediaAccount    image={<><NotConnected_img className="acc_not_connected_img no_draft"/></>}
-                                                    message={formatMessage(NotConnected, ["posts", "social media"])}/>
+                                                    message={<>
+                                                    You aren’t connected to any social media accounts right now. <br />
+                                                    Connect to begin creating drafts and posts!
+                                                    </>}/>
 
                         }
                         {
                             getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 &&
                             <ConnectSocialMediaAccount    image={<><NotConnected_img className="acc_not_connected_img no_draft"/></>}
-                                                    message={formatMessage(NotConnected, ["posts", "social media pages"])}/>
+                                                    // message={formatMessage(NotConnected, ["posts", "social media pages"])}
+                                                    message={<>
+                                                        You aren’t connected to any social media accounts right now. <br />
+                                                        Connect to begin creating drafts and posts!
+                                                        </>}
+                                                    />
                         }
                         </div>
                         </div>)

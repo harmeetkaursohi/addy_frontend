@@ -215,6 +215,9 @@ button.clear_all_button_outer:hover{
   max-width: 450px;
   margin: auto;
 }
+.no-post-review.acc_not_connected_heading.no_draft{
+  max-width: 470px;
+}
 .no-post-review.acc_not_connected_heading h3 {
   font-size: 17px;
   color: #000;
@@ -536,7 +539,11 @@ ol.guid_instagram {
   box-shadow: 0px 0px 8px 0px rgba(0,0,0,5%);
   border-radius: 10px;
 }
-
+ol.guid_instagram li {
+  font-family: 'Nunito';
+  font-weight: 400;
+  font-size: 16px;
+}
 .instaGuide 
 .cmn_body.modal-body {
   padding: 28px 20px;
@@ -575,6 +582,16 @@ button.facebook_connect.connect_buttoon {
   justify-content: center;
   box-shadow: 0px 0px 8px rgba(0,0,0,10%);
   border-radius: 9px;
+}
+.pint_cta {
+  position: absolute;
+  display: flex;
+  right: 0;
+  width: max-content;
+  padding: 5px;
+  gap: 10px;
+  z-index: 999;
+  padding-top: 10px;
 }
 .danger_bg{
   background: #D82B2BF5;
@@ -1134,7 +1151,7 @@ table.fc-col-header {
 .login_form h3 {
   margin-top: 20px;
   font-weight: 500;
-  color: #A0A0A0;
+  color: #75818F;
   font-size: 16px;
   text-align: center;
 }

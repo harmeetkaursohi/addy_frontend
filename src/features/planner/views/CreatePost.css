@@ -635,6 +635,13 @@ svg.add_media {
  p.social-media-page-name {
     white-space: nowrap;
 }
+.default_post_header {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-left: -11px;
+    margin-right: -11px;
+    padding-left: 11px;
+}
 .post_preview_outer .CommonFeedPreview_container {
     max-width: 441px;
     margin: auto;
@@ -669,7 +676,7 @@ svg.add_media {
 .user_profile_info {
     display: flex;
     gap: 10px;
-    padding: 16px 11px;
+    padding: 11px 11px;
 }
 .no_data_img {
     margin-left: -11px;

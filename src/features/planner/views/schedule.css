@@ -17,6 +17,11 @@
 }
 .fc.fc-media-screen.fc-direction-ltr.fc-theme-standard {
     width: 100%;
+    height: 100%;
+}
+.sechduled_post_outer {
+    max-height: 100vh;
+    overflow: auto;
 }
 .sechduled_post_outer img.post_img {
     border-radius: 7px;

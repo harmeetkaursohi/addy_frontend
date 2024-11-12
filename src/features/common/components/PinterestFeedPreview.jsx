@@ -33,9 +33,11 @@ const PinterestFeedPreview = ({
 
         <div className="perview_outer">
             <h2 className={"cmn_white_text feed_preview facebookFeedpreview_text flex-grow-1"}>{previewTitle}</h2>
+          
+            <div className='preview_wrapper1 preview_img_container'>
             {
                 reference === "PLANNER" && postStatus === "SCHEDULED" &&
-                <>
+                <div className="pint_cta">
                     <button
                       className="cmn_cta"
                         disabled={!isPostEditable(feedPostDate)}
@@ -59,10 +61,8 @@ const PinterestFeedPreview = ({
                     <path d="M1.42841 12.1853C1.42841 13.0002 2.11412 13.6668 2.95222 13.6668H9.04746C9.88555 13.6668 10.5713 13.0002 10.5713 12.1853V3.29646H1.42841V12.1853ZM11.3332 1.07424H8.6665L7.9046 0.333496H4.09508L3.33317 1.07424H0.666504V2.55572H11.3332V1.07424Z" fill="white"/>
                     </svg>
                     </button>
-                </>
+                </div>
             }
-            <div className='preview_wrapper1 preview_img_container'>
-
                 <div
                     className={`img_container w-100 ${selectedFileType === "VIDEO" || mediatype == 'VIDEO' ? "black_bg_color" : ""}`}>
                     {

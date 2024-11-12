@@ -193,7 +193,7 @@ const Review = () => {
                                 </h6>
                             </div>
                             {
-                                getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
+                                (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) &&
                                 <>
                                     <GenericButtonWithLoader
                                         label={"Refresh"}
