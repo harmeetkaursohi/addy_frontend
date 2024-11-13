@@ -30,7 +30,7 @@ p {
   border-radius: 6px;
   background: #f07c33 !important;
 }
-div.not_connected {
+.not_connected {
   background: rgba(240, 124, 51, 0.5) !important;
 }
 .loader_siderbar_close {
