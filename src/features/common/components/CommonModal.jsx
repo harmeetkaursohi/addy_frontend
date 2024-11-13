@@ -47,7 +47,7 @@ const CommonModal = ({
                 return await connectPage({data: data, socialMediaAccountInfo: socialMediaAccountInfo}).unwrap()
             },
             () => {
-                dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi"]))
+                dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi","getPublishedPostsApi"]))
             })
     }
 
