@@ -175,18 +175,19 @@ const Notification = () => {
                                             </div>
                                         </div>
                                     }
+                                    {(( !isAllNotificationsCleared && notificationsList?.length > 0 ) || ( !isAllNotificationsCleared && unSeenNotificationsList?.length > 0)) &&
                                     <div className="notification_wrapper">
                                     {
                                         !isAllNotificationsCleared && unSeenNotificationsList?.length > 0 &&
                                         unSeenNotificationsList?.map((notification, index) => {
                                             return (
-                                                <span key={index}>
+                                                <div key={index}>
                                                              <NotificationComponent notification={notification}
                                                                                     notificationsList={notificationsList}
                                                                                     setNotificationsList={setNotificationsList}
                                                                                     unSeenNotificationsList={unSeenNotificationsList}
                                                                                     setUnSeenNotificationsList={setUnSeenNotificationsList}/>
-                                                        </span>
+                                                        </div>
                                             )
                                         })
                                     }
@@ -206,7 +207,7 @@ const Notification = () => {
                                             )
                                         })
                                     }
-                                         </div>
+                                         </div>}
 
                                 </div>
                             }

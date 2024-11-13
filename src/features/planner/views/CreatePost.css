@@ -16,6 +16,9 @@
     padding: 26px 28px;
 
 }
+.instagram_outer.linkedin_outer i {
+    color: #004190 !important;
+}
 svg.dropdown_chevron {
     position: absolute;
     right: 11px;
@@ -949,6 +952,7 @@ button.loading {
     display: flex;
     gap: 10px;
     justify-content: flex-end;
+    margin-top: 30px;
 }
 .create_post_container {
     height: 100%;

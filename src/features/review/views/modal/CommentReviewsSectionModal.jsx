@@ -3,6 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import img from '../../../../images/draft.png'
+import default_image from '../../../../images/default_user_icon.svg'
 import {
     getCommentCreationTime,
     handleSeparateCaptionHashtag,
@@ -91,7 +92,7 @@ const CommentReviewsSectionModal = ({
                                         <div className="">
                                             <div className="user_card main_user">
                                                 <div className="user_image">
-                                                    <img src={postData?.page?.imageUrl} alt=""/>
+                                                    <img src={postData?.page?.imageUrl || default_image} alt=""/>
 
                                                 </div>
                                                 <div className="user">

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import DraftComponent from "./DraftComponent";
-import notConnected_img from "../../../images/noaccount_draft.svg";
+import NotConnected_img from "../../../images/noaccount_draft.svg?react";
 import Arrow_up_icon from "../../../images/arrow_up_icon.svg?react";
 import {
      getEmptyArrayOfSize,
@@ -96,7 +96,7 @@ export const ParentDraftComponent = ({searchQuery}) => {
                         <div className="review_wrapper cmn_height_outer no_account_bg white_bg_color noDraftPosts_outer text-center mt-3">
                             <div className="no-post-review acc_not_connected_heading  text-center ">
 
-                            <img src={notConnected_img} alt={"No Drafts"} className=" no-draft-img"/>
+                            <NotConnected_img alt={"No Drafts"} className=" no-draft-img"/>
                             <h3 className="mt-4 position-relative" ><div dangerouslySetInnerHTML={{ __html: NoPostInDraft }}/><Arrow_up_icon className="arrow_up_icon"/></h3>
                            
                             </div>

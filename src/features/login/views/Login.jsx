@@ -7,7 +7,7 @@ import {useFormik} from 'formik';
 import {validationSchemas} from "../../../utils/commonUtils.js";
 import React, {useEffect, useState} from "react";
 import {showErrorToast} from "../../common/components/Toast";
-import Frame from "../../../images/signupFrame.svg";
+import Frame from "../../../images/signupFrame.svg?react";
 import {RotatingLines} from "react-loader-spinner";
 import {SomethingWentWrong} from "../../../utils/contantData";
 import {useLoginUserMutation} from "../../../app/apis/authApi";
@@ -58,7 +58,7 @@ const Login = () => {
                                 <div className='login_outer'>
 
                                     <div className='reach_user_outer text-center'>
-                                        <img src={Frame} className=' w-100 mt-4'/>
+                                        <Frame className=' w-100 mt-4'/>
                                         <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
                                         <p>{jsondata.connect_audience_desc}</p>
                                     </div>
