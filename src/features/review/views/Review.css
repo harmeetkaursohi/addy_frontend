@@ -359,7 +359,12 @@ img.social_icons_review {
 ul.review_list thead tr th {
     background: rgba(244, 247, 252, 1);
 }
-
+.publish_post_filter .dropdown-menu h4 {
+    width: 86px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 ul.review_list table thead tr th {
     background: #fff;
     border: unset;

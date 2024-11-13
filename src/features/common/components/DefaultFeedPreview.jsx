@@ -9,6 +9,7 @@ import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import CommonSlider from "./CommonSlider";
 import {isNullOrEmpty} from "../../../utils/commonUtils";
 import AddyLogo from '../../../images/addy_face_logo.svg?react'
+import Blank_image from '../../../images/blank_image.svg?react'
 const DefaultFeedPreview = ({caption, hashTag, files, selectedFileType}) => {
 
     const getUserInfoApi = useGetUserInfoQuery("")
@@ -44,7 +45,7 @@ const DefaultFeedPreview = ({caption, hashTag, files, selectedFileType}) => {
                            {
                                 isNullOrEmpty(files) ?
                                     <div className='text-center'>
-                                        <Image src="/assets/blank_image.png" className="rounded-0"
+                                        <Blank_image className="rounded-0"
                                                alt='blank_image'/>
                                     </div> :
                                     <CommonSlider files={files} selectedFileType={selectedFileType} isrequired={true}/>

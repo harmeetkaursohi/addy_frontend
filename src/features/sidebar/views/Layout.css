@@ -101,7 +101,7 @@ li.log_out {
 li.sidebar_active a {
     background: rgba(244, 244, 244, 1);
 }
-img.addy_logo {
+.addy_logo {
     width: 158px;
     margin: auto;
 }

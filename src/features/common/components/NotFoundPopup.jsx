@@ -1,7 +1,7 @@
 import React  from "react";
 import {RxCross2} from "react-icons/rx";
 import Modal from "react-bootstrap/Modal";
-import no_page_connect_img from "../../../images/no_business_account.svg";
+import No_page_connect_img from "../../../images/no_business_account.svg?react";
 
 const NotFoundPopup = ({show, setShow,isInstagramGuideModal=false,setShowInstagramGuideModal}) => {
 
@@ -29,8 +29,7 @@ const NotFoundPopup = ({show, setShow,isInstagramGuideModal=false,setShowInstagr
                     <div className="facebook_content_outer">
                         <div className="">
                             <div className="text-center pt-5">
-                                <img
-                                    src={no_page_connect_img}
+                                <No_page_connect_img
                                     className="no_page_connect_img"
                                 />
                                 <h2 className="disconnect_title">
