@@ -74,7 +74,6 @@ p.liked_by {
     --bs-gutter-x: 1rem;
 }
 .comment_review_outer img{
-    height: 100% !important;
     width: 100%;
 }
 
