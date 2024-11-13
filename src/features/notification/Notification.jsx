@@ -166,8 +166,8 @@ const Notification = () => {
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                 <div className=" align-items-center">
                                     {
-                                        (isAllNotificationsCleared ||
-                                            (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
+                                        (isAllNotificationsCleared || (isNullOrEmpty(notificationsList) && isNullOrEmpty(unSeenNotificationsList))) &&
+                                            // (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
                                         <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
                                             <div>
                                                 <No_notification_img className="w-100 h-auto" />
