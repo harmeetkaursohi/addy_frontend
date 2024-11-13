@@ -10,7 +10,7 @@ import {FaBars} from "react-icons/fa";
 import {RxCross2} from "react-icons/rx";
 import default_user_icon from '../../../images/default_user_icon.svg'
 import Logout from '../../../images/Logout.svg?react'
-import logout_img from '../../../images/log-out.svg'
+import Logout_img from '../../../images/log-out.svg?react'
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect.jsx";
 import {
     getUpdatedNameAndImageUrlForConnectedPages, isNullOrEmpty,
@@ -175,8 +175,8 @@ const Profile =() =>{
                                             src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
                                             className='profile_img mobile_profile'/>
                                      
-                                        <span onClick={Profile}>   <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
-                                        <h4 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.email.slice(0,15) + "..." || "email"}</h4></span> <img onClick={(e)=>{LogOut(e)}} className="logout_icon" src={logout_img}/>
+                                        <span onClick={Profile} className="flex-grow-1">   <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
+                                        <h4 className={sidebar ? "d-none" : ""} title={getUserInfoApi?.data?.email}>{getUserInfoApi?.data?.email.slice(0,15) + "..." || "email"}</h4></span> <Logout_img onClick={(e)=>{LogOut(e)}} className="logout_icon me-0"/>
                                 </div>
                                       } 
                                 </li>

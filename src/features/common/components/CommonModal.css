@@ -179,9 +179,13 @@ p.planInfo span {
 .modal-body.cmn_body {
     padding: 30px;
 }
+.cmn_dropdown .user_icon {
+    border-radius: 3px;
+}
 .users_profile img {
-    border-radius: 15px;
- 
+    height: 60px;
+    width: 60px;
+    border-radius: 10px;
 }
 
 .connect_btn_outer button {
@@ -236,11 +240,7 @@ button, .modal_inner_content.disconnect_wrapper
 
 
 @media (max-width: 1440px) {
-    .users_profile img {
-        height: 60px;
-        width: 60px;
-        border-radius: 10px;
-    }
+   
 
     .users_name h2 {
         font-size: 17px;

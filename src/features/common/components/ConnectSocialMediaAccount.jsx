@@ -11,8 +11,7 @@ const ConnectSocialMediaAccount = ({image, message}) => {
             <h3 className="mb-3 mt-4">{message}</h3>
             <button onClick={() => {
                 navigate("/dashboard")
-            }} className={"connection-error-close-btn"}>Connect Now
-            </button>
+            }} className={"connection-error-close-btn"}>Connect</button>
         </div>
     );
 }

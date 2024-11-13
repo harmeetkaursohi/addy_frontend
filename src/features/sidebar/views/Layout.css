@@ -117,7 +117,7 @@ li.sidebar_active a {
 .user_profile_outer {
     padding-left: 5px;
 }
-.sidebar_content.sidebar_wrapper img.logout_icon {
+.sidebar_content.sidebar_wrapper .logout_icon {
     display: none;
 }
 

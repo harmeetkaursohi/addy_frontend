@@ -318,7 +318,7 @@ const SocialAccounts = ({}) => {
 
 
     return (
-        <div className="col-lg-5 col-xl-4 col-sm-12  pe-0">
+        <div className="social_wrap">
             {/* social media */}
             <div className="cmn_background social_media_wrapper social_accounts">
                 <div className="social_media_account">
@@ -659,7 +659,7 @@ const SocialAccounts = ({}) => {
 
                                                 <div>
                                                     <h5 className=""> Linkedin account</h5>
-                                                    <h6 className="cmn_headings">in.linkedin.com</h6>
+                                                    <h6 className="cmn_headings">www.linkedin.com</h6>
                                                 </div>
                                             </div>
 

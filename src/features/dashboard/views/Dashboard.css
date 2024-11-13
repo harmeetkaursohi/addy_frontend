@@ -968,7 +968,14 @@ width: 100%;
 }
 
 
+.social_wrap {
+    width: 395px;
+}
 
+.dashboard_outer_inner {
+    display: flex;
+    gap: 15px;
+}
 
 
 .addy_logo {

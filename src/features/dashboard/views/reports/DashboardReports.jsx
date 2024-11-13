@@ -118,7 +118,7 @@ export const DashboardReports = () => {
     return (
 
         <>
-            <div className="col-lg-7 col-xl-8 col-sm-12 dashboardReport_outer ps-0">
+            <div className="dashboardReport_outer">
                 {
                    getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllFacebookPagesApi?.isLoading || getAllFacebookPagesApi?.isFetching || getAllInstagramPagesApi?.isLoading || getAllInstagramPagesApi?.isFetching || getAllPinterestPagesApi?.isLoading || getAllPinterestPagesApi?.isFetching || getAllLinkedinPagesApi?.isLoading || getAllLinkedinPagesApi?.isFetching ?
                         <div className="text-center account_not_connect_imcontainer cmn_background  p-3">
