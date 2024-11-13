@@ -109,10 +109,17 @@ min-height: 100vh;
   border-color: #fff;
   color: #000;
 }
+.cmn_dropdown input.privacy-policy-checkbox {
+  border-color: #969696;
+}
+
+.cmn_dropdown input.privacy-policy-checkbox:checked {
+  border-color: #f57e3b;
+}
 .cmn_dropdown.dropdown button {
  background: #fff;
   border-color: #fff;
-  color: #000;
+  color: #000 !important;
   font-weight:600;
   display:flex;
   align-items:center;

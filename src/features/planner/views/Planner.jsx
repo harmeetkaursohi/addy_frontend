@@ -358,7 +358,7 @@ const Planner = () => {
                                             <Dropdown.Menu>
                                                 <li>
                                                     <h4>Select All</h4>
-                                                    <input
+                                                    <input className="privacy-policy-checkbox"
                                                         type={"checkbox"}
                                                         checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
                                                         onChange={(e) => handleSocialMediaFilters("all")}/>
@@ -374,6 +374,7 @@ const Planner = () => {
                                                                         <h4>{SocialAccountProvider[curKey]}</h4>
                                                                     </div>
                                                                     <input
+                                                                    className="privacy-policy-checkbox"
                                                                         type="checkbox"
                                                                         checked={baseSearchQuery.socialMediaTypes && baseSearchQuery.socialMediaTypes.includes(curKey)}
                                                                         value={curKey}

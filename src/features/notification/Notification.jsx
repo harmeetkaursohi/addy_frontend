@@ -333,7 +333,7 @@ const NotificationComponent = ({
                             {
                                 errorInfo && errorInfo?.length > 0 &&
                                 <div
-                                    className={"show-notification-details cursor-pointer"}
+                                    className={"show-notification-details cursor-pointer mb-1"}
                                     onClick={() => {
                                         setShowNotificationErrorDetails(!showNotificationErrorDetails)
                                     }}
