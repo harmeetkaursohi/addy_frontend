@@ -867,7 +867,7 @@ const CreatePost = () => {
 
                                             </form>
                                             {/* draft and publish now section  */}
-                                            <div className='draft_publish_outer mt-3'>
+                                            <div className='draft_publish_outer'>
                                                 <div className={"flex-grow-1"}>
                                                     <GenericButtonWithLoader label={jsondata.saveasdraft}
                                                                              onClick={() => {

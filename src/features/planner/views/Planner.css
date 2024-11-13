@@ -402,7 +402,7 @@ ul.review_list table tbody tr td {
 }
 
 .calender_outer_wrapper .dropdown-menu h4 {
-    font-size: 16px;
+    font-size: 14px;
     text-transform: capitalize;
 }
 
@@ -420,8 +420,9 @@ ul.schdeuled_post_list li:first-child .planner_info {
     border-bottom: 1px solid #ddd;
     cursor: pointer;
     display: flex;
-    gap: 10px;
+    gap: 8px;
 }
+.publish_post_filter h4
 .calender_outer_wrapper .dropdown-menu li {
     position: relative;
     padding: 10px 10px;

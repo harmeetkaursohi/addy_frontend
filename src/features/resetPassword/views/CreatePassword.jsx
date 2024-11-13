@@ -4,7 +4,7 @@ import jsondata from "../../../locales/data/initialdata.json"
 import {useFormik} from 'formik';
 import {validationSchemas} from '../../../utils/commonUtils';
 import {useLocation, useNavigate} from 'react-router-dom';
-import frame from "../../../images/signupFrame.svg";
+import Frame from "../../../images/signupFrame.svg?react";
 import addyads_img from "../../../images/addylogo.png";
 import {useCreatePasswordMutation} from "../../../app/apis/authApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
@@ -66,7 +66,7 @@ const CreatePassword = () => {
                                 <div className='login_outer'>
 
                                     <div className='reach_user_outer text-center'>
-                                        <img src={frame} className=' w-100 mt-4'/>
+                                        <Frame className=' w-100 mt-4'/>
                                         <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
                                         <p>{jsondata.connect_audience_desc}</p>
                                     </div>

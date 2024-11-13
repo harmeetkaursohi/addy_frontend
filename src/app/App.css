@@ -85,7 +85,7 @@ ul {
 min-height: 100vh;
   padding-left: 63px;
   width: 100%;
-  background-color: #fff6f2;
+  background-color: rgba(244, 248, 254, 1);
   transition: all ease-in 0.4s;
 }
 /* cmn dropdown */

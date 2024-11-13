@@ -5,6 +5,7 @@ import ConfirmModal from "./ConfirmModal.jsx";
 import {DisconnectPageWarning, SocialAccountProvider} from "../../../utils/contantData.js";
 import {isNullOrEmpty} from "../../../utils/commonUtils.js";
 import default_user_icon from "../../../images/default_user_icon.svg"
+import Addy_icon from "../../../images/Addy_icon.svg?react"
 import {RxCross2} from 'react-icons/rx';
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {useConnectPageMutation} from "../../../app/apis/pageAccessTokenApi";
@@ -65,7 +66,7 @@ const CommonModal = ({
                         <div className='d-flex  pt-3 pb-4'>
                             <div className='facebook_title flex-grow-1 header_border pb-4'>
                                 <h3>
-                                    <Image src="./Addy_icon.svg" alt='addy icon' className="addy_icon "/></h3>
+                                    <Addy_icon className="addy_icon "/></h3>
                                 <h2 className='cmn_text_style'>Please choose
                                     your {socialMediaType === SocialAccountProvider.PINTEREST ? "board" : "page"} to connect with Addy</h2>
                                 <p className='planInfo'>You have Personal Plan, you can add only one page.&nbsp;<span>Upgrade Plan</span>

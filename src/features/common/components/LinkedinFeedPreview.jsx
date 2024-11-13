@@ -49,7 +49,7 @@ console.log( reference === "PLANNER" , postStatus , "ESCHDULED","reference")
                                 {/* <FaLinkedin
                                 className="FaLinkedin_icon"/> */}
                                 </h3>
-                            <h6 className='status create_post_text d-flex'>just <Image src={ellipse_img} alt="ellipse image"
+                            <h6 className='status create_post_text d-flex'>just now<Image src={ellipse_img} alt="ellipse image"
                                                                            className="ms-1"/>
                             </h6>
                             </div>

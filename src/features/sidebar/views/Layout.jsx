@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import ReactDOMServer from 'react-dom/server';
 import {Link, useLocation, useNavigate} from "react-router-dom";
-import addy_logo from "../../../images/addylogoo.svg";
+import Addy_logo from "../../../images/addylogoo.svg?react";
 import "./Layout.css";
 import {SidebarMenuItems} from "../SidebarMenu.jsx";
 import {useDispatch} from "react-redux";
@@ -149,7 +149,7 @@ const Profile =() =>{
                     </div>
                     <div className="user_profile_outer">
                         <Link to="/dashboard">
-                            <img src={addy_logo} className={`addy_logo ${sidebar ? "cropped_logo_outer" : ""}`}/>
+                            <Addy_logo className={`addy_logo ${sidebar ? "cropped_logo_outer" : ""}`}/>
 
                         </Link>
 
