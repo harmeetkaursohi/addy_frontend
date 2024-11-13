@@ -89,6 +89,8 @@ const UpdatePost = () => {
         const [videoBlob, setVideoBlob] = useState(null)
         const [trimmedVideoUrl, setTrimmedVideoUrl] = useState()
 
+    console.log("files======>",files)
+
         const {sidebar} = useAppContext()
 
         useEffect(() => {
@@ -395,6 +397,7 @@ const UpdatePost = () => {
         };
 
         const handleRemoveSelectFile = (attachmentReferenceNameToRemove, id) => {
+            // Need to look here
             const updatedFiles = files.filter((file) => file.fileName !== attachmentReferenceNameToRemove);
             setFiles(updatedFiles);
             if (id !== undefined && id !== null) {
@@ -429,8 +432,8 @@ const UpdatePost = () => {
             setEditIndex(index)
 
             if (file.mediaType === 'VIDEO') {
-                setShowEditVideoModal(true)
-                setVideoFile(file)
+                // setShowEditVideoModal(true)
+                // setVideoFile(file)
             } else {
                 setShowEditImageModal(true)
             }
@@ -452,21 +455,21 @@ const UpdatePost = () => {
         }, [cropImgUrl])
         // trimmed video url
 
-        useEffect(() => {
-            if (trimmedVideoUrl) {
-                const updatedFiles = [...files];
-                urlToFile(trimmedVideoUrl, videoFile?.fileName, videoFile?.mediaType).then(result => {
-                    updatedFiles[editIndex] = {
-                        file: result,
-                        fileName: videoFile?.fileName,
-                        mediaType: videoFile?.mediaType,
-                        url: trimmedVideoUrl,
-                    };
-                    setFiles(updatedFiles);
-                })
-                setFiles(updatedFiles);
-            }
-        }, [trimmedVideoUrl])
+        // useEffect(() => {
+        //     if (trimmedVideoUrl) {
+        //         const updatedFiles = [...files];
+        //         urlToFile(trimmedVideoUrl, videoFile?.fileName, videoFile?.mediaType).then(result => {
+        //             updatedFiles[editIndex] = {
+        //                 file: result,
+        //                 fileName: videoFile?.fileName,
+        //                 mediaType: videoFile?.mediaType,
+        //                 url: trimmedVideoUrl,
+        //             };
+        //             setFiles(updatedFiles);
+        //         })
+        //         setFiles(updatedFiles);
+        //     }
+        // }, [trimmedVideoUrl])
 
         return (
             <>
@@ -1095,17 +1098,17 @@ const UpdatePost = () => {
 
                 }
 
-                {
-                    showEditVideoModal &&
-                    <EditVideoModal
-                        isReuired={true}
-                        showEditVideoModal={showEditVideoModal}
-                        setTrimmedVideoUrl={setTrimmedVideoUrl}
-                        setShowEditVideoModal={setShowEditVideoModal}
-                        videoInfo={videoFile}
-                        setVideoBlob={setVideoBlob}
-                    />
-                }
+                {/*{*/}
+                {/*    showEditVideoModal &&*/}
+                {/*    <EditVideoModal*/}
+                {/*        isReuired={true}*/}
+                {/*        showEditVideoModal={showEditVideoModal}*/}
+                {/*        setTrimmedVideoUrl={setTrimmedVideoUrl}*/}
+                {/*        setShowEditVideoModal={setShowEditVideoModal}*/}
+                {/*        videoInfo={videoFile}*/}
+                {/*        setVideoBlob={setVideoBlob}*/}
+                {/*    />*/}
+                {/*}*/}
                 {
                     showPublishPostConfirmationBox &&
                     <PostNowModal

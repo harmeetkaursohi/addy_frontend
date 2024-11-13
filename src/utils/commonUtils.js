@@ -629,7 +629,7 @@ export const urlToBlob = async (file) => {
                 url: url,
                 sourceURL: url,
                 mediaType: "VIDEO",
-                fileName: file?.fileName
+                fileName: file?.fileName || file?.attachmentName
             }
         } else {
             console.error('Failed to fetch file:', link);

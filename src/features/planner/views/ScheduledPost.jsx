@@ -8,7 +8,7 @@ import {
     getEmptyArrayOfSize, handleSeparateCaptionHashtag,
     isNullOrEmpty,
     isPlannerPostEditable,
-    sortByKey
+    sortByKey, urlToBlob
 } from "../../../utils/commonUtils";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import {useGetSocialMediaPostsByCriteriaQuery} from "../../../app/apis/postApi";
@@ -78,7 +78,19 @@ const ScheduledPost = ({
     useEffect(() => {
         setIsPostApiLoading(postsApi?.isLoading || postsApi?.isFetching)
         if (forceRender && postsApi?.data && !postsApi?.isLoading && !postsApi?.isFetching) {
-            setPosts(Object.values(postsApi?.data))
+            const posts = Object.values(postsApi?.data)
+            const updatedPostsPromises = posts.map(async (post) => {
+                if (!isNullOrEmpty(post?.attachments) && post?.attachments?.[0]?.mediaType === "VIDEO") {
+                    const updatedAttachments = await Promise.all(
+                        post?.attachments?.map(async (file) => await urlToBlob(file))
+                    );
+                    return { ...post, attachments: updatedAttachments };
+                }
+                return post;
+            });
+            Promise.all(updatedPostsPromises).then((updatedPosts) => {
+                setPosts(updatedPosts);
+            });
         }
     }, [postsApi, forceRender])
 

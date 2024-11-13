@@ -784,7 +784,12 @@ export const getFormattedDataForPlannerPostPreviewModal = (data) => {
             attachments: data?.attachments?.map(cur => {
                 let url = "";
                 if (data.postStatus === "SCHEDULED") {
-                    url = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id
+                    if (cur.mediaType === "IMAGE") {
+                        url = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id
+                    }
+                    if (cur.mediaType === "VIDEO") {
+                        url = cur.sourceURL
+                    }
                 }
                 if (data.postStatus === "PUBLISHED") {
                     if (cur.mediaType === "IMAGE") {

@@ -33,6 +33,8 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
     const dispatch = useDispatch()
     const sliderRef = useRef(null);
 
+    console.log("postToPreview=======>",postToPreview)
+
     const [insights, setInsights] = useState({})
     const [invalidateData, setInvalidateData] = useState(false)
     const [deletePostPageInfo, setDeletePostPageInfo] = useState(null)
@@ -216,7 +218,7 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                         <Slider {...settings} ref={sliderRef}>
                             {
                                 postToPreview?.map(post => {
-                                    console.log( post.socialMediaType," post.socialMediaType")
+                                    console.log( "post=======>",post)
                                     const index = post.message.indexOf('#');
                                     const caption = index !== -1 ? post.message.slice(0, index).trim() : post.message;
                                     const hashtags = index !== -1 ? post.message.slice(index).trim() : '';
