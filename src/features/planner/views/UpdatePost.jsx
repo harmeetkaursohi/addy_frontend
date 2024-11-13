@@ -186,7 +186,7 @@ const UpdatePost = () => {
 
                 }
                 if (postsByIdApi?.data?.attachments[0]?.mediaType === "VIDEO") {
-                    getVideoDurationById(postsByIdApi?.data?.attachments[0]?.id).then(res => {
+                    getVideoDurationById(`${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${postsByIdApi?.data?.attachments[0]?.id}`).then(res => {
                         setOldAttachmentsFileObject([{
                             id: postsByIdApi?.data?.attachments[0]?.id,
                             mediaType: "VIDEO",

@@ -5,11 +5,14 @@ import "./DraftComponent.css"
 import {RxCross1} from "react-icons/rx";
 import {formatDate} from "@fullcalendar/core";
 import {
-    computeImageURL, convertToUnixTimestamp,
+    computeImageURL,
     formatMessage,
-    getFileFromAttachmentSource, getValueOrDefault, getVideoDurationById,
+    getFileFromSource,
+    getValueOrDefault,
+    getVideoDurationAndSizeByBlobUrl,
     handleSeparateCaptionHashtag,
-    isNullOrEmpty, isUpdatePostRequestValid
+    isNullOrEmpty,
+    isUpdatePostRequestValid
 } from "../../../utils/commonUtils";
 import {useNavigate} from "react-router-dom";
 import {useDispatch,} from "react-redux";
@@ -27,11 +30,11 @@ import {DeletedSuccessfully} from "../../../utils/contantData";
 function DraftModal({
                         show,
                         setShow,
-                        postData
+                        postData,
+                        attachments
                     }) {
 
     const handleClose = () => setShow(false);
-
 
 
     const dispatch = useDispatch();
@@ -49,28 +52,36 @@ function DraftModal({
     const [showHastag, setShowHashtag] = useState(false)
 
     useEffect(() => {
-        if (postsByIdApi?.data && Object.keys(postsByIdApi?.data || {}).length > 0 && postsByIdApi?.data?.attachments?.length > 0) {
-            if (postsByIdApi?.data?.attachments[0]?.mediaType === "IMAGE") {
-                Promise.all(postsByIdApi?.data?.attachments?.map(attachment => getFileFromAttachmentSource(attachment)))
+        if (!isNullOrEmpty(attachments)) {
+            if (attachments?.[0]?.mediaType === "IMAGE") {
+                Promise.all(attachments?.map(attachment => getFileFromSource(attachment?.id, attachment?.attachmentName, attachment?.mediaType, attachment?.imageURL)))
                     .then((results) => {
                         setPostAttachments(results);
                     })
-
-            }
-            if (postsByIdApi?.data?.attachments[0]?.mediaType === "VIDEO") {
-                getVideoDurationById(postsByIdApi?.data?.attachments[0]?.id).then(res => {
-                    setPostAttachments([{
-                        id: postsByIdApi?.data?.attachments[0]?.id,
-                        mediaType: "VIDEO",
-                        fileName: postsByIdApi?.data?.attachments[0]?.fileName,
-                        duration: res.duration,
-                        fileSize: postsByIdApi?.data?.attachments[0]?.fileSize
-                    }]);
-                });
             }
         }
+    }, [attachments]);
 
-    }, [postsByIdApi?.data]);
+    useEffect(() => {
+        if (!isNullOrEmpty(attachments)) {
+            const getVideoDurationAndSize = async () => {
+                const attachment=attachments?.[0]
+                if (attachment?.mediaType === "VIDEO") {
+                    const result = await getVideoDurationAndSizeByBlobUrl(attachment?.url)
+                    setPostAttachments([{
+                        id: attachments?.[0]?.file?.id,
+                        mediaType: "VIDEO",
+                        fileName: attachments?.[0]?.file?.attachmentName,
+                        duration: result?.duration,
+                        fileSize: result?.fileSize
+                    }]);
+                }
+
+            }
+            getVideoDurationAndSize()
+        }
+
+    }, [attachments])
 
     const handlePublishedPost = async () => {
         setAction("POST")
@@ -97,11 +108,11 @@ function DraftModal({
     }
 
     const getRequestBodyToPost = () => {
-        const postData=postsByIdApi?.data
+        const postData = postsByIdApi?.data
         return {
             id: postData?.id,
             updatePostRequestDTO: {
-                postPageInfos: postData?.postPageInfos?.map(cur=>{
+                postPageInfos: postData?.postPageInfos?.map(cur => {
                     return {
                         pageId: cur.pageId,
                         id: cur.id,
@@ -112,7 +123,7 @@ function DraftModal({
                 hashTag: getValueOrDefault(postData?.hashTag, ""),
                 pinTitle: getValueOrDefault(postData?.pinTitle, ""),
                 destinationUrl: getValueOrDefault(postData?.pinDestinationUrl, ""),
-                attachments:postData?.attachments?.map((file) => ({
+                attachments: postData?.attachments?.map((file) => ({
                     mediaType: file?.mediaType,
                     file: file?.file || null,
                     fileName: file.fileName,
@@ -191,8 +202,8 @@ function DraftModal({
                                 <h3><RxCross1/></h3>
                             </div>
                             {
-                                postData?.attachments &&
-                                <CommonSlider files={postData?.attachments} selectedFileType={null} caption={null}
+                                postData?.attachments && attachments &&
+                                <CommonSlider files={attachments} selectedFileType={null} caption={null}
                                               hashTag={null}
                                               viewSimilarToSocialMedia={false}/>
                             }
@@ -240,11 +251,12 @@ function DraftModal({
                                 </div>
                             </div>
                             <div className={"modal_post_btn_outer"}>
-                                <GenericButtonWithLoader className={`post_now cmn_bg_btn ${postsByIdApi?.isLoading  ? "pe-none":""}`}
-                                                         label={"Post Now"}
-                                                         isLoading={postData?.id === postToPublish && publishedPostByIdApi?.isLoading}
-                                                         onClick={handlePublishedPost}
-                                                         isDisabled={(action !== "POST" && deletePostByIdApi?.isLoading) }
+                                <GenericButtonWithLoader
+                                    className={`post_now cmn_bg_btn ${postsByIdApi?.isLoading ? "pe-none" : ""}`}
+                                    label={"Post Now"}
+                                    isLoading={postData?.id === postToPublish && publishedPostByIdApi?.isLoading}
+                                    onClick={handlePublishedPost}
+                                    isDisabled={(action !== "POST" && deletePostByIdApi?.isLoading)}
                                 />
                                 <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn"}
                                                          label={"Schedule Post/Edit"}

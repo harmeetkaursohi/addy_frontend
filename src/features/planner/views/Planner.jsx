@@ -29,7 +29,6 @@ import {getDayStartInUTC} from "../../../utils/dateUtils";
 import "../../common/components/CommonShowMorePlannerModal.css"
 
 
-
 const Planner = () => {
 
     const {sidebar} = useAppContext();
@@ -351,7 +350,7 @@ const Planner = () => {
                                 <div
                                     className={`CalenderOuter_Wrapper`}>
                                     <div className="planner_calender w-100">
-                                       <Dropdown className='cmn_dropdown'>
+                                        <Dropdown className='cmn_dropdown'>
                                             <Dropdown.Toggle>
                                                 Filters <CgChevronDown/>
                                             </Dropdown.Toggle>
@@ -359,9 +358,9 @@ const Planner = () => {
                                                 <li>
                                                     <h4>Select All</h4>
                                                     <input className="privacy-policy-checkbox"
-                                                        type={"checkbox"}
-                                                        checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
-                                                        onChange={(e) => handleSocialMediaFilters("all")}/>
+                                                           type={"checkbox"}
+                                                           checked={Array.isArray(baseSearchQuery.socialMediaTypes) ? Object.keys(SocialAccountProvider).every(type => baseSearchQuery.socialMediaTypes.includes(type)) : false}
+                                                           onChange={(e) => handleSocialMediaFilters("all")}/>
                                                 </li>
                                                 {
                                                     Object.keys(SocialAccountProvider).map((curKey, ind) => {
@@ -374,7 +373,7 @@ const Planner = () => {
                                                                         <h4>{SocialAccountProvider[curKey]}</h4>
                                                                     </div>
                                                                     <input
-                                                                    className="privacy-policy-checkbox"
+                                                                        className="privacy-policy-checkbox"
                                                                         type="checkbox"
                                                                         checked={baseSearchQuery.socialMediaTypes && baseSearchQuery.socialMediaTypes.includes(curKey)}
                                                                         value={curKey}
@@ -414,12 +413,12 @@ const Planner = () => {
                                                     center: "title",
                                                     right: "next,timeGridDay,",
                                                 }
-                                                    // :
-                                                    // {
-                                                    //     left: "  prev",
-                                                    //     center: "title",
-                                                    //     right: "next,timeGridDay,",
-                                                    // }
+                                                // :
+                                                // {
+                                                //     left: "  prev",
+                                                //     center: "title",
+                                                //     right: "next,timeGridDay,",
+                                                // }
                                             }
                                             customButtons={{
                                                 prev: {

@@ -1,10 +1,10 @@
 import "./DraftComponent.css";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {
-    computeImageURL,
+
     formatMessage,
     handleSeparateCaptionHashtag,
-    isNullOrEmpty,
+    isNullOrEmpty, urlToBlob,
 } from "../../../utils/commonUtils";
 import CommonSlider from "../../common/components/CommonSlider";
 import {useNavigate} from "react-router-dom";
@@ -27,7 +27,6 @@ const ScheduledComponent = ({scheduledData}) => {
     const dispatch = useDispatch();
 
     const [scheduledPosts, setScheduledPosts] = useState([]);
-    console.log(scheduledPosts,"hsdkfhsdjkfhsjkd")
     const [postToDeleteId, setPostToDeleteId] = useState(null);
 
     const [showCaption, setShowCaption] = useState(false);
@@ -39,7 +38,21 @@ const ScheduledComponent = ({scheduledData}) => {
     const [deletePostById, deletePostApi] = useDeletePostByIdMutation();
 
     useEffect(() => {
-        scheduledData?.data && setScheduledPosts(Object.values(scheduledData?.data));
+        if (scheduledData?.data) {
+            const posts = Object.values(scheduledData?.data)
+            const updatedPostsPromises = posts.map(async (post) => {
+                if (!isNullOrEmpty(post?.attachments) && post?.attachments?.[0]?.mediaType === "VIDEO") {
+                    const updatedAttachments = await Promise.all(
+                        post?.attachments?.map(async (file) => await urlToBlob(file))
+                    );
+                    return { ...post, attachments: updatedAttachments };
+                }
+                return post;
+            });
+            Promise.all(updatedPostsPromises).then((updatedPosts) => {
+                setScheduledPosts(updatedPosts);
+            });
+        }
     }, [scheduledData]);
 
     useEffect(() => {

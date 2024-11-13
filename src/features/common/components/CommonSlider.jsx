@@ -31,30 +31,6 @@ const CommonSlider = ({
         slidesToShow: 1,
         slidesToScroll: 1
     };
-    const [attachment, setAttachments] = useState([]);
-
-    console.log("files=====>", files)
-
-    useEffect(() => {
-        const fetchDimensions = async () => {
-            if (!isNullOrEmpty(files)) {
-                if(selectedFileType === "IMAGE" || files.every(file => file.mediaType === "IMAGE")){
-                    setAttachments(files)
-                }
-                if(selectedFileType === "VIDEO" || files.every(file => file.mediaType === "VIDEO")){
-                    files?.map()
-                }
-                // Wait for all promises to resolve before logging the result
-                const dimensionResults = await Promise.all(files?.map(async (file) => await urlToBlob(file)));
-                console.log("dimensionResults=====>", dimensionResults);
-                setAttachments(dimensionResults)
-            }
-        };
-
-        fetchDimensions(); // Call the async function
-    }, [files]);
-
-
     const [showText, setShowText] = useState(false)
 
     return (
@@ -147,10 +123,11 @@ const CommonSlider = ({
                                 height={"114px"}
                                 width={"100%"}
                                 className=''
-                                url={files?.[0]?.sourceURL?.startsWith("http") ? files?.[0]?.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + files?.[0]?.sourceURL}
+                                url={(files?.[0]?.sourceURL?.startsWith("http") || files?.[0]?.sourceURL?.startsWith("blob")) ? files?.[0]?.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + files?.[0]?.sourceURL}
                                 controls={true}
                             />
                         }
+
 
 
                         {
@@ -158,7 +135,7 @@ const CommonSlider = ({
 
                                 return (<div key={index}>
 
-                                    {file?.mediaType === "IMAGE" || showThumbnail || !file.sourceURL ?
+                                    {file?.mediaType === "IMAGE" || showThumbnail || !file?.sourceURL ?
                                         <div className={className ? className : "post_image_outerwrapper"}>
                                             <Image
                                                 src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
@@ -168,7 +145,7 @@ const CommonSlider = ({
                                         <ReactPlayer
                                             width={"100%"}
                                             className={className ? className : 'video_player_outer'}
-                                            url={isPublished ? file.sourceURL || file?.imageURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
+                                            url={(isPublished || file?.sourceURL?.includes("http")) ? file?.sourceURL || file?.imageURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
                                             controls={true}
                                         />
 

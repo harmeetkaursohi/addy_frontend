@@ -623,9 +623,11 @@ export const urlToBlob = async (file) => {
         const response = await fetch(link);
         if (response.ok) {
             const blob = await response.blob();
+            const url = URL.createObjectURL(blob)
             return {
                 file: file,
-                url: URL.createObjectURL(blob),
+                url: url,
+                sourceURL: url,
                 mediaType: "VIDEO",
                 fileName: file?.fileName
             }
@@ -1509,6 +1511,46 @@ export const getFileFromAttachmentSource = (attachment) => {
         reader.readAsDataURL(file);
     });
 };
+export const getFileFromSource = (attachmentId, attachmentName, mediaType, source) => {
+    return new Promise((resolve, reject) => {
+        // Decode base64 string to binary data
+        const binaryData = atob(source);
+
+        // Convert binary data to array buffer
+        const arrayBuffer = new ArrayBuffer(binaryData.length);
+        const uint8Array = new Uint8Array(arrayBuffer);
+        for (let i = 0; i < binaryData.length; i++) {
+            uint8Array[i] = binaryData.charCodeAt(i);
+        }
+
+        // Create Blob object from array buffer
+        const blob = new Blob([uint8Array], {type: 'application/octet-stream'});
+
+        // Generate URL for Blob object
+        const fileName = attachmentName;
+        const fileType = 'application/octet-stream';
+        // const file = new File([blob], fileName, {type: fileType});
+        const file = blobToFile(blob, fileName, fileType);
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                resolve({
+                    id: attachmentId,
+                    file: file,
+                    url: URL.createObjectURL(blob),
+                    mediaType: mediaType,
+                    fileName: attachmentName,
+                    height: img.height,
+                    width: img.width
+                });
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+};
 export const isCreateDraftPostRequestValid = (requestBody) => {
     if (requestBody?.postPageInfos === null || requestBody?.postPageInfos === undefined || requestBody?.postPageInfos?.length === 0) {
         showErrorToast(SelectAtLeastOnePageForDraft);
@@ -1763,8 +1805,8 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                     shouldBreak = true;
                     break;
                 }
-                if(!isNullOrEmpty(requestBody.destinationUrl) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0){
-                    const domainRegex =/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+                if (!isNullOrEmpty(requestBody.destinationUrl) && requestBody.postPageInfos?.filter(page => page?.provider === "PINTEREST")?.length > 0) {
+                    const domainRegex = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
                     if (!domainRegex.test(requestBody.destinationUrl)) {
                         showErrorToast("Pin Destination Url is not valid");
                         shouldBreak = true;
@@ -2026,10 +2068,10 @@ export const getImageHeightAndWidth = (imageUrl) => {
     }
 };
 
-export const getVideoDurationById = async (attachmentId) => {
+export const getVideoDurationById = async (attachmentUrl) => {
     return new Promise((resolve, reject) => {
         const mediaElement = document.createElement("video");
-        mediaElement.src = `${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachmentId}`;
+        mediaElement.src = attachmentUrl;
 
         mediaElement.onloadedmetadata = () => {
             resolve({
@@ -2041,6 +2083,35 @@ export const getVideoDurationById = async (attachmentId) => {
         };
     });
 
+};
+export const getVideoDurationAndSizeByBlobUrl = async (blobUrl) => {
+    try {
+        const response = await fetch(blobUrl);
+        const blob = await response.blob();
+        const fileSize = blob.size; // File size in bytes
+
+        const video = document.createElement('video');
+        video.src = URL.createObjectURL(blob);
+
+        return new Promise((resolve, reject) => {
+            video.onloadedmetadata = () => {
+                const duration = video.duration; // Duration in seconds
+                URL.revokeObjectURL(video.src); // Clean up the object URL
+
+                resolve({
+                    fileSize:fileSize,
+                    duration:duration
+                });
+            };
+
+            video.onerror = (error) => {
+                reject('Error loading video metadata');
+            };
+        });
+    } catch (error) {
+        console.error('Error fetching video info:', error);
+        throw error;
+    }
 };
 
 

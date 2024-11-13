@@ -231,15 +231,15 @@ gap: 16px;
    font-size: 2.1rem;
 
 }
-.comment_review_wrapper .coment_view_carousal video{
-    object-fit: fill;
+.comment_review_wrapper .coment_view_carousal .video_player_outer{
+    /*object-fit: fill;*/
     clip-path: unset;
 }
-.coment_view_carousal video{
-    object-fit: fill;
+.coment_view_carousal .video_player_outer{
+    /*object-fit: fill;*/
     clip-path: inset(0 0 0 0 round 15px 15px 0 0);
 }
-.postcaption_modal_content_wrapper  .coment_view_carousal video{
+.postcaption_modal_content_wrapper  .coment_view_carousal .video_player_outer{
     clip-path: inset(0 0 0 0 round 14px 14px 0 0);
 }
 
