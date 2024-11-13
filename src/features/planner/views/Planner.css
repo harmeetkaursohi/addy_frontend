@@ -438,7 +438,7 @@ ul.schdeuled_post_list li:first-child .planner_info {
     min-width: 162px;
     padding: 8px 15px;
     border: 1px solid #787878;
-    border-radius: 15px;
+    border-radius: 10px;
     padding-right: 10px;
 }
 /* planner popup css */

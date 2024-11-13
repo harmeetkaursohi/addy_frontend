@@ -9,15 +9,20 @@
     display: flex;
     justify-content: space-between;
 }
-
+.notification_wrapper {
+    padding: 15px;
+    background: #fff;
+    border-radius: 25px;
+    margin-top: 15px;
+}
 .notifications_layout {
 
     background: white;
-    padding: 20px;
+    padding: 15px;
     border: 2px solid transparent;
     border-radius: 15px;
-    margin-top: 15px;
     box-shadow: 0px 5px 16px 0px rgba(8, 15, 52, 0.06);
+    margin-bottom: 15px;
 
 }
 
@@ -87,7 +92,7 @@ span.error-detail {
     font-weight: 500;
 }
 
-.show-notification-details:hover, .clear-all-notifications:hover, .load-more-notification-btn:hover {
+.clear-all-notifications:hover, .load-more-notification-btn:hover {
     text-decoration: underline;
     color: blue;
 }

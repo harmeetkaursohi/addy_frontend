@@ -87,7 +87,7 @@
 
 button#dropdown-facebook.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active {
     background: white !important;
-    border-color: unset !important;
+    border-color: unset;
     color: unset !important;
 }
 

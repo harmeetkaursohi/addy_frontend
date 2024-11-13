@@ -29,7 +29,7 @@ import Image from 'react-bootstrap/Image';
 import {useNavigate} from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
 import {CgChevronDown} from "react-icons/cg";
-
+import { FormCheck } from 'react-bootstrap';
 const Review = () => {
 
     const {sidebar} = useAppContext();
@@ -187,10 +187,16 @@ const Review = () => {
                     <div className="cmn_outer">
                         <div className="review_header align-items-center gap-3">
                             <div className="review_heading flex-grow-1">
-                                <h2 className="cmn_text_heading">Published Posts</h2>
+                               {((getConnectedSocialAccountApi?.data?.length === 0 ) || (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0)) ? 
+                               <> <h2 className="cmn_text_heading">Published Posts</h2>
+                                <h6 className="cmn_small_heading ">
+                                Here’s a collection of all the posts you've already shared.
+                                </h6>
+                                </> :  <> <h2 className="cmn_text_heading">Like/Comments</h2>
                                 <h6 className="cmn_small_heading ">
                                     {jsondata.review_post_heading}
                                 </h6>
+                                </>}
                             </div>
                             {
                                 (getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0) &&
@@ -255,43 +261,50 @@ const Review = () => {
                                                     })
                                                 }}
                                             /> */}
+                                            
+                                            <div className="calender_outer_wrapper publish_post_filter">
+                                                <Dropdown className="cmn_dropdown position-relative">
+                                                    <Dropdown.Toggle>
+                                                        {selectedDropdownOptions?.socialMediaType?.label || 'Filter'}
+                                                        <CgChevronDown />
+                                                    </Dropdown.Toggle>
 
-                                    <Dropdown className="cmn_dropdown">
-                                        <Dropdown.Toggle>
-                                            {selectedDropdownOptions?.socialMediaType?.label || 'Filter'}
-                                            <CgChevronDown/>
-                                        </Dropdown.Toggle>
+                                                    <Dropdown.Menu>
+                                                        {
+                                                            createOptionListForSelectTag(SocialAccountProvider, null, null, [])
+                                                                .map((option, index) => (
+                                                                    <li
+                                                                        key={index}
+                                                                        onClick={() => {
+                                                                            setSelectedDropDownOptions({
+                                                                                ...selectedDropdownOptions,
+                                                                                socialMediaType: option,
+                                                                                pages: [],
+                                                                            });
+                                                                            setPostsList([]);
+                                                                            setSearchQuery({
+                                                                                ...searchQuery,
+                                                                                socialMediaType: option.value?.toUpperCase(),
+                                                                                pageIds: [],
+                                                                                offSet: 0,
+                                                                            });
+                                                                        }}
+                                                                        className="d-flex"
+                                                                        active={selectedDropdownOptions?.socialMediaType?.value === option.value}
+                                                                    >
+                                                                        <h4 className="flex-grow-1">{option.label}</h4>
+                                                                        <input className="privacy-policy-checkbox"
+                                                                            type="checkbox"
+                                                                            checked={selectedDropdownOptions?.socialMediaType?.value === option.value}
+                                                                            readOnly
+                                                                        />
+                                                                    </li>
+                                                                ))
+                                                        }
+                                                    </Dropdown.Menu>
+                                                </Dropdown>
+                                            </div>
 
-                                        <Dropdown.Menu>
-                                            {/* Assuming createOptionListForSelectTag generates an array of options */}
-                                            {
-                                                createOptionListForSelectTag(SocialAccountProvider, null, null, [{
-                                                    label: "All",
-                                                    value: null,
-                                                }]).map((option, index) => (
-                                                    <Dropdown.Item
-                                                        key={index}
-                                                        onClick={() => {
-                                                            setSelectedDropDownOptions({
-                                                                ...selectedDropdownOptions,
-                                                                socialMediaType: option,
-                                                                pages: [],
-                                                            });
-                                                            setPostsList([]);
-                                                            setSearchQuery({
-                                                                ...searchQuery,
-                                                                socialMediaType: option.value?.toUpperCase(),
-                                                                pageIds: [],
-                                                                offSet: 0,
-                                                            });
-                                                        }}
-                                                        active={selectedDropdownOptions?.socialMediaType?.value === option.value}
-                                                    >
-                                                        {option.label}
-                                                    </Dropdown.Item>
-                                                ))}
-                                        </Dropdown.Menu>
-                                    </Dropdown>
                                 </>
                             }
                         </div>
