@@ -141,7 +141,7 @@ const Planner = () => {
         let classname = event?._def?.extendedProps?.batchId
         const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
         return (
-            <div className={"cal_Div w-100 test"}
+            <div className={`cal_Div w-100 test`}
                  style={{
                      backgroundColor: backgroundColor,
                      borderLeft: border,
@@ -401,11 +401,15 @@ const Planner = () => {
                                             events={events}
                                             eventContent={renderCalendarCards}
                                             dayHeaderContent={customDayHeaderContent}
-                                            // dayCellClassNames={(arg) => {
-                                            //     if (arg?.isPast) {
-                                            //         return "calendar_card_disable";
-                                            //     }
-                                            // }}
+                                            dayCellClassNames={(arg) => {
+                                                const cellDate= new Date(arg.date)
+                                                return selectedDate &&
+                                                cellDate.getDate() === selectedDate.getDate() &&
+                                                cellDate.getMonth() === selectedDate.getMonth() &&
+                                                cellDate.getFullYear() === selectedDate.getFullYear()
+                                                    ? 'selected-date-cell'
+                                                    : '';
+                                            }}
                                             headerToolbar={
                                                 // (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.data?.length === 0) ?
                                                 {

@@ -946,15 +946,15 @@ text-align: left;
   color: unset;
 }
 .fc .fc-daygrid-day.fc-day-today {
-  /* background: #AAE0FF; */
-  background-color: unset !important;
+   background: #fff;
+  /*background-color: unset !important;*/
 }
 .calendar_card1 h3 {
   font-size: 16px;
 }
 .current_date_outer {
-  color: white;
-  background: #E05905;
+  color: #000;
+  background: transparent;
   border-radius: 20px;
   height: 29px;
   width: 30px;

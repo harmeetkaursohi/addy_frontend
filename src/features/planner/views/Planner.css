@@ -8,6 +8,10 @@
 .planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-left::before,.planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-right::before {
     color: rgba(95, 109, 126, 1);
 }
+.selected-date-cell,td.fc-day.fc-day-wed.fc-day-today.selected-date-cell{
+    background: #AAE0FF;
+    outline: 1px solid #E3E3E3;
+}
 ul.schdeuled_post_list {
     display: flex;
     padding: 23px;

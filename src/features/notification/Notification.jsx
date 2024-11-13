@@ -1,6 +1,6 @@
 import {useAppContext} from "../common/components/AppProvider";
 import "./Notification.css"
-import ReactDOMServer from 'react-dom/server'; 
+import ReactDOMServer from 'react-dom/server';
 import React, {useEffect, useState} from "react";
 import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAccount";
 import {
@@ -22,11 +22,11 @@ import {
     useClearAllNotificationMutation,
     useDeleteNotificationByIdMutation,
     useGetUnseenNotificationsQuery, useLazySearchNotificationsQuery,
-     useSetNotificationsToSeenByCustomerIdMutation,
+    useSetNotificationsToSeenByCustomerIdMutation,
     useSetNotificationsToSeenMutation
 } from "../../app/apis/notificationApi";
 import {handleRTKQuery} from "../../utils/RTKQueryUtils";
-import { RxCross2 } from "react-icons/rx";
+import {RxCross2} from "react-icons/rx";
 
 
 const Notification = () => {
@@ -63,15 +63,15 @@ const Notification = () => {
                 offSet: 0
             })
         }
-    }, [getConnectedSocialAccountApi,getAllConnectedPagesApi]);
+    }, [getConnectedSocialAccountApi, getAllConnectedPagesApi]);
     useEffect(() => {
-        if (notificationsList?.length===0 && unSeenNotificationsList?.length===0 && baseSearchQuery?.offSet>=0) {
+        if (notificationsList?.length === 0 && unSeenNotificationsList?.length === 0 && baseSearchQuery?.offSet >= 0) {
             setBaseSearchQuery({
                 ...baseSearchQuery,
                 offSet: 0
             })
         }
-    }, [notificationsList,unSeenNotificationsList]);
+    }, [notificationsList, unSeenNotificationsList]);
 
     useEffect(() => {
         if (baseSearchQuery?.offSet >= 0) {
@@ -86,11 +86,13 @@ const Notification = () => {
             }
         }
     }, [unseenNotificationsApi]);
+
     useEffect(() => {
         if (unseenNotificationsApi?.data?.length > 0 && !unseenNotificationsApi?.isLoading && !unseenNotificationsApi?.isFetching) {
             setUnSeenNotificationsList([...unSeenNotificationsList, ...unseenNotificationsApi?.data])
         }
     }, [unseenNotificationsApi]);
+
     useEffect(() => {
         if (searchNotificationsApi?.data?.data?.length > 0 && !searchNotificationsApi?.isLoading && !searchNotificationsApi?.isFetching) {
             setNotificationsList([...notificationsList, ...searchNotificationsApi?.data?.data])
@@ -99,7 +101,7 @@ const Notification = () => {
 
     const handleClearAllNotifications = (e) => {
         e.preventDefault();
-        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Notification_img />);
+        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Notification_img/>);
         Swal.fire({
             html: `
              <div class="swal-content mt-2">
@@ -141,117 +143,118 @@ const Notification = () => {
                 <div className={sidebar ? "comment_container" : "cmn_Padding"}>
                     <div className="cmn_outer">
 
-                            <div className="notification_header align-items-center gap-3">
-                               <div className="flex-grow-1">
-                               <h2 className="cmn_text_heading">{jsondata.notification}</h2>
-
-                         {  !isAllNotificationsCleared &&
-                                    (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
-                                       <h6 className={"cmn_small_heading"}>{jsondata.notification_heading}</h6>}
-                               </div>
+                        <div className="notification_header align-items-center gap-3">
+                            <div className="flex-grow-1">
+                                <h2 className="cmn_text_heading">{jsondata.notification}</h2>
 
                                 {
-                                    !isAllNotificationsCleared && !isNullOrEmpty(notificationsList) && !isNullOrEmpty(unSeenNotificationsList)
-                                    (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
-                                    <button
-                                        className={"text-end clear-all-notifications  cursor-pointer  clear_all_button_outer " + (clearNotificationApi?.isLoading ? "disable_btn" : "")}
-                                        onClick={handleClearAllNotifications}
-                                    >Clear all</button>
+                                    !isAllNotificationsCleared && (!isNullOrEmpty(notificationsList) || !isNullOrEmpty(unSeenNotificationsList)) &&
+                                    // (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
+                                    <h6 className={"cmn_small_heading"}>{jsondata.notification_heading}</h6>
                                 }
+
                             </div>
-                       
-                           
-                        
+
                             {
-                                    getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
-                                <div className=" align-items-center">
-                                    {
-                                        (isAllNotificationsCleared || (isNullOrEmpty(notificationsList) && isNullOrEmpty(unSeenNotificationsList) && !searchNotificationsApi?.isLoading && !unseenNotificationsApi?.isLoading)) &&
-                                            // (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
-                                        <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
-                                            <div>
-                                                <No_notification_img className="w-100 h-auto" />
-                                                <h4 className="no-notifications-text text-center mt-3 text-black">{EmptyNotificationGridMessage}</h4>
-                                            </div>
+                                !isAllNotificationsCleared && !isNullOrEmpty(notificationsList) && !isNullOrEmpty(unSeenNotificationsList)
+                                (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
+                                <button
+                                    className={"text-end clear-all-notifications  cursor-pointer  clear_all_button_outer " + (clearNotificationApi?.isLoading ? "disable_btn" : "")}
+                                    onClick={handleClearAllNotifications}
+                                >Clear all</button>
+                            }
+                        </div>
+
+
+                        {
+                            getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
+                            <div className=" align-items-center">
+                                {
+                                    (isAllNotificationsCleared || (isNullOrEmpty(notificationsList) && isNullOrEmpty(unSeenNotificationsList) && !searchNotificationsApi?.isLoading && !unseenNotificationsApi?.isLoading)) &&
+                                    // (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
+                                    <div
+                                        className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
+                                        <div>
+                                            <No_notification_img className="w-100 h-auto"/>
+                                            <h4 className="no-notifications-text text-center mt-3 text-black">{EmptyNotificationGridMessage}</h4>
                                         </div>
-                                    }
-                                    {(( !isAllNotificationsCleared && notificationsList?.length > 0 ) || ( !isAllNotificationsCleared && unSeenNotificationsList?.length > 0)) &&
+                                    </div>
+                                }
+                                {((!isAllNotificationsCleared && notificationsList?.length > 0) || (!isAllNotificationsCleared && unSeenNotificationsList?.length > 0)) &&
                                     <div className="notification_wrapper">
-                                    {
-                                        !isAllNotificationsCleared && unSeenNotificationsList?.length > 0 &&
-                                        unSeenNotificationsList?.map((notification, index) => {
-                                            return (
-                                                <div key={index}>
-                                                             <NotificationComponent notification={notification}
-                                                                                    notificationsList={notificationsList}
-                                                                                    setNotificationsList={setNotificationsList}
-                                                                                    unSeenNotificationsList={unSeenNotificationsList}
-                                                                                    setUnSeenNotificationsList={setUnSeenNotificationsList}/>
-                                                        </div>
-                                            )
-                                        })
-                                    }
+                                        {
+                                            !isAllNotificationsCleared && unSeenNotificationsList?.length > 0 &&
+                                            unSeenNotificationsList?.map((notification, index) => {
+                                                return (
+                                                    <div key={index}>
+                                                        <NotificationComponent notification={notification}
+                                                                               notificationsList={notificationsList}
+                                                                               setNotificationsList={setNotificationsList}
+                                                                               unSeenNotificationsList={unSeenNotificationsList}
+                                                                               setUnSeenNotificationsList={setUnSeenNotificationsList}/>
+                                                    </div>
+                                                )
+                                            })
+                                        }
 
 
-                                    {
-                                        !isAllNotificationsCleared && notificationsList?.length > 0 &&
-                                        notificationsList?.map((notification, index) => {
-                                            return (
-                                                <span key={index}>
+                                        {
+                                            !isAllNotificationsCleared && notificationsList?.length > 0 &&
+                                            notificationsList?.map((notification, index) => {
+                                                return (
+                                                    <span key={index}>
                                                              <NotificationComponent notification={notification}
                                                                                     notificationsList={notificationsList}
                                                                                     setNotificationsList={setNotificationsList}
                                                                                     unSeenNotificationsList={unSeenNotificationsList}
                                                                                     setUnSeenNotificationsList={setUnSeenNotificationsList}/>
                                                         </span>
-                                            )
-                                        })
-                                    }
-                                         </div>}
+                                                )
+                                            })
+                                        }
+                                    </div>}
 
+                            </div>
+                        }
+                        {
+                            (isAccountInfoLoading || searchNotificationsApi?.isLoading || searchNotificationsApi?.isFetching || unseenNotificationsApi?.isLoading || unseenNotificationsApi?.isFetching) &&
+                            <>
+                                {
+                                    getEmptyArrayOfSize(4).map((_, i) => {
+                                        return <div className={"notifications_layout"}>
+                                            <SkeletonEffect count={1}/>
+                                            <SkeletonEffect count={1} className={"w-25 mt-2"}/>
+                                        </div>
+                                    })
+                                }
+                            </>
+                        }
+                        {
+                            getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 && searchNotificationsApi?.data?.hasNext &&
+                            <div
+                                className={" load-more-not-btn-outer " + ((searchNotificationsApi?.isLoading || searchNotificationsApi?.isFetching || deleteNotificationByIdApi?.isFetching || setNotificationsToSeenApi?.isLoading) ? "disable_btn" : "")}>
+                                <div className={"load-more-notification-btn  cursor-pointer"}
+                                     onClick={() => {
+                                         setBaseSearchQuery({
+                                             ...baseSearchQuery,
+                                             offSet: notificationsList?.length
+                                         })
+                                     }}
+                                > Load more...
                                 </div>
-                            }
-                            {
-                                (isAccountInfoLoading || searchNotificationsApi?.isLoading || searchNotificationsApi?.isFetching || unseenNotificationsApi?.isLoading || unseenNotificationsApi?.isFetching) &&
-                                <>
-                                    {
-                                        getEmptyArrayOfSize(4).map((_, i) => {
-                                            return <div className={"notifications_layout"}>
-                                                <SkeletonEffect count={1}/>
-                                                <SkeletonEffect count={1} className={"w-25 mt-2"}/>
-                                            </div>
-                                        })
-                                    }
-                                </>
-                            }
-                            {
-                                getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 && searchNotificationsApi?.data?.hasNext &&
-                                <div
-                                    className={" load-more-not-btn-outer " + ((searchNotificationsApi?.isLoading || searchNotificationsApi?.isFetching || deleteNotificationByIdApi?.isFetching || setNotificationsToSeenApi?.isLoading) ? "disable_btn" : "")}>
-                                    <div className={"load-more-notification-btn  cursor-pointer"}
-                                         onClick={() => {
-                                             setBaseSearchQuery({
-                                                 ...baseSearchQuery,
-                                                 offSet: notificationsList?.length
-                                             })
-                                         }}
-                                    > Load more...
-                                    </div>
-                                </div>
-                            }
-                            
-                            {
-                                (getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.data?.length === 0) &&
-                                <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
+                            </div>
+                        }
+
+                        {
+                            (getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.data?.length === 0) &&
+                            <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
                                 <div>
-                                    <No_notification_img className="w-100 h-auto" />
+                                    <No_notification_img className="w-100 h-auto"/>
                                     <h4 className="no-notifications-text text-center mt-3 text-black">{EmptyNotificationGridMessage}</h4>
                                 </div>
                             </div>
-                            }
+                        }
 
-
-                   
 
                     </div>
                 </div>
@@ -345,9 +348,9 @@ const NotificationComponent = ({
                                 className={"notification-creation-date"}>{getCommentCreationTime(notification.createdAt)}</div>
                         </div>
                         <div>
-                        <RxCross2  onClick={() => {
-                                            !deleteNotificationByIdApi?.isLoading && setNotificationToDelete(notification)
-                                        }}/>
+                            <RxCross2 onClick={() => {
+                                !deleteNotificationByIdApi?.isLoading && setNotificationToDelete(notification)
+                            }}/>
 
                             {/* <Dropdown className="notification_edit_button">
                                 <Dropdown.Toggle
