@@ -109,6 +109,9 @@ min-height: 100vh;
   border-color: #fff;
   color: #000;
 }
+.word-wrap{
+  word-break: break-all;
+}
 .cmn_dropdown input.privacy-policy-checkbox {
   border-color: #969696;
 }

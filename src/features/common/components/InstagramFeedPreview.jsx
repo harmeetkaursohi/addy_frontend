@@ -118,9 +118,9 @@ const InstagramFeedPreview = ({
                         </div>
                     </div>
                     <div
-                        className={`${showContent ? "feed_preview_Caption_outer" : "Caption_outer instagram_caption_outer "}`}>
+                        className={`${showContent ? "feed_preview_Caption_outer word-wrap" : "Caption_outer instagram_caption_outer word-wrap"}`}>
 
-                        <div className={showContent ? "feed_preview_Caption_outer" : "Caption_outer"}>
+                        <div className={showContent ? "feed_preview_Caption_outer word-wrap" : "Caption_outer word-wrap"}>
                             {(caption.length > 0 || hashTag.length > 0) || (caption.length > 0 && hashTag.length > 0) ?
                                 <h2 className=" mt-2">{pageName}</h2> : ""}
                             <CommentText isRequire={true} pageName={pageName} socialMediaType={"INSTAGRAM"}
