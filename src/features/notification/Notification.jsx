@@ -313,7 +313,7 @@ const NotificationComponent = ({
             className={" notifications_layout " + (notification?.id === notificationToDelete?.id ? "" : " notifications_outer")}>
             {
                 notification?.id === notificationToDelete?.id ?
-                    <SkeletonEffect count={1}></SkeletonEffect> : <>
+                    <></> : <>
                         <div className="notification_message_outer">
                             <p
                                 className={(notification?.isSeen ? "" : "unseen_notifications")}>{
