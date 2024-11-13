@@ -176,7 +176,7 @@ const SocialAccounts = ({}) => {
                             return await connectSocialAccount(res.socialAccountData).unwrap();
                         },
                         () => {
-                            dispatch(addyApi.util.invalidateTags(["getConnectedSocialAccountApi", "getSocialMediaPostsByCriteriaApi"]));
+                            dispatch(addyApi.util.invalidateTags(["getConnectedSocialAccountApi", "getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"]));
                         },
                         (response) => {
                             if (response.status === 409) {
@@ -300,8 +300,8 @@ const SocialAccounts = ({}) => {
                         return await disconnectSocialAccount(socialMediaAccountId).unwrap();
                     },
                     () => {
-                        dispatch(addyApi.util.invalidateTags(["getConnectedSocialAccountApi", "getSocialMediaPostsByCriteriaApi"]));
-                    },
+                        dispatch(addyApi.util.invalidateTags(["getConnectedSocialAccountApi", "getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"]));
+                        },
                     () => {
                         Swal.fire({
                             imageUrl: crossIcon,
