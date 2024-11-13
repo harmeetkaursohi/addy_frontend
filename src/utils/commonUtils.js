@@ -2068,10 +2068,10 @@ export const getImageHeightAndWidth = (imageUrl) => {
     }
 };
 
-export const getVideoDurationById = async (attachmentUrl) => {
+export const getVideoDurationById = async (attachmentId) => {
     return new Promise((resolve, reject) => {
         const mediaElement = document.createElement("video");
-        mediaElement.src = attachmentUrl;
+        mediaElement.src = `${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachmentId}`;
 
         mediaElement.onloadedmetadata = () => {
             resolve({
@@ -2084,6 +2084,7 @@ export const getVideoDurationById = async (attachmentUrl) => {
     });
 
 };
+
 export const getVideoDurationAndSizeByBlobUrl = async (blobUrl) => {
     try {
         const response = await fetch(blobUrl);
