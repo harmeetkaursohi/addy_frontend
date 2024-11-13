@@ -176,22 +176,22 @@ const UpdatePost = () => {
                 setFiles(postData?.attachments || []);
                 setShowScheduleDateAndTimeBox(postData?.postStatus === "SCHEDULED")
 
-                const handleAttachments = async () => {
-                    const attachments = postData?.attachments || []
-                    if(attachments?.[0]?.mediaType==="VIDEO"){
-                        const result = await getVideoDurationAndSizeByBlobUrl(attachment?.url)
-                        setPostAttachments([{
-                            id: attachments?.[0]?.file?.id,
-                            mediaType: "VIDEO",
-                            fileName: attachments?.[0]?.file?.attachmentName,
-                            duration: result?.duration,
-                            fileSize: result?.fileSize
-                        }]);
-                    }else{
-                        setFiles(attachments);
-                    }
-                }
-                handleAttachments()
+                // const handleAttachments = async () => {
+                //     const attachments = postData?.attachments || []
+                //     if(attachments?.[0]?.mediaType==="VIDEO"){
+                //         const result = await getVideoDurationAndSizeByBlobUrl(attachment?.url)
+                //         setPostAttachments([{
+                //             id: attachments?.[0]?.file?.id,
+                //             mediaType: "VIDEO",
+                //             fileName: attachments?.[0]?.file?.attachmentName,
+                //             duration: result?.duration,
+                //             fileSize: result?.fileSize
+                //         }]);
+                //     }else{
+                //         setFiles(attachments);
+                //     }
+                // }
+                // handleAttachments()
 
             }
         }, [allOptions, postsByIdApi?.data]);
