@@ -151,7 +151,7 @@ const Notification = () => {
                                </div>
 
                                 {
-                                    !isAllNotificationsCleared &&
+                                    !isAllNotificationsCleared && !isNullOrEmpty(notificationsList) && !isNullOrEmpty(unSeenNotificationsList)
                                     (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
                                     <button
                                         className={"text-end clear-all-notifications  cursor-pointer  clear_all_button_outer " + (clearNotificationApi?.isLoading ? "disable_btn" : "")}
@@ -166,7 +166,7 @@ const Notification = () => {
                                     getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                                 <div className=" align-items-center">
                                     {
-                                        (isAllNotificationsCleared || (isNullOrEmpty(notificationsList) && isNullOrEmpty(unSeenNotificationsList) && !searchNotificationsApi?.isLoading && !searchNotificationsApi?.isFetching && !unseenNotificationsApi?.isLoading && !unseenNotificationsApi?.isFetching)) &&
+                                        (isAllNotificationsCleared || (isNullOrEmpty(notificationsList) && isNullOrEmpty(unSeenNotificationsList) && !searchNotificationsApi?.isLoading && !unseenNotificationsApi?.isLoading)) &&
                                             // (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
                                         <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
                                             <div>
