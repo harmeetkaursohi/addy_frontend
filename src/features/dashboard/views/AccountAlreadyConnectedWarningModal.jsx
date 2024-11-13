@@ -9,7 +9,7 @@ const AccountAlreadyConnectedWarningModal = ({accountAlreadyConnectedWarningModa
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="md" show={accountAlreadyConnectedWarningModal?.showModal} onHide={handleClose} className="acc_already_connect_wrapper">
+                <Modal centered size="md" show={accountAlreadyConnectedWarningModal?.showModal} onHide={handleClose} className="acc_already_connect_wrapper">
                
                     <Modal.Body>
                         <div className='facebook_content_outer'>

@@ -67,7 +67,7 @@ const Review = () => {
   const [postData, setPostData] = useState(null);
   const [pageDropdown, setPageDropdown] = useState([]);
   const [selectedDropdownOptions, setSelectedDropDownOptions] = useState({
-    socialMediaType: { label: "Filter", value: null },
+    socialMediaType: { label: "Filters", value: null },
     pages: [],
   });
 
@@ -339,7 +339,7 @@ const Review = () => {
                       <Dropdown className="cmn_dropdown position-relative end-0">
                         <Dropdown.Toggle>
                           {selectedDropdownOptions?.socialMediaType?.label ||
-                            "Filter"}
+                            "Pages"}
                           <CgChevronDown />
                         </Dropdown.Toggle>
                         
@@ -400,7 +400,7 @@ const Review = () => {
                     <div className="calender_outer_wrapper publish_post_filter">
                                     <Dropdown className="cmn_dropdown position-relative end-0">
                                         <Dropdown.Toggle>
-                                            {selectedDropdownOptions?.pages?.name || 'Filter'}
+                                            {selectedDropdownOptions?.pages?.name || 'Pages'}
                                             <CgChevronDown />
                                         </Dropdown.Toggle>
                              
@@ -425,8 +425,8 @@ const Review = () => {
                                                         className="d-flex align-items-center"
                                                         active={selectedDropdownOptions?.pages?.pageId === option.pageId}
                                                     >   
-                                                    <img src={option?.imageUrl || Default_user} alt="" width={22} height={22}/>
-                                                        <h4 className="flex-grow-1">{option?.name}</h4>
+                                                    <img src={option?.imageUrl || Default_user} alt="" width={22} height={22} class="user_icon "/>
+                                                        <h4 className="flex-grow-1" title={option?.name}>{option?.name}</h4>
                                                         <input
                                                             className="privacy-policy-checkbox"
                                                             type="checkbox"
