@@ -53,7 +53,6 @@ const Planner = () => {
     },
     { title: "Twitter", start: new Date().getTime(), imageUrl: linkedin },
   ]);
-  console.log(events, "events");
 
   const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("");
   const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("");
@@ -162,7 +161,7 @@ const Planner = () => {
       border = "4px solid  #098FB9";
       textColor = "#033C48";
     } else {
-      backgroundColor = "#fcd6d6";
+      backgroundColor = "red !important";
       border = "4px solid #B90909";
       textColor = "#780000";
     }
@@ -199,11 +198,7 @@ const Planner = () => {
           !getPostsForPlannerApi?.isFetching &&
           !getPlannerPostsCountApi?.isLoading &&
           !getPlannerPostsCountApi?.isFetching && (
-            <button
-              className={`createPost_btn crate_btn ms-0  w-100 planner_view_more_btn ${
-                event?._def?.extendedProps?.showMoreContent == 0 && "d-none"
-              }`}
-            >
+            <button className="createPost_btn crate_btn ms-0  w-100 planner_view_more_btn">
               {event?._def?.extendedProps?.showMoreContent > 0 &&
                 "And " +
                   event?._def?.extendedProps?.showMoreContent +
@@ -213,6 +208,7 @@ const Planner = () => {
       </div>
     );
   };
+
   const customDayHeaderContent = (args) => {
     let days = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
     return days[args.date.getDay()];
@@ -470,12 +466,21 @@ const Planner = () => {
                     <FullCalendar
                       dateClick={(arg) => {
                         if (isPostApiLoading) return;
-                        const localDate = new Date(arg.date); // arg.date is already a Date object
+                        const localDate =
+                          arg.date instanceof Date
+                            ? arg.date
+                            : new Date(
+                                Date.UTC(
+                                  arg.date.getFullYear(),
+                                  arg.date.getMonth(),
+                                  arg.date.getDate()
+                                )
+                              );
                         setSelectedDate(
                           getDayStartInUTC(
-                            localDate.getDate(),
-                            localDate.getMonth(),
-                            localDate.getFullYear()
+                            localDate.getUTCDate(),
+                            localDate.getUTCMonth(),
+                            localDate.getUTCFullYear()
                           )
                         );
                       }}
@@ -487,7 +492,16 @@ const Planner = () => {
                       eventContent={renderCalendarCards}
                       dayHeaderContent={customDayHeaderContent}
                       dayCellClassNames={(arg) => {
-                        const cellDate = new Date(arg.date); // arg.date is a Date object
+                        const cellDate =
+                          arg.date instanceof Date
+                            ? arg.date
+                            : new Date(
+                                Date.UTC(
+                                  arg.date.getFullYear(),
+                                  arg.date.getMonth(),
+                                  arg.date.getDate()
+                                )
+                              );
                         return selectedDate &&
                           cellDate.getDate() === selectedDate.getDate() &&
                           cellDate.getMonth() === selectedDate.getMonth() &&
@@ -511,7 +525,16 @@ const Planner = () => {
                         },
                       }}
                       dayCellContent={(arg) => {
-                        const cellDate = new Date(arg.date); // Ensure arg.date is a Date object
+                        const cellDate =
+                          arg.date instanceof Date
+                            ? arg.date
+                            : new Date(
+                                Date.UTC(
+                                  arg.date.getFullYear(),
+                                  arg.date.getMonth(),
+                                  arg.date.getDate()
+                                )
+                              );
                         const currentDate = new Date();
 
                         return (
