@@ -10,7 +10,6 @@
 }
 .calender_outer_wrapper table.fc-scrollgrid-sync-table tbody td.selected-date-cell {
     background: #F07C3321;
-    outline: unset;
     box-shadow: inset 0 0 0 2px #F07C33;
 }
 td.fc-day.fc-day-sat.fc-day-future.fc-daygrid-day.event-date-cell {
