@@ -132,7 +132,7 @@ const Planner = () => {
             border = "4px solid  #098FB9";
             textColor = "#033C48"
         } else {
-            backgroundColor = '#fcd6d6';
+            backgroundColor = 'red !important';
             border = "4px solid #B90909";
             textColor = "#780000"
         }
@@ -393,14 +393,15 @@ const Planner = () => {
                                             eventContent={renderCalendarCards}
                                             dayHeaderContent={customDayHeaderContent}
                                             dayCellClassNames={(arg) => {
-                                                const cellDate= new Date(arg.date)
-                                                return selectedDate &&
-                                                cellDate.getDate() === selectedDate.getDate() &&
-                                                cellDate.getMonth() === selectedDate.getMonth() &&
-                                                cellDate.getFullYear() === selectedDate.getFullYear()
-                                                    ? 'selected-date-cell'
-                                                    : '';
-                                            }}
+                                                const cellDate = new Date(arg.date);
+                                                const hasEvent = events.some(event => new Date(event.start).toDateString() === cellDate.toDateString());
+                                                const isSelected = selectedDate && cellDate.toDateString() === new Date(selectedDate).toDateString();
+                                              
+                                                return [
+                                                  hasEvent && 'event-date-cell', 
+                                                  isSelected && 'selected-date-cell'
+                                                ].filter(Boolean).join(' ');
+                                              }}
                                             headerToolbar={
                                                 {
                                                     left: "  prev",
@@ -419,7 +420,16 @@ const Planner = () => {
                                                 },
                                             }}
                                             eventBackgroundColor="#ffcccc" // Sets a light red background for all events
-
+                                            eventClassNames={(arg) => {
+                                                const eventDate = new Date(arg.event.start);
+                                                const currentDate = new Date();
+                                                if (eventDate.getDate() === currentDate.getDate() &&
+                                                    eventDate.getMonth() === currentDate.getMonth() &&
+                                                    eventDate.getFullYear() === currentDate.getFullYear()) {
+                                                  return 'event-today'; // Add class for today’s event
+                                                }
+                                                return '';
+                                              }}
                                             dayCellContent={(arg) => {
                                                 const calenderDate = arg.date;
                                                 const dateString = calenderDate;

@@ -62,7 +62,7 @@
     gap: 10px;
     position: relative;
     width: 100%;
-    min-height: 53px;
+    min-height: 48px;
 }
 
 .plans_tags_wrapper .d-flex.page_tags, .plan_grid_content p {

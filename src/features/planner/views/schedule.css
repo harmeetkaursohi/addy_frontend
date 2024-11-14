@@ -33,7 +33,7 @@
 
 
 .scheduled_posts {
-    width: 500px;
+    flex:0 0 344px;
     padding: 13px;
     border-radius: 15px;
     background: #fff;

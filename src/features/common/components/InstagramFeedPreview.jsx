@@ -92,20 +92,27 @@ const InstagramFeedPreview = ({
                 <CommonSlider isrequired={true} files={files} selectedFileType={selectedFileType} caption={caption}
                               hashTag={hashTag}/>
                 {
-                    reference === "PLANNER" && !isNullOrEmpty(postInsightsData) &&
+                    reference === "PLANNER" && !isNullOrEmpty(postInsightsData)  ?
                     <>
                         {
                             postInsightsData?.isLoading ?
                                 <SkeletonEffect count={1}/> :
-                                <>
-                                    <>like {postInsightsData?.data?.reactions}</>
-                                    <>Comment {postInsightsData?.data?.comments}</>
-                                    <>shares {postInsightsData?.data?.shares}</>
-                                </>
+                                <div className="comment_wrapper">
+                                  <div className='like_comment_outer instagram_like'>
+                                    <ul className="flex-grow-1 d-flex mb-0">
+                                        <li className="d-flex align-items-center gap-2"><Image src={like_img} alt="like image"/> {postInsightsData?.data?.reactions}1</li>
+                                        <li className="d-flex align-items-center gap-2 ms-4 me-4">  <Image src={comment_img} alt="comment image" className=" "/>{postInsightsData?.data?.comments}1</li>
+                                        <li className="d-flex align-items-center gap-2"> <Image src={send_img} alt="send image"/>{postInsightsData?.data?.shares}1</li>   
+                                    </ul>
+                                    <div>
+                                        <Image src={save_img} alt="save image"/>
+                                    </div>
+                                     </div>
+                                </div>
                         }
                     </>
-                }
-                <div className="comment_wrapper">
+                    :
+                    <div className="comment_wrapper">
                     <div className='like_comment_outer instagram_like'>
                         <div className="flex-grow-1 d-flex">
                             <Image src={like_img} alt="like image"/>
@@ -117,7 +124,10 @@ const InstagramFeedPreview = ({
                             <Image src={save_img} alt="save image"/>
                         </div>
                     </div>
-                    <div
+                    </div>
+                }
+                <div className="comment_wrapper">
+                                      <div
                         className={`${showContent ? "feed_preview_Caption_outer word-wrap" : "Caption_outer instagram_caption_outer word-wrap"}`}>
 
                         <div className={showContent ? "feed_preview_Caption_outer word-wrap" : "Caption_outer word-wrap"}>

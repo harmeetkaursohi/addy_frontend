@@ -1202,7 +1202,10 @@ table.fc-col-header {
   color: rgba(98, 111, 128, 1);
   font-size:14px;
 }
-
+video {
+  -webkit-object-fit: cover;
+  object-fit: cover;
+}
 
 .addy_img p {
   color: rgba(95, 109, 126, 1);

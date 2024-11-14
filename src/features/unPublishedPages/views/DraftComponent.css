@@ -114,7 +114,7 @@
     height:100%;
 }
 .planner_calender .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
-    padding-top: 30px;
+    padding-top: 20px;
 }
 
 .fc-toolbar-chunk:last-child {
@@ -494,12 +494,7 @@ svg.arrow_up_icon {
     }
 }
 
-@media screen and (min-width:1499px){
-    .upcoming_post_outer .video_player_outer {
-        height: 350px !important;
-    }
 
-}
 @media screen and (max-width: 1440px){
     .small_font{
         font-size: 12px;
