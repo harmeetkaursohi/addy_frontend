@@ -166,7 +166,7 @@ const Planner = () => {
                 </div>
                 {
                     !getPostsForPlannerApi?.isLoading && !getPostsForPlannerApi?.isFetching && !getPlannerPostsCountApi?.isLoading && !getPlannerPostsCountApi?.isFetching &&
-                    <button className="createPost_btn crate_btn ms-0  w-100 planner_view_more_btn"
+                    <button className={`createPost_btn crate_btn ms-0  w-100 planner_view_more_btn ${ (event?._def?.extendedProps?.showMoreContent === 0) && "d-none"}` }
                     >{
                         (event?._def?.extendedProps?.showMoreContent > 0) &&
                         "And " + event?._def?.extendedProps?.showMoreContent + " more..."
@@ -188,6 +188,7 @@ const Planner = () => {
             calendarRef?.current?.getApi().next();
         }
         let inst = new Date(calendarRef?.current?.getApi()?.currentData?.viewTitle.toString());
+        console.log(inst,"inst")
         setSelectedDate(getDayStartInUTC(inst.getDate(), inst.getMonth(), inst.getFullYear()));
 
         inst.setDate(inst.getDate() + 10);
