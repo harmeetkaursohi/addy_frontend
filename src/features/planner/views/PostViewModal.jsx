@@ -212,7 +212,7 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                         {/* Custom prev and next buttons */}
                         <FaChevronLeft
                             size={24}
-                            className="slick_btn"
+                            className={postToPreview.length === 1 ? "slick_btn d-none" :"slick_btn"}
                             onClick={prevSlide}
                         />
                         <Slider {...settings} ref={sliderRef}>
@@ -317,7 +317,7 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                         </Slider>
 
                         <FaChevronRight
-                            className="slick_btn next_slide"
+                            className={ postToPreview.length === 1 ? "slick_btn next_slide d-none" : "slick_btn next_slide"}
                             size={24}
                             onClick={nextSlide}
                         />

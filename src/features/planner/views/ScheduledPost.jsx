@@ -123,7 +123,7 @@ const ScheduledPost = ({
                     onClick={handleNextDay}
                 />
             </div>
-            <div className='mt-4 sechduled_post_outer d-flex flex-column'>
+            <div className='sechduled_post_outer d-flex flex-column'>
                 {
                     (plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching) &&
                     getEmptyArrayOfSize(3).map((_, i) => {

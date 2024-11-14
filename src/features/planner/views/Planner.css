@@ -8,10 +8,18 @@
 .planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-left::before,.planner_outer .CalenderOuter_Wrapper .fc-icon-chevron-right::before {
     color: rgba(95, 109, 126, 1);
 }
-.selected-date-cell,td.fc-day.fc-day-wed.fc-day-today.selected-date-cell{
+.calender_outer_wrapper table.fc-scrollgrid-sync-table tbody td.selected-date-cell {
+    background: #F07C3321;
+    outline: unset;
+    box-shadow: inset 0 0 0 2px #F07C33;
+}
+td.fc-day.fc-day-sat.fc-day-future.fc-daygrid-day.event-date-cell {
+    background: #AAE0FF;
+}
+/* td.fc-day.fc-day-wed.fc-day-today.selected-date-cell{
     background: #AAE0FF;
     outline: 1px solid #E3E3E3;
-}
+} */
 ul.schdeuled_post_list {
     display: flex;
     padding: 23px;
@@ -48,9 +56,7 @@ ul.schdeuled_post_list li:nth-child(2) {
     border-left: 1px solid #000;
     border-right: 1px solid #000;
 }
-button.planner_view_more_btn {
-    color: black;
-}
+
 
 
 .current-date{
@@ -352,11 +358,33 @@ button.fc-customText-button.fc-button.fc-button-primary {
 button.planner_view_more_btn {
     color: black;
     border: none;
-    background: transparent;
-    text-align: right;
-    font-size: 14px;
-    font-weight: 700;
+    background: #F07C3340;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 400;
     font-family: 'Nunito';
+    border-radius: 0;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+    padding: 8px 0px;
+    line-height: 16px;
+}
+.select_wrapper button.planner_view_more_btn {
+    font-size: 12px;
+}
+.cal_Div {
+    border-radius: 7px;
+    display: inline-grid;
+    background: #F4F8FE;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 10%);
+}
+.select_wrapper .custom_event h3 {
+    display: none;
+}
+.custom_event h3{
+    color: #000;
+    font-weight: 500;
+    font-size: 13px;
 }
 a.fc-daygrid-dot-event:hover {
     background: transparent;
@@ -393,11 +421,11 @@ a.fc-daygrid-dot-event:hover {
     font-weight: 500;
     padding-bottom: 10px;
 }
-.cal_Div.w-100.test {
+/* .cal_Div.w-100.test {
     overflow: scroll;
     height: 61px;
     scrollbar-width: none;
-}
+} */
 .comment_wrapper{
     padding: 14px 23px;
 }
@@ -521,11 +549,11 @@ svg.slick_btn.next_slide {
     flex-wrap: wrap;
   }
  
-.cal_Div.w-100.test {
+/* .cal_Div.w-100.test {
     height: 50px;
     overflow: scroll;
     scrollbar-width: none;
-}
+} */
 
 
   .ul.schdeuled_post_list h3 {

@@ -94,48 +94,29 @@ console.log( reference === "PLANNER" , postStatus , "ESCHDULED","reference")
                                       hashTag={hashTag}></CommonSlider>
                         {/*<Image src={noImageAvailable} width="100%"/>*/}
                         {
-                            reference === "PLANNER" && !isNullOrEmpty(postInsightsData) &&
+                            reference === "PLANNER" && !isNullOrEmpty(postInsightsData) ?
                             <>
                                 {
                                     postInsightsData?.isLoading ?
                                         <SkeletonEffect count={1}/> :
                                         <>
-                                            <>like {postInsightsData?.data?.reactions}</>
-                                            <>Comment {postInsightsData?.data?.comments}</>
-                                            <>shares {postInsightsData?.data?.shares}</>
+                                        <div className="d-flex p-3 align-items-center">
+                                            <p className="flex-grow-1"><FaRegHeart size={25}/><span className=" ms-2">{postInsightsData?.data?.reactions}1 </span></p>
+                                            <p className="bold_text"><span className="me-1">{postInsightsData?.data?.comments}1</span>comments</p> <span className="dot_disc ms-2 me-2"></span>
+                                            <p className="bold_text"><span className="me-1">{postInsightsData?.data?.shares}1</span>reposts</p>
+                                        </div>
                                         </>
                                 }
                             </>
+                            :
+                            <div className="d-flex p-3 align-items-center">
+                                <p className="flex-grow-1"><FaRegHeart size={25}/><span className="blur ms-2">1245 </span></p>
+                                <p className="bold_text"><span className="blur">12</span>comments</p> <span className="dot_disc ms-2 me-2"></span>
+                                <p className="bold_text"><span className="blur">12</span>reposts</p>
+                            </div>
                         }
-                          <div className="d-flex p-3 align-items-center">
-                            <p className="flex-grow-1"><FaRegHeart size={25}/><span className="blur ms-2">1245 </span></p>
-                        <p className="bold_text"><span className="blur">12</span>comments</p> <span className="dot_disc ms-2 me-2"></span>
-                        <p className="bold_text"><span className="blur">12</span>reposts</p>
-                        </div>
-                        {/* <div className=' linkedin_post_likes'>
-                            <div className="linkedin_dropdown">
-                                <Image src={pageImage ? pageImage : default_user_icon} alt="social icon" height="30px"
-                                       width="30px"/>
-                                <IoMdArrowDropdown/>
-                            </div>
-                            <div className="linkedin_likes">
-                                <SlLike className="thumbsup_icon"/>
-
-                                <h3 className="cmn_text_style">Like</h3>
-                            </div>
-                            <div className="linkedin_likes">
-                                <FaRegCommentDots/>
-                                <h3 className="cmn_text_style">Comment</h3>
-                            </div>
-                            <div className="linkedin_likes">
-                                <BiRepost className="repost__icon"/>
-                                <h3 className="cmn_text_style">Repost</h3>
-                            </div>
-                            <div className="linkedin_likes">
-                                <IoIosSend size={20}/>
-                                <h3 className="cmn_text_style">Send</h3>
-                            </div>
-                        </div> */}
+                       
+                        
 
                     </div>
 

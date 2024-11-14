@@ -1010,6 +1010,7 @@ button.fc--button.fc-button.fc-button-primary {
 }
 .calender_outer_wrapper table.fc-scrollgrid-sync-table tbody td {
   outline: 1px solid #E3E3E3;
+  padding: 6px;
 }
 table.fc-scrollgrid-sync-table tr:last-child td:last-child {
   border-bottom-right-radius: 10px;
@@ -1201,7 +1202,10 @@ table.fc-col-header {
   color: rgba(98, 111, 128, 1);
   font-size:14px;
 }
-
+video {
+  -webkit-object-fit: cover;
+  object-fit: cover;
+}
 
 .addy_img p {
   color: rgba(95, 109, 126, 1);

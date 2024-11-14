@@ -34,7 +34,7 @@ const PinterestFeedPreview = ({
         <div className="perview_outer">
             <h2 className={"cmn_white_text feed_preview facebookFeedpreview_text flex-grow-1"}>{previewTitle}</h2>
           
-            <div className='preview_wrapper1 preview_img_container'>
+            <div className='preview_wrapper1 preview_img_container position-relative'>
             {
                 reference === "PLANNER" && postStatus === "SCHEDULED" &&
                 <div className="pint_cta">
@@ -90,14 +90,14 @@ const PinterestFeedPreview = ({
                     </svg></span>
                         </div>
                     {
-                        reference === "PLANNER" && !isNullOrEmpty(postInsightsData) &&
+                        // reference === "PLANNER" && !isNullOrEmpty(postInsightsData) &&
                         <>
                             {
                                 postInsightsData?.isLoading ?
                                     <SkeletonEffect count={1}/> :
                                     <div className="pintrest_comments">
-                                        <p><span className="">{postInsightsData?.data?.comments}</span>comments</p>
-                                        <p><span className="">{postInsightsData?.data?.reactions} </span><FaRegHeart size={25}/></p>
+                                        <p><span className="me-2">{postInsightsData?.data?.comments}</span>comments</p>
+                                        <p><span className="me-2">{postInsightsData?.data?.reactions} </span><FaRegHeart size={25}/></p>
                                     </div>
                             }
 
