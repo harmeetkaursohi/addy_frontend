@@ -78,6 +78,9 @@ table.fc-col-header {
 
 .schedule_header {
     gap: 10px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
 }
 
 .schedule_header svg path{
