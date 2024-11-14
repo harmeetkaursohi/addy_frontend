@@ -127,7 +127,7 @@ const ScheduledPost = ({
                 {
                     (plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching) &&
                     getEmptyArrayOfSize(3).map((_, i) => {
-                        return <div className={"posts-loader-outer d-flex  gap-2 mb-3 "}>
+                        return <div className={"posts-loader-outer d-flex  gap-2 mb-3 "} key={i}>
                             <div className="w-50">
                                 <SkeletonEffect count={1} className={"planner-img-skeleton"}/>
                             </div>

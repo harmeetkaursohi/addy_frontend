@@ -90,7 +90,7 @@ const PinterestFeedPreview = ({
                     </svg></span>
                         </div>
                     {
-                        // reference === "PLANNER" && !isNullOrEmpty(postInsightsData) &&
+                        reference === "PLANNER" && !isNullOrEmpty(postInsightsData) &&
                         <>
                             {
                                 postInsightsData?.isLoading ?
