@@ -970,6 +970,7 @@ width: 100%;
 
 .social_wrap {
     width: 395px;
+    flex: 0 0 395px;
 }
 
 .dashboard_outer_inner {

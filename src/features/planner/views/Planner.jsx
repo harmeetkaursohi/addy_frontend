@@ -110,7 +110,7 @@ const Planner = () => {
 
     // render event content
     const renderCalendarCards = ({event}) => {
-
+    
         const eventStartDate = event?._def?.extendedProps?.postDate
         const dateString = eventStartDate;
         const date = new Date(dateString);
@@ -140,13 +140,17 @@ const Planner = () => {
 
         let classname = event?._def?.extendedProps?.batchId
         const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
+        
+   
         return (
             <div className={`cal_Div w-100 test`}
-                 style={{
-                     backgroundColor: backgroundColor,
-                     borderLeft: border,
-                     // pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"
-                 }}>
+                //  style={{
+                //      backgroundColor: backgroundColor,
+                //      borderLeft: border,
+                //      // pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"
+                //  }}
+                 >
+
 
                 <div className="w-100 p-0 calendar_card">
 
@@ -155,30 +159,17 @@ const Planner = () => {
                         <div className={"custom_event"}
                         >
                             <img src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
-                            <h3 style={{color: textColor}}
+                            <h3
                                 className={`custom_event_heading${classname}`}>{postOnSocialMedia.title}</h3>
                         </div>
                     }
-
-
-                    {/*{event?._def?.extendedProps?.childCardContent?.map((c, index) => {*/}
-                    {/*    return (*/}
-
-                    {/*        <div key={index} className={index === 0 ? "custom_event mb-2" : "custom_event mb-2"}*/}
-                    {/*             onClick={(e) => {*/}
-                    {/*             }}>*/}
-                    {/*            <img className={"ms-4"} src={c?.imageUrl} alt={event.title}/>*/}
-                    {/*            /!*<h3>{c.title}</h3>*!/*/}
-                    {/*        </div>*/}
-                    {/*    )*/}
-                    {/*})}*/}
                 </div>
                 {
                     !getPostsForPlannerApi?.isLoading && !getPostsForPlannerApi?.isFetching && !getPlannerPostsCountApi?.isLoading && !getPlannerPostsCountApi?.isFetching &&
-                    <button className="createPost_btn crate_btn ms-0 p-0 w-100 planner_view_more_btn"
+                    <button className="createPost_btn crate_btn ms-0  w-100 planner_view_more_btn"
                     >{
                         (event?._def?.extendedProps?.showMoreContent > 0) &&
-                        "+ " + event?._def?.extendedProps?.showMoreContent
+                        "And " + event?._def?.extendedProps?.showMoreContent + " more..."
                     }
                     </button>
                 }
@@ -349,7 +340,7 @@ const Planner = () => {
 
                                 <div
                                     className={`CalenderOuter_Wrapper`}>
-                                    <div className="planner_calender w-100">
+                                    <div className={`planner_calender w-100 ${selectedDate && "select_wrapper"}`}>
                                         <Dropdown className='cmn_dropdown'>
                                             <Dropdown.Toggle>
                                                 Filters <CgChevronDown/>
@@ -411,19 +402,12 @@ const Planner = () => {
                                                     : '';
                                             }}
                                             headerToolbar={
-                                                // (getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.data?.length === 0) ?
                                                 {
                                                     left: "  prev",
                                                     center: "title",
                                                     right: "next,timeGridDay,",
                                                 }
-                                                // :
-                                                // {
-                                                //     left: "  prev",
-                                                //     center: "title",
-                                                //     right: "next,timeGridDay,",
-                                                // }
-                                            }
+                                                                                           }
                                             customButtons={{
                                                 prev: {
                                                     text: "Prev",
@@ -434,6 +418,8 @@ const Planner = () => {
                                                     click: () => customHeaderClick("Next"),
                                                 },
                                             }}
+                                            eventBackgroundColor="#ffcccc" // Sets a light red background for all events
+
                                             dayCellContent={(arg) => {
                                                 const calenderDate = arg.date;
                                                 const dateString = calenderDate;
@@ -454,7 +440,7 @@ const Planner = () => {
                                     </div>
                                     {
                                         selectedDate &&
-                                        <div className={"scheduled_posts social_accounts"}>
+                                        <div className={"scheduled_posts"}>
                                             <ScheduledPost
                                                 selectedDate={selectedDate}
                                                 setSelectedDate={setSelectedDate}
