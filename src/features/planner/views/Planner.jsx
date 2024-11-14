@@ -466,21 +466,12 @@ const Planner = () => {
                     <FullCalendar
                       dateClick={(arg) => {
                         if (isPostApiLoading) return;
-                        const localDate =
-                          arg.date instanceof Date
-                            ? arg.date
-                            : new Date(
-                                Date.UTC(
-                                  arg.date.getFullYear(),
-                                  arg.date.getMonth(),
-                                  arg.date.getDate()
-                                )
-                              );
+                        const localDate = new Date(arg.date);
                         setSelectedDate(
                           getDayStartInUTC(
-                            localDate.getUTCDate(),
-                            localDate.getUTCMonth(),
-                            localDate.getUTCFullYear()
+                            localDate.getDate(),
+                            localDate.getMonth(),
+                            localDate.getFullYear()
                           )
                         );
                       }}
@@ -492,22 +483,23 @@ const Planner = () => {
                       eventContent={renderCalendarCards}
                       dayHeaderContent={customDayHeaderContent}
                       dayCellClassNames={(arg) => {
-                        const cellDate =
-                          arg.date instanceof Date
-                            ? arg.date
-                            : new Date(
-                                Date.UTC(
-                                  arg.date.getFullYear(),
-                                  arg.date.getMonth(),
-                                  arg.date.getDate()
-                                )
-                              );
-                        return selectedDate &&
-                          cellDate.getDate() === selectedDate.getDate() &&
-                          cellDate.getMonth() === selectedDate.getMonth() &&
-                          cellDate.getFullYear() === selectedDate.getFullYear()
-                          ? "selected-date-cell"
-                          : "";
+                        const cellDate = new Date(arg.date.getTime()); // Ensures Safari compatibility
+                        const hasEvent = events.some(
+                          (event) =>
+                            new Date(event.start).getTime() ===
+                            cellDate.getTime()
+                        );
+                        const isSelected =
+                          selectedDate &&
+                          cellDate.getTime() ===
+                            new Date(selectedDate).getTime();
+
+                        return [
+                          hasEvent && "event-date-cell",
+                          isSelected && "selected-date-cell",
+                        ]
+                          .filter(Boolean)
+                          .join(" ");
                       }}
                       headerToolbar={{
                         left: "prev",
@@ -524,31 +516,27 @@ const Planner = () => {
                           click: () => customHeaderClick("Next"),
                         },
                       }}
-                      dayCellContent={(arg) => {
-                        const cellDate =
-                          arg.date instanceof Date
-                            ? arg.date
-                            : new Date(
-                                Date.UTC(
-                                  arg.date.getFullYear(),
-                                  arg.date.getMonth(),
-                                  arg.date.getDate()
-                                )
-                              );
+                      eventBackgroundColor="#ffcccc" // Sets a light red background for all events
+                      eventClassNames={(arg) => {
+                        const eventDate = new Date(arg.event.start.getTime());
                         const currentDate = new Date();
-
+                        if (eventDate.getTime() === currentDate.getTime()) {
+                          return "event-today"; // Add class for today’s event
+                        }
+                        return "";
+                      }}
+                      dayCellContent={(arg) => {
+                        const cellDate = arg.date;
+                        const currentDate = new Date();
                         return (
                           <div
                             className={
-                              currentDate.getDate() === cellDate.getDate() &&
-                              currentDate.getMonth() === cellDate.getMonth() &&
-                              currentDate.getFullYear() ===
-                                cellDate.getFullYear()
-                                ? "current_date_outer"
-                                : "calendar_card1"
+                              currentDate.getTime() === cellDate.getTime()
+                                ? " current_date_outer"
+                                : " calendar_card1"
                             }
                           >
-                            <h3>{arg?.dayNumberText}</h3>
+                            <h3>{arg.dayNumberText}</h3>
                           </div>
                         );
                       }}
