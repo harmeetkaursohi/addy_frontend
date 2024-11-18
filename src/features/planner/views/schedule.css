@@ -37,7 +37,7 @@
     padding: 13px;
     border-radius: 15px;
     background: #fff;
-    height:100% ;
+    height:100vh ;
 }
 .scduler_outer .sechduled_post_outer {
     height: calc(100vh - 64px);

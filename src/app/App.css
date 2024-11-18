@@ -951,6 +951,7 @@ text-align: left;
 }
 .calendar_card1 h3 {
   font-size: 16px;
+  font-weight: 700;
 }
 .current_date_outer {
   color: #000;
