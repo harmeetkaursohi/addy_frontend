@@ -446,7 +446,7 @@ const Review = () => {
                                     <div className="calender_outer_wrapper publish_post_filter">
                                         <Dropdown className="cmn_dropdown position-relative end-0">
                                             <Dropdown.Toggle>
-                                                Social Media
+                                                Filters
                                                 <CgChevronDown/>
                                             </Dropdown.Toggle>
 
