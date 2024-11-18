@@ -15,10 +15,43 @@
 td.fc-day.fc-day-sat.fc-day-future.fc-daygrid-day.event-date-cell {
     background: #AAE0FF;
 }
+.calender_outer_wrapper table.fc-scrollgrid-sync-table tbody td.selected-date-cell.event-date-cell {
+    background: #AAE0FF;
+}
+
 /* td.fc-day.fc-day-wed.fc-day-today.selected-date-cell{
     background: #AAE0FF;
     outline: 1px solid #E3E3E3;
 } */
+ /* Ensure all cells have the same height */
+.fc-daygrid-day {
+    height: 100px; /* Fixed height for each day cell */
+    vertical-align: top; /* Aligns content to the top */
+    box-sizing: border-box; /* Includes padding and border in height */
+}
+
+/* Make the day content frame stretch to fill the cell */
+.fc-daygrid-day-frame {
+    height: 100%; /* Fill the entire cell height */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+    justify-content: flex-start; /* Align content to the top */
+}
+
+/* Adjust for events within cells */
+.fc-event {
+    max-height: calc(100% - 10px); /* Prevent overflow of events */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis if text overflows */
+    white-space: nowrap;
+}
+
+/* For responsive design */
+@media (max-width: 768px) {
+    .fc-daygrid-day {
+        height: 80px; /* Smaller height on mobile */
+    }
+}
 ul.schdeuled_post_list {
     display: flex;
     padding: 23px;

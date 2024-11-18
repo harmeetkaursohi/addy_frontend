@@ -64,7 +64,7 @@ export const ParentDraftComponent = ({searchQuery}) => {
             {/*        </div>*/}
             {/*    </div>*/}
             {/*</div>*/}
-            <div className="row draft_container_wrapper">
+            <div className="row draft_container_wrapper m-0">
 
             {
                 (isAccountInfoLoading || draftPostsApi?.isLoading || draftPostsApi?.isFetching) ?
