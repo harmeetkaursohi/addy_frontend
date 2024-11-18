@@ -1,4 +1,4 @@
-import React, {useEffect,  useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import logo from '/Addy_icon.svg';
 import {IoSendSharp} from 'react-icons/io5';
@@ -13,14 +13,25 @@ import Loader from "../loader/Loader";
 import default_user_icon from "../../images/default_user_icon.svg";
 import {createChat, getChatByInitiatorId, searchMessage, sendMessage} from "../../app/actions/chatActions/chatActions";
 import {
+    formatMessage,
     handleApiResponse,
     isNullOrEmpty,
     isValidCreateChatRequest,
     isValidCreateMessageRequest
 } from "../../utils/commonUtils";
-import {ChatOpenMessage} from "../../utils/contantData";
+import {ChatOpenMessage, DeletedSuccessfully} from "../../utils/contantData";
 import {useGetUserInfoQuery} from "../../app/apis/userApi";
 import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
+import {PiLinkSimpleBold} from "react-icons/pi";
+import {
+    useCreateChatMutation,
+    useGetChatByInitiatorIdQuery,
+    useSearchMessageQuery,
+    useSendMessageMutation
+} from "../../app/apis/chatApi";
+import {handleRTKQuery} from "../../utils/RTKQueryUtils";
+import {showSuccessToast} from "../common/components/Toast";
+import {addyApi} from "../../app/addyApi";
 
 function NeedHelpComponent() {
 
@@ -35,108 +46,246 @@ function NeedHelpComponent() {
         minute: '2-digit',
         hour12: true
     };
-
-    const dispatch = useDispatch();
-
-    const getChatsApi = useSelector((state) => state.chat.getChatByInitiatorIdReducer);
-    const createChatApi = useSelector((state) => state.chat.createChatReducer);
-    const sendMessageApi = useSelector((state) => state.chat.sendMessageReducer);
-    const searchMessageApi = useSelector((state) => state.chat.searchMessageReducer);
+    const [searchMessageQuery, setSearchMessageQuery] = useState({
+        offSet: -1,
+        pageSize: 2,
+        chatId: null
+    })
+    const [message, setMessage] = useState({
+        text: "",
+        senderId: decodedToken?.customerId,
+        chatId: null,
+        attachment: null
+    })
 
     const userApi = useGetUserInfoQuery("")
+    const searchMessage = useSearchMessageQuery(searchMessageQuery, {skip: searchMessageQuery?.offSet < 0})
+    const chatByInitiatorIdApi = useGetChatByInitiatorIdQuery(decodedToken?.customerId)
+    const [createChat, createChatApi] = useCreateChatMutation()
+
+    console.log("chatByInitiatorIdApi=====>", chatByInitiatorIdApi)
+    console.log("message=====>", message)
+
+    useEffect(() => {
+        if (Array.isArray(chatByInitiatorIdApi?.data) && isNullOrEmpty(chatByInitiatorIdApi?.data) && !chatByInitiatorIdApi?.isLoading && !chatByInitiatorIdApi?.isFetching) {
+            const handleCreateChat = async () => {
+                await handleRTKQuery(
+                    async () => {
+                        return await createChat(decodedToken?.customerId).unwrap()
+                    },
+                    () => {
+                        dispatch(addyApi.util.invalidateTags(["getChatByInitiatorIdApi"]))
+                    });
+            }
+            handleCreateChat();
+
+        }
+    }, [chatByInitiatorIdApi]);
+
+    useEffect(()=>{
+        if( !isNullOrEmpty(chatByInitiatorIdApi?.data) ){
+            console.log("chatByInitiatorIdApi is not null======>",chatByInitiatorIdApi?.data)
+        }
+    },[chatByInitiatorIdApi])
+
+
+    const dispatch = useDispatch();
+    const [sendMessage, sendMessageApi] = useSendMessageMutation()
+
+    const getChatsApi = useSelector((state) => state.chat.getChatByInitiatorIdReducer);
+    // const createChatApi = useSelector((state) => state.chat.createChatReducer);
+    const sendMessageApi1 = useSelector((state) => state.chat.sendMessageReducer);
+    const searchMessageApi = useSelector((state) => state.chat.searchMessageReducer);
+
 
     const [triggerSearchMessageApi, setTriggerSearchMessageApi] = useState(false);
+    const [files, setFiles] = useState([]);
     const [activeChat, setActiveChat] = useState(null);
     const [offSet, setOffset] = useState(0);
-    const [message, setMessage] = useState("");
+    const [message1, setMessage1] = useState("");
     const [messageList, setMessageList] = useState([]);
     const [activeKey, setActiveKey] = useState(null);
 
 
-    useEffect(() => {
-        dispatch(getChatByInitiatorId({
-            ...baseSearch,
-            initiatorId: decodedToken.customerId
-        })).then((response) => {
-            handleApiResponse(response, () => {
-                setActiveChat(response.payload?.[0]?.id)
-                setTriggerSearchMessageApi(!isNullOrEmpty(response.payload?.[0]?.id))
-            })
-        })
-    }, [])
-    useEffect(() => {
-        if (triggerSearchMessageApi) {
-            setTriggerSearchMessageApi(false)
-            dispatch(searchMessage({
-                ...baseSearch,
-                data: {
-                    offSet: offSet,
-                    pageSize: 2,
-                    chatId: activeChat
-                }
-            })).then((response) => {
-                handleApiResponse(response, () => {
-                    const reversedArray = response.payload.data.slice().reverse()
-                    const updatedMessageList=[...reversedArray,...messageList ]
-                    setOffset(updatedMessageList?.length)
-                    setMessageList(updatedMessageList)
-                })
-            })
-        }
-    }, [triggerSearchMessageApi])
+    // useEffect(() => {
+    //     dispatch(getChatByInitiatorId({
+    //         ...baseSearch,
+    //         initiatorId: decodedToken.customerId
+    //     })).then((response) => {
+    //         handleApiResponse(response, () => {
+    //             setActiveChat(response.payload?.[0]?.id)
+    //             setTriggerSearchMessageApi(!isNullOrEmpty(response.payload?.[0]?.id))
+    //         })
+    //     })
+    // }, [])
+    // useEffect(() => {
+    //     if (triggerSearchMessageApi) {
+    //         setTriggerSearchMessageApi(false)
+    //         dispatch(searchMessage({
+    //             ...baseSearch,
+    //             data: {
+    //                 offSet: offSet,
+    //                 pageSize: 2,
+    //                 chatId: activeChat
+    //             }
+    //         })).then((response) => {
+    //             handleApiResponse(response, () => {
+    //                 const reversedArray = response.payload.data.slice().reverse()
+    //                 const updatedMessageList = [...reversedArray, ...messageList]
+    //                 setOffset(updatedMessageList?.length)
+    //                 setMessageList(updatedMessageList)
+    //             })
+    //         })
+    //     }
+    // }, [triggerSearchMessageApi])
 
-    const handleSend = () => {
-        if (isNullOrEmpty(activeChat)) {
-            let requestBody = {
-                ...baseSearch,
-                initiatorId: decodedToken.customerId,
-                data: {
-                    text: message.trim()
-                }
-            }
-            isValidCreateChatRequest(requestBody) && handleCreateNewChat(requestBody)
-        }
-        if (!isNullOrEmpty(activeChat)) {
-            let requestBody = {
-                ...baseSearch,
-                data: {
-                    text: message.trim(),
-                    senderId: decodedToken.customerId,
-                    // TODO:Set Receivers Id Here
-                    // receiversId:null,
-                    chatId: activeChat,
-                }
-            }
-            isValidCreateMessageRequest(requestBody) && handleSendMessage(requestBody)
-        }
-    }
-    const handleCreateNewChat = (requestBody) => {
-        dispatch(createChat(requestBody)).then((response) => {
-            handleApiResponse(response, () => {
-                setMessageList([...messageList,response.payload])
-                setOffset(offSet+1)
-                setActiveChat(response.payload.chatId)
-                setMessage("")
-            })
-        })
-    }
-    const handleSendMessage = (requestBody) => {
-        dispatch(sendMessage(requestBody)).then((response) => {
-            handleApiResponse(response, () => {
-                setMessageList([...messageList,response.payload])
-                setOffset(offSet+1)
-                setActiveChat(response.payload.chatId)
-                setMessage("")
-            })
-        })
-    }
+    // const handleSend = () => {
+    //     if (isNullOrEmpty(activeChat)) {
+    //         let requestBody = {
+    //             ...baseSearch,
+    //             initiatorId: decodedToken.customerId,
+    //             data: {
+    //                 text: message.trim()
+    //             }
+    //         }
+    //         isValidCreateChatRequest(requestBody) && handleCreateNewChat(requestBody)
+    //     }
+    //     if (!isNullOrEmpty(activeChat)) {
+    //         let requestBody = {
+    //             ...baseSearch,
+    //             data: {
+    //                 text: message.trim(),
+    //                 senderId: decodedToken.customerId,
+    //                 // TODO:Set Receivers Id Here
+    //                 // receiversId:null,
+    //                 chatId: activeChat,
+    //             }
+    //         }
+    //         isValidCreateMessageRequest(requestBody) && handleSendMessage(requestBody)
+    //     }
+    // }
+    // const handleCreateNewChat = (requestBody) => {
+    //     dispatch(createChat(requestBody)).then((response) => {
+    //         handleApiResponse(response, () => {
+    //             setMessageList([...messageList, response.payload])
+    //             setOffset(offSet + 1)
+    //             setActiveChat(response.payload.chatId)
+    //             setMessage("")
+    //         })
+    //     })
+    // }
+    // const handleSendMessage = (requestBody) => {
+    //     dispatch(sendMessage(requestBody)).then((response) => {
+    //         handleApiResponse(response, () => {
+    //             setMessageList([...messageList, response.payload])
+    //             setOffset(offSet + 1)
+    //             setActiveChat(response.payload.chatId)
+    //             setMessage("")
+    //         })
+    //     })
+    // }
     const handleToggle = (key) => {
         setActiveKey(key);
     };
 
+    const handleFileChange = (e) => {
+        const files = e.target.files
+        setFiles(files)
+    }
+    const handleSendMessage = async () => {
+        if (isNullOrEmpty(files)) {
+            sendMessageWithoutAttachments()
+        } else {
+            await sendMessageWithAttachments();
+        }
+
+    }
+    console.log("files======>", files)
+
+    const sendMessageWithoutAttachments = () => {
+        sendMessage({
+            chunksInfo: {
+                totalFiles: 0,
+            },
+            data: {
+                ...message,
+                chatId: chatByInitiatorIdApi?.data?.[0]?.id
+            },
+        })
+    }
+
+    const sendMessageWithAttachments = async () => {
+        for (let fileIndex = 0; fileIndex < files?.length; fileIndex++) {
+            const file = files[fileIndex]
+            if (file.type.startsWith('video/') || file.type.endsWith('/pdf')) {
+                const chunkSize = 4 * 1024 * 1024
+                const totalChunks = Math.ceil(file.size / chunkSize);
+                if (totalChunks > 1) {
+                    for (let i = 0; i < totalChunks; i++) {
+                        const chunk = file.slice(i * chunkSize, (i + 1) * chunkSize);
+                        await uploadFileChunk(file, chunk, i, totalChunks);
+                    }
+                } else {
+                    await uploadFile(file, files?.length, fileIndex);
+                }
+            } else {
+                await uploadFile(file, files?.length, fileIndex);
+            }
+        }
+    }
+    const uploadFile = async (file, totalFiles, fileIndex) => {
+        try {
+            await sendMessage({
+                chunksInfo: {
+                    fileIndex: fileIndex,
+                    totalFiles: totalFiles,
+                },
+                data: {
+                    ...message,
+                    attachment: {
+                        file: file,
+                        fileName: file.name,
+                    },
+                },
+            }).unwrap();
+        } catch (error) {
+            console.error(`Error uploading file ${fileIndex + 1}/${totalFiles}:`);
+            throw error;
+        }
+    };
+    const uploadFileChunk = async (file, chunk, chunkIndex, totalChunks) => {
+        try {
+            await sendMessage({
+                chunksInfo: {
+                    totalChunks: totalChunks,
+                    chunkIndex: chunkIndex,
+                },
+                data: {
+                    ...message,
+                    attachment: {
+                        file: chunk,
+                        fileName: file.name,
+                    },
+                },
+            }).unwrap();
+        } catch (error) {
+            console.error(`Error uploading chunk ${chunkIndex + 1}/${totalChunks}:`);
+            throw error;
+        }
+    };
 
     return (
         <div className={sidebar ? 'cmn_container' : 'cmn_Padding'}>
+            <input
+                type="file"
+                multiple={true}
+                accept=".jpg, .jpeg, .png, .mp4, .pdf, .txt, .doc, .docx, .csv"
+                onChange={handleFileChange}
+            />
+            <button onClick={() => {
+                handleSendMessage()
+            }}>Send Message
+            </button>
             <div className='cmn_outer'>
                 <div className='need_help_outer'>
                     <h3 className='needhelp_heading'>Need Help?</h3>
@@ -184,7 +333,7 @@ function NeedHelpComponent() {
                                     <h3 className='cmn_small_style_font'>Chat with Addy</h3>
                                 </div>
                                 <div className='chat_container'>
-                                    <div className="chat_scroll" >
+                                    <div className="chat_scroll">
                                         {
                                             !searchMessageApi?.loading && messageList.length === 0 &&
                                             <div className='d-flex gap-3 chat_inner_content'>
@@ -201,15 +350,20 @@ function NeedHelpComponent() {
                                             </div>
                                         }
                                         {
-                                            searchMessageApi?.loading  ?
+                                            searchMessageApi?.loading ?
                                                 <div className={"text-center mb-2"}>
                                                     <SkeletonEffect count={1} className={"w-25  mb-2"}></SkeletonEffect>
                                                     <SkeletonEffect count={1} className={"w-50  mb-2"}></SkeletonEffect>
-                                                    <SkeletonEffect count={1} className={"w-25  mb-2 ml-auto"}></SkeletonEffect>
-                                                    <SkeletonEffect count={1} className={"w-50  mb-2 ml-auto"}></SkeletonEffect>
+                                                    <SkeletonEffect count={1}
+                                                                    className={"w-25  mb-2 ml-auto"}></SkeletonEffect>
+                                                    <SkeletonEffect count={1}
+                                                                    className={"w-50  mb-2 ml-auto"}></SkeletonEffect>
                                                 </div> :
                                                 searchMessageApi?.data?.hasNext &&
-                                                <div className={"load-more-msg-txt mb-2 cursor-pointer"} onClick={()=>{setTriggerSearchMessageApi(true)}}>load previous messages...</div>
+                                                <div className={"load-more-msg-txt mb-2 cursor-pointer"}
+                                                     onClick={() => {
+                                                         setTriggerSearchMessageApi(true)
+                                                     }}>load previous messages...</div>
                                         }
                                         {
                                             messageList?.map((message, index) => {
@@ -255,24 +409,28 @@ function NeedHelpComponent() {
                                     </div>
 
                                     <div className='chart_wrapper'>
-                                        {/*<div className='attachlink_wrapepr'>*/}
-                                        {/*   <img src={attach_file} alt='Attach File'/>*/}
-                                        {/*    <PiLinkSimpleBold className='attachlink_outer'/>*/}
-                                        {/*</div>*/}
+                                        <div className='attachlink_wrapepr'>
+
+                                            {/*<img src={attach_file} alt='Attach File'/>*/}
+                                            <PiLinkSimpleBold className='attachlink_outer'/>
+                                        </div>
                                         <div className='input_wrapper'>
                                             <input
                                                 type='text'
                                                 className='form-control'
                                                 placeholder='Write message'
-                                                value={message}
+                                                value={message?.text}
                                                 onChange={(e) => {
-                                                    setMessage(e.target.value)
+                                                    setMessage({
+                                                        ...message,
+                                                        text: e.target.value
+                                                    })
                                                 }}
                                             />
                                         </div>
-                                        <div className='send_outer' onClick={handleSend}>
+                                        <div className='send_outer' onClick={handleSendMessage}>
                                             {
-                                                (createChatApi.loading || sendMessageApi.loading) ?
+                                                (createChatApi.isLoading || sendMessageApi.loading) ?
                                                     <Loader/> :
                                                     <IoSendSharp className={"cursor-pointer"}/>
                                             }

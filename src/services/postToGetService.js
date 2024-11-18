@@ -1,6 +1,8 @@
 import {baseAxios} from "../utils/commonUtils";
 import {showErrorToast} from "../features/common/components/Toast";
 import {getAuthHeader, getAuthorizationHeader} from "../utils/RTKQueryUtils";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {setAuthenticationHeader} from "../app/auth/auth";
 
 const baseUrl=`${import.meta.env.VITE_APP_API_BASE_URL}`
 // Planner Service
@@ -50,6 +52,14 @@ export const getPostByPageIdAndPostStatus=async (data)=>{
 }
 export const searchNotification=async (data)=>{
     return await baseAxios.post(`${baseUrl}/notification/search`, data,getAuthHeader()).then(res => {
+        return res.data;
+    }).catch(error => {
+        showErrorToast(error.response.data.message);
+        throw error
+    });
+}
+export const searchMessage=async (data)=>{
+    return await baseAxios.post(`${baseUrl}/chat/message/search`, data,getAuthHeader()).then(res => {
         return res.data;
     }).catch(error => {
         showErrorToast(error.response.data.message);

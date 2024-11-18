@@ -675,6 +675,20 @@ export const mapCreatePostDataToFormData = (data) => {
     return formData;
 }
 
+export const mapCreateChatDataToFormData = (data) => {
+    const formData = new FormData();
+    formData.append('senderId', data.senderId);
+    formData.append('chatId', data.chatId);
+    if ( !isNullOrEmpty(data.text)) {
+        formData.append('text', data.text);
+    }
+    if ( !isNullOrEmpty(data.attachment)) {
+        formData.append('attachment.file', data.attachment.file);
+        formData.append('attachment.fileName', data.attachment.fileName);
+    }
+    return formData;
+}
+
 export const mapUpdatePostDataToFormData = (data) => {
     const formData = new FormData();
     if (data.updatePostRequestDTO.caption !== null && data.updatePostRequestDTO.caption !== "null") {
