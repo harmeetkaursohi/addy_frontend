@@ -13,7 +13,7 @@ import success_img from "../../../../images/right_img.svg";
 import {GrPrevious} from "react-icons/gr";
 import {useSignUpMutation} from "../../../../app/apis/authApi";
 import {handleRTKQuery} from "../../../../utils/RTKQueryUtils";
-
+import { showSuccessToast } from "../../../common/components/Toast";
 const AddressInfo = ({formData, setFormData, setShowTab}) => {
     const navigate = useNavigate()
 
@@ -37,7 +37,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
             county: "",
             city: "",
             pinCode: "",
-            isAgreedToTermsAndConditions: false
+            isAgreedToTermsAndConditions: false,
         },
         validationSchema: validationSchemas.address,
         onSubmit: async (values) => {
@@ -51,30 +51,25 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
                     state: values.state,
                     county: values.county,
                     city: values.city,
-                    pinCode: values.pinCode
-                }
-            }
+                    pinCode: values.pinCode,
+                },
+            };
+    
             await handleRTKQuery(
                 async () => {
-                    return await signUp(signUpData).unwrap()
+                    return await signUp(signUpData).unwrap();
                 },
                 () => {
-                    Swal.fire({
-                        imageUrl: success_img,
-                        title: 'Registration Successful',
-                        html: `<p>Your registration is complete, and we've sent a confirmation email to your email address</p>`,
-                        showConfirmButton: true,
-                        confirmButtonColor: "#F07C33",
-                        showCancelButton: false,
-                    }).then(result => {
-                        result.isConfirmed && navigate("/login");
-                    })
+                    showSuccessToast(
+                        "Your registration is complete, and we've sent a confirmation email to your email address"
+                    );
+                    navigate("/login");
+                    formik.resetForm(); 
+                    setFormData(resetUserInfo); 
                 },
-                null,
-                () => {
-                    formik.resetForm();
-                    setFormData(resetUserInfo)
-                })
+               
+                null 
+            );
         },
     });
 
