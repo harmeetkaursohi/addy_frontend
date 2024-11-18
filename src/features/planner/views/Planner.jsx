@@ -189,11 +189,11 @@ const Planner = () => {
         } else if (eventType === "Next") {
             calendarRef?.current?.getApi().next();
         }
-        let inst = new Date(calendarRef?.current?.getApi()?.currentData?.viewTitle.toString());
-        console.log(inst,"inst")
-        setSelectedDate(getDayStartInUTC(inst.getDate(), inst.getMonth(), inst.getFullYear()));
+        const [monthName, year] = calendarRef?.current?.getApi()?.currentData?.viewTitle.toString().split(" ");
+        const date = new Date(`${monthName} 1, ${year} 00:00:00`);
+        setSelectedDate(getDayStartInUTC(date.getDate(), date.getMonth(), date.getFullYear()));
 
-        inst.setDate(inst.getDate() + 10);
+        date.setDate(date.getDate() + 10);
 
         const decodeJwt = decodeJwtToken(token);
 
@@ -209,8 +209,9 @@ const Planner = () => {
                 startDate: startDate,
                 endDate: endDate
             },
-            plannerCardDate: inst
+            plannerCardDate: date
         })
+
     };
 
     const handleSocialMediaFilters = (curKey) => {
