@@ -51,7 +51,8 @@ const Planner = () => {
         {title: "Twitter", start: new Date().getTime(), imageUrl: linkedin}
     ]);
 
-    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("");
+    const socialMediaConnected = getConnectedSocialAccountApi?.data?.map(cur=>cur?.provider);
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
     const calendarApi = calendarRef?.current?.getApi();
@@ -99,6 +100,7 @@ const Planner = () => {
     }, [getPostsForPlannerApi]);
 
     const handleCreatePost = () => {
+        if(getConnectedSocialAccountApi?.data?.length === 0 ) return
         const isAnyPageConnected = getAllConnectedPagesApi?.data?.length > 0
         const isAnyAccountConnected = getConnectedSocialAccountApi?.data?.length > 0
         if (isAnyPageConnected && isAnyAccountConnected) {
@@ -255,7 +257,7 @@ const Planner = () => {
                             <button
                                 disabled={getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isLoading || getAllConnectedPagesApi?.isFetching}
                                 onClick={handleCreatePost}
-                                className={`cmn_btn_color create_post_btn cmn_white_text`}
+                                className={`cmn_btn_color create_post_btn cmn_white_text ${getConnectedSocialAccountApi?.data?.length === 0 && "not_connected"}`}
                             >
                                 {jsondata.createpost}
                             </button>
@@ -358,7 +360,7 @@ const Planner = () => {
                                                     Object.keys(SocialAccountProvider).map((curKey, ind) => {
 
                                                             return (
-                                                                <li key={ind}>
+                                                                <li key={ind} className={socialMediaConnected?.includes(curKey) ? "" : "d-none"}>
                                                                     <div className="d-flex gap-2 align-items-center ">
                                                                         <img src={computeImageURL(curKey)} height="20px"
                                                                              width="20px"/>

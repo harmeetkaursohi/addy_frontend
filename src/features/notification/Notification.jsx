@@ -173,7 +173,7 @@ const Notification = () => {
                                     (isAllNotificationsCleared || (isNullOrEmpty(notificationsList) && isNullOrEmpty(unSeenNotificationsList) && !searchNotificationsApi?.isLoading && !unseenNotificationsApi?.isLoading)) &&
                                     // (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
                                     <div
-                                        className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
+                                        className="W-100 text-center no_post_review_outer no_account_bg white_bg_color no_draft_height">
                                         <div>
                                             <No_notification_img className="w-100 h-auto"/>
                                             <h4 className="no-notifications-text text-center mt-3 text-black">{EmptyNotificationGridMessage}</h4>
@@ -247,7 +247,7 @@ const Notification = () => {
 
                         {
                             (getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.data?.length === 0) &&
-                            <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color">
+                            <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color no_draft_height">
                                 <div>
                                     <No_notification_img className="w-100 h-auto"/>
                                     <h4 className="no-notifications-text text-center mt-3 text-black">{EmptyNotificationGridMessage}</h4>

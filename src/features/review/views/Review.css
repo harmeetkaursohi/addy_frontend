@@ -130,6 +130,9 @@ td.disabled-table-grid {
     animation-name: popUp;
     animation-duration: 0.3s;
 }
+.no_post_review_outer.no_draft_height{
+    height: calc(100vh - 98px);
+}
 .no_post_review_outer{
     background: white;
     display: flex;

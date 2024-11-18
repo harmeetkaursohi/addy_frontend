@@ -40,11 +40,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import {CgChevronDown} from "react-icons/cg";
 import {FormCheck} from "react-bootstrap";
 import Default_user from '../../../images/default_user_icon.svg'
-import fb from "../../../images/fb.svg";
-import instagram_img from "../../../images/instagram_logo.svg";
-import linkedin from "../../../images/linkedin.svg";
-import Pinterest from "../../../images/pinterest_icon.svg";
-import dropdown from "bootstrap/js/src/dropdown";
+
 
 
 const Review = () => {
@@ -85,6 +81,8 @@ const Review = () => {
 
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("");
+    console.log(getConnectedSocialAccountApi,"getConnectedSocialAccountApi");
+    const connectedSocialAccounts = getConnectedSocialAccountApi?.data?.map(cur=>cur?.provider)
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("");
     const postApi = useGetPublishedPostsQuery(searchQuery, {skip: searchQuery?.offSet < 0,});
     const [deletePostFromPagesByPageIds, deletePostFromPagesApi] = useDeletePostFromPagesByPageIdsMutation();
@@ -464,18 +462,21 @@ const Review = () => {
                                                         }}
                                                     />
                                                 </li>
+                                                {console.log(socialMediaDropDownsOptions,"socialMediaDropDownsOptions")}
                                                 {
                                                     socialMediaDropDownsOptions.map((option, index) => {
                                                         console.log("option=====>", option)
                                                         return <li
                                                             key={index}
                                                             onClick={() => {
+
+                                                               
                                                                 handleSocialMediaFilters({
                                                                     type: "SocialMediaSelect",
                                                                     socialMediaType: option?.value
                                                                 })
                                                             }}
-                                                            className="d-flex"
+                                                            className={ connectedSocialAccounts?.includes(option?.value) ? "d-flex" :"d-none"}
                                                             // active={selectedDropdownOptions?.socialMediaTypes?.value === option.value}
                                                         >
                                                             <img src={computeImageURL(option?.label?.toUpperCase())}
