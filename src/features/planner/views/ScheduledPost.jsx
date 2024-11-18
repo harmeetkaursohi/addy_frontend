@@ -123,7 +123,7 @@ const ScheduledPost = ({
                     onClick={handleNextDay}
                 />
             </div>
-            <div className='sechduled_post_outer d-flex flex-column'>
+            <div className='sechduled_post_outer'>
                 {
                     (plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching) &&
                     getEmptyArrayOfSize(3).map((_, i) => {
@@ -141,7 +141,7 @@ const ScheduledPost = ({
                 }
                 {
                     !plannerPosts?.isLoading && !plannerPosts?.isFetching && !postsApi?.isLoading && !postsApi?.isFetching && plannerPosts?.data && isNullOrEmpty(plannerPosts?.data[formatDate(selectedDate, "ISOString")]) &&
-                    <div className='No_scheduled_post'><img src={No_scheduled_post} alt="No scheduled post"/>
+                    <div className='No_scheduled_post mt-5'><img src={No_scheduled_post} alt="No scheduled post"/>
                         <p>No Post is scheduled on this date</p>
                         <button onClick={handleCreatePost}
                                 className='cmn_btn_color create_post_btn cmn_white_text'>Schedule Post
