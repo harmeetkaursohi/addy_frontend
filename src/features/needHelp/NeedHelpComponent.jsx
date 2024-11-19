@@ -257,12 +257,22 @@ function NeedHelpComponent() {
     const chatContainerRef = useRef(null); // Ref for the chat container
     const bottomRef = useRef(null); // Ref for the bottom of the container
 
-    // Effect to scroll to bottom whenever messages update
     useEffect(() => {
-        if (bottomRef.current) {
-            bottomRef.current.scrollIntoView({behavior: 'smooth'});
+        const chatContainer = chatContainerRef.current;
+    
+        if (chatContainer && chatContainer.scrollHeight > 200) {
+          if (bottomRef.current) {
+            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+          }
         }
-    }, [messageList]);
+      }, [messageList]);
+    //   format date and time 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+        const formattedDate = `${date.getDate()} ${date.toLocaleString('en-US', { month: 'long' })}, ${date.getFullYear()}`;
+        return `${time} / ${formattedDate}`;
+    };
     return (
         <div className={sidebar ? 'cmn_container' : 'cmn_Padding'}>
             <div className='cmn_outer'>
@@ -350,6 +360,7 @@ function NeedHelpComponent() {
                                         }
                                         {
                                             messageList?.map((message, index) => {
+                                                console.log(message,"message")
                                                 return <div key={index}>
                                                     {
                                                         message?.senderId === decodedToken.customerId ?
@@ -384,11 +395,11 @@ function NeedHelpComponent() {
 
                                                                 </div>
                                                                 <h6 className='chat_time text-end mb-2 pe-3'>
-                                                                    {new Date(message.createdAt).toLocaleTimeString(undefined, timeFormatOptions)}
+                                                                { formatDate(message.createdAt)}
                                                                 </h6>
                                                             </div>
                                                             :
-                                                            <div className='d-flex gap-3 chat_inner_content'>
+                                                            <div className='d-flex gap-3 chat_inner_content d-none'>
                                                                 <div className='user_profile_image_container'>
                                                                     <img src={logo} className='userchat_image'
                                                                          alt='User Profile'/>

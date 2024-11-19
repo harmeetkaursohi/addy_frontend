@@ -118,12 +118,7 @@
     line-height: 20px;
     font-weight: 400;
 }
-input::-webkit-input-placeholder { 
-    position:absolute;
-    left: 0px;
-    top: 0px;
-    font-size: 20px; 
-  }
+
   
   .chat_inner_text .chat-message {
       font-size: 13px;

@@ -12,10 +12,7 @@
     background: #F07C3321;
     box-shadow: inset 0 0 0 2px #F07C33;
 }
-td.fc-day.fc-day-sat.fc-day-future.fc-daygrid-day.event-date-cell {
-    background: #AAE0FF;
-}
-.calender_outer_wrapper table.fc-scrollgrid-sync-table tbody td.selected-date-cell.event-date-cell {
+.calender_outer_wrapper table.fc-scrollgrid-sync-table tbody td.event-date-cell {
     background: #AAE0FF;
 }
 
@@ -291,7 +288,9 @@ button.fc-customText-button.fc-button.fc-button-primary {
 
 
 
-
+.select_wrapper .custom_event {
+    justify-content: center;
+}
 .custom_event {
     width: 100%;
     height: 36px;
@@ -300,7 +299,7 @@ button.fc-customText-button.fc-button.fc-button-primary {
     display: flex;
     align-items: center;
     gap: 10px;
-    justify-content: center;
+    justify-content: start;
     cursor: pointer;
 
 }
@@ -323,6 +322,10 @@ button.fc-customText-button.fc-button.fc-button-primary {
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
