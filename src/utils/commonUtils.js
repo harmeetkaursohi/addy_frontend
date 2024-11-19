@@ -2370,3 +2370,41 @@ export const isPostEditable = (feedPostDate) => {
     }
     return (new Date(feedPostDate).getTime() - 15 * 60 * 1000) - new Date().getTime() > 0;
 }
+export const  extractPostPages=(data)=> {
+    const result = [];
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+            const platforms = data[key]; // This will contain platform keys like 'FACEBOOK', etc.
+
+            // Iterate through each platform
+            for (const platformKey in platforms) {
+                if (platforms.hasOwnProperty(platformKey)) {
+                    const platformData = platforms[platformKey]; // This is an array of objects
+                    // Add all objects from this platform to the result array
+                    result.push(...platformData);
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+export const extractPostPagesDataFromData=(groupedData,targetDateString)=>{
+    if(isNullOrEmpty(groupedData) || isNullOrEmpty(targetDateString)) return []
+    const targetDate = new Date(targetDateString);
+    const targetDateStringFormatted = targetDate?.toISOString()?.split("T")[0]; // Format as YYYY-MM-DD
+
+    // Convert and compare only date parts (YYYY-MM-DD)
+    for (const dateKey in groupedData) {
+        if (groupedData.hasOwnProperty(dateKey)) {
+            const currentKeyDate = new Date(dateKey);
+            const currentKeyDateStringFormatted = currentKeyDate.toISOString().split("T")[0];
+
+            if (currentKeyDateStringFormatted === targetDateStringFormatted) {
+                return groupedData[dateKey]; // Return data for the matching date
+            }
+        }
+    }
+    return []; // Return empty array if no match found
+}

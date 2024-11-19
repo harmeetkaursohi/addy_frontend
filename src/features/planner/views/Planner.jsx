@@ -10,7 +10,10 @@ import {useEffect, useRef, useState} from "react";
 import {decodeJwtToken, getToken} from "../../../app/auth/auth";
 import {
     computeAndReturnPlannerEvent,
-    computeImageURL, isNullOrEmpty
+    computeImageURL,
+    extractPostPages,
+    extractPostPagesDataFromData,
+    isNullOrEmpty
 } from "../../../utils/commonUtils";
 import {SocialAccountProvider} from "../../../utils/contantData";
 import ConnectSocialAccountModal from "../../common/components/ConnectSocialAccountModal";
@@ -52,7 +55,7 @@ const Planner = () => {
     ]);
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("");
-    const socialMediaConnected = getConnectedSocialAccountApi?.data?.map(cur=>cur?.provider);
+    const socialMediaConnected = getConnectedSocialAccountApi?.data?.map(cur => cur?.provider);
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
 
     const calendarApi = calendarRef?.current?.getApi();
@@ -100,7 +103,7 @@ const Planner = () => {
     }, [getPostsForPlannerApi]);
 
     const handleCreatePost = () => {
-        if(getConnectedSocialAccountApi?.data?.length === 0 ) return
+        if (getConnectedSocialAccountApi?.data?.length === 0) return
         const isAnyPageConnected = getAllConnectedPagesApi?.data?.length > 0
         const isAnyAccountConnected = getConnectedSocialAccountApi?.data?.length > 0
         if (isAnyPageConnected && isAnyAccountConnected) {
@@ -112,69 +115,59 @@ const Planner = () => {
 
     // render event content
     const renderCalendarCards = ({event}) => {
-    
-        const eventStartDate = event?._def?.extendedProps?.postDate
-        const dateString = eventStartDate;
-        const date = new Date(dateString);
-        const dayOfMonth = date.getDate();
 
-        let backgroundColor
-        let border
-        let textColor
-        if ([1, 5, 9, 13, 17, 21, 28].includes(dayOfMonth)) {
-            backgroundColor = '#fce5d6';
-            border = "4px solid #B94D09";
-            textColor = "#782E00"
-        } else if ([3, 6, 8, 14, 18, 22, 25, 26, 30].includes(dayOfMonth)) {
-            backgroundColor = '#defcd6';
-            border = "4px solid #56B909";
-            textColor = "#023E01"
-        } else if ([4, 10, 12, 15, 19, 23, 27, 31].includes(dayOfMonth)) {
-            backgroundColor = '#d6f3fc';
-            border = "4px solid  #098FB9";
-            textColor = "#033C48"
-        } else {
-            backgroundColor = 'red !important';
-            border = "4px solid #B90909";
-            textColor = "#780000"
-        }
+        // const eventStartDate = event?._def?.extendedProps?.postDate
+        // const dateString = eventStartDate;
+        // const date = new Date(dateString);
+        // const dayOfMonth = date.getDate();
 
 
         let classname = event?._def?.extendedProps?.batchId
-        const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
-        
-   
+        // const postOnSocialMedia = event?._def?.extendedProps?.childCardContent?.length > 0 ? event?._def?.extendedProps?.childCardContent[0] : null
+        const postedOnPages = extractPostPages(extractPostPagesDataFromData(getPostsForPlannerApi?.data, event?._def?.extendedProps?.postDate))
+
+
         return (
-            <div className={`cal_Div w-100 test`}
-                //  style={{
-                //      backgroundColor: backgroundColor,
-                //      borderLeft: border,
-                //      // pointerEvents: isPostDatesOnSameDayOrInFuture(event?._def?.extendedProps?.postDate, new Date()) ? "" : "none"
-                //  }}
-                 >
+            <div className={`cal_Div w-100 test`}>
 
 
                 <div className="w-100 p-0 calendar_card">
 
                     {
-                        postOnSocialMedia !== null &&
-                        <div className={"custom_event"}
-                        >
-                            <img src={postOnSocialMedia?.imageUrl} alt={postOnSocialMedia.title}/>
-                            <h3
-                                className={`custom_event_heading${classname}`}>{postOnSocialMedia.title}</h3>
+                        !isNullOrEmpty(postedOnPages) &&
+                        postedOnPages?.slice(0, 3).map((page, index) => (
+                        <div className="custom_event" key={index}>
+                            <img
+                                src={computeImageURL(page?.socialMediaType)}
+                                alt={page?.socialMediaType}
+                            />
+                            <h3 className={`custom_event_heading ${classname}`}>
+                                {page?.pageName}
+                            </h3>
                         </div>
+                    ))
                     }
                 </div>
                 {
-                    !getPostsForPlannerApi?.isLoading && !getPostsForPlannerApi?.isFetching && !getPlannerPostsCountApi?.isLoading && !getPlannerPostsCountApi?.isFetching &&
-                    <button className={`createPost_btn crate_btn ms-0  w-100 planner_view_more_btn ${ (event?._def?.extendedProps?.showMoreContent === 0) && "d-none"}` }
-                    >{
-                        (event?._def?.extendedProps?.showMoreContent > 0) &&
-                        "And " + event?._def?.extendedProps?.showMoreContent + " more..."
-                    }
+                    !isNullOrEmpty(postedOnPages) && postedOnPages?.length > 3 &&
+                    <button
+                        className={`createPost_btn crate_btn ms-0  w-100 planner_view_more_btn `}
+                    >
+                        {
+                            "And " + (postedOnPages?.length - 3) + " more..."
+                        }
                     </button>
                 }
+                {/*{*/}
+                {/*    !getPostsForPlannerApi?.isLoading && !getPostsForPlannerApi?.isFetching && !getPlannerPostsCountApi?.isLoading && !getPlannerPostsCountApi?.isFetching &&*/}
+                {/*    <button*/}
+                {/*        className={`createPost_btn crate_btn ms-0  w-100 planner_view_more_btn ${(event?._def?.extendedProps?.showMoreContent === 0) && "d-none"}`}*/}
+                {/*    >{*/}
+                {/*        (event?._def?.extendedProps?.showMoreContent > 0) &&*/}
+                {/*        "And " + event?._def?.extendedProps?.showMoreContent + " more..."*/}
+                {/*    }*/}
+                {/*    </button>*/}
+                {/*}*/}
             </div>)
     }
 
@@ -361,7 +354,8 @@ const Planner = () => {
                                                     Object.keys(SocialAccountProvider).map((curKey, ind) => {
 
                                                             return (
-                                                                <li key={ind} className={socialMediaConnected?.includes(curKey) ? "" : "d-none"}>
+                                                                <li key={ind}
+                                                                    className={socialMediaConnected?.includes(curKey) ? "" : "d-none"}>
                                                                     <div className="d-flex gap-2 align-items-center ">
                                                                         <img src={computeImageURL(curKey)} height="20px"
                                                                              width="20px"/>
@@ -400,19 +394,19 @@ const Planner = () => {
                                                 const cellDate = new Date(arg.date);
                                                 const hasEvent = events.some(event => new Date(event.start).toDateString() === cellDate.toDateString());
                                                 const isSelected = selectedDate && cellDate.toDateString() === new Date(selectedDate).toDateString();
-                                              
+
                                                 return [
-                                                  hasEvent && 'event-date-cell', 
-                                                  isSelected && 'selected-date-cell'
+                                                    hasEvent && 'event-date-cell',
+                                                    isSelected && 'selected-date-cell'
                                                 ].filter(Boolean).join(' ');
-                                              }}
+                                            }}
                                             headerToolbar={
                                                 {
                                                     left: "  prev",
                                                     center: "title",
                                                     right: "next,timeGridDay,",
                                                 }
-                                                                                           }
+                                            }
                                             customButtons={{
                                                 prev: {
                                                     text: "Prev",
@@ -430,10 +424,10 @@ const Planner = () => {
                                                 if (eventDate.getDate() === currentDate.getDate() &&
                                                     eventDate.getMonth() === currentDate.getMonth() &&
                                                     eventDate.getFullYear() === currentDate.getFullYear()) {
-                                                  return 'event-today'; // Add class for today’s event
+                                                    return 'event-today'; // Add class for today’s event
                                                 }
                                                 return '';
-                                              }}
+                                            }}
                                             dayCellContent={(arg) => {
                                                 const calenderDate = arg.date;
                                                 const dateString = calenderDate;
