@@ -3,13 +3,11 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import globalSlice from "../globalSlice/globalSlice";
 import {resetReducers} from "../actions/commonActions/commonActions";
-import chatSlice from "../slices/chatSlice/chatSlice";
 import {addyApi} from "../addyApi";
 
 
 const rootReducers = combineReducers({
     reset: resetReducers,
-    chat:chatSlice,
     global:globalSlice,
     [addyApi.reducerPath]: addyApi.reducer,
 

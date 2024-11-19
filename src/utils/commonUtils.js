@@ -2100,8 +2100,8 @@ export const getVideoDurationAndSizeByBlobUrl = async (blobUrl) => {
                 URL.revokeObjectURL(video.src); // Clean up the object URL
 
                 resolve({
-                    fileSize:fileSize,
-                    duration:duration
+                    fileSize: fileSize,
+                    duration: duration
                 });
             };
 
@@ -2333,28 +2333,17 @@ export const handleApiResponse = (res, onSuccess, onReject) => {
         onReject();
     }
 }
-export const isValidCreateChatRequest = (data) => {
-    if (isNullOrEmpty(data.initiatorId)) {
-        showErrorToast(formatMessage(IsRequired, ["Chat Initiator"]));
-        return false;
-    }
-    if (isNullOrEmpty(data.data.text)) {
-        showErrorToast(EnterMessageToStartChat);
-        return false;
-    }
-    return true;
 
-}
-export const isValidCreateMessageRequest = (data) => {
-    if (isNullOrEmpty(data.data.senderId)) {
+export const isValidCreateMessageRequest = (data, files) => {
+    if (isNullOrEmpty(data.senderId)) {
         showErrorToast(formatMessage(IsRequired, ["Message Sender"]));
         return false;
     }
-    if (isNullOrEmpty(data.data.chatId)) {
+    if (isNullOrEmpty(data.chatId)) {
         showErrorToast(formatMessage(IsRequired, ["Chat Id"]));
         return false;
     }
-    if (isNullOrEmpty(data.data.text)) {
+    if (isNullOrEmpty(data.text) && isNullOrEmpty(files)) {
         showErrorToast(EnterMessageToStartChat);
         return false;
     }

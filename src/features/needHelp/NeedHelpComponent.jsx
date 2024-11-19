@@ -6,20 +6,16 @@ import {MdOutlineMail} from 'react-icons/md';
 import {IoLocationOutline} from 'react-icons/io5';
 import './NeedHelp.css';
 import {getToken} from "../../app/auth/auth";
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useAppContext} from "../common/components/AppProvider";
 import {decodeJwtToken} from "../../app/auth/auth";
 import Loader from "../loader/Loader";
 import default_user_icon from "../../images/default_user_icon.svg";
-import {createChat, getChatByInitiatorId, searchMessage, sendMessage} from "../../app/actions/chatActions/chatActions";
 import {
-    formatMessage,
-    handleApiResponse,
     isNullOrEmpty,
-    isValidCreateChatRequest,
     isValidCreateMessageRequest
 } from "../../utils/commonUtils";
-import {ChatOpenMessage, DeletedSuccessfully} from "../../utils/contantData";
+import {ChatOpenMessage} from "../../utils/contantData";
 import {useGetUserInfoQuery} from "../../app/apis/userApi";
 import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 import {PiLinkSimpleBold} from "react-icons/pi";
@@ -30,22 +26,24 @@ import {
     useSendMessageMutation
 } from "../../app/apis/chatApi";
 import {handleRTKQuery} from "../../utils/RTKQueryUtils";
-import {showSuccessToast} from "../common/components/Toast";
 import {addyApi} from "../../app/addyApi";
+import {Link} from "react-router-dom";
 
 function NeedHelpComponent() {
 
     const {sidebar} = useAppContext();
     const token = getToken()
     const decodedToken = decodeJwtToken(token);
-    const baseSearch = {
-        token: token
-    }
+    const dispatch = useDispatch();
+
     const timeFormatOptions = {
         hour: '2-digit',
         minute: '2-digit',
         hour12: true
     };
+
+
+    const [messageList, setMessageList] = useState([]);
     const [searchMessageQuery, setSearchMessageQuery] = useState({
         offSet: -1,
         pageSize: 2,
@@ -57,14 +55,15 @@ function NeedHelpComponent() {
         chatId: null,
         attachment: null
     })
+    const [chatId, setChatId] = useState(null);
+    const [files, setFiles] = useState([]);
+    const [activeKey, setActiveKey] = useState(null);
 
     const userApi = useGetUserInfoQuery("")
-    const searchMessage = useSearchMessageQuery(searchMessageQuery, {skip: searchMessageQuery?.offSet < 0})
+    const searchMessageApi = useSearchMessageQuery(searchMessageQuery, {skip: searchMessageQuery?.offSet < 0 || isNullOrEmpty(searchMessageQuery?.chatId)})
     const chatByInitiatorIdApi = useGetChatByInitiatorIdQuery(decodedToken?.customerId)
     const [createChat, createChatApi] = useCreateChatMutation()
-
-    console.log("chatByInitiatorIdApi=====>", chatByInitiatorIdApi)
-    console.log("message=====>", message)
+    const [sendMessage, sendMessageApi] = useSendMessageMutation()
 
     useEffect(() => {
         if (Array.isArray(chatByInitiatorIdApi?.data) && isNullOrEmpty(chatByInitiatorIdApi?.data) && !chatByInitiatorIdApi?.isLoading && !chatByInitiatorIdApi?.isFetching) {
@@ -82,108 +81,25 @@ function NeedHelpComponent() {
         }
     }, [chatByInitiatorIdApi]);
 
-    useEffect(()=>{
-        if( !isNullOrEmpty(chatByInitiatorIdApi?.data) ){
-            console.log("chatByInitiatorIdApi is not null======>",chatByInitiatorIdApi?.data)
+    useEffect(() => {
+        if (!isNullOrEmpty(chatByInitiatorIdApi?.data)) {
+            setChatId(chatByInitiatorIdApi?.data?.[0]?.id)
+            setSearchMessageQuery({
+                ...searchMessageQuery,
+                offSet: 0,
+                chatId: chatByInitiatorIdApi?.data?.[0]?.id
+            })
         }
-    },[chatByInitiatorIdApi])
+    }, [chatByInitiatorIdApi])
 
+    useEffect(() => {
+        if (!isNullOrEmpty(searchMessageApi?.data?.data) && !searchMessageApi?.isLoading && !searchMessageApi?.isFetching) {
+            const reversedArray = searchMessageApi?.data?.data?.slice()?.reverse()
+            const updatedMessageList = [...reversedArray, ...messageList]
+            setMessageList(updatedMessageList)
+        }
+    }, [searchMessageApi])
 
-    const dispatch = useDispatch();
-    const [sendMessage, sendMessageApi] = useSendMessageMutation()
-
-    const getChatsApi = useSelector((state) => state.chat.getChatByInitiatorIdReducer);
-    // const createChatApi = useSelector((state) => state.chat.createChatReducer);
-    const sendMessageApi1 = useSelector((state) => state.chat.sendMessageReducer);
-    const searchMessageApi = useSelector((state) => state.chat.searchMessageReducer);
-
-
-    const [triggerSearchMessageApi, setTriggerSearchMessageApi] = useState(false);
-    const [files, setFiles] = useState([]);
-    const [activeChat, setActiveChat] = useState(null);
-    const [offSet, setOffset] = useState(0);
-    const [message1, setMessage1] = useState("");
-    const [messageList, setMessageList] = useState([]);
-    const [activeKey, setActiveKey] = useState(null);
-
-
-    // useEffect(() => {
-    //     dispatch(getChatByInitiatorId({
-    //         ...baseSearch,
-    //         initiatorId: decodedToken.customerId
-    //     })).then((response) => {
-    //         handleApiResponse(response, () => {
-    //             setActiveChat(response.payload?.[0]?.id)
-    //             setTriggerSearchMessageApi(!isNullOrEmpty(response.payload?.[0]?.id))
-    //         })
-    //     })
-    // }, [])
-    // useEffect(() => {
-    //     if (triggerSearchMessageApi) {
-    //         setTriggerSearchMessageApi(false)
-    //         dispatch(searchMessage({
-    //             ...baseSearch,
-    //             data: {
-    //                 offSet: offSet,
-    //                 pageSize: 2,
-    //                 chatId: activeChat
-    //             }
-    //         })).then((response) => {
-    //             handleApiResponse(response, () => {
-    //                 const reversedArray = response.payload.data.slice().reverse()
-    //                 const updatedMessageList = [...reversedArray, ...messageList]
-    //                 setOffset(updatedMessageList?.length)
-    //                 setMessageList(updatedMessageList)
-    //             })
-    //         })
-    //     }
-    // }, [triggerSearchMessageApi])
-
-    // const handleSend = () => {
-    //     if (isNullOrEmpty(activeChat)) {
-    //         let requestBody = {
-    //             ...baseSearch,
-    //             initiatorId: decodedToken.customerId,
-    //             data: {
-    //                 text: message.trim()
-    //             }
-    //         }
-    //         isValidCreateChatRequest(requestBody) && handleCreateNewChat(requestBody)
-    //     }
-    //     if (!isNullOrEmpty(activeChat)) {
-    //         let requestBody = {
-    //             ...baseSearch,
-    //             data: {
-    //                 text: message.trim(),
-    //                 senderId: decodedToken.customerId,
-    //                 // TODO:Set Receivers Id Here
-    //                 // receiversId:null,
-    //                 chatId: activeChat,
-    //             }
-    //         }
-    //         isValidCreateMessageRequest(requestBody) && handleSendMessage(requestBody)
-    //     }
-    // }
-    // const handleCreateNewChat = (requestBody) => {
-    //     dispatch(createChat(requestBody)).then((response) => {
-    //         handleApiResponse(response, () => {
-    //             setMessageList([...messageList, response.payload])
-    //             setOffset(offSet + 1)
-    //             setActiveChat(response.payload.chatId)
-    //             setMessage("")
-    //         })
-    //     })
-    // }
-    // const handleSendMessage = (requestBody) => {
-    //     dispatch(sendMessage(requestBody)).then((response) => {
-    //         handleApiResponse(response, () => {
-    //             setMessageList([...messageList, response.payload])
-    //             setOffset(offSet + 1)
-    //             setActiveChat(response.payload.chatId)
-    //             setMessage("")
-    //         })
-    //     })
-    // }
     const handleToggle = (key) => {
         setActiveKey(key);
     };
@@ -194,80 +110,122 @@ function NeedHelpComponent() {
     }
     const handleSendMessage = async () => {
         if (isNullOrEmpty(files)) {
-            sendMessageWithoutAttachments()
+            await sendMessageWithoutAttachments()
         } else {
             await sendMessageWithAttachments();
         }
 
     }
-    console.log("files======>", files)
 
-    const sendMessageWithoutAttachments = () => {
-        sendMessage({
-            chunksInfo: {
-                totalFiles: 0,
-            },
-            data: {
-                ...message,
-                chatId: chatByInitiatorIdApi?.data?.[0]?.id
-            },
-        })
+    const sendMessageWithoutAttachments = async () => {
+        const requestBody = {
+            ...message,
+            chatId: chatId
+        }
+        if (isValidCreateMessageRequest(requestBody, files)) {
+            await handleRTKQuery(
+                async () => {
+                    return await sendMessage({
+                        chunksInfo: {
+                            totalFiles: 0,
+                        },
+                        data: requestBody
+                    }).unwrap()
+                },
+                (res) => {
+                    setMessageList([...messageList, {...res}])
+                    setMessage({
+                        ...message,
+                        text: "",
+                        senderId: decodedToken?.customerId,
+                        attachment: null
+                    })
+                    setFiles([])
+                });
+        }
+
+
     }
 
     const sendMessageWithAttachments = async () => {
-        for (let fileIndex = 0; fileIndex < files?.length; fileIndex++) {
-            const file = files[fileIndex]
-            if (file.type.startsWith('video/') || file.type.endsWith('/pdf')) {
-                const chunkSize = 4 * 1024 * 1024
+        const requestBody = {
+            ...message,
+            chatId: chatId
+        }
+        if (isValidCreateMessageRequest(requestBody, files)) {
+            for (let fileIndex = 0; fileIndex < files?.length; fileIndex++) {
+                const file = files[fileIndex]
+                const chunkSize = `${import.meta.env.VITE_APP_FILE_CHUNK_SIZE}` * 1024 * 1024
                 const totalChunks = Math.ceil(file.size / chunkSize);
                 if (totalChunks > 1) {
                     for (let i = 0; i < totalChunks; i++) {
                         const chunk = file.slice(i * chunkSize, (i + 1) * chunkSize);
-                        await uploadFileChunk(file, chunk, i, totalChunks);
+                        await uploadFileChunk(file, chunk, i, totalChunks, files?.length, fileIndex);
                     }
                 } else {
                     await uploadFile(file, files?.length, fileIndex);
                 }
-            } else {
-                await uploadFile(file, files?.length, fileIndex);
             }
         }
+
     }
     const uploadFile = async (file, totalFiles, fileIndex) => {
         try {
-            await sendMessage({
+            const response = await sendMessage({
                 chunksInfo: {
                     fileIndex: fileIndex,
                     totalFiles: totalFiles,
                 },
                 data: {
                     ...message,
+                    chatId: chatId,
                     attachment: {
                         file: file,
                         fileName: file.name,
                     },
                 },
             }).unwrap();
+            if (!isNullOrEmpty(response)) {
+                setMessageList([...messageList, {...response}])
+                setMessage({
+                    ...message,
+                    text: "",
+                    attachment: null
+                })
+                setFiles([])
+            }
         } catch (error) {
             console.error(`Error uploading file ${fileIndex + 1}/${totalFiles}:`);
             throw error;
         }
     };
-    const uploadFileChunk = async (file, chunk, chunkIndex, totalChunks) => {
+    const uploadFileChunk = async (file, chunk, chunkIndex, totalChunks, totalFiles, fileIndex) => {
         try {
-            await sendMessage({
+            const response = await sendMessage({
                 chunksInfo: {
                     totalChunks: totalChunks,
                     chunkIndex: chunkIndex,
+                    fileIndex: fileIndex,
+                    totalFiles: totalFiles,
                 },
                 data: {
                     ...message,
+                    chatId: chatId,
                     attachment: {
                         file: chunk,
                         fileName: file.name,
                     },
                 },
             }).unwrap();
+            if (!isNullOrEmpty(response)) {
+                setMessageList([...messageList, {...response}])
+                setMessage({
+                    ...message,
+                    text: "",
+                    attachment: null
+                })
+                setFiles([])
+            }
         } catch (error) {
             console.error(`Error uploading chunk ${chunkIndex + 1}/${totalChunks}:`);
             throw error;
@@ -276,16 +234,6 @@ function NeedHelpComponent() {
 
     return (
         <div className={sidebar ? 'cmn_container' : 'cmn_Padding'}>
-            <input
-                type="file"
-                multiple={true}
-                accept=".jpg, .jpeg, .png, .mp4, .pdf, .txt, .doc, .docx, .csv"
-                onChange={handleFileChange}
-            />
-            <button onClick={() => {
-                handleSendMessage()
-            }}>Send Message
-            </button>
             <div className='cmn_outer'>
                 <div className='need_help_outer'>
                     <h3 className='needhelp_heading'>Need Help?</h3>
@@ -335,7 +283,7 @@ function NeedHelpComponent() {
                                 <div className='chat_container'>
                                     <div className="chat_scroll">
                                         {
-                                            !searchMessageApi?.loading && messageList.length === 0 &&
+                                            searchMessageApi?.data?.isLast &&
                                             <div className='d-flex gap-3 chat_inner_content'>
                                                 <div className='user_profile_image_container'>
                                                     <img src={logo} className='userchat_image'
@@ -349,8 +297,9 @@ function NeedHelpComponent() {
                                                 </div>
                                             </div>
                                         }
+
                                         {
-                                            searchMessageApi?.loading ?
+                                            (searchMessageApi?.isLoading || searchMessageApi?.isFetching) ?
                                                 <div className={"text-center mb-2"}>
                                                     <SkeletonEffect count={1} className={"w-25  mb-2"}></SkeletonEffect>
                                                     <SkeletonEffect count={1} className={"w-50  mb-2"}></SkeletonEffect>
@@ -362,7 +311,10 @@ function NeedHelpComponent() {
                                                 searchMessageApi?.data?.hasNext &&
                                                 <div className={"load-more-msg-txt mb-2 cursor-pointer"}
                                                      onClick={() => {
-                                                         setTriggerSearchMessageApi(true)
+                                                         setSearchMessageQuery({
+                                                             ...searchMessageQuery,
+                                                             offSet: messageList?.length
+                                                         })
                                                      }}>load previous messages...</div>
                                         }
                                         {
@@ -372,9 +324,23 @@ function NeedHelpComponent() {
                                                         message?.senderId === decodedToken.customerId ?
                                                             <div className='d-flex gap-3 justify-content-end'>
                                                                 <div>
+                                                                    {
+                                                                        !isNullOrEmpty(message.attachments) &&
+                                                                        message?.attachments?.map(attachment => {
+                                                                            return <Link
+                                                                                target={"_blank"}
+                                                                                to={`${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachment?.id}`}
+                                                                            > {attachment?.fileName}</Link>
+                                                                        })
+                                                                    }
                                                                     <div
                                                                         className='chat_inner_text user_chat_inner_text'>
-                                                                        <h3 className={"chat-message"}>{message.text}</h3>
+
+                                                                        {
+                                                                            !isNullOrEmpty(message.text) &&
+                                                                            <h3 className={"chat-message"}>{message.text}</h3>
+                                                                        }
+
                                                                     </div>
                                                                     <h6 className='chat_time text-end'>
                                                                         {new Date(message.createdAt).toLocaleTimeString(undefined, timeFormatOptions)}
@@ -394,8 +360,20 @@ function NeedHelpComponent() {
                                                                          alt='User Profile'/>
                                                                 </div>
                                                                 <div className='bot_chat_outer'>
+                                                                    {
+                                                                        !isNullOrEmpty(message.attachments) &&
+                                                                        message?.attachments?.map(attachment => {
+                                                                            return <Link
+                                                                                target={"_blank"}
+                                                                                to={`${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachment?.id}`}
+                                                                            > {attachment?.fileName}</Link>
+                                                                        })
+                                                                    }
                                                                     <div className='chat_inner_text'>
-                                                                        <h3 className={"chat-message"}>{message.text}</h3>
+                                                                        {
+                                                                            !isNullOrEmpty(message.text) &&
+                                                                            <h3 className={"chat-message"}>{message.text}</h3>
+                                                                        }
                                                                     </div>
                                                                     <h6 className='chat_time'>
                                                                         {new Date(message.createdAt).toLocaleTimeString(undefined, timeFormatOptions)}
@@ -407,8 +385,14 @@ function NeedHelpComponent() {
                                             })
                                         }
                                     </div>
-
+                                    <input
+                                        type="file"
+                                        multiple={true}
+                                        accept=".jpg, .jpeg, .png, .mp4, .pdf, .txt, .doc, .docx, .csv"
+                                        onChange={handleFileChange}
+                                    />
                                     <div className='chart_wrapper'>
+
                                         <div className='attachlink_wrapepr'>
 
                                             {/*<img src={attach_file} alt='Attach File'/>*/}
