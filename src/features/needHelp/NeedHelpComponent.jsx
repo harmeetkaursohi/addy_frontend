@@ -1,4 +1,4 @@
-import React, {useEffect, useState,useRef} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import logo from '/Addy_icon.svg';
 import HeadLogo from '../../images/Addy_icon.svg?react';
@@ -14,7 +14,7 @@ import Loader from "../loader/Loader";
 import default_user_icon from "../../images/default_user_icon.svg";
 import {
     isNullOrEmpty,
-    isValidCreateMessageRequest,deleteElementFromArrayAtIndex
+    isValidCreateMessageRequest, deleteElementFromArrayAtIndex
 } from "../../utils/commonUtils";
 import {ChatOpenMessage} from "../../utils/contantData";
 import {useGetUserInfoQuery} from "../../app/apis/userApi";
@@ -29,7 +29,7 @@ import {
 import {handleRTKQuery} from "../../utils/RTKQueryUtils";
 import {addyApi} from "../../app/addyApi";
 import {Link} from "react-router-dom";
-import { current } from '@reduxjs/toolkit';
+import {current} from '@reduxjs/toolkit';
 
 function NeedHelpComponent() {
 
@@ -38,7 +38,7 @@ function NeedHelpComponent() {
     const decodedToken = decodeJwtToken(token);
     const dispatch = useDispatch();
     const fileInputRef = useRef(null);
-    
+
     const timeFormatOptions = {
         hour: '2-digit',
         minute: '2-digit',
@@ -60,7 +60,6 @@ function NeedHelpComponent() {
     })
     const [chatId, setChatId] = useState(null);
     const [files, setFiles] = useState([]);
-    console.log(files,"files")
     const [activeKey, setActiveKey] = useState(null);
 
     const userApi = useGetUserInfoQuery("")
@@ -108,14 +107,15 @@ function NeedHelpComponent() {
         setActiveKey(key);
     };
 
-    const handleDeleteFile=(removeFileFromIndex)=>{
-        const updatedFiles=deleteElementFromArrayAtIndex(files,removeFileFromIndex);
+    const handleDeleteFile = (removeFileFromIndex) => {
+        const updatedFiles = deleteElementFromArrayAtIndex(files, removeFileFromIndex);
         setFiles([...updatedFiles])
     }
 
     const handleFileChange = (e) => {
         const newFiles = e.target.files
-        setFiles([...files,...newFiles])
+        setFiles([...files, ...newFiles])
+        fileInputRef.current.value = '';
     }
     const handleSendMessage = async () => {
         if (isNullOrEmpty(files)) {
@@ -240,27 +240,29 @@ function NeedHelpComponent() {
             throw error;
         }
     };
+
     function formatFileSize(bytes) {
-        if (!bytes) return "0 bytes"; 
-      
+        if (!bytes) return "0 bytes";
+
         if (bytes < 1024) {
-         
-          return `${bytes} bytes`;
+
+            return `${bytes} bytes`;
         } else if (bytes < 1024 * 1024) {
-          return `${(bytes / 1024).toFixed(2)} KB`;
+            return `${(bytes / 1024).toFixed(2)} KB`;
         } else {
-          return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+            return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
         }
-      }
-      const chatContainerRef = useRef(null); // Ref for the chat container
-      const bottomRef = useRef(null); // Ref for the bottom of the container
-    
-      // Effect to scroll to bottom whenever messages update
-      useEffect(() => {
+    }
+
+    const chatContainerRef = useRef(null); // Ref for the chat container
+    const bottomRef = useRef(null); // Ref for the bottom of the container
+
+    // Effect to scroll to bottom whenever messages update
+    useEffect(() => {
         if (bottomRef.current) {
-          bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+            bottomRef.current.scrollIntoView({behavior: 'smooth'});
         }
-      }, [messageList]);
+    }, [messageList]);
     return (
         <div className={sidebar ? 'cmn_container' : 'cmn_Padding'}>
             <div className='cmn_outer'>
@@ -306,11 +308,11 @@ function NeedHelpComponent() {
                         <div className='col-lg-6 col-sm-12 col-md-12'>
                             <div className='needhelp_wrapper helpTextbox'>
                                 <div className='chataddy_outer d-flex justify-content-center gap-3 align-items-center'>
-                                  <HeadLogo width={52} height={68} />
+                                    <HeadLogo width={52} height={68}/>
                                     <h3 className='cmn_small_style_font'>Ask Questions</h3>
                                 </div>
                                 <div className='chat_container'>
-                                    <div className="chat_scroll" ref={chatContainerRef} >
+                                    <div className="chat_scroll" ref={chatContainerRef}>
                                         {
                                             searchMessageApi?.data?.isLast &&
                                             <div className='d-flex gap-3 chat_inner_content'>
@@ -348,41 +350,42 @@ function NeedHelpComponent() {
                                         }
                                         {
                                             messageList?.map((message, index) => {
-                                                console.log(message,"message")
                                                 return <div key={index}>
                                                     {
                                                         message?.senderId === decodedToken.customerId ?
                                                             <div>
-                                                                <div className='d-flex gap-3 justify-content-start align-items-center pe-3'>
-                                                                  <div className='user_profile_image_container'>
-                                                                    <img
-                                                                        src={userApi?.data?.profilePic ? "data:image/jpeg; base64," + userApi?.data?.profilePic : default_user_icon}
-                                                                        className='userchat_image'
-                                                                        alt='User Profile'/>
+                                                                <div
+                                                                    className='d-flex gap-3 justify-content-start align-items-center pe-3'>
+                                                                    <div className='user_profile_image_container'>
+                                                                        <img
+                                                                            src={userApi?.data?.profilePic ? "data:image/jpeg; base64," + userApi?.data?.profilePic : default_user_icon}
+                                                                            className='userchat_image'
+                                                                            alt='User Profile'/>
+                                                                    </div>
+                                                                    <div>
+                                                                        {
+                                                                            !isNullOrEmpty(message.attachments) &&
+                                                                            message?.attachments?.map(attachment => {
+                                                                                return <Link
+                                                                                    target={"_blank"}
+                                                                                    className='d-block file_media'
+                                                                                    to={`${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachment?.id}`}
+                                                                                > {attachment?.fileName}</Link>
+                                                                            })
+                                                                        }
+                                                                        {
+                                                                            !isNullOrEmpty(message.text) &&
+                                                                            <div
+                                                                                className='chat_inner_text user_chat_inner_text'>
+                                                                                <h3 className={"chat-message"}>{message.text}</h3>
+                                                                            </div>
+                                                                        }
+                                                                    </div>
+
                                                                 </div>
-                                                                <div>
-                                                                    {
-                                                                        !isNullOrEmpty(message.attachments) &&
-                                                                        message?.attachments?.map(attachment => {
-                                                                            return <Link
-                                                                                target={"_blank"}
-                                                                                className='d-block file_media'
-                                                                                to={`${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachment?.id}`}
-                                                                            > {attachment?.fileName}</Link>
-                                                                        })
-                                                                    }
-                                                                    {
-                                                                        !isNullOrEmpty(message.text) &&
-                                                                        <div className='chat_inner_text user_chat_inner_text'>
-                                                                            <h3 className={"chat-message"}>{message.text}</h3>
-                                                                        </div>
-                                                                    }
-                                                                </div>
-                                                              
-                                                            </div>
-                                                                    <h6 className='chat_time text-end mb-2 pe-3'>
-                                                                        {new Date(message.createdAt).toLocaleTimeString(undefined, timeFormatOptions)}
-                                                                    </h6>
+                                                                <h6 className='chat_time text-end mb-2 pe-3'>
+                                                                    {new Date(message.createdAt).toLocaleTimeString(undefined, timeFormatOptions)}
+                                                                </h6>
                                                             </div>
                                                             :
                                                             <div className='d-flex gap-3 chat_inner_content'>
@@ -415,25 +418,29 @@ function NeedHelpComponent() {
                                                 </div>
                                             })
                                         }
-                                         <div ref={bottomRef}></div>
+                                        <div ref={bottomRef}></div>
                                     </div>
-                                  
+
                                     <div className='chart_wrapper '>
 
                                         <div className='input_wrapper position-relative'>
-                                    <ul className='media_list'>
-                                    {
-                                            files?.map((cur,index)=>{
-                                                return <li><span>{cur?.name} </span>  <strong> ({formatFileSize(cur.size)})</strong>  <button
-                                                className='ms-auto'
-                                                onClick={()=>{
-                                                    handleDeleteFile(index)
-                                                }}
-                                                
-                                                >X</button></li>
-                                            })
-                                        }
-                                    </ul>
+                                            <ul className='media_list'>
+                                                {
+                                                    files?.map((cur, index) => {
+                                                        return <li><span>{cur?.name} </span>
+                                                            <strong> ({formatFileSize(cur.size)})</strong>
+                                                            <button
+                                                                className='ms-auto'
+                                                                onClick={() => {
+                                                                    handleDeleteFile(index)
+                                                                }}
+
+                                                            >X
+                                                            </button>
+                                                        </li>
+                                                    })
+                                                }
+                                            </ul>
                                             <textarea
                                                 className='form-control'
                                                 placeholder='Write message'
@@ -447,23 +454,24 @@ function NeedHelpComponent() {
                                             />
                                         </div>
                                         <div className='d-flex align-items-center justify-content-between message_cta'>
-                                        <div className='attachlink_wrapepr'>
-                                        <input
-                                         ref={fileInputRef}
-                                        type="file"
-                                        multiple={true}
-                                        accept=".jpg, .jpeg, .png, .mp4, .pdf, .txt, .doc, .docx, .csv"
-                                        onChange={handleFileChange}
-                                    />
-                                            <PiLinkSimpleBold className='attachlink_outer'/>
-                                        </div>
-                                        <button className='cmn_btn_color cmn_connect_btn yes_btn' onClick={handleSendMessage}>
-                                            {
-                                                (createChatApi.isLoading || sendMessageApi.isLoading) ?
-                                                    <Loader/> :
-                                                    "Submit"
-                                            }
-                                        </button>
+                                            <div className='attachlink_wrapepr'>
+                                                <input
+                                                    ref={fileInputRef}
+                                                    type="file"
+                                                    multiple={true}
+                                                    accept=".jpg, .jpeg, .png, .mp4, .pdf, .txt, .doc, .docx, .csv"
+                                                    onChange={handleFileChange}
+                                                />
+                                                <PiLinkSimpleBold className='attachlink_outer'/>
+                                            </div>
+                                            <button className='cmn_btn_color cmn_connect_btn yes_btn'
+                                                    onClick={handleSendMessage}>
+                                                {
+                                                    (createChatApi.isLoading || sendMessageApi.isLoading) ?
+                                                        <Loader/> :
+                                                        "Submit"
+                                                }
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
