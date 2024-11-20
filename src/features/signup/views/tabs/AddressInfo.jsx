@@ -145,8 +145,8 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
                                     <div className='reach_user_outer text-center'>
                                         <Frame className=' w-100 mt-4'/>
-                                        <h2 className='mt-3'>{jsondata.connect_audience_title}</h2>
-                                        <p>{jsondata.connect_audience_desc}</p>
+                                        <h2 className="mt-3">{jsondata.signupTitle}</h2>
+                                        <p>{jsondata.signupDescription}</p>
                                     </div>
                                 </div>
 

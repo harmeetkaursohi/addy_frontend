@@ -1,7 +1,11 @@
 .CalenderOuter_Wrapper {
-    display: flex;
-    width: 100%;
-    gap: 12px;
+    display: grid;
+        width: 100%;
+        gap: 12px;
+        grid-template-columns: auto 344px;
+}
+.CalenderOuter_Wrapper.single_calendar {
+    grid-template-columns: auto;
 }
 .No_scheduled_post {
     width: 169px;
@@ -33,11 +37,10 @@
 
 
 .scheduled_posts {
-    flex:0 0 344px;
     padding: 13px;
     border-radius: 15px;
     background: #fff;
-    height:100vh ;
+    height:100% ;
 }
 .scduler_outer .sechduled_post_outer {
     height: calc(100vh - 64px);

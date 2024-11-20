@@ -301,16 +301,7 @@ const SocialAccounts = ({}) => {
                     },
                     () => {
                         dispatch(addyApi.util.invalidateTags(["getConnectedSocialAccountApi", "getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi", "getPublishedPostsApi", "getPostByPageIdAndPostStatusApi", "getPostDataWithInsightsApi"]));
-                        },
-                    () => {
-                        Swal.fire({
-                            imageUrl: crossIcon,
-                            title: "Error",
-                            confirmButtonColor: "#F07C33",
-                            text: `An error occurred while disconnecting your ${getInitialLetterCap(SocialAccountProvider[socialMediaType])}  account. Please try again later.`,
-                            customClass: {confirmButton: "confirmButton",},
-                        });
-                    }
+                        }
                 );
             }
         });

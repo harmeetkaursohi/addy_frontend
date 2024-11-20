@@ -69,7 +69,7 @@ function ForgotPassword() {
                                     <p className='forget_desc'>{jsondata.register_email_heading}</p>
 
                                 </div>
-                                <div className='login_form'>
+                                <div className='login_form mt-3'>
                                     <form onSubmit={formik.handleSubmit}>
                                         <div className='resetOuter_wrapper'>
 

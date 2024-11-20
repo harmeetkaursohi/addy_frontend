@@ -336,7 +336,7 @@ const Planner = () => {
 
 
                                 <div
-                                    className={`CalenderOuter_Wrapper`}>
+                                    className={`CalenderOuter_Wrapper ${!selectedDate && "single_calendar"}`}>
                                     <div className={`planner_calender w-100 ${selectedDate && "select_wrapper"}`}>
                                         <Dropdown className='cmn_dropdown'>
                                             <Dropdown.Toggle>

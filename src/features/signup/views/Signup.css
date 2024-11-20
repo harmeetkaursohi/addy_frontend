@@ -16,7 +16,12 @@
     background-color: #F07C33;
     border: 2px solid #F07C33;
 }
-
+span.agree-privacy-policy-txt a {
+    color: #00A3FF;
+}
+span.agree-privacy-policy-txt{
+    color: #A6A6A6;
+}
 /* Create the tick mark */
 .privacy-policy-checkbox:checked::before {
     content: '';

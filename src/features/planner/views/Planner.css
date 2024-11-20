@@ -291,6 +291,18 @@ button.fc-customText-button.fc-button.fc-button-primary {
 .select_wrapper .custom_event {
     justify-content: center;
 }
+.select_wrapper .calendar_card {
+    padding-top: 15px;
+}
+
+.select_wrapper .custom_event:first-child {
+    padding-top: 12px;
+}
+
+.select_wrapper .custom_event img {
+    height: 21px;
+    width: 21px;
+}
 .custom_event {
     width: 100%;
     height: 36px;
@@ -406,12 +418,20 @@ button.planner_view_more_btn {
 }
 .select_wrapper button.planner_view_more_btn {
     font-size: 12px;
+    font-weight: 500;
 }
 .cal_Div {
     border-radius: 7px;
     display: inline-grid;
     background: #F4F8FE;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 10%);
+}
+.CalenderOuter_Wrapper  .fc-scroller.fc-scroller-liquid-absolute, .CalenderOuter_Wrapper .fc .fc-view-harness-active > .fc-view {
+    position: relative;
+    inset: unset;
+}
+.CalenderOuter_Wrapper .fc-view-harness.fc-view-harness-active {
+    height: 100% !important;
 }
 .select_wrapper .custom_event h3 {
     display: none;
@@ -504,11 +524,19 @@ ul.schdeuled_post_list li:first-child .planner_info {
 
 .calender_outer_wrapper .cmn_dropdown.dropdown button {
     min-width: 162px;
-    padding: 8px 15px;
+    padding: 7px 15px;
     border: 1px solid #787878;
     border-radius: 10px;
     padding-right: 10px;
 }
+table.fc-scrollgrid-sync-table tr {
+    height: 151px;
+}
+.single_calendar table.fc-scrollgrid-sync-table tr {
+    height: 178px;
+}
+
+
 /* planner popup css */
 .viewPost  .modal-dialog {
     max-width: 548px;

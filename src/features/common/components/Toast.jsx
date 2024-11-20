@@ -1,8 +1,7 @@
 import {toast} from 'react-toastify';
-import './Toast.css'
-
+import './Toast.css';
 export function showErrorToast(content) {
-    buildCustomToastTemplate("toast_sub_child_", "fa fa-ban", "Error", content, {
+    buildCustomToastTemplate("toast_sub_child_", "fa fa-exclamation-circle", "Error", content, {
         className: "cust_toast_error",
         autoClose: true,
         bodyClassName: "toast_child",
@@ -17,7 +16,7 @@ export function showErrorToast(content) {
 }
 
 export function showSuccessToast(content) {
-    buildCustomToastTemplate("toast_sub_child_", "fa fa-check", "Success", content, {
+    buildCustomToastTemplate("toast_sub_child_", "fa fa-check-circle", "Success", content, {
         className: "cust_toast_success",
         autoClose: true,
         bodyClassName: "toast_child",
@@ -30,11 +29,12 @@ export function showSuccessToast(content) {
         toastId: 'success'
     })
 
+
 }
 
 
 export function showWarningToast(content) {
-    buildCustomToastTemplate("toast_sub_child_", "fa fa-warning", "Warning", content, {
+    buildCustomToastTemplate("toast_sub_child_", "fa fa-exclamation-circle", "Warning", content, {
         className: "cust_toast_warning",
         autoClose: true,
         bodyClassName: "toast_child",
@@ -69,16 +69,16 @@ export function buildCustomToastTemplate(parent_div_class = "toast_sub_child_", 
 
         options.render = <>
             <div className={parent_div_class}>
-                <i className={icon_tag_type} style={{marginRight: '10px'}}/>
-                <span><b>{span_bold}: </b><span className="toast_message">{span_content_}</span></span>
+                <i className={icon_tag_type} style={{marginRight: '15px'}}/>
+              <span className="toast_message">{span_content_}</span>
             </div>
         </>;
         toast.update(options.toastId, options)
     } else {
         toast(<>
             <div className={parent_div_class}>
-                <i className={icon_tag_type} style={{marginRight: '10px'}}/>
-                <span><b>{span_bold}: </b><span className="toast_message">{span_content_}</span></span>
+                <i className={icon_tag_type} style={{marginRight: '15px'}}/>
+               <span className="toast_message">{span_content_}</span>
             </div>
         </>, options)
     }
