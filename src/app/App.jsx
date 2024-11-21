@@ -25,6 +25,7 @@ import NeedHelpComponent from "../features/needHelp/NeedHelpComponent";
 import Login from "../features/login/views/Login";
 import Signup from "../features/signup/views/Signup";
 import CreatePassword from "../features/resetPassword/views/CreatePassword";
+import SuccessScreen from "../features/resetPassword/views/SuccessScreen";
 import ForgotPassword from "../features/forgotPassword/ForgotPassword";
 import ConnectPagesModal from "../features/modals/views/facebookModal/ConnectPagesModal";
 import Oauth2RedirectComponent from "../features/authentication/Oauth2RedirectComponent";
@@ -102,7 +103,9 @@ const App = () => {
                             <Route path="/" element={<Login/>}/>
                             <Route path="/sign-up" element={<Signup/>}/>
                             <Route path="/reset-password" element={<CreatePassword/>}/>
+                            <Route path="/password/success" element={<SuccessScreen/>}/>
                             <Route path="/forgot-password" element={<ForgotPassword/>}/>
+                            <Route path="/create-password" element={<CreatePassword/>}/>
                             <Route path="/fb" element={<ConnectPagesModal/>}/>
                             <Route path="/auth-redirect" element={<Oauth2RedirectComponent/>}/>
                             <Route path="*" element={<NotFound/>}/>
