@@ -594,7 +594,9 @@ const CreatePost = () => {
                                                                                     />
                                                                                 </button>
                                                                             } */}
-                                                                            <button className="delete_upload"
+                                                                            <button
+                                                                                type={"button"}
+                                                                                className="delete_upload"
                                                                                     onClick={(e) => {
                                                                                         e.preventDefault();
                                                                                         handleRemoveSelectFile(file);
