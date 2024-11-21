@@ -113,10 +113,10 @@ export const postApi = addyApi.injectEndpoints({
             async onQueryStarted(requestBody, {queryFulfilled,}) {
                 queryFulfilled.then(res => {
                     if (requestBody.postStatus === "DRAFT") {
-                        showSuccessToast("Post has been put to draft successfully");
+                        showSuccessToast("The post has been successfully saved as a draft.");
                     }
                     if (requestBody.postStatus === "SCHEDULED") {
-                        showSuccessToast("Post planned successfully");
+                        showSuccessToast("The post has been successfully scheduled.");
                     }
                     if (requestBody.postStatus === "PUBLISHED") {
                         if (res?.data?.every(response => !response.success)) {
@@ -175,10 +175,10 @@ export const postApi = addyApi.injectEndpoints({
             async onQueryStarted(requestBody, {queryFulfilled,}) {
                 queryFulfilled.then(res => {
                     if (requestBody.updatePostRequestDTO.postStatus === "DRAFT") {
-                        showSuccessToast("Post has been put to draft successfully");
+                        showSuccessToast("The post has been successfully saved as a draft.");
                     }
                     if (requestBody.updatePostRequestDTO.postStatus === "SCHEDULED") {
-                        showSuccessToast("Post planned successfully");
+                        showSuccessToast("The post has been successfully scheduled.");
                     }
                     if (requestBody.updatePostRequestDTO.postStatus === "PUBLISHED") {
                         if (res?.data?.every(c => !c.success)) {

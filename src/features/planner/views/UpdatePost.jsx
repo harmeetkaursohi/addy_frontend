@@ -89,8 +89,6 @@ const UpdatePost = () => {
         const [videoBlob, setVideoBlob] = useState(null)
         const [trimmedVideoUrl, setTrimmedVideoUrl] = useState()
 
-        console.log("files======>", files)
-
         const {sidebar} = useAppContext()
 
         useEffect(() => {

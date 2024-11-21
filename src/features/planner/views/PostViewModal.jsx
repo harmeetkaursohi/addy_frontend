@@ -33,8 +33,6 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
     const dispatch = useDispatch()
     const sliderRef = useRef(null);
 
-    console.log("postToPreview=======>",postToPreview)
-
     const [insights, setInsights] = useState({})
     const [invalidateData, setInvalidateData] = useState(false)
     const [deletePostPageInfo, setDeletePostPageInfo] = useState(null)
@@ -162,13 +160,14 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                     () => {
                         // If There is only one page in post and is removed then the whole post is removed
                         if (postToPreview?.length === 1) {
-                            dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi"]));
+                            dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi","getPostsByIdApi"]));
                             setPosts([])
                             showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]))
                             handleClose()
                         }
                         // If user has opened last postPage and deleted it , then one postPage backward is selected
                         if (currentActivePostIndex + 1 === postToPreview?.length && postToPreview?.length > 1) {
+                            dispatch(addyApi.util.invalidateTags(["getPostsByIdApi"]));
                             showSuccessToast(PageRemovedFromPostSuccessfully)
                             const updatedPostToPreview = deleteElementFromArrayAtIndex(postToPreview, currentActivePostIndex)
                             prevSlide()
@@ -178,6 +177,7 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                         }
                         // If user has opened any postPage and deleted it , then one postPage next is selected
                         if (currentActivePostIndex + 1 < postToPreview?.length && postToPreview?.length > 1) {
+                            dispatch(addyApi.util.invalidateTags(["getPostsByIdApi"]));
                             showSuccessToast(PageRemovedFromPostSuccessfully)                            // No Need to set fetchInsightsFor as delete is only available for scheduled posts and if post is still not posted, no insights will be there
                             const updatedPostToPreview = deleteElementFromArrayAtIndex(postToPreview, currentActivePostIndex)
                             setPostToPreview(updatedPostToPreview)
@@ -218,7 +218,6 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                         <Slider {...settings} ref={sliderRef}>
                             {
                                 postToPreview?.map(post => {
-                                    console.log( "post=======>",post)
                                     const index = post.message.indexOf('#');
                                     const caption = index !== -1 ? post.message.slice(0, index).trim() : post.message;
                                     const hashtags = index !== -1 ? post.message.slice(index).trim() : '';
