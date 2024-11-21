@@ -29,6 +29,12 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
         {icon: <LuRectangleHorizontal/>, title: "16:9", aspectRatio: 16 / 9, height: 400, width: 400},
     ]
 
+    useEffect(()=>{
+        if(crop){
+            makeClientCrop(crop)
+        }
+    },[crop])
+
     const handleClose = () => {
         setShowEditImageModal(false)
     }
@@ -43,6 +49,8 @@ const EditImageModal = ({showEditImageModal, setShowEditImageModal, file, setFil
     const onCropComplete = crop => {
         makeClientCrop(crop);
     };
+
+
 
     const onCropChange = (crop) => {
         setCrop(crop);
