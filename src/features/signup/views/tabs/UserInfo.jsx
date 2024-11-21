@@ -55,7 +55,7 @@ const UserInfo = ({ formData, setFormData, setShowTab }) => {
       <section>
         <div className="login_wrapper">
           <div className="row">
-            <div className="col-lg-6 col-md-12 col-sm-12 ">
+            <div className="col-lg-6 col-md-12 col-sm-12 p-0 ">
               <div className="addy_container bg_light_orange min-vh-100">
                 <div className="login_outer">
                   <div className="reach_user_outer text-center">
@@ -66,7 +66,7 @@ const UserInfo = ({ formData, setFormData, setShowTab }) => {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6 col-md-12 col-sm-12">
+            <div className="col-lg-6 col-md-12 col-sm-12 p-0">
               <div className="addy_container form_mainwrapper">
                 <div className="addy_outer">
                   <div className="form_wrapper">

@@ -10,7 +10,7 @@ const BillingForm = () => {
             <section>
                 <div className="login_wrapper">
                     <div className="row">
-                        <div className="col-lg-6 col-md-12 col-sm-12 ">
+                        <div className="col-lg-6 col-md-12 col-sm-12 p-0 ">
                             <div className='addy_container bg_color'>
                                 <div className='login_outer'>
                                     <div className='reach_user_outer'>
@@ -22,7 +22,7 @@ const BillingForm = () => {
                             </div>
 
                         </div>
-                        <div className="col-lg-6 col-md-12 col-sm-12">
+                        <div className="col-lg-6 col-md-12 col-sm-12 p-0">
                             <div className='addy_container form_mainwrapper'>
                                 <div className="addy_outer">
                                 <div className="form_wrapper">

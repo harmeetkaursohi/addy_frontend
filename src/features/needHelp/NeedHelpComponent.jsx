@@ -322,10 +322,10 @@ function NeedHelpComponent() {
                                     <h3 className='cmn_small_style_font'>Ask Questions</h3>
                                 </div>
                                 <div className='chat_container'>
-                                    <div className="chat_scroll" ref={chatContainerRef}>
+                                    <div className={`chat_scroll ${messageList?.length > 0 && "chat_scroll_wrapper"}`} ref={chatContainerRef}>
                                         {
                                             searchMessageApi?.data?.isLast &&
-                                            <div className='d-flex gap-3 chat_inner_content'>
+                                            <div className='d-flex gap-3 chat_inner_content d-none'>
                                                 <div className='user_profile_image_container'>
                                                     <img src={logo} className='userchat_image'
                                                          alt='User Profile'/>
@@ -399,7 +399,7 @@ function NeedHelpComponent() {
                                                                 </h6>
                                                             </div>
                                                             :
-                                                            <div className='d-flex gap-3 chat_inner_content d-none'>
+                                                            <div className='d-flex gap-3 chat_inner_content'>
                                                                 <div className='user_profile_image_container'>
                                                                     <img src={logo} className='userchat_image'
                                                                          alt='User Profile'/>
@@ -453,8 +453,8 @@ function NeedHelpComponent() {
                                                 }
                                             </ul>
                                             <textarea
-                                                className='form-control'
-                                                placeholder='Write message'
+                                                className={`form-control ${messageList.length == 0 && "no_message"}`}
+                                                placeholder='Write your questions'
                                                 value={message?.text}
                                                 onChange={(e) => {
                                                     setMessage({
@@ -492,7 +492,7 @@ function NeedHelpComponent() {
                     <div className='Get_in_touch_outer'>
                         <h2 className='Get_in_touch_heading'>Get in Touch!</h2>
                         <div className='Get_in_touch_content_wrapper'>
-                            <div className='row'>
+                            <div className='row mb-4'>
                                 <div className='col-lg-6 col-sm-12 col-md-6'>
                                     <div className='d-flex getintouch_inner_content align-items-center gap-2'>
                                         <div className='email_wrapper'>

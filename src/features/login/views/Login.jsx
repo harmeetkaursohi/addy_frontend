@@ -53,7 +53,7 @@ const Login = () => {
             <section>
                 <div className="login_wrapper">
                     <div className="row">
-                        <div className="col-lg-6 col-md-12 col-sm-12 ">
+                        <div className="col-lg-6 col-md-12 col-sm-12 p-0">
                             <div className='addy_container bg_light_orange min-vh-100'>
                                 <div className='login_outer'>
 
@@ -68,7 +68,7 @@ const Login = () => {
 
 
                         </div>
-                        <div className="col-lg-6 col-md-12 col-sm-12">
+                        <div className="col-lg-6 col-md-12 col-sm-12 p-0">
                             <div className='addy_container form_mainwrapper'>
                                 <div className="addy_outer d-flex align-items-center">
                                 <div className="form_wrapper">

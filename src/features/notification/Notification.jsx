@@ -156,7 +156,7 @@ const Notification = () => {
                             </div>
 
                             {
-                                !isAllNotificationsCleared && !isNullOrEmpty(notificationsList) && !isNullOrEmpty(unSeenNotificationsList)
+                                !isAllNotificationsCleared && !isNullOrEmpty(notificationsList) && !isNullOrEmpty(unSeenNotificationsList) &&
                                 (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
                                 <button
                                     className={"text-end clear-all-notifications  cursor-pointer  clear_all_button_outer " + (clearNotificationApi?.isLoading ? "disable_btn" : "")}
