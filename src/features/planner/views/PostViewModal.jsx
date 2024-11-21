@@ -210,11 +210,13 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                 <Modal.Body className="individual_post_content">
                     <div className="slider-container">
                         {/* Custom prev and next buttons */}
-                        <FaChevronLeft
-                            size={24}
-                            className={postToPreview.length === 1 ? "slick_btn d-none" :"slick_btn"}
-                            onClick={prevSlide}
-                        />
+                        {currentActivePostIndex > 0 && (
+                            <FaChevronLeft
+                                className={postToPreview.length === 1 ? "slick_btn d-none" : "slick_btn"}
+                                size={24}
+                                onClick={prevSlide}
+                            />
+                            )}
                         <Slider {...settings} ref={sliderRef}>
                             {
                                 postToPreview?.map(post => {
@@ -315,11 +317,11 @@ function PostViewModal({setPosts, setShowPostPreview, showPostPreview, postToPre
                             }
                         </Slider>
 
-                        <FaChevronRight
+                   {  currentActivePostIndex === postToPreview.length - 1 ? <></> :  <FaChevronRight
                             className={ postToPreview.length === 1 ? "slick_btn next_slide d-none" : "slick_btn next_slide"}
                             size={24}
                             onClick={nextSlide}
-                        />
+                        />}
                     </div>
                 </Modal.Body>
             </Modal>

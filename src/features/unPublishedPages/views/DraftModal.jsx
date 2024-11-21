@@ -214,7 +214,7 @@ function DraftModal({
                                 onClick={() => {
                                     handleSeparateCaptionHashtag(postData?.message)?.caption.length > 40 ? setShowCaption(!showCaption) : ""
                                 }}
-                                className={`caption ${handleSeparateCaptionHashtag(postData?.message)?.caption.length > 40 ? "cursor-pointer" : ""}  ${showCaption ? "upcoming_post_content " : "cmn_text_overflow"}`}>{postData?.message !== null && postData?.message !== "" && postData?.message !== " " ? handleSeparateCaptionHashtag(postData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h4>
+                                className={`caption mt-1 ${handleSeparateCaptionHashtag(postData?.message)?.caption.length > 40 ? "cursor-pointer" : ""}  ${showCaption ? "upcoming_post_content " : "cmn_text_overflow"}`}>{postData?.message !== null && postData?.message !== "" && postData?.message !== " " ? handleSeparateCaptionHashtag(postData?.message)?.caption || "---No Caption---" : "---No Caption---"}</h4>
 
                             <div className={"draft_container_box"}>
                                 <h3 className={"small_font"}>Hashtags: </h3>
@@ -250,15 +250,15 @@ function DraftModal({
                                     </div>
                                 </div>
                             </div>
-                            <div className={"modal_post_btn_outer"}>
-                                <GenericButtonWithLoader
+                            <div className={"modal_post_btn_outer justify-content-between"}>
+                                {/* <GenericButtonWithLoader
                                     className={`post_now cmn_bg_btn ${postsByIdApi?.isLoading ? "pe-none" : ""}`}
                                     label={"Post Now"}
                                     isLoading={postData?.id === postToPublish && publishedPostByIdApi?.isLoading}
                                     onClick={handlePublishedPost}
                                     isDisabled={(action !== "POST" && deletePostByIdApi?.isLoading)}
-                                />
-                                <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn"}
+                                /> */}
+                                <GenericButtonWithLoader className={"post_now cmn_bg_btn"}
                                                          label={"Schedule Post/Edit"}
                                                          onClick={() => {
                                                              setAction("SCHEDULE")

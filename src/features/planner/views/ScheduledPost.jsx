@@ -142,9 +142,9 @@ const ScheduledPost = ({
                 {
                     !plannerPosts?.isLoading && !plannerPosts?.isFetching && !postsApi?.isLoading && !postsApi?.isFetching && plannerPosts?.data && isNullOrEmpty(plannerPosts?.data[formatDate(selectedDate, "ISOString")]) &&
                     <div className='No_scheduled_post mt-5'><img src={No_scheduled_post} alt="No scheduled post"/>
-                        <p>No Post is scheduled on this date</p>
+                        <p>Start crafting your latest post and share with your followers!</p>
                         <button onClick={handleCreatePost}
-                                className='cmn_btn_color create_post_btn cmn_white_text'>Schedule Post
+                                className='cmn_btn_color create_post_btn cmn_white_text'>Schedule New Post
                         </button>
                     </div>
                 }
