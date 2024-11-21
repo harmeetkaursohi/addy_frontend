@@ -78,21 +78,22 @@ const CreatePassword = () => {
                         </div>
                     <div className="col-lg-6 col-md-12 col-sm-12 p-0">
                         <div className='addy_container form_mainwrapper'>
-                            <div className="addy_outer">
+                            <div className="addy_outer d-flex align-items-center">
                             <div className="form_wrapper">
-                                <div className="addy_img">
+                                <div className="addy_img text-center">
                                     <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                     </div>
-                                    <h2 >{jsondata.createPassword.createPassword}</h2>
-                                    <p>{jsondata.enternewpass}</p>
+                                    <h2 className='text-center mb-2'>{jsondata.createPassword.createPassword}</h2>
+                                    <p className='createPassText m-auto'>Create a new password. Ensure it differs from
+                                    previous ones for security   </p>
 
                                 </div>
-                                <div className='login_form'>
+                                <div className='login_form mt-2'>
                                     <form onSubmit={formik.handleSubmit}>
 
 
                                         <div className='form-group '>
-                                            <label>{jsondata.password}</label>
+                                            <label>Create Password</label>
                                             <input
                                                 className="form-control mt-1"
                                                 type={showPassword ? 'text' : 'password'}

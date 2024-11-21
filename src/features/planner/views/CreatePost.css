@@ -965,6 +965,7 @@ button.loading {
     padding: 20px;
     max-width: 531px;
     margin: auto;
+    padding-bottom: 40px;
 }
 i.fa.fa-toggle-on {
     color: #F07C33;

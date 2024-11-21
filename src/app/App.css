@@ -1207,7 +1207,10 @@ video {
   -webkit-object-fit: cover;
   object-fit: cover;
 }
-
+.addy_img p.createPassText {
+  max-width: 290px;
+  margin: auto;
+}
 .addy_img p {
   color: rgba(95, 109, 126, 1);
   text-align: center;

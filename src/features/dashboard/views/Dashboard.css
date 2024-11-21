@@ -708,9 +708,7 @@ width: 100%;
 
 .account_not_connect_imcontainer {
     min-height: calc(100vh - 122px);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  
 }
 
 .not_account_content h5 {

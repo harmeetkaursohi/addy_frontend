@@ -258,7 +258,15 @@ function DraftModal({
                                     onClick={handlePublishedPost}
                                     isDisabled={(action !== "POST" && deletePostByIdApi?.isLoading)}
                                 /> */}
-                                <GenericButtonWithLoader className={"post_now cmn_bg_btn"}
+                                  <GenericButtonWithLoader className={"post_now cmn_bg_btn mw-100"}
+                                                         label={"Delete Post"}
+                                                         isLoading={postData?.id === postToDelete && deletePostByIdApi?.isLoading}
+                                                         onClick={handleDeletePost}
+                                                         id={postData?.id}
+                                                         contentText={"Deleting..."}
+                                                         isDisabled={action !== "DELETE" && publishedPostByIdApi?.isLoading}
+                                />
+                                <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn mw-100"}
                                                          label={"Schedule Post/Edit"}
                                                          onClick={() => {
                                                              setAction("SCHEDULE")
@@ -267,14 +275,7 @@ function DraftModal({
                                                          isDisabled={action !== "SCHEDULE" && deletePostByIdApi?.isLoading || publishedPostByIdApi?.isLoading}
                                 />
 
-                                <GenericButtonWithLoader className={"cmn_bg_btn edit_schedule_btn"}
-                                                         label={"Delete Post"}
-                                                         isLoading={postData?.id === postToDelete && deletePostByIdApi?.isLoading}
-                                                         onClick={handleDeletePost}
-                                                         id={postData?.id}
-                                                         contentText={"Deleting..."}
-                                                         isDisabled={action !== "DELETE" && publishedPostByIdApi?.isLoading}
-                                />
+                              
                             </div>
 
                         </div>
