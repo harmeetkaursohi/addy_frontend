@@ -12,8 +12,8 @@
 
   },
   "createPassword": {
-    "createPassword": "CREATE PASSWORD",
-    "createpasstext":"Create Password",
+    "createPassword": "Create New Password",
+    "createpasstext":"Confirm",
     "confirmnewpass":"Confirm New Password",
     "newpass":" New Password"
   },
