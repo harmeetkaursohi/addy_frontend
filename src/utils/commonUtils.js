@@ -1718,11 +1718,6 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                         }
                         const isInValidAspectRatio = files.some(file => {
                             const aspectRatio = getImageAspectRatio(file?.url)
-                            getImageDimensions(file?.url).then(res=>{
-                                console.log("ImageDimensions======>",res)
-                            })
-                            console.log("aspectRatio======>",aspectRatio)
-
                             return (aspectRatio < 0.8 || aspectRatio > 1.91)
                         })
                         if (isInValidAspectRatio) {
@@ -1730,9 +1725,6 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                             shouldBreak = true;
                             break;
                         }
-                        showErrorToast("Here It Is");
-                        shouldBreak = true;
-                        break;
                     }
                     if (files[0]?.mediaType === "VIDEO") {
                         if (files.some(file => (file?.file?.size / 1048576) > 50)) {
@@ -2011,29 +2003,7 @@ export const getImageAspectRatio = (imageUrl) => {
     while (!img.complete) {
         // This loop will keep running until the image is loaded
     }
-
-    console.log("img.naturalWidth=======>",img.naturalWidth)
-    console.log("img.naturalHeight=======>",img.naturalHeight)
     return img.naturalWidth / img.naturalHeight;
-};
-
-const getImageDimensions = (blobUrl) => {
-    return new Promise((resolve, reject) => {
-        const image = new Image();
-
-        image.onload = () => {
-            resolve({
-                width: image.width,
-                height: image.height,
-            });
-        };
-
-        image.onerror = (error) => {
-            reject('Failed to load image');
-        };
-
-        image.src = blobUrl;
-    });
 };
 
 export const isImageValid = (imageUrl, socialMediaType) => {
