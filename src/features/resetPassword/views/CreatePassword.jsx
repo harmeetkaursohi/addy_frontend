@@ -35,7 +35,7 @@ const CreatePassword = () => {
         setShowConfirmPassword(!showConfirmPassword);
     }
 
-
+    const isResetPassword = location.pathname.includes("reset-password") 
     const formik = useFormik({
         initialValues: {
             password: "",
@@ -52,12 +52,12 @@ const CreatePassword = () => {
                 },
                 () => {
                     showSuccessToast('Password created successfully');
-                    navigate("/login")
+                    isResetPassword ? navigate("/password/success", { state: { message: "updated" } }) : navigate("/password/success")
                 })
 
         },
     });
-
+ 
     return (<section>
             <div className="login_wrapper">
                 <div className="row">
@@ -83,9 +83,8 @@ const CreatePassword = () => {
                                 <div className="addy_img text-center">
                                     <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>
                                     </div>
-                                    <h2 className='text-center mb-2'>{jsondata.createPassword.createPassword}</h2>
-                                    <p className='createPassText m-auto'>Create a new password. Ensure it differs from
-                                    previous ones for security   </p>
+                                    <h2 className='text-center mb-2'>{isResetPassword ? "Reset Your Password" :jsondata.createPassword.createPassword}</h2>
+                                    <p className='createPassText m-auto'>{isResetPassword ?"Create a new password. Ensure it differs from previous ones for security" : "Create a strong and unique password for your account."}  </p>
 
                                 </div>
                                 <div className='login_form mt-2'>

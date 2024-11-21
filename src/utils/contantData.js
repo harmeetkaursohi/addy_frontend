@@ -32,7 +32,7 @@ export const DeletePostConfirmationMessage="Are you sure you want to delete this
 export const DeletePostFromPageConfirmationMessage="Are you sure you want to remove this post from {0}?"
 export const PageRemovedFromPostSuccessfully="Post has been removed successfully"
 
-export const unProtectedUrls=["/login","/","/sign-up","/reset-password","/forgot-password","/auth-redirect"]
+export const unProtectedUrls=["/login","/","/sign-up","/reset-password","/forgot-password","/auth-redirect","/password/success"]
 
 export const enabledSocialMedia = {
     isFacebookEnabled: `${import.meta.env.VITE_APP_ENABLE_FACEBOOK}` === "true",
