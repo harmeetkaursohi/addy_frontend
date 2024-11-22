@@ -1717,14 +1717,14 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                             break;
                         }
                         const isInValidAspectRatio = files.some(file => {
-                            const aspectRatio = getImageAspectRatio(file?.url)
+                            const aspectRatio = getImageAspectRatio(file?.url)                            
                             return (aspectRatio < 0.8 || aspectRatio > 1.91)
                         })
                         if (isInValidAspectRatio) {
                             showErrorToast(InvalidAspectRatio);
                             shouldBreak = true;
                             break;
-                        }
+                        }                        
                     }
                     if (files[0]?.mediaType === "VIDEO") {
                         if (files.some(file => (file?.file?.size / 1048576) > 50)) {
@@ -2002,8 +2002,7 @@ export const getImageAspectRatio = (imageUrl) => {
     img.src = imageUrl;
     while (!img.complete) {
         // This loop will keep running until the image is loaded
-    }
-
+    }    
     return img.naturalWidth / img.naturalHeight;
 };
 
