@@ -15,7 +15,7 @@ import {useGetSocialMediaPostsByCriteriaQuery} from "../../../app/apis/postApi";
 import CommonSlider from "../../common/components/CommonSlider";
 import {Image} from "react-bootstrap";
 import default_user_icon from "../../../images/default_user_icon.svg";
-import No_scheduled_post from "../../../images/no_scheduled_post.svg";
+import No_scheduled_post from "../../../images/no_scheduled_post.svg?react";
 import {RiDeleteBin7Line} from "react-icons/ri";
 import PostViewModal from './PostViewModal';
 import {useNavigate} from 'react-router-dom';
@@ -141,7 +141,7 @@ const ScheduledPost = ({
                 }
                 {
                     !plannerPosts?.isLoading && !plannerPosts?.isFetching && !postsApi?.isLoading && !postsApi?.isFetching && plannerPosts?.data && isNullOrEmpty(plannerPosts?.data[formatDate(selectedDate, "ISOString")]) &&
-                    <div className='No_scheduled_post mt-5'><img src={No_scheduled_post} alt="No scheduled post"/>
+                    <div className='No_scheduled_post mt-5'><No_scheduled_post/>
                         <p>Start crafting your latest post and share with your followers!</p>
                         <button onClick={handleCreatePost}
                                 className='cmn_btn_color create_post_btn cmn_white_text'>Schedule New Post

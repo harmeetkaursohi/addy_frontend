@@ -2,7 +2,6 @@ import {useAppContext} from "../common/components/AppProvider";
 import "./Notification.css"
 import ReactDOMServer from 'react-dom/server';
 import React, {useEffect, useState} from "react";
-import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAccount";
 import {
     getCommentCreationTime,
     getEmptyArrayOfSize,
@@ -11,7 +10,6 @@ import {
 } from "../../utils/commonUtils";
 import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 import jsondata from "../../locales/data/initialdata.json"
-import NotConnected_img from "../../images/no_notification_bg.svg?react";
 import Swal from "sweetalert2";
 import Notification_img from "../../images/clear_notification.svg?react"
 import {EmptyNotificationGridMessage} from "../../utils/contantData";
@@ -21,17 +19,19 @@ import {useGetAllConnectedPagesQuery} from "../../app/apis/pageAccessTokenApi";
 import {
     useClearAllNotificationMutation,
     useDeleteNotificationByIdMutation,
-    useGetUnseenNotificationsQuery, useLazySearchNotificationsQuery,
+     useLazyGetUnseenNotificationsQuery, useLazySearchNotificationsQuery,
     useSetNotificationsToSeenByCustomerIdMutation,
     useSetNotificationsToSeenMutation
 } from "../../app/apis/notificationApi";
 import {handleRTKQuery} from "../../utils/RTKQueryUtils";
 import {RxCross2} from "react-icons/rx";
+import {useDispatch} from "react-redux";
 
 
 const Notification = () => {
 
     const {sidebar} = useAppContext()
+    const dispatch = useDispatch();
 
     const [baseSearchQuery, setBaseSearchQuery] = useState({
         offSet: -1,
@@ -41,7 +41,7 @@ const Notification = () => {
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
-    const unseenNotificationsApi = useGetUnseenNotificationsQuery("", {skip: isNullOrEmpty(getConnectedSocialAccountApi?.data) || isNullOrEmpty(getAllConnectedPagesApi?.data)})
+    const [getUnseenNotifications,unseenNotificationsApi] = useLazyGetUnseenNotificationsQuery("")
     const [searchNotifications, searchNotificationsApi] = useLazySearchNotificationsQuery()
 
     const [setNotificationToSeen, setNotificationsToSeenApi] = useSetNotificationsToSeenMutation()
@@ -58,12 +58,14 @@ const Notification = () => {
 
     useEffect(() => {
         if (!isNullOrEmpty(getConnectedSocialAccountApi?.data) && !isNullOrEmpty(getAllConnectedPagesApi?.data)) {
+            getUnseenNotifications("")
             setBaseSearchQuery({
                 ...baseSearchQuery,
                 offSet: 0
             })
         }
     }, [getConnectedSocialAccountApi, getAllConnectedPagesApi]);
+
     useEffect(() => {
         if (notificationsList?.length === 0 && unSeenNotificationsList?.length === 0 && baseSearchQuery?.offSet >= 0) {
             setBaseSearchQuery({
@@ -81,9 +83,11 @@ const Notification = () => {
 
     useEffect(() => {
         return () => {
-            if (unseenNotificationsApi?.data?.length > 0) {
-                setNotificationsToSeenByCustomerId()
-            }
+            setTimeout(() => {
+                if (unseenNotificationsApi?.data?.length > 0) {
+                    setNotificationsToSeenByCustomerId()
+                }
+            }, 1000);
         }
     }, [unseenNotificationsApi]);
 
@@ -156,8 +160,8 @@ const Notification = () => {
                             </div>
 
                             {
-                                !isAllNotificationsCleared && !isNullOrEmpty(notificationsList) && !isNullOrEmpty(unSeenNotificationsList) &&
-                                (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
+                                !isAllNotificationsCleared && (!isNullOrEmpty(notificationsList) || !isNullOrEmpty(unSeenNotificationsList)) &&
+                                // (!isNullOrEmpty(searchNotificationsApi?.data?.data) || !isNullOrEmpty(unseenNotificationsApi?.data)) &&
                                 <button
                                     className={"text-end clear-all-notifications  cursor-pointer  clear_all_button_outer " + (clearNotificationApi?.isLoading ? "disable_btn" : "")}
                                     onClick={handleClearAllNotifications}
@@ -170,7 +174,7 @@ const Notification = () => {
                             getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length > 0 &&
                             <div className=" align-items-center">
                                 {
-                                    (isAllNotificationsCleared || (isNullOrEmpty(notificationsList) && isNullOrEmpty(unSeenNotificationsList) && !searchNotificationsApi?.isLoading && !unseenNotificationsApi?.isLoading)) &&
+                                    (isAllNotificationsCleared || (isNullOrEmpty(notificationsList) && isNullOrEmpty(unSeenNotificationsList) && !searchNotificationsApi?.isLoading && !searchNotificationsApi?.isFetching && !unseenNotificationsApi?.isLoading && !unseenNotificationsApi?.isFetching)) &&
                                     // (Array.isArray(searchNotificationsApi?.data?.data) && isNullOrEmpty(searchNotificationsApi?.data?.data) && Array.isArray(unseenNotificationsApi?.data) && isNullOrEmpty(unseenNotificationsApi?.data))) &&
                                     <div
                                         className="W-100 text-center no_post_review_outer no_account_bg white_bg_color no_draft_height">
@@ -247,7 +251,8 @@ const Notification = () => {
 
                         {
                             (getConnectedSocialAccountApi?.data?.length === 0 || getAllConnectedPagesApi?.data?.length === 0) &&
-                            <div className="W-100 text-center no_post_review_outer no_account_bg white_bg_color no_draft_height">
+                            <div
+                                className="W-100 text-center no_post_review_outer no_account_bg white_bg_color no_draft_height">
                                 <div>
                                     <No_notification_img className="w-100 h-auto"/>
                                     <h4 className="no-notifications-text text-center mt-3 text-black">{EmptyNotificationGridMessage}</h4>
