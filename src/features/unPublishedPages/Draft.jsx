@@ -15,6 +15,7 @@ import ConnectSocialMediaAccount from "../common/components/ConnectSocialMediaAc
 import NotConnected_img from "../../images/noaccount_draft.svg?react";
 import {formatMessage} from "../../utils/commonUtils";
 import {NotConnected} from "../../utils/contantData";
+import ReactPlayer from "react-player";
 
 const Draft = () => {
 
@@ -79,7 +80,6 @@ const Draft = () => {
                         {getConnectedSocialAccountApi?.data?.length === 0 || getConnectedSocialAccountApi?.data?.length > 0 && getAllConnectedPagesApi?.data?.length === 0 ?
 
                             (<div className="review_wrapper cmn_height_outer no_account_bg white_bg_color">
-
                                 <div className="no-post-review acc_not_connected_heading no_draft">
 
                                     {

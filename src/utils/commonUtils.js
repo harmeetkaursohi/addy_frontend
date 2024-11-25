@@ -1718,7 +1718,6 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                         }
                         const isInValidAspectRatio = files.some(file => {
                             const aspectRatio = getImageAspectRatio(file?.url)
-                            console.log("aspectRatio=======>",aspectRatio)
                             return (aspectRatio < 0.8 || aspectRatio > 1.91)
                         })
                         if (isInValidAspectRatio) {
@@ -1726,8 +1725,6 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                             shouldBreak = true;
                             break;
                         }
-                        shouldBreak = true;
-                        break;
                     }
                     if (files[0]?.mediaType === "VIDEO") {
                         if (files.some(file => (file?.file?.size / 1048576) > 50)) {

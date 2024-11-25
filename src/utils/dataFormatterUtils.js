@@ -802,7 +802,8 @@ export const getFormattedDataForPlannerPostPreviewModal = (data) => {
                         url = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id
                     }
                     if (cur.mediaType === "VIDEO") {
-                        url = cur.sourceURL
+                        console.log("cur.sourceURL=====>",cur.sourceURL)
+                        url = url = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/stream/" + cur?.id
                     }
                 }
                 if (data.postStatus === "PUBLISHED") {
@@ -811,7 +812,7 @@ export const getFormattedDataForPlannerPostPreviewModal = (data) => {
                     }
                     if (cur.mediaType === "VIDEO") {
                         if(postPage.socialMediaType === "INSTAGRAM" && postPage?.postState === "IN_PROGRESS"){
-                            url=`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id
+                            url=`${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/stream/" + cur?.id
                         }
                         else if(postPage.socialMediaType === "PINTEREST"){
                             url = cur.imageURL

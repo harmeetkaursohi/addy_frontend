@@ -9,24 +9,6 @@ const DraftComponent = ({postData}) => {
 
     const [showCaption, setShowCaption] = useState(false)
     const [draftModal, setDraftModal] = useState(false);
-    const [attachments, setAttachments] = useState([]);
-
-
-    useEffect(() => {
-        const parseImage= async ()=>{
-            if(!isNullOrEmpty(postData?.attachments)){
-                // If Attachment is Video
-                if(postData?.attachments?.[0]?.mediaType==="VIDEO" ){
-                    const dimensionResults = await Promise.all(postData?.attachments?.map(async (file) => await urlToBlob(file)));
-                    setAttachments(dimensionResults)
-                }
-                if(postData?.attachments?.[0]?.mediaType==="IMAGE"){
-                    setAttachments(postData?.attachments)
-                }
-            }
-        }
-        parseImage();
-    }, [postData]);
 
 
     return (<>
@@ -41,7 +23,7 @@ const DraftComponent = ({postData}) => {
                     <div className={"posted_date_outer"}>
                         <h3>Posted on: <span>{formatDate(postData?.createdAt)}</span></h3>
                     </div>
-                    <CommonSlider files={attachments} selectedFileType={null} caption={null} hashTag={null}
+                    <CommonSlider files={postData?.attachments} selectedFileType={null} caption={null} hashTag={null}
                                   viewSimilarToSocialMedia={false}/>
                 </div>
 
@@ -88,7 +70,6 @@ const DraftComponent = ({postData}) => {
                 show={draftModal}
                 setShow={setDraftModal}
                 postData={postData}
-                attachments={attachments}
             />
 
         }

@@ -5,9 +5,7 @@ import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
 import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
 import {Dropdown} from 'react-bootstrap'
-import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import { LuPlusCircle } from "react-icons/lu";
-
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
 import { RxCross2 } from "react-icons/rx";
 import {showErrorToast} from "../../common/components/Toast";
