@@ -135,15 +135,18 @@ background-color: white;
     margin-top: 27px;
 
 }
-
-.gr_previous_outer{
-    height: 40px;
-    width: 40px;
-    border-radius: 10px;
-    border: 1px solid #C4C4C4;
-    text-align: center;
-    padding-top: 6px;
-    color: #3E3E3E;
+.gr_previous_outer.cursor-pointer span {
+    position: relative;
+    top: -1px;
+}
+.gr_previous_outer {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: #ef874d;
+    font-weight: 500;
+    position: absolute;
+    left: 2rem;
 }
 @media screen and(max-width:1024px) {
     .or_text::before{

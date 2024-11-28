@@ -6,7 +6,7 @@ import {formatMessage,  validationSchemas} from "../../../utils/commonUtils";
 import {showSuccessToast} from "./Toast";
 import { UpdatedSuccessfully} from "../../../utils/contantData";
 import "./common.css"
-import lock_img from "../../../images/lock_img.svg"
+import Lock_img from "../../../images/addylogoo.svg?react"
 import { RxCross2 } from "react-icons/rx";
 import {useUpdatePasswordMutation} from "../../../app/apis/authApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
@@ -54,18 +54,22 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
     return (
         <>
             <section className='facebook_modal_outer'>
-                <Modal size="md" show={showModal} onHide={handleClose} className="update_pass_model_wrapper">
+                <Modal centered size="md" show={showModal} onHide={handleClose} className="update_pass_model_wrapper">
                 
-                    <Modal.Body className="pt-0">
-                    <div className='pop_up_cross_icon_outer text-end pt-3 cursor-pointer' onClick={(e) => {
+                    <Modal.Body className="pt-0 update_password_wrapper">
+                    <div className='pop_up_cross_icon_outer text-end cursor-pointer' onClick={(e) => {
                                             handleClose()
                                         }}><RxCross2 className="pop_up_cross_icon"/></div>
 
                         <div className='px-2 update_pass_model_content'>
-                        <img src={lock_img} className="lock_img"/>
+                   <div className="text-center pt-3">
+                   <Lock_img/>
+                   </div>
                             <h3 className='cmn_heading_class text-center mt-2'>
-                                Update Password
+                            Create New Password
                             </h3>
+                            <p className="text-center">Create a new password. Ensure it differs from
+                            previous ones for security   </p>
                             <form onSubmit={formik.handleSubmit}>
                                 <div className="form-group">
                                     <label className="">
@@ -79,6 +83,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.oldPassword}
+                                        placeholder="Old Password"
                                     />
                                     <span className="password-toggle" onClick={() => {
                                         togglePasswordVisibility("oldPassword")
@@ -95,7 +100,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                     </span>
                                     {
                                         formik.touched.oldPassword && formik.errors.oldPassword &&
-                                        <p className="error_message">{formik.errors.oldPassword}</p>
+                                        <span className="error_message">{formik.errors.oldPassword}</span>
                                     }
                                 </div>
                                 <div className="form-group">
@@ -110,6 +115,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.newPassword}
+                                        placeholder="New Password"
                                     />
                                     <span className="password-toggle" onClick={() => {
                                         togglePasswordVisibility("newPassword")
@@ -126,7 +132,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                     </span>
                                     {
                                         formik.touched.newPassword && formik.errors.newPassword &&
-                                        <p className="error_message">{formik.errors.newPassword}</p>
+                                        <span className="error_message">{formik.errors.newPassword}</span>
                                     }
                                 </div>
                                 <div className="form-group">
@@ -141,6 +147,7 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                         value={formik.values.confirmPassword}
+                                        placeholder="Confirm Password"
                                     />
                                     <span className="password-toggle" onClick={() => {
                                         togglePasswordVisibility("confirmPassword")
@@ -157,22 +164,22 @@ const UpdatePasswordModal = ({showModal, setShowModal}) => {
                                     </span>
                                     {
                                         formik.touched.confirmPassword && formik.errors.confirmPassword &&
-                                        <p className="error_message">{formik.errors.confirmPassword}</p>
+                                        <span className="error_message">{formik.errors.confirmPassword}</span>
                                     }
                                 </div>
                                 <div className='update-password-btn-outer text-center  mt-4'>
-                                <button onClick={handleClose}
+                                {/* <button onClick={handleClose}
                                             disabled={updatePasswordApi?.isLoading}
                                             className={"close-update-password-btn me-4 cmn_modal_cancelbtn "}>Cancel
-                                    </button>
+                                    </button> */}
                                     <button type={"submit"}
                                             disabled={updatePasswordApi?.isLoading}
 
-                                            className={"update-password-btn connection-error-close-btn "}>
+                                            className={"update-password-btn connection-error-close-btn w-100"}>
                                         Update
                                         {
                                             updatePasswordApi?.isLoading &&
-                                            <span className={"spinner-border spinner-border-sm  ms-2"} role="status"
+                                            <span className={"spinner-border spinner-border-sm "} role="status"
                                                   aria-hidden="true"></span>
                                         }
 

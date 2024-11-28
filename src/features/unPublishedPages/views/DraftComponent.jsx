@@ -55,7 +55,8 @@ const DraftComponent = ({postData}) => {
                                                 ))
                                             }
                                         </div>
-                                        <h4>Posting on {count} pages.</h4>
+                                        {console.log("uniqueSocialMedia===>",uniqueSocialMedia.length)}
+                                        <h4>Posting on {count} page{uniqueSocialMedia.length > 1 && "s"}.</h4>
                                     </>
                                 );
                             })()

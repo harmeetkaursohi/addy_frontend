@@ -139,7 +139,7 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
             <section>
                 <div className="login_wrapper">
                     <div className="row">
-                    <div className="col-lg-6 col-md-12 col-sm-12 ">
+                    <div className="col-lg-6 col-md-12 col-sm-12 p-0 ">
                             <div className='addy_container bg_light_orange min-vh-100'>
                                 <div className='login_outer'>
 
@@ -154,14 +154,14 @@ const AddressInfo = ({formData, setFormData, setShowTab}) => {
 
 
                         </div>
-                        <div className="col-lg-6 col-md-12 col-sm-12">
+                        <div className="col-lg-6 col-md-12 col-sm-12 p-0">
 
 
-                            <div className="addy_outer form_mainwrapper">
+                            <div className="addy_outer form_mainwrapper position-relative">
                             <div className="form_wrapper">
                             <div className="gr_previous_outer cursor-pointer"
                                  onClick={(e) =>
-                                     !signUpApi?.isLoading && handlePreviousTab(e)}><GrPrevious/>
+                                     !signUpApi?.isLoading && handlePreviousTab(e)}><GrPrevious/> <span>Back</span>
                             </div>
                                 <div className="addy_img">
                                     <div className='logo_outer'><img src={addyads_img} height="90px" width="238px"/>

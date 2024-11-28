@@ -4,8 +4,6 @@ div.Toastify__toast{
     padding: 20px;
     box-shadow: 7px 6px 6px #0000004D;
 }
-
-
 .cust_toast_success{
     background: #2C7A1C !important;
 }
@@ -58,15 +56,10 @@ button.Toastify__close-button > svg {
     fill: #fff;
 }
 
-
 .toast_sub_child_ {
     display: flex;
     align-items: center;
 }
-
-
-
-
 .cust_toast_success span {
     color: #fff;
 }

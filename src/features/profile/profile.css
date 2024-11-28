@@ -1,13 +1,21 @@
 .editprofile_outer {
     padding: 20px;
-  
-
-}
+ }
 .user_pic{
     height: 100px;
     width: 100px;
     border-radius: 50%;
-    border: 2px solid #E05905;
+    border: 5px solid #F07C33CC;
+}
+.edit_label_container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.profile_image_wrapper {
+    position: relative;
+    width: 100px;
 }
 .update-pic-loading{
     position: absolute;
@@ -21,18 +29,38 @@
 .user_pic_container{
     position: relative;
 }
+span.personal {
+    color: #4B4B4B;
+    font-size: 12px;
+    font-weight: 700;
+}
 .edit_content h3 {
     font-size: 24px;
-    margin-top: 13px;
+    font-weight: 700;
+    padding-bottom: 20px;
+}
+.edit_content input::placeholder {
+    font-size: 14px !important;
+    color: #9DA1A6 !important;
 }
 .edit_wrapper {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px 20px 0px;
-    align-items: center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #E7E7E7;
+        padding-bottom: 24px;
+        margin-bottom: 11px;
+}
+span.last-upadte {
+    align-self: end;
+    font-weight: 600;
+    color: #303030;
+    font-size: 16px;
 }
 .profile-information{
     border-radius: 20px;
+    padding: 40px;
+    background: #fff;
 }
 ul.mb-3.edit_tabs.nav.nav-tabs {
      border-bottom: unset;
@@ -78,11 +106,11 @@ isolation: unset !important;
     border: 1px solid #e97011;
 }
 .edit_content .form-group label {
-    color: #7C7C7C;
+    color: #083A50;
     font-weight: 400;
-    font-size: 18px;
+    font-size: 15px;
     font-family: "Nunito";
-    margin-top: 16px;
+    font-weight: 600;
 }
 .edit_profile_contaniner{
     display: flex;
@@ -97,8 +125,12 @@ button.edit_profile_btn {
     padding: 4px 20px;
     font-size: 16px;
     background: #F07C33;
-    height: 35px;
+    height: 44px;
     min-width: 110px;
+}
+.profile_inner_content_wrapper .form-group .form-select {
+    border-color: transparent;
+    background-color: #F9F9F9;
 }
 .profile_cancel_btn{
     color: #2E3646;
@@ -109,13 +141,24 @@ button.edit_profile_btn {
     height: 35px;
     min-width: 110px;
 }
+.edit_content .form-select {
+    height: 45px;
+
+}
 .edit_content input {
-    border: 1px solid #A1BAC9;
-    color: #263238;
+    border: 1px solid #C3C3C3;
+    color: #9DA1A6;
     font-weight: 500;
     font-size: 18px;
     border-radius: 6px !important;
+    font-weight: 400;
+    font-size: 15px;
+    height: 45px;
 
+}
+.edit_content .form-control:disabled::placeholder{
+    font-size: 15px;
+    color: #9DA1A6;
 }
 .edit_content .form-control:disabled{
     background-color: #F8FAFD !important;
@@ -170,7 +213,6 @@ button.edit_profile_btn {
     color: white;
     text-align: center;
     padding-top: 4px;
-    transform: translate(41px, -31px);
     
 }
 
@@ -202,25 +244,33 @@ button.edit_profile_btn {
     color: #263238;
     font-weight: 500;
     font-size: 18px;
-   border:1px solid #A1BAC9
+    border: 1px solid #A1BAC9;
+    background: unset;
 }
- 
-  
-
-  .changeProfile_label:hover {
+.changeProfile_label:hover {
     background: white;
     color: #e97011;
 }
-
+.update_password_wrapper.modal-body {
+    padding: 30px;
+}
+.update_pass_model_content p {
+    max-width: 390px;
+    margin: auto !important;
+    width: 390px;
+    color: #5F6D7E;
+    padding-top: 15px;
+}
+.update_pass_model_content p.error{
+    max-width: auto;
+}
 .profile_cmn_radius {
     border-radius: 17px;
 }
-.edit_content .profile_info_container .form-group label {
-   margin-top:10px
-
-}
-.edit_content .profile_info_container .form-group label:first-child {
-    margin-top: 8px;
+.update_password_wrapper.modal-body .form-group input {
+    background: #F9F9F9;
+    border: unset;
+    height: 45px;
 }
 .profile_info_container {
     min-height: 100%;
