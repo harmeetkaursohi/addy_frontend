@@ -31,6 +31,9 @@ const CommonSlider = ({
         slidesToShow: 1,
         slidesToScroll: 1
     };
+
+    console.log("files=====>",files)
+    console.log("selectedFileType=====>",selectedFileType)
     const [showText, setShowText] = useState(false)
 
     return (
@@ -72,7 +75,7 @@ const CommonSlider = ({
                                         height={height ? height : "250px"}
                                         width={"100%"}
                                         className='video_player_outer'
-                                        url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file?.id}
+                                        url={file?.url || `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/stream/" + file?.id}
                                         controls={true}
                                         playsinline={true}
                                     />
@@ -123,7 +126,7 @@ const CommonSlider = ({
                                 height={"114px"}
                                 width={"100%"}
                                 className=''
-                                url={(files?.[0]?.sourceURL?.startsWith("http") || files?.[0]?.sourceURL?.startsWith("blob")) ? files?.[0]?.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + files?.[0]?.sourceURL}
+                                url={files?.[0]?.sourceURL?.startsWith("http")  ? files?.[0]?.sourceURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/stream/" + files?.[0]?.sourceURL}
                                 controls={true}
                             />
                         }
@@ -139,13 +142,14 @@ const CommonSlider = ({
                                         <div className={className ? className : "post_image_outerwrapper"}>
                                             <Image
                                                 src={isPublished ? file?.imageURL : "data:image/jpeg; base64," + file?.imageURL}
-                                                alt={`Image ${index}`} className='post_img'/></div>
+                                                alt={`Image ${index}`} className='post_img'/>
+                                        </div>
                                         :
 
                                         <ReactPlayer
                                             width={"100%"}
                                             className={className ? className : 'video_player_outer'}
-                                            url={(isPublished || file?.sourceURL?.includes("http")) ? file?.sourceURL || file?.imageURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + file.sourceURL}
+                                            url={(isPublished || file?.sourceURL?.includes("http")) ? file?.sourceURL || file?.imageURL : `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/stream/" + file.sourceURL}
                                             controls={true}
                                         />
 

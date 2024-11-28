@@ -304,6 +304,25 @@ p.reply_toggle::after {
     overflow-y: auto;
    
 }
+/* width */
+.comments_messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Track */
+.comments_messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.comments_messages::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+.comments_messages::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
 .comment_msg {
     padding: 8px 20px;
     position: relative;

@@ -14,7 +14,7 @@ import Loader from "../loader/Loader";
 import default_user_icon from "../../images/default_user_icon.svg";
 import {
     isNullOrEmpty,
-    isValidCreateMessageRequest, deleteElementFromArrayAtIndex
+    isValidCreateMessageRequest, deleteElementFromArrayAtIndex, formatFileSize
 } from "../../utils/commonUtils";
 import {ChatOpenMessage} from "../../utils/contantData";
 import {useGetUserInfoQuery} from "../../app/apis/userApi";
@@ -38,13 +38,14 @@ function NeedHelpComponent() {
     const decodedToken = decodeJwtToken(token);
     const dispatch = useDispatch();
     const fileInputRef = useRef(null);
+    const chatContainerRef = useRef(null);
+    const bottomRef = useRef(null);
 
     const timeFormatOptions = {
         hour: '2-digit',
         minute: '2-digit',
         hour12: true
     };
-
 
     const [messageList, setMessageList] = useState([]);
     const [searchMessageQuery, setSearchMessageQuery] = useState({
@@ -61,12 +62,25 @@ function NeedHelpComponent() {
     const [chatId, setChatId] = useState(null);
     const [files, setFiles] = useState([]);
     const [activeKey, setActiveKey] = useState(null);
+    const [invalidateSearchMessageApi, setInvalidateSearchMessageApi] = useState(false);
 
     const userApi = useGetUserInfoQuery("")
     const searchMessageApi = useSearchMessageQuery(searchMessageQuery, {skip: searchMessageQuery?.offSet < 0 || isNullOrEmpty(searchMessageQuery?.chatId)})
     const chatByInitiatorIdApi = useGetChatByInitiatorIdQuery(decodedToken?.customerId)
     const [createChat, createChatApi] = useCreateChatMutation()
     const [sendMessage, sendMessageApi] = useSendMessageMutation()
+
+
+
+    useEffect(() => {
+        return ()=>{
+            setTimeout(() => {
+                if (invalidateSearchMessageApi) {
+                    dispatch(addyApi.util.invalidateTags(["searchMessageApi"]));
+                }
+            }, 1000);
+        }
+    }, [invalidateSearchMessageApi]);
 
     useEffect(() => {
         if (Array.isArray(chatByInitiatorIdApi?.data) && isNullOrEmpty(chatByInitiatorIdApi?.data) && !chatByInitiatorIdApi?.isLoading && !chatByInitiatorIdApi?.isFetching) {
@@ -102,6 +116,15 @@ function NeedHelpComponent() {
             setMessageList(updatedMessageList)
         }
     }, [searchMessageApi])
+
+    useEffect(() => {
+        const chatContainer = chatContainerRef.current;
+        if (chatContainer && chatContainer.scrollHeight > 200) {
+            if (bottomRef.current) {
+                bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    }, [messageList]);
 
     const handleToggle = (key) => {
         setActiveKey(key);
@@ -142,6 +165,7 @@ function NeedHelpComponent() {
                     }).unwrap()
                 },
                 (res) => {
+                    setInvalidateSearchMessageApi(true)
                     setMessageList([...messageList, {...res}])
                     setMessage({
                         ...message,
@@ -195,6 +219,7 @@ function NeedHelpComponent() {
                 },
             }).unwrap();
             if (!isNullOrEmpty(response)) {
+                setInvalidateSearchMessageApi(true)
                 setMessageList([...messageList, {...response}])
                 setMessage({
                     ...message,
@@ -227,6 +252,7 @@ function NeedHelpComponent() {
                 },
             }).unwrap();
             if (!isNullOrEmpty(response)) {
+                setInvalidateSearchMessageApi(true)
                 setMessageList([...messageList, {...response}])
                 setMessage({
                     ...message,
@@ -241,38 +267,13 @@ function NeedHelpComponent() {
         }
     };
 
-    function formatFileSize(bytes) {
-        if (!bytes) return "0 bytes";
-
-        if (bytes < 1024) {
-
-            return `${bytes} bytes`;
-        } else if (bytes < 1024 * 1024) {
-            return `${(bytes / 1024).toFixed(2)} KB`;
-        } else {
-            return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-        }
-    }
-
-    const chatContainerRef = useRef(null); // Ref for the chat container
-    const bottomRef = useRef(null); // Ref for the bottom of the container
-
-    useEffect(() => {
-        const chatContainer = chatContainerRef.current;
-    
-        if (chatContainer && chatContainer.scrollHeight > 200) {
-          if (bottomRef.current) {
-            bottomRef.current.scrollIntoView({ behavior: 'smooth' });
-          }
-        }
-      }, [messageList]);
-    //   format date and time 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
         const formattedDate = `${date.getDate()} ${date.toLocaleString('en-US', { month: 'long' })}, ${date.getFullYear()}`;
         return `${time} / ${formattedDate}`;
     };
+
     return (
         <div className={sidebar ? 'cmn_container' : 'cmn_Padding'}>
             <div className='cmn_outer'>

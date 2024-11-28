@@ -729,6 +729,7 @@ const UpdatePost = () => {
                                                                             </button>
                                                                         } */}
                                                                             <button className="delete_upload"
+                                                                                    type={"button"}
                                                                                     onClick={(e) => {
                                                                                         e.preventDefault();
                                                                                         handleRemoveSelectFile(file?.fileName, file?.id);

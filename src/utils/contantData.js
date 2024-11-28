@@ -26,6 +26,7 @@ export const NoPostInDraft=" This page is waiting for you! Start adding Posts <b
 export const EmptyInsightGridMessage="Insights will appear here once you start using the platform. Let’s get started! "
 export const EmptyNotificationGridMessage="You're all set! No new notifications."
 export const EnterMessageToStartChat="Please type message to start chat with Addy!"
+export const MessageAttachmentSizeError="Files exceeding 25 MB cannot be uploaded!"
 export const ChatOpenMessage="Hi. I'm your Addy Service Assistant. How can i help you?"
 export const DeletePostConfirmationMessage="Are you sure you want to delete this post?"
 export const DeletePostFromPageConfirmationMessage="Are you sure you want to remove this post from {0}?"

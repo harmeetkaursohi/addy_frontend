@@ -85,6 +85,7 @@ export const notificationApi = addyApi.injectEndpoints({
 
 export const {
     useGetUnseenNotificationsQuery,
+    useLazyGetUnseenNotificationsQuery,
     useSearchNotificationsQuery,
     useLazySearchNotificationsQuery,
     useSetNotificationsToSeenMutation,

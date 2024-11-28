@@ -5,7 +5,7 @@ import {
     InvalidAspectRatio,
     InvalidImageDimension,
     IsRequired,
-    IsRequiredFor,
+    IsRequiredFor, MessageAttachmentSizeError,
     MultiMediaLimit,
     MultiMediaSizeLimit,
     NoBusinessAccountFound,
@@ -1717,14 +1717,14 @@ export const isCreatePostRequestValid = (requestBody, files) => {
                             break;
                         }
                         const isInValidAspectRatio = files.some(file => {
-                            const aspectRatio = getImageAspectRatio(file?.url)                            
+                            const aspectRatio = getImageAspectRatio(file?.url)
                             return (aspectRatio < 0.8 || aspectRatio > 1.91)
                         })
                         if (isInValidAspectRatio) {
                             showErrorToast(InvalidAspectRatio);
                             shouldBreak = true;
                             break;
-                        }                        
+                        }
                     }
                     if (files[0]?.mediaType === "VIDEO") {
                         if (files.some(file => (file?.file?.size / 1048576) > 50)) {
@@ -2002,7 +2002,8 @@ export const getImageAspectRatio = (imageUrl) => {
     img.src = imageUrl;
     while (!img.complete) {
         // This loop will keep running until the image is loaded
-    }    
+    }
+
     return img.naturalWidth / img.naturalHeight;
 };
 
@@ -2346,6 +2347,10 @@ export const isValidCreateMessageRequest = (data, files) => {
         showErrorToast(EnterMessageToStartChat);
         return false;
     }
+    if(!isNullOrEmpty(files) && files?.some(cur=>(cur?.size/(1024*1024)) >25) ){
+        showErrorToast(MessageAttachmentSizeError);
+        return false;
+    }
     return true;
 
 }
@@ -2406,4 +2411,15 @@ export const extractPostPagesDataFromData=(groupedData,targetDateString)=>{
         }
     }
     return []; // Return empty array if no match found
+}
+
+export const formatFileSize=(bytes)=> {
+    if (!bytes) return "0 bytes";
+    if (bytes < 1024) {
+        return `${bytes} bytes`;
+    } else if (bytes < 1024 * 1024) {
+        return `${(bytes / 1024).toFixed(2)} KB`;
+    } else {
+        return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+    }
 }

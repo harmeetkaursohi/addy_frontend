@@ -1,7 +1,6 @@
 import "./DraftComponent.css";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
 import {
-
     formatMessage,
     handleSeparateCaptionHashtag,
     isNullOrEmpty, urlToBlob,
@@ -21,6 +20,10 @@ import {addyApi} from "../../../app/addyApi";
 import {DeletedSuccessfully} from "../../../utils/contantData";
 import ReactDOMServer from 'react-dom/server'; 
 import default_user_icon from '../../../images/default_user_icon.svg'
+
+
+
+
 const ScheduledComponent = ({scheduledData}) => {
     const {sidebar} = useAppContext();
     const navigate = useNavigate();
@@ -39,19 +42,7 @@ const ScheduledComponent = ({scheduledData}) => {
 
     useEffect(() => {
         if (scheduledData?.data) {
-            const posts = Object.values(scheduledData?.data)
-            const updatedPostsPromises = posts.map(async (post) => {
-                if (!isNullOrEmpty(post?.attachments) && post?.attachments?.[0]?.mediaType === "VIDEO") {
-                    const updatedAttachments = await Promise.all(
-                        post?.attachments?.map(async (file) => await urlToBlob(file))
-                    );
-                    return { ...post, attachments: updatedAttachments };
-                }
-                return post;
-            });
-            Promise.all(updatedPostsPromises).then((updatedPosts) => {
-                setScheduledPosts(updatedPosts);
-            });
+            setScheduledPosts(Object.values(scheduledData?.data));
         }
     }, [scheduledData]);
 
@@ -85,14 +76,8 @@ const ScheduledComponent = ({scheduledData}) => {
                             return await deletePostById(postToDeleteId).unwrap();
                         },
                         () => {
-                            showSuccessToast(
-                                formatMessage(DeletedSuccessfully, ["Post has been"])
-                            );
-                            dispatch(
-                                addyApi.util.invalidateTags([
-                                    "getSocialMediaPostsByCriteriaApi",
-                                ])
-                            );
+                            showSuccessToast(formatMessage(DeletedSuccessfully, ["Post has been"]));
+                            dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsForPlannerApi", "getPlannerPostsCountApi"]));
                         },
                         null,
                         () => {

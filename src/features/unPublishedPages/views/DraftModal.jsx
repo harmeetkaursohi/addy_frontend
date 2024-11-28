@@ -31,7 +31,6 @@ function DraftModal({
                         show,
                         setShow,
                         postData,
-                        attachments
                     }) {
 
     const handleClose = () => setShow(false);
@@ -42,100 +41,100 @@ function DraftModal({
 
     const [deletePostById, deletePostByIdApi] = useDeletePostByIdMutation()
     const [publishedPostById, publishedPostByIdApi] = usePublishedPostByIdMutation()
-    const postsByIdApi = useGetPostsByIdQuery(postData?.id, {skip: isNullOrEmpty(postData?.id)})
+    // const postsByIdApi = useGetPostsByIdQuery(postData?.id, {skip: isNullOrEmpty(postData?.id)})
 
-    const [postAttachments, setPostAttachments] = useState([])
+    // const [postAttachments, setPostAttachments] = useState([])
     const [postToDelete, setPostToDelete] = useState(null);
-    const [postToPublish, setPostToPublish] = useState(null);
+    // const [postToPublish, setPostToPublish] = useState(null);
     const [action, setAction] = useState("")
     const [showCaption, setShowCaption] = useState(false)
     const [showHastag, setShowHashtag] = useState(false)
 
-    useEffect(() => {
-        if (!isNullOrEmpty(attachments)) {
-            if (attachments?.[0]?.mediaType === "IMAGE") {
-                Promise.all(attachments?.map(attachment => getFileFromSource(attachment?.id, attachment?.attachmentName, attachment?.mediaType, attachment?.imageURL)))
-                    .then((results) => {
-                        setPostAttachments(results);
-                    })
-            }
-        }
-    }, [attachments]);
+    // useEffect(() => {
+    //     if (!isNullOrEmpty(attachments)) {
+    //         if (attachments?.[0]?.mediaType === "IMAGE") {
+    //             Promise.all(attachments?.map(attachment => getFileFromSource(attachment?.id, attachment?.attachmentName, attachment?.mediaType, attachment?.imageURL)))
+    //                 .then((results) => {
+    //                     setPostAttachments(results);
+    //                 })
+    //         }
+    //     }
+    // }, [attachments]);
 
-    useEffect(() => {
-        if (!isNullOrEmpty(attachments)) {
-            const getVideoDurationAndSize = async () => {
-                const attachment=attachments?.[0]
-                if (attachment?.mediaType === "VIDEO") {
-                    const result = await getVideoDurationAndSizeByBlobUrl(attachment?.url)
-                    setPostAttachments([{
-                        id: attachments?.[0]?.file?.id,
-                        mediaType: "VIDEO",
-                        fileName: attachments?.[0]?.file?.attachmentName,
-                        duration: result?.duration,
-                        fileSize: result?.fileSize
-                    }]);
-                }
+    // useEffect(() => {
+    //     if (!isNullOrEmpty(attachments)) {
+    //         const getVideoDurationAndSize = async () => {
+    //             const attachment=attachments?.[0]
+    //             if (attachment?.mediaType === "VIDEO") {
+    //                 const result = await getVideoDurationAndSizeByBlobUrl(attachment?.url)
+    //                 setPostAttachments([{
+    //                     id: attachments?.[0]?.file?.id,
+    //                     mediaType: "VIDEO",
+    //                     fileName: attachments?.[0]?.file?.attachmentName,
+    //                     duration: result?.duration,
+    //                     fileSize: result?.fileSize
+    //                 }]);
+    //             }
+    //
+    //         }
+    //         getVideoDurationAndSize()
+    //     }
+    //
+    // }, [attachments])
 
-            }
-            getVideoDurationAndSize()
-        }
+    // const handlePublishedPost = async () => {
+    //     setAction("POST")
+    //     setPostToPublish(postData?.id)
+    //     const requestBody = getRequestBodyToPost()
+    //     if (isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, postsByIdApi?.data?.attachments, postAttachments)) {
+    //         await handleRTKQuery(
+    //             async () => {
+    //                 return await publishedPostById(postData?.id).unwrap()
+    //             },
+    //             (res) => {
+    //                 if (res?.some(cur => cur.success)) {
+    //                     dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsByIdApi"]))
+    //                 }
+    //                 handleClose()
+    //             },
+    //             null,
+    //             () => {
+    //                 setAction("")
+    //                 setPostToPublish(null)
+    //             }
+    //         )
+    //     }
+    // }
 
-    }, [attachments])
-
-    const handlePublishedPost = async () => {
-        setAction("POST")
-        setPostToPublish(postData?.id)
-        const requestBody = getRequestBodyToPost()
-        if (isUpdatePostRequestValid(requestBody?.updatePostRequestDTO, postsByIdApi?.data?.attachments, postAttachments)) {
-            await handleRTKQuery(
-                async () => {
-                    return await publishedPostById(postData?.id).unwrap()
-                },
-                (res) => {
-                    if (res?.some(cur => cur.success)) {
-                        dispatch(addyApi.util.invalidateTags(["getSocialMediaPostsByCriteriaApi", "getPostsByIdApi"]))
-                    }
-                    handleClose()
-                },
-                null,
-                () => {
-                    setAction("")
-                    setPostToPublish(null)
-                }
-            )
-        }
-    }
-
-    const getRequestBodyToPost = () => {
-        const postData = postsByIdApi?.data
-        return {
-            id: postData?.id,
-            updatePostRequestDTO: {
-                postPageInfos: postData?.postPageInfos?.map(cur => {
-                    return {
-                        pageId: cur.pageId,
-                        id: cur.id,
-                        provider: cur.socialMediaType
-                    }
-                }),
-                caption: getValueOrDefault(postData?.caption, ""),
-                hashTag: getValueOrDefault(postData?.hashTag, ""),
-                pinTitle: getValueOrDefault(postData?.pinTitle, ""),
-                destinationUrl: getValueOrDefault(postData?.pinDestinationUrl, ""),
-                attachments: postData?.attachments?.map((file) => ({
-                    mediaType: file?.mediaType,
-                    file: file?.file || null,
-                    fileName: file.fileName,
-                    id: file?.id || null,
-                    gridFsId: file?.gridFsId || null
-                })),
-                postStatus: "PUBLISHED",
-                boostPost: false,
-                scheduledPostDate: null,
-            },
-        };
-    }
+    // const getRequestBodyToPost = () => {
+    //     const postData = postsByIdApi?.data
+    //     return {
+    //         id: postData?.id,
+    //         updatePostRequestDTO: {
+    //             postPageInfos: postData?.postPageInfos?.map(cur => {
+    //                 return {
+    //                     pageId: cur.pageId,
+    //                     id: cur.id,
+    //                     provider: cur.socialMediaType
+    //                 }
+    //             }),
+    //             caption: getValueOrDefault(postData?.caption, ""),
+    //             hashTag: getValueOrDefault(postData?.hashTag, ""),
+    //             pinTitle: getValueOrDefault(postData?.pinTitle, ""),
+    //             destinationUrl: getValueOrDefault(postData?.pinDestinationUrl, ""),
+    //             attachments: postData?.attachments?.map((file) => ({
+    //                 mediaType: file?.mediaType,
+    //                 file: file?.file || null,
+    //                 fileName: file.fileName,
+    //                 id: file?.id || null,
+    //                 gridFsId: file?.gridFsId || null
+    //             })),
+    //             postStatus: "PUBLISHED",
+    //             boostPost: false,
+    //             scheduledPostDate: null,
+    //         },
+    //     };
+    // }
 
     const handleDeletePost = () => {
         setAction("DELETE");
@@ -202,8 +201,8 @@ function DraftModal({
                                 <h3><RxCross1/></h3>
                             </div>
                             {
-                                postData?.attachments && attachments &&
-                                <CommonSlider files={attachments} selectedFileType={null} caption={null}
+                                postData?.attachments &&
+                                <CommonSlider files={postData?.attachments} selectedFileType={null} caption={null}
                                               hashTag={null}
                                               viewSimilarToSocialMedia={false}/>
                             }

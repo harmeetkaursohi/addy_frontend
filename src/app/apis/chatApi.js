@@ -52,6 +52,7 @@ export const chatApi = addyApi.injectEndpoints({
                 let result = await searchMessage(data)
                 return {data: result};
             },
+            providesTags:["searchMessageApi"],
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },
