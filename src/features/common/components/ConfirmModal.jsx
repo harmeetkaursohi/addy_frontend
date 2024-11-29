@@ -24,7 +24,7 @@ const ConfirmModal = ({
     return (
         <>
             <div className='generate_ai_img_container'>
-                <Modal show={showConfirmModal} onHide={handleClose} className={"alert_modal_body"} centered>
+                <Modal show={showConfirmModal} onHide={handleClose} className={"alert_modal_body disconnectModal"} centered>
 
                     <Modal.Body>
                     <div className='pop_up_cross_icon_outer text-end cursor-pointer' onClick={(e) => {

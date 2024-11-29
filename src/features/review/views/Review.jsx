@@ -38,7 +38,6 @@ import {FormCheck} from "react-bootstrap";
 import Default_user from '../../../images/default_user_icon.svg'
 
 
-
 const Review = () => {
 
     const {sidebar} = useAppContext();
@@ -77,8 +76,8 @@ const Review = () => {
 
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("");
-    console.log(getConnectedSocialAccountApi,"getConnectedSocialAccountApi");
-    const connectedSocialAccounts = getConnectedSocialAccountApi?.data?.map(cur=>cur?.provider)
+    console.log(getConnectedSocialAccountApi, "getConnectedSocialAccountApi");
+    const connectedSocialAccounts = getConnectedSocialAccountApi?.data?.map(cur => cur?.provider)
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("");
     const postApi = useGetPublishedPostsQuery(searchQuery, {skip: searchQuery?.offSet < 0,});
     const [deletePostFromPagesByPageIds, deletePostFromPagesApi] = useDeletePostFromPagesByPageIdsMutation();
@@ -244,18 +243,17 @@ const Review = () => {
                 setPageDropdown(updatedPages)
                 setSearchQuery({
                     ...searchQuery,
-                    socialMediaTypes: updatedSocialMediaTypes?.map(cur=>cur?.value),
+                    socialMediaTypes: updatedSocialMediaTypes?.map(cur => cur?.value),
                     offSet: 0,
                     pageIds: updatedPages?.map(cur => cur?.pageId),
                 })
 
-            }
-            else {
-                const newPagesToAdd=allPages?.filter(cur=>cur?.socialMediaType===socialMediaType)
-                const updatedPages=[...selectedDropdownOptions.pages,...newPagesToAdd]
+            } else {
+                const newPagesToAdd = allPages?.filter(cur => cur?.socialMediaType === socialMediaType)
+                const updatedPages = [...selectedDropdownOptions.pages, ...newPagesToAdd]
 
-                const newSocialMediaToAdd=socialMediaDropDownsOptions?.filter(cur=>cur?.value===socialMediaType)
-                const updatedSocialMediaTypes=[...selectedDropdownOptions?.socialMediaTypes,...newSocialMediaToAdd]
+                const newSocialMediaToAdd = socialMediaDropDownsOptions?.filter(cur => cur?.value === socialMediaType)
+                const updatedSocialMediaTypes = [...selectedDropdownOptions?.socialMediaTypes, ...newSocialMediaToAdd]
 
                 setSelectedDropDownOptions({
                     ...selectedDropdownOptions,
@@ -265,7 +263,7 @@ const Review = () => {
                 setPageDropdown(updatedPages)
                 setSearchQuery({
                     ...searchQuery,
-                    socialMediaTypes: updatedSocialMediaTypes?.map(cur=>cur?.value),
+                    socialMediaTypes: updatedSocialMediaTypes?.map(cur => cur?.value),
                     offSet: 0,
                     pageIds: updatedPages?.map(cur => cur?.pageId),
                 })
@@ -287,11 +285,10 @@ const Review = () => {
                     pageIds: updatedPages?.map(cur => cur?.pageId),
                 })
 
-            }
-            else {
+            } else {
                 // If Page Is Selected
-                const newPagesToAdd=allPages?.filter(cur=>cur?.pageId===pageId)
-                const updatedPages=[...selectedDropdownOptions.pages,...newPagesToAdd]
+                const newPagesToAdd = allPages?.filter(cur => cur?.pageId === pageId)
+                const updatedPages = [...selectedDropdownOptions.pages, ...newPagesToAdd]
                 setSelectedDropDownOptions({
                     ...selectedDropdownOptions,
                     pages: updatedPages,
@@ -458,7 +455,7 @@ const Review = () => {
                                                         }}
                                                     />
                                                 </li>
-                                                {console.log(socialMediaDropDownsOptions,"socialMediaDropDownsOptions")}
+                                                {console.log(socialMediaDropDownsOptions, "socialMediaDropDownsOptions")}
                                                 {
                                                     socialMediaDropDownsOptions.map((option, index) => {
                                                         console.log("option=====>", option)
@@ -466,13 +463,13 @@ const Review = () => {
                                                             key={index}
                                                             onClick={() => {
 
-                                                               
+
                                                                 handleSocialMediaFilters({
                                                                     type: "SocialMediaSelect",
                                                                     socialMediaType: option?.value
                                                                 })
                                                             }}
-                                                            className={ connectedSocialAccounts?.includes(option?.value) ? "d-flex" :"d-none"}
+                                                            className={connectedSocialAccounts?.includes(option?.value) ? "d-flex" : "d-none"}
                                                             // active={selectedDropdownOptions?.socialMediaTypes?.value === option.value}
                                                         >
                                                             <img src={computeImageURL(option?.label?.toUpperCase())}
@@ -520,7 +517,10 @@ const Review = () => {
                                                             return <li
                                                                 key={index}
                                                                 onClick={() => {
-                                                                    handleSocialMediaFilters({type: "PageSelect",pageId:option?.pageId})
+                                                                    handleSocialMediaFilters({
+                                                                        type: "PageSelect",
+                                                                        pageId: option?.pageId
+                                                                    })
                                                                 }}
                                                                 className="d-flex align-items-center"
                                                                 // active={selectedDropdownOptions?.pages?.pageId === option.pageId}
@@ -646,14 +646,12 @@ const Review = () => {
                                                                         </td>
                                                                         <td className="text-center">
                                                                             {" "}
-                                                                            {post?.comments} Comments
+                                                                            {post?.socialMediaType === "PINTEREST" ? "N/A" : post?.comments} Comments
                                                                         </td>
                                                                         <td className="text-center">
                                                                             {" "}
-                                                                            {post?.shares}{" "}
-                                                                            {post?.socialMediaType === "PINTEREST"
-                                                                                ? "Save"
-                                                                                : "Share"}
+                                                                            {post?.socialMediaType === "INSTAGRAM" ? "N/A" :post?.shares}{" "}
+                                                                            {post?.socialMediaType === "PINTEREST" ? "Save" : "Share"}
                                                                         </td>
                                                                         <td className="text-center">
                                                                             <button

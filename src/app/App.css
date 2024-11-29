@@ -133,7 +133,9 @@ min-height: 100vh;
   min-width: 130px;
 }
 
-
+.disconnectModal {
+  background: #0000003b;
+}
 .cmn_dropdown .dropdown-menu a:active {
   background: unset;
   color: #000;
