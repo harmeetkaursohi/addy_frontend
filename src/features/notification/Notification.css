@@ -117,6 +117,7 @@ span.error-detail {
     color: #2E3646;
     font-weight: 500;
     font-size: 15px;
+    word-break: break-all;
 
 }
 .notification_edit_button .btn:focus-visible{
