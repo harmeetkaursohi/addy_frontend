@@ -5,7 +5,7 @@ import {
     InvalidAspectRatio,
     InvalidImageDimension,
     IsRequired,
-    IsRequiredFor, MessageAttachmentSizeError,
+    IsRequiredFor, MediaRequiredForPost, MessageAttachmentSizeError,
     MultiMediaLimit,
     MultiMediaSizeLimit,
     NoBusinessAccountFound,
@@ -95,13 +95,11 @@ export const validationSchemas = {
     }),
 
     editProfileInfo: yup.object().shape({
-        firstName: yup.string().required('First Name is required'),
-        lastName: yup.string().required('Last Name is required'),
+        fullName: yup.string().required('Name is required'),
     }),
 
     editProfileInfoWithAddressRequired: yup.object().shape({
-        firstName: yup.string().required('First Name is required'),
-        lastName: yup.string().required('Last Name is required'),
+        fullName: yup.string().required('Name is required'),
         username: yup.string().required('Username is required'),
         addressLine1: yup.string().required('Address is required'),
         country: yup.string().required('Country is required'),
@@ -1598,19 +1596,23 @@ export const isCreatePostRequestValid = (requestBody, files) => {
             }
             case "caption":
             case "hashTag": {
-                if (isNullOrEmpty(requestBody.hashTag)) {
-                    showErrorToast("Hashtag is required.");
-                    shouldBreak = true;
-
-                }
+                // if (isNullOrEmpty(requestBody.hashTag)) {
+                //     showErrorToast("Hashtag is required.");
+                //     shouldBreak = true;
+                //
+                // }
                 // if((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)){
                 //     showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" :""} ${isPostedOnLinkedin ? " and Linkedin" :""}, either Caption/HashTag or Image`]));
                 //     shouldBreak = true;
                 // }
                 break;
             }
-
             case "attachments": {
+                if(!hasAttachments){
+                    showErrorToast(MediaRequiredForPost);
+                    shouldBreak = true;
+                    break;
+                }
                 if (hasAttachments) {
                     if (files.some(file => file?.mediaType === "IMAGE") && files.some(file => file?.mediaType === "VIDEO")) {
                         showErrorToast(OnlyImageOrVideoCanBePosted);
@@ -1816,11 +1818,11 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
             }
             case "caption":
             case "hashTag": {
-                if (isNullOrEmpty(requestBody.hashTag)) {
-                    showErrorToast("Hashtag is required.");
-                    shouldBreak = true;
-
-                }
+                // if (isNullOrEmpty(requestBody.hashTag)) {
+                //     showErrorToast("Hashtag is required.");
+                //     shouldBreak = true;
+                //
+                // }
                 // If posted on facebook or linkedin one among caption , hashtag or image is required
                 // if ((isPostedOnFaceBook || isPostedOnLinkedin) && !hasAttachments && isNullOrEmpty(requestBody.caption) && isNullOrEmpty(requestBody.hashTag)) {
                 //     showErrorToast(formatMessage(IsRequired, [`For${isPostedOnFaceBook ? " Facebook" : ""} ${isPostedOnLinkedin ? " and Linkedin" : ""}, either Caption/HashTag or Image`]));
@@ -1829,6 +1831,11 @@ export const isUpdatePostRequestValid = (requestBody, files, oldAttachments) => 
                 break;
             }
             case "attachments": {
+                if(!hasAttachments){
+                    showErrorToast(MediaRequiredForPost);
+                    shouldBreak = true;
+                    break;
+                }
                 if (hasAttachments) {
                     if (files.some(file => file?.mediaType === "IMAGE") && files.some(file => file?.mediaType === "VIDEO")) {
                         showErrorToast(OnlyImageOrVideoCanBePosted);

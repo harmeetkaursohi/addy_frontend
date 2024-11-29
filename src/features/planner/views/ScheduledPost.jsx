@@ -20,6 +20,8 @@ import {RiDeleteBin7Line} from "react-icons/ri";
 import PostViewModal from './PostViewModal';
 import {useNavigate} from 'react-router-dom';
 import {getFormattedDataForPlannerPostPreviewModal} from "../../../utils/dataFormatterUtils";
+import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
+import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
 
 const ScheduledPost = ({
                            selectedDate,
@@ -42,7 +44,14 @@ const ScheduledPost = ({
     const [showPostPreview, setShowPostPreview] = useState(false)
 
     const [postToPreview, setPostToPreview] = useState([])
+    const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("");
+    const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("")
     const postsApi = useGetSocialMediaPostsByCriteriaQuery(searchQuery, {skip: isNullOrEmpty(searchQuery?.batchIds) || isNullOrEmpty(searchQuery?.plannerCardDate)})
+
+    const isAccountInfoLoading = getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading
+
+    console.log("getConnectedSocialAccountApi======>",getConnectedSocialAccountApi?.data)
+    console.log("getAllConnectedPagesApi======>",getAllConnectedPagesApi?.data)
 
     useEffect(() => {
         setPosts([])
@@ -113,7 +122,7 @@ const ScheduledPost = ({
             </div>
             <div className='sechduled_post_outer'>
                 {
-                    (plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching) &&
+                    (isAccountInfoLoading || plannerPosts?.isLoading || plannerPosts?.isFetching || postsApi?.isLoading || postsApi?.isFetching) &&
                     getEmptyArrayOfSize(3).map((_, i) => {
                         return <div className={"posts-loader-outer d-flex  gap-2 mb-3 "} key={i}>
                             <div className="w-50">
@@ -128,7 +137,18 @@ const ScheduledPost = ({
                     })
                 }
                 {
-                    !plannerPosts?.isLoading && !plannerPosts?.isFetching && !postsApi?.isLoading && !postsApi?.isFetching && plannerPosts?.data && isNullOrEmpty(plannerPosts?.data[formatDate(selectedDate, "ISOString")]) &&
+                    !isAccountInfoLoading &&( isNullOrEmpty(getAllConnectedPagesApi?.data) || isNullOrEmpty(getConnectedSocialAccountApi?.data)) &&
+                    <div className='No_scheduled_post mt-5'><No_scheduled_post/>
+                        <p>Connect your social media and start crafting your latest post and share with your followers!</p>
+                        <button onClick={()=>{
+                            navigate("/dashboard")
+                        }}
+                                className='cmn_btn_color create_post_btn cmn_white_text'>Connect
+                        </button>
+                    </div>
+                }
+                {
+                    getAllConnectedPagesApi?.data?.length > 0 && getConnectedSocialAccountApi?.data?.length > 0 && !plannerPosts?.isLoading && !plannerPosts?.isFetching && !postsApi?.isLoading && !postsApi?.isFetching && plannerPosts?.data && isNullOrEmpty(plannerPosts?.data[formatDate(selectedDate, "ISOString")]) &&
                     <div className='No_scheduled_post mt-5'><No_scheduled_post/>
                         <p>Start crafting your latest post and share with your followers!</p>
                         <button onClick={handleCreatePost}

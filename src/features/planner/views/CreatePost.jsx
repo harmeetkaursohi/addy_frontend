@@ -12,8 +12,14 @@ import {showErrorToast} from "../../common/components/Toast";
 import {useNavigate} from "react-router-dom";
 import {
     blobToFile,
-    checkDimensions, convertSentenceToHashtags,
-    convertToUnixTimestamp, getEnumValue, isCreateDraftPostRequestValid, isCreatePostRequestValid, isNullOrEmpty,
+    checkDimensions,
+    convertSentenceToHashtags,
+    convertToUnixTimestamp,
+    getEnumValue,
+    getValueOrDefault,
+    isCreateDraftPostRequestValid,
+    isCreatePostRequestValid,
+    isNullOrEmpty,
     validateScheduleDateAndTime
 } from "../../../utils/commonUtils";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
@@ -239,18 +245,21 @@ const CreatePost = () => {
     };
 
     const getRequestBodyToCreatePost = (postStatus, isScheduledTimeProvided) => {
+        const selectedPagesInfo=allOptions?.flatMap(obj => {
+            const provider = obj.group;
+            const selectedOptionsData = obj.allOptions
+                .filter(option => selectedOptions.includes(option.pageId))
+                .map(option => ({pageId: option.pageId, provider}));
+            return selectedOptionsData;
+        }) || []
+        const isPinterestSelected=selectedPagesInfo?.some(cur=>cur?.provider==="PINTEREST")
+
         return {
-            postPageInfos: allOptions?.flatMap(obj => {
-                const provider = obj.group;
-                const selectedOptionsData = obj.allOptions
-                    .filter(option => selectedOptions.includes(option.pageId))
-                    .map(option => ({pageId: option.pageId, provider}));
-                return selectedOptionsData;
-            }) || [],
+            postPageInfos: selectedPagesInfo,
             caption: caption ? caption : "",
             hashTag: hashTag ? hashTag : "",
-            pinTitle: pinTitle ? pinTitle : "",
-            destinationUrl: pinDestinationUrl ? pinDestinationUrl : "",
+            pinTitle: isPinterestSelected ? getValueOrDefault(pinTitle,"")  : null,
+            destinationUrl: isPinterestSelected ? getValueOrDefault(pinDestinationUrl, ""):null,
             attachments: files?.map((file) => ({mediaType: selectedFileType, file: file?.file})),
             postStatus: postStatus,
             boostPost: boostPost,
@@ -687,13 +696,11 @@ const CreatePost = () => {
                                                     selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&
                                                     <div className=' media_outer'>
                                                         <div className='caption_header mt-2'>
-                                                            <h5 className='post_heading create_post_text mb-2'>Pinterest
-                                                                Only
-                                                                *</h5>
+                                                            <h5 className='post_heading create_post_text mb-2'>Pinterest Only *</h5>
 
 
                                                         </div>
-                                                        <div className={"" }>
+                                                        <div className={""}>
                                                             <div className='textarea_outer flex-grow-1'>
                                                                 <h6 className='create_post_text'>Pin Title*</h6>
                                                                 <input type={"text"} className='textarea mt-2'
@@ -714,6 +721,7 @@ const CreatePost = () => {
                                                                            setPinDestinationUrl(e.target.value);
                                                                        }}/>
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 }
@@ -722,10 +730,10 @@ const CreatePost = () => {
 
                                                 <div
                                                     className={`media_outer`}>
-                                                    <div className='flex-grow-1'>
+                                                <div className='flex-grow-1'>
                                                         <div className='caption_header'>
                                                             <h5 className='post_heading create_post_text'>Add
-                                                                Caption </h5>
+                                                                Caption {selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&"/ Pin Description"} </h5>
 
                                                             {/* <button className="ai_btn cmn_white_text"
                                                                onClick={(e) => {
@@ -751,7 +759,7 @@ const CreatePost = () => {
                                                         <div
                                                             className={`caption_header hashtag_outer`}>
                                                             <h5 className='post_heading create_post_text'>Add
-                                                                Hashtag *</h5>
+                                                                Hashtag</h5>
 
                                                             {/*<button className="ai_btn cmn_white_text"*/}
                                                             {/*        onClick={(e) => {*/}

@@ -100,9 +100,9 @@ const InstagramFeedPreview = ({
                                 <div className="comment_wrapper">
                                   <div className='like_comment_outer instagram_like'>
                                     <ul className="flex-grow-1 d-flex mb-0">
-                                        <li className="d-flex align-items-center gap-2"><Image src={like_img} alt="like image"/> {postInsightsData?.data?.reactions}1</li>
-                                        <li className="d-flex align-items-center gap-2 ms-4 me-4">  <Image src={comment_img} alt="comment image" className=" "/>{postInsightsData?.data?.comments}1</li>
-                                        <li className="d-flex align-items-center gap-2"> <Image src={send_img} alt="send image"/>{postInsightsData?.data?.shares}1</li>   
+                                        <li className="d-flex align-items-center gap-2"><Image src={like_img} alt="like image"/> {postInsightsData?.data?.reactions}</li>
+                                        <li className="d-flex align-items-center gap-2 ms-4 me-4">  <Image src={comment_img} alt="comment image" className=" "/>{postInsightsData?.data?.comments}</li>
+                                        <li className="d-flex align-items-center gap-2"> <Image src={send_img} alt="send image"/>{postInsightsData?.data?.shares}</li>
                                     </ul>
                                     <div>
                                         <Image src={save_img} alt="save image"/>

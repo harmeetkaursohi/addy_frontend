@@ -21,7 +21,7 @@ const DraftComponent = ({postData}) => {
                 }}>
                 <div className={"draft_img_wrapper cursor-pointer"}>
                     <div className={"posted_date_outer"}>
-                        <h3>Posted on: <span>{formatDate(postData?.createdAt)}</span></h3>
+                        <h3>Posting on: <span>N/A</span></h3>
                     </div>
                     <CommonSlider files={postData?.attachments} selectedFileType={null} caption={null} hashTag={null}
                                   viewSimilarToSocialMedia={false}/>

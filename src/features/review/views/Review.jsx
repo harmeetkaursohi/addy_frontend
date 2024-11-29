@@ -2,7 +2,6 @@ import "./Review.css";
 import jsondata from "../../../locales/data/initialdata.json";
 import {
     ErrorFetchingPost,
-    NotConnected,
     PostAlreadyDeleted,
     SocialAccountProvider,
 } from "../../../utils/contantData";
@@ -10,18 +9,15 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import {
     computeImageURL,
     createOptionListForSelectTag,
-    formatMessage,
     getEmptyArrayOfSize,
     isNullOrEmpty,
 } from "../../../utils/commonUtils";
 import CommentReviewsSectionModal from "./modal/CommentReviewsSectionModal";
 import noImageAvailable from "../../../images/no_img_posted.png";
 import {useDispatch} from "react-redux";
-import Select from "react-select";
 import ConnectSocialMediaAccount from "../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../common/components/AppProvider";
 import {MdDelete} from "react-icons/md";
-import notConnected_img from "../../../images/no_acc_connect_img.svg";
 import NopostFound from "../../../images/nopostFound.svg?react";
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../app/apis/pageAccessTokenApi";
@@ -644,7 +640,7 @@ const Review = () => {
                                                                         <td className="text-center">
                                                                             {" "}
                                                                             {post?.likes} Likes{" "}
-                                                                            {post?.socialMediaType === "FACEBOOK"
+                                                                            {(post?.socialMediaType === "FACEBOOK" || post?.socialMediaType === "LINKEDIN")
                                                                                 ? "/ Reactions"
                                                                                 : ""}
                                                                         </td>

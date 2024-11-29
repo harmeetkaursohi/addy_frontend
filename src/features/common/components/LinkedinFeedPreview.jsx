@@ -35,7 +35,6 @@ const LinkedinFeedpreview = ({
                              }) => {
 
     const navigate=useNavigate();
-console.log( reference === "PLANNER" , postStatus , "ESCHDULED","reference")
     return (
         <div className="perview_outer">
             <h2 className={"cmn_white_text feed_preview facebookFeedpreview_text"}>{previewTitle}</h2>
@@ -101,9 +100,9 @@ console.log( reference === "PLANNER" , postStatus , "ESCHDULED","reference")
                                         <SkeletonEffect count={1}/> :
                                         <>
                                         <div className="d-flex p-3 align-items-center">
-                                            <p className="flex-grow-1"><FaRegHeart size={25}/><span className=" ms-2">{postInsightsData?.data?.reactions}1 </span></p>
-                                            <p className="bold_text"><span className="me-1">{postInsightsData?.data?.comments}1</span>comments</p> <span className="dot_disc ms-2 me-2"></span>
-                                            <p className="bold_text"><span className="me-1">{postInsightsData?.data?.shares}1</span>reposts</p>
+                                            <p className="flex-grow-1"><FaRegHeart size={25}/><span className=" ms-2">{postInsightsData?.data?.reactions} </span></p>
+                                            <p className="bold_text"><span className="me-1">{postInsightsData?.data?.comments}</span>comments</p> <span className="dot_disc ms-2 me-2"></span>
+                                            <p className="bold_text"><span className="me-1">{postInsightsData?.data?.shares}</span>reposts</p>
                                         </div>
                                         </>
                                 }

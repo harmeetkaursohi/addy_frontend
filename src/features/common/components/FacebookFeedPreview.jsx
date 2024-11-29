@@ -98,15 +98,15 @@ const FacebookFeedPreview = ({
                                     <div className="like_comment_outer">
                                         <div className="fb_likes">
                                             <FiThumbsUp/>
-                                            <h3 className="cmn_text_style"> {postInsightsData?.data?.reactions}1</h3>
+                                            <h3 className="cmn_text_style"> {postInsightsData?.data?.reactions}</h3>
                                         </div>
                                         <div className="fb_likes">
                                             <FaRegComment className="fb_cmt_icon"/>
-                                            <h3 className="cmn_text_style">{postInsightsData?.data?.comments}2</h3>
+                                            <h3 className="cmn_text_style">{postInsightsData?.data?.comments}</h3>
                                         </div>
                                         <div className="fb_likes">
                                             <PiShareFat/>
-                                            <h3 className="cmn_text_style">{postInsightsData?.data?.shares}3</h3>
+                                            <h3 className="cmn_text_style">{postInsightsData?.data?.shares}</h3>
                                         </div>
                                     </div>
                             }

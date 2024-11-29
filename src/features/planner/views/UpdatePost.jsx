@@ -6,10 +6,8 @@ import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
 import {useDispatch} from "react-redux";
 import {Dropdown} from 'react-bootstrap'
-import {BiSolidEditAlt, BiUser} from "react-icons/bi";
 import {RxCross2} from "react-icons/rx";
 import CommonFeedPreview from "../../common/components/CommonFeedPreview.jsx";
-import {RiDeleteBin5Fill} from "react-icons/ri";
 import {useNavigate, useParams} from "react-router-dom";
 import SocialMediaProviderBadge from "../../common/components/SocialMediaProviderBadge";
 import GenericButtonWithLoader from "../../common/components/GenericButtonWithLoader";
@@ -21,7 +19,7 @@ import {
     convertToUnixTimestamp,
     convertUnixTimestampToDateTime,
     getEnumValue,
-    getFileFromAttachmentSource, getVideoDurationAndSizeByBlobUrl,
+    getFileFromAttachmentSource, getValueOrDefault,
     getVideoDurationById,
     groupByKey,
     isNullOrEmpty,
@@ -36,7 +34,6 @@ import {SocialAccountProvider, enabledSocialMedia} from "../../../utils/contantD
 import Loader from '../../loader/Loader.jsx';
 import EditImageModal from '../../common/components/EditImageModal.jsx';
 import {useAppContext} from '../../common/components/AppProvider.jsx';
-import EditVideoModal from '../../common/components/EditVideoModal.jsx';
 import {useGetConnectedSocialAccountQuery} from "../../../app/apis/socialAccount";
 import {useGetPostsByIdQuery, useUpdatePostByIdMutation} from "../../../app/apis/postApi";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
@@ -337,18 +334,21 @@ const UpdatePost = () => {
         }
 
         const getRequestBodyToUpdatePost = (postStatus, isScheduledTimeProvided) => {
+
+            const selectedPagesInfo = selectedOptions?.map((obj) => ({
+                pageId: obj,
+                id: postsByIdApi?.data.postPageInfos && postsByIdApi?.data.postPageInfos?.find(c => c.pageId === obj)?.id || null,
+                provider: selectedAllDropdownData?.find(c => c?.selectOption?.pageId === obj)?.group || null
+            }))
+            const isPinterestSelected = selectedPagesInfo?.some(cur => cur?.provider === "PINTEREST")
             return {
                 id: id,
                 updatePostRequestDTO: {
-                    postPageInfos: selectedOptions?.map((obj) => ({
-                        pageId: obj,
-                        id: postsByIdApi?.data.postPageInfos && postsByIdApi?.data.postPageInfos?.find(c => c.pageId === obj)?.id || null,
-                        provider: selectedAllDropdownData?.find(c => c?.selectOption?.pageId === obj)?.group || null
-                    })),
+                    postPageInfos: selectedPagesInfo,
                     caption: isNullOrEmpty(caption) ? "" : caption.toString().trim(),
                     hashTag: isNullOrEmpty(hashTag) ? "" : hashTag.toString().trim(),
-                    pinTitle: isNullOrEmpty(pinTitle) ? "" : pinTitle.toString().trim(),
-                    destinationUrl: isNullOrEmpty(pinDestinationUrl) ? "" : pinDestinationUrl.toString().trim(),
+                    pinTitle: isPinterestSelected ? getValueOrDefault(pinTitle,"") : null,
+                    destinationUrl: isPinterestSelected ? getValueOrDefault(pinDestinationUrl,"") : null,
                     attachments: files?.map((file) => ({
                         mediaType: file?.mediaType,
                         file: file?.file || null,
@@ -844,7 +844,7 @@ const UpdatePost = () => {
                                                     <div className='flex-grow-1'>
                                                         <div className='caption_header'>
                                                             <h5 className='post_heading create_post_text'>Add
-                                                                Post Caption </h5>
+                                                                Post Caption {selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase())  &&"/ Pin Description"} </h5>
 
                                                             {/*<button className="ai_btn cmn_white_text"*/}
                                                             {/*        onClick={(e) => {*/}
@@ -871,7 +871,7 @@ const UpdatePost = () => {
                                                         <div
                                                             className={`caption_header hashtag_outer `}>
                                                             <h5 className='post_heading create_post_text'>Add
-                                                                Hashtag * </h5>
+                                                                Hashtag  </h5>
 
                                                             {/*<button className="ai_btn cmn_white_text"*/}
                                                             {/*        onClick={(e) => {*/}
