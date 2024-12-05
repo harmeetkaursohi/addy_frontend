@@ -47,6 +47,19 @@ export const chatApi = addyApi.injectEndpoints({
                 await handleQueryError(queryFulfilled)
             },
         }),
+        getUnSeenMessages: build.query({
+            query: (chatId) => {
+                return {
+                    url: `${baseUrl}/chat/message/unseen/${chatId}`,
+                    method: 'GET',
+                    headers: getAuthorizationHeader(),
+                };
+            },
+            providesTags:["getUnSeenMessagesApi"],
+            async onQueryStarted(_, {queryFulfilled,}) {
+                await handleQueryError(queryFulfilled)
+            },
+        }),
         searchMessage: build.query({
             async queryFn(data) {
                 let result = await searchMessage(data)
@@ -65,6 +78,8 @@ export const chatApi = addyApi.injectEndpoints({
 export const {
     useCreateChatMutation,
     useGetChatByInitiatorIdQuery,
+    useGetUnSeenMessagesQuery,
+    useLazyGetUnSeenMessagesQuery,
     useSearchMessageQuery,
     useSendMessageMutation,
 } = chatApi

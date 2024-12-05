@@ -2,7 +2,6 @@ import React, {useEffect, useState, useRef} from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import logo from '/Addy_icon.svg';
 import HeadLogo from '../../images/Addy_icon.svg?react';
-import {IoSendSharp} from 'react-icons/io5';
 import {MdOutlineMail} from 'react-icons/md';
 import {IoLocationOutline} from 'react-icons/io5';
 import './NeedHelp.css';
@@ -22,14 +21,13 @@ import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 import {PiLinkSimpleBold} from "react-icons/pi";
 import {
     useCreateChatMutation,
-    useGetChatByInitiatorIdQuery,
+    useGetChatByInitiatorIdQuery,  useLazyGetUnSeenMessagesQuery,
     useSearchMessageQuery,
     useSendMessageMutation
 } from "../../app/apis/chatApi";
 import {handleRTKQuery} from "../../utils/RTKQueryUtils";
 import {addyApi} from "../../app/addyApi";
 import {Link} from "react-router-dom";
-import {current} from '@reduxjs/toolkit';
 
 function NeedHelpComponent() {
 
@@ -51,6 +49,7 @@ function NeedHelpComponent() {
     const [searchMessageQuery, setSearchMessageQuery] = useState({
         offSet: -1,
         pageSize: 2,
+        seen: true,
         chatId: null
     })
     const [message, setMessage] = useState({
@@ -65,15 +64,15 @@ function NeedHelpComponent() {
     const [invalidateSearchMessageApi, setInvalidateSearchMessageApi] = useState(false);
 
     const userApi = useGetUserInfoQuery("")
+    const [getUnSeenMessages, getUnSeenMessagesApi] = useLazyGetUnSeenMessagesQuery()
     const searchMessageApi = useSearchMessageQuery(searchMessageQuery, {skip: searchMessageQuery?.offSet < 0 || isNullOrEmpty(searchMessageQuery?.chatId)})
     const chatByInitiatorIdApi = useGetChatByInitiatorIdQuery(decodedToken?.customerId)
     const [createChat, createChatApi] = useCreateChatMutation()
     const [sendMessage, sendMessageApi] = useSendMessageMutation()
 
 
-
     useEffect(() => {
-        return ()=>{
+        return () => {
             setTimeout(() => {
                 if (invalidateSearchMessageApi) {
                     dispatch(addyApi.util.invalidateTags(["searchMessageApi"]));
@@ -100,14 +99,34 @@ function NeedHelpComponent() {
 
     useEffect(() => {
         if (!isNullOrEmpty(chatByInitiatorIdApi?.data)) {
-            setChatId(chatByInitiatorIdApi?.data?.[0]?.id)
-            setSearchMessageQuery({
-                ...searchMessageQuery,
-                offSet: 0,
-                chatId: chatByInitiatorIdApi?.data?.[0]?.id
-            })
+            const chatId = chatByInitiatorIdApi?.data?.[0]?.id
+            getUnSeenMessages(chatId)
+            setChatId(chatId)
         }
     }, [chatByInitiatorIdApi])
+
+    useEffect(() => {
+        if (Array.isArray(getUnSeenMessagesApi?.data) && !getUnSeenMessagesApi?.isLoading && !getUnSeenMessagesApi?.isFetching) {
+            if (isNullOrEmpty(getUnSeenMessagesApi?.data)) {
+                setSearchMessageQuery({
+                    ...searchMessageQuery,
+                    offSet: 0,
+                    chatId: chatId
+                })
+            } else {
+                const reversedArray = getUnSeenMessagesApi?.data?.slice()?.reverse()
+                const updatedMessageList = [...reversedArray, ...messageList]
+                setMessageList(updatedMessageList)
+                setSearchMessageQuery({
+                    ...searchMessageQuery,
+                    offSet: getUnSeenMessagesApi?.data?.length,
+                    chatId: chatByInitiatorIdApi?.data?.[0]?.id
+                })
+                setInvalidateSearchMessageApi(true)
+            }
+        }
+    }, [getUnSeenMessagesApi])
+
 
     useEffect(() => {
         if (!isNullOrEmpty(searchMessageApi?.data?.data) && !searchMessageApi?.isLoading && !searchMessageApi?.isFetching) {
@@ -121,7 +140,7 @@ function NeedHelpComponent() {
         const chatContainer = chatContainerRef.current;
         if (chatContainer && chatContainer.scrollHeight > 200) {
             if (bottomRef.current) {
-                bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+                bottomRef.current.scrollIntoView({behavior: 'smooth'});
             }
         }
     }, [messageList]);
@@ -176,8 +195,6 @@ function NeedHelpComponent() {
                     setFiles([])
                 });
         }
-
-
     }
 
     const sendMessageWithAttachments = async () => {
@@ -269,8 +286,8 @@ function NeedHelpComponent() {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        const time = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-        const formattedDate = `${date.getDate()} ${date.toLocaleString('en-US', { month: 'long' })}, ${date.getFullYear()}`;
+        const time = date.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true});
+        const formattedDate = `${date.getDate()} ${date.toLocaleString('en-US', {month: 'long'})}, ${date.getFullYear()}`;
         return `${time} / ${formattedDate}`;
     };
 
@@ -323,7 +340,8 @@ function NeedHelpComponent() {
                                     <h3 className='cmn_small_style_font'>Ask Questions</h3>
                                 </div>
                                 <div className='chat_container'>
-                                    <div className={`chat_scroll ${messageList?.length > 0 && "chat_scroll_wrapper"}`} ref={chatContainerRef}>
+                                    <div className={`chat_scroll ${messageList?.length > 0 && "chat_scroll_wrapper"}`}
+                                         ref={chatContainerRef}>
                                         {
                                             searchMessageApi?.data?.isLast &&
                                             <div className='d-flex gap-3 chat_inner_content d-none'>
@@ -361,7 +379,7 @@ function NeedHelpComponent() {
                                         }
                                         {
                                             messageList?.map((message, index) => {
-                                                console.log(message,"message")
+                                                console.log(message, "message")
                                                 return <div key={index}>
                                                     {
                                                         message?.senderId === decodedToken.customerId ?
@@ -396,7 +414,7 @@ function NeedHelpComponent() {
 
                                                                 </div>
                                                                 <h6 className='chat_time text-end mb-2 pe-3'>
-                                                                { formatDate(message.createdAt)}
+                                                                    {formatDate(message.createdAt)}
                                                                 </h6>
                                                             </div>
                                                             :
