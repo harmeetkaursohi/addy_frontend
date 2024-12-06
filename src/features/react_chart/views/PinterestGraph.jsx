@@ -25,7 +25,7 @@ const PinterestGraph = ({graphData, isLoading}) => {
             const data = readyData?.map((entry) => {
                 return {
                     day: entry.date,
-                    "PIN CLICK": entry?.metrics?.PIN_CLICK
+                    "Pin Click": entry?.metrics?.PIN_CLICK
                 }
             })
             setData(data)
@@ -41,7 +41,8 @@ const PinterestGraph = ({graphData, isLoading}) => {
                     <XAxis dataKey="day"
                            tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
                     <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
-                    <Area type="monotone" dataKey="PIN CLICK" stroke="#F07D34" fill="#fdebe1"/>
+                    <Area type="monotone" dataKey="Pin Click" stroke="#F07D34" fill="#fdebe1"/>
+                    <Legend layout="horizontal" align="center" verticalAlign="bottom" />
                 </AreaChart>
             </ResponsiveContainer>
             {

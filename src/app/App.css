@@ -1061,7 +1061,7 @@ input[type=checkbox] {
 .page_title_container {
   display: flex;
   padding: 16px 20px;
-  justify-content: space-between;
+  justify-content: end;
   border-bottom: 1px solid #D1D9E2;
   background-color: #F8F9FB;
   align-items: center;

@@ -1,5 +1,4 @@
 
-
 .insight_heading {
     font-weight: 700;
     font-size: 30px;
@@ -7,12 +6,27 @@
     font-family: "Nunito";
 
 }
-.profile-insight-img-loader{
+
+.fb-likes-txt {
+    margin: 10px 20px;
+}
+
+.fb-followers-txt {
+    margin: 10px 20px;
+}
+
+ul.fb-likes-followers {
+    background: #f07c33;
+    border-radius: 6px;
+}
+
+.profile-insight-img-loader {
     height: 80px;
     border-radius: 50%;
     width: 80px;
 }
-.demographic-data-loader{
+
+.demographic-data-loader {
     height: 150px;
     border-radius: 50%;
     width: 150px;
@@ -21,7 +35,8 @@
     margin-top: 30px;
     margin-bottom: 50px;
 }
-.profile-visit-text{
+
+.profile-visit-text {
     color: #263238;
     background-color: transparent;
     box-shadow: unset;
@@ -29,9 +44,11 @@
     font-weight: 700;
     font-size: 20px;
 }
-.profile-visit-graph{
+
+.profile-visit-graph {
     height: 270px;
 }
+
 .insight_inner_content {
     border-radius: 22px;
     background: #FFF;
@@ -43,10 +60,12 @@
     border-radius: 20px;
     padding-bottom: 30px;
 }
+
 .insight_followers_outer ul.recharts-default-legend {
     display: flex;
     justify-content: space-around;
 }
+
 .select-account-txt {
     color: #000;
     font-family: "Nunito";
@@ -79,9 +98,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
 }
-.select-page-outer img{
+
+.select-page-outer img {
     width: 300px;
 }
 
@@ -111,16 +131,18 @@ select.days_option {
   background-repeat: no-repeat;
   background-position: calc(100% - 9px) center; */
 
- 
+
 }
 
 
 button.instagram_dropdown::after {
     margin-left: 15px !important;
 }
+
 .account_reach_graph_outer .page_title_header {
     margin: 0px;
 }
+
 button.instagram_dropdown {
     font-size: 17px !important;
     padding: 10px 23px 10px 10px !important;
@@ -153,20 +175,24 @@ button.instagram_dropdown {
     line-height: 20px;
 
 }
+
 .insight_inner_content img.post_img {
     height: 300px;
     object-fit: cover;
     width: 100%;
     object-position: center;
 }
+
 .Social_media_platform img {
     height: 21px;
     width: 21px;
 }
-.insight_outer .dropdown-item{
+
+.insight_outer .dropdown-item {
     background-color: transparent !important;
     padding: 0;
 }
+
 .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
     width: 100%;
     /* width: 297px; */
@@ -221,7 +247,7 @@ ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
     font-style: normal;
     font-weight: 700;
     line-height: 26px;
-    padding :6px 21px
+    padding: 6px 21px
 }
 
 .hightlighted_text {
@@ -234,7 +260,7 @@ ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
 }
 
 .color-growth {
-    color:#02A426;
+    color: #02A426;
 }
 
 .overview_text {
@@ -245,9 +271,11 @@ ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
     padding: 20px 20px 0px;
     color: #4E4E4E;
 }
-.overview_title{
-    
+
+.overview_title {
+
 }
+
 .scroll-y {
     height: 200px;
     overflow-y: scroll;
@@ -258,6 +286,7 @@ ul.overview_tabs.nav.nav-tabs {
     gap: 15px;
     border-bottom: unset;
 }
+
 .account_reach_overview_outer {
     border-radius: 7px;
     box-shadow: 2px 2px 12px #d3dada;
@@ -265,13 +294,15 @@ ul.overview_tabs.nav.nav-tabs {
     padding: 10px 20px;
     width: 100%;
 }
-.post_growth{
+
+.post_growth {
     font-size: 13px;
     background: white;
     padding: 4px;
     border-radius: 4px;
     font-weight: 600;
 }
+
 .pie-percentage {
     font-size: small;
     margin-top: 4px;
@@ -298,33 +329,46 @@ ul.overview_tabs.nav.nav-tabs {
     justify-content: center;
     align-items: center;
 }
-.mt-5{
+
+.mt-5 {
     margin-top: 5rem;
 }
+
 .account_reach_overview_outer h4 {
     font-weight: 700;
     font-size: 30px;
     color: #263238;
     padding: 5px 0px 0px;
 }
-.interaction_graph_outer{
-    padding: 0px 20px;
+
+.interaction_graph_outer {
+    padding: 0px 40px 0px 0px;
 }
+.selected-social-media button#dropdown-basic {
+    background: #F07C33 !important;
+    color: white;
+}
+
 .interaction_graph_outer ul.recharts-default-legend {
     margin-bottom: 20px !important;
 }
-.light_orange{
+
+.light_orange {
     background-color: #FFE4D3;
 }
-.light_blue{
+
+.light_blue {
     background-color: #E7F5FD;
 }
-.light_green{
+
+.light_green {
     background-color: #F4FFD3;
 }
-.light_purple{
+
+.light_purple {
     background-color: #F9E7FD;
 }
+
 .cmt_icon_outer {
     height: 32px;
     width: 32px;
@@ -333,6 +377,7 @@ ul.overview_tabs.nav.nav-tabs {
     border-radius: 4px;
     padding-top: 4px;
 }
+
 .account_reach_overview_outer h5 {
     font-size: 14px;
     color: #263238;
@@ -343,7 +388,7 @@ ul.overview_tabs.nav.nav-tabs {
 .account_reach_overview_wrapper {
     display: flex;
     gap: 15px;
- 
+
     padding: 20px;
 
 }
@@ -372,9 +417,11 @@ ul.overview_tabs.nav.nav-tabs {
 .Donuts_container {
     margin-top: 22px;
 }
+
 ul.top_city_list {
     margin-bottom: 0px;
 }
+
 ul.top_city_list li {
     display: flex;
     justify-content: space-between;
@@ -402,7 +449,7 @@ h2.Review_Heading {
 }
 
 
-.noPageHeading{
+.noPageHeading {
     padding: 8px 0px;
     color: #000;
     font-size: 16px;
@@ -410,28 +457,32 @@ h2.Review_Heading {
     font-weight: 600;
     line-height: 20px;
 }
+
 div.card_body_content {
     margin-top: 20px;
 }
+
 .reach-engagement-select {
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     border-bottom: 1px solid #D9D9D9;
     background: #F8F9FB;
     padding: 20px;
     align-items: center;
 }
 
-.cmn_insight_box_shadow{
+.cmn_insight_box_shadow {
     border-radius: 10px;
     box-shadow: 2px 2px 12px #edebeb;
 }
-.overview_title{
+
+.overview_title {
     color: #263238;
     font-size: 20px;
     font-weight: 700;
 }
-.post_stack{
+
+.post_stack {
     border: 1px solid #F07C33 !important;
     color: #263238;
     font-size: 20px;
@@ -442,10 +493,12 @@ div.card_body_content {
     padding: 2px 17px;
     background-color: white;
 }
+
 span.spinner-border.spinner-border-sm.loader.social-account-loader {
     height: 15px;
     width: 15px;
-}   
+}
+
 .user_profile_card_wrapper img {
     height: 100px;
     width: 100px;
@@ -453,10 +506,12 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     border-radius: 60px;
     border: 3px solid #E05905;
 }
-.user_profile_card_wrapper h3{
+
+.user_profile_card_wrapper h3 {
     line-height: 20px;
     font-weight: 700;
 }
+
 .user_profile_card_outer {
     padding: 28px 28px 0px;
     border-radius: 11px;
@@ -465,31 +520,35 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
     margin-top: 20px;
 
 }
-.Profile_visit_container{
-    min-height:100%
 
-
+.Profile_visit_container {
+    min-height: 100%
 }
+
 img.no_data_available_img {
     width: 100%;
     height: 200px;
     object-fit: contain;
     margin-top: 20px;
 }
-.visitors_outer{
+
+.visitors_outer {
     background: #F8F9FB;
     padding: 20px;
 }
+
 .visitors_outer h3 {
     font-size: 20px;
     font-family: 'Nunito';
     font-weight: 700;
 }
-.user_info_list{
+
+.user_info_list {
     justify-content: space-between;
 }
-.user_info_list li h4{
-    color:  #263238;
+
+.user_info_list li h4 {
+    color: #263238;
     font-weight: 900;
     font-size: 16px;
     line-height: 20px;
@@ -503,6 +562,7 @@ img.no_data_available_img {
     min-height: 100%;
     margin-top: 20px;
 }
+
 .Profile_visit_dropdown button#dropdown-basic {
     color: #263238;
     background-color: transparent;
@@ -511,9 +571,12 @@ img.no_data_available_img {
     font-weight: 700;
     font-size: 20px;
 }
-.profile_visit_graph_outer{
-    padding: 15px 10px 0px;
+
+
+.profile_visit_graph_outer {
+    padding: 15px 50px 0px 0px;
 }
+
 .days_dropdown button#dropdown-basic {
     color: #263238;
     font-size: 13px;
@@ -522,28 +585,33 @@ img.no_data_available_img {
     border: 1px solid #E8E8E8;
     min-width: 110px;
 }
-@media screen and (min-width:2560px) {
-    .account_reach_overview_outer{
+
+@media screen and (min-width: 2560px) {
+    .account_reach_overview_outer {
         padding: 40px;
     }
+
     .account_reach_overview_wrapper {
         gap: 30px;
     }
 }
- @media screen and (min-width:1499px){
-    .select-page-outer img{
+
+@media screen and (min-width: 1499px) {
+    .select-page-outer img {
         height: 550px;
     }
+
     img.no_data_available_img {
         height: 250px;
 
     }
- }
-@media screen and (max-width:1280px){
+}
+
+@media screen and (max-width: 1280px) {
     .social_media_dropdown {
         flex-wrap: wrap;
     }
-   
+
     /* select.days_option {
         font-size: 18px;
     } */
@@ -551,73 +619,89 @@ img.no_data_available_img {
         width: 215px;
     }
 }
+
 @media screen and (max-width: 1024px) {
     h2.Review_Heading {
         margin-top: 20px;
         font-size: 15px;
     }
+
     ul.user_info_list {
         flex-wrap: wrap;
     }
-   
-    
+
+
     .demographic_data {
         font-size: 14px;
     }
 }
-@media screen and (min-width:992px) and (max-width:1100px){
-    ul.user_info_list{
+
+@media screen and (min-width: 992px) and (max-width: 1100px) {
+    ul.user_info_list {
         display: block !important;
     }
-    ul.user_info_list li{
+
+    ul.user_info_list li {
         margin-top: 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
 }
+
 @media screen and (max-width: 991px) {
     .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
         width: 208px;
     }
-    .profile-visit-text{
+
+    .profile-visit-text {
         font-size: 16px;
     }
+
     img.no_data_available_img {
         margin-bottom: 20px;
         height: 160px;
     }
-    .interaction_graph_outer{
+
+    .interaction_graph_outer {
         padding: 0px 10px;
     }
+
     .user_profile_card_wrapper img {
-    height: 70px;
-    width: 70px;
+        height: 70px;
+        width: 70px;
     }
+
     .visitors_outer h3 {
         font-size: 16px;
     }
-    .visitors_container{
+
+    .visitors_container {
         min-height: unset;
     }
+
     .account_reach_overview_wrapper {
         flex-wrap: wrap;
     }
-    .Profile_visit_container{
+
+    .Profile_visit_container {
         min-height: unset;
     }
-    .user_profile_card_outer{
+
+    .user_profile_card_outer {
         min-height: unset;
         padding: 28px;
     }
-    ul.overview_tabs.nav.nav-tabs{
+
+    ul.overview_tabs.nav.nav-tabs {
         margin-top: 10px;
     }
-    .noPageHeading{
+
+    .noPageHeading {
         font-size: 14px;
-       
+
     }
-   
+
     .account_reach_overview_outer h5 {
         font-size: 12px;
         line-height: 20px;
@@ -659,11 +743,11 @@ img.no_data_available_img {
     .insight_heading {
         font-size: 25px;
     }
-    .select-account-txt{
+
+    .select-account-txt {
         font-size: 13px;
     }
-    
-   
+
 
 }
 
@@ -671,25 +755,31 @@ img.no_data_available_img {
     .account_reach_overview_wrapper {
         display: block;
     }
+
     .select-page-outer img {
         height: 100%;
-      
+
     }
+
     .insight_followers_outer ul.recharts-default-legend {
         margin: 0px 0px 0px 14px !important;
     }
+
     .insight_demographic_outer ul.recharts-default-legend {
         margin: 0px 0px 0px 14px !important;
     }
-    ul.user_info_list{
+
+    ul.user_info_list {
         display: block !important;
     }
-    ul.user_info_list li{
+
+    ul.user_info_list li {
         margin-top: 10px;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
+
     .Social_media_platform {
         margin-top: 4px;
     }
@@ -697,38 +787,44 @@ img.no_data_available_img {
     .post_stack {
         font-size: 16px;
     }
+
     .days_dropdown.dropdown {
         margin-top: 20px;
         margin-left: 20px;
     }
+
     .overview_tabs.nav-tabs .nav-link {
         padding: 3px 11px;
     }
-   
+
     .reach-engagement-select {
         margin-bottom: 20px;
         flex-wrap: wrap;
     }
-   
+
     .noPageHeading {
         font-size: 12px;
     }
-    .Donuts_container h3{
+
+    .Donuts_container h3 {
         font-size: 15px;
         line-height: 20px;
     }
+
     .Choose_platform_title {
         font-size: 18px;
     }
-    
-    
+
+
     .arrow-up-image {
         margin-bottom: 20px;
         margin-top: 13px;
     }
-    ul.Social_media_wrapper{
+
+    ul.Social_media_wrapper {
         margin: 0px;
     }
+
     /* select.days_option{
         font-size: 12px;
         margin-top: 10px;
@@ -736,7 +832,8 @@ img.no_data_available_img {
     .account_reach_overview_outer {
         margin-top: 15px;
     }
-    i.facebook_ICON{
+
+    i.facebook_ICON {
         margin-right: 3px !important;
     }
 
@@ -748,12 +845,14 @@ img.no_data_available_img {
         margin-top: 20px;
         font-size: 12px;
     }
-    .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show{
+
+    .chooseplatfrom_dropdown_btn.show.dropdown .dropdown-menu.show {
         width: 100%;
     }
+
     .demographic_data {
         font-size: 12px;
-        font-family:  'Nunito';
+        font-family: 'Nunito';
         font-style: normal;
         padding-top: 10px;
     }

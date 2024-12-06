@@ -2,6 +2,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Card from "react-bootstrap/Card";
 import calender_icon from "../../../images/calender_icon2.svg";
+import Eye from "../../../images/eye.svg?react";
+import Heart from "../../../images/heart.svg?react";
+import Union from "../../../images/Union.svg?react";
+import Save from "../../../images/Saveicon.svg?react";
+import ShareIcon from "../../../images/ShareIcon.svg?react";
 import "./slider.css";
 import {
     concatenateString, getEmptyArrayOfSize,
@@ -68,7 +73,6 @@ const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) =
     }, [postDataWithInsightsApi])
 
     const handleDeletePostPageInfo = async (data) => {
-        console.log("data====>", data)
         await handleRTKQuery(
             async () => {
                 return await deletePostPageInfo(data).unwrap();
@@ -108,7 +112,7 @@ const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) =
             }
 
             {
-                (postDataWithInsightsApi?.isLoading || postDataWithInsightsApi?.isFetching || postByPageIdAndPostStatusApi?.isLoading || postByPageIdAndPostStatusApi?.isFetching || deletePostPageInfoApi?.isLoading) ?
+                ( postDataWithInsightsApi?.isLoading || postDataWithInsightsApi?.isFetching || postByPageIdAndPostStatusApi?.isLoading || postByPageIdAndPostStatusApi?.isFetching || deletePostPageInfoApi?.isLoading) ?
                     <div className="row">
                         {
                             getEmptyArrayOfSize(3).map((_, i) => {
@@ -122,35 +126,8 @@ const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) =
                                             </div>
                                             <ul className="top_city_list acountReach_content_container mt-2">
                                                 <li>
-                                                    <h4 className="cmn_small_heading">
-                                                        Account Reach
-                                                    </h4>
-                                                    <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
+                                                    <h3 className={"w-100"}><SkeletonEffect count={1}/></h3>
                                                 </li>
-                                                <li>
-                                                    <h4 className="cmn_small_heading">Total Likes</h4>
-                                                    <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
-                                                </li>
-                                                <li>
-                                                    <h4 className="cmn_small_heading">
-                                                        Total Comments
-                                                    </h4>
-                                                    <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
-                                                </li>
-                                                {
-                                                    selectedPage?.socialMediaType === "PINTEREST" ?
-                                                        <li>
-                                                            <h4 className="cmn_small_heading">Total
-                                                                Save</h4>
-                                                            <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
-                                                        </li>
-                                                        :
-                                                        <li>
-                                                            <h4 className="cmn_small_heading">Total
-                                                                Share</h4>
-                                                            <h3 className={"w-25"}><SkeletonEffect count={1}/></h3>
-                                                        </li>
-                                                }
                                             </ul>
                                         </Card.Body>
                                     </Card>
@@ -165,8 +142,7 @@ const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) =
                         <div className="row">
                             {
 
-                                Object.keys(postDataWithInsightsApi?.data || {})?.length > 0 &&
-                                Object.keys(postDataWithInsightsApi?.data || {})?.map(
+                                Object.keys(postDataWithInsightsApi?.data || {})?.length > 0 && Object.keys(postDataWithInsightsApi?.data || {})?.map(
                                     (key, index) => {
                                         const formattedData = getFormattedPostDataForSlider(
                                             postDataWithInsightsApi?.data?.[key],
@@ -256,38 +232,21 @@ const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) =
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <ul className="top_city_list acountReach_content_container">
+                                                            <ul className="insights_data">
                                                                 <li>
-                                                                    <h4 className="cmn_small_heading">
-                                                                        Account Reach
-                                                                    </h4>
-                                                                    <h3>{formattedData?.account_reach}</h3>
+                                                                    <div className={"post-stack-data w-100 gap-2"}><Eye/>{formattedData?.account_reach}</div>
+                                                                    <div className={"post-stack-data w-100 gap-2"}><Heart/>{formattedData?.total_like}</div>
+                                                                    <div className={"post-stack-data w-100 gap-2"}><Union/>{formattedData?.total_comment}</div>
+                                                                    {
+                                                                        selectedPage?.socialMediaType === "PINTEREST" ?
+                                                                            <div className={"post-stack-data w-100 gap-2"}><Save/>{formattedData?.total_save}
+                                                                            </div> :
+                                                                            <div className={"post-stack-data w-100 gap-2"}>
+                                                                                <ShareIcon/>{formattedData?.total_share}
+                                                                            </div>
+                                                                    }
+
                                                                 </li>
-                                                                <li>
-                                                                    <h4 className="cmn_small_heading">Total
-                                                                        Likes</h4>
-                                                                    <h3>{formattedData?.total_like}</h3>
-                                                                </li>
-                                                                <li>
-                                                                    <h4 className="cmn_small_heading">
-                                                                        Total Comments
-                                                                    </h4>
-                                                                    <h3>{formattedData?.total_comment}</h3>
-                                                                </li>
-                                                                {
-                                                                    selectedPage?.socialMediaType === "PINTEREST" ?
-                                                                        <li>
-                                                                            <h4 className="cmn_small_heading">Total
-                                                                                Save</h4>
-                                                                            <h3>{formattedData?.total_save}</h3>
-                                                                        </li>
-                                                                        :
-                                                                        <li>
-                                                                            <h4 className="cmn_small_heading">Total
-                                                                                Share</h4>
-                                                                            <h3>{formattedData?.total_share}</h3>
-                                                                        </li>
-                                                                }
                                                             </ul>
                                                         </Card.Body>
                                                     </Card>

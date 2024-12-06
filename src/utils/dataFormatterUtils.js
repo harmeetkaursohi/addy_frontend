@@ -619,7 +619,7 @@ export const getFormattedDataForPostEngagementGraph = (data, socialMediaType) =>
 
                 return {
                     date: formattedDate,
-                    "POST ENGAGEMENT": cur.value
+                    "Post Engagement": cur.value
                 }
             })
             return formattedData
@@ -628,7 +628,7 @@ export const getFormattedDataForPostEngagementGraph = (data, socialMediaType) =>
             formattedData = data?.all?.daily_metrics?.map((cur) => {
                 return {
                     date: cur.date,
-                    "POST ENGAGEMENT": cur?.metrics?.ENGAGEMENT
+                    "Post Engagement": cur?.metrics?.ENGAGEMENT || 0
                 }
             })
             return formattedData;
@@ -637,7 +637,7 @@ export const getFormattedDataForPostEngagementGraph = (data, socialMediaType) =>
             formattedData = data?.elements?.map((cur) => {
                 return {
                     date: convertUnixTimestampToDateTime(cur?.timeRange?.start / 1000)?.date,
-                    "POST ENGAGEMENT": cur?.totalShareStatistics?.engagement
+                    "Post Engagement": cur?.totalShareStatistics?.engagement
                 }
             })
             return formattedData;

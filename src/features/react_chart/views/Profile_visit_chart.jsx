@@ -1,42 +1,44 @@
-import React, {useEffect, useState} from 'react'
-import {AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
+import React, {useEffect, useState} from 'react';
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend} from 'recharts';
 import {convertTimestampToDate} from "../../../utils/commonUtils";
-import {RotatingLines} from "react-loader-spinner";
-import {Line} from "react-chartjs-2";
 import GraphLoader from "../../common/components/GraphLoader";
 
 const ProfileVisitChart = ({graphData, socialMediaType}) => {
-    const [data, setData] = useState([{day: 'Mon', uv: 4000}, {day: 'Tue', uv: 3000}, {
-        day: 'Wed',
-        uv: 2000
-    }, {day: 'Thur', uv: 2780}, {day: 'Fri', uv: 1890}, {day: 'Sat', uv: 2390}, {day: 'Sun', uv: 3490},])
+    const [data, setData] = useState([
+        {day: 'Mon', "Profile Visit": 4000},
+        {day: 'Tue', "Profile Visit": 3000},
+        {day: 'Wed', "Profile Visit": 2000},
+        {day: 'Thur', "Profile Visit": 2780},
+        {day: 'Fri', "Profile Visit": 1890},
+        {day: 'Sat', "Profile Visit": 2390},
+        {day: 'Sun', "Profile Visit": 3490},
+    ]);
 
     useEffect(() => {
         if (graphData.data && !graphData.isLoading && !graphData?.isFetching && Array.isArray(graphData.data) && socialMediaType !== null && socialMediaType !== undefined) {
             switch (socialMediaType) {
                 case "FACEBOOK":
                 case "INSTAGRAM": {
-                    const dataSet = graphData.data.map((c => {
-                        return {day: convertTimestampToDate(c?.end_time || new Date()), uv: c.value}
-                    }))
+                    const dataSet = graphData.data.map((c) => ({
+                        day: convertTimestampToDate(c?.end_time || new Date()),
+                        "Profile Visit": c.value
+                    }));
                     setData(dataSet);
                     break;
                 }
                 case "LINKEDIN": {
-                    const dataSet = graphData.data.map((c => {
-                        return {
-                            day: convertTimestampToDate(c?.timeRange?.start || new Date()),
-                            uv: c?.totalPageStatistics?.views?.allPageViews?.pageViews
-                        }
-                    }))
+                    const dataSet = graphData.data.map((c) => ({
+                        day: convertTimestampToDate(c?.timeRange?.start || new Date()),
+                        "Profile Visit": c?.totalPageStatistics?.views?.allPageViews?.pageViews || 0
+                    }));
                     setData(dataSet);
                     break;
                 }
+                default:
+                    break;
             }
-
         }
     }, [graphData, socialMediaType]);
-
 
     const CustomTooltip = ({active, payload, label}) => {
         if (active && payload && payload.length) {
@@ -61,38 +63,55 @@ const ProfileVisitChart = ({graphData, socialMediaType}) => {
                         transform: "translateX(-50%)",
                         height: 0,
                         borderLeft: "15px solid transparent",
-                        borderRight: " 15px solid transparent",
+                        borderRight: "15px solid transparent",
                         borderTop: "15px solid #E9E9E9"
-                    }}>
-
-                    </div>
-                    <p style={{color: "#263238", fontSize: "12px"}}>{`${label} : ${dataItem.uv}`}</p>
+                    }} />
+                    <p style={{color: "#263238", fontSize: "12px"}}>{`${label} : ${dataItem?.["Profile Visit"]}`}</p>
                 </div>
             );
         }
         return null;
     };
+
     return (
         <>
             <div className="chart-container">
                 <ResponsiveContainer width="100%" height={270}>
-                    <AreaChart data={data}>
-                        <CartesianGrid strokeDasharray="3 3"/>
-                        <XAxis dataKey="day"
-                               tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
-                        <YAxis tick={{fill: '#263238', fontSize: 13, fontWeight: '900', fontFamily: 'Nunito'}}/>
-                        <Tooltip content={<CustomTooltip/>}/>
-                        <Area type="monotone" dataKey="uv" stroke="#009FFC" fill="#D9F1FF"/>
-                    </AreaChart>
+                    <LineChart data={data}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis
+                            dataKey="day"
+                            tick={{
+                                fill: '#263238',
+                                fontSize: 13,
+                                fontWeight: '900',
+                                fontFamily: 'Nunito'
+                            }}
+                        />
+                        <YAxis
+                            tick={{
+                                fill: '#263238',
+                                fontSize: 13,
+                                fontWeight: '900',
+                                fontFamily: 'Nunito'
+                            }}
+                        />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Line
+                            type="monotone"
+                            dataKey="Profile Visit"
+                            stroke="#f07c33"
+                            strokeWidth={2}
+                            dot={false}
+                        />
+                        <Legend layout="horizontal" align="center" verticalAlign="bottom" />
+                    </LineChart>
                 </ResponsiveContainer>
 
-                {
-                    (graphData?.isLoading || graphData?.isFetching ) &&
-                    <GraphLoader/>
-                }
+                {(graphData?.isLoading || graphData?.isFetching) && <GraphLoader />}
             </div>
         </>
-    )
-}
+    );
+};
 
-export default ProfileVisitChart
+export default ProfileVisitChart;

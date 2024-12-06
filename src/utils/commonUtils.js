@@ -1131,6 +1131,7 @@ export const formatMessage = (message = null, values = []) => {
     return replacedMessage;
 }
 export const getDatesForPinterest = (daysAgo) => {
+    console.log("daysAgo=====>",daysAgo)
     if (isNullOrEmpty(daysAgo.toString())) {
         return "";
     }
@@ -1138,7 +1139,7 @@ export const getDatesForPinterest = (daysAgo) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-
+    console.log("final date=====>",`${year}-${month}-${day}`)
     return `${year}-${month}-${day}`;
 
 }
@@ -2269,6 +2270,7 @@ export const createSocialMediaProfileViewInsightsQuery = (queryObject, socialMed
 }
 
 export const createPostEngagementInsightsQuery = (queryObject, socialMediaType) => {
+    console.log("queryObject=====>",queryObject)
     switch (socialMediaType) {
         case "FACEBOOK": {
             return {
@@ -2291,7 +2293,7 @@ export const createPostEngagementInsightsQuery = (queryObject, socialMediaType) 
         }
         case "PINTEREST": {
             return {
-                start_date: getDatesForPinterest(queryObject.days + 1),
+                start_date: getDatesForPinterest(parseInt(queryObject.days) + 1),
                 end_date: getDatesForPinterest("now"),
             }
 
