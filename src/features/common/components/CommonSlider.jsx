@@ -32,8 +32,6 @@ const CommonSlider = ({
         slidesToScroll: 1
     };
 
-    console.log("files=====>",files)
-    console.log("selectedFileType=====>",selectedFileType)
     const [showText, setShowText] = useState(false)
 
     return (

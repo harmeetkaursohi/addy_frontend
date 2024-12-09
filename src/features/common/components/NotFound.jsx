@@ -5,7 +5,6 @@ import { useAppContext } from './AppProvider'
 
 const NotFound = () => {
 const {sidebar}=useAppContext()
-console.log(sidebar,"sidebar")
     return (
         <div className={`not_found_wrapper ${sidebar ? "":"notFound_container"}`}>
             <div className='not_found_outer'>

@@ -7,17 +7,11 @@
 
 }
 
-.fb-likes-txt {
-    margin: 10px 20px;
-}
-
-.fb-followers-txt {
-    margin: 10px 20px;
-}
 
 ul.fb-likes-followers {
     background: #f07c33;
     border-radius: 6px;
+    padding: 10px !important;
 }
 
 .profile-insight-img-loader {
@@ -41,14 +35,39 @@ ul.fb-likes-followers {
     background-color: transparent;
     box-shadow: unset;
     font-family: 'Nunito';
-    font-weight: 700;
+    font-weight: 500;
     font-size: 20px;
 }
+.insights_carousal .insights_data {
+    margin: 0;
 
+}
+.insights_carousal .insights_data li {
+    display: flex;
+    gap: 10px;
+
+}
+.insights_carousal .insights_data li .post-stack-data {
+    background-color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid #EFEFEF;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    padding: 5px;
+}
+.insights_carousal .coment_view_carousal img{
+    border-radius: 15px;
+}
 .profile-visit-graph {
     height: 270px;
 }
-
+.insights_carousal div.card_body_content{
+    background: #F4F8FE;
+    border: 1.55px solid #F3F4F4;
+}
 .insight_inner_content {
     border-radius: 22px;
     background: #FFF;
@@ -223,7 +242,6 @@ input.Social_media_platform_checkbox {
 .social_media_dropdown {
     display: flex;
     gap: 15px;
-    margin-top: 20px;
 }
 
 ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
@@ -268,12 +286,7 @@ ul.overview_tabs.nav-tabs.nav-item.show .nav-link, .nav-tabs .nav-link.active {
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
-    padding: 20px 20px 0px;
     color: #4E4E4E;
-}
-
-.overview_title {
-
 }
 
 .scroll-y {
@@ -289,18 +302,16 @@ ul.overview_tabs.nav.nav-tabs {
 
 .account_reach_overview_outer {
     border-radius: 7px;
-    box-shadow: 2px 2px 12px #d3dada;
+    box-shadow: 0px 0px 5px rgba(0,0,0,10%);
     background: #FFF;
-    padding: 10px 20px;
+    padding: 10px 10px;
     width: 100%;
+    padding-bottom: 15px;
 }
 
 .post_growth {
     font-size: 13px;
-    background: white;
-    padding: 4px;
-    border-radius: 4px;
-    font-weight: 600;
+    color: #F07C33;
 }
 
 .pie-percentage {
@@ -338,20 +349,21 @@ ul.overview_tabs.nav.nav-tabs {
     font-weight: 700;
     font-size: 30px;
     color: #263238;
-    padding: 5px 0px 0px;
+  line-height: 30px;
+    display: inline-grid;
 }
-
+.Profile_visit_container .recharts-responsive-container {
+    height: 268px !important;
+}
 .interaction_graph_outer {
-    padding: 0px 40px 0px 0px;
+    padding: 15px;
 }
 .selected-social-media button#dropdown-basic {
     background: #F07C33 !important;
     color: white;
 }
 
-.interaction_graph_outer ul.recharts-default-legend {
-    margin-bottom: 20px !important;
-}
+
 
 .light_orange {
     background-color: #FFE4D3;
@@ -381,16 +393,13 @@ ul.overview_tabs.nav.nav-tabs {
 .account_reach_overview_outer h5 {
     font-size: 14px;
     color: #263238;
-    font-weight: 300;
+    font-weight: 500;
     line-height: 22px;
 }
 
 .account_reach_overview_wrapper {
     display: flex;
     gap: 15px;
-
-    padding: 20px;
-
 }
 
 .top_Arrow {
@@ -467,8 +476,12 @@ div.card_body_content {
     justify-content: end;
     border-bottom: 1px solid #D9D9D9;
     background: #F8F9FB;
-    padding: 20px;
+    padding: 16px 20px;
     align-items: center;
+}
+.icon_social {
+    position: relative;
+
 }
 
 .cmn_insight_box_shadow {
@@ -479,7 +492,7 @@ div.card_body_content {
 .overview_title {
     color: #263238;
     font-size: 20px;
-    font-weight: 700;
+    font-weight: 500;
 }
 
 .post_stack {
@@ -513,16 +526,19 @@ span.spinner-border.spinner-border-sm.loader.social-account-loader {
 }
 
 .user_profile_card_outer {
-    padding: 28px 28px 0px;
+    padding:15px;
     border-radius: 11px;
-    box-shadow: 2px 2px 8px #e5e2e2;
+    box-shadow: 0px 0px 5px rgba(0,0,0,10%);
     min-height: 100%;
-    margin-top: 20px;
 
 }
+.user_profile_card_wrapper .cmn_text {
+    font-weight: 400;
+}
 
-.Profile_visit_container {
-    min-height: 100%
+.overview_container {
+    border-bottom:1px solid #F3F7FD;
+    padding-bottom: 25px;
 }
 
 img.no_data_available_img {
@@ -546,13 +562,14 @@ img.no_data_available_img {
 .user_info_list {
     justify-content: space-between;
 }
-
+.Profile_visit_container .recharts-responsive-container {
+    height: 270px !important;
+}
 .user_info_list li h4 {
-    color: #263238;
-    font-weight: 900;
+    color: #263238;;
+    font-weight: 400;
     font-size: 16px;
     line-height: 20px;
-    padding-top: 9px;
     text-align: center;
 }
 
@@ -574,18 +591,34 @@ img.no_data_available_img {
 
 
 .profile_visit_graph_outer {
-    padding: 15px 50px 0px 0px;
+    padding: 15px;
 }
 
 .days_dropdown button#dropdown-basic {
-    color: #263238;
     font-size: 13px;
     font-weight: 600;
     background: #fff !important;
-    border: 1px solid #E8E8E8;
-    min-width: 110px;
+    min-width: 159px;
+    text-align: left;
+    color: #5F6D7E;
+    padding: 8px 10px;
+}
+.days_dropdown .dropdown-menu {
+    padding: 0px;
+}
+.days_dropdown .dropdown-menu a {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    font-size: 13px;
+}
+.social_media_dropdown #dropdown-basic {
+border:unset;
 }
 
+    .days_dropdown .dropdown-menu a:last-child {
+
+    border-bottom: unset;
+    }
 @media screen and (min-width: 2560px) {
     .account_reach_overview_outer {
         padding: 40px;

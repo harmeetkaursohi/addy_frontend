@@ -32,7 +32,6 @@ const Header = ({userData, setShowConnectAccountModal}) => {
             setShowConnectAccountModal(true)
         }
     }
-    console.log(getAllConnectedPagesApi?.data?.length,"getAllConnectedPagesApi?.data?.length")
     return (
         <>
             <header>

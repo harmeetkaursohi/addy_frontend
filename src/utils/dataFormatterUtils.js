@@ -802,7 +802,6 @@ export const getFormattedDataForPlannerPostPreviewModal = (data) => {
                         url = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/" + cur?.id
                     }
                     if (cur.mediaType === "VIDEO") {
-                        console.log("cur.sourceURL=====>",cur.sourceURL)
                         url = url = `${import.meta.env.VITE_APP_API_BASE_URL}` + "/attachments/stream/" + cur?.id
                     }
                 }

@@ -75,8 +75,7 @@ button.slider_btn {
     bottom: 2px;
 }
 .slider_outer_container {
-    margin-top: 28px;
-    padding-bottom: 38px;
+    margin-top: 15px;
 }
 .slider_outer_container button.slick-arrow.slick-prev {
     position: absolute;
@@ -164,9 +163,7 @@ button.slider_btn {
 
         padding: 10px;
     }
-    .slider_outer_container {
-        padding-bottom: 28px;
-    }
+
     .post_date{
         font-size: 10px;
     }

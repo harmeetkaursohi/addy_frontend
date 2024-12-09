@@ -107,7 +107,6 @@ const SocialAccounts = ({}) => {
         state: "APPROVED",
     }, {skip: !enabledSocialMedia?.isLinkedinEnabled || isNullOrEmpty(connectedSocialAccount.linkedin),});
 
-    console.log("getAllLinkedinPagesApi======>",getAllLinkedinPagesApi?.data)
 
     useEffect(() => {
         if (enabledSocialMedia?.isLinkedinEnabled && getAllConnectedPagesApi?.data && Array.isArray(getAllConnectedPagesApi?.data) && !isNullOrEmpty(getAllLinkedinPagesApi?.data)) {

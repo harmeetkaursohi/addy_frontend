@@ -76,7 +76,6 @@ const Review = () => {
 
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("");
-    console.log(getConnectedSocialAccountApi, "getConnectedSocialAccountApi");
     const connectedSocialAccounts = getConnectedSocialAccountApi?.data?.map(cur => cur?.provider)
     const getAllConnectedPagesApi = useGetAllConnectedPagesQuery("");
     const postApi = useGetPublishedPostsQuery(searchQuery, {skip: searchQuery?.offSet < 0,});
@@ -455,10 +454,8 @@ const Review = () => {
                                                         }}
                                                     />
                                                 </li>
-                                                {console.log(socialMediaDropDownsOptions, "socialMediaDropDownsOptions")}
                                                 {
                                                     socialMediaDropDownsOptions.map((option, index) => {
-                                                        console.log("option=====>", option)
                                                         return <li
                                                             key={index}
                                                             onClick={() => {

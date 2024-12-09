@@ -2,8 +2,11 @@ import React, {useEffect, useState} from "react";
 import "../views/insight.css"
 import {Dropdown} from "react-bootstrap";
 import instagram_img from "../../../../images/instagram_logo.svg";
+import FB from "../../../../images/fb_icon.svg?react";
+import INSTA from "../../../../images/instagram_icon.svg?react";
+import PINTEREST from "../../../../images/pint_icon.svg?react";
+import LINKEDIN from "../../../../images/linkedin_icon.svg?react";
 import {FiArrowDownRight, FiArrowUpRight} from "react-icons/fi";
-import DonutChart from "../../DonutsChart";
 import InteractionsLineGraph from "../../horizontalbar";
 import Carousel from "../../slider/Slider";
 import linkedin_img from "../../../../images/linkedin.svg"
@@ -27,21 +30,16 @@ import NotConnected_img from "../../../../images/no_insights.svg?react";
 import ConnectSocialMediaAccount from "../../../common/components/ConnectSocialMediaAccount";
 import {useAppContext} from "../../../common/components/AppProvider";
 import default_user_icon from "../../../../images/default_user_icon.svg"
-import calendar_img from "../../../../images/calender_img.svg"
 import ProfileVisitChart from "../../../react_chart/views/Profile_visit_chart";
 import no_page_select_bg from "../../../../images/no_page_select_bg.svg"
 import no_data_available from "../../../../images/no_data_available.svg"
 import {select} from "@syncfusion/ej2-react-schedule";
-import cmt_icon from "../../../../images/cmt_icon.svg"
-import user_icon from "../../../../images/user_icon.svg"
-import bar_icon from "../../../../images/bar_icon.svg"
-import heart_icon from "../../../../images/heart_icon.svg"
 import PinterestGraph from "../../../react_chart/views/PinterestGraph";
 import {useGetAllLinkedinPagesQuery, useGetConnectedSocialAccountQuery} from "../../../../app/apis/socialAccount";
 import {useGetAllConnectedPagesQuery} from "../../../../app/apis/pageAccessTokenApi";
 import {
     useGetAccountsReachAndEngagementQuery,
-    useGetDemographicsInsightQuery, useGetPinClicksQuery, useGetPostEngagementsQuery,
+     useGetPinClicksQuery, useGetPostEngagementsQuery,
     useGetProfileInsightsInfoQuery,
     useGetProfileVisitsInsightsQuery
 } from "../../../../app/apis/insightApi";
@@ -63,7 +61,6 @@ const Insight = () => {
     const [connectedLinkedinPages, setConnectedLinkedinPages] = useState(null);
     const [connectedPinterestBoards, setConnectedPinterestBoards] = useState(null);
 
-    console.log("selectedPage======>", selectedPage)
 
     const getConnectedSocialAccountApi = useGetConnectedSocialAccountQuery("")
 
@@ -153,7 +150,7 @@ const Insight = () => {
                         {
                             isAccountInfoLoading &&
                             <>
-                                <h5 className="Choose_platform_title">Choose PlatForm</h5>
+
                                 <div className={"d-flex"}>
                                     <SkeletonEffect count={1} className={"mt-3 h-40 w-75"}/>
                                     <SkeletonEffect count={1} className={"mt-3 h-40 w-75"}/>
@@ -166,7 +163,6 @@ const Insight = () => {
                         {
                             getConnectedSocialAccountApi?.data?.length > 0 &&
                             <div className="insight_inner_content">
-                                <h5 className="Choose_platform_title">Choose PlatForm</h5>
 
                                 <div className="social_media_dropdown">
                                     {
@@ -179,8 +175,16 @@ const Insight = () => {
                                                 className="instagram_dropdown"
                                                 disabled={!getConnectedSocialAccountApi?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.FACEBOOK?.toUpperCase())}
                                             >
-                                                <i className={`fa-brands fa-facebook me-2 `}
-                                                   style={{color: "#0866ff", fontSize: "20px"}}/>
+                                                <span class={"icon_social"}>
+                                                    <span className={"me-2"}><FB/></span>
+
+                                                    {/*<i className={`fa-brands fa-facebook me-2 `}*/}
+                                                    {/*                           style={{*/}
+                                                    {/*                               color: "#0866ff",*/}
+                                                    {/*                               fontSize: "20px"*/}
+                                                    {/*                           }}/>*/}
+                                                    <></>
+                                                </span>
                                                 Facebook {(!connectedFacebookPages?.length && getConnectedSocialAccountApi?.isLoading) ?
                                                 <Loader className="social-account-loader"/> : (<></>)}
                                             </Dropdown.Toggle>
@@ -198,11 +202,12 @@ const Insight = () => {
                                                                         handleSelectPage("FACEBOOK", page)
                                                                     }}>
                                                                         <div className="Social_media_platform">
+                                                                             <span class={"icon_social"}>
                                                                             <i className={`fa-brands fa-facebook   `}
                                                                                style={{
                                                                                    color: "#0866ff",
                                                                                    fontSize: "20px"
-                                                                               }}/>
+                                                                               }}/></span>
                                                                             <h3>{page.name}</h3>
                                                                         </div>
 
@@ -226,8 +231,9 @@ const Insight = () => {
                                                 className="instagram_dropdown"
                                                 disabled={!getConnectedSocialAccountApi?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.INSTAGRAM?.toUpperCase())}
                                             >
-                                                <img src={instagram_img} className="me-2  "
-                                                     style={{height: "18px", width: "18px"}}/>
+                                                <span className={"me-2"}> <INSTA/></span>
+                                                {/*<img src={instagram_img} className="me-2  "*/}
+                                                {/*     style={{height: "18px", width: "18px"}}/>*/}
                                                 Instagram {(!connectedInstagramPages?.length && getConnectedSocialAccountApi?.isLoading) ?
                                                 <Loader className="social-account-loader"/> : (<></>)}
                                             </Dropdown.Toggle>
@@ -270,8 +276,11 @@ const Insight = () => {
                                                 className="instagram_dropdown"
                                                 disabled={!getConnectedSocialAccountApi?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.PINTEREST?.toUpperCase())}
                                             >
-                                                <i className={`fa-brands fa-pinterest me-2 `}
-                                                   style={{color: "#e60023", fontSize: "20px"}}/>
+                                                 <span class={"icon_social me-2"}>
+                                                     <PINTEREST/>
+                                                {/*<i className={`fa-brands fa-pinterest me-2 `}*/}
+                                                {/*   style={{color: "#e60023", fontSize: "20px"}}/>*/}
+                                                 </span>
 
                                                 Pinterest {(!connectedPinterestBoards?.length && getConnectedSocialAccountApi?.isLoading) ?
                                                 <Loader className="social-account-loader"/> : (<></>)}
@@ -293,11 +302,14 @@ const Insight = () => {
                                                                         handleSelectPage("PINTEREST", board)
                                                                     }}>
                                                                         <div className="Social_media_platform">
+                                                                         <span class={"icon_social"}>
+
                                                                             <i className={`fa-brands fa-pinterest  `}
                                                                                style={{
                                                                                    color: "#e60023",
                                                                                    fontSize: "20px"
                                                                                }}/>
+                                                                         </span>
                                                                             <h3>{board.name}</h3>
                                                                         </div>
 
@@ -321,7 +333,11 @@ const Insight = () => {
                                                 className="instagram_dropdown"
                                                 disabled={!getConnectedSocialAccountApi?.data?.some(socialMedia => socialMedia.provider === SocialAccountProvider?.LINKEDIN?.toUpperCase())}
                                             >
-                                                <img src={linkedin_img} className="me-2  "/>
+                                                <span className={"me-2"}>
+                                                    <LINKEDIN/>
+                                                </span>
+
+                                                {/*<img src={linkedin_img} className="me-2  "/>*/}
                                                 Linkedin {(!connectedLinkedinPages?.length && getConnectedSocialAccountApi?.isLoading) ?
                                                 <Loader className="social-account-loader"/> : (<></>)}
                                             </Dropdown.Toggle>
@@ -366,12 +382,12 @@ const Insight = () => {
                                         :
                                         <>
                                             {/* profile visit section */}
-                                            <div className="row mt-4">
+                                            <div className="row mt-4 align-items-center mb-4">
                                                 <div className="col-lg-4 col-md-12 col-sm-12">
                                                     <div className="user_profile_card_outer cmn_shadow">
 
                                                         <div
-                                                            className="user_profile_card_wrapper text-center mt-3">
+                                                            className="user_profile_card_wrapper text-center">
                                                             {
                                                                 (profileInsightsApi.isLoading || profileInsightsApi?.isFetching || getAllLinkedinPagesApi?.isLoading || getAllLinkedinPagesApi?.isFetching) ?
                                                                     <>
@@ -411,7 +427,7 @@ const Insight = () => {
                                                         {
                                                             selectedPage?.socialMediaType === "FACEBOOK" &&
                                                             <>
-                                                                <ul className="fb-likes-followers d-flex mt-4 user_info_list">
+                                                                <ul className="fb-likes-followers d-flex mt-2 user_info_list mb-0">
                                                                     <li className={"fb-likes-txt"}>
                                                                         <h4 className={"text-white"}>{(profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
                                                                             <SkeletonEffect count={1}
@@ -470,7 +486,8 @@ const Insight = () => {
                                                                         <h4 className={"text-white"}>
                                                                             {
                                                                                 (profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
-                                                                                    <SkeletonEffect count={1} className={"mt-2 "}/>
+                                                                                    <SkeletonEffect count={1}
+                                                                                                    className={"mt-2 "}/>
                                                                                     :
                                                                                     (profileInsightsApi?.data?.followers === null || profileInsightsApi?.data?.followers === undefined) ? "N/A" : profileInsightsApi?.data?.followers
                                                                             }</h4>
@@ -487,9 +504,9 @@ const Insight = () => {
                                                 </div>
 
                                                 <div className="col-lg-8 col-md-12 col-sm-12">
-                                                    <div className="page_title_header  mb-0 Profile_visit_container ">
+                                                    <div className="mb-0 overview_container mt-3 mh-auto">
                                                         <div
-                                                            className="days_outer reach-engagement-select justify-content-between">
+                                                            className="days_outer d-flex justify-content-between align-items-center mb-3">
 
                                                             <h3 className="overview_title">Overview</h3>
 
@@ -529,24 +546,25 @@ const Insight = () => {
                                                         {/* Accounts Reached */}
                                                         <div className="account_reach_overview_wrapper mt-4">
                                                             <div className="account_reach_overview_outer light_blue">
-                                                                <div className="cmt_icon_outer">
-                                                                    <img src={bar_icon}/>
+                                                                {/*<div className="cmt_icon_outer">*/}
+                                                                {/*    <img src={bar_icon}/>*/}
 
-                                                                </div>
-                                                                <h4 className="cmn_text_style">
-                                                                    {
-                                                                        accountsReachAndEngagementApi?.isLoading || accountsReachAndEngagementApi?.isFetching ?
-                                                                            <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> :
-                                                                            accountsReachAndEngagementApi?.data?.reach?.presentData
+                                                                {/*</div>*/}
 
-                                                                    }
-
-
-                                                                </h4>
 
                                                                 <h5 className="cmn_text_style">Accounts Reached</h5>
-                                                                <div className="mt-3">
+                                                                <div className="mt-3 d-flex align-items-end gap-2">
+                                                                    <h4 className="cmn_text_style">
+                                                                        {
+                                                                            accountsReachAndEngagementApi?.isLoading || accountsReachAndEngagementApi?.isFetching ?
+                                                                                <span><i
+                                                                                    className="fa fa-spinner fa-spin"/>
+                                                                    </span> :
+                                                                                accountsReachAndEngagementApi?.data?.reach?.presentData
+
+                                                                        }
+
+                                                                    </h4>
                                                                     {
                                                                         (!accountsReachAndEngagementApi?.isLoading && !accountsReachAndEngagementApi?.isFetching) && <>
                                                                             {
@@ -573,23 +591,25 @@ const Insight = () => {
                                                             </div>
                                                             {/* acccount Engaged */}
                                                             <div className="account_reach_overview_outer light_orange">
-                                                                <div className="cmt_icon_outer">
-                                                                    <img src={user_icon}/>
+                                                                {/*<div className="cmt_icon_outer">*/}
+                                                                {/*    <img src={user_icon}/>*/}
 
-                                                                </div>
-
-
-                                                                <h4 className="cmn_text_style">
-                                                                    {
-                                                                        accountsReachAndEngagementApi?.isLoading || accountsReachAndEngagementApi?.isFetching ?
-                                                                            <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : accountsReachAndEngagementApi?.data?.engagement?.presentData
-                                                                    }
+                                                                {/*</div>*/}
 
 
-                                                                </h4>
                                                                 <h5 className="cmn_text_style">Accounts Engaged</h5>
-                                                                <div className="mt-3">
+                                                                <div className="mt-3 d-flex align-items-end gap-2">
+
+                                                                    <h4 className="cmn_text_style">
+                                                                        {
+                                                                            accountsReachAndEngagementApi?.isLoading || accountsReachAndEngagementApi?.isFetching ?
+                                                                                <span><i
+                                                                                    className="fa fa-spinner fa-spin"/>
+                                                                    </span> : accountsReachAndEngagementApi?.data?.engagement?.presentData
+                                                                        }
+
+
+                                                                    </h4>
                                                                     {!accountsReachAndEngagementApi?.isLoading && !accountsReachAndEngagementApi?.isFetching && <>
                                                                         {
                                                                             accountsReachAndEngagementApi?.data?.engagement?.presentData >= accountsReachAndEngagementApi?.data?.engagement?.previousData?.data ?
@@ -615,17 +635,18 @@ const Insight = () => {
                                                             </div>
                                                             {/* acccount followers */}
                                                             <div className="account_reach_overview_outer light_purple">
-                                                                <div className="cmt_icon_outer">
-                                                                    <img src={cmt_icon}/>
-                                                                </div>
-                                                                <h4 className="cmn_text_style">
+                                                                {/*<div className="cmt_icon_outer">*/}
+                                                                {/*    <img src={cmt_icon}/>*/}
+                                                                {/*</div>*/}
+                                                                <h5 className="cmn_text_style">Total Followers</h5>
+                                                                <h4 className="cmn_text_style mt-3">
                                                                     {
                                                                         (profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
                                                                             <span><i className="fa fa-spinner fa-spin"/>
                                                                     </span> : (profileInsightsApi?.data?.followers === null || profileInsightsApi?.data?.followers === undefined) ? "N/A" : profileInsightsApi?.data?.followers
                                                                     }
                                                                 </h4>
-                                                                <h5 className="cmn_text_style">Total Followers</h5>
+
                                                             </div>
 
                                                             {/* acccount likes */}
@@ -634,10 +655,11 @@ const Insight = () => {
                                                                 <div
                                                                     className="account_reach_overview_outer light_green">
 
-                                                                    <div className="cmt_icon_outer">
-                                                                        <img src={heart_icon}/>
-                                                                    </div>
-                                                                    <h4 className="cmn_text_style">
+                                                                    {/*<div className="cmt_icon_outer">*/}
+                                                                    {/*    <img src={heart_icon}/>*/}
+                                                                    {/*</div>*/}
+                                                                    <h5 className="cmn_text_style">Accounts likes</h5>
+                                                                    <h4 className="cmn_text_style mt-3">
                                                                         {
                                                                             (profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
                                                                                 <span><i
@@ -645,7 +667,7 @@ const Insight = () => {
                                                                     </span> : (profileInsightsApi?.data?.likes === null || profileInsightsApi?.data?.likes === undefined) ? "N/A" : profileInsightsApi?.data?.likes
                                                                         }
                                                                     </h4>
-                                                                    <h5 className="cmn_text_style">Accounts likes</h5>
+
                                                                 </div>
                                                             }
 
@@ -655,16 +677,16 @@ const Insight = () => {
 
                                                 </div>
                                             </div>
-                                            <div className="row mt-4 mb-4">
-                                                <div className={"mb-4"}></div>
-                                            </div>
+                                            {/*<div className="row mt-4 mb-4">*/}
+                                            {/*    <div className={"mb-4"}></div>*/}
+                                            {/*</div>*/}
                                             {/* profile visit section end */}
                                             {
                                                 selectedPage?.socialMediaType === "INSTAGRAM" &&
                                                 <div className={"Profile_visit_container"}>
                                                     <div className="page_title_dropdown">
-                                                        <div className={"profile-visit-text "}>Profile Visit
-                                                        </div>
+                                                        <h3 className={"overview_title"}>Profile Visit
+                                                        </h3>
                                                     </div>
                                                     <div className=" page_title_header mb-0 ">
                                                         <div className="page_title_container ">
@@ -673,9 +695,9 @@ const Insight = () => {
 
                                                                 <Dropdown className="days_dropdown">
                                                                     <Dropdown.Toggle id="dropdown-basic">
-                                                                        <img src={calendar_img} alt=""
-                                                                             className="me-2" height="20px"
-                                                                             width="20px"/>
+                                                                        {/*<img src={calendar_img} alt=""*/}
+                                                                        {/*     className="me-2" height="20px"*/}
+                                                                        {/*     width="20px"/>*/}
                                                                         {`Last ${daysForProfileVisitGraph} days`}
                                                                     </Dropdown.Toggle>
                                                                     <Dropdown.Menu>
@@ -695,7 +717,7 @@ const Insight = () => {
                                                             </div>
                                                         </div>
 
-                                                        <div className="profile_visit_graph_outer mt-2">
+                                                        <div className="interaction_graph_outer">
                                                             {
                                                                 (selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(profileVisitsApi?.data) && profileVisitsApi?.data?.length === 0))
                                                                     ?
@@ -718,89 +740,95 @@ const Insight = () => {
                                             {
                                                 (selectedPage?.socialMediaType === "FACEBOOK" || selectedPage?.socialMediaType === "LINKEDIN") &&
                                                 <div className={"row"}>
-                                                    <div className={"col-xl-6 Profile_visit_container"}>
-                                                        <div className="page_title_dropdown">
-                                                            <div className={"profile-visit-text "}>Profile Visit
+                                                    <div className={"col-xl-6 "}>
+                                                        <div className={"Profile_visit_container"}>
+                                                            <div className="page_title_dropdown">
+                                                                <h3 className={"overview_title "}>Profile Visit
+                                                                </h3>
                                                             </div>
-                                                        </div>
-                                                        <div className=" page_title_header mb-0 ">
-                                                            <div className="page_title_container ">
+                                                            <div className=" page_title_header mb-0 ">
+                                                                <div className="page_title_container ">
 
-                                                                <div className="days_outer">
+                                                                    <div className="days_outer">
 
-                                                                    <Dropdown className="days_dropdown">
-                                                                        <Dropdown.Toggle id="dropdown-basic">
-                                                                            <img src={calendar_img} alt=""
-                                                                                 className="me-2" height="20px"
-                                                                                 width="20px"/>
-                                                                            {`Last ${daysForProfileVisitGraph} days`}
-                                                                        </Dropdown.Toggle>
-                                                                        <Dropdown.Menu>
-                                                                            {selectGraphDaysOptions.map((c, i) => (
+                                                                        <Dropdown className="days_dropdown">
+                                                                            <Dropdown.Toggle id="dropdown-basic">
+                                                                                {/*<img src={calendar_img} alt=""*/}
+                                                                                {/*     className="me-2" height="20px"*/}
+                                                                                {/*     width="20px"/>*/}
+                                                                                {`Last ${daysForProfileVisitGraph} days`}
+                                                                            </Dropdown.Toggle>
+                                                                            <Dropdown.Menu>
+                                                                                {selectGraphDaysOptions.map((c, i) => (
 
-                                                                                <Dropdown.Item
-                                                                                    key={i}
-                                                                                    onClick={() => {
-                                                                                        setDaysForProfileVisitGraph(c.days);
-                                                                                    }}>
-                                                                                    {c.label}
-                                                                                </Dropdown.Item>
-                                                                            ))}
-                                                                        </Dropdown.Menu>
-                                                                    </Dropdown>
+                                                                                    <Dropdown.Item
+                                                                                        key={i}
+                                                                                        onClick={() => {
+                                                                                            setDaysForProfileVisitGraph(c.days);
+                                                                                        }}>
+                                                                                        {c.label}
+                                                                                    </Dropdown.Item>
+                                                                                ))}
+                                                                            </Dropdown.Menu>
+                                                                        </Dropdown>
 
-                                                                </div>
-                                                            </div>
-
-                                                            <div className="profile_visit_graph_outer mt-2">
-                                                                {(selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(profileVisitsApi?.data) && profileVisitsApi?.data?.length === 0))
-                                                                    ?
-                                                                    <div className={"no_data_available text-center"}>
-                                                                        <img className="no_data_available_img  "
-                                                                             src={no_data_available}
-                                                                             alt={"coming soon!"}/>
                                                                     </div>
-                                                                    :
-                                                                    <ProfileVisitChart
-                                                                        graphData={profileVisitsApi}
-                                                                        socialMediaType={selectedPage?.socialMediaType}/>
-                                                                }
-                                                            </div>
+                                                                </div>
 
+                                                                <div className="interaction_graph_outer">
+                                                                    {(selectedPage.socialMediaType === "PINTEREST" || (Array.isArray(profileVisitsApi?.data) && profileVisitsApi?.data?.length === 0))
+                                                                        ?
+                                                                        <div
+                                                                            className={"no_data_available text-center"}>
+                                                                            <img className="no_data_available_img  "
+                                                                                 src={no_data_available}
+                                                                                 alt={"coming soon!"}/>
+                                                                        </div>
+                                                                        :
+                                                                        <ProfileVisitChart
+                                                                            graphData={profileVisitsApi}
+                                                                            socialMediaType={selectedPage?.socialMediaType}/>
+                                                                    }
+                                                                </div>
+
+                                                            </div>
                                                         </div>
+
                                                     </div>
-                                                    <div className={"col-xl-6 Profile_visit_container"}>
-                                                        <h3 className="overview_title">Interactions</h3>
-                                                        <div
-                                                            className="interaction_wrapper cmn_insight_box_shadow mt-4  page_title_header">
+                                                    <div className={"col-xl-6"}>
+                                                        <div className={"Profile_visit_container"}>
+                                                            <h3 className="overview_title">Interactions</h3>
                                                             <div
-                                                                className="days_outer reach-engagement-select interaction_outer">
+                                                                className="page_title_header mb-0 ">
+                                                                <div
+                                                                    className="days_outer reach-engagement-select interaction_outer">
 
 
-                                                                {
-                                                                    <select
-                                                                        value={selectedDaysForPostEngagement}
-                                                                        className=" dropdown_days box_shadow form-select w-auto"
-                                                                        onChange={(e) => {
-                                                                            setSelectedDaysForPostEngagement(e.target.value)
-                                                                        }}
-                                                                    >
-                                                                        <option value={7}>Last 7 days</option>
-                                                                        <option value={15}>Last 15 days</option>
-                                                                        <option value={28}>Last 28 days</option>
-                                                                    </select>
+                                                                    {
+                                                                        <select
+                                                                            value={selectedDaysForPostEngagement}
+                                                                            className=" dropdown_days box_shadow form-select w-auto"
+                                                                            onChange={(e) => {
+                                                                                setSelectedDaysForPostEngagement(e.target.value)
+                                                                            }}
+                                                                        >
+                                                                            <option value={7}>Last 7 days</option>
+                                                                            <option value={15}>Last 15 days</option>
+                                                                            <option value={28}>Last 28 days</option>
+                                                                        </select>
 
-                                                                }
+                                                                    }
+                                                                </div>
+                                                                <div className="interaction_graph_outer">
+
+                                                                    <InteractionsLineGraph
+                                                                        isLoading={postEngagementsApi?.isLoading || postEngagementsApi?.isFetching}
+                                                                        graphData={postEngagementsApi?.data}
+                                                                        socialMediaType={selectedPage?.socialMediaType}
+                                                                    />
+                                                                </div>
+
                                                             </div>
-                                                            <div className="interaction_graph_outer mt-2">
-
-                                                                <InteractionsLineGraph
-                                                                    isLoading={postEngagementsApi?.isLoading || postEngagementsApi?.isFetching}
-                                                                    graphData={postEngagementsApi?.data}
-                                                                    socialMediaType={selectedPage?.socialMediaType}
-                                                                />
-                                                            </div>
-
                                                         </div>
                                                     </div>
                                                 </div>
@@ -808,70 +836,76 @@ const Insight = () => {
                                             {
                                                 selectedPage?.socialMediaType === "PINTEREST" &&
                                                 <div className={"row"}>
-                                                    <div className={"col-xl-6 Profile_visit_container"}>
-                                                        <div className="page_title_dropdown">
-                                                            <div className={"profile-visit-text "}>Pin Clicks
-                                                            </div>
-                                                        </div>
-                                                        <div className=" page_title_header mb-0 ">
-                                                            <div className="page_title_container ">
+                                                    <div className={"col-xl-6 "}>
+                                                        <div className={"Profile_visit_container"}>
+                                                            <div className={"Profile_visit_container"}>
+                                                                <div className="page_title_dropdown">
+                                                                    <h3 className={"overview_title"}>Pin Clicks
+                                                                    </h3>
+                                                                </div>
+                                                                <div className=" page_title_header mb-0 ">
+                                                                    <div className="page_title_container ">
 
-                                                                <div className="days_outer">
-                                                                    <select
-                                                                        value={selectedDaysForPinClicks}
-                                                                        onChange={(e) => {
-                                                                            setSelectedDaysForPinClicks(e.target.value)
-                                                                        }}
-                                                                        className=" days_option box_shadow"
-                                                                    >
-                                                                        <option value={9}>Last 7 days</option>
-                                                                        <option value={17}>Last 15 days</option>
-                                                                        <option value={30}>Last 28 days</option>
-                                                                    </select>
+                                                                        <div className="days_outer">
+                                                                            <select
+                                                                                value={selectedDaysForPinClicks}
+                                                                                onChange={(e) => {
+                                                                                    setSelectedDaysForPinClicks(e.target.value)
+                                                                                }}
+                                                                                className="dropdown_days box_shadow form-select w-auto"
+                                                                            >
+                                                                                <option value={9}>Last 7 days</option>
+                                                                                <option value={17}>Last 15 days</option>
+                                                                                <option value={30}>Last 28 days</option>
+                                                                            </select>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="interaction_graph_outer">
+                                                                        <PinterestGraph
+                                                                            graphData={pinClicksApi?.data}
+                                                                            isLoading={pinClicksApi?.isLoading || pinClicksApi?.isFetching}
+                                                                        />
+                                                                    </div>
 
                                                                 </div>
                                                             </div>
-
-                                                            <div className="profile_visit_graph_outer mt-2">
-                                                                <PinterestGraph
-                                                                    graphData={pinClicksApi?.data}
-                                                                    isLoading={pinClicksApi?.isLoading || pinClicksApi?.isFetching}
-                                                                />
-                                                            </div>
-
                                                         </div>
                                                     </div>
-                                                    <div className={"col-xl-6 Profile_visit_container"}>
-                                                        <h3 className="overview_title">Interactions</h3>
-                                                        <div
-                                                            className="interaction_wrapper cmn_insight_box_shadow mt-4  page_title_header">
+                                                    <div className={"col-xl-6"}>
+                                                        <div className={"Profile_visit_container"}>
+                                                            <h3 className="overview_title">Interactions</h3>
                                                             <div
-                                                                className="days_outer reach-engagement-select interaction_outer">
+                                                                className=" page_title_header mb-0 ">
+                                                                <div
+                                                                    className="days_outer reach-engagement-select interaction_outer">
 
-                                                                {
-                                                                    <select
-                                                                        value={selectedDaysForPostEngagement}
-                                                                        className=" dropdown_days box_shadow form-select w-auto"
-                                                                        onChange={(e) => {
-                                                                            setSelectedDaysForPostEngagement(e.target.value)
-                                                                        }}
-                                                                    >
-                                                                        <option value={7}>Last 7 days</option>
-                                                                        <option value={15}>Last 15 days</option>
-                                                                        <option value={28}>Last 28 days</option>
-                                                                    </select>
+                                                                    {
+                                                                        <select
+                                                                            value={selectedDaysForPostEngagement}
+                                                                            className=" dropdown_days box_shadow form-select w-auto"
+                                                                            onChange={(e) => {
+                                                                                setSelectedDaysForPostEngagement(e.target.value)
+                                                                            }}
+                                                                        >
+                                                                            <option value={7}>Last 7 days</option>
+                                                                            <option value={15}>Last 15 days</option>
+                                                                            <option value={28}>Last 28 days</option>
+                                                                        </select>
 
-                                                                }
+                                                                    }
+                                                                </div>
+                                                                <div className="interaction_graph_outer">
+
+                                                                    <InteractionsLineGraph
+                                                                        isLoading={postEngagementsApi?.isLoading || postEngagementsApi?.isFetching}
+                                                                        graphData={postEngagementsApi?.data}
+                                                                        socialMediaType={selectedPage?.socialMediaType}
+                                                                    />
+                                                                </div>
+
                                                             </div>
-                                                            <div className="interaction_graph_outer mt-2">
-
-                                                                <InteractionsLineGraph
-                                                                    isLoading={postEngagementsApi?.isLoading || postEngagementsApi?.isFetching}
-                                                                    graphData={postEngagementsApi?.data}
-                                                                    socialMediaType={selectedPage?.socialMediaType}
-                                                                />
-                                                            </div>
-
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1114,17 +1148,14 @@ const Insight = () => {
                                             {/* {interaction section end here} */}
 
 
-                                            <button
-                                                className=" post_stack mt-5 "
-                                                style={{display: 'inline-block'}}
-                                            > Posts stacks
-                                            </button>
                                             {/* slider  */}
-                                            <Carousel
-                                                postStackPageNumber={postStackPageNumber}
-                                                setPostStackPageNumber={setPostStackPageNumber}
-                                                selectedPage={selectedPage}
-                                            />
+                                            <div className={"insights_carousal"}>
+                                                <Carousel
+                                                    postStackPageNumber={postStackPageNumber}
+                                                    setPostStackPageNumber={setPostStackPageNumber}
+                                                    selectedPage={selectedPage}
+                                                />
+                                            </div>
 
 
                                         </>

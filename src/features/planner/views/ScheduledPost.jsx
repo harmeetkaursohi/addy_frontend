@@ -50,8 +50,6 @@ const ScheduledPost = ({
 
     const isAccountInfoLoading = getConnectedSocialAccountApi?.isLoading || getConnectedSocialAccountApi?.isFetching || getAllConnectedPagesApi?.isFetching || getAllConnectedPagesApi?.isLoading
 
-    console.log("getConnectedSocialAccountApi======>",getConnectedSocialAccountApi?.data)
-    console.log("getAllConnectedPagesApi======>",getAllConnectedPagesApi?.data)
 
     useEffect(() => {
         setPosts([])

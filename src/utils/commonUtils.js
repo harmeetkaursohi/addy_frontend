@@ -1,14 +1,12 @@
 import * as yup from "yup";
 import {
     EnterMessageToStartChat,
-    ErrorFetchingPost,
     InvalidAspectRatio,
     InvalidImageDimension,
     IsRequired,
     IsRequiredFor, MediaRequiredForPost, MessageAttachmentSizeError,
     MultiMediaLimit,
     MultiMediaSizeLimit,
-    NoBusinessAccountFound,
     OnlyImageOrVideoCanBePosted,
     PinterestImageLimitation,
     SelectAtleastOnePage, SelectAtLeastOnePageForDraft,
@@ -26,7 +24,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import {Linkedin_URN_Id_Types} from "./contantData.js";
 import default_user_icon from "../images/default_user_icon.svg"
-import {showErrorToast, showSuccessToast} from "../features/common/components/Toast";
+import {showErrorToast} from "../features/common/components/Toast";
 
 export const validationSchemas = {
 
@@ -1131,7 +1129,6 @@ export const formatMessage = (message = null, values = []) => {
     return replacedMessage;
 }
 export const getDatesForPinterest = (daysAgo) => {
-    console.log("daysAgo=====>",daysAgo)
     if (isNullOrEmpty(daysAgo.toString())) {
         return "";
     }
@@ -1139,7 +1136,6 @@ export const getDatesForPinterest = (daysAgo) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    console.log("final date=====>",`${year}-${month}-${day}`)
     return `${year}-${month}-${day}`;
 
 }
@@ -2270,7 +2266,6 @@ export const createSocialMediaProfileViewInsightsQuery = (queryObject, socialMed
 }
 
 export const createPostEngagementInsightsQuery = (queryObject, socialMediaType) => {
-    console.log("queryObject=====>",queryObject)
     switch (socialMediaType) {
         case "FACEBOOK": {
             return {

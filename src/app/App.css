@@ -887,6 +887,10 @@ button#dropdown-basic {
   text-transform: capitalize;
   border: unset !important;
 }
+.selected-social-media button#dropdown-basic::after {
+  content: url("../images/arrow_downIcon.svg") ;
+
+}
 button#dropdown-basic::after {
   content: url("../images/down_arrow.svg") ;
   position: absolute ;

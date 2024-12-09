@@ -7,6 +7,7 @@ import Heart from "../../../images/heart.svg?react";
 import Union from "../../../images/Union.svg?react";
 import Save from "../../../images/Saveicon.svg?react";
 import ShareIcon from "../../../images/ShareIcon.svg?react";
+
 import "./slider.css";
 import {
     concatenateString, getEmptyArrayOfSize,
@@ -23,7 +24,7 @@ import {useGetPostDataWithInsightsQuery} from "../../../app/apis/insightApi";
 import SkeletonEffect from "../../loader/skeletonEffect/SkletonEffect";
 import {LuChevronLeft} from "react-icons/lu";
 import {LuChevronRight} from "react-icons/lu";
-import {useEffect} from "react";
+import React, {useEffect} from "react";
 import {handleRTKQuery} from "../../../utils/RTKQueryUtils";
 import {addyApi} from "../../../app/addyApi";
 import {useDispatch} from "react-redux";
@@ -84,32 +85,40 @@ const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) =
     }
 
     return (
-        <div className="slider_outer_container ">
-            {
-                isNullOrEmpty(postByPageIdAndPostStatusApi?.data?.data?.[0]) && postByPageIdAndPostStatusApi?.data?.pageNumber === 0 ?
-                    <></>
-                    :
-                    <>
-                        <button
-                            disabled={postByPageIdAndPostStatusApi?.isLoading || postByPageIdAndPostStatusApi?.isFetching || deletePostPageInfoApi?.isLoading || postByPageIdAndPostStatusApi?.data?.pageNumber === 0}
-                            className="slider_btn previousSliderButton"
-                            onClick={() => {
-                                setPostStackPageNumber(postStackPageNumber - 1)
-                            }}
-                        >
-                            <LuChevronLeft/>
-                        </button>
-                        <button
-                            disabled={postByPageIdAndPostStatusApi?.loading || postByPageIdAndPostStatusApi?.isFetching || deletePostPageInfoApi?.isLoading || postByPageIdAndPostStatusApi?.data?.isLast}
-                            className="slider_btn  nextSliderButton"
-                            onClick={() => {
-                                setPostStackPageNumber(postStackPageNumber + 1)
-                            }}
-                        >
-                            <LuChevronRight/>
-                        </button>
-                    </>
-            }
+        <div className="slider_outer_container mt-4">
+            <div className={'d-flex justify-content-between'}>
+                <div
+                    className=" profile-visit-text"
+
+                > Posts stacks
+                </div>
+                {
+                    (isNullOrEmpty(postByPageIdAndPostStatusApi?.data?.data?.[0]) || Object?.keys(postByPageIdAndPostStatusApi?.data?.data?.[0] || {})?.length <4 ) && postByPageIdAndPostStatusApi?.data?.pageNumber === 0 ?
+                        <></>
+                        :
+                        <div>
+                            <button
+                                disabled={postByPageIdAndPostStatusApi?.isLoading || postByPageIdAndPostStatusApi?.isFetching || deletePostPageInfoApi?.isLoading || postByPageIdAndPostStatusApi?.data?.pageNumber === 0}
+                                className="slider_btn previousSliderButton"
+                                onClick={() => {
+                                    setPostStackPageNumber(postStackPageNumber - 1)
+                                }}
+                            >
+                                <LuChevronLeft/>
+                            </button>
+                            <button
+                                disabled={postByPageIdAndPostStatusApi?.loading || postByPageIdAndPostStatusApi?.isFetching || deletePostPageInfoApi?.isLoading || postByPageIdAndPostStatusApi?.data?.isLast}
+                                className="slider_btn  nextSliderButton"
+                                onClick={() => {
+                                    setPostStackPageNumber(postStackPageNumber + 1)
+                                }}
+                            >
+                                <LuChevronRight/>
+                            </button>
+                        </div>
+                }
+            </div>
+
 
             {
                 ( postDataWithInsightsApi?.isLoading || postDataWithInsightsApi?.isFetching || postByPageIdAndPostStatusApi?.isLoading || postByPageIdAndPostStatusApi?.isFetching || deletePostPageInfoApi?.isLoading) ?

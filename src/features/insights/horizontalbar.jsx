@@ -18,9 +18,7 @@ const InteractionsLineGraph = ({isLoading, graphData, socialMediaType}) => {
 
     useEffect(() => {
         if (graphData) {
-            console.log("graphData=====>",graphData)
             const formattedData = getFormattedDataForPostEngagementGraph(graphData, socialMediaType);
-            console.log("formattedData=====>",formattedData)
             setData(formattedData);
         }
     }, [graphData, socialMediaType]);
@@ -28,10 +26,10 @@ const InteractionsLineGraph = ({isLoading, graphData, socialMediaType}) => {
     return (
         <>
             <div className="chart-container">
-                <ResponsiveContainer width="100%" height={317}>
+                <ResponsiveContainer width="100%" height={270}>
                     <LineChart
-                        width={500}
-                        height={300}
+                        width={"100%"}
+                        height={270}
                         data={data}
                         margin={{
                             top: 20,
