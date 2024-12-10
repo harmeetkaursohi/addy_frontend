@@ -349,7 +349,7 @@ export const getFacebookAccountReachAndEngagement = async (data) => {
 
 export const getFacebookPostDataWithInsights = async (data) => {
     const postIds = data?.postIds?.map(postId => postId).join(",");
-    const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true).limit(1),reactions.summary(total_count).limit(1),comments.summary(true),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
+    const apiUrl = `${fbBaseUrl}/?ids=${postIds}&access_token=${data?.pageAccessToken}&fields=id,message,likes.summary(true).limit(1),reactions.summary(total_count).limit(1),comments.summary(total_count).limit(1),shares,attachments,created_time,is_published,insights.metric(post_impressions)`;
     return await baseAxios.get(apiUrl).then(res => {
         return res.data;
     }).catch(async error => {

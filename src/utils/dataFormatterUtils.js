@@ -550,7 +550,7 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
                 }
             }
             formattedData = {
-                total_like: data?.likes?.summary?.total_count + getValueOrDefault(data?.reactions?.summary?.total_count, 0),
+                total_like: getValueOrDefault(data?.reactions?.summary?.total_count, 0),
                 total_comment: data?.comments?.summary?.total_count,
                 total_share: data?.shares?.count || 0,
                 account_reach: data?.insights?.data[0]?.values[0]?.value,
@@ -570,10 +570,10 @@ export const getFormattedPostDataForSlider = (data, socialMediaType) => {
                 }
             }
             formattedData = {
-                total_like: data?.pin_metrics?.all_time?.reaction,
-                total_comment: data?.pin_metrics?.all_time?.comment,
-                total_save: data?.pin_metrics?.all_time?.save,
-                account_reach: data?.pin_metrics?.all_time?.impression,
+                total_like: data?.pin_metrics?.lifetime_metrics?.reaction,
+                total_comment: data?.pin_metrics?.lifetime_metrics?.comment,
+                total_save: data?.pin_metrics?.lifetime_metrics?.save,
+                account_reach: data?.pin_metrics?.lifetime_metrics?.impression,
                 creation_time: data?.created_at,
                 attachments: getAttachmentsData(data, socialMediaType),
             }
