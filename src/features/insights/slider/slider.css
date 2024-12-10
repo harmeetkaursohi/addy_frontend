@@ -92,7 +92,7 @@ button.slider_btn {
 .insights-post-date-outer {
     display: flex;
     align-items: center;
-    width: 165px;
+    /*width: 165px;*/
     height: 31px;
     gap: 5px;
 }

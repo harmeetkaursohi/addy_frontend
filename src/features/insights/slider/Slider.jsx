@@ -179,10 +179,10 @@ const Carousel = ({selectedPage, postStackPageNumber, setPostStackPageNumber}) =
                                                                     viewSimilarToSocialMedia={false}
                                                                 />
                                                                 <div className="date_Time_container">
-                                                                    <div className={"insights-post-date-outer"}>
+                                                                    <div className={"insights-post-date-outer w-100"}>
                                                                         <img src={calender_icon}
                                                                              className="me-1  ms-2"/>
-                                                                        <div className={"post_date"}>
+                                                                        <div className={"post_date me-2"}>
                                                                             {getFormattedPostTime(
                                                                                 deletedPostData?.createdAt
                                                                             )}
