@@ -61,6 +61,7 @@ import AddressInfo  from "../features/signup/views/tabs/AddressInfo"
 // const SelectPlan = lazy(() => import('../features/selectplan/views/SelectPlan.jsx'));
 
 
+
 const App = () => {
     const PrivateRoute = () => {
         const token = getToken();
