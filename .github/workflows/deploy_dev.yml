@@ -33,16 +33,16 @@ jobs:
         run: |
           sudo ssh -o StrictHostKeyChecking=no -i dev_private_key.pem ubuntu@${{ secrets.EC2_HOST_DEV }} "/var/www/html/dev.addyads.com/frontend_cleanup.sh"
 
-      - name: Set up SSH key and permissions for frontend
-        run: |
-          echo "${{ secrets.DEV_SSH_PRIVATE_KEY }}" > dev_private_key.pem
-          chmod 600 dev_private_key.pem
-
-      - name: Debugging - List current directory contents 2
-        run: ls -al
-
-      - name: Debugging - List current directory contents
-        run: pwd
+#      - name: Set up SSH key and permissions for frontend
+#        run: |
+#          echo "${{ secrets.DEV_SSH_PRIVATE_KEY }}" > dev_private_key.pem
+#          chmod 600 dev_private_key.pem
+#
+#      - name: Debugging - List current directory contents 2
+#        run: ls -al
+#
+#      - name: Debugging - List current directory contents
+#        run: pwd
 
       - name: Execute deployment script for frontend
         working-directory: /home/runner/work/addy_frontend/addy_frontend
