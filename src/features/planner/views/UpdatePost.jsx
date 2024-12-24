@@ -1,6 +1,7 @@
 import './CreatePost.css'
 import jsondata from '../../../locales/data/initialdata.json'
 import React, {useEffect, useState} from "react";
+import ai_icon from "../../../images/ai_icon.svg";
 import AI_ImageModal from "../../modals/views/ai_image_modal/AI_ImageModal.jsx";
 import AiCaptionModal from "../../modals/views/ai_caption_modal/AI_Caption";
 import AI_Hashtag from "../../modals/views/ai_hashtag_modal/AI_Hashtag";
@@ -846,14 +847,14 @@ const UpdatePost = () => {
                                                             <h5 className='post_heading create_post_text'>Add
                                                                 Post Caption {selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase())  &&"/ Pin Description"} </h5>
 
-                                                            {/*<button className="ai_btn cmn_white_text"*/}
-                                                            {/*        onClick={(e) => {*/}
-                                                            {/*            e.preventDefault();*/}
-                                                            {/*            setAIGenerateCaptionModal(true);*/}
-                                                            {/*        }}>*/}
-                                                            {/*    <img src={ai_icon}*/}
-                                                            {/*         className='ai_icon me-2'/>{jsondata.generateCaptionAi}*/}
-                                                            {/*</button>*/}
+                                                            <button className="ai_btn cmn_white_text"
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        setAIGenerateCaptionModal(true);
+                                                                    }}>
+                                                                <img src={ai_icon}
+                                                                     className='ai_icon me-2'/>{jsondata.generateCaptionAi}
+                                                            </button>
 
                                                         </div>
                                                         <div className='textarea_outer'>
@@ -873,15 +874,15 @@ const UpdatePost = () => {
                                                             <h5 className='post_heading create_post_text'>Add
                                                                 Hashtag  </h5>
 
-                                                            {/*<button className="ai_btn cmn_white_text"*/}
-                                                            {/*        onClick={(e) => {*/}
-                                                            {/*            e.preventDefault();*/}
-                                                            {/*            setAIGenerateHashTagModal(true);*/}
-                                                            {/*        }}>*/}
-                                                            {/*    <img src={ai_icon}*/}
-                                                            {/*         className='ai_icon me-2'/>*/}
-                                                            {/*    {jsondata.generateHashtagAi} */}
-                                                            {/*</button>*/}
+                                                            <button className="ai_btn cmn_white_text"
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        setAIGenerateHashTagModal(true);
+                                                                    }}>
+                                                                <img src={ai_icon}
+                                                                     className='ai_icon me-2'/>
+                                                                {jsondata.generateHashtagAi}
+                                                            </button>
 
                                                         </div>
                                                         <div className='textarea_outer'>

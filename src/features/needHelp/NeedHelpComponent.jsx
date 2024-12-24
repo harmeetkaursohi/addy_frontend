@@ -21,7 +21,7 @@ import SkeletonEffect from "../loader/skeletonEffect/SkletonEffect";
 import {PiLinkSimpleBold} from "react-icons/pi";
 import {
     useCreateChatMutation,
-    useGetChatByInitiatorIdQuery,  useLazyGetUnSeenMessagesQuery,
+    useGetChatByInitiatorIdQuery, useLazyGetUnSeenMessagesQuery,
     useSearchMessageQuery,
     useSendMessageMutation
 } from "../../app/apis/chatApi";
@@ -39,12 +39,7 @@ function NeedHelpComponent() {
     const chatContainerRef = useRef(null);
     const bottomRef = useRef(null);
 
-    const timeFormatOptions = {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-    };
-
+    const [unSeenMessageCount, setUnseenMessageCount] = useState(0);
     const [messageList, setMessageList] = useState([]);
     const [searchMessageQuery, setSearchMessageQuery] = useState({
         offSet: -1,
@@ -55,10 +50,12 @@ function NeedHelpComponent() {
     const [message, setMessage] = useState({
         text: "",
         senderId: decodedToken?.customerId,
+        receiversId: null,
         chatId: null,
         attachment: null
     })
     const [chatId, setChatId] = useState(null);
+    const [chatPartnerId, setChatPartnerId] = useState(null);
     const [files, setFiles] = useState([]);
     const [activeKey, setActiveKey] = useState(null);
     const [invalidateSearchMessageApi, setInvalidateSearchMessageApi] = useState(false);
@@ -100,8 +97,10 @@ function NeedHelpComponent() {
     useEffect(() => {
         if (!isNullOrEmpty(chatByInitiatorIdApi?.data)) {
             const chatId = chatByInitiatorIdApi?.data?.[0]?.id
+            const chatPartnerId = chatByInitiatorIdApi?.data?.[0]?.chatPartnerId
             getUnSeenMessages(chatId)
             setChatId(chatId)
+            setChatPartnerId(chatPartnerId)
         }
     }, [chatByInitiatorIdApi])
 
@@ -114,12 +113,17 @@ function NeedHelpComponent() {
                     chatId: chatId
                 })
             } else {
+                const lastMessage = [...getUnSeenMessagesApi?.data].pop();
+                const shouldAddUnSeenMessagesToOffSet = lastMessage.senderId !== decodedToken?.customerId
+                if (!shouldAddUnSeenMessagesToOffSet) {
+                    setUnseenMessageCount(getUnSeenMessagesApi?.data?.length)
+                }
                 const reversedArray = getUnSeenMessagesApi?.data?.slice()?.reverse()
                 const updatedMessageList = [...reversedArray, ...messageList]
                 setMessageList(updatedMessageList)
                 setSearchMessageQuery({
                     ...searchMessageQuery,
-                    offSet: getUnSeenMessagesApi?.data?.length,
+                    offSet: shouldAddUnSeenMessagesToOffSet ? getUnSeenMessagesApi?.data?.length : 0,
                     chatId: chatByInitiatorIdApi?.data?.[0]?.id
                 })
                 setInvalidateSearchMessageApi(true)
@@ -171,7 +175,9 @@ function NeedHelpComponent() {
     const sendMessageWithoutAttachments = async () => {
         const requestBody = {
             ...message,
-            chatId: chatId
+            chatId: chatId,
+            receiversId: chatPartnerId,
+
         }
         if (isValidCreateMessageRequest(requestBody, files)) {
             await handleRTKQuery(
@@ -229,6 +235,7 @@ function NeedHelpComponent() {
                 data: {
                     ...message,
                     chatId: chatId,
+                    receiversId: chatPartnerId,
                     attachment: {
                         file: file,
                         fileName: file.name,
@@ -262,6 +269,7 @@ function NeedHelpComponent() {
                 data: {
                     ...message,
                     chatId: chatId,
+                    receiversId: chatPartnerId,
                     attachment: {
                         file: chunk,
                         fileName: file.name,
@@ -373,77 +381,47 @@ function NeedHelpComponent() {
                                                      onClick={() => {
                                                          setSearchMessageQuery({
                                                              ...searchMessageQuery,
-                                                             offSet: messageList?.length
+                                                             offSet: messageList?.length - unSeenMessageCount
                                                          })
                                                      }}>load previous messages...</div>
                                         }
                                         {
                                             messageList?.map((message, index) => {
-                                                console.log(message, "message")
                                                 return <div key={index}>
                                                     {
-                                                        message?.senderId === decodedToken.customerId ?
-                                                            <div>
-                                                                <div
-                                                                    className='d-flex gap-3 justify-content-start align-items-center pe-3'>
-                                                                    <div className='user_profile_image_container'>
-                                                                        <img
-                                                                            src={userApi?.data?.profilePic ? "data:image/jpeg; base64," + userApi?.data?.profilePic : default_user_icon}
-                                                                            className='userchat_image'
-                                                                            alt='User Profile'/>
-                                                                    </div>
-                                                                    <div>
-                                                                        {
-                                                                            !isNullOrEmpty(message.attachments) &&
-                                                                            message?.attachments?.map(attachment => {
-                                                                                return <Link
-                                                                                    target={"_blank"}
-                                                                                    className='d-block file_media'
-                                                                                    to={`${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachment?.id}`}
-                                                                                > {attachment?.fileName}</Link>
-                                                                            })
-                                                                        }
-                                                                        {
-                                                                            !isNullOrEmpty(message.text) &&
-                                                                            <div
-                                                                                className='chat_inner_text user_chat_inner_text'>
-                                                                                <h3 className={"chat-message"}>{message.text}</h3>
-                                                                            </div>
-                                                                        }
-                                                                    </div>
-
-                                                                </div>
-                                                                <h6 className='chat_time text-end mb-2 pe-3'>
-                                                                    {formatDate(message.createdAt)}
-                                                                </h6>
-                                                            </div>
-                                                            :
-                                                            <div className='d-flex gap-3 chat_inner_content'>
+                                                        <div>
+                                                            <div
+                                                                className='d-flex gap-3 justify-content-start align-items-center pe-3'>
                                                                 <div className='user_profile_image_container'>
-                                                                    <img src={logo} className='userchat_image'
-                                                                         alt='User Profile'/>
+                                                                    <img
+                                                                        src={message?.senderId === decodedToken.customerId ? userApi?.data?.profilePic ? "data:image/jpeg; base64," + userApi?.data?.profilePic : default_user_icon : logo}
+                                                                        className='userchat_image'
+                                                                        alt='User Profile'/>
                                                                 </div>
-                                                                <div className='bot_chat_outer'>
+                                                                <div>
                                                                     {
                                                                         !isNullOrEmpty(message.attachments) &&
                                                                         message?.attachments?.map(attachment => {
                                                                             return <Link
                                                                                 target={"_blank"}
+                                                                                className='d-block file_media'
                                                                                 to={`${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachment?.id}`}
                                                                             > {attachment?.fileName}</Link>
                                                                         })
                                                                     }
-                                                                    <div className='chat_inner_text'>
-                                                                        {
-                                                                            !isNullOrEmpty(message.text) &&
+                                                                    {
+                                                                        !isNullOrEmpty(message.text) &&
+                                                                        <div
+                                                                            className='chat_inner_text user_chat_inner_text'>
                                                                             <h3 className={"chat-message"}>{message.text}</h3>
-                                                                        }
-                                                                    </div>
-                                                                    <h6 className='chat_time'>
-                                                                        {new Date(message.createdAt).toLocaleTimeString(undefined, timeFormatOptions)}
-                                                                    </h6>
+                                                                        </div>
+                                                                    }
                                                                 </div>
                                                             </div>
+                                                            <h6 className='chat_time text-end mb-2 pe-3'>
+                                                                {formatDate(message.createdAt)}
+                                                            </h6>
+                                                        </div>
                                                     }
                                                 </div>
                                             })
@@ -525,7 +503,7 @@ function NeedHelpComponent() {
                                         <div className='email_wrapper'>
                                             <IoLocationOutline/>
                                         </div>
-                                        <h3>India — 723 17th Street, Office 478 Mumbai, IM 81566</h3>
+                                        <h3>Tdi Business Centre, Office-09, Floor-10, Sector 118, Sahibzada Ajit Singh Nagar, Punjab 160055</h3>
                                     </div>
                                 </div>
                             </div>

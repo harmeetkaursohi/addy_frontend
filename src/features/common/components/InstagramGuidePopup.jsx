@@ -18,7 +18,6 @@ const InstagramGuidePopup = ({
                              }) => {
 
     const [showFacebookAuthorizedModal, setShowFacebookAuthorizedModal] = useState(false);
-    console.log(SVGComponent,props,"SVGComponent")
 
 
     const handleFacebookAuthorizedModal = () => {

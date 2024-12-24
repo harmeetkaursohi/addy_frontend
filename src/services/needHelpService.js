@@ -41,7 +41,6 @@ export const fetchChatById = async (authToken,size,page, params = { sortBy: 'cre
                 'Authorization': `Bearer ${authToken}`,
             },
         });
-        console.log('response....',response.data)
         return response.data; // Adjust this based on your API's response structure
     } catch (error) {
         console.error('Error fetching data:', error);
