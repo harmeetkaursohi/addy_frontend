@@ -2343,6 +2343,10 @@ export const isValidCreateMessageRequest = (data, files) => {
         showErrorToast(formatMessage(IsRequired, ["Message Sender"]));
         return false;
     }
+    if (isNullOrEmpty(data.receiversId)) {
+        showErrorToast(formatMessage(IsRequired, ["Message Receiver"]));
+        return false;
+    }
     if (isNullOrEmpty(data.chatId)) {
         showErrorToast(formatMessage(IsRequired, ["Chat Id"]));
         return false;

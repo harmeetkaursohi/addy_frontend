@@ -678,6 +678,7 @@ export const mapCreatePostDataToFormData = (data) => {
 export const mapCreateChatDataToFormData = (data) => {
     const formData = new FormData();
     formData.append('senderId', data.senderId);
+    formData.append('receiversId', data.receiversId);
     formData.append('chatId', data.chatId);
     if ( !isNullOrEmpty(data.text)) {
         formData.append('text', data.text);

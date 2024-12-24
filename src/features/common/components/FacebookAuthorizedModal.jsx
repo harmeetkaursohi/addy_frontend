@@ -28,7 +28,6 @@ const FacebookAuthorizedModal = ({
 
     const handleClose = () => setShowModal(false);
     const handleCloseInstagramGuideModal = () => setShowInstagramGuideModal(false);
-console.log(no_page_connect_img,"no_page_connect_img");
     return (
         <section className="facebook_modal_outer">
             <Modal
