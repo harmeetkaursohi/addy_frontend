@@ -735,14 +735,14 @@ const CreatePost = () => {
                                                         <div className='caption_header'>
                                                             <h5 className='post_heading create_post_text'>Add Caption {selectedAllDropdownData?.some(selectedPage => selectedPage.group === SocialAccountProvider.PINTEREST.toUpperCase()) &&"/ Pin Description"} </h5>
 
-                                                             <button className="ai_btn cmn_white_text"
-                                                               onClick={(e) => {
-                                                                    e.preventDefault();
-                                                                     setAIGenerateCaptionModal(true);
-                                                                 }}>
-                                                               <img src={ai_icon}
-                                                                 className='ai_icon me-2'/>{jsondata.generateCaptionAi}
-                                                           </button>
+                                                           {/*  <button className="ai_btn cmn_white_text"*/}
+                                                           {/*    onClick={(e) => {*/}
+                                                           {/*         e.preventDefault();*/}
+                                                           {/*          setAIGenerateCaptionModal(true);*/}
+                                                           {/*      }}>*/}
+                                                           {/*    <img src={ai_icon}*/}
+                                                           {/*      className='ai_icon me-2'/>{jsondata.generateCaptionAi}*/}
+                                                           {/*</button>*/}
 
                                                         </div>
                                                         <div className='textarea_outer'>
@@ -761,15 +761,15 @@ const CreatePost = () => {
                                                             <h5 className='post_heading create_post_text'>Add
                                                                 Hashtag</h5>
 
-                                                            <button className="ai_btn cmn_white_text"
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault();
-                                                                        setAIGenerateHashTagModal(true);
-                                                                    }}>
-                                                                <img src={ai_icon}
-                                                                     className='ai_icon me-2'/>
-                                                                {jsondata.generateHashtagAi}
-                                                            </button>
+                                                            {/*<button className="ai_btn cmn_white_text"*/}
+                                                            {/*        onClick={(e) => {*/}
+                                                            {/*            e.preventDefault();*/}
+                                                            {/*            setAIGenerateHashTagModal(true);*/}
+                                                            {/*        }}>*/}
+                                                            {/*    <img src={ai_icon}*/}
+                                                            {/*         className='ai_icon me-2'/>*/}
+                                                            {/*    {jsondata.generateHashtagAi}*/}
+                                                            {/*</button>*/}
 
                                                         </div>
                                                         <div className='textarea_outer'>
