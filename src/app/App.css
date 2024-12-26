@@ -292,7 +292,7 @@ a {
 border-radius: 12px;
 }
 .generate_image_outer input{
-  padding: 12px 17px;
+  padding: 12px 140px 12px 17px;
   border: 1px solid #263238;
 }
 .generate_image_outer .form-control:focus{

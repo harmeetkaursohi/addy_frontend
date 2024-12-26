@@ -31,6 +31,7 @@ export const ChatOpenMessage = "Hi, I’m Addy, your service assistant. How can 
 export const DeletePostConfirmationMessage = "Are you sure you want to delete this post?"
 export const DeletePostFromPageConfirmationMessage = "Are you sure you want to remove this post from {0}?"
 export const PageRemovedFromPostSuccessfully = "The post has been successfully removed."
+export const ErrorGeneratingWithAI = "Something went wrong while generating {0}."
 
 
 export const unProtectedUrls=["/login","/","/sign-up","/reset-password","/forgot-password","/auth-redirect","/password/success"]

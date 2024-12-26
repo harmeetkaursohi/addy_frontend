@@ -1,5 +1,8 @@
 import {addyApi} from "../addyApi";
 import {getOpenAIAuthHeader, handleQueryError} from "../../utils/RTKQueryUtils";
+import {showErrorToast} from "../../features/common/components/Toast";
+import { ErrorGeneratingWithAI} from "../../utils/contantData";
+import {formatMessage} from "../../utils/commonUtils";
 
 
 export const aiApi = addyApi.injectEndpoints({
@@ -13,6 +16,23 @@ export const aiApi = addyApi.injectEndpoints({
                     headers: getOpenAIAuthHeader()
                 };
             },
+            transformResponse: (response) => {
+                try {
+                    const rawContent = response.choices[0]?.message.content;
+                    const parsedContent = JSON.parse(rawContent);
+                    if (Array.isArray(parsedContent.captions)) {
+                        return {captions: parsedContent.captions};
+                    } else {
+                        console.error('Invalid response structure:', parsedContent);
+                        showErrorToast(formatMessage(ErrorGeneratingWithAI,["captions"]))
+                        return {captions: []};
+                    }
+                } catch (error) {
+                    console.error('Failed to parse response:', error);
+                    showErrorToast(formatMessage(ErrorGeneratingWithAI,["captions"]))
+                    return {captions: []};
+                }
+            },
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },
@@ -25,6 +45,23 @@ export const aiApi = addyApi.injectEndpoints({
                     body: requestBody,
                     headers: getOpenAIAuthHeader()
                 };
+            },
+            transformResponse: (response) => {
+                try {
+                    const rawContent = response.choices[0]?.message.content;
+                    const parsedContent = JSON.parse(rawContent);
+                    if (Array.isArray(parsedContent.hashtags)) {
+                        return {hashtags: parsedContent.hashtags};
+                    } else {
+                        console.error('Invalid response structure:', parsedContent);
+                        showErrorToast(formatMessage(ErrorGeneratingWithAI,["hashtags"]))
+                        return {hashtags: []};
+                    }
+                } catch (error) {
+                    console.error('Failed to parse response:', error);
+                    showErrorToast(formatMessage(ErrorGeneratingWithAI,["hashtags"]))
+                    return {hashtags: []};
+                }
             },
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
@@ -51,7 +88,6 @@ export const aiApi = addyApi.injectEndpoints({
         }),
     }),
 });
-
 
 
 export const {

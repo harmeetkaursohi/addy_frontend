@@ -1,13 +1,11 @@
 import Modal from 'react-bootstrap/Modal';
 import './AI_Caption.css'
 import {useEffect, useState} from "react";
-import {conventStringToArrayString} from "../../../../services/facebookService.js";
 import {isNullOrEmpty} from "../../../../utils/commonUtils";
 import Loader from "../../../loader/Loader";
 import robot_img from "../../../../images/ai_robot.svg"
 import {RxCross2} from 'react-icons/rx';
 import {useGenerateCaptionMutation} from "../../../../app/apis/aiApi";
-
 const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addCaption}) => {
 
     const handleClose = () => setAIGenerateCaptionModal(false);
@@ -21,23 +19,29 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
     const handleCaptionSubmit = (e) => {
         e.preventDefault();
         const requestBody = {
-            "model": "gpt-3.5-turbo",
-            "messages": [
+            model: "gpt-4o-mini",
+            messages: [
+                {
+                    "role": "system",
+                    "content": "You are an expert at generating concise captions from research paper text. Return a structured response with a key 'captions' containing an array of captions."
+                },
                 {
                     "role": "user",
                     "content": "Provide 10 captions about " + caption
-                }
+                },
             ]
         }
 
         !isNullOrEmpty(caption) && generateCaption(requestBody)
     }
     useEffect(() => {
-        if (generateCaptionApi?.data !== null && generateCaptionApi !== undefined) {
+        if (!generateCaptionApi?.isLoading && !generateCaptionApi?.isFetching && generateCaptionApi?.data !== null && generateCaptionApi?.data !== undefined) {
             setSelectedCaption("")
-            setCaptionSuggestionList(conventStringToArrayString(generateCaptionApi?.data)?.slice(0, 10));
+            setCaptionSuggestionList(generateCaptionApi?.data?.captions || []);
         }
     }, [generateCaptionApi])
+
+
 
 
     const handleAddCaptions = () => {
@@ -69,7 +73,8 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
                             <form onSubmit={handleCaptionSubmit}>
                                 <div className='generate_image_outer'>
                                     <input type='text' className='form-control'
-                                           placeholder='Describe the caption you want to generate'
+                                        // placeholder='Describe the caption you want to generate'
+                                           placeholder='Enter topic to generate caption'
                                            value={caption}
                                            onChange={(e) => {
                                                e.preventDefault();
@@ -78,10 +83,10 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
                                     />
 
 
-                                    <button disabled={isNullOrEmpty(caption) || generateCaptionApi?.isLoading}
+                                    <button disabled={isNullOrEmpty(caption) || generateCaptionApi?.isLoading || generateCaptionApi?.isFetching}
                                             className={'generate_btn cmn_white_text ' + (isNullOrEmpty(caption) ? " opacity-50" : "")}>
                                         {
-                                            generateCaptionApi?.isLoading ?
+                                            (generateCaptionApi?.isLoading || generateCaptionApi?.isFetching) ?
                                                 <div className={"loading_txt"}><Loader
                                                     className={"me-2 ai_caption_loading_btn"}/> Loading
                                                 </div> : captionSuggestionList?.length === 0 ? "Generate" : "Regenerate"
@@ -90,7 +95,7 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
                                 </div>
                                 <div className='caption_outer'>
                                     {
-                                        !generateCaptionApi?.isLoading && captionSuggestionList?.length > 0 &&
+                                        !generateCaptionApi?.isLoading && !generateCaptionApi?.isFetching && captionSuggestionList?.length > 0 &&
                                         <h6 className='cmn_white_text caption_heading'>Of course! Here are some captions
                                             for your post:</h6>
                                     }
@@ -103,14 +108,12 @@ const AiCaptionModal = ({aiGenerateCaptionModal, setAIGenerateCaptionModal, addC
                                                         setSelectedCaption(caption)
                                                     }}
                                                     className={selectedCaption.includes(caption) ? "cursor-pointer selectedCaption" : "cursor-pointer"}
-
-
                                                 >{`${caption}`}</li>
                                             ))
                                         }
                                     </ul>
                                     <div className='add_regenerate_btn_outer'>
-                                        <button onClick={handleAddCaptions} className='add_caption_btn cmn_bg_btn'>Add
+                                        <button onClick={handleAddCaptions} disabled={isNullOrEmpty(selectedCaption)} className={`add_caption_btn cmn_bg_btn ${isNullOrEmpty(selectedCaption)? " opacity-50" :""}`}>Add
                                         </button>
                                     </div>
                                 </div>
