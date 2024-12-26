@@ -62,19 +62,6 @@ export async function getAllFacebookConnectedSocialMediaAccounts(accessToken) {
     }
 }
 
-export const conventStringToArrayString = (captionData) => {
-    const response = captionData?.choices[0]?.message?.content;
-    const arrayOfStrings = response?.replaceAll('\"', "")?.split('\n');
-    const captionList = arrayOfStrings?.map((str) => {
-        return str.replace(/^\d+\.\s/, '');
-    });
-
-    // Filter Empty Array Elements
-    return captionList?.filter(caption => {
-        return caption !== "";
-    });
-}
-
 export const getFacebookReportByPage = async (page) => {
 
     let initialObject = {
