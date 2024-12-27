@@ -406,7 +406,7 @@ function NeedHelpComponent() {
                                                                             return <Link
                                                                                 target={"_blank"}
                                                                                 className='d-block file_media'
-                                                                                to={`${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachment?.id}`}
+                                                                                to={attachment?.mediaType === "IMAGE" ? `${import.meta.env.VITE_APP_API_BASE_URL}/attachments/${attachment?.id}` : `${import.meta.env.VITE_APP_API_BASE_URL}/attachments/stream/${attachment?.id}`}
                                                                             > {attachment?.fileName}</Link>
                                                                         })
                                                                     }
@@ -504,7 +504,8 @@ function NeedHelpComponent() {
                                         <div className='email_wrapper'>
                                             <IoLocationOutline/>
                                         </div>
-                                        <h3>Tdi Business Centre, Office-09, Floor-10, Sector 118, Sahibzada Ajit Singh Nagar, Punjab 160055</h3>
+                                        <h3>Tdi Business Centre, Office-09, Floor-10, Sector 118, Sahibzada Ajit Singh
+                                            Nagar, Punjab 160055</h3>
                                     </div>
                                 </div>
                             </div>
