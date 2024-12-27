@@ -206,7 +206,8 @@ function NeedHelpComponent() {
     const sendMessageWithAttachments = async () => {
         const requestBody = {
             ...message,
-            chatId: chatId
+            chatId: chatId,
+            receiversId: chatPartnerId,
         }
         if (isValidCreateMessageRequest(requestBody, files)) {
             for (let fileIndex = 0; fileIndex < files?.length; fileIndex++) {
