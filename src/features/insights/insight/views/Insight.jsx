@@ -39,7 +39,7 @@ import {useGetAllLinkedinPagesQuery, useGetConnectedSocialAccountQuery} from "..
 import {useGetAllConnectedPagesQuery} from "../../../../app/apis/pageAccessTokenApi";
 import {
     useGetAccountsReachAndEngagementQuery,
-     useGetPinClicksQuery, useGetPostEngagementsQuery,
+    useGetPinClicksQuery, useGetPostEngagementsQuery,
     useGetProfileInsightsInfoQuery,
     useGetProfileVisitsInsightsQuery
 } from "../../../../app/apis/insightApi";
@@ -278,8 +278,8 @@ const Insight = () => {
                                             >
                                                  <span class={"icon_social me-2"}>
                                                      <PINTEREST/>
-                                                {/*<i className={`fa-brands fa-pinterest me-2 `}*/}
-                                                {/*   style={{color: "#e60023", fontSize: "20px"}}/>*/}
+                                                     {/*<i className={`fa-brands fa-pinterest me-2 `}*/}
+                                                     {/*   style={{color: "#e60023", fontSize: "20px"}}/>*/}
                                                  </span>
 
                                                 Pinterest {(!connectedPinterestBoards?.length && getConnectedSocialAccountApi?.isLoading) ?
@@ -554,12 +554,13 @@ const Insight = () => {
 
                                                                 <h5 className="cmn_text_style">Accounts Reached</h5>
                                                                 <div className="mt-3 d-flex align-items-end gap-2">
-                                                                    <h4 className="cmn_text_style">
+                                                                    <h4 className="cmn_text_style"
+                                                                        style={{flex: "0 0 30px"}}>
                                                                         {
                                                                             accountsReachAndEngagementApi?.isLoading || accountsReachAndEngagementApi?.isFetching ?
-                                                                                <span><i
-                                                                                    className="fa fa-spinner fa-spin"/>
-                                                                    </span> :
+                                                                                <span>
+                                                                                    <SkeletonEffect count={1}/>
+                                                                                </span> :
                                                                                 accountsReachAndEngagementApi?.data?.reach?.presentData
 
                                                                         }
@@ -600,12 +601,13 @@ const Insight = () => {
                                                                 <h5 className="cmn_text_style">Accounts Engaged</h5>
                                                                 <div className="mt-3 d-flex align-items-end gap-2">
 
-                                                                    <h4 className="cmn_text_style">
+                                                                    <h4 className="cmn_text_style"
+                                                                        style={{flex: "0 0 30px"}}>
                                                                         {
                                                                             accountsReachAndEngagementApi?.isLoading || accountsReachAndEngagementApi?.isFetching ?
-                                                                                <span><i
-                                                                                    className="fa fa-spinner fa-spin"/>
-                                                                    </span> : accountsReachAndEngagementApi?.data?.engagement?.presentData
+                                                                                <span>
+                                                                                    <SkeletonEffect count={1}/>
+                                                                                </span> : accountsReachAndEngagementApi?.data?.engagement?.presentData
                                                                         }
 
 
@@ -639,11 +641,14 @@ const Insight = () => {
                                                                 {/*    <img src={cmt_icon}/>*/}
                                                                 {/*</div>*/}
                                                                 <h5 className="cmn_text_style">Total Followers</h5>
-                                                                <h4 className="cmn_text_style mt-3">
+                                                                <h4 className="cmn_text_style mt-3"
+                                                                    style={{width: "30px"}}>
                                                                     {
-                                                                        (profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
-                                                                            <span><i className="fa fa-spinner fa-spin"/>
-                                                                    </span> : (profileInsightsApi?.data?.followers === null || profileInsightsApi?.data?.followers === undefined) ? "N/A" : profileInsightsApi?.data?.followers
+                                                                        (profileInsightsApi.isLoading || profileInsightsApi?.isFetching ) ?
+                                                                            <span>
+                                                                                <SkeletonEffect count={1}/>
+                                                                            </span> :
+                                                                            (profileInsightsApi?.data?.followers === null || profileInsightsApi?.data?.followers === undefined) ? "N/A" : profileInsightsApi?.data?.followers
                                                                     }
                                                                 </h4>
 
@@ -659,12 +664,13 @@ const Insight = () => {
                                                                     {/*    <img src={heart_icon}/>*/}
                                                                     {/*</div>*/}
                                                                     <h5 className="cmn_text_style">Accounts likes</h5>
-                                                                    <h4 className="cmn_text_style mt-3">
+                                                                    <h4 className="cmn_text_style mt-3"  style={{width: "30px"}}>
                                                                         {
-                                                                            (profileInsightsApi.isLoading || profileInsightsApi?.isFetching) ?
-                                                                                <span><i
-                                                                                    className="fa fa-spinner fa-spin"/>
-                                                                    </span> : (profileInsightsApi?.data?.likes === null || profileInsightsApi?.data?.likes === undefined) ? "N/A" : profileInsightsApi?.data?.likes
+                                                                            (profileInsightsApi.isLoading || profileInsightsApi?.isFetching ) ?
+                                                                                <span>
+                                                                                    <SkeletonEffect count={1}/>
+                                                                                </span>
+                                                                                : (profileInsightsApi?.data?.likes === null || profileInsightsApi?.data?.likes === undefined) ? "N/A" : profileInsightsApi?.data?.likes
                                                                         }
                                                                     </h4>
 
