@@ -62,7 +62,12 @@ const Layout = () => {
     }, {skip: !enabledSocialMedia?.isLinkedinEnabled || isNullOrEmpty(connectedSocialAccount.linkedin)})
 
     useEffect(() => {
-        if (getConnectedSocialAccountApi?.data?.length > 0 && !getConnectedSocialAccountApi?.isLoading && !getConnectedSocialAccountApi?.isFetching && getAllConnectedPagesApi?.data?.length > 0 && !getAllConnectedPagesApi?.isLoading && !getAllConnectedPagesApi?.isFetching ) {
+        const isGetFacebookPagesLoaded = (isNullOrEmpty(connectedSocialAccount.facebook) || (!getAllFacebookPagesApi?.isLoading && !getAllFacebookPagesApi?.isFetching))
+        const isGetInstagramPagesLoaded = (isNullOrEmpty(connectedSocialAccount.instagram) || (!getAllInstagramPagesApi?.isLoading && !getAllInstagramPagesApi?.isFetching))
+        const isGetPinterestPagesLoaded = (isNullOrEmpty(connectedSocialAccount.pinterest) || (!getAllPinterestPagesApi?.isLoading && !getAllPinterestPagesApi?.isFetching))
+        const isGetLinkedinPagesLoaded = (isNullOrEmpty(connectedSocialAccount.linkedin) || (!getAllLinkedinPagesApi?.isLoading && !getAllLinkedinPagesApi?.isFetching))
+
+        if (isGetFacebookPagesLoaded && isGetInstagramPagesLoaded && isGetPinterestPagesLoaded && isGetLinkedinPagesLoaded && getConnectedSocialAccountApi?.data?.length > 0 && !getConnectedSocialAccountApi?.isLoading && !getConnectedSocialAccountApi?.isFetching && getAllConnectedPagesApi?.data?.length > 0 && !getAllConnectedPagesApi?.isLoading && !getAllConnectedPagesApi?.isFetching) {
             // First Map -> Insert socialMediaType in each page
             // Second Map -> Getting latest imageUrl if Updated or url expired
             // Third Filter -> Filter all the pages whose images we need to updated
@@ -81,9 +86,8 @@ const Layout = () => {
             const connectedSocialMediaTypes = Array.from(new Set(allConnectedPages.map(page => page.socialMediaType)));
             if (isPageInfoAvailableFromSocialMediaFor(connectedSocialMediaTypes, pageInfoFromSocialMedia)) {
                 let pageImagesToUpdate = allConnectedPages?.map(page => {
-                        return getUpdatedNameAndImageUrlForConnectedPages(page, pageInfoFromSocialMedia)
-                    }).filter(page => page?.isPageUpdated)
-
+                    return getUpdatedNameAndImageUrlForConnectedPages(page, pageInfoFromSocialMedia)
+                }).filter(page => page?.isPageUpdated)
                 const requestBody = {
                     ids: pageImagesToUpdate?.map(page => page.id).join(","),
                     data: pageImagesToUpdate
@@ -91,13 +95,13 @@ const Layout = () => {
                 pageImagesToUpdate?.length > 0 && updatePageByIds(requestBody)
             }
         }
-    }, [getAllConnectedPagesApi, getConnectedSocialAccountApi])
+    }, [getAllConnectedPagesApi, getConnectedSocialAccountApi, getAllFacebookPagesApi, getAllInstagramPagesApi, getAllLinkedinPagesApi, getAllPinterestPagesApi])
 
     const LogOut = (e) => {
         e.stopPropagation();
-    
-        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Logout />);
-    
+
+        const svgMarkup = ReactDOMServer.renderToStaticMarkup(<Logout/>);
+
         Swal.fire({
             // title: `Logout`,
             html: `
@@ -127,9 +131,9 @@ const Layout = () => {
             }
         });
     };
-const Profile =() =>{
-    navigate('/profile')
-}
+    const Profile = () => {
+        navigate('/profile')
+    }
     return (
         <>
             <section className="sidebar_container">
@@ -141,10 +145,11 @@ const Profile =() =>{
                 >
 
                     <div
-                        
+
                         className={`cmn_forward_arrow ${sidebar ? "text-center" : "text-end"}`}
                     >
-                        {sidebar ? <FaBars onClick={show_sidebar}/> : <RxCross2 onClick={show_sidebar} className="cross_icon"/>}
+                        {sidebar ? <FaBars onClick={show_sidebar}/> :
+                            <RxCross2 onClick={show_sidebar} className="cross_icon"/>}
 
                     </div>
                     <div className="user_profile_outer">
@@ -155,32 +160,38 @@ const Profile =() =>{
 
 
                     </div>
-                
+
                     <ul className={sidebar ? "sidebar_item Sidebar_containerbox " : "sidebar_item "}>
                         {SidebarMenuItems &&
                             SidebarMenuItems?.map((item, index) => (
-                                <li key={index} className={item.path === "/" + splitLocation[1] ? "sidebar_active" : ""}>
+                                <li key={index}
+                                    className={item.path === "/" + splitLocation[1] ? "sidebar_active" : ""}>
                                     <Link to={item.path}>    {item.icon} <span>{item.name}</span></Link>
                                 </li>
-                               
+
                             ))}
 
-                             <li className="log_out">
-                                     {
-                                         getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
+                        <li className="log_out">
+                            {
+                                getUserInfoApi?.isLoading || getUserInfoApi?.isFetching ?
                                     <SkeletonEffect count={1}/> :
                                     getUserInfoApi.data !== undefined &&
                                     <div className="profile_link cursor-pointer">
                                         <img onClick={Profile}
-                                            src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
-                                            className='profile_img mobile_profile'/>
-                                     
-                                        <span onClick={Profile} className="flex-grow-1">   <h3 className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
-                                        <h4 className={sidebar ? "d-none" : ""} title={getUserInfoApi?.data?.email}>{getUserInfoApi?.data?.email.slice(0,15) + "..." || "email"}</h4></span> <Logout_img onClick={(e)=>{LogOut(e)}} className="logout_icon me-0"/>
-                                </div>
-                                      } 
-                                </li>
-                       
+                                             src={getUserInfoApi?.data?.profilePic ? "data:image/jpeg; base64," + getUserInfoApi?.data?.profilePic : default_user_icon}
+                                             className='profile_img mobile_profile'/>
+
+                                        <span onClick={Profile} className="flex-grow-1">   <h3
+                                            className={sidebar ? "d-none" : ""}>{getUserInfoApi?.data?.fullName || "name"}</h3>
+                                        <h4 className={sidebar ? "d-none" : ""}
+                                            title={getUserInfoApi?.data?.email}>{getUserInfoApi?.data?.email.slice(0, 15) + "..." || "email"}</h4></span>
+                                        <Logout_img onClick={(e) => {
+                                            LogOut(e)
+                                        }} className="logout_icon me-0"/>
+                                    </div>
+                            }
+                        </li>
+
                     </ul>
                 </div>
             </section>

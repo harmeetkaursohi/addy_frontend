@@ -60,6 +60,7 @@ export const pageAccessTokenApi = addyApi.injectEndpoints({
                     headers:getAuthorizationHeader()
                 };
             },
+            invalidatesTags:["getConnectedSocialAccountApi","getAllConnectedPagesApi"],
             async onQueryStarted(_, {queryFulfilled,}) {
                 await handleQueryError(queryFulfilled)
             },

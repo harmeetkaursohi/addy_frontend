@@ -2020,6 +2020,7 @@ export const isImageValid = (imageUrl, socialMediaType) => {
         case "INSTAGRAM":
         case "LINKEDIN": {
             return fetch(imageUrl).then(res => {
+                console.log("for facebook ===>",res.ok)
                 return res.ok
             })
         }
@@ -2212,7 +2213,8 @@ export const getUpdatedNameAndImageUrlForConnectedPages = (page, data) => {
     }
     return {
         ...page,
-        isPageUpdated: (page?.name !== updatedName || page?.imageUrl !== updatedImageUrl || !isImageValid(page?.imageUrl, page?.socialMediaType)),
+        // isPageUpdated: (page?.name !== updatedName || page?.imageUrl !== updatedImageUrl || !isImageValid(page?.imageUrl, page?.socialMediaType)),
+        isPageUpdated: (page?.name !== updatedName || page?.imageUrl !== updatedImageUrl ),
         imageUrl: updatedImageUrl,
         name: updatedName
     }
