@@ -25,7 +25,7 @@ export const getAuthorizationHeader = () => {
 
 export const getOpenAIAuthHeader = () => {
     return {
-        'Authorization': `Bearer ${import.meta.env.VITE_APP_OPEN_API_KEY}`
+        'Authorization': `Bearer ${import.meta.env.VITE_APP_OPEN_AI_API_KEY}`
     }
 }
 
