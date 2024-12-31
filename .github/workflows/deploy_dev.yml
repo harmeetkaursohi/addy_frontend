@@ -21,7 +21,7 @@ jobs:
 
       - name: Inject API key into .env.dev file
         run: |
-          echo "VITE_APP_OPEN_AI_API_KEY=${{ secrets.OPEN_AI_API_KEY }}" >> .env.dev
+          echo VITE_APP_OPEN_AI_API_KEY="${{ secrets.OPEN_AI_API_KEY }}" >> .env.dev
 
       - name: Install dependencies and build React app
         run: |
